@@ -10,17 +10,19 @@ namespace myJournal
     public class Journal
     {
         string Name = string.Empty;
+        string FileName = string.Empty;
         StringBuilder JournalText = new StringBuilder();
         JournalEntries Entries = new JournalEntries();
-        string root = "/journals/";
+        string root = "journals\\";
 
         public Journal(string _name = null) 
         {
             if(_name != null)
             {
-                this.Name = root + _name;
-                Journal t = this;
-                t = OpenJournal();
+                this.Name = _name;
+                this.FileName = AppDomain.CurrentDomain.BaseDirectory + this.root + this.Name + ".journal";
+                Journal j = this;
+                j = OpenJournal();
             }
         }
 
@@ -34,23 +36,27 @@ namespace myJournal
             Entries.Add(new JournalEntry("created", "-"));
         }
 
-        public void Create(string _name)
+        public void CreateJournal()
         {
-            this.Name = root + _name;
+            File.Create(this.FileName); 
         }
 
         private void DeleteJournal()
         {
-            File.Delete(root + this.Name);
+            File.Delete(this.FileName);
         }
 
         private Journal OpenJournal()
         {
-            using(Stream stream = File.Open(this.Name, FileMode.Open))
+            try
             {
-                BinaryFormatter formatter = new BinaryFormatter();
-                return (Journal)formatter.Deserialize(stream);
+                using(Stream stream = File.Open(this.FileName, FileMode.Open))
+                {
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    return (Journal)formatter.Deserialize(stream);
+                }
             }
+            catch (FileNotFoundException) { return null; }
         }
 
         public void Save()
@@ -60,15 +66,15 @@ namespace myJournal
 
         public void SaveToDisk()
         {
-            string tmpName = this.Name + "_" + DateTime.Now.ToLongDateString() + "_" + DateTime.Now.ToLongTimeString();
+            string tmpName = this.FileName + "_" + DateTime.Now.ToString("mmddyy_HHMMss");
 
-            using (Stream stream = File.Open(tmpName, FileMode.Create))
+            using (Stream stream = File.Open(tmpName, FileMode.Append))
             {
                 BinaryFormatter formatter = new BinaryFormatter();
                 formatter.Serialize(stream, this);
             }
-            DeleteJournal();
-            File.Move(tmpName, this.Name);
+
+            File.Move(tmpName, this.FileName, true);
         }
 
         private void GetJournalText()

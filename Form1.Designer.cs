@@ -64,7 +64,7 @@ namespace myJournal
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.lstFoundEntries = new System.Windows.Forms.ListBox();
             this.label11 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -131,7 +131,7 @@ namespace myJournal
             this.grpCreateEntry.Controls.Add(this.rtbNewEntry);
             this.grpCreateEntry.Controls.Add(this.textBox1);
             this.grpCreateEntry.Controls.Add(this.label2);
-            this.grpCreateEntry.Location = new System.Drawing.Point(361, 65);
+            this.grpCreateEntry.Location = new System.Drawing.Point(334, 12);
             this.grpCreateEntry.Name = "grpCreateEntry";
             this.grpCreateEntry.Size = new System.Drawing.Size(290, 545);
             this.grpCreateEntry.TabIndex = 4;
@@ -282,6 +282,7 @@ namespace myJournal
             this.lstEntries.Name = "lstEntries";
             this.lstEntries.Size = new System.Drawing.Size(278, 154);
             this.lstEntries.TabIndex = 8;
+            this.lstEntries.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectedIndexChanged);
             // 
             // label4
             // 
@@ -308,11 +309,11 @@ namespace myJournal
             this.grpFindEntry.Controls.Add(this.label9);
             this.grpFindEntry.Controls.Add(this.label10);
             this.grpFindEntry.Controls.Add(this.label8);
-            this.grpFindEntry.Controls.Add(this.listBox1);
+            this.grpFindEntry.Controls.Add(this.lstFoundEntries);
             this.grpFindEntry.Controls.Add(this.label11);
             this.grpFindEntry.Controls.Add(this.label7);
             this.grpFindEntry.Controls.Add(this.label6);
-            this.grpFindEntry.Location = new System.Drawing.Point(683, 65);
+            this.grpFindEntry.Location = new System.Drawing.Point(645, 12);
             this.grpFindEntry.Name = "grpFindEntry";
             this.grpFindEntry.Size = new System.Drawing.Size(290, 545);
             this.grpFindEntry.TabIndex = 6;
@@ -451,14 +452,15 @@ namespace myJournal
             this.label8.TabIndex = 2;
             this.label8.Text = "Title contains";
             // 
-            // listBox1
+            // lstFoundEntries
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 15;
-            this.listBox1.Location = new System.Drawing.Point(6, 214);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(278, 109);
-            this.listBox1.TabIndex = 14;
+            this.lstFoundEntries.FormattingEnabled = true;
+            this.lstFoundEntries.ItemHeight = 15;
+            this.lstFoundEntries.Location = new System.Drawing.Point(6, 214);
+            this.lstFoundEntries.Name = "lstFoundEntries";
+            this.lstFoundEntries.Size = new System.Drawing.Size(278, 109);
+            this.lstFoundEntries.TabIndex = 14;
+            this.lstFoundEntries.SelectedIndexChanged += new System.EventHandler(this.lstFoundEntries_SelectedIndexChanged);
             // 
             // label11
             // 
@@ -593,7 +595,7 @@ namespace myJournal
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ListBox lstFoundEntries;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;

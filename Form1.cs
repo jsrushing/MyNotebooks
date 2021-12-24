@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
+using System.Reflection;
 
 namespace myJournal
 {
@@ -23,17 +25,40 @@ namespace myJournal
             this.Size = MainFormSize;
             grpOpenScreen.Location = ActiveBoxLocation;
             grpOpenScreen.Size = ActiveBoxSize;
+            LoadJournals();
         }
+        private void ActivateGroupBox(GroupBox box)
+        {
+            foreach (GroupBox gb in this.Controls)
+            {
+                gb.Visible = false;
+            }
+
+            box.Size = ActiveBoxSize;
+            box.Location = ActiveBoxLocation;
+            box.Visible = true;
+            DisplayedGroupBox = box;
+        }
+
+        private void btnOK_NewJrnl_Click(object sender, EventArgs e)
+        {
+            Journal jrnl = new Journal(txtNewJournalName.Text);
+            jrnl.CreateJournal();
+            jrnl.AddFirstEntry();
+            jrnl.SaveToDisk();
+        }
+
         private void btnCreateJournal_Click(object sender, EventArgs e)
         {
             ActivateGroupBox(grpNewJournal);
+            txtNewJournalName.Focus();
         }
 
         private void lblCreateEntry_Click(object sender, EventArgs e)
         {
-            if (ddlJournals.Text == "")
+            if (!ddlJournals.Enabled)
             {
-                MessageBox.Show("You must choose a journal.");
+                this.Text = "Please create a journal";
             }
             else
             {
@@ -70,25 +95,42 @@ namespace myJournal
             // clear search criteria
         }
 
-        private void ActivateGroupBox(GroupBox box)
+        private void LoadJournals()
         {
-            foreach (GroupBox gb in this.Controls)
+            ddlJournals.Items.Clear();
+
+            string sDir = AppDomain.CurrentDomain.BaseDirectory + "/journals/";
+
+            if (!Directory.Exists(sDir))
             {
-                gb.Visible = false;
+                Directory.CreateDirectory(sDir);
+            }
+            else
+            {
+                foreach(string s in Directory.GetFiles(sDir))
+                {
+                    ddlJournals.Items.Add(s.Replace(sDir, ""));
+                }
             }
 
-            box.Size = ActiveBoxSize;
-            box.Location = ActiveBoxLocation;
-            box.Visible = true;
-            DisplayedGroupBox = box;
+            if(ddlJournals.Items.Count == 0)
+            {
+                ddlJournals.Items.Add("click '+' to create a journal >>");
+                ddlJournals.SelectedIndex = 0;
+                ddlJournals.Enabled = false;
+            }
+
+            if(ddlJournals.Items.Count == 1) { ddlJournals.SelectedIndex = 0; }
         }
 
-        private void btnOK_NewJrnl_Click(object sender, EventArgs e)
+        private void lstEntries_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Journal jrnl = new Journal();
-            jrnl.Create(txtNewJournalName.Text);
-            jrnl.AddFirstEntry();
-            jrnl.Save();
+            // get the selected entry
+        }
+
+        private void lstFoundEntries_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // get the selected found entry
         }
     }
 }

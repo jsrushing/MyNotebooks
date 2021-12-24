@@ -4,6 +4,7 @@ using System.Text;
 
 namespace myJournal
 {
+    [Serializable]
     class JournalEntries
     {
         public List<JournalEntry> Entries;
