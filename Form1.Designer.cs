@@ -34,6 +34,9 @@ namespace myJournal
             this.lblCreateEntry = new System.Windows.Forms.Label();
             this.lblFindEntry = new System.Windows.Forms.Label();
             this.grpCreateEntry = new System.Windows.Forms.GroupBox();
+            this.btnAddGroup = new System.Windows.Forms.Button();
+            this.lstGroups = new System.Windows.Forms.CheckedListBox();
+            this.label14 = new System.Windows.Forms.Label();
             this.lblHome_NewEntry = new System.Windows.Forms.Label();
             this.lblFont_NewEntry = new System.Windows.Forms.Label();
             this.lblAddEntry = new System.Windows.Forms.Label();
@@ -73,13 +76,16 @@ namespace myJournal
             this.btnOK_NewJrnl = new System.Windows.Forms.Button();
             this.txtNewJournalName = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
-            this.lstGroups = new System.Windows.Forms.CheckedListBox();
-            this.btnAddGroup = new System.Windows.Forms.Button();
+            this.grpNewGroup = new System.Windows.Forms.GroupBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.btnOK_NewGroup = new System.Windows.Forms.Button();
+            this.txtNewGroup = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
             this.grpCreateEntry.SuspendLayout();
             this.grpOpenScreen.SuspendLayout();
             this.grpFindEntry.SuspendLayout();
             this.grpNewJournal.SuspendLayout();
+            this.grpNewGroup.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -143,6 +149,33 @@ namespace myJournal
             this.grpCreateEntry.Size = new System.Drawing.Size(290, 545);
             this.grpCreateEntry.TabIndex = 4;
             this.grpCreateEntry.TabStop = false;
+            // 
+            // btnAddGroup
+            // 
+            this.btnAddGroup.Location = new System.Drawing.Point(15, 462);
+            this.btnAddGroup.Name = "btnAddGroup";
+            this.btnAddGroup.Size = new System.Drawing.Size(25, 23);
+            this.btnAddGroup.TabIndex = 13;
+            this.btnAddGroup.Text = "+";
+            this.btnAddGroup.UseVisualStyleBackColor = true;
+            this.btnAddGroup.Click += new System.EventHandler(this.btnAddGroup_Click);
+            // 
+            // lstGroups
+            // 
+            this.lstGroups.FormattingEnabled = true;
+            this.lstGroups.Location = new System.Drawing.Point(51, 440);
+            this.lstGroups.Name = "lstGroups";
+            this.lstGroups.Size = new System.Drawing.Size(233, 76);
+            this.lstGroups.TabIndex = 27;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(6, 440);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(39, 15);
+            this.label14.TabIndex = 25;
+            this.label14.Text = "group";
             // 
             // lblHome_NewEntry
             // 
@@ -550,38 +583,63 @@ namespace myJournal
             this.label13.TabIndex = 0;
             this.label13.Text = "Journal Name:";
             // 
-            // label14
+            // grpNewGroup
             // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(6, 440);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(39, 15);
-            this.label14.TabIndex = 25;
-            this.label14.Text = "group";
+            this.grpNewGroup.Controls.Add(this.label15);
+            this.grpNewGroup.Controls.Add(this.btnOK_NewGroup);
+            this.grpNewGroup.Controls.Add(this.txtNewGroup);
+            this.grpNewGroup.Controls.Add(this.label16);
+            this.grpNewGroup.Location = new System.Drawing.Point(358, 587);
+            this.grpNewGroup.Name = "grpNewGroup";
+            this.grpNewGroup.Size = new System.Drawing.Size(290, 107);
+            this.grpNewGroup.TabIndex = 26;
+            this.grpNewGroup.TabStop = false;
             // 
-            // lstGroups
+            // label15
             // 
-            this.lstGroups.FormattingEnabled = true;
-            this.lstGroups.Location = new System.Drawing.Point(51, 440);
-            this.lstGroups.Name = "lstGroups";
-            this.lstGroups.Size = new System.Drawing.Size(233, 76);
-            this.lstGroups.TabIndex = 27;
+            this.label15.AutoSize = true;
+            this.label15.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.label15.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
+            this.label15.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.label15.Location = new System.Drawing.Point(6, 12);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(39, 15);
+            this.label15.TabIndex = 25;
+            this.label15.Text = "home";
+            this.label15.Click += new System.EventHandler(this.lblHome_Click);
             // 
-            // btnAddGroup
+            // btnOK_NewGroup
             // 
-            this.btnAddGroup.Location = new System.Drawing.Point(15, 462);
-            this.btnAddGroup.Name = "btnAddGroup";
-            this.btnAddGroup.Size = new System.Drawing.Size(25, 23);
-            this.btnAddGroup.TabIndex = 13;
-            this.btnAddGroup.Text = "+";
-            this.btnAddGroup.UseVisualStyleBackColor = true;
-            this.btnAddGroup.Click += new System.EventHandler(this.btnAddGroup_Click);
+            this.btnOK_NewGroup.Location = new System.Drawing.Point(99, 72);
+            this.btnOK_NewGroup.Name = "btnOK_NewGroup";
+            this.btnOK_NewGroup.Size = new System.Drawing.Size(75, 23);
+            this.btnOK_NewGroup.TabIndex = 2;
+            this.btnOK_NewGroup.Text = "OK";
+            this.btnOK_NewGroup.UseVisualStyleBackColor = true;
+            this.btnOK_NewGroup.Click += new System.EventHandler(this.btnOK_NewGroup_Click);
+            // 
+            // txtNewGroup
+            // 
+            this.txtNewGroup.Location = new System.Drawing.Point(88, 40);
+            this.txtNewGroup.Name = "txtNewGroup";
+            this.txtNewGroup.Size = new System.Drawing.Size(193, 23);
+            this.txtNewGroup.TabIndex = 1;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(6, 43);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(78, 15);
+            this.label16.TabIndex = 0;
+            this.label16.Text = "Group Name:";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1010, 1061);
+            this.Controls.Add(this.grpNewGroup);
             this.Controls.Add(this.grpNewJournal);
             this.Controls.Add(this.grpOpenScreen);
             this.Controls.Add(this.grpCreateEntry);
@@ -597,6 +655,8 @@ namespace myJournal
             this.grpFindEntry.PerformLayout();
             this.grpNewJournal.ResumeLayout(false);
             this.grpNewJournal.PerformLayout();
+            this.grpNewGroup.ResumeLayout(false);
+            this.grpNewGroup.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -650,6 +710,11 @@ namespace myJournal
         private System.Windows.Forms.Button btnAddGroup;
         private System.Windows.Forms.CheckedListBox lstGroups;
         private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.GroupBox grpNewGroup;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Button btnOK_NewGroup;
+        private System.Windows.Forms.TextBox txtNewGroup;
+        private System.Windows.Forms.Label label16;
     }
 }
 

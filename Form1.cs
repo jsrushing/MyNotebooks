@@ -27,7 +27,7 @@ namespace myJournal
             grpOpenScreen.Location = ActiveBoxLocation;
             grpOpenScreen.Size = ActiveBoxSize;
             LoadJournals();
-            // populate groups
+            PopulateGroups();
         }
         private void ActivateGroupBox(GroupBox box)
         {
@@ -233,8 +233,16 @@ namespace myJournal
         { btnCreateJournal.Focus(); }
 
         private void btnAddGroup_Click(object sender, EventArgs e)
+        { ActivateGroupBox(grpNewGroup); }
+
+        private void btnOK_NewGroup_Click(object sender, EventArgs e)
         {
-            
+            using (StreamWriter sw = File.AppendText(AppDomain.CurrentDomain.BaseDirectory + "/settings/groups"))
+            {
+                sw.WriteLine(txtNewGroup.Text);
+            }
+            PopulateGroups();
+            ActivateGroupBox(grpCreateEntry);
         }
     }
 }
