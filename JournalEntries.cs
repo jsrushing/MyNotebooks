@@ -5,11 +5,11 @@ using System.Text;
 namespace myJournal
 {
     [Serializable]
-    class JournalEntries
+    public class JournalEntries
     {
-        public List<JournalEntry> Entries;
+        public List<JournalEntry> Entries = new List<JournalEntry>();
 
-        public JournalEntries() { Entries = new List<JournalEntry>(); }
+        public JournalEntries() { }
 
         public void Add(JournalEntry entry)
         {

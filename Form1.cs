@@ -18,6 +18,7 @@ namespace myJournal
         Size ActiveBoxSize = (Size)new Point(290, 545);
         Size MainFormSize = (Size)new Point(331, 592);
         GroupBox DisplayedGroupBox;
+        Journal currentJournal = null;
 
         public Form1()
         {
@@ -44,14 +45,23 @@ namespace myJournal
         {
             Journal jrnl = new Journal(txtNewJournalName.Text);
             jrnl.CreateJournal();
-            jrnl.AddFirstEntry();
-            jrnl.SaveToDisk();
+            LoadJournals();
+            ActivateGroupBox(grpOpenScreen);
         }
 
         private void btnCreateJournal_Click(object sender, EventArgs e)
         {
             ActivateGroupBox(grpNewJournal);
             txtNewJournalName.Focus();
+        }
+
+        private void lblAddEntry_Click(object sender, EventArgs e)
+        {
+            // code to add an entry to the journal
+            currentJournal.Entries.Add(new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text));
+            PopulateEntries();
+            currentJournal.SaveToDisk();
+            ActivateGroupBox(grpOpenScreen);
         }
 
         private void lblCreateEntry_Click(object sender, EventArgs e)
@@ -72,11 +82,6 @@ namespace myJournal
         {
             ActivateGroupBox(grpFindEntry);
             this.Text = "Find Entry";
-        }
-
-        private void lblAddEntry_Click(object sender, EventArgs e)
-        {
-            // code to add an entry to the journal
         }
 
         private void lblSettings_Click(object sender, EventArgs e)
@@ -116,8 +121,12 @@ namespace myJournal
             if(ddlJournals.Items.Count == 0)
             {
                 ddlJournals.Items.Add("click '+' to create a journal >>");
-                ddlJournals.SelectedIndex = 0;
                 ddlJournals.Enabled = false;
+                ddlJournals.SelectedIndex = 0;
+            }
+            else
+            {
+                ddlJournals.Enabled = true;
             }
 
             if(ddlJournals.Items.Count == 1) { ddlJournals.SelectedIndex = 0; }
@@ -131,6 +140,28 @@ namespace myJournal
         private void lstFoundEntries_SelectedIndexChanged(object sender, EventArgs e)
         {
             // get the selected found entry
+        }
+
+        private void ddlJournals_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ddlJournals.Enabled)
+            {
+                PopulateEntries();
+            }
+        }
+
+        private void PopulateEntries()
+        {
+            lstEntries.Items.Clear();
+            Journal j = new Journal(ddlJournals.Text);
+            currentJournal = j.OpenJournal();
+
+            foreach(JournalEntry je in currentJournal.Entries)
+            {
+                lstEntries.Items.Add(je.Title + " (" + je.Date + ")");
+                lstEntries.Items.Add(je.Text.Length < 31 ? je.Text : je.Text.Substring(0, 30) + " ...");
+                lstEntries.Items.Add("---------------------");
+            }
         }
     }
 }

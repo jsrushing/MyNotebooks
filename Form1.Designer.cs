@@ -39,7 +39,7 @@ namespace myJournal
             this.lblAddEntry = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.rtbNewEntry = new System.Windows.Forms.RichTextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtNewEntryTitle = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.grpOpenScreen = new System.Windows.Forms.GroupBox();
             this.btnCreateJournal = new System.Windows.Forms.Button();
@@ -95,6 +95,7 @@ namespace myJournal
             this.ddlJournals.Name = "ddlJournals";
             this.ddlJournals.Size = new System.Drawing.Size(192, 23);
             this.ddlJournals.TabIndex = 1;
+            this.ddlJournals.SelectedIndexChanged += new System.EventHandler(this.ddlJournals_SelectedIndexChanged);
             // 
             // lblCreateEntry
             // 
@@ -129,7 +130,7 @@ namespace myJournal
             this.grpCreateEntry.Controls.Add(this.lblAddEntry);
             this.grpCreateEntry.Controls.Add(this.label3);
             this.grpCreateEntry.Controls.Add(this.rtbNewEntry);
-            this.grpCreateEntry.Controls.Add(this.textBox1);
+            this.grpCreateEntry.Controls.Add(this.txtNewEntryTitle);
             this.grpCreateEntry.Controls.Add(this.label2);
             this.grpCreateEntry.Location = new System.Drawing.Point(334, 12);
             this.grpCreateEntry.Name = "grpCreateEntry";
@@ -165,6 +166,7 @@ namespace myJournal
             // lblAddEntry
             // 
             this.lblAddEntry.AutoSize = true;
+            this.lblAddEntry.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lblAddEntry.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
             this.lblAddEntry.ForeColor = System.Drawing.SystemColors.MenuHighlight;
             this.lblAddEntry.Location = new System.Drawing.Point(23, 522);
@@ -192,12 +194,12 @@ namespace myJournal
             this.rtbNewEntry.TabIndex = 2;
             this.rtbNewEntry.Text = "";
             // 
-            // textBox1
+            // txtNewEntryTitle
             // 
-            this.textBox1.Location = new System.Drawing.Point(38, 34);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(240, 23);
-            this.textBox1.TabIndex = 1;
+            this.txtNewEntryTitle.Location = new System.Drawing.Point(38, 34);
+            this.txtNewEntryTitle.Name = "txtNewEntryTitle";
+            this.txtNewEntryTitle.Size = new System.Drawing.Size(240, 23);
+            this.txtNewEntryTitle.TabIndex = 1;
             // 
             // label2
             // 
@@ -530,6 +532,7 @@ namespace myJournal
             this.txtNewJournalName.Name = "txtNewJournalName";
             this.txtNewJournalName.Size = new System.Drawing.Size(193, 23);
             this.txtNewJournalName.TabIndex = 1;
+            this.txtNewJournalName.Text = "jrn1";
             // 
             // label13
             // 
@@ -574,7 +577,7 @@ namespace myJournal
         private System.Windows.Forms.Label lblAddEntry;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.RichTextBox rtbNewEntry;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtNewEntryTitle;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.GroupBox grpOpenScreen;
         private System.Windows.Forms.ListBox lstEntries;

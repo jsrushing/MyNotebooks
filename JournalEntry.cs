@@ -6,7 +6,7 @@ using System.IO;
 namespace myJournal
 {
     [Serializable]
-    class JournalEntry
+    public class JournalEntry
     {
         public DateTime Date;
         public string Text;

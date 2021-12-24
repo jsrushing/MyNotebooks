@@ -12,7 +12,7 @@ namespace myJournal
         string Name = string.Empty;
         string FileName = string.Empty;
         StringBuilder JournalText = new StringBuilder();
-        JournalEntries Entries = new JournalEntries();
+        public List<JournalEntry> Entries = new List<JournalEntry>();
         string root = "journals\\";
 
         public Journal(string _name = null) 
@@ -20,9 +20,7 @@ namespace myJournal
             if(_name != null)
             {
                 this.Name = _name;
-                this.FileName = AppDomain.CurrentDomain.BaseDirectory + this.root + this.Name + ".journal";
-                Journal j = this;
-                j = OpenJournal();
+                this.FileName = AppDomain.CurrentDomain.BaseDirectory + this.root + this.Name;
             }
         }
 
@@ -38,7 +36,9 @@ namespace myJournal
 
         public void CreateJournal()
         {
-            File.Create(this.FileName); 
+            AddFirstEntry();
+            //File.Create(this.FileName);
+            SaveToDisk();
         }
 
         private void DeleteJournal()
@@ -46,7 +46,7 @@ namespace myJournal
             File.Delete(this.FileName);
         }
 
-        private Journal OpenJournal()
+        public Journal OpenJournal()
         {
             try
             {
@@ -66,15 +66,15 @@ namespace myJournal
 
         public void SaveToDisk()
         {
-            string tmpName = this.FileName + "_" + DateTime.Now.ToString("mmddyy_HHMMss");
+            //string tmpName = this.FileName + "_" + DateTime.Now.ToString("mmddyy_HHMMss");
 
-            using (Stream stream = File.Open(tmpName, FileMode.Append))
+            try { File.Delete(this.FileName); } catch (Exception) { }
+
+            using (Stream stream = File.Open(this.FileName, FileMode.Create))
             {
                 BinaryFormatter formatter = new BinaryFormatter();
                 formatter.Serialize(stream, this);
             }
-
-            File.Move(tmpName, this.FileName, true);
         }
 
         private void GetJournalText()
