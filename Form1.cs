@@ -27,12 +27,29 @@ namespace myJournal
             grpOpenScreen.Location = ActiveBoxLocation;
             grpOpenScreen.Size = ActiveBoxSize;
             LoadJournals();
+            // populate groups
         }
         private void ActivateGroupBox(GroupBox box)
         {
             foreach (GroupBox gb in this.Controls)
             {
                 gb.Visible = false;
+            }
+
+            switch (box.Name) 
+            {
+                case "grpOpenScreen":
+                    this.Text = "My Journal";
+                    break;
+                case "grpCreateEntry":
+                    this.Text = "Create Entry";
+                    break;
+                case "grpFindEntry":
+                    this.Text = "Search Journal";
+                    break;
+                case "grpNewJournal":
+                    this.Text = "Create New Journal";
+                    break;
             }
 
             box.Size = ActiveBoxSize;
@@ -57,7 +74,6 @@ namespace myJournal
 
         private void lblAddEntry_Click(object sender, EventArgs e)
         {
-            // code to add an entry to the journal
             currentJournal.Entries.Add(new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text));
             currentJournal.SaveToDisk();
             PopulateEntries();
@@ -86,10 +102,7 @@ namespace myJournal
         }
 
         private void lblFindEntry_Click(object sender, EventArgs e)
-        {
-            ActivateGroupBox(grpFindEntry);
-            this.Text = "Find Entry";
-        }
+        { ActivateGroupBox(grpFindEntry); }
 
         private void lblSettings_Click(object sender, EventArgs e)
         {
@@ -97,10 +110,7 @@ namespace myJournal
         }
 
         private void lblHome_Click(object sender, EventArgs e)
-        {
-            ActivateGroupBox(grpOpenScreen);
-            this.Text = "My Journals";
-        }
+        { ActivateGroupBox(grpOpenScreen); }
 
         private void lblClearAll_Click(object sender, EventArgs e)
         {
@@ -111,17 +121,20 @@ namespace myJournal
         {
             ddlJournals.Items.Clear();
 
-            string sDir = AppDomain.CurrentDomain.BaseDirectory + "/journals/";
+            string sDir = AppDomain.CurrentDomain.BaseDirectory;
 
-            if (!Directory.Exists(sDir))
+            if (!Directory.Exists(sDir + "/journals/"))
             {
-                Directory.CreateDirectory(sDir);
+                Directory.CreateDirectory(sDir + "/journals/");
+                Directory.CreateDirectory(sDir + "/settings/");
+                File.Create(sDir + "/settings/settings");
+                File.Create(sDir + "/settings/groups");
             }
             else
             {
-                foreach(string s in Directory.GetFiles(sDir))
+                foreach(string s in Directory.GetFiles(sDir + "/journals/"))
                 {
-                    ddlJournals.Items.Add(s.Replace(sDir, ""));
+                    ddlJournals.Items.Add(s.Replace(sDir + "/journals/", ""));
                 }
             }
 
@@ -139,6 +152,11 @@ namespace myJournal
             if(ddlJournals.Items.Count == 1) { ddlJournals.SelectedIndex = 0; }
         }
 
+        /// <summary>
+        /// Choose a listed entry (see ddlJournals_SelectedIndexChanged) and display its Text.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void lstEntries_SelectedIndexChanged(object sender, EventArgs e)
         {
             int ctr = lstEntries.SelectedIndex;
@@ -164,6 +182,11 @@ namespace myJournal
             // get the selected found entry
         }
 
+        /// <summary>
+        /// Populate the entries listbox with entries in the selected journal.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ddlJournals_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (ddlJournals.Enabled)
@@ -172,9 +195,13 @@ namespace myJournal
             }
         }
 
+        /// <summary>
+        /// Populate the entries listbox with truncated JournalEntry's for user selection to see more.
+        /// </summary>
         private void PopulateEntries()
         {
             lstEntries.Items.Clear();
+            rtbSelectedEntry_Main.Text = string.Empty;
             Journal j = new Journal(ddlJournals.Text);
             currentJournal = j.OpenJournal();
             int iTextChunkLength = 45;
@@ -187,9 +214,27 @@ namespace myJournal
             }
         }
 
-        private void rtbSelectedEntry_Main_Click(object sender, EventArgs e)
+        private void PopulateGroups()
         {
-            btnCreateJournal.Focus();
+            lstGroups.Items.Clear();
+
+            foreach(string group in File.ReadAllLines(AppDomain.CurrentDomain.BaseDirectory + "/settings/groups")) 
+            {
+                lstGroups.Items.Add(group);
+            }
+        }
+
+        /// <summary>
+        /// Disallow focus on rtb used for displaying entry text.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void rtbSelectedEntry_Main_Click(object sender, EventArgs e)
+        { btnCreateJournal.Focus(); }
+
+        private void btnAddGroup_Click(object sender, EventArgs e)
+        {
+            
         }
     }
 }

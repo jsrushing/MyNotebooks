@@ -73,6 +73,9 @@ namespace myJournal
             this.btnOK_NewJrnl = new System.Windows.Forms.Button();
             this.txtNewJournalName = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.lstGroups = new System.Windows.Forms.CheckedListBox();
+            this.btnAddGroup = new System.Windows.Forms.Button();
             this.grpCreateEntry.SuspendLayout();
             this.grpOpenScreen.SuspendLayout();
             this.grpFindEntry.SuspendLayout();
@@ -125,6 +128,9 @@ namespace myJournal
             // 
             // grpCreateEntry
             // 
+            this.grpCreateEntry.Controls.Add(this.btnAddGroup);
+            this.grpCreateEntry.Controls.Add(this.lstGroups);
+            this.grpCreateEntry.Controls.Add(this.label14);
             this.grpCreateEntry.Controls.Add(this.lblHome_NewEntry);
             this.grpCreateEntry.Controls.Add(this.lblFont_NewEntry);
             this.grpCreateEntry.Controls.Add(this.lblAddEntry);
@@ -169,7 +175,7 @@ namespace myJournal
             this.lblAddEntry.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lblAddEntry.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
             this.lblAddEntry.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.lblAddEntry.Location = new System.Drawing.Point(23, 521);
+            this.lblAddEntry.Location = new System.Drawing.Point(200, 522);
             this.lblAddEntry.Name = "lblAddEntry";
             this.lblAddEntry.Size = new System.Drawing.Size(86, 15);
             this.lblAddEntry.TabIndex = 4;
@@ -190,7 +196,7 @@ namespace myJournal
             this.rtbNewEntry.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.rtbNewEntry.Location = new System.Drawing.Point(6, 87);
             this.rtbNewEntry.Name = "rtbNewEntry";
-            this.rtbNewEntry.Size = new System.Drawing.Size(278, 431);
+            this.rtbNewEntry.Size = new System.Drawing.Size(278, 347);
             this.rtbNewEntry.TabIndex = 2;
             this.rtbNewEntry.Text = "";
             // 
@@ -544,6 +550,33 @@ namespace myJournal
             this.label13.TabIndex = 0;
             this.label13.Text = "Journal Name:";
             // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(6, 440);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(39, 15);
+            this.label14.TabIndex = 25;
+            this.label14.Text = "group";
+            // 
+            // lstGroups
+            // 
+            this.lstGroups.FormattingEnabled = true;
+            this.lstGroups.Location = new System.Drawing.Point(51, 440);
+            this.lstGroups.Name = "lstGroups";
+            this.lstGroups.Size = new System.Drawing.Size(233, 76);
+            this.lstGroups.TabIndex = 27;
+            // 
+            // btnAddGroup
+            // 
+            this.btnAddGroup.Location = new System.Drawing.Point(15, 462);
+            this.btnAddGroup.Name = "btnAddGroup";
+            this.btnAddGroup.Size = new System.Drawing.Size(25, 23);
+            this.btnAddGroup.TabIndex = 13;
+            this.btnAddGroup.Text = "+";
+            this.btnAddGroup.UseVisualStyleBackColor = true;
+            this.btnAddGroup.Click += new System.EventHandler(this.btnAddGroup_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -614,6 +647,9 @@ namespace myJournal
         private System.Windows.Forms.TextBox txtNewJournalName;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.CheckBox chkSearchAllJournals;
+        private System.Windows.Forms.Button btnAddGroup;
+        private System.Windows.Forms.CheckedListBox lstGroups;
+        private System.Windows.Forms.Label label14;
     }
 }
 
