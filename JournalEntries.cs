@@ -10,7 +10,7 @@ namespace myJournal
 
         public JournalEntries() { Entries = new List<JournalEntry>(); }
 
-        public void AddEntry(JournalEntry entry)
+        public void Add(JournalEntry entry)
         {
             Entries.Add(entry);
         }

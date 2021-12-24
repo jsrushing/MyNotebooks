@@ -15,6 +15,8 @@ namespace myJournal
         Point ActiveBoxLocation = new Point(12, 0);
         Size ActiveBoxSize = (Size)new Point(290, 545);
         Size MainFormSize = (Size)new Point(331, 592);
+        GroupBox DisplayedGroupBox;
+
         public Form1()
         {
             InitializeComponent();
@@ -22,16 +24,16 @@ namespace myJournal
             grpOpenScreen.Location = ActiveBoxLocation;
             grpOpenScreen.Size = ActiveBoxSize;
         }
+        private void btnCreateJournal_Click(object sender, EventArgs e)
+        {
+            ActivateGroupBox(grpNewJournal);
+        }
 
         private void lblCreateEntry_Click(object sender, EventArgs e)
         {
-            if(ddlJournals.Text == "")
+            if (ddlJournals.Text == "")
             {
-                // create a new journal
-            }
-            else if (ddlJournals.Text == "Create New Journal")
-            {
-                // create a new journal
+                MessageBox.Show("You must choose a journal.");
             }
             else
             {
@@ -78,6 +80,15 @@ namespace myJournal
             box.Size = ActiveBoxSize;
             box.Location = ActiveBoxLocation;
             box.Visible = true;
+            DisplayedGroupBox = box;
+        }
+
+        private void btnOK_NewJrnl_Click(object sender, EventArgs e)
+        {
+            Journal jrnl = new Journal();
+            jrnl.Create(txtNewJournalName.Text);
+            jrnl.AddFirstEntry();
+            jrnl.Save();
         }
     }
 }
