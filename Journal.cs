@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Linq;
 
 namespace myJournal
 {
@@ -37,13 +38,17 @@ namespace myJournal
         public void CreateJournal()
         {
             AddFirstEntry();
-            //File.Create(this.FileName);
             SaveToDisk();
         }
 
         private void DeleteJournal()
         {
             File.Delete(this.FileName);
+        }
+
+        public JournalEntry GetEntry(string _title, string _date)
+        {
+            return this.Entries.First(a => a.Title + a.Date == _title + _date);
         }
 
         public Journal OpenJournal()
@@ -75,11 +80,6 @@ namespace myJournal
                 BinaryFormatter formatter = new BinaryFormatter();
                 formatter.Serialize(stream, this);
             }
-        }
-
-        private void GetJournalText()
-        {
-            // create the Entries object for named journal.
         }
     }
 }

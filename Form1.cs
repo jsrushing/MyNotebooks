@@ -59,8 +59,8 @@ namespace myJournal
         {
             // code to add an entry to the journal
             currentJournal.Entries.Add(new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text));
-            PopulateEntries();
             currentJournal.SaveToDisk();
+            PopulateEntries();
             ActivateGroupBox(grpOpenScreen);
         }
 
@@ -72,8 +72,15 @@ namespace myJournal
             }
             else
             {
-                ActivateGroupBox(grpCreateEntry);
-                this.Text = "Create Entry";
+                if(currentJournal != null)
+                {
+                    ActivateGroupBox(grpCreateEntry);
+                    this.Text = "Create Entry";
+                }
+                else
+                {
+                    this.Text = "Select A Journal";
+                }
             }
 
         }
@@ -134,7 +141,22 @@ namespace myJournal
 
         private void lstEntries_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // get the selected entry
+            int ctr = lstEntries.SelectedIndex;
+            if (lstEntries.Items[ctr].ToString().StartsWith("--")) ctr--;
+
+            while (!lstEntries.Items[ctr].ToString().StartsWith("--") & ctr > 0)
+            {
+                ctr--;
+                if (ctr < 0) break;
+            }
+            string sTitleAndDate = lstEntries.Items[ctr == 0 ? ctr : ctr + 1].ToString();
+            string sTitle = sTitleAndDate.Substring(0, sTitleAndDate.IndexOf('(') - 1);
+            string sDate = sTitleAndDate.Substring(sTitleAndDate.IndexOf('(') + 1, sTitleAndDate.Length - 2 - sTitleAndDate.IndexOf('('));
+
+            JournalEntry je = currentJournal.GetEntry(sTitle, sDate);
+
+            rtbSelectedEntry_Main.Text = je.Text;
+
         }
 
         private void lstFoundEntries_SelectedIndexChanged(object sender, EventArgs e)
@@ -155,13 +177,19 @@ namespace myJournal
             lstEntries.Items.Clear();
             Journal j = new Journal(ddlJournals.Text);
             currentJournal = j.OpenJournal();
+            int iTextChunkLength = 45;
 
             foreach(JournalEntry je in currentJournal.Entries)
             {
                 lstEntries.Items.Add(je.Title + " (" + je.Date + ")");
-                lstEntries.Items.Add(je.Text.Length < 31 ? je.Text : je.Text.Substring(0, 30) + " ...");
+                lstEntries.Items.Add(je.Text.Length < iTextChunkLength ? je.Text : je.Text.Substring(0, iTextChunkLength - 1) + " ...");
                 lstEntries.Items.Add("---------------------");
             }
+        }
+
+        private void rtbSelectedEntry_Main_Click(object sender, EventArgs e)
+        {
+            btnCreateJournal.Focus();
         }
     }
 }

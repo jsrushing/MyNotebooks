@@ -45,7 +45,7 @@ namespace myJournal
             this.btnCreateJournal = new System.Windows.Forms.Button();
             this.lblSettings = new System.Windows.Forms.Label();
             this.lblEntriesStartFrom = new System.Windows.Forms.Label();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.rtbSelectedEntry_Main = new System.Windows.Forms.RichTextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.lstEntries = new System.Windows.Forms.ListBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -169,7 +169,7 @@ namespace myJournal
             this.lblAddEntry.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lblAddEntry.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
             this.lblAddEntry.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.lblAddEntry.Location = new System.Drawing.Point(23, 522);
+            this.lblAddEntry.Location = new System.Drawing.Point(23, 521);
             this.lblAddEntry.Name = "lblAddEntry";
             this.lblAddEntry.Size = new System.Drawing.Size(86, 15);
             this.lblAddEntry.TabIndex = 4;
@@ -215,7 +215,7 @@ namespace myJournal
             this.grpOpenScreen.Controls.Add(this.btnCreateJournal);
             this.grpOpenScreen.Controls.Add(this.lblSettings);
             this.grpOpenScreen.Controls.Add(this.lblEntriesStartFrom);
-            this.grpOpenScreen.Controls.Add(this.richTextBox1);
+            this.grpOpenScreen.Controls.Add(this.rtbSelectedEntry_Main);
             this.grpOpenScreen.Controls.Add(this.ddlJournals);
             this.grpOpenScreen.Controls.Add(this.label1);
             this.grpOpenScreen.Controls.Add(this.label5);
@@ -259,13 +259,15 @@ namespace myJournal
             this.lblEntriesStartFrom.TabIndex = 10;
             this.lblEntriesStartFrom.Text = "(from 2 weeks ago)";
             // 
-            // richTextBox1
+            // rtbSelectedEntry_Main
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(6, 275);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(278, 264);
-            this.richTextBox1.TabIndex = 5;
-            this.richTextBox1.Text = "";
+            this.rtbSelectedEntry_Main.Location = new System.Drawing.Point(6, 275);
+            this.rtbSelectedEntry_Main.Name = "rtbSelectedEntry_Main";
+            this.rtbSelectedEntry_Main.Size = new System.Drawing.Size(278, 264);
+            this.rtbSelectedEntry_Main.TabIndex = 5;
+            this.rtbSelectedEntry_Main.TabStop = false;
+            this.rtbSelectedEntry_Main.Text = "";
+            this.rtbSelectedEntry_Main.Click += new System.EventHandler(this.rtbSelectedEntry_Main_Click);
             // 
             // label5
             // 
@@ -532,7 +534,6 @@ namespace myJournal
             this.txtNewJournalName.Name = "txtNewJournalName";
             this.txtNewJournalName.Size = new System.Drawing.Size(193, 23);
             this.txtNewJournalName.TabIndex = 1;
-            this.txtNewJournalName.Text = "jrn1";
             // 
             // label13
             // 
@@ -584,7 +585,7 @@ namespace myJournal
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.GroupBox grpFindEntry;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.RichTextBox rtbSelectedEntry_Main;
         private System.Windows.Forms.Label lblSettings;
         private System.Windows.Forms.Label lblEntriesStartFrom;
         private System.Windows.Forms.TextBox textBox3;
