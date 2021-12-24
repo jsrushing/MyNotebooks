@@ -9,5 +9,11 @@ namespace myJournal
         public string Name;
         public JournalEntries Entries;
 
+        public Journal() { }
+
+        private void GetEntries()
+        {
+            // create the Entries object for named journal.
+        }
     }
 }
