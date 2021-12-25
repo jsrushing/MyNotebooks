@@ -27,12 +27,12 @@ namespace myJournal
 
         private void AddEntry(string _title, string _text)
         {
-            Entries.Add(new JournalEntry(_title, _text));
+            Entries.Add(new JournalEntry(_title, _text, ""));
         }
 
         public void AddFirstEntry()
         {
-            Entries.Add(new JournalEntry("created", "-"));
+            Entries.Add(new JournalEntry("created", "-", ""));
         }
 
         public void CreateJournal()

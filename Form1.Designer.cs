@@ -81,6 +81,7 @@ namespace myJournal
             this.btnOK_NewGroup = new System.Windows.Forms.Button();
             this.txtNewGroup = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
+            this.lblEditEntry = new System.Windows.Forms.Label();
             this.grpCreateEntry.SuspendLayout();
             this.grpOpenScreen.SuspendLayout();
             this.grpFindEntry.SuspendLayout();
@@ -125,7 +126,7 @@ namespace myJournal
             this.lblFindEntry.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lblFindEntry.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
             this.lblFindEntry.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.lblFindEntry.Location = new System.Drawing.Point(119, 52);
+            this.lblFindEntry.Location = new System.Drawing.Point(220, 52);
             this.lblFindEntry.Name = "lblFindEntry";
             this.lblFindEntry.Size = new System.Drawing.Size(62, 15);
             this.lblFindEntry.TabIndex = 3;
@@ -251,6 +252,7 @@ namespace myJournal
             // 
             // grpOpenScreen
             // 
+            this.grpOpenScreen.Controls.Add(this.lblEditEntry);
             this.grpOpenScreen.Controls.Add(this.btnCreateJournal);
             this.grpOpenScreen.Controls.Add(this.lblSettings);
             this.grpOpenScreen.Controls.Add(this.lblEntriesStartFrom);
@@ -634,6 +636,19 @@ namespace myJournal
             this.label16.TabIndex = 0;
             this.label16.Text = "Group Name:";
             // 
+            // lblEditEntry
+            // 
+            this.lblEditEntry.AutoSize = true;
+            this.lblEditEntry.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lblEditEntry.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
+            this.lblEditEntry.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.lblEditEntry.Location = new System.Drawing.Point(132, 52);
+            this.lblEditEntry.Name = "lblEditEntry";
+            this.lblEditEntry.Size = new System.Drawing.Size(60, 15);
+            this.lblEditEntry.TabIndex = 13;
+            this.lblEditEntry.Text = "Edit Entry";
+            this.lblEditEntry.Click += new System.EventHandler(this.lblEditEntry_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -647,6 +662,7 @@ namespace myJournal
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "My Journals";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.grpCreateEntry.ResumeLayout(false);
             this.grpCreateEntry.PerformLayout();
             this.grpOpenScreen.ResumeLayout(false);
@@ -715,6 +731,7 @@ namespace myJournal
         private System.Windows.Forms.Button btnOK_NewGroup;
         private System.Windows.Forms.TextBox txtNewGroup;
         private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label lblEditEntry;
     }
 }
 

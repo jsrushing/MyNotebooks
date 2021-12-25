@@ -31,6 +31,7 @@ namespace myJournal
         }
         private void ActivateGroupBox(GroupBox box)
         {
+            TextBox txtBxToFocus = null;
             foreach (GroupBox gb in this.Controls)
             {
                 gb.Visible = false;
@@ -43,18 +44,25 @@ namespace myJournal
                     break;
                 case "grpCreateEntry":
                     this.Text = "Create Entry";
+                    txtBxToFocus = this.txtNewEntryTitle;
                     break;
                 case "grpFindEntry":
                     this.Text = "Search Journal";
                     break;
                 case "grpNewJournal":
                     this.Text = "Create New Journal";
+                    txtBxToFocus = this.txtNewJournalName;
+                    break;
+                case "grpNewGroup":
+                    this.Text = "Create New Group";
+                    txtBxToFocus = this.txtNewGroup;
                     break;
             }
 
             box.Size = ActiveBoxSize;
             box.Location = ActiveBoxLocation;
             box.Visible = true;
+            if (txtBxToFocus != null) txtBxToFocus.Focus();
             DisplayedGroupBox = box;
         }
 
@@ -74,7 +82,15 @@ namespace myJournal
 
         private void lblAddEntry_Click(object sender, EventArgs e)
         {
-            currentJournal.Entries.Add(new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text));
+            string sGroups = string.Empty;
+            for(int i = 0; i < lstGroups.CheckedItems.Count; i++)
+            {
+                sGroups += lstGroups.CheckedItems[i].ToString() + ",";
+            }
+
+            currentJournal.Entries.Add(new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, 
+                sGroups.Length > 0 ? sGroups.Substring(0, sGroups.Length - 1) : string.Empty));
+
             currentJournal.SaveToDisk();
             PopulateEntries();
             ActivateGroupBox(grpOpenScreen);
@@ -167,14 +183,12 @@ namespace myJournal
                 ctr--;
                 if (ctr < 0) break;
             }
-            string sTitleAndDate = lstEntries.Items[ctr == 0 ? ctr : ctr + 1].ToString();
+            if (ctr > 0) { ctr += 1; }
+            string sTitleAndDate = lstEntries.Items[ctr].ToString();
             string sTitle = sTitleAndDate.Substring(0, sTitleAndDate.IndexOf('(') - 1);
             string sDate = sTitleAndDate.Substring(sTitleAndDate.IndexOf('(') + 1, sTitleAndDate.Length - 2 - sTitleAndDate.IndexOf('('));
-
-            JournalEntry je = currentJournal.GetEntry(sTitle, sDate);
-
-            rtbSelectedEntry_Main.Text = je.Text;
-
+            lstEntries.SelectedIndex = ctr + 1;
+            rtbSelectedEntry_Main.Text = currentJournal.GetEntry(sTitle, sDate).Text;
         }
 
         private void lstFoundEntries_SelectedIndexChanged(object sender, EventArgs e)
@@ -210,6 +224,7 @@ namespace myJournal
             {
                 lstEntries.Items.Add(je.Title + " (" + je.Date + ")");
                 lstEntries.Items.Add(je.Text.Length < iTextChunkLength ? je.Text : je.Text.Substring(0, iTextChunkLength - 1) + " ...");
+                if(je.Groups.Length > 0) lstEntries.Items.Add(je.Groups);
                 lstEntries.Items.Add("---------------------");
             }
         }
@@ -242,7 +257,18 @@ namespace myJournal
                 sw.WriteLine(txtNewGroup.Text);
             }
             PopulateGroups();
+            txtNewGroup.Text = string.Empty;
             ActivateGroupBox(grpCreateEntry);
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblEditEntry_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
