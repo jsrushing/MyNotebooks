@@ -30,6 +30,11 @@ namespace myJournal
             LoadJournals();
             PopulateGroups();
         }
+
+        /// <summary>
+        /// Show a group box. Change form Text, set focus, etc. as required for that group box.
+        /// </summary>
+        /// <param name="box"></param>
         private void ActivateGroupBox(GroupBox box)
         {
             TextBox txtBxToFocus = null;
@@ -67,18 +72,28 @@ namespace myJournal
             DisplayedGroupBox = box;
         }
 
+        private void btnAddGroup_Click(object sender, EventArgs e)
+        { ActivateGroupBox(grpNewGroup); }
+
+        private void btnOK_NewGroup_Click(object sender, EventArgs e)
+        {
+            using (StreamWriter sw = File.AppendText(AppDomain.CurrentDomain.BaseDirectory + "/settings/groups"))
+            {
+                sw.WriteLine(txtNewGroup.Text);
+            }
+            PopulateGroups();
+            txtNewGroup.Text = string.Empty;
+            ActivateGroupBox(grpCreateEntry);
+        }
+
+       private void btnCreateJournal_Click(object sender, EventArgs e) { ActivateGroupBox(grpNewJournal); }
+
         private void btnOK_NewJrnl_Click(object sender, EventArgs e)
         {
             Journal jrnl = new Journal(txtNewJournalName.Text);
             jrnl.CreateJournal();
             LoadJournals();
             ActivateGroupBox(grpOpenScreen);
-        }
-
-        private void btnCreateJournal_Click(object sender, EventArgs e)
-        {
-            ActivateGroupBox(grpNewJournal);
-            txtNewJournalName.Focus();
         }
 
         private void lblAddEntry_Click(object sender, EventArgs e)
@@ -108,26 +123,22 @@ namespace myJournal
                 if(currentJournal != null)
                 {
                     ActivateGroupBox(grpCreateEntry);
-                    this.Text = "Create Entry";
                 }
                 else
                 {
                     this.Text = "Select A Journal";
                 }
             }
-
         }
 
-        private void lblFindEntry_Click(object sender, EventArgs e)
-        { ActivateGroupBox(grpFindEntry); }
+       private void lblFindEntry_Click(object sender, EventArgs e) { ActivateGroupBox(grpFindEntry); }
 
         private void lblSettings_Click(object sender, EventArgs e)
         {
             // show the settings group box
         }
 
-        private void lblHome_Click(object sender, EventArgs e)
-        { ActivateGroupBox(grpOpenScreen); }
+        private void lblHome_Click(object sender, EventArgs e) { ActivateGroupBox(grpOpenScreen); }
 
         private void lblClearAll_Click(object sender, EventArgs e)
         {
@@ -176,8 +187,6 @@ namespace myJournal
         /// <param name="e"></param>
         private void lstEntries_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var iSelected = lstEntries.SelectedIndices;
-
             ListBox.SelectedIndexCollection c = lstEntries.SelectedIndices;
             List<int> targets = new List<int>();
             this.lstEntries.SelectedIndexChanged -= new System.EventHandler(this.lstEntries_SelectedIndexChanged);
@@ -223,6 +232,7 @@ namespace myJournal
             string sTitle = sTitleAndDate.Substring(0, sTitleAndDate.IndexOf('(') - 1);
             string sDate = sTitleAndDate.Substring(sTitleAndDate.IndexOf('(') + 1, sTitleAndDate.Length - 2 - sTitleAndDate.IndexOf('('));
             SelectChosenEntry(ctr);
+            this.lstEntries.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectedIndexChanged);
             rtbSelectedEntry_Main.Text = currentJournal.GetEntry(sTitle, sDate).Text;
         }
 
@@ -232,7 +242,6 @@ namespace myJournal
             lstEntries.SelectedIndices.Add(index);
             lstEntries.SelectedIndices.Add(index + 1);
             lstEntries.SelectedIndices.Add(index + 2);
-            this.lstEntries.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectedIndexChanged);
         }
 
         private void lstFoundEntries_SelectedIndexChanged(object sender, EventArgs e)
@@ -290,20 +299,6 @@ namespace myJournal
         /// <param name="e"></param>
         private void rtbSelectedEntry_Main_Click(object sender, EventArgs e)
         { btnCreateJournal.Focus(); }
-
-        private void btnAddGroup_Click(object sender, EventArgs e)
-        { ActivateGroupBox(grpNewGroup); }
-
-        private void btnOK_NewGroup_Click(object sender, EventArgs e)
-        {
-            using (StreamWriter sw = File.AppendText(AppDomain.CurrentDomain.BaseDirectory + "/settings/groups"))
-            {
-                sw.WriteLine(txtNewGroup.Text);
-            }
-            PopulateGroups();
-            txtNewGroup.Text = string.Empty;
-            ActivateGroupBox(grpCreateEntry);
-        }
 
         private void Form1_Load(object sender, EventArgs e)
         {

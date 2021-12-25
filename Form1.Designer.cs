@@ -29,6 +29,7 @@ namespace myJournal
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
             this.ddlJournals = new System.Windows.Forms.ComboBox();
             this.lblCreateEntry = new System.Windows.Forms.Label();
@@ -36,6 +37,9 @@ namespace myJournal
             this.grpCreateEntry = new System.Windows.Forms.GroupBox();
             this.btnAddGroup = new System.Windows.Forms.Button();
             this.lstGroups = new System.Windows.Forms.CheckedListBox();
+            this.mnuGroups = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnuEdit = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.label14 = new System.Windows.Forms.Label();
             this.lblHome_NewEntry = new System.Windows.Forms.Label();
             this.lblFont_NewEntry = new System.Windows.Forms.Label();
@@ -83,6 +87,7 @@ namespace myJournal
             this.txtNewGroup = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
             this.grpCreateEntry.SuspendLayout();
+            this.mnuGroups.SuspendLayout();
             this.grpOpenScreen.SuspendLayout();
             this.grpFindEntry.SuspendLayout();
             this.grpNewJournal.SuspendLayout();
@@ -163,11 +168,32 @@ namespace myJournal
             // 
             // lstGroups
             // 
+            this.lstGroups.ContextMenuStrip = this.mnuGroups;
             this.lstGroups.FormattingEnabled = true;
             this.lstGroups.Location = new System.Drawing.Point(51, 440);
             this.lstGroups.Name = "lstGroups";
             this.lstGroups.Size = new System.Drawing.Size(233, 76);
             this.lstGroups.TabIndex = 27;
+            // 
+            // mnuGroups
+            // 
+            this.mnuGroups.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuEdit,
+            this.mnuDelete});
+            this.mnuGroups.Name = "mnuGroups";
+            this.mnuGroups.Size = new System.Drawing.Size(108, 48);
+            // 
+            // mnuEdit
+            // 
+            this.mnuEdit.Name = "mnuEdit";
+            this.mnuEdit.Size = new System.Drawing.Size(107, 22);
+            this.mnuEdit.Text = "Edit";
+            // 
+            // mnuDelete
+            // 
+            this.mnuDelete.Name = "mnuDelete";
+            this.mnuDelete.Size = new System.Drawing.Size(107, 22);
+            this.mnuDelete.Text = "Delete";
             // 
             // label14
             // 
@@ -636,9 +662,9 @@ namespace myJournal
             // 
             // txtNewGroup
             // 
-            this.txtNewGroup.Location = new System.Drawing.Point(88, 40);
+            this.txtNewGroup.Location = new System.Drawing.Point(83, 40);
             this.txtNewGroup.Name = "txtNewGroup";
-            this.txtNewGroup.Size = new System.Drawing.Size(193, 23);
+            this.txtNewGroup.Size = new System.Drawing.Size(201, 23);
             this.txtNewGroup.TabIndex = 1;
             // 
             // label16
@@ -666,6 +692,7 @@ namespace myJournal
             this.Load += new System.EventHandler(this.Form1_Load);
             this.grpCreateEntry.ResumeLayout(false);
             this.grpCreateEntry.PerformLayout();
+            this.mnuGroups.ResumeLayout(false);
             this.grpOpenScreen.ResumeLayout(false);
             this.grpOpenScreen.PerformLayout();
             this.grpFindEntry.ResumeLayout(false);
@@ -733,6 +760,9 @@ namespace myJournal
         private System.Windows.Forms.TextBox txtNewGroup;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label lblEditEntry;
+        private System.Windows.Forms.ContextMenuStrip mnuGroups;
+        private System.Windows.Forms.ToolStripMenuItem mnuEdit;
+        private System.Windows.Forms.ToolStripMenuItem mnuDelete;
     }
 }
 
