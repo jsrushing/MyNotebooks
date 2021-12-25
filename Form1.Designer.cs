@@ -45,6 +45,7 @@ namespace myJournal
             this.txtNewEntryTitle = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.grpOpenScreen = new System.Windows.Forms.GroupBox();
+            this.lblEditEntry = new System.Windows.Forms.Label();
             this.btnCreateJournal = new System.Windows.Forms.Button();
             this.lblSettings = new System.Windows.Forms.Label();
             this.lblEntriesStartFrom = new System.Windows.Forms.Label();
@@ -81,7 +82,6 @@ namespace myJournal
             this.btnOK_NewGroup = new System.Windows.Forms.Button();
             this.txtNewGroup = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
-            this.lblEditEntry = new System.Windows.Forms.Label();
             this.grpCreateEntry.SuspendLayout();
             this.grpOpenScreen.SuspendLayout();
             this.grpFindEntry.SuspendLayout();
@@ -270,6 +270,19 @@ namespace myJournal
             this.grpOpenScreen.TabIndex = 5;
             this.grpOpenScreen.TabStop = false;
             // 
+            // lblEditEntry
+            // 
+            this.lblEditEntry.AutoSize = true;
+            this.lblEditEntry.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lblEditEntry.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
+            this.lblEditEntry.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.lblEditEntry.Location = new System.Drawing.Point(132, 52);
+            this.lblEditEntry.Name = "lblEditEntry";
+            this.lblEditEntry.Size = new System.Drawing.Size(60, 15);
+            this.lblEditEntry.TabIndex = 13;
+            this.lblEditEntry.Text = "Edit Entry";
+            this.lblEditEntry.Click += new System.EventHandler(this.lblEditEntry_Click);
+            // 
             // btnCreateJournal
             // 
             this.btnCreateJournal.Location = new System.Drawing.Point(258, 21);
@@ -325,6 +338,7 @@ namespace myJournal
             this.lstEntries.ItemHeight = 15;
             this.lstEntries.Location = new System.Drawing.Point(6, 95);
             this.lstEntries.Name = "lstEntries";
+            this.lstEntries.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
             this.lstEntries.Size = new System.Drawing.Size(278, 154);
             this.lstEntries.TabIndex = 8;
             this.lstEntries.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectedIndexChanged);
@@ -635,19 +649,6 @@ namespace myJournal
             this.label16.Size = new System.Drawing.Size(78, 15);
             this.label16.TabIndex = 0;
             this.label16.Text = "Group Name:";
-            // 
-            // lblEditEntry
-            // 
-            this.lblEditEntry.AutoSize = true;
-            this.lblEditEntry.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lblEditEntry.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
-            this.lblEditEntry.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.lblEditEntry.Location = new System.Drawing.Point(132, 52);
-            this.lblEditEntry.Name = "lblEditEntry";
-            this.lblEditEntry.Size = new System.Drawing.Size(60, 15);
-            this.lblEditEntry.TabIndex = 13;
-            this.lblEditEntry.Text = "Edit Entry";
-            this.lblEditEntry.Click += new System.EventHandler(this.lblEditEntry_Click);
             // 
             // Form1
             // 

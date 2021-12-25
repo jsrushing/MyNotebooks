@@ -19,6 +19,7 @@ namespace myJournal
         Size MainFormSize = (Size)new Point(331, 592);
         GroupBox DisplayedGroupBox;
         Journal currentJournal = null;
+        int iChosenEntryForHighlighting;
 
         public Form1()
         {
@@ -175,7 +176,40 @@ namespace myJournal
         /// <param name="e"></param>
         private void lstEntries_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int ctr = lstEntries.SelectedIndex;
+            var iSelected = lstEntries.SelectedIndices;
+
+            ListBox.SelectedIndexCollection c = lstEntries.SelectedIndices;
+            List<int> targets = new List<int>();
+            this.lstEntries.SelectedIndexChanged -= new System.EventHandler(this.lstEntries_SelectedIndexChanged);
+
+            if(c.Count > 1)
+            {
+                for(int i = 0; i < c.Count - 1; i++)
+                {
+                    int i1 = c[i];
+                    int i2 = c[i + 1];
+
+                    if(c[i] == c[i + 1] - 1)
+                    {
+                        targets.Add(c[i]);
+                        targets.Add(c[i + 1]);
+                        targets.Add(c[i + 2]);
+                        break;
+                    }
+                }
+            }
+
+            if(targets.Count == 3)
+            {
+                foreach(int i in targets)
+                {
+                    lstEntries.SelectedIndices.Remove(i);
+                }
+            }
+
+            iChosenEntryForHighlighting = lstEntries.SelectedIndex;   
+
+            int ctr = iChosenEntryForHighlighting;
             if (lstEntries.Items[ctr].ToString().StartsWith("--")) ctr--;
 
             while (!lstEntries.Items[ctr].ToString().StartsWith("--") & ctr > 0)
@@ -183,12 +217,22 @@ namespace myJournal
                 ctr--;
                 if (ctr < 0) break;
             }
+
             if (ctr > 0) { ctr += 1; }
             string sTitleAndDate = lstEntries.Items[ctr].ToString();
             string sTitle = sTitleAndDate.Substring(0, sTitleAndDate.IndexOf('(') - 1);
             string sDate = sTitleAndDate.Substring(sTitleAndDate.IndexOf('(') + 1, sTitleAndDate.Length - 2 - sTitleAndDate.IndexOf('('));
-            lstEntries.SelectedIndex = ctr + 1;
+            SelectChosenEntry(ctr);
             rtbSelectedEntry_Main.Text = currentJournal.GetEntry(sTitle, sDate).Text;
+        }
+
+        private void SelectChosenEntry(int index)
+        {
+            lstEntries.SelectedIndices.Clear();
+            lstEntries.SelectedIndices.Add(index);
+            lstEntries.SelectedIndices.Add(index + 1);
+            lstEntries.SelectedIndices.Add(index + 2);
+            this.lstEntries.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectedIndexChanged);
         }
 
         private void lstFoundEntries_SelectedIndexChanged(object sender, EventArgs e)
