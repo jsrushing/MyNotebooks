@@ -404,7 +404,7 @@ namespace myJournal
             {
                 s += lstGroupsForSearch.Items[i].ToString() + ",";
             }
-            txtGroupsForSearch.Text = s.Substring(0, s.Length - 1);
+            txtGroupsForSearch.Text = s.Length > 0 ? s.Substring(0, s.Length - 1) : s;
             lstGroupsForSearch.Visible = false;
         }
     }

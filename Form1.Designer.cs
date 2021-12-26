@@ -61,8 +61,8 @@ namespace myJournal
             this.grpFindEntry = new System.Windows.Forms.GroupBox();
             this.lstGroupsForSearch = new System.Windows.Forms.CheckedListBox();
             this.txtGroupsForSearch = new System.Windows.Forms.TextBox();
-            this.label17 = new System.Windows.Forms.Label();
             this.chkSearchAllJournals = new System.Windows.Forms.CheckBox();
+            this.label17 = new System.Windows.Forms.Label();
             this.lblClearAll = new System.Windows.Forms.Label();
             this.lblHome = new System.Windows.Forms.Label();
             this.textBox3 = new System.Windows.Forms.TextBox();
@@ -443,15 +443,6 @@ namespace myJournal
             this.txtGroupsForSearch.TabIndex = 27;
             this.txtGroupsForSearch.Click += new System.EventHandler(this.txtGroupsForSearch_Click);
             // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(7, 86);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(37, 15);
-            this.label17.TabIndex = 26;
-            this.label17.Text = "tag(s)";
-            // 
             // chkSearchAllJournals
             // 
             this.chkSearchAllJournals.AutoSize = true;
@@ -461,6 +452,15 @@ namespace myJournal
             this.chkSearchAllJournals.TabIndex = 25;
             this.chkSearchAllJournals.Text = "Search All Journals";
             this.chkSearchAllJournals.UseVisualStyleBackColor = true;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(7, 86);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(37, 15);
+            this.label17.TabIndex = 26;
+            this.label17.Text = "tag(s)";
             // 
             // lblClearAll
             // 
@@ -504,12 +504,12 @@ namespace myJournal
             // 
             // dateTimePicker2
             // 
-            this.dateTimePicker2.CustomFormat = "M/d/yy";
+            this.dateTimePicker2.CustomFormat = "M/d/yyyy";
             this.dateTimePicker2.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dateTimePicker2.Location = new System.Drawing.Point(211, 34);
             this.dateTimePicker2.Name = "dateTimePicker2";
             this.dateTimePicker2.ShowUpDown = true;
-            this.dateTimePicker2.Size = new System.Drawing.Size(73, 23);
+            this.dateTimePicker2.Size = new System.Drawing.Size(79, 23);
             this.dateTimePicker2.TabIndex = 20;
             this.dateTimePicker2.Value = new System.DateTime(2021, 12, 23, 18, 55, 40, 0);
             // 
@@ -524,23 +524,23 @@ namespace myJournal
             // 
             // dateTimePicker1
             // 
-            this.dateTimePicker1.CustomFormat = "M/d/yy";
+            this.dateTimePicker1.CustomFormat = "M/d/yyyy";
             this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePicker1.Location = new System.Drawing.Point(118, 34);
+            this.dateTimePicker1.Location = new System.Drawing.Point(114, 34);
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.ShowUpDown = true;
-            this.dateTimePicker1.Size = new System.Drawing.Size(73, 23);
+            this.dateTimePicker1.Size = new System.Drawing.Size(79, 23);
             this.dateTimePicker1.TabIndex = 18;
             this.dateTimePicker1.Value = new System.DateTime(2021, 12, 23, 18, 55, 40, 0);
             // 
             // dtFindDate
             // 
-            this.dtFindDate.CustomFormat = "M/d/yy";
+            this.dtFindDate.CustomFormat = "M/d/yyyy";
             this.dtFindDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtFindDate.Location = new System.Drawing.Point(4, 34);
             this.dtFindDate.Name = "dtFindDate";
             this.dtFindDate.ShowUpDown = true;
-            this.dtFindDate.Size = new System.Drawing.Size(73, 23);
+            this.dtFindDate.Size = new System.Drawing.Size(79, 23);
             this.dtFindDate.TabIndex = 17;
             this.dtFindDate.Value = new System.DateTime(2021, 12, 23, 18, 55, 40, 0);
             // 
@@ -613,11 +613,11 @@ namespace myJournal
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(80, 38);
+            this.label7.Location = new System.Drawing.Point(84, 38);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(36, 15);
+            this.label7.Size = new System.Drawing.Size(27, 15);
             this.label7.TabIndex = 1;
-            this.label7.Text = ".. or ..";
+            this.label7.Text = "or ..";
             // 
             // label6
             // 
