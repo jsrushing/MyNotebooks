@@ -30,7 +30,6 @@ namespace myJournal
             grpOpenScreen.Location = ActiveBoxLocation;
             grpOpenScreen.Size = ActiveBoxSize;
             LoadJournals();
-            Groups_PopulateGroupsList(lstGroups);
         }
 
         /// <summary>
@@ -57,6 +56,7 @@ namespace myJournal
                 case "grpCreateEntry":
                     this.Text = "Create Entry";
                     txtBxToFocus = this.txtNewEntryTitle;
+                    if(lstGroups.Items.Count == 0) { Groups_PopulateGroupsList(lstGroups); }
                     break;
                 case "grpFindEntry":
                     this.Text = "Search Journal";
@@ -78,6 +78,32 @@ namespace myJournal
             box.Visible = true;
             if (txtBxToFocus != null) txtBxToFocus.Focus();
             DisplayedGroupBox = box;
+        }
+
+        /// <summary>
+        /// Add the new entry. THIS SHOULD BE CUT OVER TO A BUTTON.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnAddEntry_Click(object sender, EventArgs e)
+        {
+            if (rtbNewEntry.Text.Length > 0 && txtNewEntryTitle.Text.Length > 0)
+            {
+                string sGroups = string.Empty;
+
+                for (int i = 0; i < lstGroups.CheckedItems.Count; i++)
+                {
+                    sGroups += lstGroups.CheckedItems[i].ToString() + ",";
+                }
+
+                currentJournal.Entries.Add(new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text,
+                    sGroups.Length > 0 ? sGroups.Substring(0, sGroups.Length - 1) : string.Empty));
+
+                currentJournal.SaveToDisk();
+                PopulateEntries();
+            }
+
+            ActivateGroupBox(grpOpenScreen);
         }
 
         private void btnCreateJournal_Click(object sender, EventArgs e) { ActivateGroupBox(grpNewJournal); }
@@ -169,27 +195,6 @@ namespace myJournal
         }
         #endregion
 
-        /// <summary>
-        /// Populate grp
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void lblAddEntry_Click(object sender, EventArgs e)
-        {
-            string sGroups = string.Empty;
-            for(int i = 0; i < lstGroups.CheckedItems.Count; i++)
-            {
-                sGroups += lstGroups.CheckedItems[i].ToString() + ",";
-            }
-
-            currentJournal.Entries.Add(new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, 
-                sGroups.Length > 0 ? sGroups.Substring(0, sGroups.Length - 1) : string.Empty));
-
-            currentJournal.SaveToDisk();
-            PopulateEntries();
-            ActivateGroupBox(grpOpenScreen);
-        }
-
         private void lblCreateEntry_Click(object sender, EventArgs e)
         {
             if (!ddlJournals.Enabled)
@@ -228,6 +233,9 @@ namespace myJournal
             // clear search criteria
         }
 
+        /// <summary>
+        /// If no journals exist, create system folders. Otherwise populate ddlJournals with journal names.
+        /// </summary>
         private void LoadJournals()
         {
             ddlJournals.Items.Clear();
@@ -336,17 +344,23 @@ namespace myJournal
             lstEntries.Items.Clear();
             rtbSelectedEntry_Main.Text = string.Empty;
             Journal j = new Journal(ddlJournals.Text);
-            int iTextChunkLength = 45;
             currentJournal = j.OpenJournal();
+
             if(currentJournal != null)
             {
-                foreach(JournalEntry je in currentJournal.Entries)
-                {
-                    lstEntries.Items.Add(je.Title + " (" + je.Date.ToString("M-dd-yy H-d-yy") + ")");
-                    lstEntries.Items.Add(je.Text.Length < iTextChunkLength ? je.Text : je.Text.Substring(0, iTextChunkLength - 1) + " ...");
-                    if(je.Groups.Length > 0) lstEntries.Items.Add("tags: " + je.Groups);
-                    lstEntries.Items.Add("---------------------");
-                }
+                PopulateAllEntries(lstEntries, currentJournal.Entries);
+            }
+        }
+
+        private void PopulateAllEntries(ListBox lstBox, List<JournalEntry> entries)
+        {
+            int iTextChunkLength = Convert.ToInt16( Properties.Settings.Default["ShortEntryDisplayTextLength"]);
+            foreach(JournalEntry je in entries)
+            {
+                lstBox.Items.Add(je.Title + " (" + je.Date.ToString("M-dd-yy H-d-yy") + ")");
+                lstBox.Items.Add(je.Text.Length < iTextChunkLength ? je.Text : je.Text.Substring(0, iTextChunkLength - 1) + " ...");
+                if (je.Groups.Length > 0) lstEntries.Items.Add("tags: " + je.Groups);
+                lstEntries.Items.Add("---------------------");
             }
         }
 
@@ -363,27 +377,6 @@ namespace myJournal
             lstEntries.SelectedIndices.Add(index);
             lstEntries.SelectedIndices.Add(index + 1);
             lstEntries.SelectedIndices.Add(index + 2);
-        }
-
-        private void btnAddEntry_Click(object sender, EventArgs e)
-        {
-            if(rtbNewEntry.Text.Length > 0 && txtNewEntryTitle.Text.Length > 0)
-            {
-                string sGroups = string.Empty;
-
-                for (int i = 0; i < lstGroups.CheckedItems.Count; i++)
-                {
-                    sGroups += lstGroups.CheckedItems[i].ToString() + ",";
-                }
-
-                currentJournal.Entries.Add(new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text,
-                    sGroups.Length > 0 ? sGroups.Substring(0, sGroups.Length - 1) : string.Empty));
-
-                currentJournal.SaveToDisk();
-                PopulateEntries();
-            }
-
-            ActivateGroupBox(grpOpenScreen);
         }
 
         private void txtGroupsForSearch_TextChanged(object sender, EventArgs e)
@@ -463,6 +456,11 @@ namespace myJournal
                     // entry contains
                     if (je.Text.Contains(txtSearchText.Text)) { foundEntries.Add(je); }
                 }
+            }
+
+            if(foundEntries.Count > 0)
+            {
+                PopulateAllEntries(lstFoundEntries, foundEntries);
             }
 
         }

@@ -46,5 +46,17 @@ namespace myJournal.Properties {
                 this["TxtSelectGroupsForSearchDefault"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("45")]
+        public int ShortEntryDisplayTextLength {
+            get {
+                return ((int)(this["ShortEntryDisplayTextLength"]));
+            }
+            set {
+                this["ShortEntryDisplayTextLength"] = value;
+            }
+        }
     }
 }
