@@ -35,6 +35,7 @@ namespace myJournal
             this.lblCreateEntry = new System.Windows.Forms.Label();
             this.lblFindEntry = new System.Windows.Forms.Label();
             this.grpCreateEntry = new System.Windows.Forms.GroupBox();
+            this.btnAddEntry = new System.Windows.Forms.Button();
             this.btnAddGroup = new System.Windows.Forms.Button();
             this.lstGroups = new System.Windows.Forms.CheckedListBox();
             this.mnuGroups = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -43,11 +44,11 @@ namespace myJournal
             this.label14 = new System.Windows.Forms.Label();
             this.lblHome_NewEntry = new System.Windows.Forms.Label();
             this.lblFont_NewEntry = new System.Windows.Forms.Label();
-            this.lblAddEntry = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.rtbNewEntry = new System.Windows.Forms.RichTextBox();
             this.txtNewEntryTitle = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.lblAddEntry = new System.Windows.Forms.Label();
             this.grpOpenScreen = new System.Windows.Forms.GroupBox();
             this.lblEditEntry = new System.Windows.Forms.Label();
             this.btnCreateJournal = new System.Windows.Forms.Button();
@@ -58,6 +59,9 @@ namespace myJournal
             this.lstEntries = new System.Windows.Forms.ListBox();
             this.label4 = new System.Windows.Forms.Label();
             this.grpFindEntry = new System.Windows.Forms.GroupBox();
+            this.lstGroupsForSearch = new System.Windows.Forms.CheckedListBox();
+            this.txtGroupsForSearch = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
             this.chkSearchAllJournals = new System.Windows.Forms.CheckBox();
             this.lblClearAll = new System.Windows.Forms.Label();
             this.lblHome = new System.Windows.Forms.Label();
@@ -140,12 +144,12 @@ namespace myJournal
             // 
             // grpCreateEntry
             // 
+            this.grpCreateEntry.Controls.Add(this.btnAddEntry);
             this.grpCreateEntry.Controls.Add(this.btnAddGroup);
             this.grpCreateEntry.Controls.Add(this.lstGroups);
             this.grpCreateEntry.Controls.Add(this.label14);
             this.grpCreateEntry.Controls.Add(this.lblHome_NewEntry);
             this.grpCreateEntry.Controls.Add(this.lblFont_NewEntry);
-            this.grpCreateEntry.Controls.Add(this.lblAddEntry);
             this.grpCreateEntry.Controls.Add(this.label3);
             this.grpCreateEntry.Controls.Add(this.rtbNewEntry);
             this.grpCreateEntry.Controls.Add(this.txtNewEntryTitle);
@@ -156,14 +160,27 @@ namespace myJournal
             this.grpCreateEntry.TabIndex = 4;
             this.grpCreateEntry.TabStop = false;
             // 
+            // btnAddEntry
+            // 
+            this.btnAddEntry.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.btnAddEntry.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnAddEntry.Location = new System.Drawing.Point(190, 520);
+            this.btnAddEntry.Name = "btnAddEntry";
+            this.btnAddEntry.Size = new System.Drawing.Size(94, 20);
+            this.btnAddEntry.TabIndex = 28;
+            this.btnAddEntry.Text = "Add This Entry";
+            this.btnAddEntry.UseVisualStyleBackColor = false;
+            this.btnAddEntry.Click += new System.EventHandler(this.btnAddEntry_Click);
+            // 
             // btnAddGroup
             // 
+            this.btnAddGroup.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.btnAddGroup.Location = new System.Drawing.Point(15, 462);
             this.btnAddGroup.Name = "btnAddGroup";
             this.btnAddGroup.Size = new System.Drawing.Size(25, 23);
             this.btnAddGroup.TabIndex = 13;
             this.btnAddGroup.Text = "+";
-            this.btnAddGroup.UseVisualStyleBackColor = true;
+            this.btnAddGroup.UseVisualStyleBackColor = false;
             this.btnAddGroup.Click += new System.EventHandler(this.Groups_btnAddGroup_Click);
             // 
             // lstGroups
@@ -182,20 +199,20 @@ namespace myJournal
             this.mnuEdit,
             this.mnuDelete});
             this.mnuGroups.Name = "mnuGroups";
-            this.mnuGroups.Size = new System.Drawing.Size(181, 70);
+            this.mnuGroups.Size = new System.Drawing.Size(108, 48);
             this.mnuGroups.Opening += new System.ComponentModel.CancelEventHandler(this.Groups_mnuGroups_Opening);
             // 
             // mnuEdit
             // 
             this.mnuEdit.Name = "mnuEdit";
-            this.mnuEdit.Size = new System.Drawing.Size(180, 22);
+            this.mnuEdit.Size = new System.Drawing.Size(107, 22);
             this.mnuEdit.Text = "Edit";
             this.mnuEdit.Click += new System.EventHandler(this.Groups_mnuEdit_Click);
             // 
             // mnuDelete
             // 
             this.mnuDelete.Name = "mnuDelete";
-            this.mnuDelete.Size = new System.Drawing.Size(180, 22);
+            this.mnuDelete.Size = new System.Drawing.Size(107, 22);
             this.mnuDelete.Text = "Delete";
             this.mnuDelete.Click += new System.EventHandler(this.Groups_mnuDelete_Click);
             // 
@@ -233,19 +250,6 @@ namespace myJournal
             this.lblFont_NewEntry.TabIndex = 5;
             this.lblFont_NewEntry.Text = "font";
             // 
-            // lblAddEntry
-            // 
-            this.lblAddEntry.AutoSize = true;
-            this.lblAddEntry.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lblAddEntry.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
-            this.lblAddEntry.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.lblAddEntry.Location = new System.Drawing.Point(200, 522);
-            this.lblAddEntry.Name = "lblAddEntry";
-            this.lblAddEntry.Size = new System.Drawing.Size(86, 15);
-            this.lblAddEntry.TabIndex = 4;
-            this.lblAddEntry.Text = "Add This Entry";
-            this.lblAddEntry.Click += new System.EventHandler(this.lblAddEntry_Click);
-            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -279,6 +283,13 @@ namespace myJournal
             this.label2.Size = new System.Drawing.Size(32, 15);
             this.label2.TabIndex = 0;
             this.label2.Text = "Title ";
+            // 
+            // lblAddEntry
+            // 
+            this.lblAddEntry.Location = new System.Drawing.Point(0, 0);
+            this.lblAddEntry.Name = "lblAddEntry";
+            this.lblAddEntry.Size = new System.Drawing.Size(100, 23);
+            this.lblAddEntry.TabIndex = 27;
             // 
             // grpOpenScreen
             // 
@@ -315,12 +326,13 @@ namespace myJournal
             // 
             // btnCreateJournal
             // 
+            this.btnCreateJournal.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.btnCreateJournal.Location = new System.Drawing.Point(258, 21);
             this.btnCreateJournal.Name = "btnCreateJournal";
             this.btnCreateJournal.Size = new System.Drawing.Size(25, 23);
             this.btnCreateJournal.TabIndex = 12;
             this.btnCreateJournal.Text = "+";
-            this.btnCreateJournal.UseVisualStyleBackColor = true;
+            this.btnCreateJournal.UseVisualStyleBackColor = false;
             this.btnCreateJournal.Click += new System.EventHandler(this.btnCreateJournal_Click);
             // 
             // lblSettings
@@ -384,7 +396,10 @@ namespace myJournal
             // 
             // grpFindEntry
             // 
+            this.grpFindEntry.Controls.Add(this.lstGroupsForSearch);
+            this.grpFindEntry.Controls.Add(this.txtGroupsForSearch);
             this.grpFindEntry.Controls.Add(this.chkSearchAllJournals);
+            this.grpFindEntry.Controls.Add(this.label17);
             this.grpFindEntry.Controls.Add(this.lblClearAll);
             this.grpFindEntry.Controls.Add(this.lblHome);
             this.grpFindEntry.Controls.Add(this.textBox3);
@@ -408,10 +423,39 @@ namespace myJournal
             this.grpFindEntry.TabIndex = 6;
             this.grpFindEntry.TabStop = false;
             // 
+            // lstGroupsForSearch
+            // 
+            this.lstGroupsForSearch.CheckOnClick = true;
+            this.lstGroupsForSearch.ContextMenuStrip = this.mnuGroups;
+            this.lstGroupsForSearch.FormattingEnabled = true;
+            this.lstGroupsForSearch.Location = new System.Drawing.Point(46, 106);
+            this.lstGroupsForSearch.Name = "lstGroupsForSearch";
+            this.lstGroupsForSearch.Size = new System.Drawing.Size(213, 76);
+            this.lstGroupsForSearch.TabIndex = 29;
+            this.lstGroupsForSearch.Visible = false;
+            this.lstGroupsForSearch.SelectedIndexChanged += new System.EventHandler(this.lstGroupsForSearch_SelectedIndexChanged);
+            // 
+            // txtGroupsForSearch
+            // 
+            this.txtGroupsForSearch.Location = new System.Drawing.Point(46, 83);
+            this.txtGroupsForSearch.Name = "txtGroupsForSearch";
+            this.txtGroupsForSearch.Size = new System.Drawing.Size(238, 23);
+            this.txtGroupsForSearch.TabIndex = 27;
+            this.txtGroupsForSearch.Click += new System.EventHandler(this.txtGroupsForSearch_Click);
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(7, 86);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(37, 15);
+            this.label17.TabIndex = 26;
+            this.label17.Text = "tag(s)";
+            // 
             // chkSearchAllJournals
             // 
             this.chkSearchAllJournals.AutoSize = true;
-            this.chkSearchAllJournals.Location = new System.Drawing.Point(157, 13);
+            this.chkSearchAllJournals.Location = new System.Drawing.Point(6, 62);
             this.chkSearchAllJournals.Name = "chkSearchAllJournals";
             this.chkSearchAllJournals.Size = new System.Drawing.Size(124, 19);
             this.chkSearchAllJournals.TabIndex = 25;
@@ -424,7 +468,7 @@ namespace myJournal
             this.lblClearAll.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lblClearAll.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
             this.lblClearAll.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.lblClearAll.Location = new System.Drawing.Point(228, 181);
+            this.lblClearAll.Location = new System.Drawing.Point(224, 172);
             this.lblClearAll.Name = "lblClearAll";
             this.lblClearAll.Size = new System.Drawing.Size(52, 15);
             this.lblClearAll.TabIndex = 24;
@@ -437,7 +481,7 @@ namespace myJournal
             this.lblHome.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lblHome.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
             this.lblHome.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.lblHome.Location = new System.Drawing.Point(6, 11);
+            this.lblHome.Location = new System.Drawing.Point(245, 10);
             this.lblHome.Name = "lblHome";
             this.lblHome.Size = new System.Drawing.Size(39, 15);
             this.lblHome.TabIndex = 23;
@@ -446,31 +490,33 @@ namespace myJournal
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(85, 147);
+            this.textBox3.Location = new System.Drawing.Point(85, 140);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(199, 23);
             this.textBox3.TabIndex = 22;
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(85, 118);
+            this.textBox2.Location = new System.Drawing.Point(85, 111);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(199, 23);
             this.textBox2.TabIndex = 21;
             // 
             // dateTimePicker2
             // 
-            this.dateTimePicker2.Location = new System.Drawing.Point(155, 87);
+            this.dateTimePicker2.CustomFormat = "M/d/yy";
+            this.dateTimePicker2.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateTimePicker2.Location = new System.Drawing.Point(211, 34);
             this.dateTimePicker2.Name = "dateTimePicker2";
             this.dateTimePicker2.ShowUpDown = true;
-            this.dateTimePicker2.Size = new System.Drawing.Size(120, 23);
+            this.dateTimePicker2.Size = new System.Drawing.Size(73, 23);
             this.dateTimePicker2.TabIndex = 20;
             this.dateTimePicker2.Value = new System.DateTime(2021, 12, 23, 18, 55, 40, 0);
             // 
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(132, 93);
+            this.label12.Location = new System.Drawing.Point(193, 38);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(18, 15);
             this.label12.TabIndex = 19;
@@ -478,19 +524,23 @@ namespace myJournal
             // 
             // dateTimePicker1
             // 
-            this.dateTimePicker1.Location = new System.Drawing.Point(6, 87);
+            this.dateTimePicker1.CustomFormat = "M/d/yy";
+            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateTimePicker1.Location = new System.Drawing.Point(118, 34);
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.ShowUpDown = true;
-            this.dateTimePicker1.Size = new System.Drawing.Size(120, 23);
+            this.dateTimePicker1.Size = new System.Drawing.Size(73, 23);
             this.dateTimePicker1.TabIndex = 18;
             this.dateTimePicker1.Value = new System.DateTime(2021, 12, 23, 18, 55, 40, 0);
             // 
             // dtFindDate
             // 
-            this.dtFindDate.Location = new System.Drawing.Point(40, 35);
+            this.dtFindDate.CustomFormat = "M/d/yy";
+            this.dtFindDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtFindDate.Location = new System.Drawing.Point(4, 34);
             this.dtFindDate.Name = "dtFindDate";
             this.dtFindDate.ShowUpDown = true;
-            this.dtFindDate.Size = new System.Drawing.Size(241, 23);
+            this.dtFindDate.Size = new System.Drawing.Size(73, 23);
             this.dtFindDate.TabIndex = 17;
             this.dtFindDate.Value = new System.DateTime(2021, 12, 23, 18, 55, 40, 0);
             // 
@@ -500,7 +550,7 @@ namespace myJournal
             this.lblFindEntries.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lblFindEntries.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
             this.lblFindEntries.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.lblFindEntries.Location = new System.Drawing.Point(118, 181);
+            this.lblFindEntries.Location = new System.Drawing.Point(118, 172);
             this.lblFindEntries.Name = "lblFindEntries";
             this.lblFindEntries.Size = new System.Drawing.Size(59, 15);
             this.lblFindEntries.TabIndex = 16;
@@ -508,16 +558,16 @@ namespace myJournal
             // 
             // richTextBox2
             // 
-            this.richTextBox2.Location = new System.Drawing.Point(6, 344);
+            this.richTextBox2.Location = new System.Drawing.Point(6, 335);
             this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(278, 193);
+            this.richTextBox2.Size = new System.Drawing.Size(278, 198);
             this.richTextBox2.TabIndex = 12;
             this.richTextBox2.Text = "";
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(1, 155);
+            this.label9.Location = new System.Drawing.Point(2, 143);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(82, 15);
             this.label9.TabIndex = 3;
@@ -526,7 +576,7 @@ namespace myJournal
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(6, 326);
+            this.label10.Location = new System.Drawing.Point(6, 317);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(81, 15);
             this.label10.TabIndex = 15;
@@ -535,7 +585,7 @@ namespace myJournal
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 126);
+            this.label8.Location = new System.Drawing.Point(7, 114);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(77, 15);
             this.label8.TabIndex = 2;
@@ -545,7 +595,7 @@ namespace myJournal
             // 
             this.lstFoundEntries.FormattingEnabled = true;
             this.lstFoundEntries.ItemHeight = 15;
-            this.lstFoundEntries.Location = new System.Drawing.Point(6, 214);
+            this.lstFoundEntries.Location = new System.Drawing.Point(6, 205);
             this.lstFoundEntries.Name = "lstFoundEntries";
             this.lstFoundEntries.Size = new System.Drawing.Size(278, 109);
             this.lstFoundEntries.TabIndex = 14;
@@ -554,7 +604,7 @@ namespace myJournal
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(6, 196);
+            this.label11.Location = new System.Drawing.Point(6, 187);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(79, 15);
             this.label11.TabIndex = 13;
@@ -563,16 +613,16 @@ namespace myJournal
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 66);
+            this.label7.Location = new System.Drawing.Point(80, 38);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(67, 15);
+            this.label7.Size = new System.Drawing.Size(36, 15);
             this.label7.TabIndex = 1;
-            this.label7.Text = "Date Range";
+            this.label7.Text = ".. or ..";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 41);
+            this.label6.Location = new System.Drawing.Point(0, 17);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(31, 15);
             this.label6.TabIndex = 0;
@@ -605,12 +655,13 @@ namespace myJournal
             // 
             // btnOK_NewJrnl
             // 
+            this.btnOK_NewJrnl.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.btnOK_NewJrnl.Location = new System.Drawing.Point(99, 72);
             this.btnOK_NewJrnl.Name = "btnOK_NewJrnl";
             this.btnOK_NewJrnl.Size = new System.Drawing.Size(75, 23);
             this.btnOK_NewJrnl.TabIndex = 2;
             this.btnOK_NewJrnl.Text = "OK";
-            this.btnOK_NewJrnl.UseVisualStyleBackColor = true;
+            this.btnOK_NewJrnl.UseVisualStyleBackColor = false;
             this.btnOK_NewJrnl.Click += new System.EventHandler(this.btnOK_NewJrnl_Click);
             // 
             // txtNewJournalName
@@ -656,12 +707,13 @@ namespace myJournal
             // 
             // btnOK_NewGroup
             // 
+            this.btnOK_NewGroup.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.btnOK_NewGroup.Location = new System.Drawing.Point(99, 72);
             this.btnOK_NewGroup.Name = "btnOK_NewGroup";
             this.btnOK_NewGroup.Size = new System.Drawing.Size(75, 23);
             this.btnOK_NewGroup.TabIndex = 2;
             this.btnOK_NewGroup.Text = "OK";
-            this.btnOK_NewGroup.UseVisualStyleBackColor = true;
+            this.btnOK_NewGroup.UseVisualStyleBackColor = false;
             this.btnOK_NewGroup.Click += new System.EventHandler(this.Groups_btnOK_NewGroup_Click);
             // 
             // txtNewGroup
@@ -690,6 +742,7 @@ namespace myJournal
             this.Controls.Add(this.grpOpenScreen);
             this.Controls.Add(this.grpCreateEntry);
             this.Controls.Add(this.grpFindEntry);
+            this.Controls.Add(this.lblAddEntry);
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "My Journals";
@@ -767,6 +820,10 @@ namespace myJournal
         private System.Windows.Forms.ContextMenuStrip mnuGroups;
         private System.Windows.Forms.ToolStripMenuItem mnuEdit;
         private System.Windows.Forms.ToolStripMenuItem mnuDelete;
+        private System.Windows.Forms.Button btnAddEntry;
+        private System.Windows.Forms.CheckedListBox lstGroupsForSearch;
+        private System.Windows.Forms.TextBox txtGroupsForSearch;
+        private System.Windows.Forms.Label label17;
     }
 }
 

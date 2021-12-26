@@ -22,13 +22,15 @@ namespace myJournal
         bool bGroupBeingEdited = false;
 
         public Form1()
+        { InitializeComponent(); }
+
+        private void Form1_Load(object sender, EventArgs e)
         {
-            InitializeComponent();
             this.Size = MainFormSize;
             grpOpenScreen.Location = ActiveBoxLocation;
             grpOpenScreen.Size = ActiveBoxSize;
             LoadJournals();
-            Groups_PopulateGroupsList();
+            Groups_PopulateGroupsList(lstGroups);
         }
 
         /// <summary>
@@ -38,12 +40,16 @@ namespace myJournal
         private void ActivateGroupBox(GroupBox box)
         {
             TextBox txtBxToFocus = null;
-            foreach (GroupBox gb in this.Controls)
+            foreach (Control c in this.Controls)
             {
-                gb.Visible = false;
+                if (c.GetType().Name.ToLower() == "groupbox")
+                {
+                    ((GroupBox)c).Visible = false;
+
+                }
             }
 
-            switch (box.Name) 
+            switch (box.Name)
             {
                 case "grpOpenScreen":
                     this.Text = "My Journal";
@@ -54,6 +60,7 @@ namespace myJournal
                     break;
                 case "grpFindEntry":
                     this.Text = "Search Journal";
+                    Groups_PopulateGroupsList(lstGroupsForSearch);
                     break;
                 case "grpNewJournal":
                     this.Text = "Create New Journal";
@@ -90,12 +97,14 @@ namespace myJournal
             }
         }
 
+        #region Groups
+
         private void Groups_btnAddGroup_Click(object sender, EventArgs e)
         { ActivateGroupBox(grpNewGroup); }
 
         private void Groups_btnOK_NewGroup_Click(object sender, EventArgs e)
         {
-            if(!bGroupBeingEdited)
+            if (!bGroupBeingEdited)
             {
                 using (StreamWriter sw = File.AppendText(AppDomain.CurrentDomain.BaseDirectory + "/settings/groups"))
                 {
@@ -111,7 +120,7 @@ namespace myJournal
             }
 
             txtNewGroup.Text = string.Empty;
-            Groups_PopulateGroupsList();
+            Groups_PopulateGroupsList(lstGroups);
             ActivateGroupBox(grpCreateEntry);
             bGroupBeingEdited = false;
         }
@@ -127,7 +136,7 @@ namespace myJournal
         {
             lstGroups.Items.RemoveAt((int)lstGroups.SelectedIndex);
             Groups_Save();
-            Groups_PopulateGroupsList();
+            Groups_PopulateGroupsList(lstGroups);
             ActivateGroupBox(grpCreateEntry);
         }
 
@@ -136,13 +145,13 @@ namespace myJournal
             e.Cancel = lstGroups.SelectedIndices.Count == 0;
         }
 
-        private void Groups_PopulateGroupsList()
+        private void Groups_PopulateGroupsList(CheckedListBox clb)
         {
-            lstGroups.Items.Clear();
+            clb.Items.Clear();
 
             foreach (string group in File.ReadAllLines(AppDomain.CurrentDomain.BaseDirectory + "/settings/groups"))
             {
-                lstGroups.Items.Add(group);
+                clb.Items.Add(group);
             }
         }
 
@@ -150,14 +159,20 @@ namespace myJournal
         {
             StringBuilder sb = new StringBuilder();
 
-            foreach(string s in lstGroups.Items)
+            foreach (string s in lstGroups.Items)
             {
                 sb.AppendLine(s);
             }
-     
+
             File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "/settings/groups", sb.ToString());
         }
+        #endregion
 
+        /// <summary>
+        /// Populate grp
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void lblAddEntry_Click(object sender, EventArgs e)
         {
             string sGroups = string.Empty;
@@ -314,8 +329,7 @@ namespace myJournal
         /// <param name="e"></param>
         /// <summary>
         /// Populate the entries listbox with truncated JournalEntry's for user selection to see more.
-        /// </summary>
-        
+        /// </summary> 
         private void PopulateEntries()
         {
             lstEntries.Items.Clear();
@@ -329,23 +343,18 @@ namespace myJournal
                 {
                     lstEntries.Items.Add(je.Title + " (" + je.Date.ToString("M-dd-yy H-d-yy") + ")");
                     lstEntries.Items.Add(je.Text.Length < iTextChunkLength ? je.Text : je.Text.Substring(0, iTextChunkLength - 1) + " ...");
-                    if(je.Groups.Length > 0) lstEntries.Items.Add(je.Groups);
+                    if(je.Groups.Length > 0) lstEntries.Items.Add("tags: " + je.Groups);
                     lstEntries.Items.Add("---------------------");
                 }
             }
         }
+
         /// <summary>
         /// Disallow focus on rtb used for displaying entry text.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void rtbSelectedEntry_Main_Click(object sender, EventArgs e)
-        { btnCreateJournal.Focus(); }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
+        private void rtbSelectedEntry_Main_Click(object sender, EventArgs e) { btnCreateJournal.Focus(); }
 
         private void SelectChosenEntry(int index)
         {
@@ -355,9 +364,48 @@ namespace myJournal
             lstEntries.SelectedIndices.Add(index + 2);
         }
 
-        private void lstGroups_SelectedIndexChanged(object sender, EventArgs e)
+        private void btnAddEntry_Click(object sender, EventArgs e)
+        {
+            if(rtbNewEntry.Text.Length > 0 && txtNewEntryTitle.Text.Length > 0)
+            {
+                string sGroups = string.Empty;
+
+                for (int i = 0; i < lstGroups.CheckedItems.Count; i++)
+                {
+                    sGroups += lstGroups.CheckedItems[i].ToString() + ",";
+                }
+
+                currentJournal.Entries.Add(new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text,
+                    sGroups.Length > 0 ? sGroups.Substring(0, sGroups.Length - 1) : string.Empty));
+
+                currentJournal.SaveToDisk();
+                PopulateEntries();
+            }
+
+            ActivateGroupBox(grpOpenScreen);
+        }
+
+        private void txtGroupsForSearch_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void txtGroupsForSearch_Click(object sender, EventArgs e)
+        {
+            lstGroupsForSearch.Visible = !lstGroupsForSearch.Visible;
+        }
+
+        private void lstGroupsForSearch_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var iChecked = lstGroupsForSearch.CheckedIndices;
+            string s = string.Empty;
+
+            foreach(int i in iChecked)
+            {
+                s += lstGroupsForSearch.Items[i].ToString() + ",";
+            }
+            txtGroupsForSearch.Text = s.Substring(0, s.Length - 1);
+            lstGroupsForSearch.Visible = false;
         }
     }
 }
