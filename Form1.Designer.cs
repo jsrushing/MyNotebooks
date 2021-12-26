@@ -164,10 +164,11 @@ namespace myJournal
             this.btnAddGroup.TabIndex = 13;
             this.btnAddGroup.Text = "+";
             this.btnAddGroup.UseVisualStyleBackColor = true;
-            this.btnAddGroup.Click += new System.EventHandler(this.btnAddGroup_Click);
+            this.btnAddGroup.Click += new System.EventHandler(this.Groups_btnAddGroup_Click);
             // 
             // lstGroups
             // 
+            this.lstGroups.CheckOnClick = true;
             this.lstGroups.ContextMenuStrip = this.mnuGroups;
             this.lstGroups.FormattingEnabled = true;
             this.lstGroups.Location = new System.Drawing.Point(51, 440);
@@ -181,19 +182,22 @@ namespace myJournal
             this.mnuEdit,
             this.mnuDelete});
             this.mnuGroups.Name = "mnuGroups";
-            this.mnuGroups.Size = new System.Drawing.Size(108, 48);
+            this.mnuGroups.Size = new System.Drawing.Size(181, 70);
+            this.mnuGroups.Opening += new System.ComponentModel.CancelEventHandler(this.Groups_mnuGroups_Opening);
             // 
             // mnuEdit
             // 
             this.mnuEdit.Name = "mnuEdit";
-            this.mnuEdit.Size = new System.Drawing.Size(107, 22);
+            this.mnuEdit.Size = new System.Drawing.Size(180, 22);
             this.mnuEdit.Text = "Edit";
+            this.mnuEdit.Click += new System.EventHandler(this.Groups_mnuEdit_Click);
             // 
             // mnuDelete
             // 
             this.mnuDelete.Name = "mnuDelete";
-            this.mnuDelete.Size = new System.Drawing.Size(107, 22);
+            this.mnuDelete.Size = new System.Drawing.Size(180, 22);
             this.mnuDelete.Text = "Delete";
+            this.mnuDelete.Click += new System.EventHandler(this.Groups_mnuDelete_Click);
             // 
             // label14
             // 
@@ -658,7 +662,7 @@ namespace myJournal
             this.btnOK_NewGroup.TabIndex = 2;
             this.btnOK_NewGroup.Text = "OK";
             this.btnOK_NewGroup.UseVisualStyleBackColor = true;
-            this.btnOK_NewGroup.Click += new System.EventHandler(this.btnOK_NewGroup_Click);
+            this.btnOK_NewGroup.Click += new System.EventHandler(this.Groups_btnOK_NewGroup_Click);
             // 
             // txtNewGroup
             // 

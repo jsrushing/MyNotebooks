@@ -23,16 +23,5 @@ namespace myJournal
             this.Title = _title;
             this.Groups = _groups;
         }
-
-        private string CompileEntry()
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.Append("*|*" + this.Date.ToLongDateString() + "_" + this.Date.ToLongTimeString() + System.Environment.NewLine);
-            sb.Append("|*|" + this.Title + System.Environment.NewLine);
-            sb.Append("|||" + this.Text);
-            return sb.ToString();
-        }
-
-        public string GetEntry() { return CompileEntry(); }
     }
 }
