@@ -61,6 +61,7 @@ namespace myJournal
                 case "grpFindEntry":
                     this.Text = "Search Journal";
                     Groups_PopulateGroupsList(lstGroupsForSearch);
+                    txtGroupsForSearch.Text = Properties.Settings.Default["TxtSelectGroupsForSearchDefault"].ToString();
                     break;
                 case "grpNewJournal":
                     this.Text = "Create New Journal";
@@ -392,6 +393,7 @@ namespace myJournal
 
         private void txtGroupsForSearch_Click(object sender, EventArgs e)
         {
+            if(txtGroupsForSearch.Text == Properties.Settings.Default["TxtSelectGroupsForSearchDefault"].ToString()) { txtGroupsForSearch.Text = ""; }
             lstGroupsForSearch.Visible = !lstGroupsForSearch.Visible;
         }
 
@@ -404,8 +406,72 @@ namespace myJournal
             {
                 s += lstGroupsForSearch.Items[i].ToString() + ",";
             }
-            txtGroupsForSearch.Text = s.Length > 0 ? s.Substring(0, s.Length - 1) : s;
+            txtGroupsForSearch.Text = s.Length > 0 ? s.Substring(0, s.Length - 1) : Properties.Settings.Default["TxtSelectGroupsForSearchDefault"].ToString() ;
             lstGroupsForSearch.Visible = false;
+        }
+
+        private void lblFindEntries_Click(object sender, EventArgs e)
+        {
+            List<JournalEntry> foundEntries = new List<JournalEntry>();
+            List<string> journalNames = new List<string>();
+
+            if (radCurrentJournal.Checked)
+            {
+                journalNames.Add(ddlJournals.Text);
+            }
+            else
+            {
+                for(int i = 0; i < ddlJournals.Items.Count; i++)
+                {
+                    journalNames.Add(ddlJournals.Items[i].ToString());
+                }
+            }
+
+            foreach(string journalName in journalNames)
+            {
+                Journal j = new Journal(journalName);
+                j.OpenJournal();
+
+                foreach(JournalEntry je in j.Entries)
+                {
+                    // date
+                    if (chkUseDate.Checked)
+                    {
+                        if(je.Date == dtFindDate.Value)
+                        {
+                            foundEntries.Add(je);
+                        }
+                        if (chkUseDateRange.Checked)
+                        {
+                            if(je.Date >= dtSearchFrom.Value && je.Date <= dtSearchTo.Value)
+                            {
+                                foundEntries.Add(je);
+                            }
+                        }
+                    }
+                    // tags
+                    if(txtGroupsForSearch.Text != Properties.Settings.Default[""].ToString())
+                    {
+                        string[] groups = txtGroupsForSearch.Text.Split(',');
+                        foreach(string group in groups)
+                        {
+                            if (je.Groups.Contains(group)) { foundEntries.Add(je); }
+                        }
+                    }
+                    // title contains
+                    if (je.Title.Contains(txtSearchTitle.Text)) { foundEntries.Add(je); }
+                    // entry contains
+                    if (je.Text.Contains(txtSearchText.Text)) { foundEntries.Add(je); }
+                }
+            }
+
+        }
+
+        private void ToggleDateUse(object sender, EventArgs e)
+        {
+            dtFindDate.Enabled = chkUseDate.Checked;
+            dtSearchFrom.Enabled = chkUseDateRange.Checked;
+            dtSearchTo.Enabled = dtSearchFrom.Enabled;
         }
     }
 }

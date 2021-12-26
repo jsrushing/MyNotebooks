@@ -34,5 +34,17 @@ namespace myJournal.Properties {
                 this["ShortEntryDateFormat"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("(click to select)")]
+        public string TxtSelectGroupsForSearchDefault {
+            get {
+                return ((string)(this["TxtSelectGroupsForSearchDefault"]));
+            }
+            set {
+                this["TxtSelectGroupsForSearchDefault"] = value;
+            }
+        }
     }
 }
