@@ -4,6 +4,7 @@ using System.Text;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Linq;
+using encrypt_decrypt_string;
 
 namespace myJournal
 {
@@ -48,9 +49,8 @@ namespace myJournal
 
         public JournalEntry GetEntry(string _title, string _date)
         {
-            JournalEntry entry = this.Entries.First(a => a.Title + a.Date.ToString("M/dd/yy H:m:ss") == _title + _date);
-
-            return this.Entries.First(a => a.Title + a.Date.ToString("M/dd/yy H:m:ss") == _title + _date);
+            JournalEntry entry = this.Entries.First(a => EncryptDecrypt.Decrypt(a.Title, "", "") + a.Date.ToString("M-dd-yy H_m_ss") == _title + _date);
+            return entry;
         }
 
         public Journal OpenJournal(string journalToOpen = "")

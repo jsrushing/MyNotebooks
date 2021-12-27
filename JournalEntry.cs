@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using encrypt_decrypt_string;
 
 namespace myJournal
 {
@@ -18,11 +19,10 @@ namespace myJournal
 
         public JournalEntry(string _title, string _text, string _groups)
         {
-            this.Date = DateTime.Now;
-            
-            this.Text = encrypt_decrypt_string.EncryptDecrypt.Encrypt(_text, "", "");
-            this.Title = _title;
-            this.Groups = _groups;
+            this.Date = DateTime.Now;            
+            this.Text = EncryptDecrypt.Encrypt(_text, "", "");
+            this.Title = EncryptDecrypt.Encrypt(_title, "", "");
+            this.Groups = EncryptDecrypt.Encrypt(_groups, "", "");
         }
     }
 }
