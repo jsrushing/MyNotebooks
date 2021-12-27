@@ -278,6 +278,7 @@ namespace myJournal
         private void ListOfEntries_SelectedIndexChanged(object sender, EventArgs e)
         {
             ListBox lb = (ListBox)sender;
+            RichTextBox rtb = lb.Name == "lstEntries" ? rtbSelectedEntry_Main : rtbSelectedEntry_Found;
 
             List<int> targets = new List<int>();
             lb.SelectedIndexChanged -= new System.EventHandler(this.ListOfEntries_SelectedIndexChanged);
@@ -316,11 +317,11 @@ namespace myJournal
             }
 
             if (ctr > 0) { ctr += 1; }
-            SelectChosenEntry(lb, ctr);
+            EntrySelector.SelectEntry(lb, ctr);
             string sTitleAndDate = lb.Items[ctr].ToString();
             string sTitle = sTitleAndDate.Substring(0, sTitleAndDate.IndexOf('(') - 1);
             string sDate = sTitleAndDate.Substring(sTitleAndDate.IndexOf('(') + 1, sTitleAndDate.Length - 2 - sTitleAndDate.IndexOf('('));
-            rtbSelectedEntry_Main.Text = currentJournal.GetEntry(sTitle, sDate).Text;
+            rtb.Text = currentJournal.GetEntry(sTitle, sDate).Text;
             lb.SelectedIndexChanged += new System.EventHandler(this.ListOfEntries_SelectedIndexChanged);
         }
 
@@ -328,10 +329,7 @@ namespace myJournal
         /// Select all lines of a selected (short) entry.
         /// </summary>
         /// <param name="index"></param>
-        private void lstFoundEntries_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            SelectChosenEntry(lstFoundEntries, lstFoundEntries.SelectedIndex);
-        }
+        private void lstFoundEntries_SelectedIndexChanged(object sender, EventArgs e) { EntrySelector.SelectEntry(lstFoundEntries, lstFoundEntries.SelectedIndex); }
         
         /// <summary>
         /// Populate ListBox lstBox with all entries in entries.
@@ -343,7 +341,7 @@ namespace myJournal
             int iTextChunkLength = Convert.ToInt16( Properties.Settings.Default["ShortEntryDisplayTextLength"]);
             foreach(JournalEntry je in entries)
             {
-                lstBox.Items.Add(je.Title + " (" + je.Date.ToString("M-dd-yy H-d-yy") + ")");
+                lstBox.Items.Add(je.Title + " (" + je.Date.ToString("M/dd/yy H:m:ss") + ")");
                 lstBox.Items.Add(je.Text.Length < iTextChunkLength ? je.Text : je.Text.Substring(0, iTextChunkLength - 1) + " ...");
                 if (je.Groups.Length > 0) lstBox.Items.Add("tags: " + je.Groups);
                 lstBox.Items.Add("---------------------");
@@ -356,14 +354,6 @@ namespace myJournal
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void rtbSelectedEntry_Main_Click(object sender, EventArgs e) { btnCreateJournal.Focus(); }
-
-        private void SelectChosenEntry(ListBox lstBox, int index)
-        {
-            lstBox.SelectedIndices.Clear();
-            lstBox.SelectedIndices.Add(index);
-            lstBox.SelectedIndices.Add(index + 1);
-            lstBox.SelectedIndices.Add(index + 2);
-        }
 
         private void txtGroupsForSearch_TextChanged(object sender, EventArgs e)
         {

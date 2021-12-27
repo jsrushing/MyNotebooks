@@ -48,7 +48,9 @@ namespace myJournal
 
         public JournalEntry GetEntry(string _title, string _date)
         {
-            return this.Entries.First(a => a.Title + a.Date.ToString("M-dd-yy H-d-yy") == _title + _date);
+            JournalEntry entry = this.Entries.First(a => a.Title + a.Date.ToString("M/dd/yy H:m:ss") == _title + _date);
+
+            return this.Entries.First(a => a.Title + a.Date.ToString("M/dd/yy H:m:ss") == _title + _date);
         }
 
         public Journal OpenJournal(string journalToOpen = "")
