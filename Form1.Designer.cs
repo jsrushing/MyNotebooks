@@ -80,7 +80,6 @@ namespace myJournal
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
-            this.lstFoundEntries = new System.Windows.Forms.ListBox();
             this.label11 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -94,6 +93,7 @@ namespace myJournal
             this.btnOK_NewGroup = new System.Windows.Forms.Button();
             this.txtNewGroup = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
+            this.lstFoundEntries = new System.Windows.Forms.ListBox();
             this.grpCreateEntry.SuspendLayout();
             this.mnuGroups.SuspendLayout();
             this.grpOpenScreen.SuspendLayout();
@@ -387,7 +387,7 @@ namespace myJournal
             this.lstEntries.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
             this.lstEntries.Size = new System.Drawing.Size(278, 154);
             this.lstEntries.TabIndex = 8;
-            this.lstEntries.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectedIndexChanged);
+            this.lstEntries.SelectedIndexChanged += new System.EventHandler(this.ListOfEntries_SelectedIndexChanged);
             // 
             // label4
             // 
@@ -400,6 +400,7 @@ namespace myJournal
             // 
             // grpFindEntry
             // 
+            this.grpFindEntry.Controls.Add(this.lstFoundEntries);
             this.grpFindEntry.Controls.Add(this.chkUseDateRange);
             this.grpFindEntry.Controls.Add(this.chkUseDate);
             this.grpFindEntry.Controls.Add(this.label18);
@@ -421,7 +422,6 @@ namespace myJournal
             this.grpFindEntry.Controls.Add(this.label9);
             this.grpFindEntry.Controls.Add(this.label10);
             this.grpFindEntry.Controls.Add(this.label8);
-            this.grpFindEntry.Controls.Add(this.lstFoundEntries);
             this.grpFindEntry.Controls.Add(this.label11);
             this.grpFindEntry.Controls.Add(this.label7);
             this.grpFindEntry.Controls.Add(this.label6);
@@ -646,16 +646,6 @@ namespace myJournal
             this.label8.TabIndex = 2;
             this.label8.Text = "Title contains";
             // 
-            // lstFoundEntries
-            // 
-            this.lstFoundEntries.FormattingEnabled = true;
-            this.lstFoundEntries.ItemHeight = 15;
-            this.lstFoundEntries.Location = new System.Drawing.Point(6, 205);
-            this.lstFoundEntries.Name = "lstFoundEntries";
-            this.lstFoundEntries.Size = new System.Drawing.Size(278, 109);
-            this.lstFoundEntries.TabIndex = 14;
-            this.lstFoundEntries.SelectedIndexChanged += new System.EventHandler(this.lstFoundEntries_SelectedIndexChanged);
-            // 
             // label11
             // 
             this.label11.AutoSize = true;
@@ -787,6 +777,16 @@ namespace myJournal
             this.label16.TabIndex = 0;
             this.label16.Text = "Group Name:";
             // 
+            // lstFoundEntries
+            // 
+            this.lstFoundEntries.FormattingEnabled = true;
+            this.lstFoundEntries.ItemHeight = 15;
+            this.lstFoundEntries.Location = new System.Drawing.Point(6, 205);
+            this.lstFoundEntries.Name = "lstFoundEntries";
+            this.lstFoundEntries.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
+            this.lstFoundEntries.Size = new System.Drawing.Size(278, 109);
+            this.lstFoundEntries.TabIndex = 14;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -848,7 +848,6 @@ namespace myJournal
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.ListBox lstFoundEntries;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
@@ -883,6 +882,7 @@ namespace myJournal
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.CheckBox chkUseDateRange;
         private System.Windows.Forms.CheckBox chkUseDate;
+        private System.Windows.Forms.ListBox lstFoundEntries;
     }
 }
 

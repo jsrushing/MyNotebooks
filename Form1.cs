@@ -100,7 +100,7 @@ namespace myJournal
                     sGroups.Length > 0 ? sGroups.Substring(0, sGroups.Length - 1) : string.Empty));
 
                 currentJournal.SaveToDisk();
-                PopulateEntries();
+                PopulateEntries(lstEntries, currentJournal.Entries);
             }
 
             ActivateGroupBox(grpOpenScreen);
@@ -120,7 +120,11 @@ namespace myJournal
         {
             if (ddlJournals.Enabled)
             {
-                PopulateEntries();
+                lstEntries.Items.Clear();
+                rtbSelectedEntry_Main.Text = string.Empty;
+                Journal j = new Journal(ddlJournals.Text);
+                currentJournal = j.OpenJournal();
+                PopulateEntries(lstEntries, currentJournal.Entries);
             }
         }
 
@@ -271,22 +275,19 @@ namespace myJournal
             if(ddlJournals.Items.Count == 1) { ddlJournals.SelectedIndex = 0; }
         }
 
-        /// <summary>
-        /// Choose a listed entry (see ddlJournals_SelectedIndexChanged) and display its Text.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void lstEntries_SelectedIndexChanged(object sender, EventArgs e)
+        private void ListOfEntries_SelectedIndexChanged(object sender, EventArgs e)
         {
-            List<int> targets = new List<int>();
-            this.lstEntries.SelectedIndexChanged -= new System.EventHandler(this.lstEntries_SelectedIndexChanged);
-            ListBox.SelectedIndexCollection c = lstEntries.SelectedIndices;
+            ListBox lb = (ListBox)sender;
 
-            if(c.Count > 1)
+            List<int> targets = new List<int>();
+            lb.SelectedIndexChanged -= new System.EventHandler(this.ListOfEntries_SelectedIndexChanged);
+            ListBox.SelectedIndexCollection c = lb.SelectedIndices;
+
+            if (c.Count > 1)
             {
-                for(int i = 0; i < c.Count - 1; i++)
+                for (int i = 0; i < c.Count - 1; i++)
                 {
-                    if(c[i] == c[i + 1] - 1)
+                    if (c[i] == c[i + 1] - 1)
                     {
                         targets.Add(c[i]);
                         targets.Add(c[i + 1]);
@@ -296,30 +297,31 @@ namespace myJournal
                 }
             }
 
-            if(targets.Count == 3)
+            if (targets.Count == 3)
             {
-                foreach(int i in targets)
+                foreach (int i in targets)
                 {
-                    lstEntries.SelectedIndices.Remove(i);
+                    lb.SelectedIndices.Remove(i);
                 }
             }
 
-            int ctr = lstEntries.SelectedIndex;
-            if (lstEntries.Items[ctr].ToString().StartsWith("--")) ctr--;
+            int ctr = lb.SelectedIndex;
 
-            while (!lstEntries.Items[ctr].ToString().StartsWith("--") & ctr > 0)
+            if (lb.Items[ctr].ToString().StartsWith("--")) ctr--;
+
+            while (!lb.Items[ctr].ToString().StartsWith("--") & ctr > 0)
             {
                 ctr--;
                 if (ctr < 0) break;
             }
 
             if (ctr > 0) { ctr += 1; }
-            SelectChosenEntry(lstEntries, ctr);
-            string sTitleAndDate = lstEntries.Items[ctr].ToString();
+            SelectChosenEntry(lb, ctr);
+            string sTitleAndDate = lb.Items[ctr].ToString();
             string sTitle = sTitleAndDate.Substring(0, sTitleAndDate.IndexOf('(') - 1);
             string sDate = sTitleAndDate.Substring(sTitleAndDate.IndexOf('(') + 1, sTitleAndDate.Length - 2 - sTitleAndDate.IndexOf('('));
             rtbSelectedEntry_Main.Text = currentJournal.GetEntry(sTitle, sDate).Text;
-            this.lstEntries.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectedIndexChanged);
+            lb.SelectedIndexChanged += new System.EventHandler(this.ListOfEntries_SelectedIndexChanged);
         }
 
         /// <summary>
@@ -330,34 +332,13 @@ namespace myJournal
         {
             SelectChosenEntry(lstFoundEntries, lstFoundEntries.SelectedIndex);
         }
-
-        /// <summary>
-        /// Populate the entries listbox with entries in the selected journal.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        /// <summary>
-        /// Populate the entries listbox with truncated JournalEntry's for user selection to see more.
-        /// </summary> 
-        private void PopulateEntries()
-        {
-            lstEntries.Items.Clear();
-            rtbSelectedEntry_Main.Text = string.Empty;
-            Journal j = new Journal(ddlJournals.Text);
-            currentJournal = j.OpenJournal();
-
-            if(currentJournal != null)
-            {
-                PopulateAllEntries(lstEntries, currentJournal.Entries);
-            }
-        }
         
         /// <summary>
         /// Populate ListBox lstBox with all entries in entries.
         /// </summary>
         /// <param name="lstBox"></param>
         /// <param name="entries"></param>
-        private void PopulateAllEntries(ListBox lstBox, List<JournalEntry> entries)
+        private void PopulateEntries(ListBox lstBox, List<JournalEntry> entries)
         {
             int iTextChunkLength = Convert.ToInt16( Properties.Settings.Default["ShortEntryDisplayTextLength"]);
             foreach(JournalEntry je in entries)
@@ -378,10 +359,10 @@ namespace myJournal
 
         private void SelectChosenEntry(ListBox lstBox, int index)
         {
-            lstEntries.SelectedIndices.Clear();
-            lstEntries.SelectedIndices.Add(index);
-            lstEntries.SelectedIndices.Add(index + 1);
-            lstEntries.SelectedIndices.Add(index + 2);
+            lstBox.SelectedIndices.Clear();
+            lstBox.SelectedIndices.Add(index);
+            lstBox.SelectedIndices.Add(index + 1);
+            lstBox.SelectedIndices.Add(index + 2);
         }
 
         private void txtGroupsForSearch_TextChanged(object sender, EventArgs e)
@@ -468,7 +449,7 @@ namespace myJournal
 
             if(foundEntries.Count > 0)
             {
-                PopulateAllEntries(lstFoundEntries, foundEntries);
+                PopulateEntries(lstFoundEntries, foundEntries);
             }
 
         }
