@@ -51,11 +51,11 @@ namespace myJournal
             return this.Entries.First(a => a.Title + a.Date.ToString("M-dd-yy H-d-yy") == _title + _date);
         }
 
-        public Journal OpenJournal()
+        public Journal OpenJournal(string journalToOpen = "")
         {
             try
             {
-                using(Stream stream = File.Open(this.FileName, FileMode.Open))
+                using(Stream stream = File.Open(journalToOpen.Length > 0 ? AppDomain.CurrentDomain.BaseDirectory + this.root + journalToOpen : this.FileName, FileMode.Open))
                 {
                     BinaryFormatter formatter = new BinaryFormatter();
                     return (Journal)formatter.Deserialize(stream);

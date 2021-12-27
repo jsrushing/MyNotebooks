@@ -351,7 +351,7 @@ namespace myJournal
                 PopulateAllEntries(lstEntries, currentJournal.Entries);
             }
         }
-
+        
         private void PopulateAllEntries(ListBox lstBox, List<JournalEntry> entries)
         {
             int iTextChunkLength = Convert.ToInt16( Properties.Settings.Default["ShortEntryDisplayTextLength"]);
@@ -407,7 +407,8 @@ namespace myJournal
         {
             List<JournalEntry> foundEntries = new List<JournalEntry>();
             List<string> journalNames = new List<string>();
-
+            lstFoundEntries.Items.Clear();
+            
             if (radCurrentJournal.Checked)
             {
                 journalNames.Add(ddlJournals.Text);
@@ -420,12 +421,14 @@ namespace myJournal
                 }
             }
 
+            Journal j = new Journal();
+            Journal journalToSearch = new Journal();
+
             foreach(string journalName in journalNames)
             {
-                Journal j = new Journal(journalName);
-                j.OpenJournal();
+                journalToSearch = j.OpenJournal(journalName);
 
-                foreach(JournalEntry je in j.Entries)
+                foreach(JournalEntry je in journalToSearch.Entries)
                 {
                     // date
                     if (chkUseDate.Checked)
@@ -443,7 +446,7 @@ namespace myJournal
                         }
                     }
                     // tags
-                    if(txtGroupsForSearch.Text != Properties.Settings.Default[""].ToString())
+                    if(txtGroupsForSearch.Text != Properties.Settings.Default["TxtSelectGroupsForSearchDefault"].ToString())
                     {
                         string[] groups = txtGroupsForSearch.Text.Split(',');
                         foreach(string group in groups)
