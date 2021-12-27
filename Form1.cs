@@ -314,7 +314,7 @@ namespace myJournal
             }
 
             if (ctr > 0) { ctr += 1; }
-            SelectChosenEntry(ctr);
+            SelectChosenEntry(lstEntries, ctr);
             string sTitleAndDate = lstEntries.Items[ctr].ToString();
             string sTitle = sTitleAndDate.Substring(0, sTitleAndDate.IndexOf('(') - 1);
             string sDate = sTitleAndDate.Substring(sTitleAndDate.IndexOf('(') + 1, sTitleAndDate.Length - 2 - sTitleAndDate.IndexOf('('));
@@ -328,7 +328,7 @@ namespace myJournal
         /// <param name="index"></param>
         private void lstFoundEntries_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // get the selected found entry
+            SelectChosenEntry(lstFoundEntries, lstFoundEntries.SelectedIndex);
         }
 
         /// <summary>
@@ -352,6 +352,11 @@ namespace myJournal
             }
         }
         
+        /// <summary>
+        /// Populate ListBox lstBox with all entries in entries.
+        /// </summary>
+        /// <param name="lstBox"></param>
+        /// <param name="entries"></param>
         private void PopulateAllEntries(ListBox lstBox, List<JournalEntry> entries)
         {
             int iTextChunkLength = Convert.ToInt16( Properties.Settings.Default["ShortEntryDisplayTextLength"]);
@@ -359,8 +364,8 @@ namespace myJournal
             {
                 lstBox.Items.Add(je.Title + " (" + je.Date.ToString("M-dd-yy H-d-yy") + ")");
                 lstBox.Items.Add(je.Text.Length < iTextChunkLength ? je.Text : je.Text.Substring(0, iTextChunkLength - 1) + " ...");
-                if (je.Groups.Length > 0) lstEntries.Items.Add("tags: " + je.Groups);
-                lstEntries.Items.Add("---------------------");
+                if (je.Groups.Length > 0) lstBox.Items.Add("tags: " + je.Groups);
+                lstBox.Items.Add("---------------------");
             }
         }
 
@@ -371,7 +376,7 @@ namespace myJournal
         /// <param name="e"></param>
         private void rtbSelectedEntry_Main_Click(object sender, EventArgs e) { btnCreateJournal.Focus(); }
 
-        private void SelectChosenEntry(int index)
+        private void SelectChosenEntry(ListBox lstBox, int index)
         {
             lstEntries.SelectedIndices.Clear();
             lstEntries.SelectedIndices.Add(index);
@@ -455,9 +460,9 @@ namespace myJournal
                         }
                     }
                     // title contains
-                    if (je.Title.Contains(txtSearchTitle.Text)) { foundEntries.Add(je); }
+                    if (txtSearchTitle.TextLength > 0) { if (je.Title.Contains(txtSearchTitle.Text)) { foundEntries.Add(je); } }
                     // entry contains
-                    if (je.Text.Contains(txtSearchText.Text)) { foundEntries.Add(je); }
+                    if (txtSearchText.TextLength > 0) { if (je.Text.Contains(txtSearchText.Text)) { foundEntries.Add(je); } }
                 }
             }
 
