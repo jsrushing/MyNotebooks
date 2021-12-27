@@ -322,7 +322,7 @@ namespace myJournal
             string sTitleAndDate = lb.Items[ctr].ToString();
             string sTitle = sTitleAndDate.Substring(0, sTitleAndDate.IndexOf('(') - 1);
             string sDate = sTitleAndDate.Substring(sTitleAndDate.IndexOf('(') + 1, sTitleAndDate.Length - 2 - sTitleAndDate.IndexOf('('));
-            rtb.Text = encrypt_decrypt_string.EncryptDecrypt.Decrypt(currentJournal.GetEntry(sTitle, sDate).Text);
+            rtb.Text = encrypt_decrypt_string.EncryptDecrypt.Decrypt(currentJournal.GetEntry(sTitle, sDate).Text, "", "");
             lb.SelectedIndexChanged += new System.EventHandler(this.ListOfEntries_SelectedIndexChanged);
         }
 
@@ -345,8 +345,8 @@ namespace myJournal
             foreach(JournalEntry je in entries)
             {
                 lstBox.Items.Add(je.Title + " (" + je.Date.ToString("M/dd/yy H:m:ss") + ")");
-                lstBox.Items.Add(je.Text.Length < iTextChunkLength ? encrypt_decrypt_string.EncryptDecrypt.Decrypt(je.Text) : encrypt_decrypt_string.EncryptDecrypt.Decrypt(je.Text).Substring(0, iTextChunkLength - 1) + " ...");
-                if (je.Groups.Length > 0) lstBox.Items.Add("tags: " + je.Groups);
+                lstBox.Items.Add(je.Text.Length < iTextChunkLength ? encrypt_decrypt_string.EncryptDecrypt.Decrypt(je.Text, "", "") : encrypt_decrypt_string.EncryptDecrypt.Decrypt(je.Text, "", "").Substring(0, iTextChunkLength - 1) + " ...");
+                lstBox.Items.Add("tags: " + je.Groups);
                 lstBox.Items.Add("---------------------");
             }
         }
@@ -436,7 +436,7 @@ namespace myJournal
                     // title contains
                     if (txtSearchTitle.TextLength > 0) { if (je.Title.Contains(txtSearchTitle.Text)) { foundEntries.Add(je); } }
                     // entry contains
-                    if (txtSearchText.TextLength > 0) { if (encrypt_decrypt_string.EncryptDecrypt.Decrypt(je.Text).Contains(txtSearchText.Text)) { foundEntries.Add(je); } }
+                    if (txtSearchText.TextLength > 0) { if (encrypt_decrypt_string.EncryptDecrypt.Decrypt(je.Text, "", "").Contains(txtSearchText.Text)) { foundEntries.Add(je); } }
                 }
             }
 

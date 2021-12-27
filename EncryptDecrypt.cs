@@ -2,22 +2,23 @@
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+// https://www.delftstack.com/howto/csharp/encrypt-and-decrypt-a-string-in-csharp/
 
 namespace encrypt_decrypt_string
 {
     class EncryptDecrypt
     {
-        public static string Encrypt(string TextToEncrypt)
+        public static string Encrypt(string TextToEncrypt, string PublicKey, string PrivateKey)
         {
             try
             {
                 string ToReturn = "";
-                string publickey = "12345678";
-                string secretkey = "87654321";
+                PublicKey = "12345678";
+                PrivateKey = "87654321";
                 byte[] secretkeyByte = { };
-                secretkeyByte = System.Text.Encoding.UTF8.GetBytes(secretkey);
+                secretkeyByte = System.Text.Encoding.UTF8.GetBytes(PrivateKey);
                 byte[] publickeybyte = { };
-                publickeybyte = System.Text.Encoding.UTF8.GetBytes(publickey);
+                publickeybyte = System.Text.Encoding.UTF8.GetBytes(PublicKey);
                 MemoryStream ms = null;
                 CryptoStream cs = null;
                 byte[] inputbyteArray = System.Text.Encoding.UTF8.GetBytes(TextToEncrypt);
@@ -42,17 +43,17 @@ namespace encrypt_decrypt_string
         //    //Console.WriteLine(encrypted);
         //}
 
-        public static string Decrypt(string TextToDecrypt)
+        public static string Decrypt(string TextToDecrypt, string PublicKey, string PrivateKey)
         {
             try
             {
                 string ToReturn = "";
-                string publickey = "12345678";
-                string secretkey = "87654321";
+                PublicKey = "12345678";
+                PrivateKey = "87654321";
                 byte[] privatekeyByte = { };
-                privatekeyByte = System.Text.Encoding.UTF8.GetBytes(secretkey);
+                privatekeyByte = System.Text.Encoding.UTF8.GetBytes(PrivateKey);
                 byte[] publickeybyte = { };
-                publickeybyte = System.Text.Encoding.UTF8.GetBytes(publickey);
+                publickeybyte = System.Text.Encoding.UTF8.GetBytes(PublicKey);
                 MemoryStream ms = null;
                 CryptoStream cs = null;
                 byte[] inputbyteArray = new byte[TextToDecrypt.Replace(" ", "+").Length];

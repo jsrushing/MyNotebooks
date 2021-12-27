@@ -20,7 +20,7 @@ namespace myJournal
         {
             this.Date = DateTime.Now;
             
-            this.Text = encrypt_decrypt_string.EncryptDecrypt.Encrypt(_text);
+            this.Text = encrypt_decrypt_string.EncryptDecrypt.Encrypt(_text, "", "");
             this.Title = _title;
             this.Groups = _groups;
         }
