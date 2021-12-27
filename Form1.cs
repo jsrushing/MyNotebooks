@@ -129,6 +129,8 @@ namespace myJournal
                 Journal j = new Journal(ddlJournals.Text);
                 currentJournal = j.OpenJournal();
                 PopulateEntries(lstEntries, currentJournal.Entries);
+                lblCreateEntry.Enabled = true;
+                lblFindEntry.Enabled = true;
             }
         }
 
@@ -236,10 +238,8 @@ namespace myJournal
 
         private void lblHome_Click(object sender, EventArgs e) { ActivateGroupBox(grpOpenScreen); }
 
-        private void lblClearAll_Click(object sender, EventArgs e)
-        {
-            // clear search criteria
-        }
+        private void lblClearAll_Click(object sender, EventArgs e) {  // clear search criteria
+                                                                      }
 
         /// <summary>
         /// If no journals exist, create system folders. Otherwise populate ddlJournals with journal names.
@@ -326,6 +326,7 @@ namespace myJournal
             string sTitle = sTitleAndDate.Substring(0, sTitleAndDate.IndexOf('(') - 1);
             string sDate = sTitleAndDate.Substring(sTitleAndDate.IndexOf('(') + 1, sTitleAndDate.Length - 2 - sTitleAndDate.IndexOf('('));
             rtb.Text = EncryptDecrypt.Decrypt(currentJournal.GetEntry(sTitle, sDate).Text, "", "");
+            lblEditEntry.Enabled = true;
             lb.SelectedIndexChanged += new System.EventHandler(this.ListOfEntries_SelectedIndexChanged);
         }
 
