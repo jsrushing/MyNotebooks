@@ -19,7 +19,8 @@ namespace myJournal
         public JournalEntry(string _title, string _text, string _groups)
         {
             this.Date = DateTime.Now;
-            this.Text = _text;
+            
+            this.Text = encrypt_decrypt_string.EncryptDecrypt.Encrypt(_text);
             this.Title = _title;
             this.Groups = _groups;
         }
