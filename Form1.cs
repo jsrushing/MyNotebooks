@@ -433,11 +433,11 @@ namespace myJournal
                         string[] groups = txtGroupsForSearch.Text.Split(',');
                         foreach(string group in groups)
                         {
-                            if (je.Groups.Contains(group)) { foundEntries.Add(je); }
+                            if (EncryptDecrypt.Decrypt(je.Groups, "", "").Contains(group)) { foundEntries.Add(je); }
                         }
                     }
                     // title contains
-                    if (txtSearchTitle.TextLength > 0) { if (je.Title.Contains(txtSearchTitle.Text)) { foundEntries.Add(je); } }
+                    if (txtSearchTitle.TextLength > 0) { if (EncryptDecrypt.Decrypt(je.Title, "", "").Contains(txtSearchTitle.Text)) { foundEntries.Add(je); } }
                     // entry contains
                     if (txtSearchText.TextLength > 0) { if (EncryptDecrypt.Decrypt(je.Text, "", "").Contains(txtSearchText.Text)) { foundEntries.Add(je); } }
                 }
