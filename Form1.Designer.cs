@@ -112,9 +112,9 @@ namespace myJournal
 			// ddlJournals
 			// 
 			this.ddlJournals.FormattingEnabled = true;
-			this.ddlJournals.Location = new System.Drawing.Point(56, 22);
+			this.ddlJournals.Location = new System.Drawing.Point(55, 22);
 			this.ddlJournals.Name = "ddlJournals";
-			this.ddlJournals.Size = new System.Drawing.Size(192, 23);
+			this.ddlJournals.Size = new System.Drawing.Size(196, 23);
 			this.ddlJournals.TabIndex = 1;
 			this.ddlJournals.SelectedIndexChanged += new System.EventHandler(this.ddlJournals_SelectedIndexChanged);
 			// 
@@ -166,6 +166,7 @@ namespace myJournal
 			// 
 			// btnAddEntry
 			// 
+			this.btnAddEntry.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnAddEntry.BackColor = System.Drawing.SystemColors.ButtonHighlight;
 			this.btnAddEntry.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.btnAddEntry.Location = new System.Drawing.Point(190, 520);
@@ -244,6 +245,7 @@ namespace myJournal
 			// 
 			// lblFont_NewEntry
 			// 
+			this.lblFont_NewEntry.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.lblFont_NewEntry.AutoSize = true;
 			this.lblFont_NewEntry.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.lblFont_NewEntry.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
@@ -297,6 +299,7 @@ namespace myJournal
 			// 
 			// grpOpenScreen
 			// 
+			this.grpOpenScreen.Anchor = System.Windows.Forms.AnchorStyles.None;
 			this.grpOpenScreen.Controls.Add(this.lblEditEntry);
 			this.grpOpenScreen.Controls.Add(this.btnCreateJournal);
 			this.grpOpenScreen.Controls.Add(this.lblSettings);
@@ -332,7 +335,7 @@ namespace myJournal
 			// btnCreateJournal
 			// 
 			this.btnCreateJournal.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-			this.btnCreateJournal.Location = new System.Drawing.Point(258, 21);
+			this.btnCreateJournal.Location = new System.Drawing.Point(258, 22);
 			this.btnCreateJournal.Name = "btnCreateJournal";
 			this.btnCreateJournal.Size = new System.Drawing.Size(25, 23);
 			this.btnCreateJournal.TabIndex = 12;
@@ -362,6 +365,9 @@ namespace myJournal
 			// 
 			// rtbSelectedEntry_Main
 			// 
+			this.rtbSelectedEntry_Main.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.rtbSelectedEntry_Main.Location = new System.Drawing.Point(6, 275);
 			this.rtbSelectedEntry_Main.Name = "rtbSelectedEntry_Main";
 			this.rtbSelectedEntry_Main.Size = new System.Drawing.Size(278, 264);
@@ -381,7 +387,10 @@ namespace myJournal
 			// 
 			// lstEntries
 			// 
+			this.lstEntries.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.lstEntries.FormattingEnabled = true;
+			this.lstEntries.HorizontalScrollbar = true;
 			this.lstEntries.ItemHeight = 15;
 			this.lstEntries.Location = new System.Drawing.Point(6, 95);
 			this.lstEntries.Name = "lstEntries";
@@ -432,6 +441,8 @@ namespace myJournal
 			// 
 			// lstFoundEntries
 			// 
+			this.lstFoundEntries.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.lstFoundEntries.FormattingEnabled = true;
 			this.lstFoundEntries.ItemHeight = 15;
 			this.lstFoundEntries.Location = new System.Drawing.Point(6, 205);
@@ -623,6 +634,9 @@ namespace myJournal
 			// 
 			// rtbSelectedEntry_Found
 			// 
+			this.rtbSelectedEntry_Found.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.rtbSelectedEntry_Found.Location = new System.Drawing.Point(6, 335);
 			this.rtbSelectedEntry_Found.Name = "rtbSelectedEntry_Found";
 			this.rtbSelectedEntry_Found.Size = new System.Drawing.Size(278, 198);
@@ -781,9 +795,11 @@ namespace myJournal
 			this.Controls.Add(this.grpFindEntry);
 			this.Controls.Add(this.lblAddEntry);
 			this.MaximizeBox = false;
+			this.MinimumSize = new System.Drawing.Size(300, 555);
 			this.Name = "Form1";
 			this.Text = "My Journals";
 			this.Load += new System.EventHandler(this.Form1_Load);
+			this.Resize += new System.EventHandler(this.Form1_Resize);
 			this.grpCreateEntry.ResumeLayout(false);
 			this.grpCreateEntry.PerformLayout();
 			this.mnuGroups.ResumeLayout(false);

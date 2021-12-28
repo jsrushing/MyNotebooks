@@ -27,10 +27,12 @@ namespace myJournal
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.Size = MainFormSize;
             grpOpenScreen.Location = ActiveBoxLocation;
             grpOpenScreen.Size = ActiveBoxSize;
             LoadJournals();
+            DisplayedGroupBox = grpOpenScreen;
+            this.Size = MainFormSize;
+            ActivateGroupBox(grpOpenScreen);
         }
 
         /// <summary>
@@ -40,6 +42,7 @@ namespace myJournal
         private void ActivateGroupBox(GroupBox box)
         {
             TextBox txtBxToFocus = null;
+
             foreach (Control c in this.Controls)
             {
                 if (c.GetType().Name.ToLower() == "groupbox")
@@ -53,6 +56,7 @@ namespace myJournal
             {
                 case "grpOpenScreen":
                     this.Text = "My Journal";
+                    rtbSelectedEntry_Main.Clear();
                     break;
                 case "grpCreateEntry":
                     this.Text = "Create Entry";
@@ -76,19 +80,20 @@ namespace myJournal
                     break;
             }
 
-            box.Size = ActiveBoxSize;
             box.Location = ActiveBoxLocation;
+            //box.Size = new Size(this.Width - 20, this.Height - 20);
             box.Visible = true;
             if (txtBxToFocus != null) txtBxToFocus.Focus();
             DisplayedGroupBox = box;
         }
 
-        /// <summary>
-        /// Add the new entry. THIS SHOULD BE CUT OVER TO A BUTTON.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnAddEntry_Click(object sender, EventArgs e)
+		#region Buttons
+		/// <summary>
+		/// Add the new entry.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void btnAddEntry_Click(object sender, EventArgs e)
         {
             if (rtbNewEntry.Text.Length > 0 && txtNewEntryTitle.Text.Length > 0)
             {
@@ -110,8 +115,18 @@ namespace myJournal
             ActivateGroupBox(grpOpenScreen);
         }
 
+        /// <summary>
+        /// Show grpNewJournal.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnCreateJournal_Click(object sender, EventArgs e) { ActivateGroupBox(grpNewJournal); }
 
+        /// <summary>
+        /// Create the new journal.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnOK_NewJrnl_Click(object sender, EventArgs e)
         {
             Journal jrnl = new Journal(txtNewJournalName.Text);
@@ -119,19 +134,17 @@ namespace myJournal
             LoadJournals();
             ActivateGroupBox(grpOpenScreen);
         }
+        #endregion
 
-        private void ddlJournals_SelectedIndexChanged(object sender, EventArgs e)
+		private void ddlJournals_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ddlJournals.Enabled)
-            {
-                lstEntries.Items.Clear();
-                rtbSelectedEntry_Main.Text = string.Empty;
-                Journal j = new Journal(ddlJournals.Text);
-                currentJournal = j.OpenJournal();
-                PopulateEntries(lstEntries, currentJournal.Entries);
-                lblCreateEntry.Enabled = true;
-                lblFindEntry.Enabled = true;
-            }
+            lstEntries.Items.Clear();
+            rtbSelectedEntry_Main.Text = string.Empty;
+            Journal j = new Journal(ddlJournals.Text);
+            currentJournal = j.OpenJournal();
+            PopulateEntries(lstEntries, currentJournal.Entries);
+            lblCreateEntry.Enabled = true;
+            lblFindEntry.Enabled = true;
         }
 
         #region Groups
@@ -203,9 +216,11 @@ namespace myJournal
 
             File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "/settings/groups", sb.ToString());
         }
-        #endregion
+		#endregion
 
-        private void lblCreateEntry_Click(object sender, EventArgs e)
+		#region Clickable Labels
+
+		private void lblCreateEntry_Click(object sender, EventArgs e)
         {
             if (!ddlJournals.Enabled)
             {
@@ -231,6 +246,76 @@ namespace myJournal
 
         private void lblFindEntry_Click(object sender, EventArgs e) { ActivateGroupBox(grpFindEntry); }
 
+        /// <summary>
+        /// Search for entries with various criteria.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void lblFindEntries_Click(object sender, EventArgs e)
+        {
+            List<JournalEntry> foundEntries = new List<JournalEntry>();
+            List<string> journalNames = new List<string>();
+            lstFoundEntries.Items.Clear();
+
+            if (radCurrentJournal.Checked)
+            {
+                journalNames.Add(ddlJournals.Text);
+            }
+            else
+            {
+                for (int i = 0; i < ddlJournals.Items.Count; i++)
+                {
+                    journalNames.Add(ddlJournals.Items[i].ToString());
+                }
+            }
+
+            Journal j = new Journal();
+            Journal journalToSearch = new Journal();
+
+            foreach (string journalName in journalNames)
+            {
+                journalToSearch = j.OpenJournal(journalName);
+
+                foreach (JournalEntry je in journalToSearch.Entries)
+                {
+                    // date
+                    if (chkUseDate.Checked)
+                    {
+                        if (je.Date == dtFindDate.Value)
+                        {
+                            foundEntries.Add(je);
+                        }
+                        if (chkUseDateRange.Checked)
+                        {
+                            if (je.Date >= dtSearchFrom.Value && je.Date <= dtSearchTo.Value)
+                            {
+                                foundEntries.Add(je);
+                            }
+                        }
+                    }
+                    // tags
+                    if (txtGroupsForSearch.Text != Properties.Settings.Default["TxtSelectGroupsForSearchDefault"].ToString())
+                    {
+                        string[] groups = txtGroupsForSearch.Text.Split(',');
+                        foreach (string group in groups)
+                        {
+                            if (EncryptDecrypt.Decrypt(je.Groups, "", "").Contains(group)) { foundEntries.Add(je); }
+                        }
+                    }
+                    // title contains
+                    if (txtSearchTitle.TextLength > 0) { if (EncryptDecrypt.Decrypt(je.Title, "", "").Contains(txtSearchTitle.Text)) { foundEntries.Add(je); } }
+                    // entry contains
+                    if (txtSearchText.TextLength > 0) { if (EncryptDecrypt.Decrypt(je.Text, "", "").Contains(txtSearchText.Text)) { foundEntries.Add(je); } }
+                }
+            }
+
+            if (foundEntries.Count > 0)
+            {
+                PopulateEntries(lstFoundEntries, foundEntries);
+            }
+
+        }
+
         private void lblSettings_Click(object sender, EventArgs e)
         {
             // show the settings group box
@@ -240,11 +325,12 @@ namespace myJournal
 
         private void lblClearAll_Click(object sender, EventArgs e) {  // clear search criteria
                                                                       }
+		#endregion
 
-        /// <summary>
-        /// If no journals exist, create system folders. Otherwise populate ddlJournals with journal names.
-        /// </summary>
-        private void LoadJournals()
+		/// <summary>
+		/// If no journals exist, create system folders. Otherwise populate ddlJournals with journal names.
+		/// </summary>
+		private void LoadJournals()
         {
             ddlJournals.Items.Clear();
 
@@ -279,6 +365,11 @@ namespace myJournal
             if(ddlJournals.Items.Count == 1) { ddlJournals.SelectedIndex = 0; }
         }
 
+        /// <summary>
+        /// When a short entry is selected, select all lines in the entry then display full entry text.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ListOfEntries_SelectedIndexChanged(object sender, EventArgs e)
         {
             ListBox lb = (ListBox)sender;
@@ -331,12 +422,6 @@ namespace myJournal
         }
 
         /// <summary>
-        /// Select all lines of a selected (short) entry.
-        /// </summary>
-        /// <param name="index"></param>
-        private void lstFoundEntries_SelectedIndexChanged(object sender, EventArgs e) { EntrySelector.SelectEntry(lstFoundEntries, lstFoundEntries.SelectedIndex); }
-        
-        /// <summary>
         /// Populate ListBox lstBox with all entries in entries.
         /// </summary>
         /// <param name="lstBox"></param>
@@ -362,100 +447,51 @@ namespace myJournal
         /// <param name="e"></param>
         private void rtbSelectedEntry_Main_Click(object sender, EventArgs e) { btnCreateJournal.Focus(); }
 
-        private void txtGroupsForSearch_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
+        /// <summary>
+        /// Show the dropdown of Groups when clicked.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void txtGroupsForSearch_Click(object sender, EventArgs e)
         {
             if(txtGroupsForSearch.Text == Properties.Settings.Default["TxtSelectGroupsForSearchDefault"].ToString()) { txtGroupsForSearch.Text = ""; }
             lstGroupsForSearch.Visible = !lstGroupsForSearch.Visible;
         }
-
+        
+        /// <summary>
+        /// Add checked groups to txtGroupsForSearch.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void lstGroupsForSearch_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var iChecked = lstGroupsForSearch.CheckedIndices;
             string s = string.Empty;
 
-            foreach(int i in iChecked)
+            foreach(int i in lstGroupsForSearch.CheckedIndices)
             {
                 s += lstGroupsForSearch.Items[i].ToString() + ",";
             }
+
             txtGroupsForSearch.Text = s.Length > 0 ? s.Substring(0, s.Length - 1) : Properties.Settings.Default["TxtSelectGroupsForSearchDefault"].ToString() ;
             lstGroupsForSearch.Visible = false;
         }
 
-        private void lblFindEntries_Click(object sender, EventArgs e)
-        {
-            List<JournalEntry> foundEntries = new List<JournalEntry>();
-            List<string> journalNames = new List<string>();
-            lstFoundEntries.Items.Clear();
-            
-            if (radCurrentJournal.Checked)
-            {
-                journalNames.Add(ddlJournals.Text);
-            }
-            else
-            {
-                for(int i = 0; i < ddlJournals.Items.Count; i++)
-                {
-                    journalNames.Add(ddlJournals.Items[i].ToString());
-                }
-            }
-
-            Journal j = new Journal();
-            Journal journalToSearch = new Journal();
-
-            foreach(string journalName in journalNames)
-            {
-                journalToSearch = j.OpenJournal(journalName);
-
-                foreach(JournalEntry je in journalToSearch.Entries)
-                {
-                    // date
-                    if (chkUseDate.Checked)
-                    {
-                        if(je.Date == dtFindDate.Value)
-                        {
-                            foundEntries.Add(je);
-                        }
-                        if (chkUseDateRange.Checked)
-                        {
-                            if(je.Date >= dtSearchFrom.Value && je.Date <= dtSearchTo.Value)
-                            {
-                                foundEntries.Add(je);
-                            }
-                        }
-                    }
-                    // tags
-                    if(txtGroupsForSearch.Text != Properties.Settings.Default["TxtSelectGroupsForSearchDefault"].ToString())
-                    {
-                        string[] groups = txtGroupsForSearch.Text.Split(',');
-                        foreach(string group in groups)
-                        {
-                            if (EncryptDecrypt.Decrypt(je.Groups, "", "").Contains(group)) { foundEntries.Add(je); }
-                        }
-                    }
-                    // title contains
-                    if (txtSearchTitle.TextLength > 0) { if (EncryptDecrypt.Decrypt(je.Title, "", "").Contains(txtSearchTitle.Text)) { foundEntries.Add(je); } }
-                    // entry contains
-                    if (txtSearchText.TextLength > 0) { if (EncryptDecrypt.Decrypt(je.Text, "", "").Contains(txtSearchText.Text)) { foundEntries.Add(je); } }
-                }
-            }
-
-            if(foundEntries.Count > 0)
-            {
-                PopulateEntries(lstFoundEntries, foundEntries);
-            }
-
-        }
-
+        /// <summary>
+        /// Enable/Disable dateTimePickers on checkbox change.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ToggleDateUse(object sender, EventArgs e)
         {
             dtFindDate.Enabled = chkUseDate.Checked;
             dtSearchFrom.Enabled = chkUseDateRange.Checked;
             dtSearchTo.Enabled = dtSearchFrom.Enabled;
         }
-    }
+
+		private void Form1_Resize(object sender, EventArgs e)
+		{
+            DisplayedGroupBox.Location = ActiveBoxLocation;
+            DisplayedGroupBox.Size = new Size(this.Width - 35, this.Height - 50);
+        }
+	}
 }
