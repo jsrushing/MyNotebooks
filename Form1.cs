@@ -1,19 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.IO;
-using System.Reflection;
-using encrypt_decrypt_string;
+using System.Text;
+using System.Windows.Forms;
 
 namespace myJournal
 {
-    public partial class Form1 : Form
+	public partial class Form1 : Form
     {
         Point ActiveBoxLocation = new Point(12, 0);
         Size ActiveBoxSize = (Size)new Point(290, 545);
@@ -23,6 +18,8 @@ namespace myJournal
         bool bGroupBeingEdited = false;
         string rootPath = AppDomain.CurrentDomain.BaseDirectory;
         JournalEntry currentEntry = null;
+        Font InactiveMenuFont = null;
+        Font ActiveMenuFont = null;
 
         public Form1()
         { InitializeComponent(); }
@@ -34,8 +31,14 @@ namespace myJournal
             LoadJournals();
             DisplayedGroupBox = grpOpenScreen;
             this.Size = MainFormSize;
-            ActivateGroupBox(grpOpenScreen);
 
+            pnlMenu.Size = new Size(lblMenu_1.Width + 2, lblMenu_1.Height + 2);
+            lblMenu_0.Size = new Size(pnlMenu.Width, pnlMenu.Height);
+            lblMenu_1.Size = new Size(lblMenu_0.Width - 4, lblMenu_1.Height - 4);
+            lblMenu_1.Location = new Point(lblMenu_0.Left + 2, lblMenu_0.Top + 2);
+            InactiveMenuFont = lblJournal_Create.Font;
+            ActiveMenuFont = new Font(InactiveMenuFont, FontStyle.Bold | FontStyle.Underline);
+            ActivateGroupBox(grpOpenScreen);
         }
 
         private void Form1_Resize(object sender, EventArgs e)
@@ -131,27 +134,6 @@ namespace myJournal
             txtNewEntryTitle.Text = String.Empty;
             rtbNewEntry.Clear();
             ActivateGroupBox(grpOpenScreen);
-        }
-
-        /// <summary>
-        /// Show grpNewJournal.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnCreateJournal_Click(object sender, EventArgs e) { ActivateGroupBox(grpNewJournal); }
-
-        /// <summary>
-        /// Show the delete journal controls.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnDeleteJournal_Click(object sender, EventArgs e)
-        {
-            foreach (string s in ddlJournals.Items)
-            {
-                ddlJournalsToDelete.Items.Add(s);
-            }
-            ActivateGroupBox(grpDeleteJournal);
         }
 
         /// <summary>
@@ -275,34 +257,43 @@ namespace myJournal
 
             File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "/settings/groups", sb.ToString());
         }
-		#endregion
+        #endregion
 
-		#region Clickable Labels
+        #region Clickable Labels
 
-		private void lblCreateEntry_Click(object sender, EventArgs e)
-        {
-            if (!ddlJournals.Enabled)
-            {
-                this.Text = "Please create a journal";
-            }
-            else
-            {
-                if(currentJournal != null)
-                {
-                    ActivateGroupBox(grpCreateEntry);
-                }
-                else
-                {
-                    this.Text = "Select A Journal";
-                }
-            }
-        }
+        private void lblCloseMenu_Click(object sender, EventArgs e) { pnlMenu.Visible = false; }
 
+        private void lblCreateEntry_Click(object sender, EventArgs e) { ActivateGroupBox(grpCreateEntry); }
+
+        /// <summary>
+        /// Delete an entry (on grpNewEnty, available during edit).
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void lblDeleteEntry_Click(object sender, EventArgs e)
-        {
-
+        { 
+        
         }
 
+        /// <summary>
+        /// Show the delete journal controls.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void lblJournal_Delete_Click(object sender, EventArgs e)
+        {
+            foreach (string s in ddlJournals.Items)
+            {
+                ddlJournalsToDelete.Items.Add(s);
+            }
+            ActivateGroupBox(grpDeleteJournal);
+        }
+
+        /// <summary>
+        /// Edit an entry (available during edit).
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void lblEditEntry_Click(object sender, EventArgs e)
         {
             
@@ -381,15 +372,19 @@ namespace myJournal
 
         }
 
-        private void lblSettings_Click(object sender, EventArgs e)
-        {
-            // show the settings group box
-        }
+        private void lblSettings_Click(object sender, EventArgs e) { }
 
         private void lblHome_Click(object sender, EventArgs e) { ActivateGroupBox(grpOpenScreen); }
 
-        private void lblClearAll_Click(object sender, EventArgs e) {  // clear search criteria
-                                                                      }
+        /// <summary>
+        /// Reset search criteria.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void lblClearAll_Click(object sender, EventArgs e) 
+        {  
+        
+        }
 		#endregion
 
 		/// <summary>
@@ -561,5 +556,33 @@ namespace myJournal
             dtSearchTo.Enabled = dtSearchFrom.Enabled;
         }
 
+		private void label15_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void lblMenu_Click(object sender, EventArgs e)
+		{
+            pnlMenu.Visible = !pnlMenu.Visible;
+		}
+
+		private void lblJournal_Create_Click(object sender, EventArgs e) { ActivateGroupBox(grpNewJournal); }
+
+		private void lblSettings_Show_Click(object sender, EventArgs e)
+		{
+
+		}
+
+        private void MenuItem_Enter(object sender, EventArgs e)
+		{
+            Label lbl = (Label)sender;
+            lbl.Font = ActiveMenuFont;
+		}
+
+        private void MenuItem_Leave(object sender, EventArgs e)
+		{
+            Label lbl = (Label)(sender);
+            lbl.Font = InactiveMenuFont;
+        }
 	}
 }

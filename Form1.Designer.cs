@@ -36,7 +36,6 @@ namespace myJournal
 			this.lblFindEntry = new System.Windows.Forms.Label();
 			this.grpCreateEntry = new System.Windows.Forms.GroupBox();
 			this.grpAppendDeleteOriginal = new System.Windows.Forms.GroupBox();
-			this.label7 = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
 			this.radOriginal_Replace = new System.Windows.Forms.RadioButton();
 			this.radOriginal_Append = new System.Windows.Forms.RadioButton();
@@ -56,8 +55,18 @@ namespace myJournal
 			this.label2 = new System.Windows.Forms.Label();
 			this.lblAddEntry = new System.Windows.Forms.Label();
 			this.grpOpenScreen = new System.Windows.Forms.GroupBox();
-			this.btnDeleteJournal = new System.Windows.Forms.Button();
+			this.pnlMenu = new System.Windows.Forms.Panel();
+			this.lblCloseMenu = new System.Windows.Forms.Label();
+			this.lblSettings_Show = new System.Windows.Forms.Label();
+			this.lblTags_Create = new System.Windows.Forms.Label();
+			this.label21 = new System.Windows.Forms.Label();
+			this.lblJournal_Delete = new System.Windows.Forms.Label();
+			this.lblJournal_Create = new System.Windows.Forms.Label();
+			this.label15 = new System.Windows.Forms.Label();
 			this.lblEditEntry = new System.Windows.Forms.Label();
+			this.lblMenu_1 = new System.Windows.Forms.Label();
+			this.lblMenu_0 = new System.Windows.Forms.Label();
+			this.lblMenu = new System.Windows.Forms.Label();
 			this.btnCreateJournal = new System.Windows.Forms.Button();
 			this.lblSettings = new System.Windows.Forms.Label();
 			this.lblEntriesStartFrom = new System.Windows.Forms.Label();
@@ -109,6 +118,7 @@ namespace myJournal
 			this.grpAppendDeleteOriginal.SuspendLayout();
 			this.mnuGroups.SuspendLayout();
 			this.grpOpenScreen.SuspendLayout();
+			this.pnlMenu.SuspendLayout();
 			this.grpFindEntry.SuspendLayout();
 			this.grpNewJournal.SuspendLayout();
 			this.grpNewGroup.SuspendLayout();
@@ -118,7 +128,7 @@ namespace myJournal
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(7, 25);
+			this.label1.Location = new System.Drawing.Point(7, 39);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(48, 15);
 			this.label1.TabIndex = 0;
@@ -127,7 +137,7 @@ namespace myJournal
 			// ddlJournals
 			// 
 			this.ddlJournals.FormattingEnabled = true;
-			this.ddlJournals.Location = new System.Drawing.Point(55, 22);
+			this.ddlJournals.Location = new System.Drawing.Point(55, 36);
 			this.ddlJournals.Name = "ddlJournals";
 			this.ddlJournals.Size = new System.Drawing.Size(196, 23);
 			this.ddlJournals.TabIndex = 1;
@@ -138,28 +148,32 @@ namespace myJournal
 			this.lblCreateEntry.AutoSize = true;
 			this.lblCreateEntry.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.lblCreateEntry.Enabled = false;
-			this.lblCreateEntry.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
+			this.lblCreateEntry.Font = new System.Drawing.Font("Segoe UI Light", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.lblCreateEntry.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblCreateEntry.Location = new System.Drawing.Point(6, 52);
+			this.lblCreateEntry.Location = new System.Drawing.Point(17, 80);
 			this.lblCreateEntry.Name = "lblCreateEntry";
-			this.lblCreateEntry.Size = new System.Drawing.Size(105, 15);
+			this.lblCreateEntry.Size = new System.Drawing.Size(40, 15);
 			this.lblCreateEntry.TabIndex = 2;
-			this.lblCreateEntry.Text = "Create New Entry";
+			this.lblCreateEntry.Text = "Create";
 			this.lblCreateEntry.Click += new System.EventHandler(this.lblCreateEntry_Click);
+			this.lblCreateEntry.MouseEnter += new System.EventHandler(this.MenuItem_Enter);
+			this.lblCreateEntry.MouseLeave += new System.EventHandler(this.MenuItem_Leave);
 			// 
 			// lblFindEntry
 			// 
 			this.lblFindEntry.AutoSize = true;
 			this.lblFindEntry.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.lblFindEntry.Enabled = false;
-			this.lblFindEntry.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
+			this.lblFindEntry.Font = new System.Drawing.Font("Segoe UI Light", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.lblFindEntry.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblFindEntry.Location = new System.Drawing.Point(220, 52);
+			this.lblFindEntry.Location = new System.Drawing.Point(17, 122);
 			this.lblFindEntry.Name = "lblFindEntry";
-			this.lblFindEntry.Size = new System.Drawing.Size(62, 15);
+			this.lblFindEntry.Size = new System.Drawing.Size(28, 15);
 			this.lblFindEntry.TabIndex = 3;
-			this.lblFindEntry.Text = "Find Entry";
+			this.lblFindEntry.Text = "Find";
 			this.lblFindEntry.Click += new System.EventHandler(this.lblFindEntry_Click);
+			this.lblFindEntry.MouseEnter += new System.EventHandler(this.MenuItem_Enter);
+			this.lblFindEntry.MouseLeave += new System.EventHandler(this.MenuItem_Leave);
 			// 
 			// grpCreateEntry
 			// 
@@ -184,7 +198,6 @@ namespace myJournal
 			// 
 			// grpAppendDeleteOriginal
 			// 
-			this.grpAppendDeleteOriginal.Controls.Add(this.label7);
 			this.grpAppendDeleteOriginal.Controls.Add(this.label6);
 			this.grpAppendDeleteOriginal.Controls.Add(this.radOriginal_Replace);
 			this.grpAppendDeleteOriginal.Controls.Add(this.radOriginal_Append);
@@ -195,19 +208,10 @@ namespace myJournal
 			this.grpAppendDeleteOriginal.TabStop = false;
 			this.grpAppendDeleteOriginal.Visible = false;
 			// 
-			// label7
-			// 
-			this.label7.AutoSize = true;
-			this.label7.Location = new System.Drawing.Point(116, 13);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(12, 15);
-			this.label7.TabIndex = 33;
-			this.label7.Text = "/";
-			// 
 			// label6
 			// 
 			this.label6.AutoSize = true;
-			this.label6.Location = new System.Drawing.Point(6, 13);
+			this.label6.Location = new System.Drawing.Point(4, 13);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(50, 15);
 			this.label6.TabIndex = 32;
@@ -216,7 +220,7 @@ namespace myJournal
 			// radOriginal_Replace
 			// 
 			this.radOriginal_Replace.AutoSize = true;
-			this.radOriginal_Replace.Location = new System.Drawing.Point(128, 11);
+			this.radOriginal_Replace.Location = new System.Drawing.Point(121, 11);
 			this.radOriginal_Replace.Name = "radOriginal_Replace";
 			this.radOriginal_Replace.Size = new System.Drawing.Size(63, 19);
 			this.radOriginal_Replace.TabIndex = 31;
@@ -393,8 +397,8 @@ namespace myJournal
 			// grpOpenScreen
 			// 
 			this.grpOpenScreen.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.grpOpenScreen.Controls.Add(this.btnDeleteJournal);
-			this.grpOpenScreen.Controls.Add(this.lblEditEntry);
+			this.grpOpenScreen.Controls.Add(this.pnlMenu);
+			this.grpOpenScreen.Controls.Add(this.lblMenu);
 			this.grpOpenScreen.Controls.Add(this.btnCreateJournal);
 			this.grpOpenScreen.Controls.Add(this.lblSettings);
 			this.grpOpenScreen.Controls.Add(this.lblEntriesStartFrom);
@@ -404,51 +408,187 @@ namespace myJournal
 			this.grpOpenScreen.Controls.Add(this.label5);
 			this.grpOpenScreen.Controls.Add(this.lstEntries);
 			this.grpOpenScreen.Controls.Add(this.label4);
-			this.grpOpenScreen.Controls.Add(this.lblFindEntry);
-			this.grpOpenScreen.Controls.Add(this.lblCreateEntry);
 			this.grpOpenScreen.Location = new System.Drawing.Point(12, 0);
 			this.grpOpenScreen.Name = "grpOpenScreen";
 			this.grpOpenScreen.Size = new System.Drawing.Size(290, 545);
 			this.grpOpenScreen.TabIndex = 5;
 			this.grpOpenScreen.TabStop = false;
 			// 
-			// btnDeleteJournal
+			// pnlMenu
 			// 
-			this.btnDeleteJournal.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-			this.btnDeleteJournal.Location = new System.Drawing.Point(258, 33);
-			this.btnDeleteJournal.Name = "btnDeleteJournal";
-			this.btnDeleteJournal.Size = new System.Drawing.Size(25, 18);
-			this.btnDeleteJournal.TabIndex = 14;
-			this.btnDeleteJournal.Text = "-";
-			this.btnDeleteJournal.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			this.btnDeleteJournal.UseVisualStyleBackColor = false;
-			this.btnDeleteJournal.Click += new System.EventHandler(this.btnDeleteJournal_Click);
+			this.pnlMenu.BackColor = System.Drawing.SystemColors.HighlightText;
+			this.pnlMenu.Controls.Add(this.lblCloseMenu);
+			this.pnlMenu.Controls.Add(this.lblSettings_Show);
+			this.pnlMenu.Controls.Add(this.lblTags_Create);
+			this.pnlMenu.Controls.Add(this.label21);
+			this.pnlMenu.Controls.Add(this.lblJournal_Delete);
+			this.pnlMenu.Controls.Add(this.lblJournal_Create);
+			this.pnlMenu.Controls.Add(this.label15);
+			this.pnlMenu.Controls.Add(this.lblCreateEntry);
+			this.pnlMenu.Controls.Add(this.lblEditEntry);
+			this.pnlMenu.Controls.Add(this.lblFindEntry);
+			this.pnlMenu.Controls.Add(this.lblMenu_1);
+			this.pnlMenu.Controls.Add(this.lblMenu_0);
+			this.pnlMenu.Location = new System.Drawing.Point(49, 13);
+			this.pnlMenu.Name = "pnlMenu";
+			this.pnlMenu.Size = new System.Drawing.Size(175, 293);
+			this.pnlMenu.TabIndex = 28;
+			this.pnlMenu.Visible = false;
+			// 
+			// lblCloseMenu
+			// 
+			this.lblCloseMenu.AutoSize = true;
+			this.lblCloseMenu.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.lblCloseMenu.Font = new System.Drawing.Font("Segoe UI Light", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.lblCloseMenu.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.lblCloseMenu.Location = new System.Drawing.Point(9, 186);
+			this.lblCloseMenu.Name = "lblCloseMenu";
+			this.lblCloseMenu.Size = new System.Drawing.Size(65, 15);
+			this.lblCloseMenu.TabIndex = 24;
+			this.lblCloseMenu.Text = "Close Menu";
+			this.lblCloseMenu.Click += new System.EventHandler(this.lblCloseMenu_Click);
+			this.lblCloseMenu.MouseEnter += new System.EventHandler(this.MenuItem_Enter);
+			this.lblCloseMenu.MouseLeave += new System.EventHandler(this.MenuItem_Leave);
+			// 
+			// lblSettings_Show
+			// 
+			this.lblSettings_Show.AutoSize = true;
+			this.lblSettings_Show.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.lblSettings_Show.Font = new System.Drawing.Font("Segoe UI Light", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.lblSettings_Show.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.lblSettings_Show.Location = new System.Drawing.Point(9, 166);
+			this.lblSettings_Show.Name = "lblSettings_Show";
+			this.lblSettings_Show.Size = new System.Drawing.Size(47, 15);
+			this.lblSettings_Show.TabIndex = 21;
+			this.lblSettings_Show.Text = "Settings";
+			this.lblSettings_Show.Click += new System.EventHandler(this.lblSettings_Show_Click);
+			this.lblSettings_Show.MouseEnter += new System.EventHandler(this.MenuItem_Enter);
+			this.lblSettings_Show.MouseLeave += new System.EventHandler(this.MenuItem_Leave);
+			// 
+			// lblTags_Create
+			// 
+			this.lblTags_Create.AutoSize = true;
+			this.lblTags_Create.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.lblTags_Create.Font = new System.Drawing.Font("Segoe UI Light", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.lblTags_Create.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.lblTags_Create.Location = new System.Drawing.Point(9, 146);
+			this.lblTags_Create.Name = "lblTags_Create";
+			this.lblTags_Create.Size = new System.Drawing.Size(73, 15);
+			this.lblTags_Create.TabIndex = 19;
+			this.lblTags_Create.Text = "Manage Tags";
+			this.lblTags_Create.MouseEnter += new System.EventHandler(this.MenuItem_Enter);
+			this.lblTags_Create.MouseLeave += new System.EventHandler(this.MenuItem_Leave);
+			// 
+			// label21
+			// 
+			this.label21.AutoSize = true;
+			this.label21.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.label21.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.label21.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+			this.label21.Location = new System.Drawing.Point(9, 63);
+			this.label21.Name = "label21";
+			this.label21.Size = new System.Drawing.Size(45, 15);
+			this.label21.TabIndex = 17;
+			this.label21.Text = "Entries";
+			// 
+			// lblJournal_Delete
+			// 
+			this.lblJournal_Delete.AutoSize = true;
+			this.lblJournal_Delete.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.lblJournal_Delete.Font = new System.Drawing.Font("Segoe UI Light", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.lblJournal_Delete.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.lblJournal_Delete.Location = new System.Drawing.Point(17, 41);
+			this.lblJournal_Delete.Name = "lblJournal_Delete";
+			this.lblJournal_Delete.Size = new System.Drawing.Size(39, 15);
+			this.lblJournal_Delete.TabIndex = 16;
+			this.lblJournal_Delete.Text = "Delete";
+			this.lblJournal_Delete.Click += new System.EventHandler(this.lblJournal_Delete_Click);
+			this.lblJournal_Delete.MouseEnter += new System.EventHandler(this.MenuItem_Enter);
+			this.lblJournal_Delete.MouseLeave += new System.EventHandler(this.MenuItem_Leave);
+			// 
+			// lblJournal_Create
+			// 
+			this.lblJournal_Create.AutoSize = true;
+			this.lblJournal_Create.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.lblJournal_Create.Font = new System.Drawing.Font("Segoe UI Light", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.lblJournal_Create.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.lblJournal_Create.Location = new System.Drawing.Point(17, 23);
+			this.lblJournal_Create.Name = "lblJournal_Create";
+			this.lblJournal_Create.Size = new System.Drawing.Size(40, 15);
+			this.lblJournal_Create.TabIndex = 15;
+			this.lblJournal_Create.Text = "Create";
+			this.lblJournal_Create.Click += new System.EventHandler(this.lblJournal_Create_Click);
+			this.lblJournal_Create.MouseEnter += new System.EventHandler(this.MenuItem_Enter);
+			this.lblJournal_Create.MouseLeave += new System.EventHandler(this.MenuItem_Leave);
+			// 
+			// label15
+			// 
+			this.label15.AutoSize = true;
+			this.label15.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.label15.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.label15.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+			this.label15.Location = new System.Drawing.Point(9, 8);
+			this.label15.Name = "label15";
+			this.label15.Size = new System.Drawing.Size(52, 15);
+			this.label15.TabIndex = 14;
+			this.label15.Text = "Journals";
 			// 
 			// lblEditEntry
 			// 
 			this.lblEditEntry.AutoSize = true;
 			this.lblEditEntry.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.lblEditEntry.Enabled = false;
-			this.lblEditEntry.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
+			this.lblEditEntry.Font = new System.Drawing.Font("Segoe UI Light", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.lblEditEntry.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblEditEntry.Location = new System.Drawing.Point(132, 52);
+			this.lblEditEntry.Location = new System.Drawing.Point(17, 101);
 			this.lblEditEntry.Name = "lblEditEntry";
-			this.lblEditEntry.Size = new System.Drawing.Size(60, 15);
+			this.lblEditEntry.Size = new System.Drawing.Size(62, 15);
 			this.lblEditEntry.TabIndex = 13;
-			this.lblEditEntry.Text = "Edit Entry";
+			this.lblEditEntry.Text = "Edit/Delete";
 			this.lblEditEntry.Click += new System.EventHandler(this.lblEditEntry_Click);
+			this.lblEditEntry.MouseEnter += new System.EventHandler(this.MenuItem_Enter);
+			this.lblEditEntry.MouseLeave += new System.EventHandler(this.MenuItem_Leave);
+			// 
+			// lblMenu_1
+			// 
+			this.lblMenu_1.BackColor = System.Drawing.SystemColors.HighlightText;
+			this.lblMenu_1.ForeColor = System.Drawing.SystemColors.HighlightText;
+			this.lblMenu_1.Location = new System.Drawing.Point(3, 3);
+			this.lblMenu_1.Name = "lblMenu_1";
+			this.lblMenu_1.Size = new System.Drawing.Size(110, 211);
+			this.lblMenu_1.TabIndex = 23;
+			// 
+			// lblMenu_0
+			// 
+			this.lblMenu_0.BackColor = System.Drawing.SystemColors.ControlText;
+			this.lblMenu_0.Location = new System.Drawing.Point(0, 0);
+			this.lblMenu_0.Name = "lblMenu_0";
+			this.lblMenu_0.Size = new System.Drawing.Size(132, 260);
+			this.lblMenu_0.TabIndex = 22;
+			// 
+			// lblMenu
+			// 
+			this.lblMenu.AutoSize = true;
+			this.lblMenu.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.lblMenu.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
+			this.lblMenu.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.lblMenu.Location = new System.Drawing.Point(4, 11);
+			this.lblMenu.Name = "lblMenu";
+			this.lblMenu.Size = new System.Drawing.Size(39, 15);
+			this.lblMenu.TabIndex = 28;
+			this.lblMenu.Text = "menu";
+			this.lblMenu.Click += new System.EventHandler(this.lblMenu_Click);
 			// 
 			// btnCreateJournal
 			// 
 			this.btnCreateJournal.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-			this.btnCreateJournal.Location = new System.Drawing.Point(258, 14);
+			this.btnCreateJournal.Location = new System.Drawing.Point(258, 24);
 			this.btnCreateJournal.Name = "btnCreateJournal";
 			this.btnCreateJournal.Size = new System.Drawing.Size(25, 18);
 			this.btnCreateJournal.TabIndex = 12;
 			this.btnCreateJournal.Text = "+";
 			this.btnCreateJournal.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.btnCreateJournal.UseVisualStyleBackColor = false;
-			this.btnCreateJournal.Click += new System.EventHandler(this.btnCreateJournal_Click);
 			// 
 			// lblSettings
 			// 
@@ -985,6 +1125,8 @@ namespace myJournal
 			this.mnuGroups.ResumeLayout(false);
 			this.grpOpenScreen.ResumeLayout(false);
 			this.grpOpenScreen.PerformLayout();
+			this.pnlMenu.ResumeLayout(false);
+			this.pnlMenu.PerformLayout();
 			this.grpFindEntry.ResumeLayout(false);
 			this.grpFindEntry.PerformLayout();
 			this.grpNewJournal.ResumeLayout(false);
@@ -1065,15 +1207,24 @@ namespace myJournal
 		private System.Windows.Forms.RadioButton radOriginal_Replace;
 		private System.Windows.Forms.RadioButton radOriginal_Append;
 		private System.Windows.Forms.GroupBox grpAppendDeleteOriginal;
-		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.Label label6;
-		private System.Windows.Forms.Button btnDeleteJournal;
 		private System.Windows.Forms.GroupBox grpDeleteJournal;
 		private System.Windows.Forms.ComboBox ddlJournalsToDelete;
 		private System.Windows.Forms.Label lblHome_DeleteJournal;
 		private System.Windows.Forms.Button btnOK_DeleteJournal;
 		private System.Windows.Forms.Label lblJournalToDelete;
 		private System.Windows.Forms.Label lblDelete_Confirm;
+		private System.Windows.Forms.Panel pnlMenu;
+		private System.Windows.Forms.Label lblSettings_Show;
+		private System.Windows.Forms.Label lblTags_Create;
+		private System.Windows.Forms.Label label21;
+		private System.Windows.Forms.Label lblJournal_Delete;
+		private System.Windows.Forms.Label lblJournal_Create;
+		private System.Windows.Forms.Label label15;
+		private System.Windows.Forms.Label lblMenu;
+		private System.Windows.Forms.Label lblMenu_1;
+		private System.Windows.Forms.Label lblMenu_0;
+		private System.Windows.Forms.Label lblCloseMenu;
 	}
 }
 
