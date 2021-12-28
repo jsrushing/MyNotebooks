@@ -21,6 +21,7 @@ namespace myJournal
         GroupBox DisplayedGroupBox;
         Journal currentJournal = null;
         bool bGroupBeingEdited = false;
+        string rootPath = AppDomain.CurrentDomain.BaseDirectory;
 
         public Form1()
         { InitializeComponent(); }
@@ -33,6 +34,7 @@ namespace myJournal
             DisplayedGroupBox = grpOpenScreen;
             this.Size = MainFormSize;
             ActivateGroupBox(grpOpenScreen);
+
         }
 
         /// <summary>
@@ -77,6 +79,13 @@ namespace myJournal
                 case "grpNewGroup":
                     this.Text = "Create New Group";
                     txtBxToFocus = this.txtNewGroup;
+                    break;
+                case "grpDeleteJournal":
+                    lblDelete_Confirm.Visible = false;
+                    lblDelete_Confirm.Text = " will be deleted. Press Delete to confirm.";
+                    ddlJournalsToDelete.Visible = true;
+                    lblJournalToDelete.Visible = true;
+                    ddlJournalsToDelete.Text = String.Empty;
                     break;
             }
 
@@ -242,7 +251,8 @@ namespace myJournal
 
         private void lblEditEntry_Click(object sender, EventArgs e)
         {
-
+            
+            //txtNewEntryTitle.Text = 
         }
 
         private void lblFindEntry_Click(object sender, EventArgs e) { ActivateGroupBox(grpFindEntry); }
@@ -499,6 +509,42 @@ namespace myJournal
 		{
 			DisplayedGroupBox.Location = ActiveBoxLocation;
 			DisplayedGroupBox.Size = new Size(this.Width - 35, this.Height - 50);
+		}
+
+		private void lblDeleteEntry_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void radioButton2_CheckedChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private void btnOK_DeleteJournal_Click(object sender, EventArgs e)
+		{
+			if (lblDelete_Confirm.Visible)
+			{
+                File.Delete(rootPath + "\\journals\\" + ddlJournalsToDelete.Text);
+                LoadJournals();
+                ActivateGroupBox(grpOpenScreen);
+			}
+			else
+			{
+                lblDelete_Confirm.Text = ddlJournalsToDelete.Text + lblDelete_Confirm.Text;
+                ddlJournalsToDelete.Visible = false;
+                lblJournalToDelete.Visible = false;
+                lblDelete_Confirm.Visible = true;
+			}
+		}
+
+		private void btnDeleteJournal_Click(object sender, EventArgs e)
+		{
+            foreach(string s in ddlJournals.Items)
+			{
+                ddlJournalsToDelete.Items.Add(s);
+			}
+            ActivateGroupBox(grpDeleteJournal);
 		}
 	}
 }

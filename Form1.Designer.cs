@@ -35,6 +35,12 @@ namespace myJournal
 			this.lblCreateEntry = new System.Windows.Forms.Label();
 			this.lblFindEntry = new System.Windows.Forms.Label();
 			this.grpCreateEntry = new System.Windows.Forms.GroupBox();
+			this.grpAppendDeleteOriginal = new System.Windows.Forms.GroupBox();
+			this.label7 = new System.Windows.Forms.Label();
+			this.label6 = new System.Windows.Forms.Label();
+			this.radOriginal_Replace = new System.Windows.Forms.RadioButton();
+			this.radOriginal_Append = new System.Windows.Forms.RadioButton();
+			this.lblDeleteEntry = new System.Windows.Forms.Label();
 			this.btnAddEntry = new System.Windows.Forms.Button();
 			this.btnAddGroup = new System.Windows.Forms.Button();
 			this.lstGroups = new System.Windows.Forms.CheckedListBox();
@@ -50,6 +56,7 @@ namespace myJournal
 			this.label2 = new System.Windows.Forms.Label();
 			this.lblAddEntry = new System.Windows.Forms.Label();
 			this.grpOpenScreen = new System.Windows.Forms.GroupBox();
+			this.btnDeleteJournal = new System.Windows.Forms.Button();
 			this.lblEditEntry = new System.Windows.Forms.Label();
 			this.btnCreateJournal = new System.Windows.Forms.Button();
 			this.lblSettings = new System.Windows.Forms.Label();
@@ -88,16 +95,24 @@ namespace myJournal
 			this.txtNewJournalName = new System.Windows.Forms.TextBox();
 			this.label13 = new System.Windows.Forms.Label();
 			this.grpNewGroup = new System.Windows.Forms.GroupBox();
-			this.label15 = new System.Windows.Forms.Label();
+			this.lblHome_NewGroup = new System.Windows.Forms.Label();
 			this.btnOK_NewGroup = new System.Windows.Forms.Button();
 			this.txtNewGroup = new System.Windows.Forms.TextBox();
 			this.label16 = new System.Windows.Forms.Label();
+			this.grpDeleteJournal = new System.Windows.Forms.GroupBox();
+			this.lblDelete_Confirm = new System.Windows.Forms.Label();
+			this.ddlJournalsToDelete = new System.Windows.Forms.ComboBox();
+			this.lblHome_DeleteJournal = new System.Windows.Forms.Label();
+			this.btnOK_DeleteJournal = new System.Windows.Forms.Button();
+			this.lblJournalToDelete = new System.Windows.Forms.Label();
 			this.grpCreateEntry.SuspendLayout();
+			this.grpAppendDeleteOriginal.SuspendLayout();
 			this.mnuGroups.SuspendLayout();
 			this.grpOpenScreen.SuspendLayout();
 			this.grpFindEntry.SuspendLayout();
 			this.grpNewJournal.SuspendLayout();
 			this.grpNewGroup.SuspendLayout();
+			this.grpDeleteJournal.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -149,6 +164,8 @@ namespace myJournal
 			// grpCreateEntry
 			// 
 			this.grpCreateEntry.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.grpCreateEntry.Controls.Add(this.grpAppendDeleteOriginal);
+			this.grpCreateEntry.Controls.Add(this.lblDeleteEntry);
 			this.grpCreateEntry.Controls.Add(this.btnAddEntry);
 			this.grpCreateEntry.Controls.Add(this.btnAddGroup);
 			this.grpCreateEntry.Controls.Add(this.lstGroups);
@@ -164,6 +181,75 @@ namespace myJournal
 			this.grpCreateEntry.Size = new System.Drawing.Size(290, 545);
 			this.grpCreateEntry.TabIndex = 4;
 			this.grpCreateEntry.TabStop = false;
+			// 
+			// grpAppendDeleteOriginal
+			// 
+			this.grpAppendDeleteOriginal.Controls.Add(this.label7);
+			this.grpAppendDeleteOriginal.Controls.Add(this.label6);
+			this.grpAppendDeleteOriginal.Controls.Add(this.radOriginal_Replace);
+			this.grpAppendDeleteOriginal.Controls.Add(this.radOriginal_Append);
+			this.grpAppendDeleteOriginal.Location = new System.Drawing.Point(46, 0);
+			this.grpAppendDeleteOriginal.Name = "grpAppendDeleteOriginal";
+			this.grpAppendDeleteOriginal.Size = new System.Drawing.Size(194, 34);
+			this.grpAppendDeleteOriginal.TabIndex = 33;
+			this.grpAppendDeleteOriginal.TabStop = false;
+			this.grpAppendDeleteOriginal.Visible = false;
+			// 
+			// label7
+			// 
+			this.label7.AutoSize = true;
+			this.label7.Location = new System.Drawing.Point(116, 13);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(12, 15);
+			this.label7.TabIndex = 33;
+			this.label7.Text = "/";
+			// 
+			// label6
+			// 
+			this.label6.AutoSize = true;
+			this.label6.Location = new System.Drawing.Point(6, 13);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(50, 15);
+			this.label6.TabIndex = 32;
+			this.label6.Text = "original:";
+			// 
+			// radOriginal_Replace
+			// 
+			this.radOriginal_Replace.AutoSize = true;
+			this.radOriginal_Replace.Location = new System.Drawing.Point(128, 11);
+			this.radOriginal_Replace.Name = "radOriginal_Replace";
+			this.radOriginal_Replace.Size = new System.Drawing.Size(63, 19);
+			this.radOriginal_Replace.TabIndex = 31;
+			this.radOriginal_Replace.Text = "replace";
+			this.radOriginal_Replace.UseVisualStyleBackColor = true;
+			this.radOriginal_Replace.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
+			// 
+			// radOriginal_Append
+			// 
+			this.radOriginal_Append.AutoSize = true;
+			this.radOriginal_Append.Checked = true;
+			this.radOriginal_Append.Location = new System.Drawing.Point(58, 11);
+			this.radOriginal_Append.Name = "radOriginal_Append";
+			this.radOriginal_Append.Size = new System.Drawing.Size(65, 19);
+			this.radOriginal_Append.TabIndex = 30;
+			this.radOriginal_Append.TabStop = true;
+			this.radOriginal_Append.Text = "append";
+			this.radOriginal_Append.UseVisualStyleBackColor = true;
+			// 
+			// lblDeleteEntry
+			// 
+			this.lblDeleteEntry.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.lblDeleteEntry.AutoSize = true;
+			this.lblDeleteEntry.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.lblDeleteEntry.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
+			this.lblDeleteEntry.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.lblDeleteEntry.Location = new System.Drawing.Point(241, 13);
+			this.lblDeleteEntry.Name = "lblDeleteEntry";
+			this.lblDeleteEntry.Size = new System.Drawing.Size(43, 15);
+			this.lblDeleteEntry.TabIndex = 29;
+			this.lblDeleteEntry.Text = "delete";
+			this.lblDeleteEntry.Visible = false;
+			this.lblDeleteEntry.Click += new System.EventHandler(this.lblDeleteEntry_Click);
 			// 
 			// btnAddEntry
 			// 
@@ -282,6 +368,8 @@ namespace myJournal
 			// 
 			// txtNewEntryTitle
 			// 
+			this.txtNewEntryTitle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.txtNewEntryTitle.Location = new System.Drawing.Point(38, 34);
 			this.txtNewEntryTitle.Name = "txtNewEntryTitle";
 			this.txtNewEntryTitle.Size = new System.Drawing.Size(240, 23);
@@ -306,6 +394,7 @@ namespace myJournal
 			// grpOpenScreen
 			// 
 			this.grpOpenScreen.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.grpOpenScreen.Controls.Add(this.btnDeleteJournal);
 			this.grpOpenScreen.Controls.Add(this.lblEditEntry);
 			this.grpOpenScreen.Controls.Add(this.btnCreateJournal);
 			this.grpOpenScreen.Controls.Add(this.lblSettings);
@@ -324,6 +413,18 @@ namespace myJournal
 			this.grpOpenScreen.TabIndex = 5;
 			this.grpOpenScreen.TabStop = false;
 			// 
+			// btnDeleteJournal
+			// 
+			this.btnDeleteJournal.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+			this.btnDeleteJournal.Location = new System.Drawing.Point(258, 33);
+			this.btnDeleteJournal.Name = "btnDeleteJournal";
+			this.btnDeleteJournal.Size = new System.Drawing.Size(25, 18);
+			this.btnDeleteJournal.TabIndex = 14;
+			this.btnDeleteJournal.Text = "-";
+			this.btnDeleteJournal.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.btnDeleteJournal.UseVisualStyleBackColor = false;
+			this.btnDeleteJournal.Click += new System.EventHandler(this.btnDeleteJournal_Click);
+			// 
 			// lblEditEntry
 			// 
 			this.lblEditEntry.AutoSize = true;
@@ -341,11 +442,12 @@ namespace myJournal
 			// btnCreateJournal
 			// 
 			this.btnCreateJournal.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-			this.btnCreateJournal.Location = new System.Drawing.Point(258, 22);
+			this.btnCreateJournal.Location = new System.Drawing.Point(258, 14);
 			this.btnCreateJournal.Name = "btnCreateJournal";
-			this.btnCreateJournal.Size = new System.Drawing.Size(25, 23);
+			this.btnCreateJournal.Size = new System.Drawing.Size(25, 18);
 			this.btnCreateJournal.TabIndex = 12;
 			this.btnCreateJournal.Text = "+";
+			this.btnCreateJournal.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.btnCreateJournal.UseVisualStyleBackColor = false;
 			this.btnCreateJournal.Click += new System.EventHandler(this.btnCreateJournal_Click);
 			// 
@@ -745,7 +847,7 @@ namespace myJournal
 			// 
 			// grpNewGroup
 			// 
-			this.grpNewGroup.Controls.Add(this.label15);
+			this.grpNewGroup.Controls.Add(this.lblHome_NewGroup);
 			this.grpNewGroup.Controls.Add(this.btnOK_NewGroup);
 			this.grpNewGroup.Controls.Add(this.txtNewGroup);
 			this.grpNewGroup.Controls.Add(this.label16);
@@ -755,18 +857,18 @@ namespace myJournal
 			this.grpNewGroup.TabIndex = 26;
 			this.grpNewGroup.TabStop = false;
 			// 
-			// label15
+			// lblHome_NewGroup
 			// 
-			this.label15.AutoSize = true;
-			this.label15.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.label15.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
-			this.label15.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.label15.Location = new System.Drawing.Point(6, 12);
-			this.label15.Name = "label15";
-			this.label15.Size = new System.Drawing.Size(39, 15);
-			this.label15.TabIndex = 25;
-			this.label15.Text = "home";
-			this.label15.Click += new System.EventHandler(this.lblHome_Click);
+			this.lblHome_NewGroup.AutoSize = true;
+			this.lblHome_NewGroup.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.lblHome_NewGroup.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
+			this.lblHome_NewGroup.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.lblHome_NewGroup.Location = new System.Drawing.Point(6, 12);
+			this.lblHome_NewGroup.Name = "lblHome_NewGroup";
+			this.lblHome_NewGroup.Size = new System.Drawing.Size(39, 15);
+			this.lblHome_NewGroup.TabIndex = 25;
+			this.lblHome_NewGroup.Text = "home";
+			this.lblHome_NewGroup.Click += new System.EventHandler(this.lblHome_Click);
 			// 
 			// btnOK_NewGroup
 			// 
@@ -795,11 +897,76 @@ namespace myJournal
 			this.label16.TabIndex = 0;
 			this.label16.Text = "Group Name:";
 			// 
+			// grpDeleteJournal
+			// 
+			this.grpDeleteJournal.Controls.Add(this.lblDelete_Confirm);
+			this.grpDeleteJournal.Controls.Add(this.ddlJournalsToDelete);
+			this.grpDeleteJournal.Controls.Add(this.lblHome_DeleteJournal);
+			this.grpDeleteJournal.Controls.Add(this.btnOK_DeleteJournal);
+			this.grpDeleteJournal.Controls.Add(this.lblJournalToDelete);
+			this.grpDeleteJournal.Location = new System.Drawing.Point(673, 587);
+			this.grpDeleteJournal.Name = "grpDeleteJournal";
+			this.grpDeleteJournal.Size = new System.Drawing.Size(290, 107);
+			this.grpDeleteJournal.TabIndex = 26;
+			this.grpDeleteJournal.TabStop = false;
+			// 
+			// lblDelete_Confirm
+			// 
+			this.lblDelete_Confirm.Location = new System.Drawing.Point(41, 27);
+			this.lblDelete_Confirm.Name = "lblDelete_Confirm";
+			this.lblDelete_Confirm.Size = new System.Drawing.Size(211, 39);
+			this.lblDelete_Confirm.TabIndex = 26;
+			this.lblDelete_Confirm.Text = " will be deleted. Press Delete to continue.";
+			this.lblDelete_Confirm.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.lblDelete_Confirm.Visible = false;
+			// 
+			// ddlJournalsToDelete
+			// 
+			this.ddlJournalsToDelete.FormattingEnabled = true;
+			this.ddlJournalsToDelete.Location = new System.Drawing.Point(56, 40);
+			this.ddlJournalsToDelete.Name = "ddlJournalsToDelete";
+			this.ddlJournalsToDelete.Size = new System.Drawing.Size(228, 23);
+			this.ddlJournalsToDelete.TabIndex = 16;
+			// 
+			// lblHome_DeleteJournal
+			// 
+			this.lblHome_DeleteJournal.AutoSize = true;
+			this.lblHome_DeleteJournal.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.lblHome_DeleteJournal.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
+			this.lblHome_DeleteJournal.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.lblHome_DeleteJournal.Location = new System.Drawing.Point(6, 12);
+			this.lblHome_DeleteJournal.Name = "lblHome_DeleteJournal";
+			this.lblHome_DeleteJournal.Size = new System.Drawing.Size(39, 15);
+			this.lblHome_DeleteJournal.TabIndex = 25;
+			this.lblHome_DeleteJournal.Text = "home";
+			this.lblHome_DeleteJournal.Click += new System.EventHandler(this.lblHome_Click);
+			// 
+			// btnOK_DeleteJournal
+			// 
+			this.btnOK_DeleteJournal.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+			this.btnOK_DeleteJournal.Location = new System.Drawing.Point(107, 72);
+			this.btnOK_DeleteJournal.Name = "btnOK_DeleteJournal";
+			this.btnOK_DeleteJournal.Size = new System.Drawing.Size(75, 23);
+			this.btnOK_DeleteJournal.TabIndex = 2;
+			this.btnOK_DeleteJournal.Text = "Delete";
+			this.btnOK_DeleteJournal.UseVisualStyleBackColor = false;
+			this.btnOK_DeleteJournal.Click += new System.EventHandler(this.btnOK_DeleteJournal_Click);
+			// 
+			// lblJournalToDelete
+			// 
+			this.lblJournalToDelete.AutoSize = true;
+			this.lblJournalToDelete.Location = new System.Drawing.Point(6, 43);
+			this.lblJournalToDelete.Name = "lblJournalToDelete";
+			this.lblJournalToDelete.Size = new System.Drawing.Size(45, 15);
+			this.lblJournalToDelete.TabIndex = 0;
+			this.lblJournalToDelete.Text = "Journal";
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1010, 1061);
+			this.Controls.Add(this.grpDeleteJournal);
 			this.Controls.Add(this.grpNewGroup);
 			this.Controls.Add(this.grpNewJournal);
 			this.Controls.Add(this.grpOpenScreen);
@@ -814,6 +981,8 @@ namespace myJournal
 			this.Resize += new System.EventHandler(this.Form1_Resize);
 			this.grpCreateEntry.ResumeLayout(false);
 			this.grpCreateEntry.PerformLayout();
+			this.grpAppendDeleteOriginal.ResumeLayout(false);
+			this.grpAppendDeleteOriginal.PerformLayout();
 			this.mnuGroups.ResumeLayout(false);
 			this.grpOpenScreen.ResumeLayout(false);
 			this.grpOpenScreen.PerformLayout();
@@ -823,6 +992,8 @@ namespace myJournal
 			this.grpNewJournal.PerformLayout();
 			this.grpNewGroup.ResumeLayout(false);
 			this.grpNewGroup.PerformLayout();
+			this.grpDeleteJournal.ResumeLayout(false);
+			this.grpDeleteJournal.PerformLayout();
 			this.ResumeLayout(false);
 
         }
@@ -873,7 +1044,7 @@ namespace myJournal
         private System.Windows.Forms.CheckedListBox lstGroups;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.GroupBox grpNewGroup;
-        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label lblHome_NewGroup;
         private System.Windows.Forms.Button btnOK_NewGroup;
         private System.Windows.Forms.TextBox txtNewGroup;
         private System.Windows.Forms.Label label16;
@@ -891,6 +1062,19 @@ namespace myJournal
         private System.Windows.Forms.CheckBox chkUseDateRange;
         private System.Windows.Forms.CheckBox chkUseDate;
         private System.Windows.Forms.ListBox lstFoundEntries;
-    }
+		private System.Windows.Forms.Label lblDeleteEntry;
+		private System.Windows.Forms.RadioButton radOriginal_Replace;
+		private System.Windows.Forms.RadioButton radOriginal_Append;
+		private System.Windows.Forms.GroupBox grpAppendDeleteOriginal;
+		private System.Windows.Forms.Label label7;
+		private System.Windows.Forms.Label label6;
+		private System.Windows.Forms.Button btnDeleteJournal;
+		private System.Windows.Forms.GroupBox grpDeleteJournal;
+		private System.Windows.Forms.ComboBox ddlJournalsToDelete;
+		private System.Windows.Forms.Label lblHome_DeleteJournal;
+		private System.Windows.Forms.Button btnOK_DeleteJournal;
+		private System.Windows.Forms.Label lblJournalToDelete;
+		private System.Windows.Forms.Label lblDelete_Confirm;
+	}
 }
 
