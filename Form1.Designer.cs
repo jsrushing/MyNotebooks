@@ -222,7 +222,6 @@ namespace myJournal
 			this.radOriginal_Replace.TabIndex = 31;
 			this.radOriginal_Replace.Text = "replace";
 			this.radOriginal_Replace.UseVisualStyleBackColor = true;
-			this.radOriginal_Replace.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
 			// 
 			// radOriginal_Append
 			// 

@@ -22,6 +22,7 @@ namespace myJournal
         Journal currentJournal = null;
         bool bGroupBeingEdited = false;
         string rootPath = AppDomain.CurrentDomain.BaseDirectory;
+        JournalEntry currentEntry = null;
 
         public Form1()
         { InitializeComponent(); }
@@ -36,6 +37,13 @@ namespace myJournal
             ActivateGroupBox(grpOpenScreen);
 
         }
+
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+            DisplayedGroupBox.Location = ActiveBoxLocation;
+            DisplayedGroupBox.Size = new Size(this.Width - 35, this.Height - 50);
+        }
+
 
         /// <summary>
         /// Show a group box. Change form Text, set focus, etc. as required for that group box.
@@ -133,6 +141,42 @@ namespace myJournal
         private void btnCreateJournal_Click(object sender, EventArgs e) { ActivateGroupBox(grpNewJournal); }
 
         /// <summary>
+        /// Show the delete journal controls.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnDeleteJournal_Click(object sender, EventArgs e)
+        {
+            foreach (string s in ddlJournals.Items)
+            {
+                ddlJournalsToDelete.Items.Add(s);
+            }
+            ActivateGroupBox(grpDeleteJournal);
+        }
+
+        /// <summary>
+        /// Deleting Journal - either show confirmation or delete journal.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnOK_DeleteJournal_Click(object sender, EventArgs e)
+        {
+            if (lblDelete_Confirm.Visible)
+            {
+                File.Delete(rootPath + "\\journals\\" + ddlJournalsToDelete.Text);
+                LoadJournals();
+                ActivateGroupBox(grpOpenScreen);
+            }
+            else
+            {
+                lblDelete_Confirm.Text = ddlJournalsToDelete.Text + lblDelete_Confirm.Text;
+                ddlJournalsToDelete.Visible = false;
+                lblJournalToDelete.Visible = false;
+                lblDelete_Confirm.Visible = true;
+            }
+        }
+
+        /// <summary>
         /// Create the new journal.
         /// </summary>
         /// <param name="sender"></param>
@@ -146,6 +190,11 @@ namespace myJournal
         }
         #endregion
 
+        /// <summary>
+        /// Load the selected journal.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
 		private void ddlJournals_SelectedIndexChanged(object sender, EventArgs e)
         {
             lstEntries.Items.Clear();
@@ -153,7 +202,7 @@ namespace myJournal
             Journal j = new Journal(ddlJournals.Text);
             currentJournal = j.OpenJournal();
             PopulateEntries(lstEntries, currentJournal.Entries);
-            lblCreateEntry.Enabled = true;
+            lblCreateEntry.Enabled = true; 
             lblFindEntry.Enabled = true;
         }
 
@@ -249,6 +298,11 @@ namespace myJournal
             }
         }
 
+        private void lblDeleteEntry_Click(object sender, EventArgs e)
+        {
+
+        }
+
         private void lblEditEntry_Click(object sender, EventArgs e)
         {
             
@@ -296,12 +350,12 @@ namespace myJournal
                         {
                             foundEntries.Add(je);
                         }
-                        if (chkUseDateRange.Checked)
+                    }
+                    if (chkUseDateRange.Checked)
+                    {
+                        if (je.Date >= dtSearchFrom.Value && je.Date <= dtSearchTo.Value)
                         {
-                            if (je.Date >= dtSearchFrom.Value && je.Date <= dtSearchTo.Value)
-                            {
-                                foundEntries.Add(je);
-                            }
+                            foundEntries.Add(je);
                         }
                     }
                     // tags
@@ -310,13 +364,13 @@ namespace myJournal
                         string[] groups = txtGroupsForSearch.Text.Split(',');
                         foreach (string group in groups)
                         {
-                            if (EncryptDecrypt.Decrypt(je.Groups, "", "").Contains(group)) { foundEntries.Add(je); }
+                            if (je.ClearTags().Contains(group)) { foundEntries.Add(je); }
                         }
                     }
                     // title contains
-                    if (txtSearchTitle.TextLength > 0) { if (EncryptDecrypt.Decrypt(je.Title, "", "").Contains(txtSearchTitle.Text)) { foundEntries.Add(je); } }
+                    if (txtSearchTitle.TextLength > 0) { if (je.ClearTitle().Contains(txtSearchTitle.Text)) { foundEntries.Add(je); } }
                     // entry contains
-                    if (txtSearchText.TextLength > 0) { if (EncryptDecrypt.Decrypt(je.Text, "", "").Contains(txtSearchText.Text)) { foundEntries.Add(je); } }
+                    if (txtSearchText.TextLength > 0) { if (je.ClearText().Contains(txtSearchText.Text)) { foundEntries.Add(je); } }
                 }
             }
 
@@ -422,12 +476,14 @@ namespace myJournal
                 if (ctr < 0) break;
             }
 
+            
             if (ctr > 0) { ctr += 1; }
             EntrySelector.SelectEntry(lb, ctr);
             string sTitleAndDate = lb.Items[ctr].ToString();
             string sTitle = sTitleAndDate.Substring(0, sTitleAndDate.IndexOf('(') - 1);
             string sDate = sTitleAndDate.Substring(sTitleAndDate.IndexOf('(') + 1, sTitleAndDate.Length - 2 - sTitleAndDate.IndexOf('('));
-            rtb.Text = EncryptDecrypt.Decrypt(currentJournal.GetEntry(sTitle, sDate).Text, "", "");
+            currentEntry = currentJournal.GetEntry(sTitle, sDate);
+            rtb.Text = currentEntry.ClearText();
             lblEditEntry.Enabled = true;
             lb.SelectedIndexChanged += new System.EventHandler(this.ListOfEntries_SelectedIndexChanged);
         }
@@ -444,15 +500,15 @@ namespace myJournal
 
             foreach(JournalEntry je in entries)
             {
-                lstBox.Items.Add(EncryptDecrypt.Decrypt(je.Title, "", "") + " (" + je.Date.ToString("M-dd-yy H_m_ss") + ")");
-                string sEntryText = EncryptDecrypt.Decrypt(je.Text, "", "");
+                lstBox.Items.Add(je.ClearTitle() + " (" + je.Date.ToString("M-dd-yy H_m_ss") + ")");
+                string sEntryText = je.ClearText();
 
 
                 lstBox.Items.Add(sEntryText.Length < iTextChunkLength ?
                     sEntryText :
                     sEntryText.Substring(0, iTextChunkLength) + " ...");
 
-                lstBox.Items.Add("tags: " + EncryptDecrypt.Decrypt(je.Groups, "", ""));
+                lstBox.Items.Add("tags: " + je.ClearTags());
                 lstBox.Items.Add("---------------------");
             }
         }
@@ -505,46 +561,5 @@ namespace myJournal
             dtSearchTo.Enabled = dtSearchFrom.Enabled;
         }
 
-		private void Form1_Resize(object sender, EventArgs e)
-		{
-			DisplayedGroupBox.Location = ActiveBoxLocation;
-			DisplayedGroupBox.Size = new Size(this.Width - 35, this.Height - 50);
-		}
-
-		private void lblDeleteEntry_Click(object sender, EventArgs e)
-		{
-
-		}
-
-		private void radioButton2_CheckedChanged(object sender, EventArgs e)
-		{
-
-		}
-
-		private void btnOK_DeleteJournal_Click(object sender, EventArgs e)
-		{
-			if (lblDelete_Confirm.Visible)
-			{
-                File.Delete(rootPath + "\\journals\\" + ddlJournalsToDelete.Text);
-                LoadJournals();
-                ActivateGroupBox(grpOpenScreen);
-			}
-			else
-			{
-                lblDelete_Confirm.Text = ddlJournalsToDelete.Text + lblDelete_Confirm.Text;
-                ddlJournalsToDelete.Visible = false;
-                lblJournalToDelete.Visible = false;
-                lblDelete_Confirm.Visible = true;
-			}
-		}
-
-		private void btnDeleteJournal_Click(object sender, EventArgs e)
-		{
-            foreach(string s in ddlJournals.Items)
-			{
-                ddlJournalsToDelete.Items.Add(s);
-			}
-            ActivateGroupBox(grpDeleteJournal);
-		}
 	}
 }

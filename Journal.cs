@@ -49,7 +49,7 @@ namespace myJournal
 
         public JournalEntry GetEntry(string _title, string _date)
         {
-			try { return this.Entries.First(a => EncryptDecrypt.Decrypt(a.Title, "", "") + a.Date.ToString("M-dd-yy H_m_ss") == _title + _date); }
+			try { return this.Entries.First(a => a.ClearTitle() + a.Date.ToString("M-dd-yy H_m_ss") == _title + _date); }
             catch(Exception ex) { return null; }
         }
 
