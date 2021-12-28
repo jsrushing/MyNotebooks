@@ -85,6 +85,7 @@ namespace myJournal
             box.Visible = true;
             if (txtBxToFocus != null) txtBxToFocus.Focus();
             DisplayedGroupBox = box;
+            this.Height += 1;
         }
 
 		#region Buttons
@@ -428,13 +429,19 @@ namespace myJournal
         /// <param name="entries"></param>
         private void PopulateEntries(ListBox lstBox, List<JournalEntry> entries)
         {
-            int iTextChunkLength = Convert.ToInt16( Properties.Settings.Default["ShortEntryDisplayTextLength"]);
+            int iTextChunkLength = 45;  // this.Width - 265 - Convert.ToInt16(this.Width * .065);
             lstBox.Items.Clear();
 
             foreach(JournalEntry je in entries)
             {
                 lstBox.Items.Add(EncryptDecrypt.Decrypt(je.Title, "", "") + " (" + je.Date.ToString("M-dd-yy H_m_ss") + ")");
-                lstBox.Items.Add(je.Text.Length < iTextChunkLength ? EncryptDecrypt.Decrypt(je.Text, "", "") : EncryptDecrypt.Decrypt(je.Text, "", "").Substring(0, iTextChunkLength - 1) + " ...");
+                string sEntryText = EncryptDecrypt.Decrypt(je.Text, "", "");
+
+
+                lstBox.Items.Add(sEntryText.Length < iTextChunkLength ?
+                    sEntryText :
+                    sEntryText.Substring(0, iTextChunkLength) + " ...");
+
                 lstBox.Items.Add("tags: " + EncryptDecrypt.Decrypt(je.Groups, "", ""));
                 lstBox.Items.Add("---------------------");
             }
@@ -490,8 +497,8 @@ namespace myJournal
 
 		private void Form1_Resize(object sender, EventArgs e)
 		{
-            DisplayedGroupBox.Location = ActiveBoxLocation;
-            DisplayedGroupBox.Size = new Size(this.Width - 35, this.Height - 50);
-        }
+			DisplayedGroupBox.Location = ActiveBoxLocation;
+			DisplayedGroupBox.Size = new Size(this.Width - 35, this.Height - 50);
+		}
 	}
 }

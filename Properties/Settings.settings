@@ -8,8 +8,5 @@
     <Setting Name="TxtSelectGroupsForSearchDefault" Type="System.String" Scope="User">
       <Value Profile="(Default)">(click to select)</Value>
     </Setting>
-    <Setting Name="ShortEntryDisplayTextLength" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">45</Value>
-    </Setting>
   </Settings>
 </SettingsFile>

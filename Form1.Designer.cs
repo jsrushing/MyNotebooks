@@ -148,6 +148,7 @@ namespace myJournal
 			// 
 			// grpCreateEntry
 			// 
+			this.grpCreateEntry.Anchor = System.Windows.Forms.AnchorStyles.None;
 			this.grpCreateEntry.Controls.Add(this.btnAddEntry);
 			this.grpCreateEntry.Controls.Add(this.btnAddGroup);
 			this.grpCreateEntry.Controls.Add(this.lstGroups);
@@ -190,6 +191,9 @@ namespace myJournal
 			// 
 			// lstGroups
 			// 
+			this.lstGroups.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.lstGroups.CheckOnClick = true;
 			this.lstGroups.ContextMenuStrip = this.mnuGroups;
 			this.lstGroups.FormattingEnabled = true;
@@ -267,6 +271,8 @@ namespace myJournal
 			// 
 			// rtbNewEntry
 			// 
+			this.rtbNewEntry.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.rtbNewEntry.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.rtbNewEntry.Location = new System.Drawing.Point(6, 87);
 			this.rtbNewEntry.Name = "rtbNewEntry";
@@ -519,6 +525,8 @@ namespace myJournal
 			// 
 			// txtGroupsForSearch
 			// 
+			this.txtGroupsForSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.txtGroupsForSearch.Location = new System.Drawing.Point(41, 86);
 			this.txtGroupsForSearch.Name = "txtGroupsForSearch";
 			this.txtGroupsForSearch.Size = new System.Drawing.Size(243, 23);
@@ -562,6 +570,8 @@ namespace myJournal
 			// 
 			// txtSearchText
 			// 
+			this.txtSearchText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.txtSearchText.Location = new System.Drawing.Point(85, 143);
 			this.txtSearchText.Name = "txtSearchText";
 			this.txtSearchText.Size = new System.Drawing.Size(199, 23);
@@ -569,6 +579,8 @@ namespace myJournal
 			// 
 			// txtSearchTitle
 			// 
+			this.txtSearchTitle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.txtSearchTitle.Location = new System.Drawing.Point(85, 114);
 			this.txtSearchTitle.Name = "txtSearchTitle";
 			this.txtSearchTitle.Size = new System.Drawing.Size(199, 23);
