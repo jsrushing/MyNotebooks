@@ -35,6 +35,8 @@ namespace myJournal
 			this.lblCreateEntry = new System.Windows.Forms.Label();
 			this.lblFindEntry = new System.Windows.Forms.Label();
 			this.grpCreateEntry = new System.Windows.Forms.GroupBox();
+			this.lblEntryText_Hidden = new System.Windows.Forms.Label();
+			this.lblEntryTitle_Hidden = new System.Windows.Forms.Label();
 			this.grpAppendDeleteOriginal = new System.Windows.Forms.GroupBox();
 			this.lblDeleteEntry = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
@@ -87,9 +89,9 @@ namespace myJournal
 			this.lblHome = new System.Windows.Forms.Label();
 			this.txtSearchText = new System.Windows.Forms.TextBox();
 			this.txtSearchTitle = new System.Windows.Forms.TextBox();
-			this.dtSearchTo = new System.Windows.Forms.DateTimePicker();
+			this.dtFindDate_To = new System.Windows.Forms.DateTimePicker();
 			this.label12 = new System.Windows.Forms.Label();
-			this.dtSearchFrom = new System.Windows.Forms.DateTimePicker();
+			this.dtFindDate_From = new System.Windows.Forms.DateTimePicker();
 			this.dtFindDate = new System.Windows.Forms.DateTimePicker();
 			this.lblFindEntries = new System.Windows.Forms.Label();
 			this.rtbSelectedEntry_Found = new System.Windows.Forms.RichTextBox();
@@ -113,8 +115,6 @@ namespace myJournal
 			this.lblHome_DeleteJournal = new System.Windows.Forms.Label();
 			this.btnOK_DeleteJournal = new System.Windows.Forms.Button();
 			this.lblJournalToDelete = new System.Windows.Forms.Label();
-			this.lblEntryTitle_Hidden = new System.Windows.Forms.Label();
-			this.lblEntryText_Hidden = new System.Windows.Forms.Label();
 			this.grpCreateEntry.SuspendLayout();
 			this.grpAppendDeleteOriginal.SuspendLayout();
 			this.mnuGroups.SuspendLayout();
@@ -199,6 +199,26 @@ namespace myJournal
 			this.grpCreateEntry.Size = new System.Drawing.Size(290, 545);
 			this.grpCreateEntry.TabIndex = 4;
 			this.grpCreateEntry.TabStop = false;
+			// 
+			// lblEntryText_Hidden
+			// 
+			this.lblEntryText_Hidden.AutoSize = true;
+			this.lblEntryText_Hidden.Location = new System.Drawing.Point(77, 527);
+			this.lblEntryText_Hidden.Name = "lblEntryText_Hidden";
+			this.lblEntryText_Hidden.Size = new System.Drawing.Size(67, 15);
+			this.lblEntryText_Hidden.TabIndex = 35;
+			this.lblEntryText_Hidden.Text = "hidden text";
+			this.lblEntryText_Hidden.Visible = false;
+			// 
+			// lblEntryTitle_Hidden
+			// 
+			this.lblEntryTitle_Hidden.AutoSize = true;
+			this.lblEntryTitle_Hidden.Location = new System.Drawing.Point(4, 527);
+			this.lblEntryTitle_Hidden.Name = "lblEntryTitle_Hidden";
+			this.lblEntryTitle_Hidden.Size = new System.Drawing.Size(67, 15);
+			this.lblEntryTitle_Hidden.TabIndex = 34;
+			this.lblEntryTitle_Hidden.Text = "hidden title";
+			this.lblEntryTitle_Hidden.Visible = false;
 			// 
 			// grpAppendDeleteOriginal
 			// 
@@ -662,9 +682,9 @@ namespace myJournal
 			this.grpFindEntry.Controls.Add(this.lblHome);
 			this.grpFindEntry.Controls.Add(this.txtSearchText);
 			this.grpFindEntry.Controls.Add(this.txtSearchTitle);
-			this.grpFindEntry.Controls.Add(this.dtSearchTo);
+			this.grpFindEntry.Controls.Add(this.dtFindDate_To);
 			this.grpFindEntry.Controls.Add(this.label12);
-			this.grpFindEntry.Controls.Add(this.dtSearchFrom);
+			this.grpFindEntry.Controls.Add(this.dtFindDate_From);
 			this.grpFindEntry.Controls.Add(this.dtFindDate);
 			this.grpFindEntry.Controls.Add(this.lblFindEntries);
 			this.grpFindEntry.Controls.Add(this.rtbSelectedEntry_Found);
@@ -819,17 +839,17 @@ namespace myJournal
 			this.txtSearchTitle.Size = new System.Drawing.Size(199, 23);
 			this.txtSearchTitle.TabIndex = 21;
 			// 
-			// dtSearchTo
+			// dtFindDate_To
 			// 
-			this.dtSearchTo.CustomFormat = "M/d/yyyy";
-			this.dtSearchTo.Enabled = false;
-			this.dtSearchTo.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-			this.dtSearchTo.Location = new System.Drawing.Point(192, 32);
-			this.dtSearchTo.Name = "dtSearchTo";
-			this.dtSearchTo.ShowUpDown = true;
-			this.dtSearchTo.Size = new System.Drawing.Size(79, 23);
-			this.dtSearchTo.TabIndex = 20;
-			this.dtSearchTo.Value = new System.DateTime(2021, 12, 23, 18, 55, 40, 0);
+			this.dtFindDate_To.CustomFormat = "M/d/yyyy";
+			this.dtFindDate_To.Enabled = false;
+			this.dtFindDate_To.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+			this.dtFindDate_To.Location = new System.Drawing.Point(192, 32);
+			this.dtFindDate_To.Name = "dtFindDate_To";
+			this.dtFindDate_To.ShowUpDown = true;
+			this.dtFindDate_To.Size = new System.Drawing.Size(79, 23);
+			this.dtFindDate_To.TabIndex = 20;
+			this.dtFindDate_To.Value = new System.DateTime(2021, 12, 23, 18, 55, 40, 0);
 			// 
 			// label12
 			// 
@@ -840,17 +860,17 @@ namespace myJournal
 			this.label12.TabIndex = 19;
 			this.label12.Text = "to";
 			// 
-			// dtSearchFrom
+			// dtFindDate_From
 			// 
-			this.dtSearchFrom.CustomFormat = "M/d/yyyy";
-			this.dtSearchFrom.Enabled = false;
-			this.dtSearchFrom.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-			this.dtSearchFrom.Location = new System.Drawing.Point(95, 32);
-			this.dtSearchFrom.Name = "dtSearchFrom";
-			this.dtSearchFrom.ShowUpDown = true;
-			this.dtSearchFrom.Size = new System.Drawing.Size(79, 23);
-			this.dtSearchFrom.TabIndex = 18;
-			this.dtSearchFrom.Value = new System.DateTime(2021, 12, 23, 18, 55, 40, 0);
+			this.dtFindDate_From.CustomFormat = "M/d/yyyy";
+			this.dtFindDate_From.Enabled = false;
+			this.dtFindDate_From.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+			this.dtFindDate_From.Location = new System.Drawing.Point(95, 32);
+			this.dtFindDate_From.Name = "dtFindDate_From";
+			this.dtFindDate_From.ShowUpDown = true;
+			this.dtFindDate_From.Size = new System.Drawing.Size(79, 23);
+			this.dtFindDate_From.TabIndex = 18;
+			this.dtFindDate_From.Value = new System.DateTime(2021, 12, 23, 18, 55, 40, 0);
 			// 
 			// dtFindDate
 			// 
@@ -1098,26 +1118,6 @@ namespace myJournal
 			this.lblJournalToDelete.TabIndex = 0;
 			this.lblJournalToDelete.Text = "Journal";
 			// 
-			// lblEntryTitle_Hidden
-			// 
-			this.lblEntryTitle_Hidden.AutoSize = true;
-			this.lblEntryTitle_Hidden.Location = new System.Drawing.Point(4, 527);
-			this.lblEntryTitle_Hidden.Name = "lblEntryTitle_Hidden";
-			this.lblEntryTitle_Hidden.Size = new System.Drawing.Size(67, 15);
-			this.lblEntryTitle_Hidden.TabIndex = 34;
-			this.lblEntryTitle_Hidden.Text = "hidden title";
-			this.lblEntryTitle_Hidden.Visible = false;
-			// 
-			// lblEntryText_Hidden
-			// 
-			this.lblEntryText_Hidden.AutoSize = true;
-			this.lblEntryText_Hidden.Location = new System.Drawing.Point(77, 527);
-			this.lblEntryText_Hidden.Name = "lblEntryText_Hidden";
-			this.lblEntryText_Hidden.Size = new System.Drawing.Size(67, 15);
-			this.lblEntryText_Hidden.TabIndex = 35;
-			this.lblEntryText_Hidden.Text = "hidden text";
-			this.lblEntryText_Hidden.Visible = false;
-			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -1179,9 +1179,9 @@ namespace myJournal
         private System.Windows.Forms.Label lblEntriesStartFrom;
         private System.Windows.Forms.TextBox txtSearchText;
         private System.Windows.Forms.TextBox txtSearchTitle;
-        private System.Windows.Forms.DateTimePicker dtSearchTo;
+        private System.Windows.Forms.DateTimePicker dtFindDate_To;
         private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.DateTimePicker dtSearchFrom;
+        private System.Windows.Forms.DateTimePicker dtFindDate_From;
         private System.Windows.Forms.DateTimePicker dtFindDate;
         private System.Windows.Forms.Label lblFindEntries;
         private System.Windows.Forms.RichTextBox rtbSelectedEntry_Found;

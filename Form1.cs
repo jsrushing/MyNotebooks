@@ -174,8 +174,7 @@ namespace myJournal
         {
             if (lblDelete_Confirm.Visible)
             {
-                if (currentJournal == null) { currentJournal = new Journal(ddlJournalsToDelete.Text).OpenJournal(); }
-                currentJournal.DeleteJournal();
+                if (currentJournal == null) { new Journal(ddlJournalsToDelete.Text).OpenJournal().Delete(); } else { currentJournal.Delete(); }
                 currentJournal = null;
                 LoadJournals();
                 ddlJournals.Text = String.Empty;
@@ -334,17 +333,23 @@ namespace myJournal
             txtNewEntryTitle.Text = currentEntry.ClearTitle();
             lblEntryText_Hidden.Text = currentEntry.ClearText();
             lblEntryTitle_Hidden.Text = currentEntry.ClearTitle();
-            rtbNewEntry.Text = System.Environment.NewLine + System.Environment.NewLine + "Original Title: " + 
-                currentEntry.ClearTitle() + System.Environment.NewLine + "Original Entry:" + System.Environment.NewLine + currentEntry.ClearText();
+            string newLine = System.Environment.NewLine;
+            rtbNewEntry.Text = newLine + newLine + 
+                "Original Date: " + currentEntry.Date.ToString("dd/M/yy H:m:s") + newLine +
+                "Original Title: " + currentEntry.ClearTitle() + newLine + 
+                "Original Entry:" + newLine + currentEntry.ClearText();
             rtbNewEntry.Focus();
             rtbNewEntry.SelectionStart = 0; 
 			grpAppendDeleteOriginal.Visible = true;
             foreach (int i in lstGroups.CheckedIndices) { lstGroups.SetItemChecked(i, false); }
-            foreach (string s in currentEntry.ClearTags().Split(','))
-            {
-                int index = lstGroups.FindString(s);
-                if (index > -1) { lstGroups.SetItemChecked(index, true); }
-            }
+            if(currentEntry.ClearTags().Length > 0)
+			{
+                foreach (string s in currentEntry.ClearTags().Split(','))
+                {
+                    int index = lstGroups.FindString(s);
+                    if (index > -1) { lstGroups.SetItemChecked(index, true); }
+                }
+			}
         }
 
         private void lblFindEntry_Click(object sender, EventArgs e) { ActivateGroupBox(grpFindEntry); }
@@ -391,7 +396,7 @@ namespace myJournal
                     }
                     if (chkUseDateRange.Checked)
                     {
-                        if (je.Date >= dtSearchFrom.Value && je.Date <= dtSearchTo.Value)
+                        if (je.Date >= dtFindDate_From.Value && je.Date <= dtFindDate_To.Value)
                         {
                             foundEntries.Add(je);
                         }
@@ -430,7 +435,15 @@ namespace myJournal
         /// <param name="e"></param>
         private void lblClearAll_Click(object sender, EventArgs e) 
         {  
-        
+            dtFindDate.Value = DateTime.Now;
+            dtFindDate_From.Value = DateTime.Now;
+            dtFindDate_To.Value = DateTime.Now;
+            radCurrentJournal.Checked = true;
+            txtGroupsForSearch.Text = String.Empty;
+            txtSearchTitle.Text = String.Empty; 
+            txtSearchText.Text = String.Empty;  
+            lstFoundEntries.Items.Clear();
+            rtbSelectedEntry_Found.Clear();
         }
 		#endregion
 
@@ -517,15 +530,17 @@ namespace myJournal
                 ctr--;
                 if (ctr < 0) break;
             }
-
-            
+ 
             if (ctr > 0) { ctr += 1; }
-            EntrySelector.SelectEntry(lb, ctr);
-            string sTitleAndDate = lb.Items[ctr].ToString();
+            lb.SelectedIndices.Clear();                             // Select the whole short entry ...
+            lb.SelectedIndices.Add(ctr);
+            lb.SelectedIndices.Add(ctr + 1);
+            lb.SelectedIndices.Add(ctr + 2);                        //
+            string sTitleAndDate = lb.Items[ctr].ToString();        // Use the title and date of the entry to create a JournalEntry object whose .ClearText will populate the display ...
             string sTitle = sTitleAndDate.Substring(0, sTitleAndDate.IndexOf('(') - 1);
             string sDate = sTitleAndDate.Substring(sTitleAndDate.IndexOf('(') + 1, sTitleAndDate.Length - 2 - sTitleAndDate.IndexOf('('));
-            currentEntry = currentJournal.GetEntry(sTitle, sDate);
-            rtb.Text = currentEntry.ClearText();
+            currentEntry = currentJournal.GetEntry(sTitle, sDate);  
+            rtb.Text = currentEntry.ClearText();                    // (note: This depends too much on the title/date formatting. Must standardize that.
             lblEditEntry.Enabled = true;
             lb.SelectedIndexChanged += new System.EventHandler(this.ListOfEntries_SelectedIndexChanged);
         }
@@ -599,8 +614,8 @@ namespace myJournal
         private void ToggleDateUse(object sender, EventArgs e)
         {
             dtFindDate.Enabled = chkUseDate.Checked;
-            dtSearchFrom.Enabled = chkUseDateRange.Checked;
-            dtSearchTo.Enabled = dtSearchFrom.Enabled;
+            dtFindDate_From.Enabled = chkUseDateRange.Checked;
+            dtFindDate_To.Enabled = dtFindDate_From.Enabled;
         }
 
 		private void lblMenu_Click(object sender, EventArgs e) { pnlMenu.Visible = !pnlMenu.Visible; }

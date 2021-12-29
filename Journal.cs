@@ -42,25 +42,29 @@ namespace myJournal
             SaveToDisk();
         }
 
-        public void DeleteJournal() { File.Delete(this.FileName); }
+        public void Delete() { File.Delete(this.FileName); }
 
         public JournalEntry GetEntry(string _title, string _date)
         {
-			try { return this.Entries.First(a => a.ClearTitle() + a.Date.ToString("M-dd-yy H_m_ss") == _title + _date); }
-            catch(Exception ex) { return null; }
+            JournalEntry je = null;
+			try { je = this.Entries.First(a => a.ClearTitle() + a.Date.ToString("M-dd-yy H_m_ss") == _title + _date); }
+            catch(Exception) { }
+            return je;
         }
 
         public Journal OpenJournal(string journalToOpen = "")
         {
+            Journal jRtrn = null;
             try
             {
                 using(Stream stream = File.Open(journalToOpen.Length > 0 ? AppDomain.CurrentDomain.BaseDirectory + this.root + journalToOpen : this.FileName, FileMode.Open))
                 {
                     BinaryFormatter formatter = new BinaryFormatter();
-                    return (Journal)formatter.Deserialize(stream);
+                    jRtrn = (Journal)formatter.Deserialize(stream);
                 }
             }
-            catch (FileNotFoundException) { return null; }
+            catch(Exception) { }
+            return jRtrn;
         }
 
         public void ReplaceEntry(JournalEntry jeToReplace, JournalEntry jeToInsert)
