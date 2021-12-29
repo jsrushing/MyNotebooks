@@ -36,10 +36,10 @@ namespace myJournal
 			this.lblFindEntry = new System.Windows.Forms.Label();
 			this.grpCreateEntry = new System.Windows.Forms.GroupBox();
 			this.grpAppendDeleteOriginal = new System.Windows.Forms.GroupBox();
+			this.lblDeleteEntry = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
 			this.radOriginal_Replace = new System.Windows.Forms.RadioButton();
 			this.radOriginal_Append = new System.Windows.Forms.RadioButton();
-			this.lblDeleteEntry = new System.Windows.Forms.Label();
 			this.btnAddEntry = new System.Windows.Forms.Button();
 			this.btnAddGroup = new System.Windows.Forms.Button();
 			this.lstGroups = new System.Windows.Forms.CheckedListBox();
@@ -67,7 +67,6 @@ namespace myJournal
 			this.lblMenu_1 = new System.Windows.Forms.Label();
 			this.lblMenu_0 = new System.Windows.Forms.Label();
 			this.lblMenu = new System.Windows.Forms.Label();
-			this.btnCreateJournal = new System.Windows.Forms.Button();
 			this.lblSettings = new System.Windows.Forms.Label();
 			this.lblEntriesStartFrom = new System.Windows.Forms.Label();
 			this.rtbSelectedEntry_Main = new System.Windows.Forms.RichTextBox();
@@ -114,6 +113,8 @@ namespace myJournal
 			this.lblHome_DeleteJournal = new System.Windows.Forms.Label();
 			this.btnOK_DeleteJournal = new System.Windows.Forms.Button();
 			this.lblJournalToDelete = new System.Windows.Forms.Label();
+			this.lblEntryTitle_Hidden = new System.Windows.Forms.Label();
+			this.lblEntryText_Hidden = new System.Windows.Forms.Label();
 			this.grpCreateEntry.SuspendLayout();
 			this.grpAppendDeleteOriginal.SuspendLayout();
 			this.mnuGroups.SuspendLayout();
@@ -136,10 +137,12 @@ namespace myJournal
 			// 
 			// ddlJournals
 			// 
+			this.ddlJournals.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.ddlJournals.FormattingEnabled = true;
 			this.ddlJournals.Location = new System.Drawing.Point(55, 36);
 			this.ddlJournals.Name = "ddlJournals";
-			this.ddlJournals.Size = new System.Drawing.Size(196, 23);
+			this.ddlJournals.Size = new System.Drawing.Size(229, 23);
 			this.ddlJournals.TabIndex = 1;
 			this.ddlJournals.SelectedIndexChanged += new System.EventHandler(this.ddlJournals_SelectedIndexChanged);
 			// 
@@ -178,8 +181,9 @@ namespace myJournal
 			// grpCreateEntry
 			// 
 			this.grpCreateEntry.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.grpCreateEntry.Controls.Add(this.lblEntryText_Hidden);
+			this.grpCreateEntry.Controls.Add(this.lblEntryTitle_Hidden);
 			this.grpCreateEntry.Controls.Add(this.grpAppendDeleteOriginal);
-			this.grpCreateEntry.Controls.Add(this.lblDeleteEntry);
 			this.grpCreateEntry.Controls.Add(this.btnAddEntry);
 			this.grpCreateEntry.Controls.Add(this.btnAddGroup);
 			this.grpCreateEntry.Controls.Add(this.lstGroups);
@@ -198,15 +202,30 @@ namespace myJournal
 			// 
 			// grpAppendDeleteOriginal
 			// 
+			this.grpAppendDeleteOriginal.Controls.Add(this.lblDeleteEntry);
 			this.grpAppendDeleteOriginal.Controls.Add(this.label6);
 			this.grpAppendDeleteOriginal.Controls.Add(this.radOriginal_Replace);
 			this.grpAppendDeleteOriginal.Controls.Add(this.radOriginal_Append);
 			this.grpAppendDeleteOriginal.Location = new System.Drawing.Point(46, 0);
 			this.grpAppendDeleteOriginal.Name = "grpAppendDeleteOriginal";
-			this.grpAppendDeleteOriginal.Size = new System.Drawing.Size(194, 34);
+			this.grpAppendDeleteOriginal.Size = new System.Drawing.Size(244, 34);
 			this.grpAppendDeleteOriginal.TabIndex = 33;
 			this.grpAppendDeleteOriginal.TabStop = false;
 			this.grpAppendDeleteOriginal.Visible = false;
+			// 
+			// lblDeleteEntry
+			// 
+			this.lblDeleteEntry.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.lblDeleteEntry.AutoSize = true;
+			this.lblDeleteEntry.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.lblDeleteEntry.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
+			this.lblDeleteEntry.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.lblDeleteEntry.Location = new System.Drawing.Point(195, 11);
+			this.lblDeleteEntry.Name = "lblDeleteEntry";
+			this.lblDeleteEntry.Size = new System.Drawing.Size(43, 15);
+			this.lblDeleteEntry.TabIndex = 29;
+			this.lblDeleteEntry.Text = "delete";
+			this.lblDeleteEntry.Click += new System.EventHandler(this.lblDeleteEntry_Click);
 			// 
 			// label6
 			// 
@@ -238,21 +257,6 @@ namespace myJournal
 			this.radOriginal_Append.TabStop = true;
 			this.radOriginal_Append.Text = "append";
 			this.radOriginal_Append.UseVisualStyleBackColor = true;
-			// 
-			// lblDeleteEntry
-			// 
-			this.lblDeleteEntry.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.lblDeleteEntry.AutoSize = true;
-			this.lblDeleteEntry.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.lblDeleteEntry.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
-			this.lblDeleteEntry.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblDeleteEntry.Location = new System.Drawing.Point(241, 13);
-			this.lblDeleteEntry.Name = "lblDeleteEntry";
-			this.lblDeleteEntry.Size = new System.Drawing.Size(43, 15);
-			this.lblDeleteEntry.TabIndex = 29;
-			this.lblDeleteEntry.Text = "delete";
-			this.lblDeleteEntry.Visible = false;
-			this.lblDeleteEntry.Click += new System.EventHandler(this.lblDeleteEntry_Click);
 			// 
 			// btnAddEntry
 			// 
@@ -399,7 +403,6 @@ namespace myJournal
 			this.grpOpenScreen.Anchor = System.Windows.Forms.AnchorStyles.None;
 			this.grpOpenScreen.Controls.Add(this.pnlMenu);
 			this.grpOpenScreen.Controls.Add(this.lblMenu);
-			this.grpOpenScreen.Controls.Add(this.btnCreateJournal);
 			this.grpOpenScreen.Controls.Add(this.lblSettings);
 			this.grpOpenScreen.Controls.Add(this.lblEntriesStartFrom);
 			this.grpOpenScreen.Controls.Add(this.rtbSelectedEntry_Main);
@@ -578,17 +581,6 @@ namespace myJournal
 			this.lblMenu.TabIndex = 28;
 			this.lblMenu.Text = "menu";
 			this.lblMenu.Click += new System.EventHandler(this.lblMenu_Click);
-			// 
-			// btnCreateJournal
-			// 
-			this.btnCreateJournal.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-			this.btnCreateJournal.Location = new System.Drawing.Point(258, 24);
-			this.btnCreateJournal.Name = "btnCreateJournal";
-			this.btnCreateJournal.Size = new System.Drawing.Size(25, 18);
-			this.btnCreateJournal.TabIndex = 12;
-			this.btnCreateJournal.Text = "+";
-			this.btnCreateJournal.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			this.btnCreateJournal.UseVisualStyleBackColor = false;
 			// 
 			// lblSettings
 			// 
@@ -970,6 +962,8 @@ namespace myJournal
 			// 
 			// txtNewJournalName
 			// 
+			this.txtNewJournalName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.txtNewJournalName.Location = new System.Drawing.Point(88, 40);
 			this.txtNewJournalName.Name = "txtNewJournalName";
 			this.txtNewJournalName.Size = new System.Drawing.Size(193, 23);
@@ -1022,6 +1016,8 @@ namespace myJournal
 			// 
 			// txtNewGroup
 			// 
+			this.txtNewGroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.txtNewGroup.Location = new System.Drawing.Point(83, 40);
 			this.txtNewGroup.Name = "txtNewGroup";
 			this.txtNewGroup.Size = new System.Drawing.Size(201, 23);
@@ -1061,6 +1057,8 @@ namespace myJournal
 			// 
 			// ddlJournalsToDelete
 			// 
+			this.ddlJournalsToDelete.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.ddlJournalsToDelete.FormattingEnabled = true;
 			this.ddlJournalsToDelete.Location = new System.Drawing.Point(56, 40);
 			this.ddlJournalsToDelete.Name = "ddlJournalsToDelete";
@@ -1099,6 +1097,26 @@ namespace myJournal
 			this.lblJournalToDelete.Size = new System.Drawing.Size(45, 15);
 			this.lblJournalToDelete.TabIndex = 0;
 			this.lblJournalToDelete.Text = "Journal";
+			// 
+			// lblEntryTitle_Hidden
+			// 
+			this.lblEntryTitle_Hidden.AutoSize = true;
+			this.lblEntryTitle_Hidden.Location = new System.Drawing.Point(4, 527);
+			this.lblEntryTitle_Hidden.Name = "lblEntryTitle_Hidden";
+			this.lblEntryTitle_Hidden.Size = new System.Drawing.Size(67, 15);
+			this.lblEntryTitle_Hidden.TabIndex = 34;
+			this.lblEntryTitle_Hidden.Text = "hidden title";
+			this.lblEntryTitle_Hidden.Visible = false;
+			// 
+			// lblEntryText_Hidden
+			// 
+			this.lblEntryText_Hidden.AutoSize = true;
+			this.lblEntryText_Hidden.Location = new System.Drawing.Point(77, 527);
+			this.lblEntryText_Hidden.Name = "lblEntryText_Hidden";
+			this.lblEntryText_Hidden.Size = new System.Drawing.Size(67, 15);
+			this.lblEntryText_Hidden.TabIndex = 35;
+			this.lblEntryText_Hidden.Text = "hidden text";
+			this.lblEntryText_Hidden.Visible = false;
 			// 
 			// Form1
 			// 
@@ -1176,7 +1194,6 @@ namespace myJournal
         private System.Windows.Forms.Label lblHome_NewEntry;
         private System.Windows.Forms.Label lblHome;
         private System.Windows.Forms.Label lblClearAll;
-        private System.Windows.Forms.Button btnCreateJournal;
         private System.Windows.Forms.Label lblHome_NewJrnl;
         private System.Windows.Forms.Button btnOK_NewJrnl;
         private System.Windows.Forms.TextBox txtNewJournalName;
@@ -1225,6 +1242,8 @@ namespace myJournal
 		private System.Windows.Forms.Label lblMenu_1;
 		private System.Windows.Forms.Label lblMenu_0;
 		private System.Windows.Forms.Label lblCloseMenu;
+		private System.Windows.Forms.Label lblEntryText_Hidden;
+		private System.Windows.Forms.Label lblEntryTitle_Hidden;
 	}
 }
 

@@ -24,6 +24,7 @@ namespace myJournal
             this.Text = EncryptDecrypt.Encrypt(_text, "", "");
             this.Title = EncryptDecrypt.Encrypt(_title, "", "");
             this.Tags = EncryptDecrypt.Encrypt(_tags, "", "");
+            this.Id = Guid.NewGuid().ToString();
         }
 
         public string ClearText() { return EncryptDecrypt.Decrypt(this.Text, "", ""); }

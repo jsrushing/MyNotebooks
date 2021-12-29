@@ -75,6 +75,7 @@ namespace myJournal
                     this.Text = "Create Entry";
                     txtNewEntryTitle.Text = String.Empty;
                     rtbNewEntry.Clear();
+                    grpAppendDeleteOriginal.Visible = false;
                     txtBxToFocus = this.txtNewEntryTitle;
                     if(lstGroups.Items.Count == 0) { Groups_PopulateGroupsList(lstGroups); }
                     break;
@@ -96,10 +97,11 @@ namespace myJournal
                     lblDelete_Confirm.Text = " will be deleted. Press Delete to confirm.";
                     ddlJournalsToDelete.Visible = true;
                     lblJournalToDelete.Visible = true;
-                    ddlJournalsToDelete.Text = String.Empty;
+                    ddlJournalsToDelete.Text = ddlJournals.Text.Length > 0 ? ddlJournals.Text : String.Empty;
                     break;
             }
 
+            pnlMenu.Visible = false;
             box.Location = ActiveBoxLocation;
             //box.Size = new Size(this.Width - 20, this.Height - 20);
             box.Visible = true;
@@ -125,14 +127,41 @@ namespace myJournal
                     sGroups += lstGroups.CheckedItems[i].ToString() + ",";
                 }
 
-                currentJournal.Entries.Add(new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text,
-                    sGroups.Length > 0 ? sGroups.Substring(0, sGroups.Length - 1) : string.Empty));
+                sGroups = sGroups.Length > 0 ? sGroups.Substring(0, sGroups.Length - 1) : string.Empty;
+
+                JournalEntry je = new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, sGroups);
+                
+				if (grpAppendDeleteOriginal.Visible)
+				{
+                    string sTitle = txtNewEntryTitle.Text;
+                    string sText = rtbNewEntry.Text;
+
+                    if (radOriginal_Append.Checked)
+					{ 
+                        sTitle = txtNewEntryTitle.Text == lblEntryTitle_Hidden.Text ? txtNewEntryTitle.Text : txtNewEntryTitle.Text + System.Environment.NewLine + "previous: " + lblEntryTitle_Hidden.Text; 
+                        
+					}
+					else
+					{
+                        sText = lblEntryText_Hidden.Text;
+					}
+
+                    je = new JournalEntry(sTitle, sText, sGroups);
+                
+                    // remove the current entry and replace with new one
+                }
+				else
+				{
+                    currentJournal.Entries.Add(je);
+				}
 
                 currentJournal.SaveToDisk();
                 PopulateEntries(lstEntries, currentJournal.Entries);
             }
+
             txtNewEntryTitle.Text = String.Empty;
             rtbNewEntry.Clear();
+            foreach(int i in lstGroups.CheckedIndices) { lstGroups.SetItemChecked(i, false); }
             ActivateGroupBox(grpOpenScreen);
         }
 
@@ -145,12 +174,18 @@ namespace myJournal
         {
             if (lblDelete_Confirm.Visible)
             {
-                File.Delete(rootPath + "\\journals\\" + ddlJournalsToDelete.Text);
+                if (currentJournal == null) { currentJournal = new Journal(ddlJournalsToDelete.Text).OpenJournal(); }
+                currentJournal.DeleteJournal();
+                currentJournal = null;
                 LoadJournals();
+                ddlJournals.Text = String.Empty;
+                lstEntries.Items.Clear();
+                rtbSelectedEntry_Main.Text = String.Empty;
                 ActivateGroupBox(grpOpenScreen);
             }
             else
             {
+                lblDelete_Confirm.Location = new Point(grpDeleteJournal.Width/2 - lblDelete_Confirm.Width / 2, lblDelete_Confirm.Top);
                 lblDelete_Confirm.Text = ddlJournalsToDelete.Text + lblDelete_Confirm.Text;
                 ddlJournalsToDelete.Visible = false;
                 lblJournalToDelete.Visible = false;
@@ -181,8 +216,7 @@ namespace myJournal
         {
             lstEntries.Items.Clear();
             rtbSelectedEntry_Main.Text = string.Empty;
-            Journal j = new Journal(ddlJournals.Text);
-            currentJournal = j.OpenJournal();
+            currentJournal = new Journal(ddlJournals.Text).OpenJournal();
             PopulateEntries(lstEntries, currentJournal.Entries);
             lblCreateEntry.Enabled = true; 
             lblFindEntry.Enabled = true;
@@ -296,8 +330,21 @@ namespace myJournal
         /// <param name="e"></param>
         private void lblEditEntry_Click(object sender, EventArgs e)
         {
-            
-            //txtNewEntryTitle.Text = 
+            ActivateGroupBox(grpCreateEntry);
+            txtNewEntryTitle.Text = currentEntry.ClearTitle();
+            lblEntryText_Hidden.Text = currentEntry.ClearText();
+            lblEntryTitle_Hidden.Text = currentEntry.ClearTitle();
+            rtbNewEntry.Text = System.Environment.NewLine + System.Environment.NewLine + "Original Title: " + 
+                currentEntry.ClearTitle() + System.Environment.NewLine + "Original Entry:" + System.Environment.NewLine + currentEntry.ClearText();
+            rtbNewEntry.Focus();
+            rtbNewEntry.SelectionStart = 0; 
+			grpAppendDeleteOriginal.Visible = true;
+            foreach (int i in lstGroups.CheckedIndices) { lstGroups.SetItemChecked(i, false); }
+            foreach (string s in currentEntry.ClearTags().Split(','))
+            {
+                int index = lstGroups.FindString(s);
+                if (index > -1) { lstGroups.SetItemChecked(index, true); }
+            }
         }
 
         private void lblFindEntry_Click(object sender, EventArgs e) { ActivateGroupBox(grpFindEntry); }
@@ -513,7 +560,7 @@ namespace myJournal
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void rtbSelectedEntry_Main_Click(object sender, EventArgs e) { btnCreateJournal.Focus(); }
+        private void rtbSelectedEntry_Main_Click(object sender, EventArgs e) { ddlJournals.Focus(); }
 
         /// <summary>
         /// Show the dropdown of Groups when clicked.
@@ -556,15 +603,7 @@ namespace myJournal
             dtSearchTo.Enabled = dtSearchFrom.Enabled;
         }
 
-		private void label15_Click(object sender, EventArgs e)
-		{
-
-		}
-
-		private void lblMenu_Click(object sender, EventArgs e)
-		{
-            pnlMenu.Visible = !pnlMenu.Visible;
-		}
+		private void lblMenu_Click(object sender, EventArgs e) { pnlMenu.Visible = !pnlMenu.Visible; }
 
 		private void lblJournal_Create_Click(object sender, EventArgs e) { ActivateGroupBox(grpNewJournal); }
 

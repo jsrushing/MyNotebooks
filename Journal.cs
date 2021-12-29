@@ -42,10 +42,7 @@ namespace myJournal
             SaveToDisk();
         }
 
-        private void DeleteJournal()
-        {
-            File.Delete(this.FileName);
-        }
+        public void DeleteJournal() { File.Delete(this.FileName); }
 
         public JournalEntry GetEntry(string _title, string _date)
         {
@@ -65,6 +62,11 @@ namespace myJournal
             }
             catch (FileNotFoundException) { return null; }
         }
+
+        public void ReplaceEntry(JournalEntry jeToReplace, JournalEntry jeToInsert)
+		{
+
+		}
 
         public void Save()
         {
