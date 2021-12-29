@@ -4,7 +4,7 @@ using System.Text;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Linq;
-using encrypt_decrypt_string;
+using System.Configuration;
 
 namespace myJournal
 {
@@ -47,7 +47,7 @@ namespace myJournal
         public JournalEntry GetEntry(string _title, string _date)
         {
             JournalEntry je = null;
-			try { je = this.Entries.First(a => a.ClearTitle() + a.Date.ToString("M-dd-yy H_m_ss") == _title + _date); }
+			try { je = this.Entries.First(a => a.ClearTitle() + a.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) == _title + _date); }
             catch(Exception) { }
             return je;
         }
@@ -69,7 +69,10 @@ namespace myJournal
 
         public void ReplaceEntry(JournalEntry jeToReplace, JournalEntry jeToInsert)
 		{
-
+			int idx = 0;
+			for(idx = 0; idx < this.Entries.Count; idx++) { if(this.Entries[idx] == jeToReplace) { break; } }
+			this.Entries.Remove(jeToReplace);
+			this.Entries.Insert(idx, jeToInsert);
 		}
 
         public void Save()

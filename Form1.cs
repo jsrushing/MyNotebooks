@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using System.Configuration;
 
 namespace myJournal
 {
@@ -34,7 +35,7 @@ namespace myJournal
 
             pnlMenu.Size = new Size(lblMenu_1.Width + 2, lblMenu_1.Height + 2);
             lblMenu_0.Size = new Size(pnlMenu.Width, pnlMenu.Height);
-            lblMenu_1.Size = new Size(lblMenu_0.Width - 4, lblMenu_1.Height - 4);
+            lblMenu_1.Size = new Size(lblMenu_0.Width - 4, lblMenu_1.Height - 2);
             lblMenu_1.Location = new Point(lblMenu_0.Left + 2, lblMenu_0.Top + 2);
             InactiveMenuFont = lblJournal_Create.Font;
             ActiveMenuFont = new Font(InactiveMenuFont, FontStyle.Bold | FontStyle.Underline);
@@ -72,12 +73,14 @@ namespace myJournal
                     rtbSelectedEntry_Main.Clear();
                     break;
                 case "grpCreateEntry":
+					btnAddEntry.Text = "Save Entry";
                     this.Text = "Create Entry";
                     txtNewEntryTitle.Text = String.Empty;
                     rtbNewEntry.Clear();
                     grpAppendDeleteOriginal.Visible = false;
                     txtBxToFocus = this.txtNewEntryTitle;
-                    if(lstGroups.Items.Count == 0) { Groups_PopulateGroupsList(lstGroups); }
+                    if(lstTags.Items.Count == 0) { Groups_PopulateGroupsList(lstTags); }
+					foreach(int i in lstTags.CheckedIndices) { lstTags.SetItemChecked(i, false); }
                     break;
                 case "grpFindEntry":
                     this.Text = "Search Journal";
@@ -122,36 +125,34 @@ namespace myJournal
             {
                 string sGroups = string.Empty;
 
-                for (int i = 0; i < lstGroups.CheckedItems.Count; i++)
+                for (int i = 0; i < lstTags.CheckedItems.Count; i++)
                 {
-                    sGroups += lstGroups.CheckedItems[i].ToString() + ",";
+                    sGroups += lstTags.CheckedItems[i].ToString() + ",";
                 }
-
                 sGroups = sGroups.Length > 0 ? sGroups.Substring(0, sGroups.Length - 1) : string.Empty;
-
-                JournalEntry je = new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, sGroups);
                 
 				if (grpAppendDeleteOriginal.Visible)
 				{
                     string sTitle = txtNewEntryTitle.Text;
-                    string sText = rtbNewEntry.Text;
+                    string sText = rtbNewEntry.Text + " ";
 
                     if (radOriginal_Append.Checked)
-					{ 
-                        sTitle = txtNewEntryTitle.Text == lblEntryTitle_Hidden.Text ? txtNewEntryTitle.Text : txtNewEntryTitle.Text + System.Environment.NewLine + "previous: " + lblEntryTitle_Hidden.Text; 
-                        
+					{
+						sTitle = txtNewEntryTitle.Text;	// txtNewEntryTitle.Text == lblEntryTitle_Hidden.Text ? 
+							//txtNewEntryTitle.Text : 
+							//txtNewEntryTitle.Text = txtNewEntryTitle.Text; 
 					}
 					else
 					{
+						sTitle = lblEntryTitle_Hidden.Text;
                         sText = lblEntryText_Hidden.Text;
 					}
 
-                    je = new JournalEntry(sTitle, sText, sGroups);
-                
-                    // remove the current entry and replace with new one
-                }
+					currentJournal.ReplaceEntry(currentEntry, new JournalEntry(sTitle, sText, sGroups));
+				}
 				else
 				{
+					JournalEntry je = new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, sGroups);
                     currentJournal.Entries.Add(je);
 				}
 
@@ -161,7 +162,7 @@ namespace myJournal
 
             txtNewEntryTitle.Text = String.Empty;
             rtbNewEntry.Clear();
-            foreach(int i in lstGroups.CheckedIndices) { lstGroups.SetItemChecked(i, false); }
+            foreach(int i in lstTags.CheckedIndices) { lstTags.SetItemChecked(i, false); }
             ActivateGroupBox(grpOpenScreen);
         }
 
@@ -237,36 +238,36 @@ namespace myJournal
             }
             else
             {
-                int i = lstGroups.SelectedIndex;
-                lstGroups.Items.RemoveAt(i);
-                lstGroups.Items.Insert(i, txtNewGroup.Text);
+                int i = lstTags.SelectedIndex;
+                lstTags.Items.RemoveAt(i);
+                lstTags.Items.Insert(i, txtNewGroup.Text);
                 Groups_Save();
             }
 
             txtNewGroup.Text = string.Empty;
-            Groups_PopulateGroupsList(lstGroups);
+            Groups_PopulateGroupsList(lstTags);
             ActivateGroupBox(grpCreateEntry);
             bGroupBeingEdited = false;
         }
 
         private void Groups_mnuEdit_Click(object sender, EventArgs e)
         {
-            txtNewGroup.Text = lstGroups.SelectedItem.ToString();
+            txtNewGroup.Text = lstTags.SelectedItem.ToString();
             bGroupBeingEdited = true;
             ActivateGroupBox(grpNewGroup);
         }
 
         private void Groups_mnuDelete_Click(object sender, EventArgs e)
         {
-            lstGroups.Items.RemoveAt((int)lstGroups.SelectedIndex);
+            lstTags.Items.RemoveAt((int)lstTags.SelectedIndex);
             Groups_Save();
-            Groups_PopulateGroupsList(lstGroups);
+            Groups_PopulateGroupsList(lstTags);
             ActivateGroupBox(grpCreateEntry);
         }
 
         private void Groups_mnuGroups_Opening(object sender, CancelEventArgs e)
         {
-            e.Cancel = lstGroups.SelectedIndices.Count == 0;
+            e.Cancel = lstTags.SelectedIndices.Count == 0;
         }
 
         private void Groups_PopulateGroupsList(CheckedListBox clb)
@@ -283,7 +284,7 @@ namespace myJournal
         {
             StringBuilder sb = new StringBuilder();
 
-            foreach (string s in lstGroups.Items)
+            foreach (string s in lstTags.Items)
             {
                 sb.AppendLine(s);
             }
@@ -330,24 +331,25 @@ namespace myJournal
         private void lblEditEntry_Click(object sender, EventArgs e)
         {
             ActivateGroupBox(grpCreateEntry);
-            txtNewEntryTitle.Text = currentEntry.ClearTitle();
+			btnAddEntry.Text = "Save Edit";
+			txtNewEntryTitle.Text = currentEntry.ClearTitle();
             lblEntryText_Hidden.Text = currentEntry.ClearText();
             lblEntryTitle_Hidden.Text = currentEntry.ClearTitle();
             string newLine = System.Environment.NewLine;
             rtbNewEntry.Text = newLine + newLine + 
-                "Original Date: " + currentEntry.Date.ToString("dd/M/yy H:m:s") + newLine +
-                "Original Title: " + currentEntry.ClearTitle() + newLine + 
-                "Original Entry:" + newLine + currentEntry.ClearText();
+                " Original Date: " + currentEntry.Date.ToString("dd/M/yy H:m:s") + newLine +
+                "Title: " + currentEntry.ClearTitle() + newLine + 
+                "Entry:" + newLine + currentEntry.ClearText();
             rtbNewEntry.Focus();
             rtbNewEntry.SelectionStart = 0; 
 			grpAppendDeleteOriginal.Visible = true;
-            foreach (int i in lstGroups.CheckedIndices) { lstGroups.SetItemChecked(i, false); }
+            foreach (int i in lstTags.CheckedIndices) { lstTags.SetItemChecked(i, false); }
             if(currentEntry.ClearTags().Length > 0)
 			{
                 foreach (string s in currentEntry.ClearTags().Split(','))
                 {
-                    int index = lstGroups.FindString(s);
-                    if (index > -1) { lstGroups.SetItemChecked(index, true); }
+                    int index = lstTags.FindString(s);
+                    if (index > -1) { lstTags.SetItemChecked(index, true); }
                 }
 			}
         }
@@ -540,7 +542,7 @@ namespace myJournal
             string sTitle = sTitleAndDate.Substring(0, sTitleAndDate.IndexOf('(') - 1);
             string sDate = sTitleAndDate.Substring(sTitleAndDate.IndexOf('(') + 1, sTitleAndDate.Length - 2 - sTitleAndDate.IndexOf('('));
             currentEntry = currentJournal.GetEntry(sTitle, sDate);  
-            rtb.Text = currentEntry.ClearText();                    // (note: This depends too much on the title/date formatting. Must standardize that.
+            rtb.Text = currentEntry != null ? currentEntry.ClearText() : String.Empty;                    // (note: This depends too much on the title/date formatting. Must standardize that.
             lblEditEntry.Enabled = true;
             lb.SelectedIndexChanged += new System.EventHandler(this.ListOfEntries_SelectedIndexChanged);
         }
@@ -557,7 +559,7 @@ namespace myJournal
 
             foreach(JournalEntry je in entries)
             {
-                lstBox.Items.Add(je.ClearTitle() + " (" + je.Date.ToString("M-dd-yy H_m_ss") + ")");
+                lstBox.Items.Add(je.ClearTitle() + " (" + je.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")");
                 string sEntryText = je.ClearText();
 
 
@@ -638,5 +640,7 @@ namespace myJournal
             Label lbl = (Label)(sender);
             lbl.Font = InactiveMenuFont;
         }
+
+		private void lblTagManager_Click(object sender, EventArgs e) { ActivateGroupBox(grpNewGroup); }
 	}
 }

@@ -35,6 +35,7 @@ namespace myJournal
 			this.lblCreateEntry = new System.Windows.Forms.Label();
 			this.lblFindEntry = new System.Windows.Forms.Label();
 			this.grpCreateEntry = new System.Windows.Forms.GroupBox();
+			this.lblManageTags2 = new System.Windows.Forms.Label();
 			this.lblEntryText_Hidden = new System.Windows.Forms.Label();
 			this.lblEntryTitle_Hidden = new System.Windows.Forms.Label();
 			this.grpAppendDeleteOriginal = new System.Windows.Forms.GroupBox();
@@ -43,8 +44,7 @@ namespace myJournal
 			this.radOriginal_Replace = new System.Windows.Forms.RadioButton();
 			this.radOriginal_Append = new System.Windows.Forms.RadioButton();
 			this.btnAddEntry = new System.Windows.Forms.Button();
-			this.btnAddGroup = new System.Windows.Forms.Button();
-			this.lstGroups = new System.Windows.Forms.CheckedListBox();
+			this.lstTags = new System.Windows.Forms.CheckedListBox();
 			this.mnuGroups = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.mnuEdit = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuDelete = new System.Windows.Forms.ToolStripMenuItem();
@@ -60,7 +60,7 @@ namespace myJournal
 			this.pnlMenu = new System.Windows.Forms.Panel();
 			this.lblCloseMenu = new System.Windows.Forms.Label();
 			this.lblSettings_Show = new System.Windows.Forms.Label();
-			this.lblTags_Create = new System.Windows.Forms.Label();
+			this.lblTagManager = new System.Windows.Forms.Label();
 			this.label21 = new System.Windows.Forms.Label();
 			this.lblJournal_Delete = new System.Windows.Forms.Label();
 			this.lblJournal_Create = new System.Windows.Forms.Label();
@@ -181,12 +181,12 @@ namespace myJournal
 			// grpCreateEntry
 			// 
 			this.grpCreateEntry.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.grpCreateEntry.Controls.Add(this.lblManageTags2);
 			this.grpCreateEntry.Controls.Add(this.lblEntryText_Hidden);
 			this.grpCreateEntry.Controls.Add(this.lblEntryTitle_Hidden);
 			this.grpCreateEntry.Controls.Add(this.grpAppendDeleteOriginal);
 			this.grpCreateEntry.Controls.Add(this.btnAddEntry);
-			this.grpCreateEntry.Controls.Add(this.btnAddGroup);
-			this.grpCreateEntry.Controls.Add(this.lstGroups);
+			this.grpCreateEntry.Controls.Add(this.lstTags);
 			this.grpCreateEntry.Controls.Add(this.label14);
 			this.grpCreateEntry.Controls.Add(this.lblHome_NewEntry);
 			this.grpCreateEntry.Controls.Add(this.lblFont_NewEntry);
@@ -194,11 +194,25 @@ namespace myJournal
 			this.grpCreateEntry.Controls.Add(this.rtbNewEntry);
 			this.grpCreateEntry.Controls.Add(this.txtNewEntryTitle);
 			this.grpCreateEntry.Controls.Add(this.label2);
-			this.grpCreateEntry.Location = new System.Drawing.Point(334, 12);
+			this.grpCreateEntry.Location = new System.Drawing.Point(337, 0);
 			this.grpCreateEntry.Name = "grpCreateEntry";
 			this.grpCreateEntry.Size = new System.Drawing.Size(290, 545);
 			this.grpCreateEntry.TabIndex = 4;
 			this.grpCreateEntry.TabStop = false;
+			// 
+			// lblManageTags2
+			// 
+			this.lblManageTags2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.lblManageTags2.AutoSize = true;
+			this.lblManageTags2.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.lblManageTags2.Font = new System.Drawing.Font("Segoe UI Light", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.lblManageTags2.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.lblManageTags2.Location = new System.Drawing.Point(37, 400);
+			this.lblManageTags2.Name = "lblManageTags2";
+			this.lblManageTags2.Size = new System.Drawing.Size(48, 15);
+			this.lblManageTags2.TabIndex = 36;
+			this.lblManageTags2.Text = "Manage";
+			this.lblManageTags2.Click += new System.EventHandler(this.lblTagManager_Click);
 			// 
 			// lblEntryText_Hidden
 			// 
@@ -291,29 +305,17 @@ namespace myJournal
 			this.btnAddEntry.UseVisualStyleBackColor = false;
 			this.btnAddEntry.Click += new System.EventHandler(this.btnAddEntry_Click);
 			// 
-			// btnAddGroup
+			// lstTags
 			// 
-			this.btnAddGroup.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-			this.btnAddGroup.Location = new System.Drawing.Point(15, 462);
-			this.btnAddGroup.Name = "btnAddGroup";
-			this.btnAddGroup.Size = new System.Drawing.Size(25, 23);
-			this.btnAddGroup.TabIndex = 13;
-			this.btnAddGroup.Text = "+";
-			this.btnAddGroup.UseVisualStyleBackColor = false;
-			this.btnAddGroup.Click += new System.EventHandler(this.Groups_btnAddGroup_Click);
-			// 
-			// lstGroups
-			// 
-			this.lstGroups.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+			this.lstTags.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.lstGroups.CheckOnClick = true;
-			this.lstGroups.ContextMenuStrip = this.mnuGroups;
-			this.lstGroups.FormattingEnabled = true;
-			this.lstGroups.Location = new System.Drawing.Point(51, 440);
-			this.lstGroups.Name = "lstGroups";
-			this.lstGroups.Size = new System.Drawing.Size(233, 76);
-			this.lstGroups.TabIndex = 27;
+			this.lstTags.CheckOnClick = true;
+			this.lstTags.ContextMenuStrip = this.mnuGroups;
+			this.lstTags.FormattingEnabled = true;
+			this.lstTags.Location = new System.Drawing.Point(6, 420);
+			this.lstTags.Name = "lstTags";
+			this.lstTags.Size = new System.Drawing.Size(278, 94);
+			this.lstTags.TabIndex = 27;
 			// 
 			// mnuGroups
 			// 
@@ -340,12 +342,13 @@ namespace myJournal
 			// 
 			// label14
 			// 
+			this.label14.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label14.AutoSize = true;
-			this.label14.Location = new System.Drawing.Point(6, 440);
+			this.label14.Location = new System.Drawing.Point(6, 400);
 			this.label14.Name = "label14";
-			this.label14.Size = new System.Drawing.Size(39, 15);
+			this.label14.Size = new System.Drawing.Size(29, 15);
 			this.label14.TabIndex = 25;
-			this.label14.Text = "group";
+			this.label14.Text = "tags";
 			// 
 			// lblHome_NewEntry
 			// 
@@ -355,9 +358,9 @@ namespace myJournal
 			this.lblHome_NewEntry.ForeColor = System.Drawing.SystemColors.MenuHighlight;
 			this.lblHome_NewEntry.Location = new System.Drawing.Point(6, 11);
 			this.lblHome_NewEntry.Name = "lblHome_NewEntry";
-			this.lblHome_NewEntry.Size = new System.Drawing.Size(39, 15);
+			this.lblHome_NewEntry.Size = new System.Drawing.Size(33, 15);
 			this.lblHome_NewEntry.TabIndex = 24;
-			this.lblHome_NewEntry.Text = "home";
+			this.lblHome_NewEntry.Text = "back";
 			this.lblHome_NewEntry.Click += new System.EventHandler(this.lblHome_Click);
 			// 
 			// lblFont_NewEntry
@@ -384,12 +387,13 @@ namespace myJournal
 			// 
 			// rtbNewEntry
 			// 
-			this.rtbNewEntry.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.rtbNewEntry.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.rtbNewEntry.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.rtbNewEntry.Location = new System.Drawing.Point(6, 87);
 			this.rtbNewEntry.Name = "rtbNewEntry";
-			this.rtbNewEntry.Size = new System.Drawing.Size(278, 347);
+			this.rtbNewEntry.Size = new System.Drawing.Size(278, 308);
 			this.rtbNewEntry.TabIndex = 2;
 			this.rtbNewEntry.Text = "";
 			// 
@@ -442,7 +446,7 @@ namespace myJournal
 			this.pnlMenu.BackColor = System.Drawing.SystemColors.HighlightText;
 			this.pnlMenu.Controls.Add(this.lblCloseMenu);
 			this.pnlMenu.Controls.Add(this.lblSettings_Show);
-			this.pnlMenu.Controls.Add(this.lblTags_Create);
+			this.pnlMenu.Controls.Add(this.lblTagManager);
 			this.pnlMenu.Controls.Add(this.label21);
 			this.pnlMenu.Controls.Add(this.lblJournal_Delete);
 			this.pnlMenu.Controls.Add(this.lblJournal_Create);
@@ -452,7 +456,7 @@ namespace myJournal
 			this.pnlMenu.Controls.Add(this.lblFindEntry);
 			this.pnlMenu.Controls.Add(this.lblMenu_1);
 			this.pnlMenu.Controls.Add(this.lblMenu_0);
-			this.pnlMenu.Location = new System.Drawing.Point(49, 13);
+			this.pnlMenu.Location = new System.Drawing.Point(34, 29);
 			this.pnlMenu.Name = "pnlMenu";
 			this.pnlMenu.Size = new System.Drawing.Size(175, 293);
 			this.pnlMenu.TabIndex = 28;
@@ -488,19 +492,20 @@ namespace myJournal
 			this.lblSettings_Show.MouseEnter += new System.EventHandler(this.MenuItem_Enter);
 			this.lblSettings_Show.MouseLeave += new System.EventHandler(this.MenuItem_Leave);
 			// 
-			// lblTags_Create
+			// lblTagManager
 			// 
-			this.lblTags_Create.AutoSize = true;
-			this.lblTags_Create.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.lblTags_Create.Font = new System.Drawing.Font("Segoe UI Light", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.lblTags_Create.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblTags_Create.Location = new System.Drawing.Point(9, 146);
-			this.lblTags_Create.Name = "lblTags_Create";
-			this.lblTags_Create.Size = new System.Drawing.Size(73, 15);
-			this.lblTags_Create.TabIndex = 19;
-			this.lblTags_Create.Text = "Manage Tags";
-			this.lblTags_Create.MouseEnter += new System.EventHandler(this.MenuItem_Enter);
-			this.lblTags_Create.MouseLeave += new System.EventHandler(this.MenuItem_Leave);
+			this.lblTagManager.AutoSize = true;
+			this.lblTagManager.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.lblTagManager.Font = new System.Drawing.Font("Segoe UI Light", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.lblTagManager.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.lblTagManager.Location = new System.Drawing.Point(9, 146);
+			this.lblTagManager.Name = "lblTagManager";
+			this.lblTagManager.Size = new System.Drawing.Size(73, 15);
+			this.lblTagManager.TabIndex = 19;
+			this.lblTagManager.Text = "Manage Tags";
+			this.lblTagManager.Click += new System.EventHandler(this.lblTagManager_Click);
+			this.lblTagManager.MouseEnter += new System.EventHandler(this.MenuItem_Enter);
+			this.lblTagManager.MouseLeave += new System.EventHandler(this.MenuItem_Leave);
 			// 
 			// label21
 			// 
@@ -692,7 +697,7 @@ namespace myJournal
 			this.grpFindEntry.Controls.Add(this.label10);
 			this.grpFindEntry.Controls.Add(this.label8);
 			this.grpFindEntry.Controls.Add(this.label11);
-			this.grpFindEntry.Location = new System.Drawing.Point(645, 12);
+			this.grpFindEntry.Location = new System.Drawing.Point(648, 0);
 			this.grpFindEntry.Name = "grpFindEntry";
 			this.grpFindEntry.Size = new System.Drawing.Size(290, 545);
 			this.grpFindEntry.TabIndex = 6;
@@ -816,9 +821,9 @@ namespace myJournal
 			this.lblHome.ForeColor = System.Drawing.SystemColors.MenuHighlight;
 			this.lblHome.Location = new System.Drawing.Point(245, 10);
 			this.lblHome.Name = "lblHome";
-			this.lblHome.Size = new System.Drawing.Size(39, 15);
+			this.lblHome.Size = new System.Drawing.Size(33, 15);
 			this.lblHome.TabIndex = 23;
-			this.lblHome.Text = "home";
+			this.lblHome.Text = "back";
 			this.lblHome.Click += new System.EventHandler(this.lblHome_Click);
 			// 
 			// txtSearchText
@@ -964,9 +969,9 @@ namespace myJournal
 			this.lblHome_NewJrnl.ForeColor = System.Drawing.SystemColors.MenuHighlight;
 			this.lblHome_NewJrnl.Location = new System.Drawing.Point(6, 12);
 			this.lblHome_NewJrnl.Name = "lblHome_NewJrnl";
-			this.lblHome_NewJrnl.Size = new System.Drawing.Size(39, 15);
+			this.lblHome_NewJrnl.Size = new System.Drawing.Size(33, 15);
 			this.lblHome_NewJrnl.TabIndex = 25;
-			this.lblHome_NewJrnl.Text = "home";
+			this.lblHome_NewJrnl.Text = "back";
 			this.lblHome_NewJrnl.Click += new System.EventHandler(this.lblHome_Click);
 			// 
 			// btnOK_NewJrnl
@@ -1018,9 +1023,9 @@ namespace myJournal
 			this.lblHome_NewGroup.ForeColor = System.Drawing.SystemColors.MenuHighlight;
 			this.lblHome_NewGroup.Location = new System.Drawing.Point(6, 12);
 			this.lblHome_NewGroup.Name = "lblHome_NewGroup";
-			this.lblHome_NewGroup.Size = new System.Drawing.Size(39, 15);
+			this.lblHome_NewGroup.Size = new System.Drawing.Size(33, 15);
 			this.lblHome_NewGroup.TabIndex = 25;
-			this.lblHome_NewGroup.Text = "home";
+			this.lblHome_NewGroup.Text = "back";
 			this.lblHome_NewGroup.Click += new System.EventHandler(this.lblHome_Click);
 			// 
 			// btnOK_NewGroup
@@ -1093,9 +1098,9 @@ namespace myJournal
 			this.lblHome_DeleteJournal.ForeColor = System.Drawing.SystemColors.MenuHighlight;
 			this.lblHome_DeleteJournal.Location = new System.Drawing.Point(6, 12);
 			this.lblHome_DeleteJournal.Name = "lblHome_DeleteJournal";
-			this.lblHome_DeleteJournal.Size = new System.Drawing.Size(39, 15);
+			this.lblHome_DeleteJournal.Size = new System.Drawing.Size(33, 15);
 			this.lblHome_DeleteJournal.TabIndex = 25;
-			this.lblHome_DeleteJournal.Text = "home";
+			this.lblHome_DeleteJournal.Text = "back";
 			this.lblHome_DeleteJournal.Click += new System.EventHandler(this.lblHome_Click);
 			// 
 			// btnOK_DeleteJournal
@@ -1131,7 +1136,7 @@ namespace myJournal
 			this.Controls.Add(this.grpFindEntry);
 			this.Controls.Add(this.lblAddEntry);
 			this.MaximizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(300, 555);
+			this.MinimumSize = new System.Drawing.Size(331, 592);
 			this.Name = "Form1";
 			this.Text = "My Journals";
 			this.Load += new System.EventHandler(this.Form1_Load);
@@ -1198,8 +1203,7 @@ namespace myJournal
         private System.Windows.Forms.Button btnOK_NewJrnl;
         private System.Windows.Forms.TextBox txtNewJournalName;
         private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.Button btnAddGroup;
-        private System.Windows.Forms.CheckedListBox lstGroups;
+        private System.Windows.Forms.CheckedListBox lstTags;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.GroupBox grpNewGroup;
         private System.Windows.Forms.Label lblHome_NewGroup;
@@ -1233,7 +1237,7 @@ namespace myJournal
 		private System.Windows.Forms.Label lblDelete_Confirm;
 		private System.Windows.Forms.Panel pnlMenu;
 		private System.Windows.Forms.Label lblSettings_Show;
-		private System.Windows.Forms.Label lblTags_Create;
+		private System.Windows.Forms.Label lblTagManager;
 		private System.Windows.Forms.Label label21;
 		private System.Windows.Forms.Label lblJournal_Delete;
 		private System.Windows.Forms.Label lblJournal_Create;
@@ -1244,6 +1248,7 @@ namespace myJournal
 		private System.Windows.Forms.Label lblCloseMenu;
 		private System.Windows.Forms.Label lblEntryText_Hidden;
 		private System.Windows.Forms.Label lblEntryTitle_Hidden;
+		private System.Windows.Forms.Label lblManageTags2;
 	}
 }
 

@@ -22,29 +22,5 @@ namespace myJournal.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\"M-dd-yy H-d-yy\"")]
-        public string ShortEntryDateFormat {
-            get {
-                return ((string)(this["ShortEntryDateFormat"]));
-            }
-            set {
-                this["ShortEntryDateFormat"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("(click to select)")]
-        public string TxtSelectGroupsForSearchDefault {
-            get {
-                return ((string)(this["TxtSelectGroupsForSearchDefault"]));
-            }
-            set {
-                this["TxtSelectGroupsForSearchDefault"] = value;
-            }
-        }
     }
 }
