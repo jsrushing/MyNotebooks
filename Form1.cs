@@ -6,6 +6,7 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using System.Configuration;
+using System.Linq;
 
 namespace myJournal
 {
@@ -32,13 +33,14 @@ namespace myJournal
             LoadJournals();
             DisplayedGroupBox = grpOpenScreen;
             this.Size = MainFormSize;
-
             pnlMenu.Size = new Size(lblMenu_1.Width + 2, lblMenu_1.Height + 2);
             lblMenu_0.Size = new Size(pnlMenu.Width, pnlMenu.Height);
             lblMenu_1.Size = new Size(lblMenu_0.Width - 4, lblMenu_1.Height - 2);
             lblMenu_1.Location = new Point(lblMenu_0.Left + 2, lblMenu_0.Top + 2);
             InactiveMenuFont = lblJournal_Create.Font;
-            ActiveMenuFont = new Font(InactiveMenuFont, FontStyle.Bold | FontStyle.Underline);
+			FontStyle fs = FontStyle.Bold | FontStyle.Italic;
+            ActiveMenuFont = new Font(InactiveMenuFont.FontFamily, InactiveMenuFont.Size + 1);
+			ActiveMenuFont = new Font(ActiveMenuFont, fs);
             ActivateGroupBox(grpOpenScreen);
         }
 
@@ -47,7 +49,6 @@ namespace myJournal
             DisplayedGroupBox.Location = ActiveBoxLocation;
             DisplayedGroupBox.Size = new Size(this.Width - 35, this.Height - 50);
         }
-
 
         /// <summary>
         /// Show a group box. Change form Text, set focus, etc. as required for that group box.
@@ -79,12 +80,12 @@ namespace myJournal
                     rtbNewEntry.Clear();
                     grpAppendDeleteOriginal.Visible = false;
                     txtBxToFocus = this.txtNewEntryTitle;
-                    if(lstTags.Items.Count == 0) { Groups_PopulateGroupsList(lstTags); }
+                    if(lstTags.Items.Count == 0) { Tags_PopulateTagsList(lstTags); }
 					foreach(int i in lstTags.CheckedIndices) { lstTags.SetItemChecked(i, false); }
                     break;
                 case "grpFindEntry":
                     this.Text = "Search Journal";
-                    Groups_PopulateGroupsList(lstGroupsForSearch);
+                    Tags_PopulateTagsList(lstGroupsForSearch);
                     txtGroupsForSearch.Text = Properties.Settings.Default["TxtSelectGroupsForSearchDefault"].ToString();
                     break;
                 case "grpNewJournal":
@@ -93,7 +94,8 @@ namespace myJournal
                     break;
                 case "grpNewGroup":
                     this.Text = "Create New Group";
-                    txtBxToFocus = this.txtNewGroup;
+					Tags_PopulateTagsList(null, lstTagsForEdit);
+					txtBxToFocus = this.txtTags_TagName_NewTag;
                     break;
                 case "grpDeleteJournal":
                     lblDelete_Confirm.Visible = false;
@@ -200,18 +202,39 @@ namespace myJournal
         /// <param name="e"></param>
         private void btnOK_NewJrnl_Click(object sender, EventArgs e)
         {
-            Journal jrnl = new Journal(txtNewJournalName.Text);
-            jrnl.CreateJournal();
-            LoadJournals();
-            ActivateGroupBox(grpOpenScreen);
+			if (lblMessage_BadJournalName.Visible)
+			{
+				lblMessage_BadJournalName.Visible = false;
+			}
+			else
+			{
+				try
+				{
+					Journal jrnl = new Journal(txtNewJournalName.Text);
+					jrnl.CreateJournal();
+					LoadJournals();
+					ActivateGroupBox(grpOpenScreen);
+				}
+				catch (Exception ex) { lblMessage_BadJournalName.Visible = true; }
+			}
         }
-        #endregion
 
-        /// <summary>
-        /// Load the selected journal.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+		private void btnOK_TagName_Edited_Click(object sender, EventArgs e)
+		{
+			int a = lstTagsForEdit.SelectedIndex;
+			lstTagsForEdit.Items.RemoveAt(a);
+			lstTagsForEdit.Items.Insert(a, txtTag_TagName_Edited.Text);
+			grpEditTags_NewName.Visible = false;
+			Tags_Save(null, lstTagsForEdit);
+		}
+
+		#endregion
+
+		/// <summary>
+		/// Load the selected journal.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void ddlJournals_SelectedIndexChanged(object sender, EventArgs e)
         {
             lstEntries.Items.Clear();
@@ -222,73 +245,76 @@ namespace myJournal
             lblFindEntry.Enabled = true;
         }
 
-        #region Groups
-
-        private void Groups_btnAddGroup_Click(object sender, EventArgs e)
+        #region Tags
+        private void Tags_btnAddTag_Click(object sender, EventArgs e)
         { ActivateGroupBox(grpNewGroup); }
 
-        private void Groups_btnOK_NewGroup_Click(object sender, EventArgs e)
+        private void Tags_btnOK_NewTag_Click(object sender, EventArgs e)
         {
             if (!bGroupBeingEdited)
             {
                 using (StreamWriter sw = File.AppendText(AppDomain.CurrentDomain.BaseDirectory + "/settings/groups"))
                 {
-                    sw.WriteLine(txtNewGroup.Text);
+                    sw.WriteLine(txtTags_TagName_NewTag.Text);
                 }
             }
             else
             {
                 int i = lstTags.SelectedIndex;
                 lstTags.Items.RemoveAt(i);
-                lstTags.Items.Insert(i, txtNewGroup.Text);
-                Groups_Save();
+                lstTags.Items.Insert(i, txtTags_TagName_NewTag.Text);
+                Tags_Save();
             }
 
-            txtNewGroup.Text = string.Empty;
-            Groups_PopulateGroupsList(lstTags);
+            txtTags_TagName_NewTag.Text = string.Empty;
+            Tags_PopulateTagsList(lstTags);
             ActivateGroupBox(grpCreateEntry);
             bGroupBeingEdited = false;
         }
 
-        private void Groups_mnuEdit_Click(object sender, EventArgs e)
+        private void Tags_mnuEdit_Click(object sender, EventArgs e)
         {
-            txtNewGroup.Text = lstTags.SelectedItem.ToString();
+            txtTags_TagName_NewTag.Text = lstTags.SelectedItem.ToString();
             bGroupBeingEdited = true;
             ActivateGroupBox(grpNewGroup);
         }
 
-        private void Groups_mnuDelete_Click(object sender, EventArgs e)
+        private void Tags_mnuDelete_Click(object sender, EventArgs e)
         {
             lstTags.Items.RemoveAt((int)lstTags.SelectedIndex);
-            Groups_Save();
-            Groups_PopulateGroupsList(lstTags);
+            Tags_Save();
+            Tags_PopulateTagsList(lstTags);
             ActivateGroupBox(grpCreateEntry);
         }
 
-        private void Groups_mnuGroups_Opening(object sender, CancelEventArgs e)
+        private void Tags_mnuTags_Opening(object sender, CancelEventArgs e)
         {
             e.Cancel = lstTags.SelectedIndices.Count == 0;
         }
 
-        private void Groups_PopulateGroupsList(CheckedListBox clb)
+        private void Tags_PopulateTagsList(CheckedListBox clb, ListBox lb = null)
         {
-            clb.Items.Clear();
+			if (clb != null) { clb.Items.Clear(); }
+			if(lb != null) { lb.Items.Clear(); }
 
             foreach (string group in File.ReadAllLines(AppDomain.CurrentDomain.BaseDirectory + "/settings/groups"))
             {
-                clb.Items.Add(group);
+				if(lb != null)
+				{
+					lb.Items.Add(group);
+				}
+				else
+				{
+					clb.Items.Add(group);
+				}
             }
         }
 
-        private void Groups_Save()
+        private void Tags_Save(CheckedListBox clb = null, ListBox lb = null)
         {
+			string[] tags = clb == null ? lb.Items.OfType<string>().ToArray() : clb.Items.OfType<string>().ToArray();
             StringBuilder sb = new StringBuilder();
-
-            foreach (string s in lstTags.Items)
-            {
-                sb.AppendLine(s);
-            }
-
+            foreach (string s in tags) { sb.AppendLine(s); }
             File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "/settings/groups", sb.ToString());
         }
         #endregion
@@ -296,6 +322,19 @@ namespace myJournal
         #region Clickable Labels
 
         private void lblCloseMenu_Click(object sender, EventArgs e) { pnlMenu.Visible = false; }
+
+        private void lblClearSearchCriteria_Click(object sender, EventArgs e) 
+        {  
+            dtFindDate.Value = DateTime.Now;
+            dtFindDate_From.Value = DateTime.Now;
+            dtFindDate_To.Value = DateTime.Now;
+            radCurrentJournal.Checked = true;
+            txtGroupsForSearch.Text = String.Empty;
+            txtSearchTitle.Text = String.Empty; 
+            txtSearchText.Text = String.Empty;  
+            lstFoundEntries.Items.Clear();
+            rtbSelectedEntry_Found.Clear();
+        }
 
         private void lblCreateEntry_Click(object sender, EventArgs e) { ActivateGroupBox(grpCreateEntry); }
 
@@ -308,6 +347,14 @@ namespace myJournal
         { 
         
         }
+
+		private void lblEditTag_Click(object sender, EventArgs e)
+		{
+			grpEditTags_NewName.Location = grpEditTags_Add.Location;
+			grpEditTags_NewName.Height = grpEditTags_EditRemove.Top + grpEditTags_EditRemove.Height;
+			txtTag_TagName_Edited.Text = lstTagsForEdit.SelectedItem.ToString();
+			grpEditTags_NewName.Visible = true;
+		}
 
         /// <summary>
         /// Show the delete journal controls.
@@ -337,9 +384,9 @@ namespace myJournal
             lblEntryTitle_Hidden.Text = currentEntry.ClearTitle();
             string newLine = System.Environment.NewLine;
             rtbNewEntry.Text = newLine + newLine + 
-                " Original Date: " + currentEntry.Date.ToString("dd/M/yy H:m:s") + newLine +
-                "Title: " + currentEntry.ClearTitle() + newLine + 
-                "Entry:" + newLine + currentEntry.ClearText();
+                " > Original Date: " + currentEntry.Date.ToString("dd/M/yy H:m:s") + newLine +
+                " > Title: " + currentEntry.ClearTitle() + newLine + 
+                " > Entry:" + newLine + currentEntry.ClearText();
             rtbNewEntry.Focus();
             rtbNewEntry.SelectionStart = 0; 
 			grpAppendDeleteOriginal.Visible = true;
@@ -426,26 +473,39 @@ namespace myJournal
 
         }
 
-        private void lblSettings_Click(object sender, EventArgs e) { }
-
         private void lblHome_Click(object sender, EventArgs e) { ActivateGroupBox(grpOpenScreen); }
 
-        /// <summary>
-        /// Reset search criteria.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void lblClearAll_Click(object sender, EventArgs e) 
-        {  
-            dtFindDate.Value = DateTime.Now;
-            dtFindDate_From.Value = DateTime.Now;
-            dtFindDate_To.Value = DateTime.Now;
-            radCurrentJournal.Checked = true;
-            txtGroupsForSearch.Text = String.Empty;
-            txtSearchTitle.Text = String.Empty; 
-            txtSearchText.Text = String.Empty;  
-            lstFoundEntries.Items.Clear();
-            rtbSelectedEntry_Found.Clear();
+		private void lblJournal_Create_Click(object sender, EventArgs e) { ActivateGroupBox(grpNewJournal); }
+
+		private void lblMenu_Click(object sender, EventArgs e) { pnlMenu.Visible = !pnlMenu.Visible; }
+
+		private void lblRemoveTag_Click(object sender, EventArgs e)
+		{
+			int a = lstTagsForEdit.SelectedIndex;
+			lstTagsForEdit.Items.RemoveAt(a);
+			grpEditTags_NewName.Visible = false;
+			Tags_Save(null, lstTagsForEdit);
+		}
+
+		private void lblSettings_Show_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void lblTagManager_Click(object sender, EventArgs e) { ActivateGroupBox(grpNewGroup); }
+		#endregion
+
+		#region Menus - Toggle display on MouseEnter/Leave
+		private void MenuItem_Enter(object sender, EventArgs e)
+		{
+            Label lbl = (Label)sender;
+            lbl.Font = ActiveMenuFont;
+		}
+
+        private void MenuItem_Leave(object sender, EventArgs e)
+		{
+            Label lbl = (Label)(sender);
+            lbl.Font = InactiveMenuFont;
         }
 		#endregion
 
@@ -620,27 +680,5 @@ namespace myJournal
             dtFindDate_To.Enabled = dtFindDate_From.Enabled;
         }
 
-		private void lblMenu_Click(object sender, EventArgs e) { pnlMenu.Visible = !pnlMenu.Visible; }
-
-		private void lblJournal_Create_Click(object sender, EventArgs e) { ActivateGroupBox(grpNewJournal); }
-
-		private void lblSettings_Show_Click(object sender, EventArgs e)
-		{
-
-		}
-
-        private void MenuItem_Enter(object sender, EventArgs e)
-		{
-            Label lbl = (Label)sender;
-            lbl.Font = ActiveMenuFont;
-		}
-
-        private void MenuItem_Leave(object sender, EventArgs e)
-		{
-            Label lbl = (Label)(sender);
-            lbl.Font = InactiveMenuFont;
-        }
-
-		private void lblTagManager_Click(object sender, EventArgs e) { ActivateGroupBox(grpNewGroup); }
 	}
 }
