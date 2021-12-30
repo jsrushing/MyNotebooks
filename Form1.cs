@@ -86,7 +86,7 @@ namespace myJournal
                 case "grpFindEntry":
                     this.Text = "Search Journal";
                     Tags_PopulateTagsList(lstGroupsForSearch);
-                    txtGroupsForSearch.Text = Properties.Settings.Default["TxtSelectGroupsForSearchDefault"].ToString();
+                    //txtGroupsForSearch.Text = Properties.Settings.Default["TxtSelectGroupsForSearchDefault"].ToString();
                     break;
                 case "grpNewJournal":
                     this.Text = "Create New Journal";
@@ -161,7 +161,7 @@ namespace myJournal
 				}
 
                 currentJournal.SaveToDisk();
-                PopulateEntries(lstEntries, currentJournal.Entries);
+                PopulateEntries(lstEntries);
             }
 
             txtNewEntryTitle.Text = String.Empty;
@@ -217,7 +217,7 @@ namespace myJournal
 					LoadJournals();
 					ActivateGroupBox(grpOpenScreen);
 				}
-				catch (Exception ex) { lblMessage_BadJournalName.Visible = true; }
+				catch (Exception) { lblMessage_BadJournalName.Visible = true; }
 			}
         }
 
@@ -241,10 +241,22 @@ namespace myJournal
         {
             lstEntries.Items.Clear();
             rtbSelectedEntry_Main.Text = string.Empty;
-            currentJournal = new Journal(ddlJournals.Text).OpenJournal();
-            PopulateEntries(lstEntries, currentJournal.Entries);
-            lblCreateEntry.Enabled = true; 
-            lblFindEntry.Enabled = true;
+			try
+			{
+				currentJournal = new Journal(ddlJournals.Text).OpenJournal(); 
+
+				if(currentJournal != null)
+				{
+					PopulateEntries(lstEntries);
+					lblCreateEntry.Enabled = true; 
+					lblFindEntry.Enabled = true;
+				}
+				else
+				{
+					lstEntries.Focus();
+				}
+			}
+			catch(Exception) { }
         }
 
         #region Tags
@@ -452,10 +464,12 @@ namespace myJournal
                             foundEntries.Add(je);
                         }
                     }
-                    // tags
-                    if (txtGroupsForSearch.Text != Properties.Settings.Default["TxtSelectGroupsForSearchDefault"].ToString())
-                    {
-                        string[] groups = txtGroupsForSearch.Text.Split(',');
+					// tags
+					//if (txtGroupsForSearch.Text != Properties.Settings.Default["TxtSelectGroupsForSearchDefault"].ToString())
+					if (txtGroupsForSearch.Text.Length > 0)
+
+					{
+						string[] groups = txtGroupsForSearch.Text.Split(',');
                         foreach (string group in groups)
                         {
                             if (je.ClearTags().Contains(group)) { foundEntries.Add(je); }
@@ -534,19 +548,8 @@ namespace myJournal
                     ddlJournals.Items.Add(s.Replace(sDir + "/journals/", ""));
                 }
             }
-
-            if(ddlJournals.Items.Count == 0)
-            {
-                ddlJournals.Items.Add("click '+' to create a journal >>");
-                ddlJournals.Enabled = false;
-                ddlJournals.SelectedIndex = 0;
-            }
-            else
-            {
-                ddlJournals.Enabled = true;
-            }
-
-            if(ddlJournals.Items.Count == 1) { ddlJournals.SelectedIndex = 0; }
+			ddlJournals.Enabled = ddlJournals.Items.Count > 0;
+			ddlJournals.SelectedIndex = ddlJournals.Items.Count == 1 ? 0 : -1;
         }
 
         /// <summary>
@@ -612,25 +615,26 @@ namespace myJournal
         /// <summary>
         /// Populate ListBox lstBox with all entries in entries.
         /// </summary>
-        /// <param name="lstBox"></param>
+        /// <param name="lstBoxToPopulate"></param>
         /// <param name="entries"></param>
-        private void PopulateEntries(ListBox lstBox, List<JournalEntry> entries)
+        private void PopulateEntries(ListBox lstBoxToPopulate, List<JournalEntry> entries = null)
         {
-            int iTextChunkLength = 45;  // this.Width - 265 - Convert.ToInt16(this.Width * .065);
-            lstBox.Items.Clear();
+			if(entries == null) { entries = currentJournal.Entries; }
+			int iTextChunkLength = Convert.ToInt16(lstEntries.Width * .17);
+            lstBoxToPopulate.Items.Clear();
 
-            foreach(JournalEntry je in entries)
+            foreach(JournalEntry je in currentJournal.Entries)
             {
-                lstBox.Items.Add(je.ClearTitle() + " (" + je.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")");
+                lstBoxToPopulate.Items.Add(je.ClearTitle() + " (" + je.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")");
                 string sEntryText = je.ClearText();
 
 
-                lstBox.Items.Add(sEntryText.Length < iTextChunkLength ?
+                lstBoxToPopulate.Items.Add(sEntryText.Length < iTextChunkLength ?
                     sEntryText :
                     sEntryText.Substring(0, iTextChunkLength) + " ...");
 
-                lstBox.Items.Add("tags: " + je.ClearTags());
-                lstBox.Items.Add("---------------------");
+                lstBoxToPopulate.Items.Add("tags: " + je.ClearTags());
+                lstBoxToPopulate.Items.Add("---------------------");
             }
         }
 
@@ -648,7 +652,7 @@ namespace myJournal
         /// <param name="e"></param>
         private void txtGroupsForSearch_Click(object sender, EventArgs e)
         {
-            if(txtGroupsForSearch.Text == Properties.Settings.Default["TxtSelectGroupsForSearchDefault"].ToString()) { txtGroupsForSearch.Text = ""; }
+            //if(txtGroupsForSearch.Text == Properties.Settings.Default["TxtSelectGroupsForSearchDefault"].ToString()) { txtGroupsForSearch.Text = ""; }
             lstGroupsForSearch.Visible = !lstGroupsForSearch.Visible;
         }
         
@@ -666,7 +670,7 @@ namespace myJournal
                 s += lstGroupsForSearch.Items[i].ToString() + ",";
             }
 
-            txtGroupsForSearch.Text = s.Length > 0 ? s.Substring(0, s.Length - 1) : Properties.Settings.Default["TxtSelectGroupsForSearchDefault"].ToString() ;
+			txtGroupsForSearch.Text = s.Length > 0 ? s.Substring(0, s.Length - 1) : String.Empty;	// Properties.Settings.Default["TxtSelectGroupsForSearchDefault"].ToString() ;
             lstGroupsForSearch.Visible = false;
         }
 
