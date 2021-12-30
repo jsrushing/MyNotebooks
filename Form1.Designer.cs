@@ -207,7 +207,7 @@ namespace myJournal
 			this.grpCreateEntry.Controls.Add(this.rtbNewEntry);
 			this.grpCreateEntry.Controls.Add(this.txtNewEntryTitle);
 			this.grpCreateEntry.Controls.Add(this.label2);
-			this.grpCreateEntry.Location = new System.Drawing.Point(337, 0);
+			this.grpCreateEntry.Location = new System.Drawing.Point(376, 0);
 			this.grpCreateEntry.Name = "grpCreateEntry";
 			this.grpCreateEntry.Size = new System.Drawing.Size(290, 545);
 			this.grpCreateEntry.TabIndex = 4;
@@ -447,7 +447,7 @@ namespace myJournal
 			this.grpOpenScreen.Controls.Add(this.label5);
 			this.grpOpenScreen.Controls.Add(this.lstEntries);
 			this.grpOpenScreen.Controls.Add(this.label4);
-			this.grpOpenScreen.Location = new System.Drawing.Point(12, 0);
+			this.grpOpenScreen.Location = new System.Drawing.Point(51, 0);
 			this.grpOpenScreen.Name = "grpOpenScreen";
 			this.grpOpenScreen.Size = new System.Drawing.Size(290, 545);
 			this.grpOpenScreen.TabIndex = 5;
@@ -965,9 +965,9 @@ namespace myJournal
 			// 
 			// lblMessage_BadJournalName
 			// 
-			this.lblMessage_BadJournalName.Location = new System.Drawing.Point(0, 30);
+			this.lblMessage_BadJournalName.Location = new System.Drawing.Point(6, 117);
 			this.lblMessage_BadJournalName.Name = "lblMessage_BadJournalName";
-			this.lblMessage_BadJournalName.Size = new System.Drawing.Size(290, 39);
+			this.lblMessage_BadJournalName.Size = new System.Drawing.Size(280, 39);
 			this.lblMessage_BadJournalName.TabIndex = 27;
 			this.lblMessage_BadJournalName.Text = " The Journal Name you entered has illegal characters. Please try again.";
 			this.lblMessage_BadJournalName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1003,7 +1003,7 @@ namespace myJournal
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.txtNewJournalName.Location = new System.Drawing.Point(88, 40);
 			this.txtNewJournalName.Name = "txtNewJournalName";
-			this.txtNewJournalName.Size = new System.Drawing.Size(193, 23);
+			this.txtNewJournalName.Size = new System.Drawing.Size(185, 23);
 			this.txtNewJournalName.TabIndex = 1;
 			// 
 			// label13
@@ -1250,7 +1250,7 @@ namespace myJournal
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(1010, 1061);
+			this.ClientSize = new System.Drawing.Size(1089, 1061);
 			this.Controls.Add(this.grpDeleteJournal);
 			this.Controls.Add(this.grpNewGroup);
 			this.Controls.Add(this.grpNewJournal);

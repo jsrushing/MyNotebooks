@@ -91,6 +91,8 @@ namespace myJournal
                 case "grpNewJournal":
                     this.Text = "Create New Journal";
                     txtBxToFocus = this.txtNewJournalName;
+					lblMessage_BadJournalName.Location = new Point(6, 30);
+					lblMessage_BadJournalName.Width = grpNewJournal.Width - 3;
                     break;
                 case "grpNewGroup":
                     this.Text = "Create New Group";
