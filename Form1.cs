@@ -22,6 +22,7 @@ namespace myJournal
         JournalEntry currentEntry = null;
         Font InactiveMenuFont = null;
         Font ActiveMenuFont = null;
+		GroupBox backTarget = null;
 
         public Form1()
         { InitializeComponent(); }
@@ -170,12 +171,20 @@ namespace myJournal
             ActivateGroupBox(grpOpenScreen);
         }
 
-        /// <summary>
-        /// Deleting Journal - either show confirmation or delete journal.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnOK_DeleteJournal_Click(object sender, EventArgs e)
+		/// <summary>
+		/// Deleting Journal - either show confirmation or delete journal.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void btnConfirmEntryDelete_Click(object sender, EventArgs e)
+		{
+			currentJournal.Entries.Remove(currentEntry);
+			currentJournal.SaveToDisk();
+			PopulateEntries(lstEntries);
+			ActivateGroupBox(grpOpenScreen);
+		}
+		
+		private void btnOK_DeleteJournal_Click(object sender, EventArgs e)
         {
             if (lblDelete_Confirm.Visible)
             {
@@ -358,8 +367,9 @@ namespace myJournal
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void lblDeleteEntry_Click(object sender, EventArgs e)
-        { 
-        
+        {
+			lblMessage_ConfirmEntryDelete.Text = currentEntry.ClearTitle() + " " + lblMessage_ConfirmEntryDelete.Text;
+			ActivateGroupBox(grpConfirmDeleteEntry);
         }
 
 		private void lblEditTag_Click(object sender, EventArgs e)
@@ -489,7 +499,12 @@ namespace myJournal
 
         }
 
-        private void lblHome_Click(object sender, EventArgs e) { ActivateGroupBox(grpOpenScreen); }
+        private void lblHome_Click(object sender, EventArgs e) 
+		{
+			GroupBox gb = backTarget == null ? grpOpenScreen : backTarget;
+			ActivateGroupBox(gb);
+			backTarget = null;
+		}
 
 		private void lblJournal_Create_Click(object sender, EventArgs e) { ActivateGroupBox(grpNewJournal); }
 
@@ -619,8 +634,8 @@ namespace myJournal
         /// <param name="entries"></param>
         private void PopulateEntries(ListBox lstBoxToPopulate, List<JournalEntry> entries = null)
         {
-			if(entries == null) { entries = currentJournal.Entries; }
-			int iTextChunkLength = Convert.ToInt16(lstEntries.Width * .17);
+			entries = entries != null ? currentJournal.Entries : null;
+			int iTextChunkLength = Convert.ToInt16(lstEntries.Width * .15);
             lstBoxToPopulate.Items.Clear();
 
             foreach(JournalEntry je in currentJournal.Entries)

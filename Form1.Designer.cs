@@ -85,13 +85,13 @@ namespace myJournal
 			this.txtGroupsForSearch = new System.Windows.Forms.TextBox();
 			this.label17 = new System.Windows.Forms.Label();
 			this.lblClearAll = new System.Windows.Forms.Label();
+			this.dtFindDate = new System.Windows.Forms.DateTimePicker();
 			this.lblHome = new System.Windows.Forms.Label();
 			this.txtSearchText = new System.Windows.Forms.TextBox();
 			this.txtSearchTitle = new System.Windows.Forms.TextBox();
 			this.dtFindDate_To = new System.Windows.Forms.DateTimePicker();
 			this.label12 = new System.Windows.Forms.Label();
 			this.dtFindDate_From = new System.Windows.Forms.DateTimePicker();
-			this.dtFindDate = new System.Windows.Forms.DateTimePicker();
 			this.lblFindEntries = new System.Windows.Forms.Label();
 			this.rtbSelectedEntry_Found = new System.Windows.Forms.RichTextBox();
 			this.label9 = new System.Windows.Forms.Label();
@@ -125,6 +125,10 @@ namespace myJournal
 			this.lblHome_DeleteJournal = new System.Windows.Forms.Label();
 			this.btnOK_DeleteJournal = new System.Windows.Forms.Button();
 			this.lblJournalToDelete = new System.Windows.Forms.Label();
+			this.grpConfirmDeleteEntry = new System.Windows.Forms.GroupBox();
+			this.lblMessage_ConfirmEntryDelete = new System.Windows.Forms.Label();
+			this.lblBack_ConfirmEntryDelete = new System.Windows.Forms.Label();
+			this.btnOK_ConfirmEntryDelete = new System.Windows.Forms.Button();
 			this.grpCreateEntry.SuspendLayout();
 			this.grpAppendDeleteOriginal.SuspendLayout();
 			this.mnuGroups.SuspendLayout();
@@ -137,6 +141,7 @@ namespace myJournal
 			this.grpEditTags_EditRemove.SuspendLayout();
 			this.grpEditTags_Add.SuspendLayout();
 			this.grpDeleteJournal.SuspendLayout();
+			this.grpConfirmDeleteEntry.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -207,7 +212,7 @@ namespace myJournal
 			this.grpCreateEntry.Controls.Add(this.rtbNewEntry);
 			this.grpCreateEntry.Controls.Add(this.txtNewEntryTitle);
 			this.grpCreateEntry.Controls.Add(this.label2);
-			this.grpCreateEntry.Location = new System.Drawing.Point(376, 0);
+			this.grpCreateEntry.Location = new System.Drawing.Point(386, 0);
 			this.grpCreateEntry.Name = "grpCreateEntry";
 			this.grpCreateEntry.Size = new System.Drawing.Size(290, 545);
 			this.grpCreateEntry.TabIndex = 4;
@@ -447,7 +452,7 @@ namespace myJournal
 			this.grpOpenScreen.Controls.Add(this.label5);
 			this.grpOpenScreen.Controls.Add(this.lstEntries);
 			this.grpOpenScreen.Controls.Add(this.label4);
-			this.grpOpenScreen.Location = new System.Drawing.Point(51, 0);
+			this.grpOpenScreen.Location = new System.Drawing.Point(61, 0);
 			this.grpOpenScreen.Name = "grpOpenScreen";
 			this.grpOpenScreen.Size = new System.Drawing.Size(290, 545);
 			this.grpOpenScreen.TabIndex = 5;
@@ -685,20 +690,20 @@ namespace myJournal
 			this.grpFindEntry.Controls.Add(this.txtGroupsForSearch);
 			this.grpFindEntry.Controls.Add(this.label17);
 			this.grpFindEntry.Controls.Add(this.lblClearAll);
+			this.grpFindEntry.Controls.Add(this.dtFindDate);
 			this.grpFindEntry.Controls.Add(this.lblHome);
 			this.grpFindEntry.Controls.Add(this.txtSearchText);
 			this.grpFindEntry.Controls.Add(this.txtSearchTitle);
 			this.grpFindEntry.Controls.Add(this.dtFindDate_To);
 			this.grpFindEntry.Controls.Add(this.label12);
 			this.grpFindEntry.Controls.Add(this.dtFindDate_From);
-			this.grpFindEntry.Controls.Add(this.dtFindDate);
 			this.grpFindEntry.Controls.Add(this.lblFindEntries);
 			this.grpFindEntry.Controls.Add(this.rtbSelectedEntry_Found);
 			this.grpFindEntry.Controls.Add(this.label9);
 			this.grpFindEntry.Controls.Add(this.label10);
 			this.grpFindEntry.Controls.Add(this.label8);
 			this.grpFindEntry.Controls.Add(this.label11);
-			this.grpFindEntry.Location = new System.Drawing.Point(648, 0);
+			this.grpFindEntry.Location = new System.Drawing.Point(705, 13);
 			this.grpFindEntry.Name = "grpFindEntry";
 			this.grpFindEntry.Size = new System.Drawing.Size(290, 545);
 			this.grpFindEntry.TabIndex = 6;
@@ -720,7 +725,7 @@ namespace myJournal
 			// chkUseDateRange
 			// 
 			this.chkUseDateRange.AutoSize = true;
-			this.chkUseDateRange.Location = new System.Drawing.Point(129, 12);
+			this.chkUseDateRange.Location = new System.Drawing.Point(50, 12);
 			this.chkUseDateRange.Name = "chkUseDateRange";
 			this.chkUseDateRange.Size = new System.Drawing.Size(103, 19);
 			this.chkUseDateRange.TabIndex = 34;
@@ -731,7 +736,7 @@ namespace myJournal
 			// chkUseDate
 			// 
 			this.chkUseDate.AutoSize = true;
-			this.chkUseDate.Location = new System.Drawing.Point(9, 12);
+			this.chkUseDate.Location = new System.Drawing.Point(206, 13);
 			this.chkUseDate.Name = "chkUseDate";
 			this.chkUseDate.Size = new System.Drawing.Size(70, 19);
 			this.chkUseDate.TabIndex = 33;
@@ -814,13 +819,25 @@ namespace myJournal
 			this.lblClearAll.Text = "Clear All";
 			this.lblClearAll.Click += new System.EventHandler(this.lblClearSearchCriteria_Click);
 			// 
+			// dtFindDate
+			// 
+			this.dtFindDate.CustomFormat = "M/d/yyyy";
+			this.dtFindDate.Enabled = false;
+			this.dtFindDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+			this.dtFindDate.Location = new System.Drawing.Point(201, 33);
+			this.dtFindDate.Name = "dtFindDate";
+			this.dtFindDate.ShowUpDown = true;
+			this.dtFindDate.Size = new System.Drawing.Size(79, 23);
+			this.dtFindDate.TabIndex = 17;
+			this.dtFindDate.Value = new System.DateTime(2021, 12, 23, 18, 55, 40, 0);
+			// 
 			// lblHome
 			// 
 			this.lblHome.AutoSize = true;
 			this.lblHome.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.lblHome.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
 			this.lblHome.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblHome.Location = new System.Drawing.Point(245, 10);
+			this.lblHome.Location = new System.Drawing.Point(3, 12);
 			this.lblHome.Name = "lblHome";
 			this.lblHome.Size = new System.Drawing.Size(33, 15);
 			this.lblHome.TabIndex = 23;
@@ -850,7 +867,7 @@ namespace myJournal
 			this.dtFindDate_To.CustomFormat = "M/d/yyyy";
 			this.dtFindDate_To.Enabled = false;
 			this.dtFindDate_To.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-			this.dtFindDate_To.Location = new System.Drawing.Point(192, 32);
+			this.dtFindDate_To.Location = new System.Drawing.Point(107, 32);
 			this.dtFindDate_To.Name = "dtFindDate_To";
 			this.dtFindDate_To.ShowUpDown = true;
 			this.dtFindDate_To.Size = new System.Drawing.Size(79, 23);
@@ -871,24 +888,12 @@ namespace myJournal
 			this.dtFindDate_From.CustomFormat = "M/d/yyyy";
 			this.dtFindDate_From.Enabled = false;
 			this.dtFindDate_From.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-			this.dtFindDate_From.Location = new System.Drawing.Point(95, 32);
+			this.dtFindDate_From.Location = new System.Drawing.Point(18, 32);
 			this.dtFindDate_From.Name = "dtFindDate_From";
 			this.dtFindDate_From.ShowUpDown = true;
 			this.dtFindDate_From.Size = new System.Drawing.Size(79, 23);
 			this.dtFindDate_From.TabIndex = 18;
 			this.dtFindDate_From.Value = new System.DateTime(2021, 12, 23, 18, 55, 40, 0);
-			// 
-			// dtFindDate
-			// 
-			this.dtFindDate.CustomFormat = "M/d/yyyy";
-			this.dtFindDate.Enabled = false;
-			this.dtFindDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-			this.dtFindDate.Location = new System.Drawing.Point(4, 32);
-			this.dtFindDate.Name = "dtFindDate";
-			this.dtFindDate.ShowUpDown = true;
-			this.dtFindDate.Size = new System.Drawing.Size(79, 23);
-			this.dtFindDate.TabIndex = 17;
-			this.dtFindDate.Value = new System.DateTime(2021, 12, 23, 18, 55, 40, 0);
 			// 
 			// lblFindEntries
 			// 
@@ -1187,7 +1192,7 @@ namespace myJournal
 			this.grpDeleteJournal.Controls.Add(this.lblHome_DeleteJournal);
 			this.grpDeleteJournal.Controls.Add(this.btnOK_DeleteJournal);
 			this.grpDeleteJournal.Controls.Add(this.lblJournalToDelete);
-			this.grpDeleteJournal.Location = new System.Drawing.Point(673, 587);
+			this.grpDeleteJournal.Location = new System.Drawing.Point(669, 587);
 			this.grpDeleteJournal.Name = "grpDeleteJournal";
 			this.grpDeleteJournal.Size = new System.Drawing.Size(290, 107);
 			this.grpDeleteJournal.TabIndex = 26;
@@ -1246,11 +1251,56 @@ namespace myJournal
 			this.lblJournalToDelete.TabIndex = 0;
 			this.lblJournalToDelete.Text = "Journal";
 			// 
+			// grpConfirmDeleteEntry
+			// 
+			this.grpConfirmDeleteEntry.Controls.Add(this.lblMessage_ConfirmEntryDelete);
+			this.grpConfirmDeleteEntry.Controls.Add(this.lblBack_ConfirmEntryDelete);
+			this.grpConfirmDeleteEntry.Controls.Add(this.btnOK_ConfirmEntryDelete);
+			this.grpConfirmDeleteEntry.Location = new System.Drawing.Point(669, 719);
+			this.grpConfirmDeleteEntry.Name = "grpConfirmDeleteEntry";
+			this.grpConfirmDeleteEntry.Size = new System.Drawing.Size(290, 107);
+			this.grpConfirmDeleteEntry.TabIndex = 27;
+			this.grpConfirmDeleteEntry.TabStop = false;
+			// 
+			// lblMessage_ConfirmEntryDelete
+			// 
+			this.lblMessage_ConfirmEntryDelete.Location = new System.Drawing.Point(41, 27);
+			this.lblMessage_ConfirmEntryDelete.Name = "lblMessage_ConfirmEntryDelete";
+			this.lblMessage_ConfirmEntryDelete.Size = new System.Drawing.Size(211, 39);
+			this.lblMessage_ConfirmEntryDelete.TabIndex = 26;
+			this.lblMessage_ConfirmEntryDelete.Text = " will be deleted. Press Delete to continue.";
+			this.lblMessage_ConfirmEntryDelete.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// lblBack_ConfirmEntryDelete
+			// 
+			this.lblBack_ConfirmEntryDelete.AutoSize = true;
+			this.lblBack_ConfirmEntryDelete.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.lblBack_ConfirmEntryDelete.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
+			this.lblBack_ConfirmEntryDelete.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.lblBack_ConfirmEntryDelete.Location = new System.Drawing.Point(6, 12);
+			this.lblBack_ConfirmEntryDelete.Name = "lblBack_ConfirmEntryDelete";
+			this.lblBack_ConfirmEntryDelete.Size = new System.Drawing.Size(33, 15);
+			this.lblBack_ConfirmEntryDelete.TabIndex = 25;
+			this.lblBack_ConfirmEntryDelete.Text = "back";
+			this.lblBack_ConfirmEntryDelete.Click += new System.EventHandler(this.lblHome_Click);
+			// 
+			// btnOK_ConfirmEntryDelete
+			// 
+			this.btnOK_ConfirmEntryDelete.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+			this.btnOK_ConfirmEntryDelete.Location = new System.Drawing.Point(107, 72);
+			this.btnOK_ConfirmEntryDelete.Name = "btnOK_ConfirmEntryDelete";
+			this.btnOK_ConfirmEntryDelete.Size = new System.Drawing.Size(75, 23);
+			this.btnOK_ConfirmEntryDelete.TabIndex = 2;
+			this.btnOK_ConfirmEntryDelete.Text = "Delete";
+			this.btnOK_ConfirmEntryDelete.UseVisualStyleBackColor = false;
+			this.btnOK_ConfirmEntryDelete.Click += new System.EventHandler(this.btnConfirmEntryDelete_Click);
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(1089, 1061);
+			this.ClientSize = new System.Drawing.Size(1109, 1061);
+			this.Controls.Add(this.grpConfirmDeleteEntry);
 			this.Controls.Add(this.grpDeleteJournal);
 			this.Controls.Add(this.grpNewGroup);
 			this.Controls.Add(this.grpNewJournal);
@@ -1287,6 +1337,8 @@ namespace myJournal
 			this.grpEditTags_Add.PerformLayout();
 			this.grpDeleteJournal.ResumeLayout(false);
 			this.grpDeleteJournal.PerformLayout();
+			this.grpConfirmDeleteEntry.ResumeLayout(false);
+			this.grpConfirmDeleteEntry.PerformLayout();
 			this.ResumeLayout(false);
 
         }
@@ -1388,6 +1440,10 @@ namespace myJournal
 		private System.Windows.Forms.Label lblRemoveTag;
 		private System.Windows.Forms.Label lblEditTag;
 		private System.Windows.Forms.Label label19;
+		private System.Windows.Forms.GroupBox grpConfirmDeleteEntry;
+		private System.Windows.Forms.Label lblMessage_ConfirmEntryDelete;
+		private System.Windows.Forms.Label lblBack_ConfirmEntryDelete;
+		private System.Windows.Forms.Button btnOK_ConfirmEntryDelete;
 	}
 }
 
