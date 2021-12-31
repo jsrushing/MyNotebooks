@@ -61,7 +61,9 @@ namespace myJournal
                 {
                     BinaryFormatter formatter = new BinaryFormatter();
                     jRtrn = (Journal)formatter.Deserialize(stream);
-                }
+					jRtrn.FileName = AppDomain.CurrentDomain.BaseDirectory + this.root + journalToOpen;
+
+				}
             }
             catch(Exception) { }
             return jRtrn;

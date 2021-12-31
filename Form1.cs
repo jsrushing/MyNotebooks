@@ -147,9 +147,7 @@ namespace myJournal
 
                     if (radOriginal_Append.Checked)
 					{
-						sTitle = txtNewEntryTitle.Text;	// txtNewEntryTitle.Text == lblEntryTitle_Hidden.Text ? 
-							//txtNewEntryTitle.Text : 
-							//txtNewEntryTitle.Text = txtNewEntryTitle.Text; 
+						sTitle = txtNewEntryTitle.Text;
 					}
 					else
 					{
@@ -257,7 +255,7 @@ namespace myJournal
             rtbSelectedEntry_Main.Text = string.Empty;
 			try
 			{
-				currentJournal = new Journal(ddlJournals.Text).OpenJournal(); 
+				currentJournal = new Journal(ddlJournals.Text).OpenJournal(ddlJournals.Text); 
 
 				if(currentJournal != null)
 				{
@@ -280,7 +278,7 @@ namespace myJournal
         {
             if (!bGroupBeingEdited)
             {
-                using (StreamWriter sw = File.AppendText(AppDomain.CurrentDomain.BaseDirectory + "/settings/groups"))
+                using (StreamWriter sw = File.AppendText(rootPath + "/settings/groups"))
                 {
                     sw.WriteLine(txtTags_TagName_NewTag.Text);
                 }
@@ -325,7 +323,7 @@ namespace myJournal
 			if (clb != null) { clb.Items.Clear(); }
 			if(lb != null) { lb.Items.Clear(); }
 
-            foreach (string group in File.ReadAllLines(AppDomain.CurrentDomain.BaseDirectory + "/settings/groups"))
+            foreach (string group in File.ReadAllLines(rootPath + "/settings/groups"))
             {
 				if(lb != null)
 				{
@@ -343,7 +341,7 @@ namespace myJournal
 			string[] tags = clb == null ? lb.Items.OfType<string>().ToArray() : clb.Items.OfType<string>().ToArray();
             StringBuilder sb = new StringBuilder();
             foreach (string s in tags) { sb.AppendLine(s); }
-            File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "/settings/groups", sb.ToString());
+            File.WriteAllText(rootPath + "/settings/groups", sb.ToString());
         }
         #endregion
 
@@ -567,20 +565,18 @@ namespace myJournal
         {
             ddlJournals.Items.Clear();
 
-            string sDir = AppDomain.CurrentDomain.BaseDirectory;
-
-            if (!Directory.Exists(sDir + "/journals/"))
+            if (!Directory.Exists(rootPath + "/journals/"))
             {
-                Directory.CreateDirectory(sDir + "/journals/");
-                Directory.CreateDirectory(sDir + "/settings/");
-                File.Create(sDir + "/settings/settings");
-                File.Create(sDir + "/settings/groups");
+                Directory.CreateDirectory(rootPath + "/journals/");
+                Directory.CreateDirectory(rootPath + "/settings/");
+                File.Create(rootPath + "/settings/settings");
+                File.Create(rootPath + "/settings/groups");
             }
             else
             {
-                foreach(string s in Directory.GetFiles(sDir + "/journals/"))
+                foreach(string s in Directory.GetFiles(rootPath + "/journals/"))
                 {
-                    ddlJournals.Items.Add(s.Replace(sDir + "/journals/", ""));
+                    ddlJournals.Items.Add(s.Replace(rootPath + "/journals/", ""));
                 }
             }
 			ddlJournals.Enabled = ddlJournals.Items.Count > 0;
