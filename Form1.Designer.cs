@@ -129,6 +129,7 @@ namespace myJournal
 			this.lblMessage_ConfirmEntryDelete = new System.Windows.Forms.Label();
 			this.lblBack_ConfirmEntryDelete = new System.Windows.Forms.Label();
 			this.btnOK_ConfirmEntryDelete = new System.Windows.Forms.Button();
+			this.lblBack_EditTag = new System.Windows.Forms.Label();
 			this.grpCreateEntry.SuspendLayout();
 			this.grpAppendDeleteOriginal.SuspendLayout();
 			this.mnuGroups.SuspendLayout();
@@ -1034,12 +1035,15 @@ namespace myJournal
 			// 
 			// grpEditTags_NewName
 			// 
+			this.grpEditTags_NewName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.grpEditTags_NewName.Controls.Add(this.lblBack_EditTag);
 			this.grpEditTags_NewName.Controls.Add(this.txtTag_TagName_Edited);
 			this.grpEditTags_NewName.Controls.Add(this.label7);
 			this.grpEditTags_NewName.Controls.Add(this.btnOK_TagName_Edited);
 			this.grpEditTags_NewName.Location = new System.Drawing.Point(6, 258);
 			this.grpEditTags_NewName.Name = "grpEditTags_NewName";
-			this.grpEditTags_NewName.Size = new System.Drawing.Size(275, 100);
+			this.grpEditTags_NewName.Size = new System.Drawing.Size(275, 131);
 			this.grpEditTags_NewName.TabIndex = 28;
 			this.grpEditTags_NewName.TabStop = false;
 			this.grpEditTags_NewName.Text = "Edit Tag";
@@ -1049,7 +1053,7 @@ namespace myJournal
 			// 
 			this.txtTag_TagName_Edited.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtTag_TagName_Edited.Location = new System.Drawing.Point(67, 22);
+			this.txtTag_TagName_Edited.Location = new System.Drawing.Point(67, 38);
 			this.txtTag_TagName_Edited.Name = "txtTag_TagName_Edited";
 			this.txtTag_TagName_Edited.Size = new System.Drawing.Size(121, 23);
 			this.txtTag_TagName_Edited.TabIndex = 4;
@@ -1057,7 +1061,7 @@ namespace myJournal
 			// label7
 			// 
 			this.label7.AutoSize = true;
-			this.label7.Location = new System.Drawing.Point(3, 25);
+			this.label7.Location = new System.Drawing.Point(3, 41);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(63, 15);
 			this.label7.TabIndex = 3;
@@ -1065,8 +1069,9 @@ namespace myJournal
 			// 
 			// btnOK_TagName_Edited
 			// 
+			this.btnOK_TagName_Edited.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnOK_TagName_Edited.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-			this.btnOK_TagName_Edited.Location = new System.Drawing.Point(194, 22);
+			this.btnOK_TagName_Edited.Location = new System.Drawing.Point(194, 38);
 			this.btnOK_TagName_Edited.Name = "btnOK_TagName_Edited";
 			this.btnOK_TagName_Edited.Size = new System.Drawing.Size(75, 23);
 			this.btnOK_TagName_Edited.TabIndex = 5;
@@ -1076,6 +1081,8 @@ namespace myJournal
 			// 
 			// grpEditTags_EditRemove
 			// 
+			this.grpEditTags_EditRemove.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.grpEditTags_EditRemove.Controls.Add(this.lblRemoveTag);
 			this.grpEditTags_EditRemove.Controls.Add(this.lblEditTag);
 			this.grpEditTags_EditRemove.Controls.Add(this.label19);
@@ -1124,6 +1131,8 @@ namespace myJournal
 			// 
 			// lstTagsForEdit
 			// 
+			this.lstTagsForEdit.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.lstTagsForEdit.FormattingEnabled = true;
 			this.lstTagsForEdit.ItemHeight = 15;
 			this.lstTagsForEdit.Location = new System.Drawing.Point(6, 36);
@@ -1133,6 +1142,8 @@ namespace myJournal
 			// 
 			// grpEditTags_Add
 			// 
+			this.grpEditTags_Add.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.grpEditTags_Add.Controls.Add(this.txtTags_TagName_NewTag);
 			this.grpEditTags_Add.Controls.Add(this.label16);
 			this.grpEditTags_Add.Controls.Add(this.btnOK_TagName_New);
@@ -1163,6 +1174,7 @@ namespace myJournal
 			// 
 			// btnOK_TagName_New
 			// 
+			this.btnOK_TagName_New.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnOK_TagName_New.BackColor = System.Drawing.SystemColors.ButtonHighlight;
 			this.btnOK_TagName_New.Location = new System.Drawing.Point(197, 28);
 			this.btnOK_TagName_New.Name = "btnOK_TagName_New";
@@ -1294,6 +1306,19 @@ namespace myJournal
 			this.btnOK_ConfirmEntryDelete.Text = "Delete";
 			this.btnOK_ConfirmEntryDelete.UseVisualStyleBackColor = false;
 			this.btnOK_ConfirmEntryDelete.Click += new System.EventHandler(this.btnConfirmEntryDelete_Click);
+			// 
+			// lblBack_EditTag
+			// 
+			this.lblBack_EditTag.AutoSize = true;
+			this.lblBack_EditTag.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.lblBack_EditTag.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
+			this.lblBack_EditTag.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.lblBack_EditTag.Location = new System.Drawing.Point(6, 19);
+			this.lblBack_EditTag.Name = "lblBack_EditTag";
+			this.lblBack_EditTag.Size = new System.Drawing.Size(33, 15);
+			this.lblBack_EditTag.TabIndex = 29;
+			this.lblBack_EditTag.Text = "back";
+			this.lblBack_EditTag.Click += new System.EventHandler(this.lblHome_Click);
 			// 
 			// Form1
 			// 
@@ -1444,6 +1469,7 @@ namespace myJournal
 		private System.Windows.Forms.Label lblMessage_ConfirmEntryDelete;
 		private System.Windows.Forms.Label lblBack_ConfirmEntryDelete;
 		private System.Windows.Forms.Button btnOK_ConfirmEntryDelete;
+		private System.Windows.Forms.Label lblBack_EditTag;
 	}
 }
 

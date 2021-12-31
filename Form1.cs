@@ -98,6 +98,7 @@ namespace myJournal
                 case "grpNewGroup":
                     this.Text = "Create New Group";
 					Tags_PopulateTagsList(null, lstTagsForEdit);
+					grpEditTags_NewName.Visible = false;
 					txtBxToFocus = this.txtTags_TagName_NewTag;
                     break;
                 case "grpDeleteJournal":
@@ -374,10 +375,15 @@ namespace myJournal
 
 		private void lblEditTag_Click(object sender, EventArgs e)
 		{
-			grpEditTags_NewName.Location = grpEditTags_Add.Location;
-			grpEditTags_NewName.Height = grpEditTags_EditRemove.Top + grpEditTags_EditRemove.Height;
-			txtTag_TagName_Edited.Text = lstTagsForEdit.SelectedItem.ToString();
-			grpEditTags_NewName.Visible = true;
+			if(lstTagsForEdit.SelectedIndex > -1)
+			{
+				grpEditTags_NewName.Location = grpEditTags_Add.Location;
+				grpEditTags_NewName.Height = grpEditTags_EditRemove.Top + grpEditTags_EditRemove.Height;
+				grpEditTags_NewName.Width = grpEditTags_Add.Width;
+				backTarget = grpNewGroup;
+				txtTag_TagName_Edited.Text = lstTagsForEdit.SelectedItem.ToString();
+				grpEditTags_NewName.Visible = true;
+			}
 		}
 
         /// <summary>
@@ -513,9 +519,13 @@ namespace myJournal
 		private void lblRemoveTag_Click(object sender, EventArgs e)
 		{
 			int a = lstTagsForEdit.SelectedIndex;
-			lstTagsForEdit.Items.RemoveAt(a);
-			grpEditTags_NewName.Visible = false;
-			Tags_Save(null, lstTagsForEdit);
+
+			if (a > -1)
+			{
+				lstTagsForEdit.Items.RemoveAt(a);
+				grpEditTags_NewName.Visible = false;
+				Tags_Save(null, lstTagsForEdit);
+			}
 		}
 
 		private void lblSettings_Show_Click(object sender, EventArgs e)
