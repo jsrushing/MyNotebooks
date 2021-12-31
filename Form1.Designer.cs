@@ -35,7 +35,7 @@ namespace myJournal
 			this.lblCreateEntry = new System.Windows.Forms.Label();
 			this.lblFindEntry = new System.Windows.Forms.Label();
 			this.grpCreateEntry = new System.Windows.Forms.GroupBox();
-			this.lblManageTags2 = new System.Windows.Forms.Label();
+			this.lblTagManager2 = new System.Windows.Forms.Label();
 			this.lblEntryText_Hidden = new System.Windows.Forms.Label();
 			this.lblEntryTitle_Hidden = new System.Windows.Forms.Label();
 			this.grpAppendDeleteOriginal = new System.Windows.Forms.GroupBox();
@@ -106,6 +106,7 @@ namespace myJournal
 			this.label13 = new System.Windows.Forms.Label();
 			this.grpNewGroup = new System.Windows.Forms.GroupBox();
 			this.grpEditTags_NewName = new System.Windows.Forms.GroupBox();
+			this.lblBack_EditTag = new System.Windows.Forms.Label();
 			this.txtTag_TagName_Edited = new System.Windows.Forms.TextBox();
 			this.label7 = new System.Windows.Forms.Label();
 			this.btnOK_TagName_Edited = new System.Windows.Forms.Button();
@@ -129,7 +130,6 @@ namespace myJournal
 			this.lblMessage_ConfirmEntryDelete = new System.Windows.Forms.Label();
 			this.lblBack_ConfirmEntryDelete = new System.Windows.Forms.Label();
 			this.btnOK_ConfirmEntryDelete = new System.Windows.Forms.Button();
-			this.lblBack_EditTag = new System.Windows.Forms.Label();
 			this.grpCreateEntry.SuspendLayout();
 			this.grpAppendDeleteOriginal.SuspendLayout();
 			this.mnuGroups.SuspendLayout();
@@ -164,6 +164,7 @@ namespace myJournal
 			this.ddlJournals.Size = new System.Drawing.Size(229, 23);
 			this.ddlJournals.TabIndex = 1;
 			this.ddlJournals.SelectedIndexChanged += new System.EventHandler(this.ddlJournals_SelectedIndexChanged);
+			this.ddlJournals.Click += new System.EventHandler(this.ddlJournals_Click);
 			// 
 			// lblCreateEntry
 			// 
@@ -200,7 +201,7 @@ namespace myJournal
 			// grpCreateEntry
 			// 
 			this.grpCreateEntry.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.grpCreateEntry.Controls.Add(this.lblManageTags2);
+			this.grpCreateEntry.Controls.Add(this.lblTagManager2);
 			this.grpCreateEntry.Controls.Add(this.lblEntryText_Hidden);
 			this.grpCreateEntry.Controls.Add(this.lblEntryTitle_Hidden);
 			this.grpCreateEntry.Controls.Add(this.grpAppendDeleteOriginal);
@@ -219,19 +220,19 @@ namespace myJournal
 			this.grpCreateEntry.TabIndex = 4;
 			this.grpCreateEntry.TabStop = false;
 			// 
-			// lblManageTags2
+			// lblTagManager2
 			// 
-			this.lblManageTags2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.lblManageTags2.AutoSize = true;
-			this.lblManageTags2.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.lblManageTags2.Font = new System.Drawing.Font("Segoe UI Light", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.lblManageTags2.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblManageTags2.Location = new System.Drawing.Point(37, 400);
-			this.lblManageTags2.Name = "lblManageTags2";
-			this.lblManageTags2.Size = new System.Drawing.Size(48, 15);
-			this.lblManageTags2.TabIndex = 36;
-			this.lblManageTags2.Text = "Manage";
-			this.lblManageTags2.Click += new System.EventHandler(this.lblTagManager_Click);
+			this.lblTagManager2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.lblTagManager2.AutoSize = true;
+			this.lblTagManager2.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.lblTagManager2.Font = new System.Drawing.Font("Segoe UI Light", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.lblTagManager2.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.lblTagManager2.Location = new System.Drawing.Point(37, 400);
+			this.lblTagManager2.Name = "lblTagManager2";
+			this.lblTagManager2.Size = new System.Drawing.Size(48, 15);
+			this.lblTagManager2.TabIndex = 36;
+			this.lblTagManager2.Text = "Manage";
+			this.lblTagManager2.Click += new System.EventHandler(this.lblTagManager_Click);
 			// 
 			// lblEntryText_Hidden
 			// 
@@ -1049,6 +1050,19 @@ namespace myJournal
 			this.grpEditTags_NewName.Text = "Edit Tag";
 			this.grpEditTags_NewName.Visible = false;
 			// 
+			// lblBack_EditTag
+			// 
+			this.lblBack_EditTag.AutoSize = true;
+			this.lblBack_EditTag.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.lblBack_EditTag.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
+			this.lblBack_EditTag.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.lblBack_EditTag.Location = new System.Drawing.Point(6, 19);
+			this.lblBack_EditTag.Name = "lblBack_EditTag";
+			this.lblBack_EditTag.Size = new System.Drawing.Size(33, 15);
+			this.lblBack_EditTag.TabIndex = 29;
+			this.lblBack_EditTag.Text = "back";
+			this.lblBack_EditTag.Click += new System.EventHandler(this.lblHome_Click);
+			// 
 			// txtTag_TagName_Edited
 			// 
 			this.txtTag_TagName_Edited.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -1307,19 +1321,6 @@ namespace myJournal
 			this.btnOK_ConfirmEntryDelete.UseVisualStyleBackColor = false;
 			this.btnOK_ConfirmEntryDelete.Click += new System.EventHandler(this.btnConfirmEntryDelete_Click);
 			// 
-			// lblBack_EditTag
-			// 
-			this.lblBack_EditTag.AutoSize = true;
-			this.lblBack_EditTag.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.lblBack_EditTag.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
-			this.lblBack_EditTag.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblBack_EditTag.Location = new System.Drawing.Point(6, 19);
-			this.lblBack_EditTag.Name = "lblBack_EditTag";
-			this.lblBack_EditTag.Size = new System.Drawing.Size(33, 15);
-			this.lblBack_EditTag.TabIndex = 29;
-			this.lblBack_EditTag.Text = "back";
-			this.lblBack_EditTag.Click += new System.EventHandler(this.lblHome_Click);
-			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -1453,7 +1454,7 @@ namespace myJournal
 		private System.Windows.Forms.Label lblCloseMenu;
 		private System.Windows.Forms.Label lblEntryText_Hidden;
 		private System.Windows.Forms.Label lblEntryTitle_Hidden;
-		private System.Windows.Forms.Label lblManageTags2;
+		private System.Windows.Forms.Label lblTagManager2;
 		private System.Windows.Forms.Label lblMessage_BadJournalName;
 		private System.Windows.Forms.GroupBox grpEditTags_EditRemove;
 		private System.Windows.Forms.ListBox lstTagsForEdit;

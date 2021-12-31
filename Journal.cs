@@ -82,8 +82,6 @@ namespace myJournal
 
         public void SaveToDisk()
         {
-            //string tmpName = this.FileName + "_" + DateTime.Now.ToString("mmddyy_HHMMss");
-
             try { File.Delete(this.FileName); } catch (Exception) { }
 
             using (Stream stream = File.Open(this.FileName, FileMode.Create))

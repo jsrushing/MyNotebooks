@@ -14,7 +14,7 @@ namespace myJournal
     {
         Point ActiveBoxLocation = new Point(12, 0);
         Size ActiveBoxSize = (Size)new Point(290, 545);
-        Size MainFormSize = (Size)new Point(331, 592);
+        Size MainFormSize = (Size)new Point(450, 592);
         GroupBox DisplayedGroupBox;
         Journal currentJournal = null;
         bool bGroupBeingEdited = false;
@@ -77,8 +77,11 @@ namespace myJournal
                 case "grpCreateEntry":
 					btnAddEntry.Text = "Save Entry";
                     this.Text = "Create Entry";
-                    txtNewEntryTitle.Text = String.Empty;
-                    rtbNewEntry.Clear();
+					if(backTarget == null)
+					{
+						txtNewEntryTitle.Text = String.Empty;
+						rtbNewEntry.Clear();
+					}
                     grpAppendDeleteOriginal.Visible = false;
                     txtBxToFocus = this.txtNewEntryTitle;
                     if(lstTags.Items.Count == 0) { Tags_PopulateTagsList(lstTags); }
@@ -111,11 +114,11 @@ namespace myJournal
             }
 
             pnlMenu.Visible = false;
-            box.Location = ActiveBoxLocation;
-            //box.Size = new Size(this.Width - 20, this.Height - 20);
+			box.Location = ActiveBoxLocation;
             box.Visible = true;
             if (txtBxToFocus != null) txtBxToFocus.Focus();
             DisplayedGroupBox = box;
+			backTarget = null;
             this.Height += 1;
         }
 
@@ -249,7 +252,8 @@ namespace myJournal
 		/// <param name="e"></param>
 		private void ddlJournals_SelectedIndexChanged(object sender, EventArgs e)
         {
-            lstEntries.Items.Clear();
+			pnlMenu.Visible = false;
+			lstEntries.Items.Clear();
             rtbSelectedEntry_Main.Text = string.Empty;
 			try
 			{
@@ -270,8 +274,7 @@ namespace myJournal
         }
 
         #region Tags
-        private void Tags_btnAddTag_Click(object sender, EventArgs e)
-        { ActivateGroupBox(grpNewGroup); }
+        private void Tags_btnAddTag_Click(object sender, EventArgs e) { ActivateGroupBox(grpNewGroup); }
 
         private void Tags_btnOK_NewTag_Click(object sender, EventArgs e)
         {
@@ -292,6 +295,7 @@ namespace myJournal
 
             txtTags_TagName_NewTag.Text = string.Empty;
             Tags_PopulateTagsList(lstTags);
+			backTarget = new GroupBox();
             ActivateGroupBox(grpCreateEntry);
             bGroupBeingEdited = false;
         }
@@ -414,7 +418,7 @@ namespace myJournal
             lblEntryTitle_Hidden.Text = currentEntry.ClearTitle();
             string newLine = System.Environment.NewLine;
             rtbNewEntry.Text = newLine + newLine + 
-                " > Original Date: " + currentEntry.Date.ToString("dd/M/yy H:m:s") + newLine +
+                " > Original Date: " + currentEntry.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + newLine +
                 " > Title: " + currentEntry.ClearTitle() + newLine + 
                 " > Entry:" + newLine + currentEntry.ClearText();
             rtbNewEntry.Focus();
@@ -509,7 +513,6 @@ namespace myJournal
 		{
 			GroupBox gb = backTarget == null ? grpOpenScreen : backTarget;
 			ActivateGroupBox(gb);
-			backTarget = null;
 		}
 
 		private void lblJournal_Create_Click(object sender, EventArgs e) { ActivateGroupBox(grpNewJournal); }
@@ -525,7 +528,9 @@ namespace myJournal
 				lstTagsForEdit.Items.RemoveAt(a);
 				grpEditTags_NewName.Visible = false;
 				Tags_Save(null, lstTagsForEdit);
+				Tags_PopulateTagsList(lstTags);
 			}
+
 		}
 
 		private void lblSettings_Show_Click(object sender, EventArgs e)
@@ -533,7 +538,12 @@ namespace myJournal
 
 		}
 
-		private void lblTagManager_Click(object sender, EventArgs e) { ActivateGroupBox(grpNewGroup); }
+		private void lblTagManager_Click(object sender, EventArgs e) 
+		{
+			Label label = (Label)sender;
+			ActivateGroupBox(grpNewGroup); 
+			backTarget = label.Name.EndsWith("2") ? grpCreateEntry : null;
+		}
 		#endregion
 
 		#region Menus - Toggle display on MouseEnter/Leave
@@ -590,20 +600,25 @@ namespace myJournal
             List<int> targets = new List<int>();
             lb.SelectedIndexChanged -= new System.EventHandler(this.ListOfEntries_SelectedIndexChanged);
             ListBox.SelectedIndexCollection c = lb.SelectedIndices;
+			pnlMenu.Visible = false;
 
-            if (c.Count > 1)
-            {
-                for (int i = 0; i < c.Count - 1; i++)
-                {
-                    if (c[i] == c[i + 1] - 1)
-                    {
-                        targets.Add(c[i]);
-                        targets.Add(c[i + 1]);
-                        targets.Add(c[i + 2]);
-                        break;
-                    }
-                }
-            }
+			try
+			{
+				if (c.Count > 1)
+				{
+					for (int i = 0; i < c.Count - 1; i++)
+					{
+						if (c[i] == c[i + 1] - 1)
+						{
+							targets.Add(c[i]);
+							targets.Add(c[i + 1]);
+							targets.Add(c[i + 2]);
+							break;
+						}
+					}
+				}
+			}
+			catch (Exception) { }
 
             if (targets.Count == 3)
             {
@@ -668,7 +683,7 @@ namespace myJournal
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void rtbSelectedEntry_Main_Click(object sender, EventArgs e) { ddlJournals.Focus(); }
+        private void rtbSelectedEntry_Main_Click(object sender, EventArgs e) { pnlMenu.Visible = false; ddlJournals.Focus(); }
 
         /// <summary>
         /// Show the dropdown of Groups when clicked.
@@ -711,5 +726,6 @@ namespace myJournal
             dtFindDate_To.Enabled = dtFindDate_From.Enabled;
         }
 
+		private void ddlJournals_Click(object sender, EventArgs e) { pnlMenu.Visible = false; }
 	}
 }
