@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Configuration;
 using System.Linq;
 using System.Drawing.Printing;
+using System.Runtime.InteropServices;
 
 namespace myJournal
 {
@@ -24,17 +25,26 @@ namespace myJournal
         Font InactiveMenuFont = null;
         Font ActiveMenuFont = null;
 		GroupBox backTarget = null;
-		PrintDocument document = new PrintDocument();
-		PrintDialog dialog = new PrintDialog();
+		PrintDocument PrintDocument = new PrintDocument();
+		PrintDialog PrintDialog = new PrintDialog();
+
+		[DllImport("User32.dll")]
+		static extern Int64 SendMessage (IntPtr hwnd, Int64 wMsg, bool wParam, Object lParam);
+		const Int64 EM_FMTLINES = 1;	// &HC8;
 
 		public Form1()
         { 
 			InitializeComponent(); 
-			document.PrintPage += new PrintPageEventHandler(PrintPage); 
+			PrintDocument.PrintPage += new PrintPageEventHandler(PrintPage); 
 		}
 
         private void Form1_Load(object sender, EventArgs e)
         {
+			//Int64 val = Convert.ToInt64("FC8");
+			//byte[] buffer = { &HA9, &HC8, &HE6, &HC4 };
+
+
+
 			int x = Convert.ToInt16(ConfigurationManager.AppSettings["Left_ActiveBox"]);
 			int y = Convert.ToInt16(ConfigurationManager.AppSettings["Top_ActiveBox"]);
 			ActiveBoxLocation = new Point(x,y);
@@ -703,7 +713,30 @@ namespace myJournal
 
 		private void PrintPage(object sender, PrintPageEventArgs e)
 		{
-			e.Graphics.DrawString(rtbSelectedEntry_Main.Text, rtbSelectedEntry_Main.Font, Brushes.Black, 20, 20);
+			int linesPrinted = 0;
+			Brush brush = new SolidBrush(rtbSelectedEntry_Main.ForeColor);
+			string[] lines = rtbSelectedEntry_Main.Text.Split('\n');
+			int x = e.MarginBounds.Left;
+			int y = e.MarginBounds.Top;
+
+			foreach(string line in lines)
+			{
+
+			}
+
+			while (linesPrinted < lines.Length)
+			{
+				e.Graphics.DrawString(lines[linesPrinted++], rtbSelectedEntry_Main.Font, brush, x, y);
+				y += 15;
+				if(y >= e.MarginBounds.Bottom)
+				{
+					e.HasMorePages = true;
+					return;
+				}
+				linesPrinted = 0;
+				e.HasMorePages = false;
+			}
+			//e.Graphics.DrawString(rtbSelectedEntry_Main.Text.Split('\n'), rtbSelectedEntry_Main.Font, Brushes.Black, 20, 20);
 		}
 
         /// <summary>
@@ -775,10 +808,10 @@ namespace myJournal
 		/// <param name="e"></param>
 		private void lblPrint_Click(object sender, EventArgs e)
 		{
-			dialog.Document = document;
-			if(dialog.ShowDialog() == DialogResult.OK)
+			PrintDialog.Document = PrintDocument;
+			if(PrintDialog.ShowDialog() == DialogResult.OK)
 			{
-				document.Print();
+				PrintDocument.Print();
 			}
 		}
 	}
