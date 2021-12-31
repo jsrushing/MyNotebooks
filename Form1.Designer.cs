@@ -476,7 +476,7 @@ namespace myJournal
 			this.lblPrint.Size = new System.Drawing.Size(34, 15);
 			this.lblPrint.TabIndex = 29;
 			this.lblPrint.Text = "print";
-			this.lblPrint.Click += new System.EventHandler(this.lblPrint_Click_1);
+			this.lblPrint.Click += new System.EventHandler(this.lblPrint_Click);
 			// 
 			// pnlMenu
 			// 

@@ -11,7 +11,7 @@ namespace myJournal
     [Serializable]
     public class Journal
     {
-        string Name = string.Empty;
+        public string Name = string.Empty;
         string FileName = string.Empty;
         StringBuilder JournalText = new StringBuilder();
         public List<JournalEntry> Entries = new List<JournalEntry>();
@@ -23,7 +23,7 @@ namespace myJournal
             {
                 this.Name = _name;
                 this.FileName = AppDomain.CurrentDomain.BaseDirectory + this.root + this.Name;
-            }
+			}
         }
 
         public void AddEntry(JournalEntry entryToAdd) { Entries.Add(entryToAdd); }
@@ -41,10 +41,10 @@ namespace myJournal
 		public string GetAllEntries()
 		{
 			StringBuilder sb = new StringBuilder();
-
+			sb.AppendLine("Journal: " + this.Name);
 			foreach(JournalEntry je in this.Entries)
 			{
-				sb.Append(String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"], je.Date, je.ClearTitle(), je.ClearText()));
+				sb.Append(String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Editing"].Replace("Original ", ""), je.Date, je.ClearTitle(), je.ClearText()));
 			}
 			return sb.ToString();
 		}
@@ -73,7 +73,6 @@ namespace myJournal
             catch(Exception) { }
             return jRtrn;
         }
-
 
         public void ReplaceEntry(JournalEntry jeToReplace, JournalEntry jeToInsert)
 		{

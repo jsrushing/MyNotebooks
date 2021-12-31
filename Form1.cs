@@ -12,10 +12,10 @@ using System.Drawing.Printing;
 namespace myJournal
 {
 	public partial class Form1 : Form
-    {
-        Point ActiveBoxLocation = new Point(12, 0);
-        Size ActiveBoxSize = (Size)new Point(290, 545);
-        Size MainFormSize = (Size)new Point(450, 592);
+	{
+		Point ActiveBoxLocation = new Point(0,0);
+		Size ActiveBoxSize = new Size(0, 0);
+		Size MainFormSize = new Size(0, 0);
         GroupBox DisplayedGroupBox;
         Journal currentJournal = null;
         bool bGroupBeingEdited = false;
@@ -24,13 +24,27 @@ namespace myJournal
         Font InactiveMenuFont = null;
         Font ActiveMenuFont = null;
 		GroupBox backTarget = null;
+		PrintDocument document = new PrintDocument();
+		PrintDialog dialog = new PrintDialog();
 
-        public Form1()
-        { InitializeComponent(); }
+		public Form1()
+        { 
+			InitializeComponent(); 
+			document.PrintPage += new PrintPageEventHandler(PrintPage); 
+		}
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            grpOpenScreen.Location = ActiveBoxLocation;
+			int x = Convert.ToInt16(ConfigurationManager.AppSettings["Left_ActiveBox"]);
+			int y = Convert.ToInt16(ConfigurationManager.AppSettings["Top_ActiveBox"]);
+			ActiveBoxLocation = new Point(x,y);
+			x = Convert.ToInt16(ConfigurationManager.AppSettings["Width_ActiveBox"]);
+			y = Convert.ToInt16(ConfigurationManager.AppSettings["Height_ActiveBox"]);
+			ActiveBoxSize = new Size(x,y);
+			x = Convert.ToInt16(ConfigurationManager.AppSettings["Width_MainForm"]);
+			y = Convert.ToInt16(ConfigurationManager.AppSettings["Height_MainForm"]);
+			MainFormSize = new Size(x, y);
+			grpOpenScreen.Location = ActiveBoxLocation;
             grpOpenScreen.Size = ActiveBoxSize;
             LoadJournals();
 			lblJournal_Delete.Enabled = ddlJournals.Enabled;
@@ -642,13 +656,22 @@ namespace myJournal
             lb.SelectedIndices.Add(ctr);
             lb.SelectedIndices.Add(ctr + 1);
             lb.SelectedIndices.Add(ctr + 2);                        //
+
             string sTitleAndDate = lb.Items[ctr].ToString();        // Use the title and date of the entry to create a JournalEntry object whose .ClearText will populate the display ...
             string sTitle = sTitleAndDate.Substring(0, sTitleAndDate.IndexOf('(') - 1);
             string sDate = sTitleAndDate.Substring(sTitleAndDate.IndexOf('(') + 1, sTitleAndDate.Length - 2 - sTitleAndDate.IndexOf('('));
-            currentEntry = currentJournal.GetEntry(sTitle, sDate);  
-            rtb.Text = currentEntry != null ? currentEntry.ClearText() : String.Empty;                    // (note: This depends too much on the title/date formatting. Must standardize that.
-            lblEditEntry.Enabled = true;
-			lblPrint.Enabled = rtb.Text.Length > 0;
+            
+			currentEntry = currentJournal.GetEntry(sTitle, sDate);  
+
+			if(currentEntry != null)
+			{
+				StringBuilder sb = new StringBuilder();
+				rtb.Text = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
+					, currentJournal.Name, currentEntry.ClearTitle(), currentEntry.Date, currentEntry.ClearTags(), currentEntry.ClearText());
+				lblEditEntry.Enabled = true;
+				lblPrint.Enabled = rtb.Text.Length > 0;
+			}
+
 			lb.SelectedIndexChanged += new System.EventHandler(this.ListOfEntries_SelectedIndexChanged);
         }
 
@@ -677,6 +700,11 @@ namespace myJournal
                 lstBoxToPopulate.Items.Add("---------------------");
             }
         }
+
+		private void PrintPage(object sender, PrintPageEventArgs e)
+		{
+			e.Graphics.DrawString(rtbSelectedEntry_Main.Text, rtbSelectedEntry_Main.Font, Brushes.Black, 20, 20);
+		}
 
         /// <summary>
         /// Disallow focus on rtb used for displaying entry text.
@@ -726,8 +754,13 @@ namespace myJournal
             dtFindDate_To.Enabled = dtFindDate_From.Enabled;
         }
 
-		private void ddlJournals_Click(object sender, EventArgs e) { pnlMenu.Visible = false; }
+		private void ddlJournals_Click(object sender, EventArgs e) { lblPrint.Enabled = false; pnlMenu.Visible = false; }
 
+		/// <summary>
+		/// Populate rtbSelectedEntry with entire journal contents.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void lblViewJournal_Click(object sender, EventArgs e)
 		{
 			pnlMenu.Visible = false;
@@ -735,9 +768,18 @@ namespace myJournal
 			lblPrint.Enabled = rtbSelectedEntry_Main.Text.Length > 0;
 		}
 
-		private void lblPrint_Click_1(object sender, EventArgs e)
+		/// <summary>
+		/// Print the contents of rtbSelectedEntry.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void lblPrint_Click(object sender, EventArgs e)
 		{
-
+			dialog.Document = document;
+			if(dialog.ShowDialog() == DialogResult.OK)
+			{
+				document.Print();
+			}
 		}
 	}
 }
