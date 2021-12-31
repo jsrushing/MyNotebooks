@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Configuration;
 using System.Linq;
+using System.Drawing.Printing;
 
 namespace myJournal
 {
@@ -32,6 +33,7 @@ namespace myJournal
             grpOpenScreen.Location = ActiveBoxLocation;
             grpOpenScreen.Size = ActiveBoxSize;
             LoadJournals();
+			lblJournal_Delete.Enabled = ddlJournals.Enabled;
             DisplayedGroupBox = grpOpenScreen;
             this.Size = MainFormSize;
             pnlMenu.Size = new Size(lblMenu_1.Width + 2, lblMenu_1.Height + 2);
@@ -159,11 +161,10 @@ namespace myJournal
 				}
 				else
 				{
-					JournalEntry je = new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, sGroups);
-                    currentJournal.Entries.Add(je);
+					currentJournal.AddEntry(new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, sGroups));
 				}
 
-                currentJournal.SaveToDisk();
+                currentJournal.Save();
                 PopulateEntries(lstEntries);
             }
 
@@ -181,7 +182,7 @@ namespace myJournal
 		private void btnConfirmEntryDelete_Click(object sender, EventArgs e)
 		{
 			currentJournal.Entries.Remove(currentEntry);
-			currentJournal.SaveToDisk();
+			currentJournal.Save();
 			PopulateEntries(lstEntries);
 			ActivateGroupBox(grpOpenScreen);
 		}
@@ -190,7 +191,7 @@ namespace myJournal
         {
             if (lblDelete_Confirm.Visible)
             {
-                if (currentJournal == null) { new Journal(ddlJournalsToDelete.Text).OpenJournal().Delete(); } else { currentJournal.Delete(); }
+                if (currentJournal == null) { new Journal(ddlJournalsToDelete.Text).Open().Delete(); } else { currentJournal.Delete(); }
                 currentJournal = null;
                 LoadJournals();
                 ddlJournals.Text = String.Empty;
@@ -224,7 +225,7 @@ namespace myJournal
 				try
 				{
 					Journal jrnl = new Journal(txtNewJournalName.Text);
-					jrnl.CreateJournal();
+					jrnl.Create();
 					LoadJournals();
 					ActivateGroupBox(grpOpenScreen);
 				}
@@ -255,13 +256,14 @@ namespace myJournal
             rtbSelectedEntry_Main.Text = string.Empty;
 			try
 			{
-				currentJournal = new Journal(ddlJournals.Text).OpenJournal(ddlJournals.Text); 
+				currentJournal = new Journal(ddlJournals.Text).Open(ddlJournals.Text); 
 
 				if(currentJournal != null)
 				{
 					PopulateEntries(lstEntries);
 					lblCreateEntry.Enabled = true; 
 					lblFindEntry.Enabled = true;
+					lblViewJournal.Enabled = true;
 				}
 				else
 				{
@@ -388,25 +390,11 @@ namespace myJournal
 			}
 		}
 
-        /// <summary>
-        /// Show the delete journal controls.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void lblJournal_Delete_Click(object sender, EventArgs e)
-        {
-            foreach (string s in ddlJournals.Items)
-            {
-                ddlJournalsToDelete.Items.Add(s);
-            }
-            ActivateGroupBox(grpDeleteJournal);
-        }
-
-        /// <summary>
-        /// Edit an entry (available during edit).
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+		/// <summary>
+		/// Configure and show the edit entry group box.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
         private void lblEditEntry_Click(object sender, EventArgs e)
         {
             ActivateGroupBox(grpCreateEntry);
@@ -415,11 +403,11 @@ namespace myJournal
             lblEntryText_Hidden.Text = currentEntry.ClearText();
             lblEntryTitle_Hidden.Text = currentEntry.ClearTitle();
             string newLine = System.Environment.NewLine;
-            rtbNewEntry.Text = newLine + newLine + 
-                " > Original Date: " + currentEntry.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + newLine +
-                " > Title: " + currentEntry.ClearTitle() + newLine + 
-                " > Entry:" + newLine + currentEntry.ClearText();
-            rtbNewEntry.Focus();
+
+			rtbNewEntry.Text = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Editing"], currentEntry.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"])
+				, currentEntry.ClearTitle(), currentEntry.ClearText());
+
+			rtbNewEntry.Focus();
             rtbNewEntry.SelectionStart = 0; 
 			grpAppendDeleteOriginal.Visible = true;
             foreach (int i in lstTags.CheckedIndices) { lstTags.SetItemChecked(i, false); }
@@ -431,6 +419,21 @@ namespace myJournal
                     if (index > -1) { lstTags.SetItemChecked(index, true); }
                 }
 			}
+        }
+
+        /// <summary>
+        /// Show the delete journal controls.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <summary>
+        private void lblJournal_Delete_Click(object sender, EventArgs e)
+        {
+            foreach (string s in ddlJournals.Items)
+            {
+                ddlJournalsToDelete.Items.Add(s);
+            }
+            ActivateGroupBox(grpDeleteJournal);
         }
 
         private void lblFindEntry_Click(object sender, EventArgs e) { ActivateGroupBox(grpFindEntry); }
@@ -463,7 +466,7 @@ namespace myJournal
 
             foreach (string journalName in journalNames)
             {
-                journalToSearch = j.OpenJournal(journalName);
+                journalToSearch = j.Open(journalName);
 
                 foreach (JournalEntry je in journalToSearch.Entries)
                 {
@@ -645,7 +648,8 @@ namespace myJournal
             currentEntry = currentJournal.GetEntry(sTitle, sDate);  
             rtb.Text = currentEntry != null ? currentEntry.ClearText() : String.Empty;                    // (note: This depends too much on the title/date formatting. Must standardize that.
             lblEditEntry.Enabled = true;
-            lb.SelectedIndexChanged += new System.EventHandler(this.ListOfEntries_SelectedIndexChanged);
+			lblPrint.Enabled = rtb.Text.Length > 0;
+			lb.SelectedIndexChanged += new System.EventHandler(this.ListOfEntries_SelectedIndexChanged);
         }
 
         /// <summary>
@@ -723,5 +727,17 @@ namespace myJournal
         }
 
 		private void ddlJournals_Click(object sender, EventArgs e) { pnlMenu.Visible = false; }
+
+		private void lblViewJournal_Click(object sender, EventArgs e)
+		{
+			pnlMenu.Visible = false;
+			rtbSelectedEntry_Main.Text = currentJournal.GetAllEntries();
+			lblPrint.Enabled = rtbSelectedEntry_Main.Text.Length > 0;
+		}
+
+		private void lblPrint_Click_1(object sender, EventArgs e)
+		{
+
+		}
 	}
 }

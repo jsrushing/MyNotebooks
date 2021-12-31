@@ -26,23 +26,28 @@ namespace myJournal
             }
         }
 
-        private void AddEntry(string _title, string _text)
-        {
-            Entries.Add(new JournalEntry(_title, _text, ""));
-        }
+        public void AddEntry(JournalEntry entryToAdd) { Entries.Add(entryToAdd); }
 
-        public void AddFirstEntry()
-        {
-            Entries.Add(new JournalEntry("created", "-", ""));
-        }
+        private void AddFirstEntry() { Entries.Add(new JournalEntry("created", "-", "")); }
 
-        public void CreateJournal()
+        public void Create()
         {
             AddFirstEntry();
-            SaveToDisk();
+            Save();
         }
 
         public void Delete() { File.Delete(this.FileName); }
+
+		public string GetAllEntries()
+		{
+			StringBuilder sb = new StringBuilder();
+
+			foreach(JournalEntry je in this.Entries)
+			{
+				sb.Append(String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"], je.Date, je.ClearTitle(), je.ClearText()));
+			}
+			return sb.ToString();
+		}
 
         public JournalEntry GetEntry(string _title, string _date)
         {
@@ -52,7 +57,7 @@ namespace myJournal
             return je;
         }
 
-        public Journal OpenJournal(string journalToOpen = "")
+        public Journal Open(string journalToOpen = "")
         {
             Journal jRtrn = null;
             try
@@ -69,9 +74,10 @@ namespace myJournal
             return jRtrn;
         }
 
+
         public void ReplaceEntry(JournalEntry jeToReplace, JournalEntry jeToInsert)
 		{
-			int idx = 0;
+			int idx;
 			for(idx = 0; idx < this.Entries.Count; idx++) { if(this.Entries[idx] == jeToReplace) { break; } }
 			this.Entries.Remove(jeToReplace);
 			this.Entries.Insert(idx, jeToInsert);
@@ -79,18 +85,13 @@ namespace myJournal
 
         public void Save()
         {
-            
-        }
-
-        public void SaveToDisk()
-        {
             try { File.Delete(this.FileName); } catch (Exception) { }
 
             using (Stream stream = File.Open(this.FileName, FileMode.Create))
             {
                 BinaryFormatter formatter = new BinaryFormatter();
                 formatter.Serialize(stream, this);
-            }
+            }            
         }
     }
 }

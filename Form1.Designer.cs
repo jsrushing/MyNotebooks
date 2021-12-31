@@ -57,7 +57,9 @@ namespace myJournal
 			this.label2 = new System.Windows.Forms.Label();
 			this.lblAddEntry = new System.Windows.Forms.Label();
 			this.grpOpenScreen = new System.Windows.Forms.GroupBox();
+			this.lblPrint = new System.Windows.Forms.Label();
 			this.pnlMenu = new System.Windows.Forms.Panel();
+			this.lblViewJournal = new System.Windows.Forms.Label();
 			this.lblCloseMenu = new System.Windows.Forms.Label();
 			this.lblSettings_Show = new System.Windows.Forms.Label();
 			this.lblTagManager = new System.Windows.Forms.Label();
@@ -71,7 +73,7 @@ namespace myJournal
 			this.lblMenu = new System.Windows.Forms.Label();
 			this.lblEntriesStartFrom = new System.Windows.Forms.Label();
 			this.rtbSelectedEntry_Main = new System.Windows.Forms.RichTextBox();
-			this.label5 = new System.Windows.Forms.Label();
+			this.lblSelectionType = new System.Windows.Forms.Label();
 			this.lstEntries = new System.Windows.Forms.ListBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.grpFindEntry = new System.Windows.Forms.GroupBox();
@@ -173,7 +175,7 @@ namespace myJournal
 			this.lblCreateEntry.Enabled = false;
 			this.lblCreateEntry.Font = new System.Drawing.Font("Adobe Fan Heiti Std B", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			this.lblCreateEntry.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblCreateEntry.Location = new System.Drawing.Point(17, 80);
+			this.lblCreateEntry.Location = new System.Drawing.Point(17, 103);
 			this.lblCreateEntry.Name = "lblCreateEntry";
 			this.lblCreateEntry.Size = new System.Drawing.Size(42, 15);
 			this.lblCreateEntry.TabIndex = 2;
@@ -189,7 +191,7 @@ namespace myJournal
 			this.lblFindEntry.Enabled = false;
 			this.lblFindEntry.Font = new System.Drawing.Font("Adobe Fan Heiti Std B", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			this.lblFindEntry.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblFindEntry.Location = new System.Drawing.Point(17, 122);
+			this.lblFindEntry.Location = new System.Drawing.Point(17, 143);
 			this.lblFindEntry.Name = "lblFindEntry";
 			this.lblFindEntry.Size = new System.Drawing.Size(30, 15);
 			this.lblFindEntry.TabIndex = 3;
@@ -445,13 +447,14 @@ namespace myJournal
 			// grpOpenScreen
 			// 
 			this.grpOpenScreen.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.grpOpenScreen.Controls.Add(this.lblPrint);
 			this.grpOpenScreen.Controls.Add(this.pnlMenu);
 			this.grpOpenScreen.Controls.Add(this.lblMenu);
 			this.grpOpenScreen.Controls.Add(this.lblEntriesStartFrom);
 			this.grpOpenScreen.Controls.Add(this.rtbSelectedEntry_Main);
 			this.grpOpenScreen.Controls.Add(this.ddlJournals);
 			this.grpOpenScreen.Controls.Add(this.label1);
-			this.grpOpenScreen.Controls.Add(this.label5);
+			this.grpOpenScreen.Controls.Add(this.lblSelectionType);
 			this.grpOpenScreen.Controls.Add(this.lstEntries);
 			this.grpOpenScreen.Controls.Add(this.label4);
 			this.grpOpenScreen.Location = new System.Drawing.Point(61, 0);
@@ -460,9 +463,25 @@ namespace myJournal
 			this.grpOpenScreen.TabIndex = 5;
 			this.grpOpenScreen.TabStop = false;
 			// 
+			// lblPrint
+			// 
+			this.lblPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.lblPrint.AutoSize = true;
+			this.lblPrint.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.lblPrint.Enabled = false;
+			this.lblPrint.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
+			this.lblPrint.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.lblPrint.Location = new System.Drawing.Point(242, 257);
+			this.lblPrint.Name = "lblPrint";
+			this.lblPrint.Size = new System.Drawing.Size(34, 15);
+			this.lblPrint.TabIndex = 29;
+			this.lblPrint.Text = "print";
+			this.lblPrint.Click += new System.EventHandler(this.lblPrint_Click_1);
+			// 
 			// pnlMenu
 			// 
 			this.pnlMenu.BackColor = System.Drawing.SystemColors.HighlightText;
+			this.pnlMenu.Controls.Add(this.lblViewJournal);
 			this.pnlMenu.Controls.Add(this.lblCloseMenu);
 			this.pnlMenu.Controls.Add(this.lblSettings_Show);
 			this.pnlMenu.Controls.Add(this.lblTagManager);
@@ -481,13 +500,29 @@ namespace myJournal
 			this.pnlMenu.TabIndex = 28;
 			this.pnlMenu.Visible = false;
 			// 
+			// lblViewJournal
+			// 
+			this.lblViewJournal.AutoSize = true;
+			this.lblViewJournal.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.lblViewJournal.Enabled = false;
+			this.lblViewJournal.Font = new System.Drawing.Font("Adobe Fan Heiti Std B", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.lblViewJournal.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.lblViewJournal.Location = new System.Drawing.Point(17, 63);
+			this.lblViewJournal.Name = "lblViewJournal";
+			this.lblViewJournal.Size = new System.Drawing.Size(73, 15);
+			this.lblViewJournal.TabIndex = 26;
+			this.lblViewJournal.Text = "View Entries";
+			this.lblViewJournal.Click += new System.EventHandler(this.lblViewJournal_Click);
+			this.lblViewJournal.MouseEnter += new System.EventHandler(this.MenuItem_Enter);
+			this.lblViewJournal.MouseLeave += new System.EventHandler(this.MenuItem_Leave);
+			// 
 			// lblCloseMenu
 			// 
 			this.lblCloseMenu.AutoSize = true;
 			this.lblCloseMenu.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.lblCloseMenu.Font = new System.Drawing.Font("Adobe Fan Heiti Std B", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			this.lblCloseMenu.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblCloseMenu.Location = new System.Drawing.Point(9, 186);
+			this.lblCloseMenu.Location = new System.Drawing.Point(9, 203);
 			this.lblCloseMenu.Name = "lblCloseMenu";
 			this.lblCloseMenu.Size = new System.Drawing.Size(70, 15);
 			this.lblCloseMenu.TabIndex = 24;
@@ -502,7 +537,7 @@ namespace myJournal
 			this.lblSettings_Show.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.lblSettings_Show.Font = new System.Drawing.Font("Adobe Fan Heiti Std B", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			this.lblSettings_Show.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblSettings_Show.Location = new System.Drawing.Point(9, 166);
+			this.lblSettings_Show.Location = new System.Drawing.Point(9, 183);
 			this.lblSettings_Show.Name = "lblSettings_Show";
 			this.lblSettings_Show.Size = new System.Drawing.Size(50, 15);
 			this.lblSettings_Show.TabIndex = 21;
@@ -517,7 +552,7 @@ namespace myJournal
 			this.lblTagManager.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.lblTagManager.Font = new System.Drawing.Font("Adobe Fan Heiti Std B", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			this.lblTagManager.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblTagManager.Location = new System.Drawing.Point(9, 146);
+			this.lblTagManager.Location = new System.Drawing.Point(9, 163);
 			this.lblTagManager.Name = "lblTagManager";
 			this.lblTagManager.Size = new System.Drawing.Size(77, 15);
 			this.lblTagManager.TabIndex = 19;
@@ -532,7 +567,7 @@ namespace myJournal
 			this.label21.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.label21.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			this.label21.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
-			this.label21.Location = new System.Drawing.Point(9, 63);
+			this.label21.Location = new System.Drawing.Point(9, 83);
 			this.label21.Name = "label21";
 			this.label21.Size = new System.Drawing.Size(45, 15);
 			this.label21.TabIndex = 17;
@@ -544,7 +579,7 @@ namespace myJournal
 			this.lblJournal_Delete.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.lblJournal_Delete.Font = new System.Drawing.Font("Adobe Fan Heiti Std B", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			this.lblJournal_Delete.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblJournal_Delete.Location = new System.Drawing.Point(17, 41);
+			this.lblJournal_Delete.Location = new System.Drawing.Point(17, 43);
 			this.lblJournal_Delete.Name = "lblJournal_Delete";
 			this.lblJournal_Delete.Size = new System.Drawing.Size(43, 15);
 			this.lblJournal_Delete.TabIndex = 16;
@@ -587,7 +622,7 @@ namespace myJournal
 			this.lblEditEntry.Enabled = false;
 			this.lblEditEntry.Font = new System.Drawing.Font("Adobe Fan Heiti Std B", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			this.lblEditEntry.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblEditEntry.Location = new System.Drawing.Point(17, 101);
+			this.lblEditEntry.Location = new System.Drawing.Point(17, 123);
 			this.lblEditEntry.Name = "lblEditEntry";
 			this.lblEditEntry.Size = new System.Drawing.Size(67, 15);
 			this.lblEditEntry.TabIndex = 13;
@@ -602,7 +637,7 @@ namespace myJournal
 			this.lblMenu_1.ForeColor = System.Drawing.SystemColors.HighlightText;
 			this.lblMenu_1.Location = new System.Drawing.Point(3, 3);
 			this.lblMenu_1.Name = "lblMenu_1";
-			this.lblMenu_1.Size = new System.Drawing.Size(110, 211);
+			this.lblMenu_1.Size = new System.Drawing.Size(110, 244);
 			this.lblMenu_1.TabIndex = 23;
 			// 
 			// lblMenu_0
@@ -648,14 +683,14 @@ namespace myJournal
 			this.rtbSelectedEntry_Main.Text = "";
 			this.rtbSelectedEntry_Main.Click += new System.EventHandler(this.rtbSelectedEntry_Main_Click);
 			// 
-			// label5
+			// lblSelectionType
 			// 
-			this.label5.AutoSize = true;
-			this.label5.Location = new System.Drawing.Point(6, 258);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(81, 15);
-			this.label5.TabIndex = 9;
-			this.label5.Text = "Selected Entry";
+			this.lblSelectionType.AutoSize = true;
+			this.lblSelectionType.Location = new System.Drawing.Point(6, 258);
+			this.lblSelectionType.Name = "lblSelectionType";
+			this.lblSelectionType.Size = new System.Drawing.Size(54, 15);
+			this.lblSelectionType.TabIndex = 9;
+			this.lblSelectionType.Text = "Selected ";
 			// 
 			// lstEntries
 			// 
@@ -1385,7 +1420,7 @@ namespace myJournal
         private System.Windows.Forms.ListBox lstEntries;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.GroupBox grpFindEntry;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label lblSelectionType;
         private System.Windows.Forms.RichTextBox rtbSelectedEntry_Main;
         private System.Windows.Forms.Label lblEntriesStartFrom;
         private System.Windows.Forms.TextBox txtSearchText;
@@ -1471,6 +1506,8 @@ namespace myJournal
 		private System.Windows.Forms.Label lblBack_ConfirmEntryDelete;
 		private System.Windows.Forms.Button btnOK_ConfirmEntryDelete;
 		private System.Windows.Forms.Label lblBack_EditTag;
+		private System.Windows.Forms.Label lblViewJournal;
+		private System.Windows.Forms.Label lblPrint;
 	}
 }
 
