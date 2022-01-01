@@ -100,7 +100,8 @@ namespace myJournal
                 case "grpOpenScreen":
                     this.Text = "My Journal";
                     rtbSelectedEntry_Main.Clear();
-                    break;
+					lstEntries.Height = rtbSelectedEntry_Main.Height - 70;
+					break;
                 case "grpCreateEntry":
 					btnAddEntry.Text = "Save Entry";
                     this.Text = "Create Entry";
@@ -300,9 +301,9 @@ namespace myJournal
 					lblCreateEntry.Enabled = true; 
 					lblFindEntry.Enabled = true;
 					lblViewJournal.Enabled = true;
-					lblSelectionType.Enabled = true;
 					lblSelectAJournal.Enabled = true;
 					lblSelectAJournal.Text = "Entries";
+					lstEntries.Height = grpOpenScreen.Height - 100;
 				}
 				else
 				{
@@ -715,11 +716,12 @@ namespace myJournal
 				rtb.Text = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
 					, currentJournal.Name, currentEntry.ClearTitle(), currentEntry.Date, currentEntry.ClearTags(), currentEntry.ClearText());
 				lblEditEntry.Enabled = true;
-				lblPrint.Enabled = rtb.Text.Length > 0;
+				lblPrint.Visible = rtb.Text.Length > 0;
 				lblSelectionType.Visible = rtb.Text.Length > 0;
-				lblPrint.Visible = lblSelectionType.Visible;
+				lblSeparator_grpOpenScreen.Visible = rtb.Text.Length > 0;
 				lblSelectedFoundEntry.Visible = rtbSelectedEntry_Found.Text.Length > 0;
 				lblSelectionType.Text = "Selected Entry";
+				lstEntries.Height = rtb.Text.Length > 0 ? rtbSelectedEntry_Main.Top - 132 : lstEntries.Height;
 			}
 
 			lb.SelectedIndexChanged += new System.EventHandler(this.ListOfEntries_SelectedIndexChanged);
@@ -749,6 +751,11 @@ namespace myJournal
                 lstBoxToPopulate.Items.Add("tags: " + je.ClearTags());
                 lstBoxToPopulate.Items.Add("---------------------");
             }
+
+			if(lstBoxToPopulate.Items.Count > 0)
+			{
+				lstBoxToPopulate.Height = lstBoxToPopulate.Height + rtbSelectedEntry_Main.Height;
+			}
         }
 
 		private void PrintPage(object sender, PrintPageEventArgs e)
@@ -827,7 +834,12 @@ namespace myJournal
             dtFindDate_To.Enabled = dtFindDate_From.Enabled;
         }
 
-		private void ddlJournals_Click(object sender, EventArgs e) { lblPrint.Enabled = false; pnlMenu.Visible = false; }
+		private void ddlJournals_Click(object sender, EventArgs e) 
+		{ 
+			lblPrint.Visible = false; 
+			pnlMenu.Visible = false; 
+			lblSeparator_grpOpenScreen.Visible = false;
+		}
 
 		/// <summary>
 		/// Populate rtbSelectedEntry with entire journal contents.
@@ -838,7 +850,6 @@ namespace myJournal
 		{
 			pnlMenu.Visible = false;
 			rtbSelectedEntry_Main.Text = currentJournal.GetAllEntries();
-			lblPrint.Enabled = rtbSelectedEntry_Main.Text.Length > 0;
 			lblSelectionType.Visible = true;
 			lblPrint.Visible = lblSelectionType.Visible;
 			lblSelectionType.Text = "All Entries";

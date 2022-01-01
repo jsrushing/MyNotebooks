@@ -72,10 +72,11 @@ namespace myJournal
 			this.lblMenu_0 = new System.Windows.Forms.Label();
 			this.lblMenu = new System.Windows.Forms.Label();
 			this.lblEntriesStartFrom = new System.Windows.Forms.Label();
-			this.rtbSelectedEntry_Main = new System.Windows.Forms.RichTextBox();
 			this.lblSelectionType = new System.Windows.Forms.Label();
 			this.lstEntries = new System.Windows.Forms.ListBox();
 			this.lblSelectAJournal = new System.Windows.Forms.Label();
+			this.lblSeparator_grpOpenScreen = new System.Windows.Forms.Label();
+			this.rtbSelectedEntry_Main = new System.Windows.Forms.RichTextBox();
 			this.grpFindEntry = new System.Windows.Forms.GroupBox();
 			this.lstFoundEntries = new System.Windows.Forms.ListBox();
 			this.chkUseDateRange = new System.Windows.Forms.CheckBox();
@@ -462,12 +463,13 @@ namespace myJournal
 			this.grpOpenScreen.Controls.Add(this.pnlMenu);
 			this.grpOpenScreen.Controls.Add(this.lblMenu);
 			this.grpOpenScreen.Controls.Add(this.lblEntriesStartFrom);
-			this.grpOpenScreen.Controls.Add(this.rtbSelectedEntry_Main);
 			this.grpOpenScreen.Controls.Add(this.ddlJournals);
 			this.grpOpenScreen.Controls.Add(this.label1);
 			this.grpOpenScreen.Controls.Add(this.lblSelectionType);
 			this.grpOpenScreen.Controls.Add(this.lstEntries);
 			this.grpOpenScreen.Controls.Add(this.lblSelectAJournal);
+			this.grpOpenScreen.Controls.Add(this.lblSeparator_grpOpenScreen);
+			this.grpOpenScreen.Controls.Add(this.rtbSelectedEntry_Main);
 			this.grpOpenScreen.Location = new System.Drawing.Point(61, 0);
 			this.grpOpenScreen.Name = "grpOpenScreen";
 			this.grpOpenScreen.Size = new System.Drawing.Size(290, 545);
@@ -479,7 +481,6 @@ namespace myJournal
 			this.lblPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.lblPrint.AutoSize = true;
 			this.lblPrint.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.lblPrint.Enabled = false;
 			this.lblPrint.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
 			this.lblPrint.ForeColor = System.Drawing.SystemColors.MenuHighlight;
 			this.lblPrint.Location = new System.Drawing.Point(242, 257);
@@ -683,21 +684,6 @@ namespace myJournal
 			this.lblEntriesStartFrom.Text = "(from 2 weeks ago)";
 			this.lblEntriesStartFrom.Visible = false;
 			// 
-			// rtbSelectedEntry_Main
-			// 
-			this.rtbSelectedEntry_Main.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.rtbSelectedEntry_Main.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.rtbSelectedEntry_Main.Location = new System.Drawing.Point(6, 282);
-			this.rtbSelectedEntry_Main.Name = "rtbSelectedEntry_Main";
-			this.rtbSelectedEntry_Main.Size = new System.Drawing.Size(278, 258);
-			this.rtbSelectedEntry_Main.TabIndex = 5;
-			this.rtbSelectedEntry_Main.TabStop = false;
-			this.rtbSelectedEntry_Main.Text = "";
-			this.rtbSelectedEntry_Main.Click += new System.EventHandler(this.rtbSelectedEntry_Main_Click);
-			this.rtbSelectedEntry_Main.TextChanged += new System.EventHandler(this.rtbSelectedEntry_Main_TextChanged);
-			// 
 			// lblSelectionType
 			// 
 			this.lblSelectionType.AutoSize = true;
@@ -736,6 +722,32 @@ namespace myJournal
 			this.lblSelectAJournal.Size = new System.Drawing.Size(133, 17);
 			this.lblSelectAJournal.TabIndex = 7;
 			this.lblSelectAJournal.Text = "(Select A Journal ...)";
+			// 
+			// lblSeparator_grpOpenScreen
+			// 
+			this.lblSeparator_grpOpenScreen.AutoSize = true;
+			this.lblSeparator_grpOpenScreen.ForeColor = System.Drawing.Color.Gray;
+			this.lblSeparator_grpOpenScreen.Location = new System.Drawing.Point(3, 241);
+			this.lblSeparator_grpOpenScreen.Name = "lblSeparator_grpOpenScreen";
+			this.lblSeparator_grpOpenScreen.Size = new System.Drawing.Size(272, 15);
+			this.lblSeparator_grpOpenScreen.TabIndex = 30;
+			this.lblSeparator_grpOpenScreen.Text = "_____________________________________________________";
+			this.lblSeparator_grpOpenScreen.Visible = false;
+			// 
+			// rtbSelectedEntry_Main
+			// 
+			this.rtbSelectedEntry_Main.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.rtbSelectedEntry_Main.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.rtbSelectedEntry_Main.Location = new System.Drawing.Point(6, 282);
+			this.rtbSelectedEntry_Main.Name = "rtbSelectedEntry_Main";
+			this.rtbSelectedEntry_Main.Size = new System.Drawing.Size(278, 258);
+			this.rtbSelectedEntry_Main.TabIndex = 5;
+			this.rtbSelectedEntry_Main.TabStop = false;
+			this.rtbSelectedEntry_Main.Text = "";
+			this.rtbSelectedEntry_Main.Click += new System.EventHandler(this.rtbSelectedEntry_Main_Click);
+			this.rtbSelectedEntry_Main.TextChanged += new System.EventHandler(this.rtbSelectedEntry_Main_TextChanged);
 			// 
 			// grpFindEntry
 			// 
@@ -1549,6 +1561,7 @@ namespace myJournal
 		private System.Windows.Forms.Label lblPrint;
 		private System.Windows.Forms.Label lblEntriesStartFrom;
 		private System.Windows.Forms.Label lblTagManager2;
+		private System.Windows.Forms.Label lblSeparator_grpOpenScreen;
 	}
 }
 
