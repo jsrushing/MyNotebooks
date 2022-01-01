@@ -19,7 +19,7 @@ namespace myJournal
 		Size MainFormSize = new Size(0, 0);
         GroupBox DisplayedGroupBox;
         Journal currentJournal = null;
-        bool bGroupBeingEdited = false;
+        bool bTagBeingEdited = false;
         string rootPath = AppDomain.CurrentDomain.BaseDirectory;
         JournalEntry currentEntry = null;
         Font InactiveMenuFont = null;
@@ -118,7 +118,10 @@ namespace myJournal
                     this.Text = "Search Journal";
                     Tags_PopulateTagsList(lstGroupsForSearch);
 					lstGroupsForSearch.Location = new Point(txtGroupsForSearch.Left, txtGroupsForSearch.Top + txtGroupsForSearch.Height);
-					lstGroupsForSearch.Width = txtGroupsForSearch.Width;
+					lstGroupsForSearch.Visible = false ;
+					txtGroupsForSearch.Text = String.Empty;
+					lstFoundEntries.Items.Clear();
+					rtbSelectedEntry_Found.Text = String.Empty;
                     //txtGroupsForSearch.Text = Properties.Settings.Default["TxtSelectGroupsForSearchDefault"].ToString();
                     break;
                 case "grpNewJournal":
@@ -260,6 +263,11 @@ namespace myJournal
 			}
         }
 
+		/// <summary>
+		/// Save a tag edit.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void btnOK_TagName_Edited_Click(object sender, EventArgs e)
 		{
 			int a = lstTagsForEdit.SelectedIndex;
@@ -304,11 +312,16 @@ namespace myJournal
         }
 
         #region Tags
-        private void Tags_btnAddTag_Click(object sender, EventArgs e) { ActivateGroupBox(grpNewGroup); }
+        private void Tags_btnAddTag_Click(object sender, EventArgs e) { ActivateGroupBox(grpManageTags); }
 
+		/// <summary>
+		/// Add new or edit a tag.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
         private void Tags_btnOK_NewTag_Click(object sender, EventArgs e)
         {
-            if (!bGroupBeingEdited)
+            if (!bTagBeingEdited)
             {
                 using (StreamWriter sw = File.AppendText(rootPath + "/settings/groups"))
                 {
@@ -327,14 +340,19 @@ namespace myJournal
             Tags_PopulateTagsList(lstTags);
 			backTarget = new GroupBox();
             ActivateGroupBox(grpCreateEntry);
-            bGroupBeingEdited = false;
+            bTagBeingEdited = false;
         }
 
+		/// <summary>
+		/// Show the edit tags controls.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
         private void Tags_mnuEdit_Click(object sender, EventArgs e)
         {
             txtTags_TagName_NewTag.Text = lstTags.SelectedItem.ToString();
-            bGroupBeingEdited = true;
-            ActivateGroupBox(grpNewGroup);
+            bTagBeingEdited = true;
+            ActivateGroupBox(grpManageTags);
         }
 
         private void Tags_mnuDelete_Click(object sender, EventArgs e)
@@ -407,6 +425,11 @@ namespace myJournal
 			ActivateGroupBox(grpConfirmDeleteEntry);
         }
 
+		/// <summary>
+		/// Show tag edit controls.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void lblEditTag_Click(object sender, EventArgs e)
 		{
 			if(lstTagsForEdit.SelectedIndex > -1)
@@ -414,9 +437,11 @@ namespace myJournal
 				grpEditTags_NewName.Location = grpEditTags_Add.Location;
 				grpEditTags_NewName.Height = grpEditTags_EditRemove.Top + grpEditTags_EditRemove.Height;
 				grpEditTags_NewName.Width = grpEditTags_Add.Width;
-				backTarget = grpNewGroup;
+				backTarget = grpManageTags;
 				txtTag_TagName_Edited.Text = lstTagsForEdit.SelectedItem.ToString();
 				grpEditTags_NewName.Visible = true;
+				txtTag_TagName_Edited.SelectAll();
+				txtTag_TagName_Edited.Focus();
 			}
 		}
 
@@ -451,7 +476,9 @@ namespace myJournal
 			}
         }
 
-        /// <summary>
+         private void lblFindEntry_Click(object sender, EventArgs e) { ActivateGroupBox(grpFindEntry); }
+
+       /// <summary>
         /// Show the delete journal controls.
         /// </summary>
         /// <param name="sender"></param>
@@ -465,8 +492,6 @@ namespace myJournal
             }
             ActivateGroupBox(grpDeleteJournal);
         }
-
-        private void lblFindEntry_Click(object sender, EventArgs e) { ActivateGroupBox(grpFindEntry); }
 
         /// <summary>
         /// Search for entries with various criteria.
@@ -573,7 +598,7 @@ namespace myJournal
 		private void lblTagManager_Click(object sender, EventArgs e) 
 		{
 			Label label = (Label)sender;
-			ActivateGroupBox(grpNewGroup); 
+			ActivateGroupBox(grpManageTags); 
 			backTarget = label.Name.EndsWith("2") ? grpCreateEntry : null;
 		}
 		#endregion
