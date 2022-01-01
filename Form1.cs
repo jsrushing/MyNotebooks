@@ -187,11 +187,11 @@ namespace myJournal
                         sText = lblEntryText_Hidden.Text;
 					}
 
-					currentJournal.ReplaceEntry(currentEntry, new JournalEntry(sTitle, sText, sGroups));
+					currentJournal.ReplaceEntry(currentEntry, new JournalEntry(sTitle, sText, sGroups, true));
 				}
 				else
 				{
-					currentJournal.AddEntry(new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, sGroups));
+					currentJournal.AddEntry(new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, sGroups, true));
 				}
 
                 currentJournal.Save();
@@ -289,6 +289,7 @@ namespace myJournal
 			pnlMenu.Visible = false;
 			lstEntries.Items.Clear();
             rtbSelectedEntry_Main.Text = string.Empty;
+
 			try
 			{
 				currentJournal = new Journal(ddlJournals.Text).Open(ddlJournals.Text); 
@@ -699,7 +700,10 @@ namespace myJournal
             lb.SelectedIndices.Add(ctr + 1);
             lb.SelectedIndices.Add(ctr + 2);                        //
 
-            string sTitleAndDate = lb.Items[ctr].ToString();        // Use the title and date of the entry to create a JournalEntry object whose .ClearText will populate the display ...
+
+			// this is where you have to account for isEdited
+
+            string sTitleAndDate = lb.Items[ctr].ToString().Replace(" - EDITED", "");        // Use the title and date of the entry to create a JournalEntry object whose .ClearText will populate the display ...
             string sTitle = sTitleAndDate.Substring(0, sTitleAndDate.IndexOf('(') - 1);
             string sDate = sTitleAndDate.Substring(sTitleAndDate.IndexOf('(') + 1, sTitleAndDate.Length - 2 - sTitleAndDate.IndexOf('('));
             
@@ -734,9 +738,9 @@ namespace myJournal
 
             foreach(JournalEntry je in currentJournal.Entries)
             {
-                lstBoxToPopulate.Items.Add(je.ClearTitle() + " (" + je.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")");
+				// add display of isEdited here
+                lstBoxToPopulate.Items.Add(je.ClearTitle() + " (" + je.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")" + (je.isEdited ? " - EDITED" : ""));
                 string sEntryText = je.ClearText();
-
 
                 lstBoxToPopulate.Items.Add(sEntryText.Length < iTextChunkLength ?
                     sEntryText :

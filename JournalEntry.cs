@@ -13,18 +13,20 @@ namespace myJournal
         string Text;
         string Title;
         string Tags;
+		public bool isEdited = false;
 
         public string Id;
 
         public JournalEntry() { }
 
-        public JournalEntry(string _title, string _text, string _tags)
+		public JournalEntry(string _title, string _text, string _tags, bool _edited = false)
         {
             this.Date = DateTime.Now;            
             this.Text = EncryptDecrypt.Encrypt(_text, "", "");
             this.Title = EncryptDecrypt.Encrypt(_title, "", "");
             this.Tags = EncryptDecrypt.Encrypt(_tags, "", "");
             this.Id = Guid.NewGuid().ToString();
+			this.isEdited = _edited;
         }
 
         public string ClearText() { return EncryptDecrypt.Decrypt(this.Text, "", ""); }
