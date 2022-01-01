@@ -61,6 +61,7 @@ namespace myJournal
             DisplayedGroupBox = grpOpenScreen;
             this.Size = MainFormSize;
             pnlMenu.Size = new Size(lblMenu_1.Width + 2, lblMenu_1.Height + 2);
+			pnlMenu.Location = new Point(lblMenu.Left + lblMenu.Width, lblMenu.Top + lblMenu.Height);
             lblMenu_0.Size = new Size(pnlMenu.Width, pnlMenu.Height);
             lblMenu_1.Size = new Size(lblMenu_0.Width - 4, lblMenu_1.Height - 2);
             lblMenu_1.Location = new Point(lblMenu_0.Left + 2, lblMenu_0.Top + 2);
@@ -116,6 +117,8 @@ namespace myJournal
                 case "grpFindEntry":
                     this.Text = "Search Journal";
                     Tags_PopulateTagsList(lstGroupsForSearch);
+					lstGroupsForSearch.Location = new Point(txtGroupsForSearch.Left, txtGroupsForSearch.Top + txtGroupsForSearch.Height);
+					lstGroupsForSearch.Width = txtGroupsForSearch.Width;
                     //txtGroupsForSearch.Text = Properties.Settings.Default["TxtSelectGroupsForSearchDefault"].ToString();
                     break;
                 case "grpNewJournal":
@@ -288,6 +291,9 @@ namespace myJournal
 					lblCreateEntry.Enabled = true; 
 					lblFindEntry.Enabled = true;
 					lblViewJournal.Enabled = true;
+					lblSelectionType.Enabled = true;
+					lblSelectAJournal.Enabled = true;
+					lblSelectAJournal.Text = "Entries";
 				}
 				else
 				{
@@ -530,6 +536,7 @@ namespace myJournal
             if (foundEntries.Count > 0)
             {
                 PopulateEntries(lstFoundEntries, foundEntries);
+				lblFoundEntries.Visible = true;
             }
 
         }
@@ -680,6 +687,10 @@ namespace myJournal
 					, currentJournal.Name, currentEntry.ClearTitle(), currentEntry.Date, currentEntry.ClearTags(), currentEntry.ClearText());
 				lblEditEntry.Enabled = true;
 				lblPrint.Enabled = rtb.Text.Length > 0;
+				lblSelectionType.Visible = rtb.Text.Length > 0;
+				lblPrint.Visible = lblSelectionType.Visible;
+				lblSelectedFoundEntry.Visible = rtbSelectedEntry_Found.Text.Length > 0;
+				lblSelectionType.Text = "Selected Entry";
 			}
 
 			lb.SelectedIndexChanged += new System.EventHandler(this.ListOfEntries_SelectedIndexChanged);
@@ -799,6 +810,9 @@ namespace myJournal
 			pnlMenu.Visible = false;
 			rtbSelectedEntry_Main.Text = currentJournal.GetAllEntries();
 			lblPrint.Enabled = rtbSelectedEntry_Main.Text.Length > 0;
+			lblSelectionType.Visible = true;
+			lblPrint.Visible = lblSelectionType.Visible;
+			lblSelectionType.Text = "All Entries";
 		}
 
 		/// <summary>
@@ -813,6 +827,11 @@ namespace myJournal
 			{
 				PrintDocument.Print();
 			}
+		}
+
+		private void rtbSelectedEntry_Main_TextChanged(object sender, EventArgs e)
+		{
+			lblSelectionType.Visible = rtbSelectedEntry_Main.Text.Length > 0;
 		}
 	}
 }

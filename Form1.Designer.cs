@@ -75,7 +75,7 @@ namespace myJournal
 			this.rtbSelectedEntry_Main = new System.Windows.Forms.RichTextBox();
 			this.lblSelectionType = new System.Windows.Forms.Label();
 			this.lstEntries = new System.Windows.Forms.ListBox();
-			this.label4 = new System.Windows.Forms.Label();
+			this.lblSelectAJournal = new System.Windows.Forms.Label();
 			this.grpFindEntry = new System.Windows.Forms.GroupBox();
 			this.lstFoundEntries = new System.Windows.Forms.ListBox();
 			this.chkUseDateRange = new System.Windows.Forms.CheckBox();
@@ -97,9 +97,9 @@ namespace myJournal
 			this.lblFindEntries = new System.Windows.Forms.Label();
 			this.rtbSelectedEntry_Found = new System.Windows.Forms.RichTextBox();
 			this.label9 = new System.Windows.Forms.Label();
-			this.label10 = new System.Windows.Forms.Label();
+			this.lblSelectedFoundEntry = new System.Windows.Forms.Label();
 			this.label8 = new System.Windows.Forms.Label();
-			this.label11 = new System.Windows.Forms.Label();
+			this.lblFoundEntries = new System.Windows.Forms.Label();
 			this.grpNewJournal = new System.Windows.Forms.GroupBox();
 			this.lblMessage_BadJournalName = new System.Windows.Forms.Label();
 			this.lblHome_NewJrnl = new System.Windows.Forms.Label();
@@ -229,7 +229,7 @@ namespace myJournal
 			this.lblTagManager2.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.lblTagManager2.Font = new System.Drawing.Font("Segoe UI Light", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.lblTagManager2.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblTagManager2.Location = new System.Drawing.Point(37, 400);
+			this.lblTagManager2.Location = new System.Drawing.Point(37, 403);
 			this.lblTagManager2.Name = "lblTagManager2";
 			this.lblTagManager2.Size = new System.Drawing.Size(48, 15);
 			this.lblTagManager2.TabIndex = 36;
@@ -262,6 +262,7 @@ namespace myJournal
 			this.grpAppendDeleteOriginal.Controls.Add(this.label6);
 			this.grpAppendDeleteOriginal.Controls.Add(this.radOriginal_Replace);
 			this.grpAppendDeleteOriginal.Controls.Add(this.radOriginal_Append);
+			this.grpAppendDeleteOriginal.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.grpAppendDeleteOriginal.Location = new System.Drawing.Point(46, 0);
 			this.grpAppendDeleteOriginal.Name = "grpAppendDeleteOriginal";
 			this.grpAppendDeleteOriginal.Size = new System.Drawing.Size(244, 34);
@@ -331,12 +332,13 @@ namespace myJournal
 			// 
 			this.lstTags.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.lstTags.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.lstTags.CheckOnClick = true;
 			this.lstTags.ContextMenuStrip = this.mnuGroups;
 			this.lstTags.FormattingEnabled = true;
 			this.lstTags.Location = new System.Drawing.Point(6, 420);
 			this.lstTags.Name = "lstTags";
-			this.lstTags.Size = new System.Drawing.Size(278, 94);
+			this.lstTags.Size = new System.Drawing.Size(278, 90);
 			this.lstTags.TabIndex = 27;
 			// 
 			// mnuGroups
@@ -366,7 +368,7 @@ namespace myJournal
 			// 
 			this.label14.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label14.AutoSize = true;
-			this.label14.Location = new System.Drawing.Point(6, 400);
+			this.label14.Location = new System.Drawing.Point(6, 403);
 			this.label14.Name = "label14";
 			this.label14.Size = new System.Drawing.Size(29, 15);
 			this.label14.TabIndex = 25;
@@ -412,6 +414,7 @@ namespace myJournal
 			this.rtbNewEntry.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.rtbNewEntry.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.rtbNewEntry.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.rtbNewEntry.Location = new System.Drawing.Point(6, 87);
 			this.rtbNewEntry.Name = "rtbNewEntry";
@@ -423,19 +426,20 @@ namespace myJournal
 			// 
 			this.txtNewEntryTitle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtNewEntryTitle.Location = new System.Drawing.Point(38, 34);
+			this.txtNewEntryTitle.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.txtNewEntryTitle.Location = new System.Drawing.Point(38, 42);
 			this.txtNewEntryTitle.Name = "txtNewEntryTitle";
-			this.txtNewEntryTitle.Size = new System.Drawing.Size(240, 23);
+			this.txtNewEntryTitle.Size = new System.Drawing.Size(240, 16);
 			this.txtNewEntryTitle.TabIndex = 1;
 			// 
 			// label2
 			// 
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(6, 37);
+			this.label2.Location = new System.Drawing.Point(6, 43);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(32, 15);
 			this.label2.TabIndex = 0;
-			this.label2.Text = "Title ";
+			this.label2.Text = "Title:";
 			// 
 			// lblAddEntry
 			// 
@@ -447,6 +451,7 @@ namespace myJournal
 			// grpOpenScreen
 			// 
 			this.grpOpenScreen.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.grpOpenScreen.BackColor = System.Drawing.SystemColors.Window;
 			this.grpOpenScreen.Controls.Add(this.lblPrint);
 			this.grpOpenScreen.Controls.Add(this.pnlMenu);
 			this.grpOpenScreen.Controls.Add(this.lblMenu);
@@ -456,7 +461,7 @@ namespace myJournal
 			this.grpOpenScreen.Controls.Add(this.label1);
 			this.grpOpenScreen.Controls.Add(this.lblSelectionType);
 			this.grpOpenScreen.Controls.Add(this.lstEntries);
-			this.grpOpenScreen.Controls.Add(this.label4);
+			this.grpOpenScreen.Controls.Add(this.lblSelectAJournal);
 			this.grpOpenScreen.Location = new System.Drawing.Point(61, 0);
 			this.grpOpenScreen.Name = "grpOpenScreen";
 			this.grpOpenScreen.Size = new System.Drawing.Size(290, 545);
@@ -476,6 +481,7 @@ namespace myJournal
 			this.lblPrint.Size = new System.Drawing.Size(34, 15);
 			this.lblPrint.TabIndex = 29;
 			this.lblPrint.Text = "print";
+			this.lblPrint.Visible = false;
 			this.lblPrint.Click += new System.EventHandler(this.lblPrint_Click);
 			// 
 			// pnlMenu
@@ -494,7 +500,7 @@ namespace myJournal
 			this.pnlMenu.Controls.Add(this.lblFindEntry);
 			this.pnlMenu.Controls.Add(this.lblMenu_1);
 			this.pnlMenu.Controls.Add(this.lblMenu_0);
-			this.pnlMenu.Location = new System.Drawing.Point(34, 29);
+			this.pnlMenu.Location = new System.Drawing.Point(60, 52);
 			this.pnlMenu.Name = "pnlMenu";
 			this.pnlMenu.Size = new System.Drawing.Size(175, 293);
 			this.pnlMenu.TabIndex = 28;
@@ -509,9 +515,9 @@ namespace myJournal
 			this.lblViewJournal.ForeColor = System.Drawing.SystemColors.MenuHighlight;
 			this.lblViewJournal.Location = new System.Drawing.Point(17, 63);
 			this.lblViewJournal.Name = "lblViewJournal";
-			this.lblViewJournal.Size = new System.Drawing.Size(73, 15);
+			this.lblViewJournal.Size = new System.Drawing.Size(60, 15);
 			this.lblViewJournal.TabIndex = 26;
-			this.lblViewJournal.Text = "View Entries";
+			this.lblViewJournal.Text = "All Entries";
 			this.lblViewJournal.Click += new System.EventHandler(this.lblViewJournal_Click);
 			this.lblViewJournal.MouseEnter += new System.EventHandler(this.MenuItem_Enter);
 			this.lblViewJournal.MouseLeave += new System.EventHandler(this.MenuItem_Leave);
@@ -637,7 +643,7 @@ namespace myJournal
 			this.lblMenu_1.ForeColor = System.Drawing.SystemColors.HighlightText;
 			this.lblMenu_1.Location = new System.Drawing.Point(3, 3);
 			this.lblMenu_1.Name = "lblMenu_1";
-			this.lblMenu_1.Size = new System.Drawing.Size(110, 244);
+			this.lblMenu_1.Size = new System.Drawing.Size(110, 230);
 			this.lblMenu_1.TabIndex = 23;
 			// 
 			// lblMenu_0
@@ -664,17 +670,19 @@ namespace myJournal
 			// lblEntriesStartFrom
 			// 
 			this.lblEntriesStartFrom.AutoSize = true;
-			this.lblEntriesStartFrom.Location = new System.Drawing.Point(54, 77);
+			this.lblEntriesStartFrom.Location = new System.Drawing.Point(127, 77);
 			this.lblEntriesStartFrom.Name = "lblEntriesStartFrom";
 			this.lblEntriesStartFrom.Size = new System.Drawing.Size(108, 15);
 			this.lblEntriesStartFrom.TabIndex = 10;
 			this.lblEntriesStartFrom.Text = "(from 2 weeks ago)";
+			this.lblEntriesStartFrom.Visible = false;
 			// 
 			// rtbSelectedEntry_Main
 			// 
 			this.rtbSelectedEntry_Main.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.rtbSelectedEntry_Main.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.rtbSelectedEntry_Main.Location = new System.Drawing.Point(6, 275);
 			this.rtbSelectedEntry_Main.Name = "rtbSelectedEntry_Main";
 			this.rtbSelectedEntry_Main.Size = new System.Drawing.Size(278, 264);
@@ -682,38 +690,44 @@ namespace myJournal
 			this.rtbSelectedEntry_Main.TabStop = false;
 			this.rtbSelectedEntry_Main.Text = "";
 			this.rtbSelectedEntry_Main.Click += new System.EventHandler(this.rtbSelectedEntry_Main_Click);
+			this.rtbSelectedEntry_Main.TextChanged += new System.EventHandler(this.rtbSelectedEntry_Main_TextChanged);
 			// 
 			// lblSelectionType
 			// 
 			this.lblSelectionType.AutoSize = true;
-			this.lblSelectionType.Location = new System.Drawing.Point(6, 258);
+			this.lblSelectionType.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.lblSelectionType.Location = new System.Drawing.Point(4, 257);
 			this.lblSelectionType.Name = "lblSelectionType";
-			this.lblSelectionType.Size = new System.Drawing.Size(54, 15);
+			this.lblSelectionType.Size = new System.Drawing.Size(98, 15);
 			this.lblSelectionType.TabIndex = 9;
-			this.lblSelectionType.Text = "Selected ";
+			this.lblSelectionType.Text = "Select An Entry ...";
+			this.lblSelectionType.Visible = false;
 			// 
 			// lstEntries
 			// 
 			this.lstEntries.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.lstEntries.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.lstEntries.FormattingEnabled = true;
 			this.lstEntries.HorizontalScrollbar = true;
 			this.lstEntries.ItemHeight = 15;
 			this.lstEntries.Location = new System.Drawing.Point(6, 95);
 			this.lstEntries.Name = "lstEntries";
 			this.lstEntries.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
-			this.lstEntries.Size = new System.Drawing.Size(278, 154);
+			this.lstEntries.Size = new System.Drawing.Size(278, 150);
 			this.lstEntries.TabIndex = 8;
 			this.lstEntries.SelectedIndexChanged += new System.EventHandler(this.ListOfEntries_SelectedIndexChanged);
 			// 
-			// label4
+			// lblSelectAJournal
 			// 
-			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(6, 78);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(42, 15);
-			this.label4.TabIndex = 7;
-			this.label4.Text = "Entries";
+			this.lblSelectAJournal.AutoSize = true;
+			this.lblSelectAJournal.Enabled = false;
+			this.lblSelectAJournal.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.lblSelectAJournal.Location = new System.Drawing.Point(6, 77);
+			this.lblSelectAJournal.Name = "lblSelectAJournal";
+			this.lblSelectAJournal.Size = new System.Drawing.Size(110, 15);
+			this.lblSelectAJournal.TabIndex = 7;
+			this.lblSelectAJournal.Text = "(Select A Journal ...)";
 			// 
 			// grpFindEntry
 			// 
@@ -737,9 +751,9 @@ namespace myJournal
 			this.grpFindEntry.Controls.Add(this.lblFindEntries);
 			this.grpFindEntry.Controls.Add(this.rtbSelectedEntry_Found);
 			this.grpFindEntry.Controls.Add(this.label9);
-			this.grpFindEntry.Controls.Add(this.label10);
+			this.grpFindEntry.Controls.Add(this.lblSelectedFoundEntry);
 			this.grpFindEntry.Controls.Add(this.label8);
-			this.grpFindEntry.Controls.Add(this.label11);
+			this.grpFindEntry.Controls.Add(this.lblFoundEntries);
 			this.grpFindEntry.Location = new System.Drawing.Point(705, 13);
 			this.grpFindEntry.Name = "grpFindEntry";
 			this.grpFindEntry.Size = new System.Drawing.Size(290, 545);
@@ -750,12 +764,13 @@ namespace myJournal
 			// 
 			this.lstFoundEntries.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.lstFoundEntries.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.lstFoundEntries.FormattingEnabled = true;
 			this.lstFoundEntries.ItemHeight = 15;
 			this.lstFoundEntries.Location = new System.Drawing.Point(6, 205);
 			this.lstFoundEntries.Name = "lstFoundEntries";
 			this.lstFoundEntries.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
-			this.lstFoundEntries.Size = new System.Drawing.Size(278, 109);
+			this.lstFoundEntries.Size = new System.Drawing.Size(278, 105);
 			this.lstFoundEntries.TabIndex = 14;
 			this.lstFoundEntries.SelectedIndexChanged += new System.EventHandler(this.ListOfEntries_SelectedIndexChanged);
 			// 
@@ -817,9 +832,9 @@ namespace myJournal
 			this.lstGroupsForSearch.CheckOnClick = true;
 			this.lstGroupsForSearch.ContextMenuStrip = this.mnuGroups;
 			this.lstGroupsForSearch.FormattingEnabled = true;
-			this.lstGroupsForSearch.Location = new System.Drawing.Point(41, 108);
+			this.lstGroupsForSearch.Location = new System.Drawing.Point(91, 103);
 			this.lstGroupsForSearch.Name = "lstGroupsForSearch";
-			this.lstGroupsForSearch.Size = new System.Drawing.Size(213, 76);
+			this.lstGroupsForSearch.Size = new System.Drawing.Size(174, 76);
 			this.lstGroupsForSearch.TabIndex = 29;
 			this.lstGroupsForSearch.Visible = false;
 			this.lstGroupsForSearch.SelectedIndexChanged += new System.EventHandler(this.lstGroupsForSearch_SelectedIndexChanged);
@@ -828,20 +843,21 @@ namespace myJournal
 			// 
 			this.txtGroupsForSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtGroupsForSearch.Location = new System.Drawing.Point(41, 86);
+			this.txtGroupsForSearch.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.txtGroupsForSearch.Location = new System.Drawing.Point(89, 88);
 			this.txtGroupsForSearch.Name = "txtGroupsForSearch";
-			this.txtGroupsForSearch.Size = new System.Drawing.Size(243, 23);
+			this.txtGroupsForSearch.Size = new System.Drawing.Size(191, 16);
 			this.txtGroupsForSearch.TabIndex = 27;
 			this.txtGroupsForSearch.Click += new System.EventHandler(this.txtGroupsForSearch_Click);
 			// 
 			// label17
 			// 
 			this.label17.AutoSize = true;
-			this.label17.Location = new System.Drawing.Point(4, 89);
+			this.label17.Location = new System.Drawing.Point(45, 89);
 			this.label17.Name = "label17";
-			this.label17.Size = new System.Drawing.Size(37, 15);
+			this.label17.Size = new System.Drawing.Size(40, 15);
 			this.label17.TabIndex = 26;
-			this.label17.Text = "tag(s)";
+			this.label17.Text = "tag(s):";
 			// 
 			// lblClearAll
 			// 
@@ -885,18 +901,20 @@ namespace myJournal
 			// 
 			this.txtSearchText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtSearchText.Location = new System.Drawing.Point(85, 143);
+			this.txtSearchText.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.txtSearchText.Location = new System.Drawing.Point(89, 145);
 			this.txtSearchText.Name = "txtSearchText";
-			this.txtSearchText.Size = new System.Drawing.Size(199, 23);
+			this.txtSearchText.Size = new System.Drawing.Size(191, 16);
 			this.txtSearchText.TabIndex = 22;
 			// 
 			// txtSearchTitle
 			// 
 			this.txtSearchTitle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtSearchTitle.Location = new System.Drawing.Point(85, 114);
+			this.txtSearchTitle.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.txtSearchTitle.Location = new System.Drawing.Point(89, 116);
 			this.txtSearchTitle.Name = "txtSearchTitle";
-			this.txtSearchTitle.Size = new System.Drawing.Size(199, 23);
+			this.txtSearchTitle.Size = new System.Drawing.Size(191, 16);
 			this.txtSearchTitle.TabIndex = 21;
 			// 
 			// dtFindDate_To
@@ -950,6 +968,7 @@ namespace myJournal
 			this.rtbSelectedEntry_Found.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.rtbSelectedEntry_Found.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.rtbSelectedEntry_Found.Location = new System.Drawing.Point(6, 335);
 			this.rtbSelectedEntry_Found.Name = "rtbSelectedEntry_Found";
 			this.rtbSelectedEntry_Found.Size = new System.Drawing.Size(278, 198);
@@ -959,38 +978,40 @@ namespace myJournal
 			// label9
 			// 
 			this.label9.AutoSize = true;
-			this.label9.Location = new System.Drawing.Point(2, 146);
+			this.label9.Location = new System.Drawing.Point(3, 146);
 			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(82, 15);
+			this.label9.Size = new System.Drawing.Size(85, 15);
 			this.label9.TabIndex = 3;
-			this.label9.Text = "Entry contains";
+			this.label9.Text = "Entry contains:";
 			// 
-			// label10
+			// lblSelectedFoundEntry
 			// 
-			this.label10.AutoSize = true;
-			this.label10.Location = new System.Drawing.Point(3, 317);
-			this.label10.Name = "label10";
-			this.label10.Size = new System.Drawing.Size(81, 15);
-			this.label10.TabIndex = 15;
-			this.label10.Text = "Selected Entry";
+			this.lblSelectedFoundEntry.AutoSize = true;
+			this.lblSelectedFoundEntry.Location = new System.Drawing.Point(3, 317);
+			this.lblSelectedFoundEntry.Name = "lblSelectedFoundEntry";
+			this.lblSelectedFoundEntry.Size = new System.Drawing.Size(81, 15);
+			this.lblSelectedFoundEntry.TabIndex = 15;
+			this.lblSelectedFoundEntry.Text = "Selected Entry";
+			this.lblSelectedFoundEntry.Visible = false;
 			// 
 			// label8
 			// 
 			this.label8.AutoSize = true;
-			this.label8.Location = new System.Drawing.Point(7, 117);
+			this.label8.Location = new System.Drawing.Point(8, 116);
 			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(77, 15);
+			this.label8.Size = new System.Drawing.Size(80, 15);
 			this.label8.TabIndex = 2;
-			this.label8.Text = "Title contains";
+			this.label8.Text = "Title contains:";
 			// 
-			// label11
+			// lblFoundEntries
 			// 
-			this.label11.AutoSize = true;
-			this.label11.Location = new System.Drawing.Point(3, 187);
-			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(79, 15);
-			this.label11.TabIndex = 13;
-			this.label11.Text = "Found Entries";
+			this.lblFoundEntries.AutoSize = true;
+			this.lblFoundEntries.Location = new System.Drawing.Point(3, 187);
+			this.lblFoundEntries.Name = "lblFoundEntries";
+			this.lblFoundEntries.Size = new System.Drawing.Size(79, 15);
+			this.lblFoundEntries.TabIndex = 13;
+			this.lblFoundEntries.Text = "Found Entries";
+			this.lblFoundEntries.Visible = false;
 			// 
 			// grpNewJournal
 			// 
@@ -1043,9 +1064,10 @@ namespace myJournal
 			// 
 			this.txtNewJournalName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtNewJournalName.Location = new System.Drawing.Point(88, 40);
+			this.txtNewJournalName.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.txtNewJournalName.Location = new System.Drawing.Point(88, 42);
 			this.txtNewJournalName.Name = "txtNewJournalName";
-			this.txtNewJournalName.Size = new System.Drawing.Size(185, 23);
+			this.txtNewJournalName.Size = new System.Drawing.Size(185, 16);
 			this.txtNewJournalName.TabIndex = 1;
 			// 
 			// label13
@@ -1102,9 +1124,10 @@ namespace myJournal
 			// 
 			this.txtTag_TagName_Edited.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtTag_TagName_Edited.Location = new System.Drawing.Point(67, 38);
+			this.txtTag_TagName_Edited.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.txtTag_TagName_Edited.Location = new System.Drawing.Point(67, 40);
 			this.txtTag_TagName_Edited.Name = "txtTag_TagName_Edited";
-			this.txtTag_TagName_Edited.Size = new System.Drawing.Size(121, 23);
+			this.txtTag_TagName_Edited.Size = new System.Drawing.Size(121, 16);
 			this.txtTag_TagName_Edited.TabIndex = 4;
 			// 
 			// label7
@@ -1182,11 +1205,13 @@ namespace myJournal
 			// 
 			this.lstTagsForEdit.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.lstTagsForEdit.BackColor = System.Drawing.SystemColors.Window;
+			this.lstTagsForEdit.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.lstTagsForEdit.FormattingEnabled = true;
 			this.lstTagsForEdit.ItemHeight = 15;
 			this.lstTagsForEdit.Location = new System.Drawing.Point(6, 36);
 			this.lstTagsForEdit.Name = "lstTagsForEdit";
-			this.lstTagsForEdit.Size = new System.Drawing.Size(263, 94);
+			this.lstTagsForEdit.Size = new System.Drawing.Size(263, 90);
 			this.lstTagsForEdit.TabIndex = 0;
 			// 
 			// grpEditTags_Add
@@ -1207,9 +1232,10 @@ namespace myJournal
 			// 
 			this.txtTags_TagName_NewTag.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtTags_TagName_NewTag.Location = new System.Drawing.Point(70, 28);
+			this.txtTags_TagName_NewTag.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.txtTags_TagName_NewTag.Location = new System.Drawing.Point(70, 30);
 			this.txtTags_TagName_NewTag.Name = "txtTags_TagName_NewTag";
-			this.txtTags_TagName_NewTag.Size = new System.Drawing.Size(121, 23);
+			this.txtTags_TagName_NewTag.Size = new System.Drawing.Size(121, 16);
 			this.txtTags_TagName_NewTag.TabIndex = 1;
 			// 
 			// label16
@@ -1360,6 +1386,7 @@ namespace myJournal
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.BackColor = System.Drawing.SystemColors.Window;
 			this.ClientSize = new System.Drawing.Size(1109, 1061);
 			this.Controls.Add(this.grpConfirmDeleteEntry);
 			this.Controls.Add(this.grpDeleteJournal);
@@ -1418,11 +1445,10 @@ namespace myJournal
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.GroupBox grpOpenScreen;
         private System.Windows.Forms.ListBox lstEntries;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label lblSelectAJournal;
         private System.Windows.Forms.GroupBox grpFindEntry;
         private System.Windows.Forms.Label lblSelectionType;
         private System.Windows.Forms.RichTextBox rtbSelectedEntry_Main;
-        private System.Windows.Forms.Label lblEntriesStartFrom;
         private System.Windows.Forms.TextBox txtSearchText;
         private System.Windows.Forms.TextBox txtSearchTitle;
         private System.Windows.Forms.DateTimePicker dtFindDate_To;
@@ -1432,9 +1458,9 @@ namespace myJournal
         private System.Windows.Forms.Label lblFindEntries;
         private System.Windows.Forms.RichTextBox rtbSelectedEntry_Found;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label lblSelectedFoundEntry;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label lblFoundEntries;
         private System.Windows.Forms.GroupBox grpNewJournal;
         private System.Windows.Forms.Label lblFont_NewEntry;
         private System.Windows.Forms.Label lblHome_NewEntry;
@@ -1508,6 +1534,7 @@ namespace myJournal
 		private System.Windows.Forms.Label lblBack_EditTag;
 		private System.Windows.Forms.Label lblViewJournal;
 		private System.Windows.Forms.Label lblPrint;
+		private System.Windows.Forms.Label lblEntriesStartFrom;
 	}
 }
 
