@@ -689,7 +689,7 @@ namespace myJournal
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.rtbSelectedEntry_Main.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.rtbSelectedEntry_Main.Location = new System.Drawing.Point(6, 281);
+			this.rtbSelectedEntry_Main.Location = new System.Drawing.Point(6, 282);
 			this.rtbSelectedEntry_Main.Name = "rtbSelectedEntry_Main";
 			this.rtbSelectedEntry_Main.Size = new System.Drawing.Size(278, 258);
 			this.rtbSelectedEntry_Main.TabIndex = 5;
@@ -1066,7 +1066,7 @@ namespace myJournal
 			// btnOK_NewJrnl
 			// 
 			this.btnOK_NewJrnl.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-			this.btnOK_NewJrnl.Location = new System.Drawing.Point(99, 72);
+			this.btnOK_NewJrnl.Location = new System.Drawing.Point(103, 70);
 			this.btnOK_NewJrnl.Name = "btnOK_NewJrnl";
 			this.btnOK_NewJrnl.Size = new System.Drawing.Size(75, 23);
 			this.btnOK_NewJrnl.TabIndex = 2;
@@ -1295,15 +1295,15 @@ namespace myJournal
 			this.grpDeleteJournal.Controls.Add(this.lblJournalToDelete);
 			this.grpDeleteJournal.Location = new System.Drawing.Point(669, 587);
 			this.grpDeleteJournal.Name = "grpDeleteJournal";
-			this.grpDeleteJournal.Size = new System.Drawing.Size(290, 107);
+			this.grpDeleteJournal.Size = new System.Drawing.Size(290, 126);
 			this.grpDeleteJournal.TabIndex = 26;
 			this.grpDeleteJournal.TabStop = false;
 			// 
 			// lblDelete_Confirm
 			// 
-			this.lblDelete_Confirm.Location = new System.Drawing.Point(41, 27);
+			this.lblDelete_Confirm.Location = new System.Drawing.Point(36, 19);
 			this.lblDelete_Confirm.Name = "lblDelete_Confirm";
-			this.lblDelete_Confirm.Size = new System.Drawing.Size(211, 39);
+			this.lblDelete_Confirm.Size = new System.Drawing.Size(229, 58);
 			this.lblDelete_Confirm.TabIndex = 26;
 			this.lblDelete_Confirm.Text = " will be deleted. Press Delete to continue.";
 			this.lblDelete_Confirm.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1335,7 +1335,7 @@ namespace myJournal
 			// btnOK_DeleteJournal
 			// 
 			this.btnOK_DeleteJournal.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-			this.btnOK_DeleteJournal.Location = new System.Drawing.Point(107, 72);
+			this.btnOK_DeleteJournal.Location = new System.Drawing.Point(113, 80);
 			this.btnOK_DeleteJournal.Name = "btnOK_DeleteJournal";
 			this.btnOK_DeleteJournal.Size = new System.Drawing.Size(75, 23);
 			this.btnOK_DeleteJournal.TabIndex = 2;
@@ -1359,15 +1359,15 @@ namespace myJournal
 			this.grpConfirmDeleteEntry.Controls.Add(this.btnOK_ConfirmEntryDelete);
 			this.grpConfirmDeleteEntry.Location = new System.Drawing.Point(669, 719);
 			this.grpConfirmDeleteEntry.Name = "grpConfirmDeleteEntry";
-			this.grpConfirmDeleteEntry.Size = new System.Drawing.Size(290, 107);
+			this.grpConfirmDeleteEntry.Size = new System.Drawing.Size(290, 120);
 			this.grpConfirmDeleteEntry.TabIndex = 27;
 			this.grpConfirmDeleteEntry.TabStop = false;
 			// 
 			// lblMessage_ConfirmEntryDelete
 			// 
-			this.lblMessage_ConfirmEntryDelete.Location = new System.Drawing.Point(41, 27);
+			this.lblMessage_ConfirmEntryDelete.Location = new System.Drawing.Point(36, 19);
 			this.lblMessage_ConfirmEntryDelete.Name = "lblMessage_ConfirmEntryDelete";
-			this.lblMessage_ConfirmEntryDelete.Size = new System.Drawing.Size(211, 39);
+			this.lblMessage_ConfirmEntryDelete.Size = new System.Drawing.Size(229, 58);
 			this.lblMessage_ConfirmEntryDelete.TabIndex = 26;
 			this.lblMessage_ConfirmEntryDelete.Text = " will be deleted. Press Delete to continue.";
 			this.lblMessage_ConfirmEntryDelete.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1388,7 +1388,7 @@ namespace myJournal
 			// btnOK_ConfirmEntryDelete
 			// 
 			this.btnOK_ConfirmEntryDelete.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-			this.btnOK_ConfirmEntryDelete.Location = new System.Drawing.Point(107, 72);
+			this.btnOK_ConfirmEntryDelete.Location = new System.Drawing.Point(113, 80);
 			this.btnOK_ConfirmEntryDelete.Name = "btnOK_ConfirmEntryDelete";
 			this.btnOK_ConfirmEntryDelete.Size = new System.Drawing.Size(75, 23);
 			this.btnOK_ConfirmEntryDelete.TabIndex = 2;

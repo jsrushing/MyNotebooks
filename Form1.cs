@@ -232,7 +232,7 @@ namespace myJournal
             else
             {
                 lblDelete_Confirm.Location = new Point(grpDeleteJournal.Width/2 - lblDelete_Confirm.Width / 2, lblDelete_Confirm.Top);
-                lblDelete_Confirm.Text = ddlJournalsToDelete.Text + lblDelete_Confirm.Text;
+                lblDelete_Confirm.Text = "'" + ddlJournalsToDelete.Text + "' " + lblDelete_Confirm.Text;
                 ddlJournalsToDelete.Visible = false;
                 lblJournalToDelete.Visible = false;
                 lblDelete_Confirm.Visible = true;
@@ -421,7 +421,7 @@ namespace myJournal
         /// <param name="e"></param>
         private void lblDeleteEntry_Click(object sender, EventArgs e)
         {
-			lblMessage_ConfirmEntryDelete.Text = currentEntry.ClearTitle() + " " + lblMessage_ConfirmEntryDelete.Text;
+			lblMessage_ConfirmEntryDelete.Text = "'" + currentEntry.ClearTitle() + "' " + lblMessage_ConfirmEntryDelete.Text;
 			ActivateGroupBox(grpConfirmDeleteEntry);
         }
 
