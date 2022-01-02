@@ -100,7 +100,6 @@ namespace myJournal
                 case "grpOpenScreen":
                     this.Text = "My Journal";
                     rtbSelectedEntry_Main.Clear();
-					lstEntries.Height = rtbSelectedEntry_Main.Height - 70;
 					break;
                 case "grpCreateEntry":
 					btnAddEntry.Text = "Save Entry";
@@ -112,8 +111,15 @@ namespace myJournal
 					}
                     grpAppendDeleteOriginal.Visible = false;
                     txtBxToFocus = this.txtNewEntryTitle;
-                    if(lstTags.Items.Count == 0) { Tags_PopulateTagsList(lstTags); }
+                    Tags_PopulateTagsList(lstTags);
 					foreach(int i in lstTags.CheckedIndices) { lstTags.SetItemChecked(i, false); }
+                    break;
+                case "grpDeleteJournal":
+                    lblDelete_Confirm.Visible = false;
+                    lblDelete_Confirm.Text = " will be deleted. Press Delete to confirm.";
+                    ddlJournalsToDelete.Visible = true;
+                    lblJournalToDelete.Visible = true;
+                    ddlJournalsToDelete.Text = ddlJournals.Text.Length > 0 ? ddlJournals.Text : String.Empty;
                     break;
                 case "grpFindEntry":
                     this.Text = "Search Journal";
@@ -125,24 +131,17 @@ namespace myJournal
 					rtbSelectedEntry_Found.Text = String.Empty;
                     //txtGroupsForSearch.Text = Properties.Settings.Default["TxtSelectGroupsForSearchDefault"].ToString();
                     break;
-                case "grpNewJournal":
-                    this.Text = "Create New Journal";
-                    txtBxToFocus = this.txtNewJournalName;
-					lblMessage_BadJournalName.Location = new Point(6, 30);
-					lblMessage_BadJournalName.Width = grpNewJournal.Width - 3;
-                    break;
-                case "grpNewGroup":
+                case "grpManageTags":
                     this.Text = "Create New Group";
 					Tags_PopulateTagsList(null, lstTagsForEdit);
 					grpEditTags_NewName.Visible = false;
 					txtBxToFocus = this.txtTags_TagName_NewTag;
                     break;
-                case "grpDeleteJournal":
-                    lblDelete_Confirm.Visible = false;
-                    lblDelete_Confirm.Text = " will be deleted. Press Delete to confirm.";
-                    ddlJournalsToDelete.Visible = true;
-                    lblJournalToDelete.Visible = true;
-                    ddlJournalsToDelete.Text = ddlJournals.Text.Length > 0 ? ddlJournals.Text : String.Empty;
+                case "grpNewJournal":
+                    this.Text = "Create New Journal";
+                    txtBxToFocus = this.txtNewJournalName;
+					lblMessage_BadJournalName.Location = new Point(6, 30);
+					lblMessage_BadJournalName.Width = grpNewJournal.Width - 3;
                     break;
             }
 
@@ -439,7 +438,6 @@ namespace myJournal
 				grpEditTags_NewName.Location = grpEditTags_Add.Location;
 				grpEditTags_NewName.Height = grpEditTags_EditRemove.Top + grpEditTags_EditRemove.Height;
 				grpEditTags_NewName.Width = grpEditTags_Add.Width;
-				backTarget = grpManageTags;
 				txtTag_TagName_Edited.Text = lstTagsForEdit.SelectedItem.ToString();
 				grpEditTags_NewName.Visible = true;
 				txtTag_TagName_Edited.SelectAll();
@@ -578,6 +576,20 @@ namespace myJournal
 
 		private void lblMenu_Click(object sender, EventArgs e) { pnlMenu.Visible = !pnlMenu.Visible; }
 
+		/// <summary>
+		/// Print the contents of rtbSelectedEntry.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void lblPrint_Click(object sender, EventArgs e)
+		{
+			PrintDialog.Document = PrintDocument;
+			if (PrintDialog.ShowDialog() == DialogResult.OK)
+			{
+				PrintDocument.Print();
+			}
+		}
+
 		private void lblRemoveTag_Click(object sender, EventArgs e)
 		{
 			int a = lstTagsForEdit.SelectedIndex;
@@ -603,6 +615,16 @@ namespace myJournal
 			ActivateGroupBox(grpManageTags); 
 			backTarget = label.Name.EndsWith("2") ? grpCreateEntry : null;
 		}
+		private void lblViewJournal_Click(object sender, EventArgs e)
+		{
+			pnlMenu.Visible = false;
+			rtbSelectedEntry_Main.Text = currentJournal.GetAllEntries();
+			lblSelectionType.Visible = true;
+			lblPrint.Visible = lblSelectionType.Visible;
+			lblSelectionType.Text = "All Entries";
+		}
+
+
 		#endregion
 
 		#region Menus - Toggle display on MouseEnter/Leave
@@ -722,6 +744,7 @@ namespace myJournal
 				lblSelectedFoundEntry.Visible = rtbSelectedEntry_Found.Text.Length > 0;
 				lblSelectionType.Text = "Selected Entry";
 				lstEntries.Height = rtb.Text.Length > 0 ? rtbSelectedEntry_Main.Top - 132 : lstEntries.Height;
+				lstEntries.TopIndex = rtbSelectedEntry_Main.Text.Length > 0 ? ctr == 0 ? ctr : ctr - 1 : lstEntries.TopIndex;
 			}
 
 			lb.SelectedIndexChanged += new System.EventHandler(this.ListOfEntries_SelectedIndexChanged);
@@ -846,29 +869,6 @@ namespace myJournal
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void lblViewJournal_Click(object sender, EventArgs e)
-		{
-			pnlMenu.Visible = false;
-			rtbSelectedEntry_Main.Text = currentJournal.GetAllEntries();
-			lblSelectionType.Visible = true;
-			lblPrint.Visible = lblSelectionType.Visible;
-			lblSelectionType.Text = "All Entries";
-		}
-
-		/// <summary>
-		/// Print the contents of rtbSelectedEntry.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void lblPrint_Click(object sender, EventArgs e)
-		{
-			PrintDialog.Document = PrintDocument;
-			if(PrintDialog.ShowDialog() == DialogResult.OK)
-			{
-				PrintDocument.Print();
-			}
-		}
-
 		private void rtbSelectedEntry_Main_TextChanged(object sender, EventArgs e)
 		{
 			lblSelectionType.Visible = rtbSelectedEntry_Main.Text.Length > 0;
