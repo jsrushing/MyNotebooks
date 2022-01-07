@@ -30,6 +30,7 @@ namespace myJournal
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
 			this.label1 = new System.Windows.Forms.Label();
 			this.ddlJournals = new System.Windows.Forms.ComboBox();
 			this.lblCreateEntry = new System.Windows.Forms.Label();
@@ -55,7 +56,6 @@ namespace myJournal
 			this.rtbNewEntry = new System.Windows.Forms.RichTextBox();
 			this.txtNewEntryTitle = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
-			this.lblAddEntry = new System.Windows.Forms.Label();
 			this.grpOpenScreen = new System.Windows.Forms.GroupBox();
 			this.lblPrint = new System.Windows.Forms.Label();
 			this.pnlMenu = new System.Windows.Forms.Panel();
@@ -109,14 +109,15 @@ namespace myJournal
 			this.label13 = new System.Windows.Forms.Label();
 			this.grpManageTags = new System.Windows.Forms.GroupBox();
 			this.grpEditTags_NewName = new System.Windows.Forms.GroupBox();
-			this.lblBack_EditTag = new System.Windows.Forms.Label();
 			this.txtTag_TagName_Edited = new System.Windows.Forms.TextBox();
 			this.label7 = new System.Windows.Forms.Label();
 			this.btnOK_TagName_Edited = new System.Windows.Forms.Button();
 			this.grpEditTags_EditRemove = new System.Windows.Forms.GroupBox();
-			this.lblRemoveTag = new System.Windows.Forms.Label();
+			this.pnlTagControls = new System.Windows.Forms.Panel();
 			this.lblEditTag = new System.Windows.Forms.Label();
-			this.label19 = new System.Windows.Forms.Label();
+			this.lblRemoveTag = new System.Windows.Forms.Label();
+			this.lblMoveDown = new System.Windows.Forms.Label();
+			this.lblMoveUp = new System.Windows.Forms.Label();
 			this.lstTagsForEdit = new System.Windows.Forms.ListBox();
 			this.grpEditTags_Add = new System.Windows.Forms.GroupBox();
 			this.txtTags_TagName_NewTag = new System.Windows.Forms.TextBox();
@@ -143,6 +144,7 @@ namespace myJournal
 			this.grpManageTags.SuspendLayout();
 			this.grpEditTags_NewName.SuspendLayout();
 			this.grpEditTags_EditRemove.SuspendLayout();
+			this.pnlTagControls.SuspendLayout();
 			this.grpEditTags_Add.SuspendLayout();
 			this.grpDeleteJournal.SuspendLayout();
 			this.grpConfirmDeleteEntry.SuspendLayout();
@@ -421,9 +423,9 @@ namespace myJournal
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.rtbNewEntry.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.rtbNewEntry.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.rtbNewEntry.Location = new System.Drawing.Point(6, 87);
+			this.rtbNewEntry.Location = new System.Drawing.Point(6, 88);
 			this.rtbNewEntry.Name = "rtbNewEntry";
-			this.rtbNewEntry.Size = new System.Drawing.Size(278, 296);
+			this.rtbNewEntry.Size = new System.Drawing.Size(278, 306);
 			this.rtbNewEntry.TabIndex = 2;
 			this.rtbNewEntry.Text = "";
 			// 
@@ -447,13 +449,6 @@ namespace myJournal
 			this.label2.Size = new System.Drawing.Size(40, 17);
 			this.label2.TabIndex = 0;
 			this.label2.Text = "Title:";
-			// 
-			// lblAddEntry
-			// 
-			this.lblAddEntry.Location = new System.Drawing.Point(0, 0);
-			this.lblAddEntry.Name = "lblAddEntry";
-			this.lblAddEntry.Size = new System.Drawing.Size(100, 23);
-			this.lblAddEntry.TabIndex = 27;
 			// 
 			// grpOpenScreen
 			// 
@@ -725,13 +720,15 @@ namespace myJournal
 			// 
 			// lblSeparator_grpOpenScreen
 			// 
+			this.lblSeparator_grpOpenScreen.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.lblSeparator_grpOpenScreen.AutoSize = true;
 			this.lblSeparator_grpOpenScreen.ForeColor = System.Drawing.Color.Gray;
 			this.lblSeparator_grpOpenScreen.Location = new System.Drawing.Point(3, 241);
 			this.lblSeparator_grpOpenScreen.Name = "lblSeparator_grpOpenScreen";
-			this.lblSeparator_grpOpenScreen.Size = new System.Drawing.Size(272, 15);
+			this.lblSeparator_grpOpenScreen.Size = new System.Drawing.Size(1192, 15);
 			this.lblSeparator_grpOpenScreen.TabIndex = 30;
-			this.lblSeparator_grpOpenScreen.Text = "_____________________________________________________";
+			this.lblSeparator_grpOpenScreen.Text = resources.GetString("lblSeparator_grpOpenScreen.Text");
 			this.lblSeparator_grpOpenScreen.Visible = false;
 			// 
 			// rtbSelectedEntry_Main
@@ -819,16 +816,18 @@ namespace myJournal
 			// label18
 			// 
 			this.label18.AutoSize = true;
+			this.label18.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.label18.ForeColor = System.Drawing.SystemColors.MenuHighlight;
 			this.label18.Location = new System.Drawing.Point(3, 63);
 			this.label18.Name = "label18";
-			this.label18.Size = new System.Drawing.Size(55, 15);
+			this.label18.Size = new System.Drawing.Size(64, 17);
 			this.label18.TabIndex = 32;
 			this.label18.Text = "Search in";
 			// 
 			// radAllJournals
 			// 
 			this.radAllJournals.AutoSize = true;
-			this.radAllJournals.Location = new System.Drawing.Point(197, 61);
+			this.radAllJournals.Location = new System.Drawing.Point(200, 61);
 			this.radAllJournals.Name = "radAllJournals";
 			this.radAllJournals.Size = new System.Drawing.Size(82, 19);
 			this.radAllJournals.TabIndex = 31;
@@ -839,7 +838,7 @@ namespace myJournal
 			// 
 			this.radCurrentJournal.AutoSize = true;
 			this.radCurrentJournal.Checked = true;
-			this.radCurrentJournal.Location = new System.Drawing.Point(64, 61);
+			this.radCurrentJournal.Location = new System.Drawing.Point(70, 61);
 			this.radCurrentJournal.Name = "radCurrentJournal";
 			this.radCurrentJournal.Size = new System.Drawing.Size(129, 19);
 			this.radCurrentJournal.TabIndex = 30;
@@ -854,7 +853,7 @@ namespace myJournal
 			this.lstGroupsForSearch.CheckOnClick = true;
 			this.lstGroupsForSearch.ContextMenuStrip = this.mnuGroups;
 			this.lstGroupsForSearch.FormattingEnabled = true;
-			this.lstGroupsForSearch.Location = new System.Drawing.Point(42, 164);
+			this.lstGroupsForSearch.Location = new System.Drawing.Point(56, 188);
 			this.lstGroupsForSearch.Name = "lstGroupsForSearch";
 			this.lstGroupsForSearch.Size = new System.Drawing.Size(174, 76);
 			this.lstGroupsForSearch.TabIndex = 29;
@@ -866,18 +865,20 @@ namespace myJournal
 			this.txtGroupsForSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.txtGroupsForSearch.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.txtGroupsForSearch.Location = new System.Drawing.Point(89, 88);
+			this.txtGroupsForSearch.Location = new System.Drawing.Point(107, 88);
 			this.txtGroupsForSearch.Name = "txtGroupsForSearch";
-			this.txtGroupsForSearch.Size = new System.Drawing.Size(191, 16);
+			this.txtGroupsForSearch.Size = new System.Drawing.Size(173, 16);
 			this.txtGroupsForSearch.TabIndex = 27;
 			this.txtGroupsForSearch.Click += new System.EventHandler(this.txtGroupsForSearch_Click);
 			// 
 			// label17
 			// 
 			this.label17.AutoSize = true;
-			this.label17.Location = new System.Drawing.Point(45, 89);
+			this.label17.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.label17.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.label17.Location = new System.Drawing.Point(56, 87);
 			this.label17.Name = "label17";
-			this.label17.Size = new System.Drawing.Size(40, 15);
+			this.label17.Size = new System.Drawing.Size(48, 17);
 			this.label17.TabIndex = 26;
 			this.label17.Text = "tag(s):";
 			// 
@@ -924,9 +925,9 @@ namespace myJournal
 			this.txtSearchText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.txtSearchText.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.txtSearchText.Location = new System.Drawing.Point(89, 145);
+			this.txtSearchText.Location = new System.Drawing.Point(107, 145);
 			this.txtSearchText.Name = "txtSearchText";
-			this.txtSearchText.Size = new System.Drawing.Size(191, 16);
+			this.txtSearchText.Size = new System.Drawing.Size(173, 16);
 			this.txtSearchText.TabIndex = 22;
 			// 
 			// txtSearchTitle
@@ -934,9 +935,9 @@ namespace myJournal
 			this.txtSearchTitle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.txtSearchTitle.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.txtSearchTitle.Location = new System.Drawing.Point(89, 116);
+			this.txtSearchTitle.Location = new System.Drawing.Point(107, 116);
 			this.txtSearchTitle.Name = "txtSearchTitle";
-			this.txtSearchTitle.Size = new System.Drawing.Size(191, 16);
+			this.txtSearchTitle.Size = new System.Drawing.Size(173, 16);
 			this.txtSearchTitle.TabIndex = 21;
 			// 
 			// dtFindDate_To
@@ -1000,9 +1001,11 @@ namespace myJournal
 			// label9
 			// 
 			this.label9.AutoSize = true;
-			this.label9.Location = new System.Drawing.Point(3, 146);
+			this.label9.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.label9.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.label9.Location = new System.Drawing.Point(3, 144);
 			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(85, 15);
+			this.label9.Size = new System.Drawing.Size(101, 17);
 			this.label9.TabIndex = 3;
 			this.label9.Text = "Entry contains:";
 			// 
@@ -1021,9 +1024,11 @@ namespace myJournal
 			// label8
 			// 
 			this.label8.AutoSize = true;
-			this.label8.Location = new System.Drawing.Point(8, 116);
+			this.label8.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.label8.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.label8.Location = new System.Drawing.Point(8, 115);
 			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(80, 15);
+			this.label8.Size = new System.Drawing.Size(96, 17);
 			this.label8.TabIndex = 2;
 			this.label8.Text = "Title contains:";
 			// 
@@ -1091,17 +1096,19 @@ namespace myJournal
 			this.txtNewJournalName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.txtNewJournalName.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.txtNewJournalName.Location = new System.Drawing.Point(88, 42);
+			this.txtNewJournalName.Location = new System.Drawing.Point(105, 42);
 			this.txtNewJournalName.Name = "txtNewJournalName";
-			this.txtNewJournalName.Size = new System.Drawing.Size(185, 16);
+			this.txtNewJournalName.Size = new System.Drawing.Size(168, 16);
 			this.txtNewJournalName.TabIndex = 1;
 			// 
 			// label13
 			// 
 			this.label13.AutoSize = true;
-			this.label13.Location = new System.Drawing.Point(6, 43);
+			this.label13.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.label13.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.label13.Location = new System.Drawing.Point(6, 41);
 			this.label13.Name = "label13";
-			this.label13.Size = new System.Drawing.Size(83, 15);
+			this.label13.Size = new System.Drawing.Size(98, 17);
 			this.label13.TabIndex = 0;
 			this.label13.Text = "Journal Name:";
 			// 
@@ -1113,7 +1120,7 @@ namespace myJournal
 			this.grpManageTags.Controls.Add(this.lblHome_NewGroup);
 			this.grpManageTags.Location = new System.Drawing.Point(358, 587);
 			this.grpManageTags.Name = "grpManageTags";
-			this.grpManageTags.Size = new System.Drawing.Size(290, 395);
+			this.grpManageTags.Size = new System.Drawing.Size(349, 395);
 			this.grpManageTags.TabIndex = 26;
 			this.grpManageTags.TabStop = false;
 			// 
@@ -1121,47 +1128,35 @@ namespace myJournal
 			// 
 			this.grpEditTags_NewName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.grpEditTags_NewName.Controls.Add(this.lblBack_EditTag);
 			this.grpEditTags_NewName.Controls.Add(this.txtTag_TagName_Edited);
 			this.grpEditTags_NewName.Controls.Add(this.label7);
 			this.grpEditTags_NewName.Controls.Add(this.btnOK_TagName_Edited);
 			this.grpEditTags_NewName.Location = new System.Drawing.Point(6, 258);
 			this.grpEditTags_NewName.Name = "grpEditTags_NewName";
-			this.grpEditTags_NewName.Size = new System.Drawing.Size(275, 131);
+			this.grpEditTags_NewName.Size = new System.Drawing.Size(334, 131);
 			this.grpEditTags_NewName.TabIndex = 28;
 			this.grpEditTags_NewName.TabStop = false;
 			this.grpEditTags_NewName.Text = "Edit Tag";
 			this.grpEditTags_NewName.Visible = false;
-			// 
-			// lblBack_EditTag
-			// 
-			this.lblBack_EditTag.AutoSize = true;
-			this.lblBack_EditTag.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.lblBack_EditTag.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
-			this.lblBack_EditTag.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblBack_EditTag.Location = new System.Drawing.Point(6, 19);
-			this.lblBack_EditTag.Name = "lblBack_EditTag";
-			this.lblBack_EditTag.Size = new System.Drawing.Size(33, 15);
-			this.lblBack_EditTag.TabIndex = 29;
-			this.lblBack_EditTag.Text = "back";
-			this.lblBack_EditTag.Click += new System.EventHandler(this.lblHome_Click);
 			// 
 			// txtTag_TagName_Edited
 			// 
 			this.txtTag_TagName_Edited.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.txtTag_TagName_Edited.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.txtTag_TagName_Edited.Location = new System.Drawing.Point(67, 40);
+			this.txtTag_TagName_Edited.Location = new System.Drawing.Point(80, 26);
 			this.txtTag_TagName_Edited.Name = "txtTag_TagName_Edited";
-			this.txtTag_TagName_Edited.Size = new System.Drawing.Size(121, 16);
+			this.txtTag_TagName_Edited.Size = new System.Drawing.Size(167, 16);
 			this.txtTag_TagName_Edited.TabIndex = 4;
 			// 
 			// label7
 			// 
 			this.label7.AutoSize = true;
-			this.label7.Location = new System.Drawing.Point(3, 41);
+			this.label7.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.label7.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.label7.Location = new System.Drawing.Point(3, 25);
 			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(63, 15);
+			this.label7.Size = new System.Drawing.Size(74, 17);
 			this.label7.TabIndex = 3;
 			this.label7.Text = "Tag Name:";
 			// 
@@ -1169,7 +1164,7 @@ namespace myJournal
 			// 
 			this.btnOK_TagName_Edited.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnOK_TagName_Edited.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-			this.btnOK_TagName_Edited.Location = new System.Drawing.Point(194, 38);
+			this.btnOK_TagName_Edited.Location = new System.Drawing.Point(253, 24);
 			this.btnOK_TagName_Edited.Name = "btnOK_TagName_Edited";
 			this.btnOK_TagName_Edited.Size = new System.Drawing.Size(75, 23);
 			this.btnOK_TagName_Edited.TabIndex = 5;
@@ -1181,51 +1176,77 @@ namespace myJournal
 			// 
 			this.grpEditTags_EditRemove.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.grpEditTags_EditRemove.Controls.Add(this.lblRemoveTag);
-			this.grpEditTags_EditRemove.Controls.Add(this.lblEditTag);
-			this.grpEditTags_EditRemove.Controls.Add(this.label19);
+			this.grpEditTags_EditRemove.Controls.Add(this.pnlTagControls);
 			this.grpEditTags_EditRemove.Controls.Add(this.lstTagsForEdit);
 			this.grpEditTags_EditRemove.Location = new System.Drawing.Point(6, 113);
 			this.grpEditTags_EditRemove.Name = "grpEditTags_EditRemove";
-			this.grpEditTags_EditRemove.Size = new System.Drawing.Size(275, 139);
+			this.grpEditTags_EditRemove.Size = new System.Drawing.Size(334, 139);
 			this.grpEditTags_EditRemove.TabIndex = 27;
 			this.grpEditTags_EditRemove.TabStop = false;
-			this.grpEditTags_EditRemove.Text = "Edit/Remove Tags";
+			this.grpEditTags_EditRemove.Text = "Edit Tags";
 			// 
-			// lblRemoveTag
+			// pnlTagControls
 			// 
-			this.lblRemoveTag.AutoSize = true;
-			this.lblRemoveTag.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.lblRemoveTag.Font = new System.Drawing.Font("Adobe Fan Heiti Std B", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-			this.lblRemoveTag.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblRemoveTag.Location = new System.Drawing.Point(140, 19);
-			this.lblRemoveTag.Name = "lblRemoveTag";
-			this.lblRemoveTag.Size = new System.Drawing.Size(52, 15);
-			this.lblRemoveTag.TabIndex = 3;
-			this.lblRemoveTag.Text = "Remove";
-			this.lblRemoveTag.Click += new System.EventHandler(this.lblRemoveTag_Click);
+			this.pnlTagControls.Controls.Add(this.lblEditTag);
+			this.pnlTagControls.Controls.Add(this.lblRemoveTag);
+			this.pnlTagControls.Controls.Add(this.lblMoveDown);
+			this.pnlTagControls.Controls.Add(this.lblMoveUp);
+			this.pnlTagControls.Location = new System.Drawing.Point(2, 16);
+			this.pnlTagControls.Name = "pnlTagControls";
+			this.pnlTagControls.Size = new System.Drawing.Size(200, 17);
+			this.pnlTagControls.TabIndex = 7;
 			// 
 			// lblEditTag
 			// 
 			this.lblEditTag.AutoSize = true;
 			this.lblEditTag.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.lblEditTag.Font = new System.Drawing.Font("Adobe Fan Heiti Std B", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.lblEditTag.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
 			this.lblEditTag.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblEditTag.Location = new System.Drawing.Point(107, 19);
+			this.lblEditTag.Location = new System.Drawing.Point(3, 0);
 			this.lblEditTag.Name = "lblEditTag";
 			this.lblEditTag.Size = new System.Drawing.Size(27, 15);
 			this.lblEditTag.TabIndex = 2;
 			this.lblEditTag.Text = "Edit";
 			this.lblEditTag.Click += new System.EventHandler(this.lblEditTag_Click);
 			// 
-			// label19
+			// lblRemoveTag
 			// 
-			this.label19.AutoSize = true;
-			this.label19.Location = new System.Drawing.Point(17, 19);
-			this.label19.Name = "label19";
-			this.label19.Size = new System.Drawing.Size(84, 15);
-			this.label19.TabIndex = 1;
-			this.label19.Text = "Selected Item: ";
+			this.lblRemoveTag.AutoSize = true;
+			this.lblRemoveTag.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.lblRemoveTag.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+			this.lblRemoveTag.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.lblRemoveTag.Location = new System.Drawing.Point(29, 0);
+			this.lblRemoveTag.Name = "lblRemoveTag";
+			this.lblRemoveTag.Size = new System.Drawing.Size(50, 15);
+			this.lblRemoveTag.TabIndex = 3;
+			this.lblRemoveTag.Text = "Remove";
+			this.lblRemoveTag.Click += new System.EventHandler(this.lblRemoveTag_Click);
+			// 
+			// lblMoveDown
+			// 
+			this.lblMoveDown.AutoSize = true;
+			this.lblMoveDown.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.lblMoveDown.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+			this.lblMoveDown.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.lblMoveDown.Location = new System.Drawing.Point(132, 0);
+			this.lblMoveDown.Name = "lblMoveDown";
+			this.lblMoveDown.Size = new System.Drawing.Size(71, 15);
+			this.lblMoveDown.TabIndex = 5;
+			this.lblMoveDown.Text = "Move Down";
+			this.lblMoveDown.Click += new System.EventHandler(this.lblMoveUpDown_Click);
+			// 
+			// lblMoveUp
+			// 
+			this.lblMoveUp.AutoSize = true;
+			this.lblMoveUp.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.lblMoveUp.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+			this.lblMoveUp.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.lblMoveUp.Location = new System.Drawing.Point(78, 0);
+			this.lblMoveUp.Name = "lblMoveUp";
+			this.lblMoveUp.Size = new System.Drawing.Size(55, 15);
+			this.lblMoveUp.TabIndex = 4;
+			this.lblMoveUp.Text = "Move Up";
+			this.lblMoveUp.Click += new System.EventHandler(this.lblMoveUpDown_Click);
 			// 
 			// lstTagsForEdit
 			// 
@@ -1237,8 +1258,9 @@ namespace myJournal
 			this.lstTagsForEdit.ItemHeight = 15;
 			this.lstTagsForEdit.Location = new System.Drawing.Point(6, 36);
 			this.lstTagsForEdit.Name = "lstTagsForEdit";
-			this.lstTagsForEdit.Size = new System.Drawing.Size(263, 90);
+			this.lstTagsForEdit.Size = new System.Drawing.Size(322, 90);
 			this.lstTagsForEdit.TabIndex = 0;
+			this.lstTagsForEdit.SelectedIndexChanged += new System.EventHandler(this.lstTagsForEdit_SelectedIndexChanged);
 			// 
 			// grpEditTags_Add
 			// 
@@ -1249,7 +1271,7 @@ namespace myJournal
 			this.grpEditTags_Add.Controls.Add(this.btnOK_TagName_New);
 			this.grpEditTags_Add.Location = new System.Drawing.Point(6, 38);
 			this.grpEditTags_Add.Name = "grpEditTags_Add";
-			this.grpEditTags_Add.Size = new System.Drawing.Size(278, 69);
+			this.grpEditTags_Add.Size = new System.Drawing.Size(337, 69);
 			this.grpEditTags_Add.TabIndex = 26;
 			this.grpEditTags_Add.TabStop = false;
 			this.grpEditTags_Add.Text = "Add New Tag";
@@ -1259,17 +1281,19 @@ namespace myJournal
 			this.txtTags_TagName_NewTag.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.txtTags_TagName_NewTag.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.txtTags_TagName_NewTag.Location = new System.Drawing.Point(70, 30);
+			this.txtTags_TagName_NewTag.Location = new System.Drawing.Point(80, 30);
 			this.txtTags_TagName_NewTag.Name = "txtTags_TagName_NewTag";
-			this.txtTags_TagName_NewTag.Size = new System.Drawing.Size(121, 16);
+			this.txtTags_TagName_NewTag.Size = new System.Drawing.Size(170, 16);
 			this.txtTags_TagName_NewTag.TabIndex = 1;
 			// 
 			// label16
 			// 
 			this.label16.AutoSize = true;
-			this.label16.Location = new System.Drawing.Point(6, 31);
+			this.label16.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.label16.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.label16.Location = new System.Drawing.Point(6, 29);
 			this.label16.Name = "label16";
-			this.label16.Size = new System.Drawing.Size(63, 15);
+			this.label16.Size = new System.Drawing.Size(74, 17);
 			this.label16.TabIndex = 0;
 			this.label16.Text = "Tag Name:";
 			// 
@@ -1277,7 +1301,7 @@ namespace myJournal
 			// 
 			this.btnOK_TagName_New.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnOK_TagName_New.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-			this.btnOK_TagName_New.Location = new System.Drawing.Point(197, 28);
+			this.btnOK_TagName_New.Location = new System.Drawing.Point(256, 28);
 			this.btnOK_TagName_New.Name = "btnOK_TagName_New";
 			this.btnOK_TagName_New.Size = new System.Drawing.Size(75, 23);
 			this.btnOK_TagName_New.TabIndex = 2;
@@ -1305,7 +1329,7 @@ namespace myJournal
 			this.grpDeleteJournal.Controls.Add(this.lblHome_DeleteJournal);
 			this.grpDeleteJournal.Controls.Add(this.btnOK_DeleteJournal);
 			this.grpDeleteJournal.Controls.Add(this.lblJournalToDelete);
-			this.grpDeleteJournal.Location = new System.Drawing.Point(669, 587);
+			this.grpDeleteJournal.Location = new System.Drawing.Point(807, 599);
 			this.grpDeleteJournal.Name = "grpDeleteJournal";
 			this.grpDeleteJournal.Size = new System.Drawing.Size(290, 126);
 			this.grpDeleteJournal.TabIndex = 26;
@@ -1369,7 +1393,7 @@ namespace myJournal
 			this.grpConfirmDeleteEntry.Controls.Add(this.lblMessage_ConfirmEntryDelete);
 			this.grpConfirmDeleteEntry.Controls.Add(this.lblBack_ConfirmEntryDelete);
 			this.grpConfirmDeleteEntry.Controls.Add(this.btnOK_ConfirmEntryDelete);
-			this.grpConfirmDeleteEntry.Location = new System.Drawing.Point(669, 719);
+			this.grpConfirmDeleteEntry.Location = new System.Drawing.Point(807, 731);
 			this.grpConfirmDeleteEntry.Name = "grpConfirmDeleteEntry";
 			this.grpConfirmDeleteEntry.Size = new System.Drawing.Size(290, 120);
 			this.grpConfirmDeleteEntry.TabIndex = 27;
@@ -1421,8 +1445,6 @@ namespace myJournal
 			this.Controls.Add(this.grpOpenScreen);
 			this.Controls.Add(this.grpCreateEntry);
 			this.Controls.Add(this.grpFindEntry);
-			this.Controls.Add(this.lblAddEntry);
-			this.MaximizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(331, 592);
 			this.Name = "Form1";
 			this.Text = "My Journals";
@@ -1446,7 +1468,8 @@ namespace myJournal
 			this.grpEditTags_NewName.ResumeLayout(false);
 			this.grpEditTags_NewName.PerformLayout();
 			this.grpEditTags_EditRemove.ResumeLayout(false);
-			this.grpEditTags_EditRemove.PerformLayout();
+			this.pnlTagControls.ResumeLayout(false);
+			this.pnlTagControls.PerformLayout();
 			this.grpEditTags_Add.ResumeLayout(false);
 			this.grpEditTags_Add.PerformLayout();
 			this.grpDeleteJournal.ResumeLayout(false);
@@ -1464,7 +1487,6 @@ namespace myJournal
         private System.Windows.Forms.Label lblCreateEntry;
         private System.Windows.Forms.Label lblFindEntry;
         private System.Windows.Forms.GroupBox grpCreateEntry;
-        private System.Windows.Forms.Label lblAddEntry;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.RichTextBox rtbNewEntry;
         private System.Windows.Forms.TextBox txtNewEntryTitle;
@@ -1549,19 +1571,20 @@ namespace myJournal
 		private System.Windows.Forms.TextBox txtTag_TagName_Edited;
 		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.Button btnOK_TagName_Edited;
-		private System.Windows.Forms.Label lblRemoveTag;
-		private System.Windows.Forms.Label lblEditTag;
-		private System.Windows.Forms.Label label19;
 		private System.Windows.Forms.GroupBox grpConfirmDeleteEntry;
 		private System.Windows.Forms.Label lblMessage_ConfirmEntryDelete;
 		private System.Windows.Forms.Label lblBack_ConfirmEntryDelete;
 		private System.Windows.Forms.Button btnOK_ConfirmEntryDelete;
-		private System.Windows.Forms.Label lblBack_EditTag;
 		private System.Windows.Forms.Label lblViewJournal;
 		private System.Windows.Forms.Label lblPrint;
 		private System.Windows.Forms.Label lblEntriesStartFrom;
 		private System.Windows.Forms.Label lblTagManager2;
 		private System.Windows.Forms.Label lblSeparator_grpOpenScreen;
+		private System.Windows.Forms.Panel pnlTagControls;
+		private System.Windows.Forms.Label lblEditTag;
+		private System.Windows.Forms.Label lblRemoveTag;
+		private System.Windows.Forms.Label lblMoveDown;
+		private System.Windows.Forms.Label lblMoveUp;
 	}
 }
 

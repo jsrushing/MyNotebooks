@@ -53,10 +53,13 @@ namespace myJournal
 			ActiveBoxSize = new Size(x,y);
 			x = Convert.ToInt16(ConfigurationManager.AppSettings["Width_MainForm"]);
 			y = Convert.ToInt16(ConfigurationManager.AppSettings["Height_MainForm"]);
+
 			MainFormSize = new Size(x, y);
 			grpOpenScreen.Location = ActiveBoxLocation;
             grpOpenScreen.Size = ActiveBoxSize;
+
             LoadJournals();
+
 			lblJournal_Delete.Enabled = ddlJournals.Enabled;
             DisplayedGroupBox = grpOpenScreen;
             this.Size = MainFormSize;
@@ -69,6 +72,7 @@ namespace myJournal
 			FontStyle fs = FontStyle.Bold | FontStyle.Italic;
             ActiveMenuFont = new Font(InactiveMenuFont.FontFamily, InactiveMenuFont.Size + 1);
 			ActiveMenuFont = new Font(ActiveMenuFont, fs);
+
             ActivateGroupBox(grpOpenScreen);
         }
 
@@ -100,6 +104,7 @@ namespace myJournal
                 case "grpOpenScreen":
                     this.Text = "My Journal";
                     rtbSelectedEntry_Main.Clear();
+					lstEntries.Height = grpOpenScreen.Height - 100;
 					break;
                 case "grpCreateEntry":
 					btnAddEntry.Text = "Save Entry";
@@ -136,6 +141,10 @@ namespace myJournal
 					Tags_PopulateTagsList(null, lstTagsForEdit);
 					grpEditTags_NewName.Visible = false;
 					txtBxToFocus = this.txtTags_TagName_NewTag;
+					lblEditTag.Enabled = lstTagsForEdit.SelectedIndex > -1;
+					lblRemoveTag.Enabled = lblEditTag.Enabled;
+					lblMoveDown.Enabled = lblEditTag.Enabled;
+					lblMoveUp.Enabled = lblEditTag.Enabled;
                     break;
                 case "grpNewJournal":
                     this.Text = "Create New Journal";
@@ -313,7 +322,7 @@ namespace myJournal
         }
 
         #region Tags
-        private void Tags_btnAddTag_Click(object sender, EventArgs e) { ActivateGroupBox(grpManageTags); }
+        private void Tags_btnAddTag_Click(object sender, EventArgs e) { ActivateGroupBox(backTarget != null ? backTarget : grpOpenScreen); }
 
 		/// <summary>
 		/// Add new or edit a tag.
@@ -442,6 +451,7 @@ namespace myJournal
 				grpEditTags_NewName.Visible = true;
 				txtTag_TagName_Edited.SelectAll();
 				txtTag_TagName_Edited.Focus();
+				backTarget = grpManageTags;
 			}
 		}
 
@@ -612,9 +622,10 @@ namespace myJournal
 		private void lblTagManager_Click(object sender, EventArgs e) 
 		{
 			Label label = (Label)sender;
-			ActivateGroupBox(grpManageTags); 
-			backTarget = label.Name.EndsWith("2") ? grpCreateEntry : null;
+			ActivateGroupBox(grpManageTags);
+			backTarget = label.Name.EndsWith("2") ? grpCreateEntry : grpOpenScreen;
 		}
+
 		private void lblViewJournal_Click(object sender, EventArgs e)
 		{
 			pnlMenu.Visible = false;
@@ -623,7 +634,6 @@ namespace myJournal
 			lblPrint.Visible = lblSelectionType.Visible;
 			lblSelectionType.Text = "All Entries";
 		}
-
 
 		#endregion
 
@@ -743,8 +753,8 @@ namespace myJournal
 				lblSeparator_grpOpenScreen.Visible = rtb.Text.Length > 0;
 				lblSelectedFoundEntry.Visible = rtbSelectedEntry_Found.Text.Length > 0;
 				lblSelectionType.Text = "Selected Entry";
-				lstEntries.Height = rtb.Text.Length > 0 ? rtbSelectedEntry_Main.Top - 132 : lstEntries.Height;
-				lstEntries.TopIndex = rtbSelectedEntry_Main.Text.Length > 0 ? ctr == 0 ? ctr : ctr - 1 : lstEntries.TopIndex;
+				lstEntries.Height = rtb.Text.Length > 0 ? rtbSelectedEntry_Main.Top - 132 : grpOpenScreen.Height - 100;
+				lstEntries.TopIndex = lstEntries.Top + lstEntries.Height < rtbSelectedEntry_Main.Top ? ctr : lstEntries.TopIndex;
 			}
 
 			lb.SelectedIndexChanged += new System.EventHandler(this.ListOfEntries_SelectedIndexChanged);
@@ -872,6 +882,27 @@ namespace myJournal
 		private void rtbSelectedEntry_Main_TextChanged(object sender, EventArgs e)
 		{
 			lblSelectionType.Visible = rtbSelectedEntry_Main.Text.Length > 0;
+		}
+
+		private void lblMoveUpDown_Click(object sender, EventArgs e)
+		{
+			if(lstTagsForEdit.SelectedIndex > -1)
+			{
+				Label l = (Label)sender;
+				int iOriginal = lstTagsForEdit.SelectedIndex;
+				int iOffset = lstTagsForEdit.SelectedIndex + (l.Name.ToLower().Contains("up") ? 1 : -1);
+				string sItem = lstTagsForEdit.SelectedItem.ToString();
+				lstTagsForEdit.Items.RemoveAt(iOriginal);
+				lstTagsForEdit.Items.Insert(iOriginal + iOffset, sItem);
+			}
+		}
+
+		private void lstTagsForEdit_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			lblMoveDown.Enabled = lstTagsForEdit.SelectedIndex != lstTagsForEdit.Items.Count - 1;
+			lblMoveUp.Enabled = lstTagsForEdit.SelectedIndex > 0;
+			lblEditTag.Enabled = true;
+			lblRemoveTag.Enabled = true;
 		}
 	}
 }
