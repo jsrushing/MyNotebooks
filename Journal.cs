@@ -5,13 +5,14 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Linq;
 using System.Configuration;
+using System.Web;
 
 namespace myJournal
 {
     [Serializable]
     public class Journal
     {
-        public string Name = string.Empty;
+		public string Name = string.Empty;
         string FileName = string.Empty;
         StringBuilder JournalText = new StringBuilder();
         public List<JournalEntry> Entries = new List<JournalEntry>();
@@ -19,6 +20,7 @@ namespace myJournal
 
         public Journal(string _name = null) 
         {
+			//Configuration config = System.Web.
             if(_name != null)
             {
                 this.Name = _name;

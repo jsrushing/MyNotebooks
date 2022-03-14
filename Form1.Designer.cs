@@ -125,15 +125,32 @@ namespace myJournal
 			this.btnOK_TagName_New = new System.Windows.Forms.Button();
 			this.lblHome_NewGroup = new System.Windows.Forms.Label();
 			this.grpDeleteJournal = new System.Windows.Forms.GroupBox();
-			this.lblDelete_Confirm = new System.Windows.Forms.Label();
+			this.lblDeleteJournal_ConfirmMsg = new System.Windows.Forms.Label();
 			this.ddlJournalsToDelete = new System.Windows.Forms.ComboBox();
 			this.lblHome_DeleteJournal = new System.Windows.Forms.Label();
 			this.btnOK_DeleteJournal = new System.Windows.Forms.Button();
 			this.lblJournalToDelete = new System.Windows.Forms.Label();
 			this.grpConfirmDeleteEntry = new System.Windows.Forms.GroupBox();
-			this.lblMessage_ConfirmEntryDelete = new System.Windows.Forms.Label();
+			this.lblDeleteEntry_ConfirmMsg = new System.Windows.Forms.Label();
 			this.lblBack_ConfirmEntryDelete = new System.Windows.Forms.Label();
-			this.btnOK_ConfirmEntryDelete = new System.Windows.Forms.Button();
+			this.btnOK_DeleteEntry = new System.Windows.Forms.Button();
+			this.grpLogin = new System.Windows.Forms.GroupBox();
+			this.pnlPIN = new System.Windows.Forms.Panel();
+			this.labelPIN = new System.Windows.Forms.Label();
+			this.pnlPINNumbers = new System.Windows.Forms.Panel();
+			this.textBox4 = new System.Windows.Forms.TextBox();
+			this.txtPin1 = new System.Windows.Forms.TextBox();
+			this.textBox5 = new System.Windows.Forms.TextBox();
+			this.textBox1 = new System.Windows.Forms.TextBox();
+			this.textBox2 = new System.Windows.Forms.TextBox();
+			this.textBox3 = new System.Windows.Forms.TextBox();
+			this.label20 = new System.Windows.Forms.Label();
+			this.label19 = new System.Windows.Forms.Label();
+			this.label11 = new System.Windows.Forms.Label();
+			this.label10 = new System.Windows.Forms.Label();
+			this.label5 = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
+			this.btnPIN = new System.Windows.Forms.Button();
 			this.grpCreateEntry.SuspendLayout();
 			this.grpAppendDeleteOriginal.SuspendLayout();
 			this.mnuGroups.SuspendLayout();
@@ -148,6 +165,9 @@ namespace myJournal
 			this.grpEditTags_Add.SuspendLayout();
 			this.grpDeleteJournal.SuspendLayout();
 			this.grpConfirmDeleteEntry.SuspendLayout();
+			this.grpLogin.SuspendLayout();
+			this.pnlPIN.SuspendLayout();
+			this.pnlPINNumbers.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -205,7 +225,6 @@ namespace myJournal
 			// 
 			// grpCreateEntry
 			// 
-			this.grpCreateEntry.Anchor = System.Windows.Forms.AnchorStyles.None;
 			this.grpCreateEntry.Controls.Add(this.lblTagManager2);
 			this.grpCreateEntry.Controls.Add(this.lblEntryText_Hidden);
 			this.grpCreateEntry.Controls.Add(this.lblEntryTitle_Hidden);
@@ -219,7 +238,7 @@ namespace myJournal
 			this.grpCreateEntry.Controls.Add(this.rtbNewEntry);
 			this.grpCreateEntry.Controls.Add(this.txtNewEntryTitle);
 			this.grpCreateEntry.Controls.Add(this.label2);
-			this.grpCreateEntry.Location = new System.Drawing.Point(386, 0);
+			this.grpCreateEntry.Location = new System.Drawing.Point(347, 0);
 			this.grpCreateEntry.Name = "grpCreateEntry";
 			this.grpCreateEntry.Size = new System.Drawing.Size(290, 545);
 			this.grpCreateEntry.TabIndex = 4;
@@ -452,7 +471,6 @@ namespace myJournal
 			// 
 			// grpOpenScreen
 			// 
-			this.grpOpenScreen.Anchor = System.Windows.Forms.AnchorStyles.None;
 			this.grpOpenScreen.BackColor = System.Drawing.SystemColors.Window;
 			this.grpOpenScreen.Controls.Add(this.lblPrint);
 			this.grpOpenScreen.Controls.Add(this.pnlMenu);
@@ -465,7 +483,7 @@ namespace myJournal
 			this.grpOpenScreen.Controls.Add(this.lblSelectAJournal);
 			this.grpOpenScreen.Controls.Add(this.lblSeparator_grpOpenScreen);
 			this.grpOpenScreen.Controls.Add(this.rtbSelectedEntry_Main);
-			this.grpOpenScreen.Location = new System.Drawing.Point(61, 0);
+			this.grpOpenScreen.Location = new System.Drawing.Point(22, 0);
 			this.grpOpenScreen.Name = "grpOpenScreen";
 			this.grpOpenScreen.Size = new System.Drawing.Size(290, 545);
 			this.grpOpenScreen.TabIndex = 5;
@@ -1324,7 +1342,7 @@ namespace myJournal
 			// 
 			// grpDeleteJournal
 			// 
-			this.grpDeleteJournal.Controls.Add(this.lblDelete_Confirm);
+			this.grpDeleteJournal.Controls.Add(this.lblDeleteJournal_ConfirmMsg);
 			this.grpDeleteJournal.Controls.Add(this.ddlJournalsToDelete);
 			this.grpDeleteJournal.Controls.Add(this.lblHome_DeleteJournal);
 			this.grpDeleteJournal.Controls.Add(this.btnOK_DeleteJournal);
@@ -1335,15 +1353,15 @@ namespace myJournal
 			this.grpDeleteJournal.TabIndex = 26;
 			this.grpDeleteJournal.TabStop = false;
 			// 
-			// lblDelete_Confirm
+			// lblDeleteJournal_ConfirmMsg
 			// 
-			this.lblDelete_Confirm.Location = new System.Drawing.Point(36, 19);
-			this.lblDelete_Confirm.Name = "lblDelete_Confirm";
-			this.lblDelete_Confirm.Size = new System.Drawing.Size(229, 58);
-			this.lblDelete_Confirm.TabIndex = 26;
-			this.lblDelete_Confirm.Text = " will be deleted. Press Delete to continue.";
-			this.lblDelete_Confirm.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			this.lblDelete_Confirm.Visible = false;
+			this.lblDeleteJournal_ConfirmMsg.Location = new System.Drawing.Point(36, 19);
+			this.lblDeleteJournal_ConfirmMsg.Name = "lblDeleteJournal_ConfirmMsg";
+			this.lblDeleteJournal_ConfirmMsg.Size = new System.Drawing.Size(229, 58);
+			this.lblDeleteJournal_ConfirmMsg.TabIndex = 26;
+			this.lblDeleteJournal_ConfirmMsg.Text = " will be deleted. Press Delete to continue.";
+			this.lblDeleteJournal_ConfirmMsg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.lblDeleteJournal_ConfirmMsg.Visible = false;
 			// 
 			// ddlJournalsToDelete
 			// 
@@ -1390,23 +1408,23 @@ namespace myJournal
 			// 
 			// grpConfirmDeleteEntry
 			// 
-			this.grpConfirmDeleteEntry.Controls.Add(this.lblMessage_ConfirmEntryDelete);
+			this.grpConfirmDeleteEntry.Controls.Add(this.lblDeleteEntry_ConfirmMsg);
 			this.grpConfirmDeleteEntry.Controls.Add(this.lblBack_ConfirmEntryDelete);
-			this.grpConfirmDeleteEntry.Controls.Add(this.btnOK_ConfirmEntryDelete);
+			this.grpConfirmDeleteEntry.Controls.Add(this.btnOK_DeleteEntry);
 			this.grpConfirmDeleteEntry.Location = new System.Drawing.Point(807, 731);
 			this.grpConfirmDeleteEntry.Name = "grpConfirmDeleteEntry";
 			this.grpConfirmDeleteEntry.Size = new System.Drawing.Size(290, 120);
 			this.grpConfirmDeleteEntry.TabIndex = 27;
 			this.grpConfirmDeleteEntry.TabStop = false;
 			// 
-			// lblMessage_ConfirmEntryDelete
+			// lblDeleteEntry_ConfirmMsg
 			// 
-			this.lblMessage_ConfirmEntryDelete.Location = new System.Drawing.Point(36, 19);
-			this.lblMessage_ConfirmEntryDelete.Name = "lblMessage_ConfirmEntryDelete";
-			this.lblMessage_ConfirmEntryDelete.Size = new System.Drawing.Size(229, 58);
-			this.lblMessage_ConfirmEntryDelete.TabIndex = 26;
-			this.lblMessage_ConfirmEntryDelete.Text = " will be deleted. Press Delete to continue.";
-			this.lblMessage_ConfirmEntryDelete.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.lblDeleteEntry_ConfirmMsg.Location = new System.Drawing.Point(36, 19);
+			this.lblDeleteEntry_ConfirmMsg.Name = "lblDeleteEntry_ConfirmMsg";
+			this.lblDeleteEntry_ConfirmMsg.Size = new System.Drawing.Size(229, 58);
+			this.lblDeleteEntry_ConfirmMsg.TabIndex = 26;
+			this.lblDeleteEntry_ConfirmMsg.Text = " will be deleted. Press Delete to continue.";
+			this.lblDeleteEntry_ConfirmMsg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// lblBack_ConfirmEntryDelete
 			// 
@@ -1421,23 +1439,196 @@ namespace myJournal
 			this.lblBack_ConfirmEntryDelete.Text = "back";
 			this.lblBack_ConfirmEntryDelete.Click += new System.EventHandler(this.lblHome_Click);
 			// 
-			// btnOK_ConfirmEntryDelete
+			// btnOK_DeleteEntry
 			// 
-			this.btnOK_ConfirmEntryDelete.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-			this.btnOK_ConfirmEntryDelete.Location = new System.Drawing.Point(113, 80);
-			this.btnOK_ConfirmEntryDelete.Name = "btnOK_ConfirmEntryDelete";
-			this.btnOK_ConfirmEntryDelete.Size = new System.Drawing.Size(75, 23);
-			this.btnOK_ConfirmEntryDelete.TabIndex = 2;
-			this.btnOK_ConfirmEntryDelete.Text = "Delete";
-			this.btnOK_ConfirmEntryDelete.UseVisualStyleBackColor = false;
-			this.btnOK_ConfirmEntryDelete.Click += new System.EventHandler(this.btnConfirmEntryDelete_Click);
+			this.btnOK_DeleteEntry.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+			this.btnOK_DeleteEntry.Location = new System.Drawing.Point(113, 80);
+			this.btnOK_DeleteEntry.Name = "btnOK_DeleteEntry";
+			this.btnOK_DeleteEntry.Size = new System.Drawing.Size(75, 23);
+			this.btnOK_DeleteEntry.TabIndex = 2;
+			this.btnOK_DeleteEntry.Text = "Delete";
+			this.btnOK_DeleteEntry.UseVisualStyleBackColor = false;
+			this.btnOK_DeleteEntry.Click += new System.EventHandler(this.btnOk_DeleteEntry_Click);
+			// 
+			// grpLogin
+			// 
+			this.grpLogin.Controls.Add(this.pnlPIN);
+			this.grpLogin.Location = new System.Drawing.Point(1055, 95);
+			this.grpLogin.Name = "grpLogin";
+			this.grpLogin.Size = new System.Drawing.Size(283, 365);
+			this.grpLogin.TabIndex = 28;
+			this.grpLogin.TabStop = false;
+			// 
+			// pnlPIN
+			// 
+			this.pnlPIN.Controls.Add(this.labelPIN);
+			this.pnlPIN.Controls.Add(this.pnlPINNumbers);
+			this.pnlPIN.Controls.Add(this.btnPIN);
+			this.pnlPIN.Location = new System.Drawing.Point(85, 20);
+			this.pnlPIN.Name = "pnlPIN";
+			this.pnlPIN.Size = new System.Drawing.Size(120, 123);
+			this.pnlPIN.TabIndex = 9;
+			// 
+			// labelPIN
+			// 
+			this.labelPIN.AutoSize = true;
+			this.labelPIN.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.labelPIN.Location = new System.Drawing.Point(21, -3);
+			this.labelPIN.Name = "labelPIN";
+			this.labelPIN.Size = new System.Drawing.Size(64, 37);
+			this.labelPIN.TabIndex = 7;
+			this.labelPIN.Text = "PIN";
+			// 
+			// pnlPINNumbers
+			// 
+			this.pnlPINNumbers.Controls.Add(this.textBox4);
+			this.pnlPINNumbers.Controls.Add(this.txtPin1);
+			this.pnlPINNumbers.Controls.Add(this.textBox5);
+			this.pnlPINNumbers.Controls.Add(this.textBox1);
+			this.pnlPINNumbers.Controls.Add(this.textBox2);
+			this.pnlPINNumbers.Controls.Add(this.textBox3);
+			this.pnlPINNumbers.Controls.Add(this.label20);
+			this.pnlPINNumbers.Controls.Add(this.label19);
+			this.pnlPINNumbers.Controls.Add(this.label11);
+			this.pnlPINNumbers.Controls.Add(this.label10);
+			this.pnlPINNumbers.Controls.Add(this.label5);
+			this.pnlPINNumbers.Controls.Add(this.label4);
+			this.pnlPINNumbers.Location = new System.Drawing.Point(1, 37);
+			this.pnlPINNumbers.Name = "pnlPINNumbers";
+			this.pnlPINNumbers.Size = new System.Drawing.Size(112, 38);
+			this.pnlPINNumbers.TabIndex = 8;
+			// 
+			// textBox4
+			// 
+			this.textBox4.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.textBox4.Location = new System.Drawing.Point(73, 2);
+			this.textBox4.MaxLength = 1;
+			this.textBox4.Name = "textBox4";
+			this.textBox4.Size = new System.Drawing.Size(15, 16);
+			this.textBox4.TabIndex = 5;
+			// 
+			// txtPin1
+			// 
+			this.txtPin1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.txtPin1.Location = new System.Drawing.Point(5, 2);
+			this.txtPin1.MaxLength = 1;
+			this.txtPin1.Name = "txtPin1";
+			this.txtPin1.Size = new System.Drawing.Size(15, 16);
+			this.txtPin1.TabIndex = 1;
+			// 
+			// textBox5
+			// 
+			this.textBox5.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.textBox5.Location = new System.Drawing.Point(90, 2);
+			this.textBox5.MaxLength = 1;
+			this.textBox5.Name = "textBox5";
+			this.textBox5.Size = new System.Drawing.Size(15, 16);
+			this.textBox5.TabIndex = 6;
+			// 
+			// textBox1
+			// 
+			this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.textBox1.Location = new System.Drawing.Point(22, 2);
+			this.textBox1.MaxLength = 1;
+			this.textBox1.Name = "textBox1";
+			this.textBox1.Size = new System.Drawing.Size(15, 16);
+			this.textBox1.TabIndex = 2;
+			// 
+			// textBox2
+			// 
+			this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.textBox2.Location = new System.Drawing.Point(39, 2);
+			this.textBox2.MaxLength = 1;
+			this.textBox2.Name = "textBox2";
+			this.textBox2.Size = new System.Drawing.Size(15, 16);
+			this.textBox2.TabIndex = 3;
+			// 
+			// textBox3
+			// 
+			this.textBox3.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.textBox3.Location = new System.Drawing.Point(56, 2);
+			this.textBox3.MaxLength = 1;
+			this.textBox3.Name = "textBox3";
+			this.textBox3.Size = new System.Drawing.Size(15, 16);
+			this.textBox3.TabIndex = 4;
+			// 
+			// label20
+			// 
+			this.label20.AutoSize = true;
+			this.label20.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.label20.Location = new System.Drawing.Point(81, -12);
+			this.label20.Name = "label20";
+			this.label20.Size = new System.Drawing.Size(28, 37);
+			this.label20.TabIndex = 14;
+			this.label20.Text = "_";
+			// 
+			// label19
+			// 
+			this.label19.AutoSize = true;
+			this.label19.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.label19.Location = new System.Drawing.Point(64, -12);
+			this.label19.Name = "label19";
+			this.label19.Size = new System.Drawing.Size(28, 37);
+			this.label19.TabIndex = 13;
+			this.label19.Text = "_";
+			// 
+			// label11
+			// 
+			this.label11.AutoSize = true;
+			this.label11.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.label11.Location = new System.Drawing.Point(48, -12);
+			this.label11.Name = "label11";
+			this.label11.Size = new System.Drawing.Size(28, 37);
+			this.label11.TabIndex = 12;
+			this.label11.Text = "_";
+			// 
+			// label10
+			// 
+			this.label10.AutoSize = true;
+			this.label10.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.label10.Location = new System.Drawing.Point(30, -12);
+			this.label10.Name = "label10";
+			this.label10.Size = new System.Drawing.Size(28, 37);
+			this.label10.TabIndex = 11;
+			this.label10.Text = "_";
+			// 
+			// label5
+			// 
+			this.label5.AutoSize = true;
+			this.label5.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.label5.Location = new System.Drawing.Point(13, -12);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(28, 37);
+			this.label5.TabIndex = 10;
+			this.label5.Text = "_";
+			// 
+			// label4
+			// 
+			this.label4.AutoSize = true;
+			this.label4.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.label4.Location = new System.Drawing.Point(-4, -12);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(28, 37);
+			this.label4.TabIndex = 9;
+			this.label4.Text = "_";
+			// 
+			// btnPIN
+			// 
+			this.btnPIN.Location = new System.Drawing.Point(3, 82);
+			this.btnPIN.Name = "btnPIN";
+			this.btnPIN.Size = new System.Drawing.Size(100, 25);
+			this.btnPIN.TabIndex = 0;
+			this.btnPIN.Text = "Login";
+			this.btnPIN.UseVisualStyleBackColor = true;
+			this.btnPIN.Click += new System.EventHandler(this.btnPIN_Click);
 			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.Window;
-			this.ClientSize = new System.Drawing.Size(1109, 1061);
+			this.ClientSize = new System.Drawing.Size(1414, 1061);
+			this.Controls.Add(this.grpLogin);
 			this.Controls.Add(this.grpConfirmDeleteEntry);
 			this.Controls.Add(this.grpDeleteJournal);
 			this.Controls.Add(this.grpManageTags);
@@ -1476,6 +1667,11 @@ namespace myJournal
 			this.grpDeleteJournal.PerformLayout();
 			this.grpConfirmDeleteEntry.ResumeLayout(false);
 			this.grpConfirmDeleteEntry.PerformLayout();
+			this.grpLogin.ResumeLayout(false);
+			this.pnlPIN.ResumeLayout(false);
+			this.pnlPIN.PerformLayout();
+			this.pnlPINNumbers.ResumeLayout(false);
+			this.pnlPINNumbers.PerformLayout();
 			this.ResumeLayout(false);
 
         }
@@ -1549,7 +1745,7 @@ namespace myJournal
 		private System.Windows.Forms.Label lblHome_DeleteJournal;
 		private System.Windows.Forms.Button btnOK_DeleteJournal;
 		private System.Windows.Forms.Label lblJournalToDelete;
-		private System.Windows.Forms.Label lblDelete_Confirm;
+		private System.Windows.Forms.Label lblDeleteJournal_ConfirmMsg;
 		private System.Windows.Forms.Panel pnlMenu;
 		private System.Windows.Forms.Label lblSettings_Show;
 		private System.Windows.Forms.Label lblTagManager;
@@ -1572,9 +1768,9 @@ namespace myJournal
 		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.Button btnOK_TagName_Edited;
 		private System.Windows.Forms.GroupBox grpConfirmDeleteEntry;
-		private System.Windows.Forms.Label lblMessage_ConfirmEntryDelete;
+		private System.Windows.Forms.Label lblDeleteEntry_ConfirmMsg;
 		private System.Windows.Forms.Label lblBack_ConfirmEntryDelete;
-		private System.Windows.Forms.Button btnOK_ConfirmEntryDelete;
+		private System.Windows.Forms.Button btnOK_DeleteEntry;
 		private System.Windows.Forms.Label lblViewJournal;
 		private System.Windows.Forms.Label lblPrint;
 		private System.Windows.Forms.Label lblEntriesStartFrom;
@@ -1585,6 +1781,23 @@ namespace myJournal
 		private System.Windows.Forms.Label lblRemoveTag;
 		private System.Windows.Forms.Label lblMoveDown;
 		private System.Windows.Forms.Label lblMoveUp;
+		private System.Windows.Forms.GroupBox grpLogin;
+		private System.Windows.Forms.Panel pnlPINNumbers;
+		private System.Windows.Forms.TextBox textBox4;
+		private System.Windows.Forms.TextBox txtPin1;
+		private System.Windows.Forms.TextBox textBox5;
+		private System.Windows.Forms.TextBox textBox1;
+		private System.Windows.Forms.TextBox textBox2;
+		private System.Windows.Forms.TextBox textBox3;
+		private System.Windows.Forms.Button btnPIN;
+		private System.Windows.Forms.Label labelPIN;
+		private System.Windows.Forms.Panel pnlPIN;
+		private System.Windows.Forms.Label label20;
+		private System.Windows.Forms.Label label19;
+		private System.Windows.Forms.Label label11;
+		private System.Windows.Forms.Label label10;
+		private System.Windows.Forms.Label label5;
+		private System.Windows.Forms.Label label4;
 	}
 }
 

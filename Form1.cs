@@ -9,29 +9,39 @@ using System.Configuration;
 using System.Linq;
 using System.Drawing.Printing;
 using System.Runtime.InteropServices;
+using myJournal.forms;
+using encrypt_decrypt_string;
 
 namespace myJournal
 {
 	public partial class Form1 : Form
 	{
-		Point ActiveBoxLocation = new Point(0,0);
-		Size ActiveBoxSize = new Size(0, 0);
-		Size MainFormSize = new Size(0, 0);
-        GroupBox DisplayedGroupBox;
-        Journal currentJournal = null;
-        bool bTagBeingEdited = false;
-        string rootPath = AppDomain.CurrentDomain.BaseDirectory;
-        JournalEntry currentEntry = null;
-        Font InactiveMenuFont = null;
-        Font ActiveMenuFont = null;
-		GroupBox backTarget = null;
+		Point ActiveBoxLocation		= new Point(0,0);
+		Size ActiveBoxSize			= new Size(0, 0);
+		Size MainFormSize			= new Size(0, 0);
+        Journal currentJournal		= null;
+        bool bTagBeingEdited		= false;
+        string rootPath				= AppDomain.CurrentDomain.BaseDirectory;
 		PrintDocument PrintDocument = new PrintDocument();
-		PrintDialog PrintDialog = new PrintDialog();
+		PrintDialog	PrintDialog		= new PrintDialog();
+        JournalEntry currentEntry	= null;
+        Font InactiveMenuFont		= null;
+        Font ActiveMenuFont			= null;
+		GroupBox backTarget			= null;
+		Form activeForm;
+        GroupBox DisplayedGroupBox;
 
 		[DllImport("User32.dll")]
 		static extern Int64 SendMessage (IntPtr hwnd, Int64 wMsg, bool wParam, Object lParam);
 		const Int64 EM_FMTLINES = 1;	// &HC8;
 
+
+		protected Point CenterGroupBox(GroupBox boxToCenter, GroupBox boxBackground = null, int boxTop = -1, int boxHeight = 0)
+		{
+			int b1_Left	= (boxBackground == null ? this.Width / 2 : boxBackground.Width / 2) - boxToCenter.Width / 2;
+			int b1_Top	= (boxTop > -1 ? boxTop : this.Height / 2) - boxToCenter.Height / 2;
+			return new Point(b1_Left, b1_Top);
+		}
 		public Form1()
         { 
 			InitializeComponent(); 
@@ -43,7 +53,7 @@ namespace myJournal
 			//Int64 val = Convert.ToInt64("FC8");
 			//byte[] buffer = { &HA9, &HC8, &HE6, &HC4 };
 
-
+			activeForm = new frmMain();
 
 			int x = Convert.ToInt16(ConfigurationManager.AppSettings["Left_ActiveBox"]);
 			int y = Convert.ToInt16(ConfigurationManager.AppSettings["Top_ActiveBox"]);
@@ -53,30 +63,27 @@ namespace myJournal
 			ActiveBoxSize = new Size(x,y);
 			x = Convert.ToInt16(ConfigurationManager.AppSettings["Width_MainForm"]);
 			y = Convert.ToInt16(ConfigurationManager.AppSettings["Height_MainForm"]);
-
 			MainFormSize = new Size(x, y);
-			grpOpenScreen.Location = ActiveBoxLocation;
-            grpOpenScreen.Size = ActiveBoxSize;
 
             LoadJournals();
 
-			lblJournal_Delete.Enabled = ddlJournals.Enabled;
-            DisplayedGroupBox = grpOpenScreen;
-            this.Size = MainFormSize;
-            pnlMenu.Size = new Size(lblMenu_1.Width + 2, lblMenu_1.Height + 2);
-			pnlMenu.Location = new Point(lblMenu.Left + lblMenu.Width, lblMenu.Top + lblMenu.Height);
-            lblMenu_0.Size = new Size(pnlMenu.Width, pnlMenu.Height);
-            lblMenu_1.Size = new Size(lblMenu_0.Width - 4, lblMenu_1.Height - 2);
-            lblMenu_1.Location = new Point(lblMenu_0.Left + 2, lblMenu_0.Top + 2);
-            InactiveMenuFont = lblJournal_Create.Font;
-			FontStyle fs = FontStyle.Bold | FontStyle.Italic;
-            ActiveMenuFont = new Font(InactiveMenuFont.FontFamily, InactiveMenuFont.Size + 1);
-			ActiveMenuFont = new Font(ActiveMenuFont, fs);
+			lblJournal_Delete.Enabled	= ddlJournals.Enabled;
+            DisplayedGroupBox			= grpOpenScreen;
+            this.Size					= MainFormSize;
+            pnlMenu.Size				= new Size(lblMenu_1.Width + 2, lblMenu_1.Height + 2);
+			pnlMenu.Location			= new Point(lblMenu.Left + lblMenu.Width, lblMenu.Top + lblMenu.Height);
+            lblMenu_0.Size				= new Size(pnlMenu.Width, pnlMenu.Height);
+            lblMenu_1.Size				= new Size(lblMenu_0.Width - 4, lblMenu_1.Height - 2);
+            lblMenu_1.Location			= new Point(lblMenu_0.Left + 2, lblMenu_0.Top + 2);
+            InactiveMenuFont			= lblJournal_Create.Font;
+			FontStyle fs				= FontStyle.Bold | FontStyle.Italic;
+            ActiveMenuFont				= new Font(InactiveMenuFont.FontFamily, InactiveMenuFont.Size + 1);
+			ActiveMenuFont				= new Font(ActiveMenuFont, fs);
 
-            ActivateGroupBox(grpOpenScreen);
-        }
+            ActivateGroupBox(grpLogin);
+		}
 
-        private void Form1_Resize(object sender, EventArgs e)
+		private void Form1_Resize(object sender, EventArgs e)
         {
             DisplayedGroupBox.Location = ActiveBoxLocation;
             DisplayedGroupBox.Size = new Size(this.Width - 35, this.Height - 50);
@@ -101,6 +108,15 @@ namespace myJournal
 
             switch (box.Name)
             {
+				case "grpLogin":
+					this.Text = "Login";
+					//labelPIN.Location = new Point((this.Width / 2) - labelPIN.Width / 2, this.Height);
+					//grpLogin.Location = CenterGroupBox(grpLogin, null, 200, 35);
+					//grpLogin.Size = new Size(114, 119);
+					//ActiveBoxLocation = grpLogin.Location;
+					pnlPIN.Location = new Point((grpLogin.Width / 2) - (pnlPIN.Width / 2), 10);
+					txtBxToFocus = txtPin1;
+					break;
                 case "grpOpenScreen":
                     this.Text = "My Journal";
                     rtbSelectedEntry_Main.Clear();
@@ -120,8 +136,8 @@ namespace myJournal
 					foreach(int i in lstTags.CheckedIndices) { lstTags.SetItemChecked(i, false); }
                     break;
                 case "grpDeleteJournal":
-                    lblDelete_Confirm.Visible = false;
-                    lblDelete_Confirm.Text = " will be deleted. Press Delete to confirm.";
+                    lblDeleteJournal_ConfirmMsg.Visible = false;
+                    lblDeleteJournal_ConfirmMsg.Text = " will be deleted. Press Delete to confirm.";
                     ddlJournalsToDelete.Visible = true;
                     lblJournalToDelete.Visible = true;
                     ddlJournalsToDelete.Text = ddlJournals.Text.Length > 0 ? ddlJournals.Text : String.Empty;
@@ -154,14 +170,15 @@ namespace myJournal
                     break;
             }
 
-            pnlMenu.Visible = false;
-			box.Location = ActiveBoxLocation;
-            box.Visible = true;
+            pnlMenu.Visible		= false;
+			box.Location		= ActiveBoxLocation;
+            box.Visible			= true;
+            DisplayedGroupBox	= box;
+			backTarget			= null;
+            this.Height			+= 1;
             if (txtBxToFocus != null) txtBxToFocus.Focus();
-            DisplayedGroupBox = box;
-			backTarget = null;
-            this.Height += 1;
-        }
+			//txtPin1.Focus();
+		}
 
 		#region Buttons
 		/// <summary>
@@ -214,11 +231,11 @@ namespace myJournal
         }
 
 		/// <summary>
-		/// Deleting Journal - either show confirmation or delete journal.
+		/// Deleting Entry - do the delete
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void btnConfirmEntryDelete_Click(object sender, EventArgs e)
+		private void btnOk_DeleteEntry_Click(object sender, EventArgs e)
 		{
 			currentJournal.Entries.Remove(currentEntry);
 			currentJournal.Save();
@@ -226,9 +243,14 @@ namespace myJournal
 			ActivateGroupBox(grpOpenScreen);
 		}
 		
+		/// <summary>
+		/// Deleting Journal - show confirmation message or do the delete
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void btnOK_DeleteJournal_Click(object sender, EventArgs e)
         {
-            if (lblDelete_Confirm.Visible)
+            if (lblDeleteJournal_ConfirmMsg.Visible)
             {
                 if (currentJournal == null) { new Journal(ddlJournalsToDelete.Text).Open().Delete(); } else { currentJournal.Delete(); }
                 currentJournal = null;
@@ -240,11 +262,11 @@ namespace myJournal
             }
             else
             {
-                lblDelete_Confirm.Location = new Point(grpDeleteJournal.Width/2 - lblDelete_Confirm.Width / 2, lblDelete_Confirm.Top);
-                lblDelete_Confirm.Text = "'" + ddlJournalsToDelete.Text + "' " + lblDelete_Confirm.Text;
+                lblDeleteJournal_ConfirmMsg.Location = new Point(grpDeleteJournal.Width/2 - lblDeleteJournal_ConfirmMsg.Width / 2, lblDeleteJournal_ConfirmMsg.Top);
+                lblDeleteJournal_ConfirmMsg.Text = "'" + ddlJournalsToDelete.Text + "' " + lblDeleteJournal_ConfirmMsg.Text;
                 ddlJournalsToDelete.Visible = false;
                 lblJournalToDelete.Visible = false;
-                lblDelete_Confirm.Visible = true;
+                lblDeleteJournal_ConfirmMsg.Visible = true;
             }
         }
 
@@ -285,7 +307,6 @@ namespace myJournal
 			grpEditTags_NewName.Visible = false;
 			Tags_Save(null, lstTagsForEdit);
 		}
-
 		#endregion
 
 		/// <summary>
@@ -431,7 +452,7 @@ namespace myJournal
         /// <param name="e"></param>
         private void lblDeleteEntry_Click(object sender, EventArgs e)
         {
-			lblMessage_ConfirmEntryDelete.Text = "'" + currentEntry.ClearTitle() + "' " + lblMessage_ConfirmEntryDelete.Text;
+			lblDeleteEntry_ConfirmMsg.Text = "'" + currentEntry.ClearTitle() + "' " + lblDeleteEntry_ConfirmMsg.Text;
 			ActivateGroupBox(grpConfirmDeleteEntry);
         }
 
@@ -903,6 +924,30 @@ namespace myJournal
 			lblMoveUp.Enabled = lstTagsForEdit.SelectedIndex > 0;
 			lblEditTag.Enabled = true;
 			lblRemoveTag.Enabled = true;
+		}
+
+		private void btnPIN_Click(object sender, EventArgs e)
+		{
+			string PIN = txtPin1.Text;
+			bool bStart = true;
+
+			if (File.Exists("key.txt"))
+			{
+				bStart = PIN == EncryptDecrypt.Decrypt(File.ReadAllText("key.txt"), ConfigurationManager.AppSettings["PublicKey"], ConfigurationManager.AppSettings["PrivateKey"]);
+			}
+			else
+			{
+				File.WriteAllTextAsync("key.txt", EncryptDecrypt.Encrypt(PIN, ConfigurationManager.AppSettings["PublicKey"], ConfigurationManager.AppSettings["PrivateKey"]));
+			}
+
+			if (bStart)
+			{
+				ActivateGroupBox(grpOpenScreen);
+			}
+			else
+			{
+				// notify bad pin
+			}
 		}
 	}
 }
