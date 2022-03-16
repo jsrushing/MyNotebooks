@@ -116,6 +116,7 @@ namespace myJournal
 					//grpLogin.Size = new Size(114, 119);
 					//ActiveBoxLocation = grpLogin.Location;
 					pnlPIN.Location = new Point((grpLogin.Width / 2) - (pnlPIN.Width / 2), 10);
+					txtPin1.Text = string.Empty;
 					txtBxToFocus = txtPin1;
 					btnToFocus = btnPIN;
 					break;
@@ -215,13 +216,12 @@ namespace myJournal
                         sText = lblEntryText_Hidden.Text;
 					}
 
-					currentJournal.ReplaceEntry(currentEntry, new JournalEntry(sTitle, sText, sGroups, true));
+					currentJournal.ReplaceEntry(currentEntry, new JournalEntry(sTitle, sText, sGroups, txtPin1.Text, true));
 				}
 				else
 				{
-					currentJournal.AddEntry(new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, sGroups, true));
+					currentJournal.AddEntry(new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, sGroups, txtPin1.Text, true));
 				}
-
                 currentJournal.Save();
                 PopulateEntries(lstEntries);
             }
@@ -254,7 +254,7 @@ namespace myJournal
         {
             if (lblDeleteJournal_ConfirmMsg.Visible)
             {
-                if (currentJournal == null) { new Journal(ddlJournalsToDelete.Text).Open().Delete(); } else { currentJournal.Delete(); }
+                if (currentJournal == null) { new Journal(txtPin1.Text, ddlJournalsToDelete.Text).Open().Delete(); } else { currentJournal.Delete(); }
                 currentJournal = null;
                 LoadJournals();
                 ddlJournals.Text = String.Empty;
@@ -287,7 +287,7 @@ namespace myJournal
 			{
 				try
 				{
-					Journal jrnl = new Journal(txtNewJournalName.Text);
+					Journal jrnl = new Journal(txtPin1.Text, txtNewJournalName.Text);
 					jrnl.Create();
 					LoadJournals();
 					ActivateGroupBox(grpOpenScreen);
@@ -324,7 +324,7 @@ namespace myJournal
 
 			try
 			{
-				currentJournal = new Journal(ddlJournals.Text).Open(ddlJournals.Text); 
+				currentJournal = new Journal(txtPin1.Text, ddlJournals.Text).Open(ddlJournals.Text); 
 
 				if(currentJournal != null)
 				{
@@ -549,8 +549,8 @@ namespace myJournal
                 }
             }
 
-            Journal j = new Journal();
-            Journal journalToSearch = new Journal();
+            Journal j = new Journal(txtPin1.Text);
+            Journal journalToSearch = new Journal(txtPin1.Text);
 
             foreach (string journalName in journalNames)
             {
@@ -574,7 +574,6 @@ namespace myJournal
                         }
                     }
 					// tags
-					//if (txtGroupsForSearch.Text != Properties.Settings.Default["TxtSelectGroupsForSearchDefault"].ToString())
 					if (txtGroupsForSearch.Text.Length > 0)
 
 					{
@@ -797,7 +796,7 @@ namespace myJournal
             foreach(JournalEntry je in currentJournal.Entries)
             {
 				// add display of isEdited here
-                lstBoxToPopulate.Items.Add(je.ClearTitle() + " (" + je.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")" + (je.isEdited ? " - EDITED" : ""));
+                lstBoxToPopulate.Items.Add(je.ClearTitle() + " (" + je.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"); //+ (je.isEdited ? " - EDITED" : ""));
                 string sEntryText = je.ClearText();
 
                 lstBoxToPopulate.Items.Add(sEntryText.Length < iTextChunkLength ?
@@ -930,8 +929,7 @@ namespace myJournal
 
 		private void btnPIN_Click(object sender, EventArgs e)
 		{
-			string PIN = txtPin1.Text;
-			if(PIN.Length < 8) { PIN = PIN + PIN.Substring(0, 8 - PIN.Length); }
+			string PIN = EncryptDecrypt.FullPin(txtPin1.Text);
 			bool bStart = true;
 
 			if (File.Exists("key.txt"))
@@ -959,6 +957,11 @@ namespace myJournal
 			lblPinError.Text = "Enter at least four characters.";
 			btnPIN.Enabled = txtPin1.Text.Length >= 4;
 			lblPinError.Visible = !btnPIN.Enabled;
+		}
+
+		private void lblLogOut_Click(object sender, EventArgs e)
+		{
+			ActivateGroupBox(grpLogin);
 		}
 	}
 }

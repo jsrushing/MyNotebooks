@@ -140,6 +140,7 @@ namespace myJournal
 			this.txtPin1 = new System.Windows.Forms.TextBox();
 			this.labelPIN = new System.Windows.Forms.Label();
 			this.btnPIN = new System.Windows.Forms.Button();
+			this.lblLogOut = new System.Windows.Forms.Label();
 			this.grpCreateEntry.SuspendLayout();
 			this.grpAppendDeleteOriginal.SuspendLayout();
 			this.mnuGroups.SuspendLayout();
@@ -495,6 +496,7 @@ namespace myJournal
 			// pnlMenu
 			// 
 			this.pnlMenu.BackColor = System.Drawing.SystemColors.HighlightText;
+			this.pnlMenu.Controls.Add(this.lblLogOut);
 			this.pnlMenu.Controls.Add(this.lblViewJournal);
 			this.pnlMenu.Controls.Add(this.lblCloseMenu);
 			this.pnlMenu.Controls.Add(this.lblSettings_Show);
@@ -651,7 +653,7 @@ namespace myJournal
 			this.lblMenu_1.ForeColor = System.Drawing.SystemColors.HighlightText;
 			this.lblMenu_1.Location = new System.Drawing.Point(3, 3);
 			this.lblMenu_1.Name = "lblMenu_1";
-			this.lblMenu_1.Size = new System.Drawing.Size(110, 230);
+			this.lblMenu_1.Size = new System.Drawing.Size(110, 257);
 			this.lblMenu_1.TabIndex = 23;
 			// 
 			// lblMenu_0
@@ -1501,6 +1503,19 @@ namespace myJournal
 			this.btnPIN.UseVisualStyleBackColor = true;
 			this.btnPIN.Click += new System.EventHandler(this.btnPIN_Click);
 			// 
+			// lblLogOut
+			// 
+			this.lblLogOut.AutoSize = true;
+			this.lblLogOut.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.lblLogOut.Font = new System.Drawing.Font("Adobe Fan Heiti Std B", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.lblLogOut.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.lblLogOut.Location = new System.Drawing.Point(9, 225);
+			this.lblLogOut.Name = "lblLogOut";
+			this.lblLogOut.Size = new System.Drawing.Size(50, 15);
+			this.lblLogOut.TabIndex = 27;
+			this.lblLogOut.Text = "Log Out";
+			this.lblLogOut.Click += new System.EventHandler(this.lblLogOut_Click);
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -1664,6 +1679,7 @@ namespace myJournal
 		private System.Windows.Forms.Label labelPIN;
 		private System.Windows.Forms.Panel pnlPIN;
 		private System.Windows.Forms.Label lblPinError;
+		private System.Windows.Forms.Label lblLogOut;
 	}
 }
 

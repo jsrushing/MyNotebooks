@@ -2,6 +2,8 @@
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using System.Configuration;
+
 // https://www.delftstack.com/howto/csharp/encrypt-and-decrypt-a-string-in-csharp/
 
 namespace encrypt_decrypt_string
@@ -18,7 +20,7 @@ namespace encrypt_decrypt_string
 				byte[] secretkeyByte = { };
                 secretkeyByte = System.Text.Encoding.UTF8.GetBytes(PrivateKey);
                 byte[] publickeybyte = { };
-                publickeybyte = System.Text.Encoding.UTF8.GetBytes(PublicKey);
+                publickeybyte = System.Text.Encoding.UTF8.GetBytes(FullPin(PublicKey));
                 MemoryStream ms = null;
                 CryptoStream cs = null;
                 byte[] inputbyteArray = System.Text.Encoding.UTF8.GetBytes(TextToEncrypt);
@@ -37,11 +39,6 @@ namespace encrypt_decrypt_string
                 throw new Exception(ex.Message, ex.InnerException);
             }
         }
-        //static void Main(string[] args)
-        //{
-        //    //string encrypted = Encrypt();
-        //    //Console.WriteLine(encrypted);
-        //}
 
         public static string Decrypt(string TextToDecrypt, string PublicKey, string PrivateKey)
         {
@@ -53,7 +50,7 @@ namespace encrypt_decrypt_string
                 byte[] privatekeyByte = { };
                 privatekeyByte = System.Text.Encoding.UTF8.GetBytes(PrivateKey);
                 byte[] publickeybyte = { };
-                publickeybyte = System.Text.Encoding.UTF8.GetBytes(PublicKey); 
+                publickeybyte = System.Text.Encoding.UTF8.GetBytes(FullPin(PublicKey)); 
                 MemoryStream ms = null;
                 CryptoStream cs = null;
                 byte[] inputbyteArray = new byte[TextToDecrypt.Replace(" ", "+").Length];
@@ -70,10 +67,16 @@ namespace encrypt_decrypt_string
                 return ToReturn;
             }
             
-			catch (Exception ae)
+			catch (Exception ex)
             {
 				return string.Empty;
             }
         }
+
+		public static string FullPin(string pin)
+		{
+			pin = pin == null ? "" : pin;
+			return pin.Length < 8 ? pin + pin.Substring(0, 8 - pin.Length) : pin;
+		}
     }
 }

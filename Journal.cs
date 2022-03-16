@@ -17,20 +17,22 @@ namespace myJournal
         StringBuilder JournalText = new StringBuilder();
         public List<JournalEntry> Entries = new List<JournalEntry>();
         string root = "journals\\";
+		string PIN;
 
-        public Journal(string _name = null) 
+        public Journal(string _PIN, string _name = null) 
         {
 			//Configuration config = System.Web.
             if(_name != null)
             {
                 this.Name = _name;
                 this.FileName = AppDomain.CurrentDomain.BaseDirectory + this.root + this.Name;
+				this.PIN = _PIN;
 			}
         }
 
         public void AddEntry(JournalEntry entryToAdd) { Entries.Add(entryToAdd); }
 
-        private void AddFirstEntry() { Entries.Add(new JournalEntry("created", "-", "")); }
+        private void AddFirstEntry() { Entries.Add(new JournalEntry("created", "-", "", PIN)); }
 
         public void Create()
         {
