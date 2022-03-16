@@ -96,6 +96,7 @@ namespace myJournal
         private void ActivateGroupBox(GroupBox box)
         {
             TextBox txtBxToFocus = null;
+			Button btnToFocus = null;
 
             foreach (Control c in this.Controls)
             {
@@ -116,6 +117,7 @@ namespace myJournal
 					//ActiveBoxLocation = grpLogin.Location;
 					pnlPIN.Location = new Point((grpLogin.Width / 2) - (pnlPIN.Width / 2), 10);
 					txtBxToFocus = txtPin1;
+					btnToFocus = btnPIN;
 					break;
                 case "grpOpenScreen":
                     this.Text = "My Journal";
@@ -177,7 +179,7 @@ namespace myJournal
 			backTarget			= null;
             this.Height			+= 1;
             if (txtBxToFocus != null) txtBxToFocus.Focus();
-			//txtPin1.Focus();
+			if (btnToFocus != null) this.AcceptButton = btnToFocus;
 		}
 
 		#region Buttons
@@ -929,15 +931,16 @@ namespace myJournal
 		private void btnPIN_Click(object sender, EventArgs e)
 		{
 			string PIN = txtPin1.Text;
+			if(PIN.Length < 8) { PIN = PIN + PIN.Substring(0, 8 - PIN.Length); }
 			bool bStart = true;
 
 			if (File.Exists("key.txt"))
 			{
-				bStart = PIN == EncryptDecrypt.Decrypt(File.ReadAllText("key.txt"), ConfigurationManager.AppSettings["PublicKey"], ConfigurationManager.AppSettings["PrivateKey"]);
+				bStart = PIN == EncryptDecrypt.Decrypt(File.ReadAllText("key.txt"), PIN, ConfigurationManager.AppSettings["PrivateKey"]);
 			}
 			else
 			{
-				File.WriteAllTextAsync("key.txt", EncryptDecrypt.Encrypt(PIN, ConfigurationManager.AppSettings["PublicKey"], ConfigurationManager.AppSettings["PrivateKey"]));
+				File.WriteAllTextAsync("key.txt", EncryptDecrypt.Encrypt(PIN, PIN, ConfigurationManager.AppSettings["PrivateKey"]));
 			}
 
 			if (bStart)
@@ -946,8 +949,16 @@ namespace myJournal
 			}
 			else
 			{
-				// notify bad pin
+				lblPinError.Text = "Wrong PIN";
+				lblPinError.Visible = true;
 			}
+		}
+
+		private void txtPin1_TextChanged(object sender, EventArgs e)
+		{
+			lblPinError.Text = "Enter at least four characters.";
+			btnPIN.Enabled = txtPin1.Text.Length >= 4;
+			lblPinError.Visible = !btnPIN.Enabled;
 		}
 	}
 }

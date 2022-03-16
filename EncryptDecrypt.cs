@@ -13,9 +13,9 @@ namespace encrypt_decrypt_string
             try
             {
                 string ToReturn = "";
-                //PublicKey = "12345678";
-                //PrivateKey = "87654321";
-                byte[] secretkeyByte = { };
+				//PublicKey = "12345678";
+				//PrivateKey = "87654321";
+				byte[] secretkeyByte = { };
                 secretkeyByte = System.Text.Encoding.UTF8.GetBytes(PrivateKey);
                 byte[] publickeybyte = { };
                 publickeybyte = System.Text.Encoding.UTF8.GetBytes(PublicKey);
@@ -53,7 +53,7 @@ namespace encrypt_decrypt_string
                 byte[] privatekeyByte = { };
                 privatekeyByte = System.Text.Encoding.UTF8.GetBytes(PrivateKey);
                 byte[] publickeybyte = { };
-                publickeybyte = System.Text.Encoding.UTF8.GetBytes(PublicKey);
+                publickeybyte = System.Text.Encoding.UTF8.GetBytes(PublicKey); 
                 MemoryStream ms = null;
                 CryptoStream cs = null;
                 byte[] inputbyteArray = new byte[TextToDecrypt.Replace(" ", "+").Length];
@@ -69,9 +69,10 @@ namespace encrypt_decrypt_string
                 }
                 return ToReturn;
             }
-            catch (Exception ae)
+            
+			catch (Exception ae)
             {
-                throw new Exception(ae.Message, ae.InnerException);
+				return string.Empty;
             }
         }
     }

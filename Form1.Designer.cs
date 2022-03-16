@@ -136,20 +136,9 @@ namespace myJournal
 			this.btnOK_DeleteEntry = new System.Windows.Forms.Button();
 			this.grpLogin = new System.Windows.Forms.GroupBox();
 			this.pnlPIN = new System.Windows.Forms.Panel();
-			this.labelPIN = new System.Windows.Forms.Label();
-			this.pnlPINNumbers = new System.Windows.Forms.Panel();
-			this.textBox4 = new System.Windows.Forms.TextBox();
+			this.lblPinError = new System.Windows.Forms.Label();
 			this.txtPin1 = new System.Windows.Forms.TextBox();
-			this.textBox5 = new System.Windows.Forms.TextBox();
-			this.textBox1 = new System.Windows.Forms.TextBox();
-			this.textBox2 = new System.Windows.Forms.TextBox();
-			this.textBox3 = new System.Windows.Forms.TextBox();
-			this.label20 = new System.Windows.Forms.Label();
-			this.label19 = new System.Windows.Forms.Label();
-			this.label11 = new System.Windows.Forms.Label();
-			this.label10 = new System.Windows.Forms.Label();
-			this.label5 = new System.Windows.Forms.Label();
-			this.label4 = new System.Windows.Forms.Label();
+			this.labelPIN = new System.Windows.Forms.Label();
 			this.btnPIN = new System.Windows.Forms.Button();
 			this.grpCreateEntry.SuspendLayout();
 			this.grpAppendDeleteOriginal.SuspendLayout();
@@ -167,7 +156,6 @@ namespace myJournal
 			this.grpConfirmDeleteEntry.SuspendLayout();
 			this.grpLogin.SuspendLayout();
 			this.pnlPIN.SuspendLayout();
-			this.pnlPINNumbers.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -1461,160 +1449,51 @@ namespace myJournal
 			// 
 			// pnlPIN
 			// 
+			this.pnlPIN.Controls.Add(this.lblPinError);
+			this.pnlPIN.Controls.Add(this.txtPin1);
 			this.pnlPIN.Controls.Add(this.labelPIN);
-			this.pnlPIN.Controls.Add(this.pnlPINNumbers);
 			this.pnlPIN.Controls.Add(this.btnPIN);
 			this.pnlPIN.Location = new System.Drawing.Point(85, 20);
 			this.pnlPIN.Name = "pnlPIN";
-			this.pnlPIN.Size = new System.Drawing.Size(120, 123);
+			this.pnlPIN.Size = new System.Drawing.Size(119, 162);
 			this.pnlPIN.TabIndex = 9;
+			// 
+			// lblPinError
+			// 
+			this.lblPinError.ForeColor = System.Drawing.Color.Red;
+			this.lblPinError.Location = new System.Drawing.Point(10, 110);
+			this.lblPinError.Name = "lblPinError";
+			this.lblPinError.Size = new System.Drawing.Size(100, 32);
+			this.lblPinError.TabIndex = 8;
+			this.lblPinError.Text = "Enter at least four characters";
+			this.lblPinError.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.lblPinError.Visible = false;
+			// 
+			// txtPin1
+			// 
+			this.txtPin1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.txtPin1.Location = new System.Drawing.Point(11, 41);
+			this.txtPin1.MaxLength = 8;
+			this.txtPin1.Name = "txtPin1";
+			this.txtPin1.Size = new System.Drawing.Size(97, 23);
+			this.txtPin1.TabIndex = 1;
+			this.txtPin1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			this.txtPin1.TextChanged += new System.EventHandler(this.txtPin1_TextChanged);
 			// 
 			// labelPIN
 			// 
 			this.labelPIN.AutoSize = true;
 			this.labelPIN.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-			this.labelPIN.Location = new System.Drawing.Point(21, -3);
+			this.labelPIN.Location = new System.Drawing.Point(27, -3);
 			this.labelPIN.Name = "labelPIN";
 			this.labelPIN.Size = new System.Drawing.Size(64, 37);
 			this.labelPIN.TabIndex = 7;
 			this.labelPIN.Text = "PIN";
 			// 
-			// pnlPINNumbers
-			// 
-			this.pnlPINNumbers.Controls.Add(this.textBox4);
-			this.pnlPINNumbers.Controls.Add(this.txtPin1);
-			this.pnlPINNumbers.Controls.Add(this.textBox5);
-			this.pnlPINNumbers.Controls.Add(this.textBox1);
-			this.pnlPINNumbers.Controls.Add(this.textBox2);
-			this.pnlPINNumbers.Controls.Add(this.textBox3);
-			this.pnlPINNumbers.Controls.Add(this.label20);
-			this.pnlPINNumbers.Controls.Add(this.label19);
-			this.pnlPINNumbers.Controls.Add(this.label11);
-			this.pnlPINNumbers.Controls.Add(this.label10);
-			this.pnlPINNumbers.Controls.Add(this.label5);
-			this.pnlPINNumbers.Controls.Add(this.label4);
-			this.pnlPINNumbers.Location = new System.Drawing.Point(1, 37);
-			this.pnlPINNumbers.Name = "pnlPINNumbers";
-			this.pnlPINNumbers.Size = new System.Drawing.Size(112, 38);
-			this.pnlPINNumbers.TabIndex = 8;
-			// 
-			// textBox4
-			// 
-			this.textBox4.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.textBox4.Location = new System.Drawing.Point(73, 2);
-			this.textBox4.MaxLength = 1;
-			this.textBox4.Name = "textBox4";
-			this.textBox4.Size = new System.Drawing.Size(15, 16);
-			this.textBox4.TabIndex = 5;
-			// 
-			// txtPin1
-			// 
-			this.txtPin1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.txtPin1.Location = new System.Drawing.Point(5, 2);
-			this.txtPin1.MaxLength = 1;
-			this.txtPin1.Name = "txtPin1";
-			this.txtPin1.Size = new System.Drawing.Size(15, 16);
-			this.txtPin1.TabIndex = 1;
-			// 
-			// textBox5
-			// 
-			this.textBox5.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.textBox5.Location = new System.Drawing.Point(90, 2);
-			this.textBox5.MaxLength = 1;
-			this.textBox5.Name = "textBox5";
-			this.textBox5.Size = new System.Drawing.Size(15, 16);
-			this.textBox5.TabIndex = 6;
-			// 
-			// textBox1
-			// 
-			this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.textBox1.Location = new System.Drawing.Point(22, 2);
-			this.textBox1.MaxLength = 1;
-			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(15, 16);
-			this.textBox1.TabIndex = 2;
-			// 
-			// textBox2
-			// 
-			this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.textBox2.Location = new System.Drawing.Point(39, 2);
-			this.textBox2.MaxLength = 1;
-			this.textBox2.Name = "textBox2";
-			this.textBox2.Size = new System.Drawing.Size(15, 16);
-			this.textBox2.TabIndex = 3;
-			// 
-			// textBox3
-			// 
-			this.textBox3.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.textBox3.Location = new System.Drawing.Point(56, 2);
-			this.textBox3.MaxLength = 1;
-			this.textBox3.Name = "textBox3";
-			this.textBox3.Size = new System.Drawing.Size(15, 16);
-			this.textBox3.TabIndex = 4;
-			// 
-			// label20
-			// 
-			this.label20.AutoSize = true;
-			this.label20.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-			this.label20.Location = new System.Drawing.Point(81, -12);
-			this.label20.Name = "label20";
-			this.label20.Size = new System.Drawing.Size(28, 37);
-			this.label20.TabIndex = 14;
-			this.label20.Text = "_";
-			// 
-			// label19
-			// 
-			this.label19.AutoSize = true;
-			this.label19.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-			this.label19.Location = new System.Drawing.Point(64, -12);
-			this.label19.Name = "label19";
-			this.label19.Size = new System.Drawing.Size(28, 37);
-			this.label19.TabIndex = 13;
-			this.label19.Text = "_";
-			// 
-			// label11
-			// 
-			this.label11.AutoSize = true;
-			this.label11.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-			this.label11.Location = new System.Drawing.Point(48, -12);
-			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(28, 37);
-			this.label11.TabIndex = 12;
-			this.label11.Text = "_";
-			// 
-			// label10
-			// 
-			this.label10.AutoSize = true;
-			this.label10.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-			this.label10.Location = new System.Drawing.Point(30, -12);
-			this.label10.Name = "label10";
-			this.label10.Size = new System.Drawing.Size(28, 37);
-			this.label10.TabIndex = 11;
-			this.label10.Text = "_";
-			// 
-			// label5
-			// 
-			this.label5.AutoSize = true;
-			this.label5.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-			this.label5.Location = new System.Drawing.Point(13, -12);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(28, 37);
-			this.label5.TabIndex = 10;
-			this.label5.Text = "_";
-			// 
-			// label4
-			// 
-			this.label4.AutoSize = true;
-			this.label4.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-			this.label4.Location = new System.Drawing.Point(-4, -12);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(28, 37);
-			this.label4.TabIndex = 9;
-			this.label4.Text = "_";
-			// 
 			// btnPIN
 			// 
-			this.btnPIN.Location = new System.Drawing.Point(3, 82);
+			this.btnPIN.Enabled = false;
+			this.btnPIN.Location = new System.Drawing.Point(9, 73);
 			this.btnPIN.Name = "btnPIN";
 			this.btnPIN.Size = new System.Drawing.Size(100, 25);
 			this.btnPIN.TabIndex = 0;
@@ -1670,8 +1549,6 @@ namespace myJournal
 			this.grpLogin.ResumeLayout(false);
 			this.pnlPIN.ResumeLayout(false);
 			this.pnlPIN.PerformLayout();
-			this.pnlPINNumbers.ResumeLayout(false);
-			this.pnlPINNumbers.PerformLayout();
 			this.ResumeLayout(false);
 
         }
@@ -1782,22 +1659,11 @@ namespace myJournal
 		private System.Windows.Forms.Label lblMoveDown;
 		private System.Windows.Forms.Label lblMoveUp;
 		private System.Windows.Forms.GroupBox grpLogin;
-		private System.Windows.Forms.Panel pnlPINNumbers;
-		private System.Windows.Forms.TextBox textBox4;
 		private System.Windows.Forms.TextBox txtPin1;
-		private System.Windows.Forms.TextBox textBox5;
-		private System.Windows.Forms.TextBox textBox1;
-		private System.Windows.Forms.TextBox textBox2;
-		private System.Windows.Forms.TextBox textBox3;
 		private System.Windows.Forms.Button btnPIN;
 		private System.Windows.Forms.Label labelPIN;
 		private System.Windows.Forms.Panel pnlPIN;
-		private System.Windows.Forms.Label label20;
-		private System.Windows.Forms.Label label19;
-		private System.Windows.Forms.Label label11;
-		private System.Windows.Forms.Label label10;
-		private System.Windows.Forms.Label label5;
-		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.Label lblPinError;
 	}
 }
 
