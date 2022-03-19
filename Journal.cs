@@ -17,7 +17,7 @@ namespace myJournal
         StringBuilder JournalText = new StringBuilder();
         public List<JournalEntry> Entries = new List<JournalEntry>();
         string root = "journals\\";
-		string PIN;
+		public string PIN;
 
         public Journal(string _PIN, string _name = null) 
         {
@@ -48,7 +48,7 @@ namespace myJournal
 			sb.AppendLine("Journal: " + this.Name);
 			foreach(JournalEntry je in this.Entries)
 			{
-				sb.Append(String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Editing"].Replace("Original ", ""), je.Date, je.ClearTitle(), je.ClearText()));
+				sb.Append(String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Editing"].Replace("Original ", ""), je.Date, je.ClearTitle(this.PIN), je.ClearText(this.PIN)));
 			}
 			return sb.ToString();
 		}
@@ -56,7 +56,7 @@ namespace myJournal
         public JournalEntry GetEntry(string _title, string _date)
         {
             JournalEntry je = null;
-			try { je = this.Entries.First(a => a.ClearTitle() + a.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) == _title + _date); }
+			try { je = this.Entries.First(a => a.ClearTitle(this.PIN) + a.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) == _title + _date); }
             catch(Exception) { }
             return je;
         }
@@ -64,6 +64,7 @@ namespace myJournal
         public Journal Open(string journalToOpen = "")
         {
             Journal jRtrn = null;
+
             try
             {
                 using(Stream stream = File.Open(journalToOpen.Length > 0 ? AppDomain.CurrentDomain.BaseDirectory + this.root + journalToOpen : this.FileName, FileMode.Open))
@@ -71,7 +72,7 @@ namespace myJournal
                     BinaryFormatter formatter = new BinaryFormatter();
                     jRtrn = (Journal)formatter.Deserialize(stream);
 					jRtrn.FileName = AppDomain.CurrentDomain.BaseDirectory + this.root + journalToOpen;
-
+					jRtrn.PIN = this.PIN;
 				}
             }
             catch(Exception) { }

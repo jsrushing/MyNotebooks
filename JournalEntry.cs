@@ -14,7 +14,7 @@ namespace myJournal
         string Text;
         string Title;
         string Tags;
-		string PIN;
+		public string PIN;
 		public bool isEdited = false;
         public string Id;
 
@@ -32,8 +32,8 @@ namespace myJournal
 			this.isEdited = _edited;
         }
 
-        public string ClearText() { return EncryptDecrypt.Decrypt(this.Text,this.PIN, ConfigurationManager.AppSettings["PrivateKey"]); }
-        public string ClearTitle() { return EncryptDecrypt.Decrypt(this.Title,this.PIN, ConfigurationManager.AppSettings["PrivateKey"]); }
-        public string ClearTags() { return this.Tags == null ? String.Empty : EncryptDecrypt.Decrypt(this.Tags,this.PIN, ConfigurationManager.AppSettings["PrivateKey"]); }
+        public string ClearText(string _pin) { return EncryptDecrypt.Decrypt(this.Text, _pin, ConfigurationManager.AppSettings["PrivateKey"]); }
+        public string ClearTitle(string _pin) { return EncryptDecrypt.Decrypt(this.Title, _pin, ConfigurationManager.AppSettings["PrivateKey"]); }
+        public string ClearTags(string _pin = null) { return this.Tags == null ? String.Empty : EncryptDecrypt.Decrypt(this.Tags, _pin, ConfigurationManager.AppSettings["PrivateKey"]); }
     }
 }

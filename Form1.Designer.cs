@@ -59,6 +59,7 @@ namespace myJournal
 			this.grpOpenScreen = new System.Windows.Forms.GroupBox();
 			this.lblPrint = new System.Windows.Forms.Label();
 			this.pnlMenu = new System.Windows.Forms.Panel();
+			this.lblLogOut = new System.Windows.Forms.Label();
 			this.lblViewJournal = new System.Windows.Forms.Label();
 			this.lblCloseMenu = new System.Windows.Forms.Label();
 			this.lblSettings_Show = new System.Windows.Forms.Label();
@@ -140,7 +141,6 @@ namespace myJournal
 			this.txtPin1 = new System.Windows.Forms.TextBox();
 			this.labelPIN = new System.Windows.Forms.Label();
 			this.btnPIN = new System.Windows.Forms.Button();
-			this.lblLogOut = new System.Windows.Forms.Label();
 			this.grpCreateEntry.SuspendLayout();
 			this.grpAppendDeleteOriginal.SuspendLayout();
 			this.mnuGroups.SuspendLayout();
@@ -515,6 +515,19 @@ namespace myJournal
 			this.pnlMenu.Size = new System.Drawing.Size(175, 293);
 			this.pnlMenu.TabIndex = 28;
 			this.pnlMenu.Visible = false;
+			// 
+			// lblLogOut
+			// 
+			this.lblLogOut.AutoSize = true;
+			this.lblLogOut.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.lblLogOut.Font = new System.Drawing.Font("Adobe Fan Heiti Std B", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.lblLogOut.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.lblLogOut.Location = new System.Drawing.Point(9, 225);
+			this.lblLogOut.Name = "lblLogOut";
+			this.lblLogOut.Size = new System.Drawing.Size(50, 15);
+			this.lblLogOut.TabIndex = 27;
+			this.lblLogOut.Text = "Log Out";
+			this.lblLogOut.Click += new System.EventHandler(this.lblLogOut_Click);
 			// 
 			// lblViewJournal
 			// 
@@ -1479,6 +1492,7 @@ namespace myJournal
 			this.txtPin1.Name = "txtPin1";
 			this.txtPin1.Size = new System.Drawing.Size(97, 23);
 			this.txtPin1.TabIndex = 1;
+			this.txtPin1.Text = "1234";
 			this.txtPin1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			this.txtPin1.TextChanged += new System.EventHandler(this.txtPin1_TextChanged);
 			// 
@@ -1501,20 +1515,7 @@ namespace myJournal
 			this.btnPIN.TabIndex = 0;
 			this.btnPIN.Text = "Login";
 			this.btnPIN.UseVisualStyleBackColor = true;
-			this.btnPIN.Click += new System.EventHandler(this.btnPIN_Click);
-			// 
-			// lblLogOut
-			// 
-			this.lblLogOut.AutoSize = true;
-			this.lblLogOut.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.lblLogOut.Font = new System.Drawing.Font("Adobe Fan Heiti Std B", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-			this.lblLogOut.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblLogOut.Location = new System.Drawing.Point(9, 225);
-			this.lblLogOut.Name = "lblLogOut";
-			this.lblLogOut.Size = new System.Drawing.Size(50, 15);
-			this.lblLogOut.TabIndex = 27;
-			this.lblLogOut.Text = "Log Out";
-			this.lblLogOut.Click += new System.EventHandler(this.lblLogOut_Click);
+			this.btnPIN.Click += new System.EventHandler(this.btnOK_PIN_Click);
 			// 
 			// Form1
 			// 

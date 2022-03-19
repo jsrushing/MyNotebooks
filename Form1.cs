@@ -80,7 +80,8 @@ namespace myJournal
             ActiveMenuFont				= new Font(InactiveMenuFont.FontFamily, InactiveMenuFont.Size + 1);
 			ActiveMenuFont				= new Font(ActiveMenuFont, fs);
 
-            ActivateGroupBox(grpLogin);
+			//ActivateGroupBox(grpOpenScreen);
+			ActivateGroupBox(grpLogin);
 		}
 
 		private void Form1_Resize(object sender, EventArgs e)
@@ -309,6 +310,33 @@ namespace myJournal
 			grpEditTags_NewName.Visible = false;
 			Tags_Save(null, lstTagsForEdit);
 		}
+
+		private void btnOK_PIN_Click(object sender, EventArgs e)
+		{
+			string PIN = EncryptDecrypt.FullPin(txtPin1.Text);
+			bool bStart = true;
+
+			if (File.Exists("key.txt"))
+			{
+				bStart = PIN == EncryptDecrypt.Decrypt(File.ReadAllText("key.txt"), PIN, ConfigurationManager.AppSettings["PrivateKey"]);
+			}
+			else
+			{
+				File.WriteAllTextAsync("key.txt", EncryptDecrypt.Encrypt(PIN, PIN, ConfigurationManager.AppSettings["PrivateKey"]));
+			}
+
+			if (bStart)
+			{
+				ActivateGroupBox(grpOpenScreen);
+			}
+			else
+			{
+				lblPinError.Text = "Wrong PIN";
+				lblPinError.Visible = true;
+			}
+		}
+
+
 		#endregion
 
 		/// <summary>
@@ -454,7 +482,7 @@ namespace myJournal
         /// <param name="e"></param>
         private void lblDeleteEntry_Click(object sender, EventArgs e)
         {
-			lblDeleteEntry_ConfirmMsg.Text = "'" + currentEntry.ClearTitle() + "' " + lblDeleteEntry_ConfirmMsg.Text;
+			lblDeleteEntry_ConfirmMsg.Text = "'" + currentEntry.ClearTitle(txtPin1.Text) + "' " + lblDeleteEntry_ConfirmMsg.Text;
 			ActivateGroupBox(grpConfirmDeleteEntry);
         }
 
@@ -487,13 +515,13 @@ namespace myJournal
         {
             ActivateGroupBox(grpCreateEntry);
 			btnAddEntry.Text = "Save Edit";
-			txtNewEntryTitle.Text = currentEntry.ClearTitle();
-            lblEntryText_Hidden.Text = currentEntry.ClearText();
-            lblEntryTitle_Hidden.Text = currentEntry.ClearTitle();
+			txtNewEntryTitle.Text = currentEntry.ClearTitle(txtPin1.Text);
+            lblEntryText_Hidden.Text = currentEntry.ClearText(txtPin1.Text);
+            lblEntryTitle_Hidden.Text = currentEntry.ClearTitle(txtPin1.Text);
             string newLine = System.Environment.NewLine;
 
 			rtbNewEntry.Text = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Editing"], currentEntry.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"])
-				, currentEntry.ClearTitle(), currentEntry.ClearText());
+				, currentEntry.ClearTitle(txtPin1.Text), currentEntry.ClearText(txtPin1.Text));
 
 			rtbNewEntry.Focus();
             rtbNewEntry.SelectionStart = 0; 
@@ -584,9 +612,9 @@ namespace myJournal
                         }
                     }
                     // title contains
-                    if (txtSearchTitle.TextLength > 0) { if (je.ClearTitle().Contains(txtSearchTitle.Text)) { foundEntries.Add(je); } }
+                    if (txtSearchTitle.TextLength > 0) { if (je.ClearTitle(txtPin1.Text).Contains(txtSearchTitle.Text)) { foundEntries.Add(je); } }
                     // entry contains
-                    if (txtSearchText.TextLength > 0) { if (je.ClearText().Contains(txtSearchText.Text)) { foundEntries.Add(je); } }
+                    if (txtSearchText.TextLength > 0) { if (je.ClearText(txtPin1.Text).Contains(txtSearchText.Text)) { foundEntries.Add(je); } }
                 }
             }
 
@@ -755,7 +783,6 @@ namespace myJournal
             lb.SelectedIndices.Add(ctr + 1);
             lb.SelectedIndices.Add(ctr + 2);                        //
 
-
 			// this is where you have to account for isEdited
 
             string sTitleAndDate = lb.Items[ctr].ToString().Replace(" - EDITED", "");        // Use the title and date of the entry to create a JournalEntry object whose .ClearText will populate the display ...
@@ -768,7 +795,7 @@ namespace myJournal
 			{
 				StringBuilder sb = new StringBuilder();
 				rtb.Text = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
-					, currentJournal.Name, currentEntry.ClearTitle(), currentEntry.Date, currentEntry.ClearTags(), currentEntry.ClearText());
+					, currentJournal.Name, currentEntry.ClearTitle(txtPin1.Text), currentEntry.Date, currentEntry.ClearTags(), currentEntry.ClearText(txtPin1.Text));
 				lblEditEntry.Enabled = true;
 				lblPrint.Visible = rtb.Text.Length > 0;
 				lblSelectionType.Visible = rtb.Text.Length > 0;
@@ -796,8 +823,8 @@ namespace myJournal
             foreach(JournalEntry je in currentJournal.Entries)
             {
 				// add display of isEdited here
-                lstBoxToPopulate.Items.Add(je.ClearTitle() + " (" + je.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"); //+ (je.isEdited ? " - EDITED" : ""));
-                string sEntryText = je.ClearText();
+                lstBoxToPopulate.Items.Add(je.ClearTitle(txtPin1.Text) + " (" + je.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"); //+ (je.isEdited ? " - EDITED" : ""));
+                string sEntryText = je.ClearText(txtPin1.Text);
 
                 lstBoxToPopulate.Items.Add(sEntryText.Length < iTextChunkLength ?
                     sEntryText :
@@ -823,20 +850,18 @@ namespace myJournal
 
 			foreach(string line in lines)
 			{
-
-			}
-
-			while (linesPrinted < lines.Length)
-			{
-				e.Graphics.DrawString(lines[linesPrinted++], rtbSelectedEntry_Main.Font, brush, x, y);
-				y += 15;
-				if(y >= e.MarginBounds.Bottom)
+				while (linesPrinted < lines.Length)
 				{
-					e.HasMorePages = true;
-					return;
+					e.Graphics.DrawString(lines[linesPrinted++], rtbSelectedEntry_Main.Font, brush, x, y);
+					y += 15;
+					if(y >= e.MarginBounds.Bottom)
+					{
+						e.HasMorePages = true;
+						return;
+					}
+					linesPrinted = 0;
+					e.HasMorePages = false;
 				}
-				linesPrinted = 0;
-				e.HasMorePages = false;
 			}
 			//e.Graphics.DrawString(rtbSelectedEntry_Main.Text.Split('\n'), rtbSelectedEntry_Main.Font, Brushes.Black, 20, 20);
 		}
@@ -925,31 +950,6 @@ namespace myJournal
 			lblMoveUp.Enabled = lstTagsForEdit.SelectedIndex > 0;
 			lblEditTag.Enabled = true;
 			lblRemoveTag.Enabled = true;
-		}
-
-		private void btnPIN_Click(object sender, EventArgs e)
-		{
-			string PIN = EncryptDecrypt.FullPin(txtPin1.Text);
-			bool bStart = true;
-
-			if (File.Exists("key.txt"))
-			{
-				bStart = PIN == EncryptDecrypt.Decrypt(File.ReadAllText("key.txt"), PIN, ConfigurationManager.AppSettings["PrivateKey"]);
-			}
-			else
-			{
-				File.WriteAllTextAsync("key.txt", EncryptDecrypt.Encrypt(PIN, PIN, ConfigurationManager.AppSettings["PrivateKey"]));
-			}
-
-			if (bStart)
-			{
-				ActivateGroupBox(grpOpenScreen);
-			}
-			else
-			{
-				lblPinError.Text = "Wrong PIN";
-				lblPinError.Visible = true;
-			}
 		}
 
 		private void txtPin1_TextChanged(object sender, EventArgs e)

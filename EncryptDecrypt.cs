@@ -45,9 +45,9 @@ namespace encrypt_decrypt_string
             try
             {
                 string ToReturn = "";
-                //PublicKey = "12345678";
-                //PrivateKey = "87654321";
-                byte[] privatekeyByte = { };
+				//PublicKey = "12341234";
+				//PrivateKey = "87654321";
+				byte[] privatekeyByte = { };
                 privatekeyByte = System.Text.Encoding.UTF8.GetBytes(PrivateKey);
                 byte[] publickeybyte = { };
                 publickeybyte = System.Text.Encoding.UTF8.GetBytes(FullPin(PublicKey)); 
