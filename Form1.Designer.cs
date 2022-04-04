@@ -487,6 +487,7 @@ namespace myJournal
 			this.grpSelectedEntryLabels.Name = "grpSelectedEntryLabels";
 			this.grpSelectedEntryLabels.Size = new System.Drawing.Size(280, 19);
 			this.grpSelectedEntryLabels.TabIndex = 32;
+			this.grpSelectedEntryLabels.Visible = false;
 			// 
 			// lblPrint
 			// 
