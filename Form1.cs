@@ -30,6 +30,7 @@ namespace myJournal
 		GroupBox backTarget			= null;
 		Form activeForm;
         GroupBox DisplayedGroupBox;
+		int iMouseX					= -1;
 
 		[DllImport("User32.dll")]
 		static extern Int64 SendMessage (IntPtr hwnd, Int64 wMsg, bool wParam, Object lParam);
@@ -50,6 +51,10 @@ namespace myJournal
 
         private void Form1_Load(object sender, EventArgs e)
         {
+			//frmPlay frm = new frmPlay();
+			//frm.ShowDialog();
+
+
 			//Int64 val = Convert.ToInt64("FC8");
 			//byte[] buffer = { &HA9, &HC8, &HE6, &HC4 };
 
@@ -88,7 +93,8 @@ namespace myJournal
         {
             DisplayedGroupBox.Location = ActiveBoxLocation;
             DisplayedGroupBox.Size = new Size(this.Width - 35, this.Height - 50);
-        }
+			ResizeListsAndRTBs(lstEntries, rtbSelectedEntry_Main, lblSeparator_grpOpenScreen);
+		}
 
         /// <summary>
         /// Show a group box. Change form Text, set focus, etc. as required for that group box.
@@ -125,6 +131,7 @@ namespace myJournal
                     this.Text = "My Journal";
                     rtbSelectedEntry_Main.Clear();
 					lstEntries.Height = grpOpenScreen.Height - 100;
+					ResizeListsAndRTBs(lstEntries, rtbSelectedEntry_Main, lblSeparator_grpOpenScreen);
 					break;
                 case "grpCreateEntry":
 					btnAddEntry.Text = "Save Entry";
@@ -335,7 +342,6 @@ namespace myJournal
 				lblPinError.Visible = true;
 			}
 		}
-
 
 		#endregion
 
@@ -798,7 +804,7 @@ namespace myJournal
 					, currentJournal.Name, currentEntry.ClearTitle(txtPin1.Text), currentEntry.Date, currentEntry.ClearTags(), currentEntry.ClearText(txtPin1.Text));
 				lblEditEntry.Enabled = true;
 				lblPrint.Visible = rtb.Text.Length > 0;
-				lblSelectionType.Visible = rtb.Text.Length > 0;
+				grpSelectedEntryLabels.Visible = rtb.Text.Length > 0;
 				lblSeparator_grpOpenScreen.Visible = rtb.Text.Length > 0;
 				lblSelectedFoundEntry.Visible = rtbSelectedEntry_Found.Text.Length > 0;
 				lblSelectionType.Text = "Selected Entry";
@@ -962,6 +968,28 @@ namespace myJournal
 		private void lblLogOut_Click(object sender, EventArgs e)
 		{
 			ActivateGroupBox(grpLogin);
+		}
+
+		private void lblSeparator_grpOpenScreen_MouseMove(object sender, MouseEventArgs e)
+		{
+			//rtbSelectedEntry_Main.Visible = false;
+
+			if (e.Button == MouseButtons.Left)
+			{
+				lblSeparator_grpOpenScreen.Top += e.Y;
+				ResizeListsAndRTBs(lstEntries, rtbSelectedEntry_Main, lblSeparator_grpOpenScreen);	
+			}
+		}
+
+		private void ResizeListsAndRTBs(ListBox lbx, RichTextBox rtb, Label lblSeperator)
+		{
+			int iBoxCenter = lbx.Width / 2;
+			lblSeperator.Left = lbx.Left + 10;
+			lblSeperator.Width = lbx.Width - 20;
+			lbx.Height = lblSeperator.Top - lbx.Top - 5;
+			grpSelectedEntryLabels.Top = lblSeperator.Top + lblSeperator.Height + 10;
+			rtb.Top = grpSelectedEntryLabels.Top + grpSelectedEntryLabels.Height;
+			rtb.Height = DisplayedGroupBox.Height - rtb.Top - 10;
 		}
 	}
 }
