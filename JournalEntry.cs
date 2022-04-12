@@ -17,8 +17,10 @@ namespace myJournal
 		public string PIN;
 		public bool isEdited = false;
         public string Id;
-
-        public JournalEntry() { }
+		private string _clearText;
+		private string _clearTitle;
+		private string _clearTags;
+		public JournalEntry() { }
 
 		public JournalEntry(string _title, string _text, string _tags, string _PIN, bool _edited = false)
         {
@@ -30,10 +32,14 @@ namespace myJournal
             this.Tags = EncryptDecrypt.Encrypt(_tags, _PIN, key);
             this.Id = Guid.NewGuid().ToString();
 			this.isEdited = _edited;
-        }
 
-        public string ClearText(string _pin) { return EncryptDecrypt.Decrypt(this.Text, _pin, ConfigurationManager.AppSettings["PrivateKey"]); }
-        public string ClearTitle(string _pin) { return EncryptDecrypt.Decrypt(this.Title, _pin, ConfigurationManager.AppSettings["PrivateKey"]); }
-        public string ClearTags(string _pin = null) { return this.Tags == null ? String.Empty : EncryptDecrypt.Decrypt(this.Tags, _pin, ConfigurationManager.AppSettings["PrivateKey"]); }
-    }
+			this._clearText = ClearText(_PIN);
+			this._clearTitle = ClearTitle(_PIN);
+			this._clearTags = ClearTags(_PIN);
+		}
+
+		public string ClearText(string _pin) { return EncryptDecrypt.Decrypt(this.Text, _pin, ConfigurationManager.AppSettings["PrivateKey"]); }
+		public string ClearTitle(string _pin) { return EncryptDecrypt.Decrypt(this.Title, _pin, ConfigurationManager.AppSettings["PrivateKey"]); }
+		public string ClearTags(string _pin = null) { return this.Tags == null ? String.Empty : EncryptDecrypt.Decrypt(this.Tags, _pin, ConfigurationManager.AppSettings["PrivateKey"]); }
+	}
 }

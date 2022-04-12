@@ -85,8 +85,8 @@ namespace myJournal
             ActiveMenuFont				= new Font(InactiveMenuFont.FontFamily, InactiveMenuFont.Size + 1);
 			ActiveMenuFont				= new Font(ActiveMenuFont, fs);
 
-			//ActivateGroupBox(grpOpenScreen);
-			ActivateGroupBox(grpLogin);
+			ActivateGroupBox(grpOpenScreen);
+			//ActivateGroupBox(grpLogin);
 		}
 
 		private void Form1_Resize(object sender, EventArgs e)
@@ -744,20 +744,20 @@ namespace myJournal
             rtb.Clear();    
             List<int> targets = new List<int>();
             lb.SelectedIndexChanged -= new System.EventHandler(this.ListOfEntries_SelectedIndexChanged);
-            ListBox.SelectedIndexCollection c = lb.SelectedIndices;
+            ListBox.SelectedIndexCollection cltnLbSelectedEntries = lb.SelectedIndices;
 			pnlMenu.Visible = false;
 
 			try
 			{
-				if (c.Count > 1)
+				if (cltnLbSelectedEntries.Count > 1)
 				{
-					for (int i = 0; i < c.Count - 1; i++)
+					for (int i = 0; i < cltnLbSelectedEntries.Count - 1; i++)
 					{
-						if (c[i] == c[i + 1] - 1)
+						if (cltnLbSelectedEntries[i] == cltnLbSelectedEntries[i + 1] - 1)
 						{
-							targets.Add(c[i]);
-							targets.Add(c[i + 1]);
-							targets.Add(c[i + 2]);
+							targets.Add(cltnLbSelectedEntries[i]);
+							targets.Add(cltnLbSelectedEntries[i + 1]);
+							targets.Add(cltnLbSelectedEntries[i + 2]);
 							break;
 						}
 					}
@@ -782,16 +782,16 @@ namespace myJournal
                 ctr--;
                 if (ctr < 0) break;
             }
- 
-            if (ctr > 0) { ctr += 1; }
-            lb.SelectedIndices.Clear();                             // Select the whole short entry ...
-            lb.SelectedIndices.Add(ctr);
-            lb.SelectedIndices.Add(ctr + 1);
-            lb.SelectedIndices.Add(ctr + 2);                        //
+
+			if (ctr > 0) { ctr += 1; }
+			lb.SelectedIndices.Clear();                             // Select the whole short entry ...
+			lb.SelectedIndices.Add(ctr);
+			lb.SelectedIndices.Add(ctr + 1);
+			lb.SelectedIndices.Add(ctr + 2);                        //
 
 			// this is where you have to account for isEdited
 
-            string sTitleAndDate = lb.Items[ctr].ToString().Replace(" - EDITED", "");        // Use the title and date of the entry to create a JournalEntry object whose .ClearText will populate the display ...
+			string sTitleAndDate = lb.Items[ctr].ToString().Replace(" - EDITED", "");        // Use the title and date of the entry to create a JournalEntry object whose .ClearText will populate the display ...
             string sTitle = sTitleAndDate.Substring(0, sTitleAndDate.IndexOf('(') - 1);
             string sDate = sTitleAndDate.Substring(sTitleAndDate.IndexOf('(') + 1, sTitleAndDate.Length - 2 - sTitleAndDate.IndexOf('('));
             
