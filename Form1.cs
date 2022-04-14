@@ -96,6 +96,15 @@ namespace myJournal
 			ResizeListsAndRTBs(lstEntries, rtbSelectedEntry_Main, lblSeparator_grpOpenScreen);
 		}
 
+		private void ActivateForm(Form frmToActivate)
+		{
+			pnlMenu.Visible = false;
+			frmToActivate.Size = this.Size;
+			//frmToActivate.Location = new Point(this.Left, this.Top);
+			frmToActivate.ShowDialog();
+			frmToActivate.Close();
+		}
+
         /// <summary>
         /// Show a group box. Change form Text, set focus, etc. as required for that group box.
         /// </summary>
@@ -844,6 +853,8 @@ namespace myJournal
 			{
 				lstBoxToPopulate.Height = lstBoxToPopulate.Height + rtbSelectedEntry_Main.Height;
 			}
+
+			lblJournal_Import.Enabled = true;
         }
 
 		private void PrintPage(object sender, PrintPageEventArgs e)
@@ -990,6 +1001,11 @@ namespace myJournal
 			grpSelectedEntryLabels.Top = lblSeperator.Top + lblSeperator.Height + 10;
 			rtb.Top = grpSelectedEntryLabels.Top + grpSelectedEntryLabels.Height;
 			rtb.Height = DisplayedGroupBox.Height - rtb.Top - 10;
+		}
+
+		private void lblJournal_Import_Click(object sender, EventArgs e)
+		{	
+			ActivateForm(new frmImportJournal(new Point(this.Left, this.Top), ddlJournals));
 		}
 	}
 }
