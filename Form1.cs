@@ -139,13 +139,13 @@ namespace myJournal
 
             switch (box.Name)
             {
-				case "grpLogin":
-					this.Text = "Login";
-					pnlPIN.Location = new Point((grpLogin.Width / 2) - (pnlPIN.Width / 2), 10);
-					ConfigurationManager.AppSettings["PIN"] = string.Empty;
-					txtBxToFocus = txtPin1;
-					btnToFocus = btnPIN;
-					break;
+				//case "grpLogin":
+				//	this.Text = "Login";
+				//	pnlPIN.Location = new Point((grpLogin.Width / 2) - (pnlPIN.Width / 2), 10);
+				//	ConfigurationManager.AppSettings["PIN"] = string.Empty;
+				//	txtBxToFocus = txtPin1;
+				//	btnToFocus = btnPIN;
+				//	break;
                 case "grpOpenScreen":
                     this.Text = "My Journal";
                     rtbSelectedEntry_Main.Clear();
@@ -335,31 +335,6 @@ namespace myJournal
 			lstTagsForEdit.Items.Insert(a, txtTag_TagName_Edited.Text);
 			grpEditTags_NewName.Visible = false;
 			Tags_Save(null, lstTagsForEdit);
-		}
-
-		private void btnOK_PIN_Click(object sender, EventArgs e)
-		{
-			string PIN = EncryptDecrypt.FullPin(ConfigurationManager.AppSettings["PIN"]);
-			bool bStart = true;
-
-			if (File.Exists("key.txt"))
-			{
-				bStart = PIN == EncryptDecrypt.Decrypt(File.ReadAllText("key.txt"), PIN, ConfigurationManager.AppSettings["PrivateKey"]);
-			}
-			else
-			{
-				File.WriteAllTextAsync("key.txt", EncryptDecrypt.Encrypt(PIN, PIN, ConfigurationManager.AppSettings["PrivateKey"]));
-			}
-
-			if (bStart)
-			{
-				ActivateGroupBox(grpOpenScreen);
-			}
-			else
-			{
-				lblPinError.Text = "Wrong PIN";
-				lblPinError.Visible = true;
-			}
 		}
 
 		#endregion
@@ -981,16 +956,9 @@ namespace myJournal
 			lblRemoveTag.Enabled = true;
 		}
 
-		private void txtPin1_TextChanged(object sender, EventArgs e)
-		{
-			lblPinError.Text = "Enter at least four characters.";
-			btnPIN.Enabled = ConfigurationManager.AppSettings["PIN"].Length >= 4;
-			lblPinError.Visible = !btnPIN.Enabled;
-		}
-
 		private void lblLogOut_Click(object sender, EventArgs e)
 		{
-			ActivateGroupBox(grpLogin);
+			ActivateForm(new frmLogin());
 		}
 
 		private void lblSeparator_grpOpenScreen_MouseMove(object sender, MouseEventArgs e)

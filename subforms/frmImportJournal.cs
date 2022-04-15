@@ -11,7 +11,6 @@ namespace myJournal
 	public partial class frmImportJournal : Form
 	{
 		private Point myLocation;
-		private Journal _currentJournal;
 
 		public frmImportJournal(Point pntLocation, ComboBox lst)
 		{

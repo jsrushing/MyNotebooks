@@ -50,6 +50,10 @@ namespace myJournal.subforms
 				ConfigurationManager.AppSettings["PIN"] = txtPIN.Text;
 				this.Hide();
 			}
+			else
+			{
+				this.Hide();
+			}
 
 			if (txtPIN.Text.Length > 0 && !PIN_Ok)
 			{

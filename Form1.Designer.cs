@@ -137,12 +137,6 @@ namespace myJournal
 			this.lblDeleteEntry_ConfirmMsg = new System.Windows.Forms.Label();
 			this.lblBack_ConfirmEntryDelete = new System.Windows.Forms.Label();
 			this.btnOK_DeleteEntry = new System.Windows.Forms.Button();
-			this.grpLogin = new System.Windows.Forms.GroupBox();
-			this.pnlPIN = new System.Windows.Forms.Panel();
-			this.lblPinError = new System.Windows.Forms.Label();
-			this.txtPin1 = new System.Windows.Forms.TextBox();
-			this.labelPIN = new System.Windows.Forms.Label();
-			this.btnPIN = new System.Windows.Forms.Button();
 			this.grpCreateEntry.SuspendLayout();
 			this.grpAppendDeleteOriginal.SuspendLayout();
 			this.mnuGroups.SuspendLayout();
@@ -158,8 +152,6 @@ namespace myJournal
 			this.grpEditTags_Add.SuspendLayout();
 			this.grpDeleteJournal.SuspendLayout();
 			this.grpConfirmDeleteEntry.SuspendLayout();
-			this.grpLogin.SuspendLayout();
-			this.pnlPIN.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -1480,77 +1472,12 @@ namespace myJournal
 			this.btnOK_DeleteEntry.UseVisualStyleBackColor = false;
 			this.btnOK_DeleteEntry.Click += new System.EventHandler(this.btnOk_DeleteEntry_Click);
 			// 
-			// grpLogin
-			// 
-			this.grpLogin.Controls.Add(this.pnlPIN);
-			this.grpLogin.Location = new System.Drawing.Point(1055, 95);
-			this.grpLogin.Name = "grpLogin";
-			this.grpLogin.Size = new System.Drawing.Size(283, 365);
-			this.grpLogin.TabIndex = 28;
-			this.grpLogin.TabStop = false;
-			// 
-			// pnlPIN
-			// 
-			this.pnlPIN.Controls.Add(this.lblPinError);
-			this.pnlPIN.Controls.Add(this.txtPin1);
-			this.pnlPIN.Controls.Add(this.labelPIN);
-			this.pnlPIN.Controls.Add(this.btnPIN);
-			this.pnlPIN.Location = new System.Drawing.Point(85, 20);
-			this.pnlPIN.Name = "pnlPIN";
-			this.pnlPIN.Size = new System.Drawing.Size(119, 162);
-			this.pnlPIN.TabIndex = 9;
-			// 
-			// lblPinError
-			// 
-			this.lblPinError.ForeColor = System.Drawing.Color.Red;
-			this.lblPinError.Location = new System.Drawing.Point(10, 110);
-			this.lblPinError.Name = "lblPinError";
-			this.lblPinError.Size = new System.Drawing.Size(100, 32);
-			this.lblPinError.TabIndex = 8;
-			this.lblPinError.Text = "Enter at least four characters";
-			this.lblPinError.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			this.lblPinError.Visible = false;
-			// 
-			// txtPin1
-			// 
-			this.txtPin1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.txtPin1.Location = new System.Drawing.Point(11, 41);
-			this.txtPin1.MaxLength = 8;
-			this.txtPin1.Name = "txtPin1";
-			this.txtPin1.Size = new System.Drawing.Size(97, 23);
-			this.txtPin1.TabIndex = 1;
-			this.txtPin1.Text = "1234";
-			this.txtPin1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-			this.txtPin1.TextChanged += new System.EventHandler(this.txtPin1_TextChanged);
-			// 
-			// labelPIN
-			// 
-			this.labelPIN.AutoSize = true;
-			this.labelPIN.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-			this.labelPIN.Location = new System.Drawing.Point(27, -3);
-			this.labelPIN.Name = "labelPIN";
-			this.labelPIN.Size = new System.Drawing.Size(64, 37);
-			this.labelPIN.TabIndex = 7;
-			this.labelPIN.Text = "PIN";
-			// 
-			// btnPIN
-			// 
-			this.btnPIN.Enabled = false;
-			this.btnPIN.Location = new System.Drawing.Point(9, 73);
-			this.btnPIN.Name = "btnPIN";
-			this.btnPIN.Size = new System.Drawing.Size(100, 25);
-			this.btnPIN.TabIndex = 0;
-			this.btnPIN.Text = "Login";
-			this.btnPIN.UseVisualStyleBackColor = true;
-			this.btnPIN.Click += new System.EventHandler(this.btnOK_PIN_Click);
-			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.Window;
 			this.ClientSize = new System.Drawing.Size(1414, 1061);
-			this.Controls.Add(this.grpLogin);
 			this.Controls.Add(this.grpConfirmDeleteEntry);
 			this.Controls.Add(this.grpDeleteJournal);
 			this.Controls.Add(this.grpManageTags);
@@ -1591,9 +1518,6 @@ namespace myJournal
 			this.grpDeleteJournal.PerformLayout();
 			this.grpConfirmDeleteEntry.ResumeLayout(false);
 			this.grpConfirmDeleteEntry.PerformLayout();
-			this.grpLogin.ResumeLayout(false);
-			this.pnlPIN.ResumeLayout(false);
-			this.pnlPIN.PerformLayout();
 			this.ResumeLayout(false);
 
         }
@@ -1703,12 +1627,6 @@ namespace myJournal
 		private System.Windows.Forms.Label lblRemoveTag;
 		private System.Windows.Forms.Label lblMoveDown;
 		private System.Windows.Forms.Label lblMoveUp;
-		private System.Windows.Forms.GroupBox grpLogin;
-		private System.Windows.Forms.TextBox txtPin1;
-		private System.Windows.Forms.Button btnPIN;
-		private System.Windows.Forms.Label labelPIN;
-		private System.Windows.Forms.Panel pnlPIN;
-		private System.Windows.Forms.Label lblPinError;
 		private System.Windows.Forms.Label lblLogOut;
 		private System.Windows.Forms.Panel grpSelectedEntryLabels;
 		private System.Windows.Forms.Label lblJournal_Import;
