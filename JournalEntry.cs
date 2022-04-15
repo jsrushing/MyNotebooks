@@ -24,22 +24,22 @@ namespace myJournal
 
 		public JournalEntry(string _title, string _text, string _tags, string _PIN, bool _edited = false)
         {
-            this.Date = DateTime.Now;
-			this.PIN = _PIN;
-			string key = ConfigurationManager.AppSettings["PrivateKey"];
-			this.Text = EncryptDecrypt.Encrypt(_text, _PIN, key);
-            this.Title = EncryptDecrypt.Encrypt(_title, _PIN, key);
-            this.Tags = EncryptDecrypt.Encrypt(_tags, _PIN, key);
-            this.Id = Guid.NewGuid().ToString();
+            this.Date	= DateTime.Now;
+			this.PIN	= _PIN;
+			string key	= ConfigurationManager.AppSettings["PrivateKey"];
+			this.Text	= EncryptDecrypt.Encrypt(_text, this.PIN, key);
+            this.Title	= EncryptDecrypt.Encrypt(_title, this.PIN, key);
+            this.Tags	= EncryptDecrypt.Encrypt(_tags, this.PIN, key);
+            this.Id		= Guid.NewGuid().ToString();
 			this.isEdited = _edited;
 
-			this._clearText = ClearText(_PIN);
-			this._clearTitle = ClearTitle(_PIN);
-			this._clearTags = ClearTags(_PIN);
+			this._clearText		= ClearText();
+			this._clearTitle	= ClearTitle();
+			this._clearTags		= ClearTags();
 		}
 
-		public string ClearText(string _pin) { return EncryptDecrypt.Decrypt(this.Text, _pin, ConfigurationManager.AppSettings["PrivateKey"]); }
-		public string ClearTitle(string _pin) { return EncryptDecrypt.Decrypt(this.Title, _pin, ConfigurationManager.AppSettings["PrivateKey"]); }
-		public string ClearTags(string _pin = null) { return this.Tags == null ? String.Empty : EncryptDecrypt.Decrypt(this.Tags, _pin, ConfigurationManager.AppSettings["PrivateKey"]); }
+		public string ClearText() { return EncryptDecrypt.Decrypt(this.Text, this.PIN, ConfigurationManager.AppSettings["PrivateKey"]); }
+		public string ClearTitle() { return EncryptDecrypt.Decrypt(this.Title, this.PIN, ConfigurationManager.AppSettings["PrivateKey"]); }
+		public string ClearTags() { return this.Tags == null ? String.Empty : EncryptDecrypt.Decrypt(this.Tags, this.PIN, ConfigurationManager.AppSettings["PrivateKey"]); }
 	}
 }

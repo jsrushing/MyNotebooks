@@ -15,7 +15,7 @@ namespace encrypt_decrypt_string
             try
             {
                 string ToReturn = "";
-				if(PublicKey.Length == 0)
+				if(PublicKey == null)
 				{
 					PublicKey = "12345678";
 					PrivateKey = "87654321";

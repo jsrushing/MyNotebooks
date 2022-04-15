@@ -109,13 +109,9 @@ namespace myJournal
 			switch (DisplayedForm.Name) {
 				case ("frmLogin"):
 					if(ConfigurationManager.AppSettings["CloseApp"] == "True")
-					{
-						this.Close();
-					}
+					{ this.Close(); }
 					else
-					{
-						ActivateGroupBox(grpOpenScreen);
-					}
+					{ ActivateGroupBox(grpOpenScreen); }
 					break;
 			}			
 		}
@@ -482,7 +478,7 @@ namespace myJournal
         /// <param name="e"></param>
         private void lblDeleteEntry_Click(object sender, EventArgs e)
         {
-			lblDeleteEntry_ConfirmMsg.Text = "'" + currentEntry.ClearTitle(ConfigurationManager.AppSettings["PIN"]) + "' " + lblDeleteEntry_ConfirmMsg.Text;
+			lblDeleteEntry_ConfirmMsg.Text = "'" + currentEntry.ClearTitle() + "' " + lblDeleteEntry_ConfirmMsg.Text;
 			ActivateGroupBox(grpConfirmDeleteEntry);
         }
 
@@ -795,7 +791,8 @@ namespace myJournal
 			{
 				StringBuilder sb = new StringBuilder();
 				rtb.Text = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
-					, currentJournal.Name, currentEntry.ClearTitle(ConfigurationManager.AppSettings["PIN"]), currentEntry.Date
+					//, currentJournal.Name
+					, currentEntry.ClearTitle(ConfigurationManager.AppSettings["PIN"]), currentEntry.Date
 					, currentEntry.ClearTags(ConfigurationManager.AppSettings["PIN"])
 					, currentEntry.ClearText(ConfigurationManager.AppSettings["PIN"]));
 				lblEditEntry.Enabled = true;

@@ -104,7 +104,7 @@ namespace myJournal.subforms
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(285, 271);
 			this.Controls.Add(this.grp1);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Name = "frmLogin";
 			this.Text = "frmLogin";
 			this.Activated += new System.EventHandler(this.frmLogin_Activated);
