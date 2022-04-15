@@ -22,5 +22,29 @@ namespace myJournal.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string PIN {
+            get {
+                return ((string)(this["PIN"]));
+            }
+            set {
+                this["PIN"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool CloseApp {
+            get {
+                return ((bool)(this["CloseApp"]));
+            }
+            set {
+                this["CloseApp"] = value;
+            }
+        }
     }
 }

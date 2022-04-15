@@ -10,6 +10,7 @@ using System.Linq;
 using System.Drawing.Printing;
 using System.Runtime.InteropServices;
 using myJournal.forms;
+using myJournal.subforms;
 using encrypt_decrypt_string;
 
 namespace myJournal
@@ -30,7 +31,7 @@ namespace myJournal
 		GroupBox backTarget			= null;
 		Form activeForm;
         GroupBox DisplayedGroupBox;
-		int iMouseX					= -1;
+		Form DisplayedForm;
 
 		[DllImport("User32.dll")]
 		static extern Int64 SendMessage (IntPtr hwnd, Int64 wMsg, bool wParam, Object lParam);
@@ -87,6 +88,7 @@ namespace myJournal
 
 			ActivateGroupBox(grpOpenScreen);
 			//ActivateGroupBox(grpLogin);
+			ActivateForm(new frmLogin());
 		}
 
 		private void Form1_Resize(object sender, EventArgs e)
@@ -98,11 +100,24 @@ namespace myJournal
 
 		private void ActivateForm(Form frmToActivate)
 		{
+			DisplayedForm = frmToActivate;
 			pnlMenu.Visible = false;
 			frmToActivate.Size = this.Size;
-			//frmToActivate.Location = new Point(this.Left, this.Top);
 			frmToActivate.ShowDialog();
 			frmToActivate.Close();
+
+			switch (DisplayedForm.Name) {
+				case ("frmLogin"):
+					if(ConfigurationManager.AppSettings["CloseApp"] == "True")
+					{
+						this.Close();
+					}
+					else
+					{
+						ActivateGroupBox(grpOpenScreen);
+					}
+					break;
+			}			
 		}
 
         /// <summary>
@@ -116,23 +131,18 @@ namespace myJournal
 
             foreach (Control c in this.Controls)
             {
-                if (c.GetType().Name.ToLower() == "groupbox")
-                {
-                    ((GroupBox)c).Visible = false;
-
-                }
+				if(c.GetType().Name.ToLower() == "groupbox")
+				{
+					((GroupBox)c).Visible = false;
+				}
             }
 
             switch (box.Name)
             {
 				case "grpLogin":
 					this.Text = "Login";
-					//labelPIN.Location = new Point((this.Width / 2) - labelPIN.Width / 2, this.Height);
-					//grpLogin.Location = CenterGroupBox(grpLogin, null, 200, 35);
-					//grpLogin.Size = new Size(114, 119);
-					//ActiveBoxLocation = grpLogin.Location;
 					pnlPIN.Location = new Point((grpLogin.Width / 2) - (pnlPIN.Width / 2), 10);
-					txtPin1.Text = string.Empty;
+					ConfigurationManager.AppSettings["PIN"] = string.Empty;
 					txtBxToFocus = txtPin1;
 					btnToFocus = btnPIN;
 					break;
@@ -233,11 +243,11 @@ namespace myJournal
                         sText = lblEntryText_Hidden.Text;
 					}
 
-					currentJournal.ReplaceEntry(currentEntry, new JournalEntry(sTitle, sText, sGroups, txtPin1.Text, true));
+					currentJournal.ReplaceEntry(currentEntry, new JournalEntry(sTitle, sText, sGroups, ConfigurationManager.AppSettings["PIN"], true));
 				}
 				else
 				{
-					currentJournal.AddEntry(new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, sGroups, txtPin1.Text, true));
+					currentJournal.AddEntry(new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, sGroups, ConfigurationManager.AppSettings["PIN"], true));
 				}
                 currentJournal.Save();
                 PopulateEntries(lstEntries);
@@ -271,7 +281,7 @@ namespace myJournal
         {
             if (lblDeleteJournal_ConfirmMsg.Visible)
             {
-                if (currentJournal == null) { new Journal(txtPin1.Text, ddlJournalsToDelete.Text).Open().Delete(); } else { currentJournal.Delete(); }
+                if (currentJournal == null) { new Journal(ConfigurationManager.AppSettings["PIN"], ddlJournalsToDelete.Text).Open().Delete(); } else { currentJournal.Delete(); }
                 currentJournal = null;
                 LoadJournals();
                 ddlJournals.Text = String.Empty;
@@ -304,7 +314,7 @@ namespace myJournal
 			{
 				try
 				{
-					Journal jrnl = new Journal(txtPin1.Text, txtNewJournalName.Text);
+					Journal jrnl = new Journal(ConfigurationManager.AppSettings["PIN"], txtNewJournalName.Text);
 					jrnl.Create();
 					LoadJournals();
 					ActivateGroupBox(grpOpenScreen);
@@ -329,7 +339,7 @@ namespace myJournal
 
 		private void btnOK_PIN_Click(object sender, EventArgs e)
 		{
-			string PIN = EncryptDecrypt.FullPin(txtPin1.Text);
+			string PIN = EncryptDecrypt.FullPin(ConfigurationManager.AppSettings["PIN"]);
 			bool bStart = true;
 
 			if (File.Exists("key.txt"))
@@ -367,7 +377,7 @@ namespace myJournal
 
 			try
 			{
-				currentJournal = new Journal(txtPin1.Text, ddlJournals.Text).Open(ddlJournals.Text); 
+				currentJournal = new Journal(ConfigurationManager.AppSettings["PIN"], ddlJournals.Text).Open(ddlJournals.Text); 
 
 				if(currentJournal != null)
 				{
@@ -497,7 +507,7 @@ namespace myJournal
         /// <param name="e"></param>
         private void lblDeleteEntry_Click(object sender, EventArgs e)
         {
-			lblDeleteEntry_ConfirmMsg.Text = "'" + currentEntry.ClearTitle(txtPin1.Text) + "' " + lblDeleteEntry_ConfirmMsg.Text;
+			lblDeleteEntry_ConfirmMsg.Text = "'" + currentEntry.ClearTitle(ConfigurationManager.AppSettings["PIN"]) + "' " + lblDeleteEntry_ConfirmMsg.Text;
 			ActivateGroupBox(grpConfirmDeleteEntry);
         }
 
@@ -530,13 +540,13 @@ namespace myJournal
         {
             ActivateGroupBox(grpCreateEntry);
 			btnAddEntry.Text = "Save Edit";
-			txtNewEntryTitle.Text = currentEntry.ClearTitle(txtPin1.Text);
-            lblEntryText_Hidden.Text = currentEntry.ClearText(txtPin1.Text);
-            lblEntryTitle_Hidden.Text = currentEntry.ClearTitle(txtPin1.Text);
+			txtNewEntryTitle.Text = currentEntry.ClearTitle(ConfigurationManager.AppSettings["PIN"]);
+            lblEntryText_Hidden.Text = currentEntry.ClearText(ConfigurationManager.AppSettings["PIN"]);
+            lblEntryTitle_Hidden.Text = currentEntry.ClearTitle(ConfigurationManager.AppSettings["PIN"]);
             string newLine = System.Environment.NewLine;
 
 			rtbNewEntry.Text = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Editing"], currentEntry.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"])
-				, currentEntry.ClearTitle(txtPin1.Text), currentEntry.ClearText(txtPin1.Text));
+				, currentEntry.ClearTitle(ConfigurationManager.AppSettings["PIN"]), currentEntry.ClearText(ConfigurationManager.AppSettings["PIN"]));
 
 			rtbNewEntry.Focus();
             rtbNewEntry.SelectionStart = 0; 
@@ -592,8 +602,8 @@ namespace myJournal
                 }
             }
 
-            Journal j = new Journal(txtPin1.Text);
-            Journal journalToSearch = new Journal(txtPin1.Text);
+            Journal j = new Journal(ConfigurationManager.AppSettings["PIN"]);
+            Journal journalToSearch = new Journal(ConfigurationManager.AppSettings["PIN"]);
 
             foreach (string journalName in journalNames)
             {
@@ -627,9 +637,9 @@ namespace myJournal
                         }
                     }
                     // title contains
-                    if (txtSearchTitle.TextLength > 0) { if (je.ClearTitle(txtPin1.Text).Contains(txtSearchTitle.Text)) { foundEntries.Add(je); } }
+                    if (txtSearchTitle.TextLength > 0) { if (je.ClearTitle(ConfigurationManager.AppSettings["PIN"]).Contains(txtSearchTitle.Text)) { foundEntries.Add(je); } }
                     // entry contains
-                    if (txtSearchText.TextLength > 0) { if (je.ClearText(txtPin1.Text).Contains(txtSearchText.Text)) { foundEntries.Add(je); } }
+                    if (txtSearchText.TextLength > 0) { if (je.ClearText(ConfigurationManager.AppSettings["PIN"]).Contains(txtSearchText.Text)) { foundEntries.Add(je); } }
                 }
             }
 
@@ -810,7 +820,9 @@ namespace myJournal
 			{
 				StringBuilder sb = new StringBuilder();
 				rtb.Text = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
-					, currentJournal.Name, currentEntry.ClearTitle(txtPin1.Text), currentEntry.Date, currentEntry.ClearTags(), currentEntry.ClearText(txtPin1.Text));
+					, currentJournal.Name, currentEntry.ClearTitle(ConfigurationManager.AppSettings["PIN"]), currentEntry.Date
+					, currentEntry.ClearTags(ConfigurationManager.AppSettings["PIN"])
+					, currentEntry.ClearText(ConfigurationManager.AppSettings["PIN"]));
 				lblEditEntry.Enabled = true;
 				lblPrint.Visible = rtb.Text.Length > 0;
 				grpSelectedEntryLabels.Visible = rtb.Text.Length > 0;
@@ -838,14 +850,14 @@ namespace myJournal
             foreach(JournalEntry je in currentJournal.Entries)
             {
 				// add display of isEdited here
-                lstBoxToPopulate.Items.Add(je.ClearTitle(txtPin1.Text) + " (" + je.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"); //+ (je.isEdited ? " - EDITED" : ""));
-                string sEntryText = je.ClearText(txtPin1.Text);
+                lstBoxToPopulate.Items.Add(je.ClearTitle(ConfigurationManager.AppSettings["PIN"]) + " (" + je.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"); //+ (je.isEdited ? " - EDITED" : ""));
+                string sEntryText = je.ClearText(ConfigurationManager.AppSettings["PIN"]);
 
                 lstBoxToPopulate.Items.Add(sEntryText.Length < iTextChunkLength ?
                     sEntryText :
                     sEntryText.Substring(0, iTextChunkLength) + " ...");
 
-                lstBoxToPopulate.Items.Add("tags: " + je.ClearTags());
+                lstBoxToPopulate.Items.Add("tags: " + je.ClearTags(ConfigurationManager.AppSettings["PIN"]));
                 lstBoxToPopulate.Items.Add("---------------------");
             }
 
@@ -972,7 +984,7 @@ namespace myJournal
 		private void txtPin1_TextChanged(object sender, EventArgs e)
 		{
 			lblPinError.Text = "Enter at least four characters.";
-			btnPIN.Enabled = txtPin1.Text.Length >= 4;
+			btnPIN.Enabled = ConfigurationManager.AppSettings["PIN"].Length >= 4;
 			lblPinError.Visible = !btnPIN.Enabled;
 		}
 

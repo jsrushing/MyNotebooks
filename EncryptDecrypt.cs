@@ -15,8 +15,11 @@ namespace encrypt_decrypt_string
             try
             {
                 string ToReturn = "";
-				PublicKey = "12345678";
-				PrivateKey = "87654321";
+				if(PublicKey.Length == 0)
+				{
+					PublicKey = "12345678";
+					PrivateKey = "87654321";
+				}
 				byte[] secretkeyByte = { };
                 secretkeyByte = System.Text.Encoding.UTF8.GetBytes(PrivateKey);
                 byte[] publickeybyte = { };
@@ -45,8 +48,11 @@ namespace encrypt_decrypt_string
             try
             {
                 string ToReturn = "";
-				PublicKey = "12345678";
-				PrivateKey = "87654321";
+				if (PublicKey.Length == 0)
+				{
+					PublicKey = "12345678";
+					PrivateKey = "87654321";
+				}
 				byte[] privatekeyByte = { };
                 privatekeyByte = System.Text.Encoding.UTF8.GetBytes(PrivateKey);
                 byte[] publickeybyte = { };
