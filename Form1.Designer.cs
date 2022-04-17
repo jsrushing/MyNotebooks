@@ -57,9 +57,7 @@ namespace myJournal
 			this.txtNewEntryTitle = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.grpOpenScreen = new System.Windows.Forms.GroupBox();
-			this.grpSelectedEntryLabels = new System.Windows.Forms.Panel();
-			this.lblPrint = new System.Windows.Forms.Label();
-			this.lblSelectionType = new System.Windows.Forms.Label();
+			this.lbl1stSelection = new System.Windows.Forms.Label();
 			this.pnlMenu = new System.Windows.Forms.Panel();
 			this.lblJournal_Import = new System.Windows.Forms.Label();
 			this.lblLogOut = new System.Windows.Forms.Label();
@@ -74,6 +72,11 @@ namespace myJournal
 			this.lblEditEntry = new System.Windows.Forms.Label();
 			this.lblMenu_1 = new System.Windows.Forms.Label();
 			this.lblMenu_0 = new System.Windows.Forms.Label();
+			this.txtJournalPIN = new System.Windows.Forms.TextBox();
+			this.label4 = new System.Windows.Forms.Label();
+			this.grpSelectedEntryLabels = new System.Windows.Forms.Panel();
+			this.lblPrint = new System.Windows.Forms.Label();
+			this.lblSelectionType = new System.Windows.Forms.Label();
 			this.lblMenu = new System.Windows.Forms.Label();
 			this.lblEntriesStartFrom = new System.Windows.Forms.Label();
 			this.lstEntries = new System.Windows.Forms.ListBox();
@@ -141,8 +144,8 @@ namespace myJournal
 			this.grpAppendDeleteOriginal.SuspendLayout();
 			this.mnuGroups.SuspendLayout();
 			this.grpOpenScreen.SuspendLayout();
-			this.grpSelectedEntryLabels.SuspendLayout();
 			this.pnlMenu.SuspendLayout();
+			this.grpSelectedEntryLabels.SuspendLayout();
 			this.grpFindEntry.SuspendLayout();
 			this.grpNewJournal.SuspendLayout();
 			this.grpManageTags.SuspendLayout();
@@ -157,7 +160,7 @@ namespace myJournal
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(7, 39);
+			this.label1.Location = new System.Drawing.Point(6, 54);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(48, 15);
 			this.label1.TabIndex = 0;
@@ -168,7 +171,7 @@ namespace myJournal
 			this.ddlJournals.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.ddlJournals.FormattingEnabled = true;
-			this.ddlJournals.Location = new System.Drawing.Point(55, 36);
+			this.ddlJournals.Location = new System.Drawing.Point(55, 51);
 			this.ddlJournals.Name = "ddlJournals";
 			this.ddlJournals.Size = new System.Drawing.Size(229, 23);
 			this.ddlJournals.TabIndex = 1;
@@ -456,8 +459,11 @@ namespace myJournal
 			// grpOpenScreen
 			// 
 			this.grpOpenScreen.BackColor = System.Drawing.SystemColors.Window;
-			this.grpOpenScreen.Controls.Add(this.grpSelectedEntryLabels);
+			this.grpOpenScreen.Controls.Add(this.lbl1stSelection);
 			this.grpOpenScreen.Controls.Add(this.pnlMenu);
+			this.grpOpenScreen.Controls.Add(this.txtJournalPIN);
+			this.grpOpenScreen.Controls.Add(this.label4);
+			this.grpOpenScreen.Controls.Add(this.grpSelectedEntryLabels);
 			this.grpOpenScreen.Controls.Add(this.lblMenu);
 			this.grpOpenScreen.Controls.Add(this.lblEntriesStartFrom);
 			this.grpOpenScreen.Controls.Add(this.ddlJournals);
@@ -472,41 +478,15 @@ namespace myJournal
 			this.grpOpenScreen.TabIndex = 5;
 			this.grpOpenScreen.TabStop = false;
 			// 
-			// grpSelectedEntryLabels
+			// lbl1stSelection
 			// 
-			this.grpSelectedEntryLabels.Controls.Add(this.lblPrint);
-			this.grpSelectedEntryLabels.Controls.Add(this.lblSelectionType);
-			this.grpSelectedEntryLabels.Location = new System.Drawing.Point(0, 395);
-			this.grpSelectedEntryLabels.Name = "grpSelectedEntryLabels";
-			this.grpSelectedEntryLabels.Size = new System.Drawing.Size(280, 19);
-			this.grpSelectedEntryLabels.TabIndex = 32;
-			this.grpSelectedEntryLabels.Visible = false;
-			// 
-			// lblPrint
-			// 
-			this.lblPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.lblPrint.AutoSize = true;
-			this.lblPrint.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.lblPrint.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
-			this.lblPrint.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblPrint.Location = new System.Drawing.Point(240, 0);
-			this.lblPrint.Name = "lblPrint";
-			this.lblPrint.Size = new System.Drawing.Size(34, 15);
-			this.lblPrint.TabIndex = 29;
-			this.lblPrint.Text = "print";
-			this.lblPrint.Visible = false;
-			this.lblPrint.Click += new System.EventHandler(this.lblPrint_Click);
-			// 
-			// lblSelectionType
-			// 
-			this.lblSelectionType.AutoSize = true;
-			this.lblSelectionType.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-			this.lblSelectionType.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblSelectionType.Location = new System.Drawing.Point(3, 0);
-			this.lblSelectionType.Name = "lblSelectionType";
-			this.lblSelectionType.Size = new System.Drawing.Size(118, 17);
-			this.lblSelectionType.TabIndex = 9;
-			this.lblSelectionType.Text = "Select An Entry ...";
+			this.lbl1stSelection.AutoSize = true;
+			this.lbl1stSelection.Location = new System.Drawing.Point(189, 88);
+			this.lbl1stSelection.Name = "lbl1stSelection";
+			this.lbl1stSelection.Size = new System.Drawing.Size(13, 15);
+			this.lbl1stSelection.TabIndex = 35;
+			this.lbl1stSelection.Text = "1";
+			this.lbl1stSelection.Visible = false;
 			// 
 			// pnlMenu
 			// 
@@ -526,7 +506,7 @@ namespace myJournal
 			this.pnlMenu.Controls.Add(this.lblFindEntry);
 			this.pnlMenu.Controls.Add(this.lblMenu_1);
 			this.pnlMenu.Controls.Add(this.lblMenu_0);
-			this.pnlMenu.Location = new System.Drawing.Point(60, 52);
+			this.pnlMenu.Location = new System.Drawing.Point(55, 157);
 			this.pnlMenu.Name = "pnlMenu";
 			this.pnlMenu.Size = new System.Drawing.Size(175, 408);
 			this.pnlMenu.TabIndex = 28;
@@ -707,6 +687,58 @@ namespace myJournal
 			this.lblMenu_0.Size = new System.Drawing.Size(132, 408);
 			this.lblMenu_0.TabIndex = 22;
 			// 
+			// txtJournalPIN
+			// 
+			this.txtJournalPIN.Location = new System.Drawing.Point(55, 80);
+			this.txtJournalPIN.Name = "txtJournalPIN";
+			this.txtJournalPIN.Size = new System.Drawing.Size(100, 23);
+			this.txtJournalPIN.TabIndex = 34;
+			// 
+			// label4
+			// 
+			this.label4.AutoSize = true;
+			this.label4.Location = new System.Drawing.Point(28, 83);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(26, 15);
+			this.label4.TabIndex = 33;
+			this.label4.Text = "PIN";
+			// 
+			// grpSelectedEntryLabels
+			// 
+			this.grpSelectedEntryLabels.Controls.Add(this.lblPrint);
+			this.grpSelectedEntryLabels.Controls.Add(this.lblSelectionType);
+			this.grpSelectedEntryLabels.Location = new System.Drawing.Point(0, 395);
+			this.grpSelectedEntryLabels.Name = "grpSelectedEntryLabels";
+			this.grpSelectedEntryLabels.Size = new System.Drawing.Size(280, 19);
+			this.grpSelectedEntryLabels.TabIndex = 32;
+			this.grpSelectedEntryLabels.Visible = false;
+			// 
+			// lblPrint
+			// 
+			this.lblPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.lblPrint.AutoSize = true;
+			this.lblPrint.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.lblPrint.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
+			this.lblPrint.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.lblPrint.Location = new System.Drawing.Point(240, 0);
+			this.lblPrint.Name = "lblPrint";
+			this.lblPrint.Size = new System.Drawing.Size(34, 15);
+			this.lblPrint.TabIndex = 29;
+			this.lblPrint.Text = "print";
+			this.lblPrint.Visible = false;
+			this.lblPrint.Click += new System.EventHandler(this.lblPrint_Click);
+			// 
+			// lblSelectionType
+			// 
+			this.lblSelectionType.AutoSize = true;
+			this.lblSelectionType.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.lblSelectionType.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.lblSelectionType.Location = new System.Drawing.Point(3, 0);
+			this.lblSelectionType.Name = "lblSelectionType";
+			this.lblSelectionType.Size = new System.Drawing.Size(118, 17);
+			this.lblSelectionType.TabIndex = 9;
+			this.lblSelectionType.Text = "Select An Entry ...";
+			// 
 			// lblMenu
 			// 
 			this.lblMenu.AutoSize = true;
@@ -723,7 +755,7 @@ namespace myJournal
 			// lblEntriesStartFrom
 			// 
 			this.lblEntriesStartFrom.AutoSize = true;
-			this.lblEntriesStartFrom.Location = new System.Drawing.Point(127, 77);
+			this.lblEntriesStartFrom.Location = new System.Drawing.Point(127, 32);
 			this.lblEntriesStartFrom.Name = "lblEntriesStartFrom";
 			this.lblEntriesStartFrom.Size = new System.Drawing.Size(108, 15);
 			this.lblEntriesStartFrom.TabIndex = 10;
@@ -739,10 +771,10 @@ namespace myJournal
 			this.lstEntries.HorizontalScrollbar = true;
 			this.lstEntries.IntegralHeight = false;
 			this.lstEntries.ItemHeight = 15;
-			this.lstEntries.Location = new System.Drawing.Point(6, 95);
+			this.lstEntries.Location = new System.Drawing.Point(6, 109);
 			this.lstEntries.Name = "lstEntries";
 			this.lstEntries.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
-			this.lstEntries.Size = new System.Drawing.Size(278, 137);
+			this.lstEntries.Size = new System.Drawing.Size(278, 123);
 			this.lstEntries.TabIndex = 8;
 			this.lstEntries.SelectedIndexChanged += new System.EventHandler(this.ListOfEntries_SelectedIndexChanged);
 			// 
@@ -752,7 +784,7 @@ namespace myJournal
 			this.lblSelectAJournal.Enabled = false;
 			this.lblSelectAJournal.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			this.lblSelectAJournal.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblSelectAJournal.Location = new System.Drawing.Point(6, 74);
+			this.lblSelectAJournal.Location = new System.Drawing.Point(6, 29);
 			this.lblSelectAJournal.Name = "lblSelectAJournal";
 			this.lblSelectAJournal.Size = new System.Drawing.Size(133, 17);
 			this.lblSelectAJournal.TabIndex = 7;
@@ -1497,10 +1529,10 @@ namespace myJournal
 			this.mnuGroups.ResumeLayout(false);
 			this.grpOpenScreen.ResumeLayout(false);
 			this.grpOpenScreen.PerformLayout();
-			this.grpSelectedEntryLabels.ResumeLayout(false);
-			this.grpSelectedEntryLabels.PerformLayout();
 			this.pnlMenu.ResumeLayout(false);
 			this.pnlMenu.PerformLayout();
+			this.grpSelectedEntryLabels.ResumeLayout(false);
+			this.grpSelectedEntryLabels.PerformLayout();
 			this.grpFindEntry.ResumeLayout(false);
 			this.grpFindEntry.PerformLayout();
 			this.grpNewJournal.ResumeLayout(false);
@@ -1630,6 +1662,9 @@ namespace myJournal
 		private System.Windows.Forms.Label lblLogOut;
 		private System.Windows.Forms.Panel grpSelectedEntryLabels;
 		private System.Windows.Forms.Label lblJournal_Import;
+		private System.Windows.Forms.TextBox txtJournalPIN;
+		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.Label lbl1stSelection;
 	}
 }
 

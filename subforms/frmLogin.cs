@@ -24,7 +24,8 @@ namespace myJournal.subforms
 		{ txtPIN.Focus(); }
 
 		private void frmLogin_Load(object sender, EventArgs e)
-		{ grp1.Location = new Point((this.Width / 2) - (grp1.Width / 2), (this.Height / 2) - (grp1.Height / 2)); }
+		//{ grp1.Location = new Point((this.Width / 2) - (grp1.Width / 2), (this.Height / 2) - (grp1.Height / 2)); }
+		{ grp1.Location = new Point((this.Width / 2) - (grp1.Width / 2), 25); }
 
 		private void btnCancel_Click(object sender, EventArgs e)
 		{

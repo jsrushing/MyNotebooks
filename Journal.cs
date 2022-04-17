@@ -40,6 +40,15 @@ namespace myJournal
             Save();
         }
 
+		public void ChangePIN(string newPIN)
+		{
+			foreach (JournalEntry je in this.Entries)
+			{
+				JournalEntry newJE = new JournalEntry(je.ClearTitle(), je.ClearText(), je.ClearTags(), newPIN);
+				newJE.Date = je.Date;
+			}
+		}
+
         public void Delete() { File.Delete(this.FileName); }
 
 		public string GetAllEntries()

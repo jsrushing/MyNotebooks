@@ -11,11 +11,13 @@ namespace myJournal
 	public partial class frmImportJournal : Form
 	{
 		private Point myLocation;
+		Journal Journal_ImportTo;
 
-		public frmImportJournal(Point pntLocation, ComboBox lst)
+		public frmImportJournal(Point pntLocation, ComboBox lst, Journal journalImportTo)
 		{
 			InitializeComponent();
 			myLocation = new Point(pntLocation.X + 10, pntLocation.Y + 35);
+			this.Journal_ImportTo = journalImportTo;
 			foreach(object o in lst.Items) { cbxJournals_From.Items.Add(o.ToString()); }
 		}
 
@@ -31,6 +33,16 @@ namespace myJournal
 		}
 
 		private void btnImport_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void lblSelectAllEntries_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void cbxJournals_From_SelectedIndexChanged(object sender, EventArgs e)
 		{
 
 		}

@@ -38,8 +38,13 @@ namespace myJournal
 			this._clearTags		= ClearTags();
 		}
 
-		public string ClearText() { return EncryptDecrypt.Decrypt(this.Text, this.PIN, ConfigurationManager.AppSettings["PrivateKey"]); }
-		public string ClearTitle() { return EncryptDecrypt.Decrypt(this.Title, this.PIN, ConfigurationManager.AppSettings["PrivateKey"]); }
-		public string ClearTags() { return this.Tags == null ? String.Empty : EncryptDecrypt.Decrypt(this.Tags, this.PIN, ConfigurationManager.AppSettings["PrivateKey"]); }
+		public void ChangePIN(string newPIN)
+		{
+
+		}
+
+		public string ClearText(string _pin = null) { _pin = this.PIN == string.Empty ? null : this.PIN; return EncryptDecrypt.Decrypt(this.Text, _pin, ConfigurationManager.AppSettings["PrivateKey"]); }
+		public string ClearTitle(string _pin = null) { _pin = this.PIN == string.Empty ? null : this.PIN; return EncryptDecrypt.Decrypt(this.Title, _pin, ConfigurationManager.AppSettings["PrivateKey"]); }
+		public string ClearTags(string _pin = null) { _pin = this.PIN == string.Empty ? null : this.PIN; return this.Tags == null ? String.Empty : EncryptDecrypt.Decrypt(this.Tags, _pin, ConfigurationManager.AppSettings["PrivateKey"]); }
 	}
 }

@@ -88,7 +88,7 @@ namespace myJournal
 
 			ActivateGroupBox(grpOpenScreen);
 			//ActivateGroupBox(grpLogin);
-			ActivateForm(new frmLogin());
+			//ActivateForm(new frmLogin());
 		}
 
 		private void Form1_Resize(object sender, EventArgs e)
@@ -96,6 +96,7 @@ namespace myJournal
             DisplayedGroupBox.Location = ActiveBoxLocation;
             DisplayedGroupBox.Size = new Size(this.Width - 35, this.Height - 50);
 			ResizeListsAndRTBs(lstEntries, rtbSelectedEntry_Main, lblSeparator_grpOpenScreen);
+			//PopulateEntries(lstEntries);
 		}
 
 		private void ActivateForm(Form frmToActivate)
@@ -359,6 +360,7 @@ namespace myJournal
 					lblSelectAJournal.Enabled = true;
 					lblSelectAJournal.Text = "Entries";
 					lstEntries.Height = grpOpenScreen.Height - 100;
+					lbl1stSelection.Text = "1";
 				}
 				else
 				{
@@ -511,13 +513,13 @@ namespace myJournal
         {
             ActivateGroupBox(grpCreateEntry);
 			btnAddEntry.Text = "Save Edit";
-			txtNewEntryTitle.Text = currentEntry.ClearTitle(ConfigurationManager.AppSettings["PIN"]);
-            lblEntryText_Hidden.Text = currentEntry.ClearText(ConfigurationManager.AppSettings["PIN"]);
-            lblEntryTitle_Hidden.Text = currentEntry.ClearTitle(ConfigurationManager.AppSettings["PIN"]);
+			txtNewEntryTitle.Text = currentEntry.ClearTitle();
+            lblEntryText_Hidden.Text = currentEntry.ClearText();
+            lblEntryTitle_Hidden.Text = currentEntry.ClearTitle();
             string newLine = System.Environment.NewLine;
 
 			rtbNewEntry.Text = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Editing"], currentEntry.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"])
-				, currentEntry.ClearTitle(ConfigurationManager.AppSettings["PIN"]), currentEntry.ClearText(ConfigurationManager.AppSettings["PIN"]));
+				, currentEntry.ClearTitle(), currentEntry.ClearText());
 
 			rtbNewEntry.Focus();
             rtbNewEntry.SelectionStart = 0; 
@@ -608,9 +610,9 @@ namespace myJournal
                         }
                     }
                     // title contains
-                    if (txtSearchTitle.TextLength > 0) { if (je.ClearTitle(ConfigurationManager.AppSettings["PIN"]).Contains(txtSearchTitle.Text)) { foundEntries.Add(je); } }
+                    if (txtSearchTitle.TextLength > 0) { if (je.ClearTitle().Contains(txtSearchTitle.Text)) { foundEntries.Add(je); } }
                     // entry contains
-                    if (txtSearchText.TextLength > 0) { if (je.ClearText(ConfigurationManager.AppSettings["PIN"]).Contains(txtSearchText.Text)) { foundEntries.Add(je); } }
+                    if (txtSearchText.TextLength > 0) { if (je.ClearText().Contains(txtSearchText.Text)) { foundEntries.Add(je); } }
                 }
             }
 
@@ -734,20 +736,20 @@ namespace myJournal
             rtb.Clear();    
             List<int> targets = new List<int>();
             lb.SelectedIndexChanged -= new System.EventHandler(this.ListOfEntries_SelectedIndexChanged);
-            ListBox.SelectedIndexCollection cltnLbSelectedEntries = lb.SelectedIndices;
+            //ListBox.SelectedIndexCollection cltnLbSelectedEntries = lb.SelectedIndices;
 			pnlMenu.Visible = false;
 
 			try
 			{
-				if (cltnLbSelectedEntries.Count > 1)
+				if (lb.SelectedIndices.Count > 1)
 				{
-					for (int i = 0; i < cltnLbSelectedEntries.Count - 1; i++)
+					for (int i = 0; i < lb.SelectedIndices.Count - 1; i++)
 					{
-						if (cltnLbSelectedEntries[i] == cltnLbSelectedEntries[i + 1] - 1)
+						if (lb.SelectedIndices[i] == lb.SelectedIndices[i + 1] - 1)
 						{
-							targets.Add(cltnLbSelectedEntries[i]);
-							targets.Add(cltnLbSelectedEntries[i + 1]);
-							targets.Add(cltnLbSelectedEntries[i + 2]);
+							targets.Add(lb.SelectedIndices[i]);
+							targets.Add(lb.SelectedIndices[i + 1]);
+							targets.Add(lb.SelectedIndices[i + 2]);
 							break;
 						}
 					}
@@ -792,9 +794,10 @@ namespace myJournal
 				StringBuilder sb = new StringBuilder();
 				rtb.Text = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
 					//, currentJournal.Name
-					, currentEntry.ClearTitle(ConfigurationManager.AppSettings["PIN"]), currentEntry.Date
-					, currentEntry.ClearTags(ConfigurationManager.AppSettings["PIN"])
-					, currentEntry.ClearText(ConfigurationManager.AppSettings["PIN"]));
+					, currentEntry.ClearTitle(), currentEntry.Date
+					, currentEntry.ClearTags()
+					, currentEntry.ClearText());
+				if(rtb.Text.Length == 0) { lstEntries.TopIndex = lstEntries.Top + lstEntries.Height < rtbSelectedEntry_Main.Top ? ctr : lstEntries.TopIndex; }
 				lblEditEntry.Enabled = true;
 				lblPrint.Visible = rtb.Text.Length > 0;
 				grpSelectedEntryLabels.Visible = rtb.Text.Length > 0;
@@ -802,7 +805,13 @@ namespace myJournal
 				lblSelectedFoundEntry.Visible = rtbSelectedEntry_Found.Text.Length > 0;
 				lblSelectionType.Text = "Selected Entry";
 				lstEntries.Height = rtb.Text.Length > 0 ? rtbSelectedEntry_Main.Top - 132 : grpOpenScreen.Height - 100;
-				lstEntries.TopIndex = lstEntries.Top + lstEntries.Height < rtbSelectedEntry_Main.Top ? ctr : lstEntries.TopIndex;
+				if (lbl1stSelection.Text.Equals("1"))
+				{
+					lstEntries.TopIndex = lstEntries.Top + lstEntries.Height < rtbSelectedEntry_Main.Top ? ctr : lstEntries.TopIndex;
+					lbl1stSelection.Text = "0";
+				}
+
+				ResizeListsAndRTBs(lstEntries, rtbSelectedEntry_Main, lblSeparator_grpOpenScreen);
 			}
 
 			lb.SelectedIndexChanged += new System.EventHandler(this.ListOfEntries_SelectedIndexChanged);
@@ -816,20 +825,20 @@ namespace myJournal
         private void PopulateEntries(ListBox lstBoxToPopulate, List<JournalEntry> entries = null)
         {
 			entries = entries != null ? currentJournal.Entries : null;
-			int iTextChunkLength = Convert.ToInt16(lstEntries.Width * .15);
+			int iTextChunkLength = Convert.ToInt16(lstBoxToPopulate.Width * .15);
             lstBoxToPopulate.Items.Clear();
 
             foreach(JournalEntry je in currentJournal.Entries)
             {
 				// add display of isEdited here
-                lstBoxToPopulate.Items.Add(je.ClearTitle(ConfigurationManager.AppSettings["PIN"]) + " (" + je.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"); //+ (je.isEdited ? " - EDITED" : ""));
-                string sEntryText = je.ClearText(ConfigurationManager.AppSettings["PIN"]);
+                lstBoxToPopulate.Items.Add(je.ClearTitle() + " (" + je.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"); //+ (je.isEdited ? " - EDITED" : ""));
+                string sEntryText = je.ClearText();
 
                 lstBoxToPopulate.Items.Add(sEntryText.Length < iTextChunkLength ?
                     sEntryText :
                     sEntryText.Substring(0, iTextChunkLength) + " ...");
 
-                lstBoxToPopulate.Items.Add("tags: " + je.ClearTags(ConfigurationManager.AppSettings["PIN"]));
+                lstBoxToPopulate.Items.Add("tags: " + je.ClearTags());
                 lstBoxToPopulate.Items.Add("---------------------");
             }
 
@@ -982,7 +991,7 @@ namespace myJournal
 
 		private void lblJournal_Import_Click(object sender, EventArgs e)
 		{	
-			ActivateForm(new frmImportJournal(new Point(this.Left, this.Top), ddlJournals));
+			ActivateForm(new frmImportJournal(new Point(this.Left, this.Top), ddlJournals, currentJournal));
 		}
 	}
 }
