@@ -21,7 +21,8 @@ namespace myJournal
 
         public Journal(string _PIN, string _name = null) 
         {
-			//Configuration config = System.Web.
+			if(_PIN.Length == 0) { _PIN = null; }
+			//Configuration config = System.Web. 
             if(_name != null)
             {
                 this.Name = _name;
@@ -54,7 +55,7 @@ namespace myJournal
 		public string GetAllEntries()
 		{
 			StringBuilder sb = new StringBuilder();
-			sb.AppendLine("Journal: " + this.Name);
+			//sb.AppendLine("Journal: " + this.Name);
 			foreach(JournalEntry je in this.Entries)
 			{
 				sb.Append(String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Editing"].Replace("Original ", ""), je.Date, je.ClearTitle(this.PIN), je.ClearText(this.PIN)));

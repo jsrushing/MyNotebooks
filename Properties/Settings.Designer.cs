@@ -26,12 +26,12 @@ namespace myJournal.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string PIN {
+        public string masterPIN {
             get {
-                return ((string)(this["PIN"]));
+                return ((string)(this["masterPIN"]));
             }
             set {
-                this["PIN"] = value;
+                this["masterPIN"] = value;
             }
         }
         

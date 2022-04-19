@@ -35,33 +35,27 @@ namespace myJournal.subforms
 
 		private void btnOk_Click(object sender, EventArgs e)
 		{
-			if (txtPIN.Text.Length > 0)
+			string PIN = EncryptDecrypt.FullPin(txtPIN.Text);
+
+			if (File.Exists("key.txt"))
 			{
-				string PIN = EncryptDecrypt.FullPin(txtPIN.Text);
+				PIN_Ok = PIN == EncryptDecrypt.Decrypt(File.ReadAllText("key.txt"), PIN, ConfigurationManager.AppSettings["PrivateKey"]);
+			}
+			else
+			{
+				File.WriteAllTextAsync("key.txt", EncryptDecrypt.Encrypt(PIN, PIN, ConfigurationManager.AppSettings["PrivateKey"]));
+			}
 
-				if (File.Exists("key.txt"))
-				{
-					PIN_Ok = PIN == EncryptDecrypt.Decrypt(File.ReadAllText("key.txt"), PIN, ConfigurationManager.AppSettings["PrivateKey"]);
-				}
-				else
-				{
-					File.WriteAllTextAsync("key.txt", EncryptDecrypt.Encrypt(PIN, PIN, ConfigurationManager.AppSettings["PrivateKey"]));
-				}
-
-				ConfigurationManager.AppSettings["PIN"] = txtPIN.Text;
+			if (PIN_Ok)
+			{
+				ConfigurationManager.AppSettings["masterPIN"] = txtPIN.Text;
 				this.Hide();
 			}
 			else
 			{
-				this.Hide();
-			}
-
-			if (txtPIN.Text.Length > 0 && !PIN_Ok)
-			{
 				lblError.Text = "Wrong PIN";
 				lblError.Visible = true;
 			}
-
 		}
 
 	}
