@@ -633,7 +633,7 @@ namespace myJournal
 			ActivateGroupBox(gb);
 		}
 
-		private void lblJournal_Create_Click(object sender, EventArgs e) { ActivateGroupBox(grpNewJournal); }
+		private void lblJournal_Create_Click(object sender, EventArgs e) { ActivateForm(new frmNewJournal()); }			//ActivateGroupBox(grpNewJournal); }
 
 		private void lblMenu_Click(object sender, EventArgs e) { pnlMenu.Visible = !pnlMenu.Visible; }
 
@@ -1001,11 +1001,11 @@ namespace myJournal
 		{
 			// decrypt <journalname>.p with appsetting "masterPIN". Match to txtJournalPINtry
 
-			//try
-			//{
-			//	string s = EncryptDecrypt.Decrypt(File.ReadAllText(ddlJournals.Text + ".p"), ConfigurationManager.AppSettings["masterPIN"], ConfigurationManager.AppSettings["PrivateKey"]);
-			//}
-			//catch (FileNotFoundException fnfex) { } // PIN file does not exist. Is v .5 or earlier }
+			try
+			{
+				string s = EncryptDecrypt.Decrypt(File.ReadAllText(ddlJournals.Text + ".p"), ConfigurationManager.AppSettings["masterPIN"], ConfigurationManager.AppSettings["PrivateKey"]);
+			}
+			catch (FileNotFoundException) { } // PIN file does not exist. Is v .5 or earlier }
 
 			try
 			{

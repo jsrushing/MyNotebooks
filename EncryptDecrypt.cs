@@ -82,7 +82,7 @@ namespace encrypt_decrypt_string
 		public static string FullPin(string pin)
 		{
 			pin = pin == null ? "" : pin;
-			return pin.Length < 8 ? pin + pin.Substring(0, 8 - pin.Length) : pin;
+			return pin.Length < 8 && pin.Length > 0 ? pin + pin.Substring(0, 8 - pin.Length) : pin;
 		}
     }
 }

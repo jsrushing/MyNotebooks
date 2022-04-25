@@ -16,16 +16,15 @@ namespace myJournal.subforms
 		bool PIN_Ok = false;
 
 		public frmLogin()
-		{
-			InitializeComponent();
-		}
+		{ InitializeComponent(); }
 
-		private void frmLogin_Activated(object sender, EventArgs e)
-		{ txtPIN.Focus(); }
+		private void frmLogin_Activated(object sender, EventArgs e) { txtPIN.Focus(); }
 
 		private void frmLogin_Load(object sender, EventArgs e)
-		//{ grp1.Location = new Point((this.Width / 2) - (grp1.Width / 2), (this.Height / 2) - (grp1.Height / 2)); }
-		{ grp1.Location = new Point((this.Width / 2) - (grp1.Width / 2), 25); }
+		{
+			this.WindowState = FormWindowState.Maximized;
+			grp1.Location = new Point((this.Width / 2) - (grp1.Width / 2), 100); 
+		}
 
 		private void btnCancel_Click(object sender, EventArgs e)
 		{
@@ -58,5 +57,9 @@ namespace myJournal.subforms
 			}
 		}
 
+		private void frmLogin_Resize(object sender, EventArgs e)
+		{
+			grp1.Location = new Point((this.Width / 2) - (grp1.Width / 2), 50);
+		}
 	}
 }

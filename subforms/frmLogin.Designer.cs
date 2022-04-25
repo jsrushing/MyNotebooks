@@ -103,14 +103,16 @@ namespace myJournal.subforms
 			this.AcceptButton = this.btnOk;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.AutoSize = true;
 			this.CancelButton = this.btnCancel;
 			this.ClientSize = new System.Drawing.Size(285, 271);
 			this.Controls.Add(this.grp1);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.Name = "frmLogin";
-			this.Text = "frmLogin";
+			this.Text = "Login";
 			this.Activated += new System.EventHandler(this.frmLogin_Activated);
 			this.Load += new System.EventHandler(this.frmLogin_Load);
+			this.Resize += new System.EventHandler(this.frmLogin_Resize);
 			this.grp1.ResumeLayout(false);
 			this.grp1.PerformLayout();
 			this.ResumeLayout(false);
