@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using myJournal.subforms;
+using System.Configuration;
 
 namespace myJournal
 {
@@ -105,11 +106,22 @@ namespace myJournal
 
 		private void frmParent_Activated(object sender, EventArgs e)
 		{
+			//this.AddOwnedForm(new frmLogin());
+			//this.OwnedForms[0].ShowDialog();
+
 			Form childForm = new frmLogin();
 			childForm.MdiParent = this;
-			childForm.Text = "Window " + childFormNumber++;
-			//childForm.Size = this.Size;
+			//childForm.Text = "Window " + childFormNumber++;
 			childForm.Show();
+
+			if (ConfigurationManager.AppSettings["CloseApp"] == "True")
+			{
+				this.Close();
+			}
+			else
+			{
+				//ActivateGroupBox(grpOpenScreen);
+			}
 		}
 	}
 }

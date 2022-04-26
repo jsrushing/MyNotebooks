@@ -59,7 +59,7 @@ namespace myJournal
 			//Int64 val = Convert.ToInt64("FC8");
 			//byte[] buffer = { &HA9, &HC8, &HE6, &HC4 };
 
-			activeForm = new frmMain();
+			//activeForm = new frmMain();
 
 			int x = Convert.ToInt16(ConfigurationManager.AppSettings["Left_ActiveBox"]);
 			int y = Convert.ToInt16(ConfigurationManager.AppSettings["Top_ActiveBox"]);

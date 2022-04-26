@@ -71,6 +71,11 @@ namespace myJournal
 			this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
 			this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.journalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.createToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.saveToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.saveAsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStrip = new System.Windows.Forms.ToolStrip();
 			this.newToolStripButton = new System.Windows.Forms.ToolStripButton();
 			this.openToolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -96,7 +101,8 @@ namespace myJournal
             this.viewMenu,
             this.toolsMenu,
             this.windowsMenu,
-            this.helpMenu});
+            this.helpMenu,
+            this.journalToolStripMenuItem});
 			this.menuStrip.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip.MdiWindowListItem = this.windowsMenu;
 			this.menuStrip.Name = "menuStrip";
@@ -429,6 +435,41 @@ namespace myJournal
 			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
 			this.aboutToolStripMenuItem.Text = "&About ... ...";
 			// 
+			// journalToolStripMenuItem
+			// 
+			this.journalToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.createToolStripMenuItem,
+            this.saveToolStripMenuItem1,
+            this.saveAsToolStripMenuItem1,
+            this.deleteToolStripMenuItem});
+			this.journalToolStripMenuItem.Name = "journalToolStripMenuItem";
+			this.journalToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
+			this.journalToolStripMenuItem.Text = "&Journal";
+			// 
+			// createToolStripMenuItem
+			// 
+			this.createToolStripMenuItem.Name = "createToolStripMenuItem";
+			this.createToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+			this.createToolStripMenuItem.Text = "&Create";
+			// 
+			// saveToolStripMenuItem1
+			// 
+			this.saveToolStripMenuItem1.Name = "saveToolStripMenuItem1";
+			this.saveToolStripMenuItem1.Size = new System.Drawing.Size(114, 22);
+			this.saveToolStripMenuItem1.Text = "&Save";
+			// 
+			// saveAsToolStripMenuItem1
+			// 
+			this.saveAsToolStripMenuItem1.Name = "saveAsToolStripMenuItem1";
+			this.saveAsToolStripMenuItem1.Size = new System.Drawing.Size(114, 22);
+			this.saveAsToolStripMenuItem1.Text = "Save &As";
+			// 
+			// deleteToolStripMenuItem
+			// 
+			this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+			this.deleteToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+			this.deleteToolStripMenuItem.Text = "&Delete";
+			// 
 			// toolStrip
 			// 
 			this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -440,11 +481,12 @@ namespace myJournal
             this.printPreviewToolStripButton,
             this.toolStripSeparator2,
             this.helpToolStripButton});
-			this.toolStrip.Location = new System.Drawing.Point(0, 24);
+			this.toolStrip.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip.Name = "toolStrip";
 			this.toolStrip.Size = new System.Drawing.Size(737, 25);
 			this.toolStrip.TabIndex = 1;
 			this.toolStrip.Text = "ToolStrip";
+			this.toolStrip.Visible = false;
 			// 
 			// newToolStripButton
 			// 
@@ -535,13 +577,13 @@ namespace myJournal
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(737, 523);
 			this.Controls.Add(this.statusStrip);
-			this.Controls.Add(this.toolStrip);
 			this.Controls.Add(this.menuStrip);
+			this.Controls.Add(this.toolStrip);
 			this.IsMdiContainer = true;
 			this.MainMenuStrip = this.menuStrip;
 			this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.Name = "frmParent";
-			this.Text = "frmParent";
+			this.Text = "MyJournal";
 			this.Activated += new System.EventHandler(this.frmParent_Activated);
 			this.menuStrip.ResumeLayout(false);
 			this.menuStrip.PerformLayout();
@@ -608,6 +650,11 @@ namespace myJournal
 		private System.Windows.Forms.ToolStripButton printPreviewToolStripButton;
 		private System.Windows.Forms.ToolStripButton helpToolStripButton;
 		private System.Windows.Forms.ToolTip toolTip;
+		private System.Windows.Forms.ToolStripMenuItem journalToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem createToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem1;
 	}
 }
 

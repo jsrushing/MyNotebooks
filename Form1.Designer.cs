@@ -60,6 +60,7 @@ namespace myJournal
 			this.btnLoadJournal = new System.Windows.Forms.Button();
 			this.lbl1stSelection = new System.Windows.Forms.Label();
 			this.pnlMenu = new System.Windows.Forms.Panel();
+			this.lblJournal_Save = new System.Windows.Forms.Label();
 			this.lblLogOut = new System.Windows.Forms.Label();
 			this.lblViewJournal = new System.Windows.Forms.Label();
 			this.lblCloseMenu = new System.Windows.Forms.Label();
@@ -140,7 +141,6 @@ namespace myJournal
 			this.lblDeleteEntry_ConfirmMsg = new System.Windows.Forms.Label();
 			this.lblBack_ConfirmEntryDelete = new System.Windows.Forms.Label();
 			this.btnOK_DeleteEntry = new System.Windows.Forms.Button();
-			this.lblJournal_Save = new System.Windows.Forms.Label();
 			this.grpCreateEntry.SuspendLayout();
 			this.grpAppendDeleteOriginal.SuspendLayout();
 			this.mnuGroups.SuspendLayout();
@@ -474,7 +474,7 @@ namespace myJournal
 			this.grpOpenScreen.Controls.Add(this.lblSelectAJournal);
 			this.grpOpenScreen.Controls.Add(this.rtbSelectedEntry_Main);
 			this.grpOpenScreen.Controls.Add(this.lblSeparator_grpOpenScreen);
-			this.grpOpenScreen.Location = new System.Drawing.Point(22, 0);
+			this.grpOpenScreen.Location = new System.Drawing.Point(19, 0);
 			this.grpOpenScreen.Name = "grpOpenScreen";
 			this.grpOpenScreen.Size = new System.Drawing.Size(290, 545);
 			this.grpOpenScreen.TabIndex = 5;
@@ -523,6 +523,20 @@ namespace myJournal
 			this.pnlMenu.Size = new System.Drawing.Size(175, 408);
 			this.pnlMenu.TabIndex = 28;
 			this.pnlMenu.Visible = false;
+			// 
+			// lblJournal_Save
+			// 
+			this.lblJournal_Save.AutoSize = true;
+			this.lblJournal_Save.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.lblJournal_Save.Enabled = false;
+			this.lblJournal_Save.Font = new System.Drawing.Font("Adobe Fan Heiti Std B", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.lblJournal_Save.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.lblJournal_Save.Location = new System.Drawing.Point(17, 82);
+			this.lblJournal_Save.Name = "lblJournal_Save";
+			this.lblJournal_Save.Size = new System.Drawing.Size(32, 15);
+			this.lblJournal_Save.TabIndex = 28;
+			this.lblJournal_Save.Text = "Save";
+			this.lblJournal_Save.Click += new System.EventHandler(this.lblJournal_Save_Click);
 			// 
 			// lblLogOut
 			// 
@@ -1501,20 +1515,6 @@ namespace myJournal
 			this.btnOK_DeleteEntry.Text = "Delete";
 			this.btnOK_DeleteEntry.UseVisualStyleBackColor = false;
 			this.btnOK_DeleteEntry.Click += new System.EventHandler(this.btnOk_DeleteEntry_Click);
-			// 
-			// lblJournal_Save
-			// 
-			this.lblJournal_Save.AutoSize = true;
-			this.lblJournal_Save.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.lblJournal_Save.Enabled = false;
-			this.lblJournal_Save.Font = new System.Drawing.Font("Adobe Fan Heiti Std B", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-			this.lblJournal_Save.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblJournal_Save.Location = new System.Drawing.Point(17, 82);
-			this.lblJournal_Save.Name = "lblJournal_Save";
-			this.lblJournal_Save.Size = new System.Drawing.Size(32, 15);
-			this.lblJournal_Save.TabIndex = 28;
-			this.lblJournal_Save.Text = "Save";
-			this.lblJournal_Save.Click += new System.EventHandler(this.lblJournal_Save_Click);
 			// 
 			// Form1
 			// 

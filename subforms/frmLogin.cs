@@ -22,7 +22,7 @@ namespace myJournal.subforms
 
 		private void frmLogin_Load(object sender, EventArgs e)
 		{
-			this.WindowState = FormWindowState.Maximized;
+			//this.WindowState = FormWindowState.Maximized;
 			grp1.Location = new Point((this.Width / 2) - (grp1.Width / 2), 100); 
 		}
 
