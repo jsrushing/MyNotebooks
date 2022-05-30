@@ -7,16 +7,25 @@ using System.Text;
 using System.Windows.Forms;
 using myJournal.subforms;
 using System.Configuration;
+using System.Runtime.InteropServices;
 
 namespace myJournal
 {
 	public partial class frmParent : Form
 	{
 		private int childFormNumber = 0;
+		public Form currentForm;
+		public Form nextForm = null;
 
-		public frmParent()
+		public delegate void OnJournalCreate(string journalName, string PIN);
+
+		public static event OnJournalCreate OnCreate;
+
+				public frmParent()
 		{
 			InitializeComponent();
+			ShowForm(new frmMain());
+			string s = RuntimeInformation.FrameworkDescription;
 		}
 
 		private void ShowNewForm(object sender, EventArgs e)
@@ -38,90 +47,46 @@ namespace myJournal
 			}
 		}
 
-		private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
+		private void frmParent_Activated(object sender, EventArgs e)
 		{
-			SaveFileDialog saveFileDialog = new SaveFileDialog();
-			saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-			saveFileDialog.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
-			if (saveFileDialog.ShowDialog(this) == DialogResult.OK)
-			{
-				string FileName = saveFileDialog.FileName;
-			}
+			if(nextForm != null) {ShowForm(nextForm); nextForm = null; }
+		
 		}
 
-		private void ExitToolsStripMenuItem_Click(object sender, EventArgs e)
+		private void mnuCancel_Login_Click(object sender, EventArgs e)
 		{
 			this.Close();
 		}
 
-		private void CutToolStripMenuItem_Click(object sender, EventArgs e)
+		private void mnuLogin_Click(object sender, EventArgs e)
 		{
-		}
 
-		private void CopyToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-		}
+			this.ActiveMdiChild.Close();
 
-		private void PasteToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-		}
-
-		private void ToolBarToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			toolStrip.Visible = toolBarToolStripMenuItem.Checked;
-		}
-
-		private void StatusBarToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			statusStrip.Visible = statusBarToolStripMenuItem.Checked;
-		}
-
-		private void CascadeToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			LayoutMdi(MdiLayout.Cascade);
-		}
-
-		private void TileVerticalToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			LayoutMdi(MdiLayout.TileVertical);
-		}
-
-		private void TileHorizontalToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			LayoutMdi(MdiLayout.TileHorizontal);
-		}
-
-		private void ArrangeIconsToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			LayoutMdi(MdiLayout.ArrangeIcons);
-		}
-
-		private void CloseAllToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			foreach (Form childForm in MdiChildren)
+			if(ConfigurationManager.AppSettings["PINOk"] == "1")
 			{
-				childForm.Close();
+				ShowForm(new frmMain());
+				//mnuStrip_Login.Visible = false;
+				//mnuStrip_Main.Visible = true;		//Form childForm = new frmMain();
+				//childForm.MdiParent = this;
+				//currentForm = childForm;
+				//currentForm.Show();
 			}
 		}
 
-		private void frmParent_Activated(object sender, EventArgs e)
+		private void ShowForm(Form frmToShow)
 		{
-			//this.AddOwnedForm(new frmLogin());
-			//this.OwnedForms[0].ShowDialog();
-
-			Form childForm = new frmLogin();
-			childForm.MdiParent = this;
-			//childForm.Text = "Window " + childFormNumber++;
-			childForm.Show();
-
-			if (ConfigurationManager.AppSettings["CloseApp"] == "True")
-			{
-				this.Close();
-			}
-			else
-			{
-				//ActivateGroupBox(grpOpenScreen);
-			}
+			currentForm = frmToShow;
+			currentForm.MdiParent = this;
+			currentForm.MinimizeBox = false;
+			currentForm.MaximizeBox = false;
+			currentForm.Show();
 		}
+
+		private void frmParent_Load(object sender, EventArgs e)
+		{
+			
+		}
+
 	}
 }

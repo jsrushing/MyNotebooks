@@ -11,11 +11,20 @@ namespace myJournal.subforms
 	public partial class frmNewJournal : Form
 	{
 		public frmNewJournal()
-		{ InitializeComponent(); }
+		{ 
+			InitializeComponent();
+			//((frmParent)this.MdiParent).
+		}
 
 		private void frmNewJournal_Load(object sender, EventArgs e)
 		{ grp1.Location = new Point((this.Width / 2) - (grp1.Width / 2), 25); }
 
 		private void frmNewJournal_Activated(object sender, EventArgs e) { txtName.Focus(); }
+
+		private void btnOk_Click(object sender, EventArgs e)
+		{
+			((frmParent)this.MdiParent).nextForm = new frmMain();
+			this.Close();
+		}
 	}
 }

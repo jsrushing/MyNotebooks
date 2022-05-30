@@ -35,7 +35,11 @@ namespace myJournal.subforms
 			this.lblError = new System.Windows.Forms.Label();
 			this.grp1 = new System.Windows.Forms.GroupBox();
 			this.label2 = new System.Windows.Forms.Label();
+			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+			this.mnuLogin = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuCancel = new System.Windows.Forms.ToolStripMenuItem();
 			this.grp1.SuspendLayout();
+			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// btnOk
@@ -82,12 +86,11 @@ namespace myJournal.subforms
 			this.grp1.Controls.Add(this.txtPIN);
 			this.grp1.Controls.Add(this.btnCancel);
 			this.grp1.Controls.Add(this.btnOk);
-			this.grp1.Location = new System.Drawing.Point(12, 12);
+			this.grp1.Location = new System.Drawing.Point(12, 27);
 			this.grp1.Name = "grp1";
 			this.grp1.Size = new System.Drawing.Size(143, 162);
 			this.grp1.TabIndex = 6;
 			this.grp1.TabStop = false;
-			this.grp1.Text = "Login";
 			// 
 			// label2
 			// 
@@ -98,6 +101,30 @@ namespace myJournal.subforms
 			this.label2.TabIndex = 7;
 			this.label2.Text = "PIN";
 			// 
+			// menuStrip1
+			// 
+			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuLogin,
+            this.mnuCancel});
+			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+			this.menuStrip1.Name = "menuStrip1";
+			this.menuStrip1.Size = new System.Drawing.Size(285, 24);
+			this.menuStrip1.TabIndex = 7;
+			this.menuStrip1.Text = "menuStrip1";
+			// 
+			// mnuLogin
+			// 
+			this.mnuLogin.Name = "mnuLogin";
+			this.mnuLogin.Size = new System.Drawing.Size(49, 20);
+			this.mnuLogin.Text = "Login";
+			this.mnuLogin.Click += new System.EventHandler(this.mnuLogin_Click);
+			// 
+			// mnuCancel
+			// 
+			this.mnuCancel.Name = "mnuCancel";
+			this.mnuCancel.Size = new System.Drawing.Size(55, 20);
+			this.mnuCancel.Text = "Cancel";
+			// 
 			// frmLogin
 			// 
 			this.AcceptButton = this.btnOk;
@@ -107,15 +134,21 @@ namespace myJournal.subforms
 			this.CancelButton = this.btnCancel;
 			this.ClientSize = new System.Drawing.Size(285, 271);
 			this.Controls.Add(this.grp1);
+			this.Controls.Add(this.menuStrip1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+			this.MainMenuStrip = this.menuStrip1;
 			this.Name = "frmLogin";
 			this.Text = "Login";
 			this.Activated += new System.EventHandler(this.frmLogin_Activated);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmLogin_FormClosing);
 			this.Load += new System.EventHandler(this.frmLogin_Load);
 			this.Resize += new System.EventHandler(this.frmLogin_Resize);
 			this.grp1.ResumeLayout(false);
 			this.grp1.PerformLayout();
+			this.menuStrip1.ResumeLayout(false);
+			this.menuStrip1.PerformLayout();
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -127,5 +160,8 @@ namespace myJournal.subforms
 		private System.Windows.Forms.Label lblError;
 		private System.Windows.Forms.GroupBox grp1;
 		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.MenuStrip menuStrip1;
+		private System.Windows.Forms.ToolStripMenuItem mnuLogin;
+		private System.Windows.Forms.ToolStripMenuItem mnuCancel;
 	}
 }
