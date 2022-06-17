@@ -60,6 +60,7 @@ namespace myJournal.subforms
 			this.btnLoadJournal.TabIndex = 36;
 			this.btnLoadJournal.Text = "&Load";
 			this.btnLoadJournal.UseVisualStyleBackColor = true;
+			this.btnLoadJournal.Click += new System.EventHandler(this.btnLoadJournal_Click);
 			// 
 			// lbl1stSelection
 			// 
@@ -227,7 +228,7 @@ namespace myJournal.subforms
 			// mnuJournal_Create
 			// 
 			this.mnuJournal_Create.Name = "mnuJournal_Create";
-			this.mnuJournal_Create.Size = new System.Drawing.Size(180, 22);
+			this.mnuJournal_Create.Size = new System.Drawing.Size(108, 22);
 			this.mnuJournal_Create.Text = "Create";
 			this.mnuJournal_Create.Click += new System.EventHandler(this.mnuJournal_Create_Click);
 			// 
@@ -235,7 +236,7 @@ namespace myJournal.subforms
 			// 
 			this.mnuJournal_Delete.Enabled = false;
 			this.mnuJournal_Delete.Name = "mnuJournal_Delete";
-			this.mnuJournal_Delete.Size = new System.Drawing.Size(180, 22);
+			this.mnuJournal_Delete.Size = new System.Drawing.Size(108, 22);
 			this.mnuJournal_Delete.Text = "Delete";
 			// 
 			// frmMain

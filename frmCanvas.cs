@@ -21,7 +21,7 @@ namespace myJournal
 
 		private void frmCanvas_Load(object sender, EventArgs e)
 		{
-			ActivateForm(new frmLogin());
+			ActivateForm(new frmMain());
 		}
 
 		private void ActivateForm(Form frmToActivate)

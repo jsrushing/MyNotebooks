@@ -87,7 +87,7 @@ namespace myJournal
 			ActiveMenuFont				= new Font(ActiveMenuFont, fs);
 
 			ActivateGroupBox(grpOpenScreen);
-			ActivateForm(new frmLogin());
+			//ActivateForm(new frmMain());
 		}
 
 		private void Form1_Resize(object sender, EventArgs e)
@@ -346,32 +346,32 @@ namespace myJournal
 		/// <param name="e"></param>
 		private void ddlJournals_SelectedIndexChanged(object sender, EventArgs e)
         {
-			//pnlMenu.Visible = false;
-			//lstEntries.Items.Clear();
-   //         rtbSelectedEntry_Main.Text = string.Empty;
+			pnlMenu.Visible = false;
+			lstEntries.Items.Clear();
+			rtbSelectedEntry_Main.Text = string.Empty;
 
-			//try
-			//{
-			//	currentJournal = new Journal(ConfigurationManager.AppSettings["PIN"], ddlJournals.Text).Open(ddlJournals.Text); 
+			try
+			{
+				currentJournal = new Journal(ConfigurationManager.AppSettings["PIN"], ddlJournals.Text).Open(ddlJournals.Text);
 
-			//	if(currentJournal != null)
-			//	{
-			//		PopulateEntries(lstEntries);
-			//		lblCreateEntry.Enabled = true; 
-			//		lblFindEntry.Enabled = true;
-			//		lblViewJournal.Enabled = true;
-			//		lblSelectAJournal.Enabled = true;
-			//		lblSelectAJournal.Text = "Entries";
-			//		lstEntries.Height = grpOpenScreen.Height - 100;
-			//		lbl1stSelection.Text = "1";
-			//	}
-			//	else
-			//	{
-			//		lstEntries.Focus();
-			//	}
-			//}
-			//catch(Exception) { }
-        }
+				if (currentJournal != null)
+				{
+					PopulateEntries(lstEntries);
+					lblCreateEntry.Enabled = true;
+					lblFindEntry.Enabled = true;
+					lblViewJournal.Enabled = true;
+					lblSelectAJournal.Enabled = true;
+					lblSelectAJournal.Text = "Entries";
+					lstEntries.Height = grpOpenScreen.Height - 100;
+					lbl1stSelection.Text = "1";
+				}
+				else
+				{
+					lstEntries.Focus();
+				}
+			}
+			catch (Exception) { }
+		}
 
         #region Tags
         private void Tags_btnAddTag_Click(object sender, EventArgs e) { ActivateGroupBox(backTarget != null ? backTarget : grpOpenScreen); }
@@ -967,7 +967,7 @@ namespace myJournal
 
 		private void lblLogOut_Click(object sender, EventArgs e)
 		{
-			ActivateForm(new frmLogin());
+			//ActivateForm(new frmLogin());
 		}
 
 		private void lblSeparator_grpOpenScreen_MouseMove(object sender, MouseEventArgs e)
