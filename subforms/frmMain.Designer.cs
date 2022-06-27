@@ -166,6 +166,7 @@ namespace myJournal.subforms
 			this.lstEntries.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
 			this.lstEntries.Size = new System.Drawing.Size(401, 123);
 			this.lstEntries.TabIndex = 8;
+			this.lstEntries.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectedIndexChanged);
 			// 
 			// lblSelectAJournal
 			// 
@@ -205,6 +206,7 @@ namespace myJournal.subforms
 			this.lblSeparator_grpOpenScreen.TabIndex = 30;
 			this.lblSeparator_grpOpenScreen.Text = resources.GetString("lblSeparator_grpOpenScreen.Text");
 			this.lblSeparator_grpOpenScreen.Visible = false;
+			this.lblSeparator_grpOpenScreen.MouseMove += new System.Windows.Forms.MouseEventHandler(this.lblSeparator_grpOpenScreen_MouseMove);
 			// 
 			// menuStrip1
 			// 
@@ -258,7 +260,6 @@ namespace myJournal.subforms
 			this.Controls.Add(this.lblEntriesStartFrom);
 			this.Controls.Add(this.ddlJournals);
 			this.Controls.Add(this.menuStrip1);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.MainMenuStrip = this.menuStrip1;
 			this.Name = "frmMain";
 			this.Text = "MyJournal";

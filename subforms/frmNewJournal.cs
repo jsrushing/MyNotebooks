@@ -10,10 +10,12 @@ namespace myJournal.subforms
 {
 	public partial class frmNewJournal : Form
 	{
+		public string sJournalName;
+		public string sPIN;
+
 		public frmNewJournal()
 		{ 
 			InitializeComponent();
-			//((frmParent)this.MdiParent).
 		}
 
 		private void frmNewJournal_Load(object sender, EventArgs e)
@@ -23,8 +25,16 @@ namespace myJournal.subforms
 
 		private void btnOk_Click(object sender, EventArgs e)
 		{
-			((frmParent)this.MdiParent).nextForm = new frmMain();
+			//((frmParent)this.MdiParent).nextForm = new frmMain();
 			this.Close();
+		}
+
+		private void frmNewJournal_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			e.Cancel = true;
+			sJournalName = txtName.Text;
+			sPIN = txtPIN.Text;
+			this.Hide();
 		}
 	}
 }

@@ -100,9 +100,9 @@ namespace myJournal.subforms
 			this.grp1.Controls.Add(this.btnOk);
 			this.grp1.Controls.Add(this.label1);
 			this.grp1.Controls.Add(this.label2);
-			this.grp1.Location = new System.Drawing.Point(68, 12);
+			this.grp1.Location = new System.Drawing.Point(12, 12);
 			this.grp1.Name = "grp1";
-			this.grp1.Size = new System.Drawing.Size(230, 226);
+			this.grp1.Size = new System.Drawing.Size(230, 184);
 			this.grp1.TabIndex = 6;
 			// 
 			// lblMessage_BadJournalName
@@ -120,12 +120,13 @@ namespace myJournal.subforms
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.btnCancel;
-			this.ClientSize = new System.Drawing.Size(392, 479);
+			this.ClientSize = new System.Drawing.Size(255, 208);
 			this.Controls.Add(this.grp1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Name = "frmNewJournal";
 			this.Text = "New Journal";
 			this.Activated += new System.EventHandler(this.frmNewJournal_Activated);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmNewJournal_FormClosing);
 			this.Load += new System.EventHandler(this.frmNewJournal_Load);
 			this.grp1.ResumeLayout(false);
 			this.grp1.PerformLayout();

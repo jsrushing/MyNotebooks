@@ -13,6 +13,7 @@ namespace myJournal.subforms
 	public partial class frmMain : Form
 	{
 		Journal currentJournal;
+		JournalEntry currentEntry;
 
 		public frmMain()
 		{
@@ -21,7 +22,7 @@ namespace myJournal.subforms
 
 		private void frmMain_Load(object sender, EventArgs e)
 		{
-			this.WindowState = FormWindowState.Maximized;
+			//this.WindowState = FormWindowState.Maximized;
 			LoadJournals();
 		}
 
@@ -55,8 +56,13 @@ namespace myJournal.subforms
 
 		private void mnuJournal_Create_Click(object sender, EventArgs e)
 		{
-			((frmParent)this.MdiParent).nextForm = new frmNewJournal();
-			this.Close();
+			//((frmParent)this.MdiParent).nextForm = new frmNewJournal();
+			//this.Close();
+			frmNewJournal frm = new frmNewJournal();
+			ShowForm(frm);
+			Journal j = new Journal(frm.sPIN, frm.sJournalName);
+			j.Create();
+			LoadJournals();
 		}
 
 		private void btnLoadJournal_Click(object sender, EventArgs e)
@@ -116,5 +122,133 @@ namespace myJournal.subforms
 			//lblJournal_Save.Enabled = true;
 		}
 
+		private void lstEntries_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			ListBox lb = (ListBox)sender;
+			RichTextBox rtb = rtbSelectedEntry_Main; //RichTextBox rtb = lb.Name == "lstEntries" ? rtbSelectedEntry_Main : rtbSelectedEntry;
+			rtb.Clear();
+			List<int> targets = new List<int>();
+			lb.SelectedIndexChanged -= new System.EventHandler(this.lstEntries_SelectedIndexChanged);
+			//ListBox.SelectedIndexCollection cltnLbSelectedEntries = lb.SelectedIndices;
+			//pnlMenu.Visible = false;
+
+			try
+			{
+				if (lb.SelectedIndices.Count > 1)
+				{
+					for (int i = 0; i < lb.SelectedIndices.Count - 1; i++)
+					{
+						if (lb.SelectedIndices[i] == lb.SelectedIndices[i + 1] - 1)
+						{
+							targets.Add(lb.SelectedIndices[i]);
+							targets.Add(lb.SelectedIndices[i + 1]);
+							targets.Add(lb.SelectedIndices[i + 2]);
+							break;
+						}
+					}
+				}
+			}
+			catch (Exception) { }
+
+			if (targets.Count == 3)
+			{
+				foreach (int i in targets)
+				{
+					lb.SelectedIndices.Remove(i);
+				}
+			}
+
+			int ctr = lb.SelectedIndex;
+
+			if (lb.Items[ctr].ToString().StartsWith("--")) ctr--;
+
+			while (!lb.Items[ctr].ToString().StartsWith("--") & ctr > 0)
+			{
+				ctr--;
+				if (ctr < 0) break;
+			}
+
+			if (ctr > 0) { ctr += 1; }
+			lb.SelectedIndices.Clear();                             // Select the whole short entry ...
+			lb.SelectedIndices.Add(ctr);
+			lb.SelectedIndices.Add(ctr + 1);
+			lb.SelectedIndices.Add(ctr + 2);                        //
+
+			// this is where you have to account for isEdited
+
+			string sTitleAndDate = lb.Items[ctr].ToString().Replace(" - EDITED", "");        // Use the title and date of the entry to create a JournalEntry object whose .ClearText will populate the display ...
+			string sTitle = sTitleAndDate.Substring(0, sTitleAndDate.IndexOf('(') - 1);
+			string sDate = sTitleAndDate.Substring(sTitleAndDate.IndexOf('(') + 1, sTitleAndDate.Length - 2 - sTitleAndDate.IndexOf('('));
+
+			currentEntry = currentJournal.GetEntry(sTitle, sDate);
+
+			if (currentEntry != null)
+			{
+				StringBuilder sb = new StringBuilder();
+				rtb.Text = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
+					//, currentJournal.Name
+					, currentEntry.ClearTitle(), currentEntry.Date
+					, currentEntry.ClearTags()
+					, currentEntry.ClearText());
+				if (rtb.Text.Length == 0) { lstEntries.TopIndex = lstEntries.Top + lstEntries.Height < rtbSelectedEntry_Main.Top ? ctr : lstEntries.TopIndex; }
+				//lblEditEntry.Enabled = true;
+				lblPrint.Visible = rtb.Text.Length > 0;
+				grpSelectedEntryLabels.Visible = rtb.Text.Length > 0;
+				lblSeparator_grpOpenScreen.Visible = rtb.Text.Length > 0;
+				//lblSelectedFoundEntry.Visible = rtbSelectedEntry_Found.Text.Length > 0;
+				lblSelectionType.Text = "Selected Entry";
+
+				//lstEntries.Height = rtb.Text.Length > 0 ? rtbSelectedEntry_Main.Top - 132 : grpOpenScreen.Height - 100;
+
+				lstEntries.Height = rtb.Text.Length > 0 ? rtbSelectedEntry_Main.Top - 132 : 100;
+
+				if (lbl1stSelection.Text.Equals("1"))
+				{
+					lstEntries.TopIndex = lstEntries.Top + lstEntries.Height < rtbSelectedEntry_Main.Top ? ctr : lstEntries.TopIndex;
+					lbl1stSelection.Text = "0";
+				}
+
+				ResizeListsAndRTBs(lstEntries, rtbSelectedEntry_Main, lblSeparator_grpOpenScreen);
+			}
+
+			lb.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectedIndexChanged);
+		}
+
+		private void ResizeListsAndRTBs(ListBox lbx, RichTextBox rtb, Label lblSeperator)
+		{
+			int iBoxCenter = lbx.Width / 2;
+			lblSeperator.Left = lbx.Left + 10;
+			lblSeperator.Width = lbx.Width - 20;
+			lbx.Height = lblSeperator.Top - lbx.Top - 5;
+			grpSelectedEntryLabels.Top = lblSeperator.Top + lblSeperator.Height + 10;
+			rtb.Top = grpSelectedEntryLabels.Top + grpSelectedEntryLabels.Height;
+			rtb.Height = this.Height - rtb.Top - 50;
+		}
+
+		private void lblSeparator_grpOpenScreen_MouseMove(object sender, MouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Left)
+			{
+				lblSeparator_grpOpenScreen.Top += e.Y;
+				ResizeListsAndRTBs(lstEntries, rtbSelectedEntry_Main, lblSeparator_grpOpenScreen);
+				lstEntries.TopIndex = lstEntries.SelectedIndices[0];
+			}
+		}
+
+		private void ShowForm(Form frm)
+		{
+			frm.StartPosition = FormStartPosition.Manual;
+			frm.Location = new Point(this.Left + (this.Width / 2) - (frm.Width / 2), (this.Top + (this.Height / 2) - (frm.Width / 2)));
+			frm.ShowDialog();
+			
+		}
+
+		protected override CreateParams CreateParams {
+			get {
+				CreateParams cp = base.CreateParams;
+				cp.ExStyle |= 0x02000000;  // Turn on WS_EX_COMPOSITED
+				return cp;
+			}
+		}
 	}
 }
