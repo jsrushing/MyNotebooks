@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+﻿/* Add a new journal 
+ * 6/15/22
+ */
+using System;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace myJournal.subforms
@@ -26,7 +25,12 @@ namespace myJournal.subforms
 		private void btnOk_Click(object sender, EventArgs e)
 		{
 			//((frmParent)this.MdiParent).nextForm = new frmMain();
-			this.Close();
+			if (txtPIN.Text.Length > 0 | txtName.Text.Length > 0)
+			{
+				sJournalName = txtName.Text;
+				sPIN = txtPIN.Text;
+			}
+			this.Hide();
 		}
 
 		private void frmNewJournal_FormClosing(object sender, FormClosingEventArgs e)
@@ -44,7 +48,7 @@ namespace myJournal.subforms
 		{
 			txtName.Text = string.Empty;
 			txtPIN.Text = string.Empty;
-			this.Close();
+			this.Hide();
 		}
 	}
 }

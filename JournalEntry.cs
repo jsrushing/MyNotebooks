@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
-using encrypt_decrypt_string;
+﻿/* Journal Entry object
+ * 8/1//21
+ */
+using System;
 using System.Configuration;
+using encrypt_decrypt_string;
 
 namespace myJournal
 {
-    [Serializable]
+	[Serializable]
     public class JournalEntry
     {
         public DateTime Date;

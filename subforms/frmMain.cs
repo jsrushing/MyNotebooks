@@ -61,6 +61,7 @@ namespace myJournal.subforms
 			ShowForm(frm);
 			string pin = frm.sPIN == null ? string.Empty : frm.sPIN;
 			string name = frm.sJournalName == null ? string.Empty : frm.sJournalName;
+			frm.Close();
 
 			if ( pin.Length > 0 |  name.Length > 0){
 				Journal j = new Journal(pin, name);
@@ -273,7 +274,13 @@ namespace myJournal.subforms
 		{
 			frmNewEntry frm = new frmNewEntry();
 			ShowForm(frm, 10, 10);
-
+			if(frm.entry != null)
+			{
+				currentJournal.AddEntry(frm.entry);
+				currentJournal.Save();
+				PopulateEntries(lstEntries);
+			}
+			frm.Close();
 		}
 	}
 }

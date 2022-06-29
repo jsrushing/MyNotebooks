@@ -1,15 +1,17 @@
-﻿using System;
+﻿/* Journal object
+ * 8/1//21
+ */
+using System;
 using System.Collections.Generic;
-using System.Text;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Linq;
 using System.Configuration;
-using System.Web;
+using System.IO;
+using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 
 namespace myJournal
 {
-    [Serializable]
+	[Serializable]
     public class Journal
     {
 		public string Name = string.Empty;
