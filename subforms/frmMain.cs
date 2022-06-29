@@ -52,17 +52,21 @@ namespace myJournal.subforms
 		private void ddlJournals_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			mnuJournal_Delete.Enabled = true;
+			mnuEntryTop.Enabled = true;
 		}
 
 		private void mnuJournal_Create_Click(object sender, EventArgs e)
 		{
-			//((frmParent)this.MdiParent).nextForm = new frmNewJournal();
-			//this.Close();
 			frmNewJournal frm = new frmNewJournal();
 			ShowForm(frm);
-			Journal j = new Journal(frm.sPIN, frm.sJournalName);
-			j.Create();
-			LoadJournals();
+			string pin = frm.sPIN == null ? string.Empty : frm.sPIN;
+			string name = frm.sJournalName == null ? string.Empty : frm.sJournalName;
+
+			if ( pin.Length > 0 |  name.Length > 0){
+				Journal j = new Journal(pin, name);
+				j.Create();
+				LoadJournals();
+			}
 		}
 
 		private void btnLoadJournal_Click(object sender, EventArgs e)
@@ -235,12 +239,26 @@ namespace myJournal.subforms
 			}
 		}
 
-		private void ShowForm(Form frm)
+		private void ShowForm(Form frm, int left = -1, int top = -1)
 		{
 			frm.StartPosition = FormStartPosition.Manual;
-			frm.Location = new Point(this.Left + (this.Width / 2) - (frm.Width / 2), (this.Top + (this.Height / 2) - (frm.Width / 2)));
+
+			frm.Location = new Point(this.Left, this.Top);
+			frm.Size = new Size(this.Width, this.Height);
+
+			//frm.Location = left > -1 | top > -1 ?
+			//	new Point(this.Left + left, this.Top + top) :
+			//	new Point(this.Left + (this.Width / 2) - (frm.Width / 2), (this.Top + (this.Height / 2) - (frm.Width / 2)));
+
+			//if (left > -1 & top > -1)
+			//{
+			//	frm.Location =  new Point(this.Left + left, this.Top + top);
+			//}
+			//else
+			//{
+			//	frm.Location = new Point(this.Left + (this.Width / 2) - (frm.Width / 2), (this.Top + (this.Height / 2) - (frm.Width / 2)));
+			//}
 			frm.ShowDialog();
-			
 		}
 
 		protected override CreateParams CreateParams {
@@ -249,6 +267,13 @@ namespace myJournal.subforms
 				cp.ExStyle |= 0x02000000;  // Turn on WS_EX_COMPOSITED
 				return cp;
 			}
+		}
+
+		private void mnuEntryCreate_Click(object sender, EventArgs e)
+		{
+			frmNewEntry frm = new frmNewEntry();
+			ShowForm(frm, 10, 10);
+
 		}
 	}
 }

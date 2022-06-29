@@ -31,10 +31,20 @@ namespace myJournal.subforms
 
 		private void frmNewJournal_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			e.Cancel = true;
-			sJournalName = txtName.Text;
-			sPIN = txtPIN.Text;
-			this.Hide();
+			if (txtPIN.Text.Length > 0 | txtName.Text.Length > 0)
+			{
+				e.Cancel = true;
+				sJournalName = txtName.Text;
+				sPIN = txtPIN.Text;
+				this.Hide();
+			}
+		}
+
+		private void btnCancel_Click(object sender, EventArgs e)
+		{
+			txtName.Text = string.Empty;
+			txtPIN.Text = string.Empty;
+			this.Close();
 		}
 	}
 }

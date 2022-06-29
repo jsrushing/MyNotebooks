@@ -48,6 +48,10 @@ namespace myJournal.subforms
 			this.mnuJournal = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuJournal_Create = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuJournal_Delete = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuEntryTop = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuEntryCreate = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuEntryEditDelete = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuEntryFind = new System.Windows.Forms.ToolStripMenuItem();
 			this.grpSelectedEntryLabels.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -211,7 +215,8 @@ namespace myJournal.subforms
 			// menuStrip1
 			// 
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuJournal});
+            this.mnuJournal,
+            this.mnuEntryTop});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
 			this.menuStrip1.Size = new System.Drawing.Size(425, 24);
@@ -240,6 +245,37 @@ namespace myJournal.subforms
 			this.mnuJournal_Delete.Name = "mnuJournal_Delete";
 			this.mnuJournal_Delete.Size = new System.Drawing.Size(108, 22);
 			this.mnuJournal_Delete.Text = "Delete";
+			// 
+			// mnuEntryTop
+			// 
+			this.mnuEntryTop.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuEntryCreate,
+            this.mnuEntryEditDelete,
+            this.mnuEntryFind});
+			this.mnuEntryTop.Enabled = false;
+			this.mnuEntryTop.Name = "mnuEntryTop";
+			this.mnuEntryTop.Size = new System.Drawing.Size(46, 20);
+			this.mnuEntryTop.Text = "Entry";
+			// 
+			// mnuEntryCreate
+			// 
+			this.mnuEntryCreate.Name = "mnuEntryCreate";
+			this.mnuEntryCreate.Size = new System.Drawing.Size(180, 22);
+			this.mnuEntryCreate.Text = "Create";
+			this.mnuEntryCreate.Click += new System.EventHandler(this.mnuEntryCreate_Click);
+			// 
+			// mnuEntryEditDelete
+			// 
+			this.mnuEntryEditDelete.Enabled = false;
+			this.mnuEntryEditDelete.Name = "mnuEntryEditDelete";
+			this.mnuEntryEditDelete.Size = new System.Drawing.Size(180, 22);
+			this.mnuEntryEditDelete.Text = "Edit/Delete";
+			// 
+			// mnuEntryFind
+			// 
+			this.mnuEntryFind.Name = "mnuEntryFind";
+			this.mnuEntryFind.Size = new System.Drawing.Size(180, 22);
+			this.mnuEntryFind.Text = "Find";
 			// 
 			// frmMain
 			// 
@@ -292,5 +328,9 @@ namespace myJournal.subforms
 		private System.Windows.Forms.ToolStripMenuItem mnuJournal;
 		private System.Windows.Forms.ToolStripMenuItem mnuJournal_Create;
 		private System.Windows.Forms.ToolStripMenuItem mnuJournal_Delete;
+		private System.Windows.Forms.ToolStripMenuItem mnuEntryTop;
+		private System.Windows.Forms.ToolStripMenuItem mnuEntryCreate;
+		private System.Windows.Forms.ToolStripMenuItem mnuEntryEditDelete;
+		private System.Windows.Forms.ToolStripMenuItem mnuEntryFind;
 	}
 }
