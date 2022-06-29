@@ -9,7 +9,6 @@ using System.Configuration;
 using System.Linq;
 using System.Drawing.Printing;
 using System.Runtime.InteropServices;
-using myJournal.forms;
 using myJournal.subforms;
 using encrypt_decrypt_string;
 

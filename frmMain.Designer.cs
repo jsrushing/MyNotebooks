@@ -58,6 +58,7 @@ namespace myJournal.subforms
 			// 
 			// btnLoadJournal
 			// 
+			this.btnLoadJournal.Enabled = false;
 			this.btnLoadJournal.Location = new System.Drawing.Point(168, 77);
 			this.btnLoadJournal.Name = "btnLoadJournal";
 			this.btnLoadJournal.Size = new System.Drawing.Size(75, 23);
@@ -170,7 +171,8 @@ namespace myJournal.subforms
 			this.lstEntries.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
 			this.lstEntries.Size = new System.Drawing.Size(401, 123);
 			this.lstEntries.TabIndex = 8;
-			this.lstEntries.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectedIndexChanged);
+			this.lstEntries.Visible = false;
+			this.lstEntries.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectEntry);
 			// 
 			// lblSelectAJournal
 			// 
@@ -196,6 +198,7 @@ namespace myJournal.subforms
 			this.rtbSelectedEntry_Main.TabIndex = 5;
 			this.rtbSelectedEntry_Main.TabStop = false;
 			this.rtbSelectedEntry_Main.Text = "";
+			this.rtbSelectedEntry_Main.Visible = false;
 			// 
 			// lblSeparator_grpOpenScreen
 			// 
@@ -245,6 +248,7 @@ namespace myJournal.subforms
 			this.mnuJournal_Delete.Name = "mnuJournal_Delete";
 			this.mnuJournal_Delete.Size = new System.Drawing.Size(108, 22);
 			this.mnuJournal_Delete.Text = "Delete";
+			this.mnuJournal_Delete.Click += new System.EventHandler(this.mnuJournal_Delete_Click);
 			// 
 			// mnuEntryTop
 			// 
@@ -260,7 +264,7 @@ namespace myJournal.subforms
 			// mnuEntryCreate
 			// 
 			this.mnuEntryCreate.Name = "mnuEntryCreate";
-			this.mnuEntryCreate.Size = new System.Drawing.Size(180, 22);
+			this.mnuEntryCreate.Size = new System.Drawing.Size(132, 22);
 			this.mnuEntryCreate.Text = "Create";
 			this.mnuEntryCreate.Click += new System.EventHandler(this.mnuEntryCreate_Click);
 			// 
@@ -268,13 +272,13 @@ namespace myJournal.subforms
 			// 
 			this.mnuEntryEditDelete.Enabled = false;
 			this.mnuEntryEditDelete.Name = "mnuEntryEditDelete";
-			this.mnuEntryEditDelete.Size = new System.Drawing.Size(180, 22);
+			this.mnuEntryEditDelete.Size = new System.Drawing.Size(132, 22);
 			this.mnuEntryEditDelete.Text = "Edit/Delete";
 			// 
 			// mnuEntryFind
 			// 
 			this.mnuEntryFind.Name = "mnuEntryFind";
-			this.mnuEntryFind.Size = new System.Drawing.Size(180, 22);
+			this.mnuEntryFind.Size = new System.Drawing.Size(132, 22);
 			this.mnuEntryFind.Text = "Find";
 			// 
 			// frmMain

@@ -24,7 +24,7 @@ namespace myJournal
         public Journal(string _PIN, string _name = null) 
         {
 			if (_PIN == null || _PIN.Length == 0) { _PIN = null; }
-			//Configuration config = System.Web. 
+
             if(_name != null)
             {
                 this.Name = _name;
