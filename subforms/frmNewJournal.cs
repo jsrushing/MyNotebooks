@@ -24,7 +24,6 @@ namespace myJournal.subforms
 
 		private void btnOk_Click(object sender, EventArgs e)
 		{
-			//((frmParent)this.MdiParent).nextForm = new frmMain();
 			if (txtPIN.Text.Length > 0 | txtName.Text.Length > 0)
 			{
 				sJournalName = txtName.Text;

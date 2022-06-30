@@ -57,11 +57,15 @@ namespace myJournal.subforms
 		{
 			mnuJournal_Delete.Enabled = true;
 			btnLoadJournal.Enabled = true;
+			txtJournalPIN.Text = string.Empty;
+			lstEntries.Items.Clear();
+			lstEntries.Visible = false;
 		}
 
 		private void mnuEntryCreate_Click(object sender, EventArgs e)
 		{
 			frmNewEntry frm = new frmNewEntry();
+			frm.PIN = txtJournalPIN.Text;
 			ShowForm(frm, 10, 10);
 			if(frm.entry != null)
 			{
@@ -236,16 +240,19 @@ namespace myJournal.subforms
 
 			foreach (JournalEntry je in currentJournal.Entries)
 			{
-				int iTextChunkLength = Convert.ToInt16(lstEntries.Width * .15);
-				lstEntries.Items.Add(je.ClearTitle(txtJournalPIN.Text) + " (" + je.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"); //+ (je.isEdited ? " - EDITED" : ""));
-				string sEntryText = je.ClearText();
+				if(txtJournalPIN.Text == je.PIN)
+				{
+					int iTextChunkLength = Convert.ToInt16(lstEntries.Width * .15);
+					lstEntries.Items.Add(je.ClearTitle(txtJournalPIN.Text) + " (" + je.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"); //+ (je.isEdited ? " - EDITED" : ""));
+					string sEntryText = je.ClearText();
 
-				lstEntries.Items.Add(sEntryText.Length < iTextChunkLength ?
-					sEntryText :
-					sEntryText.Substring(0, iTextChunkLength) + " ...");
+					lstEntries.Items.Add(sEntryText.Length < iTextChunkLength ?
+						sEntryText :
+						sEntryText.Substring(0, iTextChunkLength) + " ...");
 
-				lstEntries.Items.Add("tags: " + je.ClearTags());
-				lstEntries.Items.Add("---------------------");
+					lstEntries.Items.Add("tags: " + je.ClearTags());
+					lstEntries.Items.Add("---------------------");
+				}
 			}
 
 			lstEntries.Height = this.Height - lstEntries.Top - 50;

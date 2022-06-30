@@ -11,6 +11,7 @@ namespace myJournal.subforms
 	public partial class frmNewEntry : Form
 	{
 		public JournalEntry entry = null;
+		public string PIN = string.Empty;
 
 		public frmNewEntry()
 		{
@@ -42,7 +43,7 @@ namespace myJournal.subforms
 					groups += lstTags.CheckedItems[i].ToString() + ",";
 				}
 				groups = groups.Length > 0 ? groups.Substring(0, groups.Length - 1) : string.Empty;
-				entry = new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, groups, "2343", false);
+				entry = new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, groups, this.PIN, false);
 			}
 			this.Hide();
 		}
