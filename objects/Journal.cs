@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using myJournal.subforms;
 
 namespace myJournal
 {
@@ -19,17 +20,18 @@ namespace myJournal
         StringBuilder JournalText = new StringBuilder();
         public List<JournalEntry> Entries = new List<JournalEntry>();
         string root = "journals\\";
-		public string PIN;
+		private string PIN;
 
-        public Journal(string _PIN, string _name = null) 
+        public Journal(string _name = null) 
         {
-			if (_PIN == null || _PIN.Length == 0) { _PIN = null; }
+			//if (_PIN == null || _PIN.Length == 0) { _PIN = null; }
+			frmMain frm = new frmMain();
 
             if(_name != null)
             {
                 this.Name = _name;
                 this.FileName = AppDomain.CurrentDomain.BaseDirectory + this.root + this.Name;
-				this.PIN = _PIN;
+				this.PIN = frm.GetPin();	// _PIN;
 			}
         }
 
@@ -102,14 +104,12 @@ namespace myJournal
         public void Save()
         {
             try { File.Delete(this.FileName); } catch (Exception) { }
-			string pin = this.PIN;
-			this.PIN = string.Empty;
+
             using (Stream stream = File.Open(this.FileName, FileMode.Create))
             {
                 BinaryFormatter formatter = new BinaryFormatter();
                 formatter.Serialize(stream, this);
             }
-			this.PIN = pin;
         }
     }
 }

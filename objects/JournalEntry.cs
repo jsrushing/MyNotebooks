@@ -4,6 +4,8 @@
 using System;
 using System.Configuration;
 using encrypt_decrypt_string;
+using System.Collections.Generic;
+using myJournal.subforms;
 
 namespace myJournal
 {
@@ -14,21 +16,41 @@ namespace myJournal
         string Text;
         string Title;
         string Tags;
-		public string PIN;
+		private string PIN;
 		public bool isEdited = false;
         public string Id;
+
 		public JournalEntry() { }
 
 		public JournalEntry(string _title, string _text, string _tags, string _PIN, bool _edited = false)
         {
+			frmMain frm = new frmMain();
+			
             this.Date	= DateTime.Now;
 			string key	= ConfigurationManager.AppSettings["PrivateKey"];
-			this.PIN	= _PIN;	// EncryptDecrypt.Encrypt(_PIN, _PIN, key);
+			this.PIN	= frm.GetPin();	//  _PIN;	// EncryptDecrypt.Encrypt(_PIN, _PIN, key);
 			this.Text	= EncryptDecrypt.Encrypt(_text, _PIN, key);
             this.Title	= EncryptDecrypt.Encrypt(_title, _PIN, key);
             this.Tags	= EncryptDecrypt.Encrypt(_tags, _PIN, key);
             this.Id		= Guid.NewGuid().ToString();
 			this.isEdited = _edited;
+		}
+
+		public List<string> EntryAsList(int ListboxWidth)
+		{
+			List<string> lstRtrn = new List<string>();
+			int iTextChunkLength = Convert.ToInt16(ListboxWidth * .15);
+
+			lstRtrn.Add(this.ClearTitle(this.PIN) + " (" + this.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"); //+ (je.isEdited ? " - EDITED" : ""));
+			string sEntryText = this.ClearText(this.PIN);
+
+			lstRtrn.Add(sEntryText.Length < iTextChunkLength ?
+				sEntryText :
+				sEntryText.Substring(0, iTextChunkLength) + " ...");
+
+			lstRtrn.Add("tags: " + this.ClearTags(this.PIN));
+			lstRtrn.Add("---------------------");
+			return lstRtrn;
 		}
 
 		public void ChangePIN(string newPIN)

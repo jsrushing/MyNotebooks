@@ -280,7 +280,7 @@ namespace myJournal
         {
             if (lblDeleteJournal_ConfirmMsg.Visible)
             {
-                if (currentJournal == null) { new Journal(ConfigurationManager.AppSettings["PIN"], ddlJournalsToDelete.Text).Open().Delete(); } else { currentJournal.Delete(); }
+                if (currentJournal == null) { new Journal(ddlJournalsToDelete.Text).Open().Delete(); } else { currentJournal.Delete(); }
                 currentJournal = null;
                 LoadJournals();
                 ddlJournals.Text = String.Empty;

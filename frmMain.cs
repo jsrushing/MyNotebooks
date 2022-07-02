@@ -31,7 +31,7 @@ namespace myJournal.subforms
 
 			try
 			{
-				currentJournal = new Journal(txtJournalPIN.Text, ddlJournals.Text).Open(ddlJournals.Text);
+				currentJournal = new Journal(ddlJournals.Text).Open(ddlJournals.Text);
 
 				//				currentJournal = new Journal(ConfigurationManager.AppSettings["PIN"], ddlJournals.Text).Open(ddlJournals.Text);
 
@@ -60,6 +60,9 @@ namespace myJournal.subforms
 			txtJournalPIN.Text = string.Empty;
 			lstEntries.Items.Clear();
 			lstEntries.Visible = false;
+			txtJournalPIN.Focus();
+			rtbSelectedEntry_Main.Text = string.Empty;
+			ShowHideEntriesArea(false);
 		}
 
 		private void mnuEntryCreate_Click(object sender, EventArgs e)
@@ -84,7 +87,7 @@ namespace myJournal.subforms
 			frm.Close();
 
 			if ( pin.Length > 0 |  name.Length > 0){
-				Journal j = new Journal(pin, name);
+				Journal j = new Journal(name);
 				j.Create();
 				LoadJournals();
 			}
@@ -195,17 +198,9 @@ namespace myJournal.subforms
 			
 		}
 
-		private void ResizeListsAndRTBs(ListBox lbx, RichTextBox rtb, Label lblSeperator)
+		public string GetPin()
 		{
-			int iBoxCenter = lbx.Width / 2;
-			lblSeparator_grpOpenScreen.Visible = true;
-			rtb.Visible = true;
-			lblSeperator.Left = lbx.Left + 10;
-			lblSeperator.Width = lbx.Width - 20;
-			lbx.Height = lblSeperator.Top - lbx.Top - 5;
-			grpSelectedEntryLabels.Top = lblSeperator.Top + lblSeperator.Height + 10;
-			rtb.Top = grpSelectedEntryLabels.Top + grpSelectedEntryLabels.Height;
-			rtb.Height = this.Height - rtb.Top - 50;
+			return txtJournalPIN.Text;
 		}
 
 		private void LoadJournals()
@@ -239,24 +234,37 @@ namespace myJournal.subforms
 
 			foreach (JournalEntry je in currentJournal.Entries)
 			{
-				if (txtJournalPIN.Text == je.PIN)	// je.ClearPIN(txtJournalPIN.Text))
-				{
-					int iTextChunkLength = Convert.ToInt16(lstEntries.Width * .15);
-					lstEntries.Items.Add(je.ClearTitle(txtJournalPIN.Text) + " (" + je.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"); //+ (je.isEdited ? " - EDITED" : ""));
-					string sEntryText = je.ClearText(txtJournalPIN.Text);
-
-					lstEntries.Items.Add(sEntryText.Length < iTextChunkLength ?
-						sEntryText :
-						sEntryText.Substring(0, iTextChunkLength) + " ...");
-
-					lstEntries.Items.Add("tags: " + je.ClearTags(txtJournalPIN.Text));
-					lstEntries.Items.Add("---------------------");
-				}
+				//if (txtJournalPIN.Text == je.PIN)	// je.ClearPIN(txtJournalPIN.Text))
+				//{
+					foreach(string s in je.EntryAsList(lstEntries.Width))
+					{
+						lstEntries.Items.Add(s);
+					}
+				//}
 			}
 
 			lstEntries.Height = this.Height - lstEntries.Top - 50;
-			lblSeparator_grpOpenScreen.Visible = false;
-			rtbSelectedEntry_Main.Visible = false;
+			ShowHideEntriesArea(false);
+		}
+
+		private void ShowHideEntriesArea(bool show)
+		{
+			rtbSelectedEntry_Main.Visible = show;
+			lblSeparator_grpOpenScreen.Visible = show;
+			
+		}
+
+		private void ResizeListsAndRTBs(ListBox lbx, RichTextBox rtb, Label lblSeperator)
+		{
+			int iBoxCenter = lbx.Width / 2;
+			lblSeparator_grpOpenScreen.Visible = true;
+			rtb.Visible = true;
+			lblSeperator.Left = lbx.Left + 10;
+			lblSeperator.Width = lbx.Width - 20;
+			lbx.Height = lblSeperator.Top - lbx.Top - 5;
+			grpSelectedEntryLabels.Top = lblSeperator.Top + lblSeperator.Height + 10;
+			rtb.Top = grpSelectedEntryLabels.Top + grpSelectedEntryLabels.Height;
+			rtb.Height = this.Height - rtb.Top - 50;
 		}
 
 		private void ShowForm(Form frm, int left = -1, int top = -1)
