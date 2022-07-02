@@ -102,12 +102,14 @@ namespace myJournal
         public void Save()
         {
             try { File.Delete(this.FileName); } catch (Exception) { }
-
+			string pin = this.PIN;
+			this.PIN = string.Empty;
             using (Stream stream = File.Open(this.FileName, FileMode.Create))
             {
                 BinaryFormatter formatter = new BinaryFormatter();
                 formatter.Serialize(stream, this);
-            }            
+            }
+			this.PIN = pin;
         }
     }
 }

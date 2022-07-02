@@ -11,11 +11,12 @@ namespace myJournal.subforms
 	public partial class frmNewEntry : Form
 	{
 		public JournalEntry entry = null;
-		public string PIN = string.Empty;
+		private string PIN = string.Empty;
 
-		public frmNewEntry()
+		public frmNewEntry(string PIN)
 		{
 			InitializeComponent();
+			this.PIN = PIN;
 		}
 
 		private void btnCancel_Click(object sender, EventArgs e)
