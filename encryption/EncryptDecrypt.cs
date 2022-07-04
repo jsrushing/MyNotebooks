@@ -16,13 +16,14 @@ namespace encrypt_decrypt_string
             try
             {
                 string ToReturn = "";
-				if(PublicKey == null)
+				PublicKey = Program.PIN;
+
+				if(PublicKey == null || PublicKey.Length == 0)
 				{
 					PublicKey = "12345678";
 					PrivateKey = "87654321";
 				}
 
-				PublicKey = Program.PIN;
 
 				byte[] secretkeyByte = { };
                 secretkeyByte = System.Text.Encoding.UTF8.GetBytes(PrivateKey);
@@ -52,13 +53,14 @@ namespace encrypt_decrypt_string
             try
             {
                 string ToReturn = "";
-				if (PublicKey == null)
+				PublicKey = Program.PIN;
+
+				if (PublicKey == null || PublicKey.Length == 0)
 				{
 					PublicKey = "12345678";
 					PrivateKey = "87654321";
 				}
 
-				PublicKey = Program.PIN;
 
 				byte[] privatekeyByte = { };
                 privatekeyByte = System.Text.Encoding.UTF8.GetBytes(PrivateKey);

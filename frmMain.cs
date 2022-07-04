@@ -27,7 +27,7 @@ namespace myJournal.subforms
 		private void btnLoadJournal_Click(object sender, EventArgs e)
 		{
 			lstEntries.Items.Clear();
-			rtbSelectedEntry_Main.Text = string.Empty;
+			rtbSelectedEntry.Text = string.Empty;
 			Program.PIN = txtJournalPIN.Text;
 			lblWrongPin.Visible = false;
 
@@ -70,13 +70,13 @@ namespace myJournal.subforms
 			lstEntries.Items.Clear();
 			lstEntries.Visible = false;
 			txtJournalPIN.Focus();
-			rtbSelectedEntry_Main.Text = string.Empty;
+			rtbSelectedEntry.Text = string.Empty;
 			ShowHideEntriesArea(false);
 		}
 
 		private void mnuEntryCreate_Click(object sender, EventArgs e)
 		{
-			frmNewEntry frm = new frmNewEntry(txtJournalPIN.Text);
+			frmNewEntry frm = new frmNewEntry();
 			ShowForm(frm, 10, 10);
 			if(frm.entry != null)
 			{
@@ -111,12 +111,12 @@ namespace myJournal.subforms
             LoadJournals();
 		}
 
-		private void lblSeparator_grpOpenScreen_MouseMove(object sender, MouseEventArgs e)
+		private void lblSeparator_MouseMove(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left)
 			{
-				lblSeparator_grpOpenScreen.Top += e.Y;
-				ResizeListsAndRTBs(lstEntries, rtbSelectedEntry_Main, lblSeparator_grpOpenScreen);
+				lblSeparator.Top += e.Y;
+				ResizeListsAndRTBs();
 				lstEntries.TopIndex = lstEntries.SelectedIndices[0];
 			}
 		}
@@ -124,7 +124,7 @@ namespace myJournal.subforms
 		private void lstEntries_SelectEntry(object sender, EventArgs e)
 		{
 			ListBox lb = (ListBox)sender;
-			RichTextBox rtb = rtbSelectedEntry_Main; //RichTextBox rtb = lb.Name == "lstEntries" ? rtbSelectedEntry_Main : rtbSelectedEntry;
+			RichTextBox rtb = rtbSelectedEntry;
 			rtb.Clear();
 			List<int> targets = new List<int>();
 			lb.SelectedIndexChanged -= new System.EventHandler(this.lstEntries_SelectEntry);
@@ -186,30 +186,24 @@ namespace myJournal.subforms
 					, currentEntry.ClearTitle(), currentEntry.Date
 					, currentEntry.ClearTags()
 					, currentEntry.ClearText());
-				if (rtb.Text.Length == 0) { lstEntries.TopIndex = lstEntries.Top + lstEntries.Height < rtbSelectedEntry_Main.Top ? ctr : lstEntries.TopIndex; }
+				if (rtb.Text.Length == 0) { lstEntries.TopIndex = lstEntries.Top + lstEntries.Height < rtbSelectedEntry.Top ? ctr : lstEntries.TopIndex; }
 				lblPrint.Visible = rtb.Text.Length > 0;
 				grpSelectedEntryLabels.Visible = rtb.Text.Length > 0;
-				lblSeparator_grpOpenScreen.Visible = rtb.Text.Length > 0;
+				lblSeparator.Visible = rtb.Text.Length > 0;
 				lblSelectionType.Text = "Selected Entry";
-				lstEntries.Height = rtb.Text.Length > 0 ? rtbSelectedEntry_Main.Top - 132 : 100;
+				lstEntries.Height = rtb.Text.Length > 0 ? rtbSelectedEntry.Top - 132 : 100;
 
 				if (lbl1stSelection.Text.Equals("1"))
 				{
-					lstEntries.TopIndex = lstEntries.Top + lstEntries.Height < rtbSelectedEntry_Main.Top ? ctr : lstEntries.TopIndex;
+					lstEntries.TopIndex = lstEntries.Top + lstEntries.Height < rtbSelectedEntry.Top ? ctr : lstEntries.TopIndex;
 					lbl1stSelection.Text = "0";
 				}
 
-				ResizeListsAndRTBs(lstEntries, rtbSelectedEntry_Main, lblSeparator_grpOpenScreen);
+				ResizeListsAndRTBs();
 			}
 
 			lb.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectEntry);
-			rtbSelectedEntry_Main.Visible = rtbSelectedEntry_Main.Text.Length > 0;
-			
-		}
-
-		public string GetPin()
-		{
-			return txtJournalPIN.Text;
+			rtbSelectedEntry.Visible = rtbSelectedEntry.Text.Length > 0;			
 		}
 
 		private void LoadJournals()
@@ -255,22 +249,22 @@ namespace myJournal.subforms
 
 		private void ShowHideEntriesArea(bool show)
 		{
-			rtbSelectedEntry_Main.Visible = show;
-			lblSeparator_grpOpenScreen.Visible = show;
+			rtbSelectedEntry.Visible = show;
+			lblSeparator.Visible = show;
 			
 		}
 
-		private void ResizeListsAndRTBs(ListBox lbx, RichTextBox rtb, Label lblSeperator)
+		private void ResizeListsAndRTBs()
 		{
-			int iBoxCenter = lbx.Width / 2;
-			lblSeparator_grpOpenScreen.Visible = true;
-			rtb.Visible = true;
-			lblSeperator.Left = lbx.Left + 10;
-			lblSeperator.Width = lbx.Width - 20;
-			lbx.Height = lblSeperator.Top - lbx.Top - 5;
-			grpSelectedEntryLabels.Top = lblSeperator.Top + lblSeperator.Height + 10;
-			rtb.Top = grpSelectedEntryLabels.Top + grpSelectedEntryLabels.Height;
-			rtb.Height = this.Height - rtb.Top - 50;
+			int iBoxCenter = lstEntries.Width / 2;
+			lblSeparator.Visible = true;
+			rtbSelectedEntry.Visible = true;
+			lblSeparator.Left = lstEntries.Left + 10;
+			lblSeparator.Width = lstEntries.Width - 20;
+			lstEntries.Height = lblSeparator.Top - lstEntries.Top - 5;
+			grpSelectedEntryLabels.Top = lblSeparator.Top + lblSeparator.Height + 10;
+			rtbSelectedEntry.Top = grpSelectedEntryLabels.Top + grpSelectedEntryLabels.Height;
+			rtbSelectedEntry.Height = this.Height - rtbSelectedEntry.Top - 50;
 		}
 
 		private void ShowForm(Form frm, int left = -1, int top = -1)

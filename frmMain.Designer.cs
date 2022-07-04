@@ -42,8 +42,8 @@ namespace myJournal.subforms
 			this.label1 = new System.Windows.Forms.Label();
 			this.lstEntries = new System.Windows.Forms.ListBox();
 			this.lblSelectAJournal = new System.Windows.Forms.Label();
-			this.rtbSelectedEntry_Main = new System.Windows.Forms.RichTextBox();
-			this.lblSeparator_grpOpenScreen = new System.Windows.Forms.Label();
+			this.rtbSelectedEntry = new System.Windows.Forms.RichTextBox();
+			this.lblSeparator = new System.Windows.Forms.Label();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.mnuJournal = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuJournal_Create = new System.Windows.Forms.ToolStripMenuItem();
@@ -187,34 +187,34 @@ namespace myJournal.subforms
 			this.lblSelectAJournal.TabIndex = 7;
 			this.lblSelectAJournal.Text = "(Select A Journal ...)";
 			// 
-			// rtbSelectedEntry_Main
+			// rtbSelectedEntry
 			// 
-			this.rtbSelectedEntry_Main.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.rtbSelectedEntry.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.rtbSelectedEntry_Main.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.rtbSelectedEntry_Main.Location = new System.Drawing.Point(15, 276);
-			this.rtbSelectedEntry_Main.Name = "rtbSelectedEntry_Main";
-			this.rtbSelectedEntry_Main.Size = new System.Drawing.Size(398, 186);
-			this.rtbSelectedEntry_Main.TabIndex = 5;
-			this.rtbSelectedEntry_Main.TabStop = false;
-			this.rtbSelectedEntry_Main.Text = "";
-			this.rtbSelectedEntry_Main.Visible = false;
+			this.rtbSelectedEntry.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.rtbSelectedEntry.Location = new System.Drawing.Point(15, 276);
+			this.rtbSelectedEntry.Name = "rtbSelectedEntry";
+			this.rtbSelectedEntry.Size = new System.Drawing.Size(398, 186);
+			this.rtbSelectedEntry.TabIndex = 5;
+			this.rtbSelectedEntry.TabStop = false;
+			this.rtbSelectedEntry.Text = "";
+			this.rtbSelectedEntry.Visible = false;
 			// 
-			// lblSeparator_grpOpenScreen
+			// lblSeparator
 			// 
-			this.lblSeparator_grpOpenScreen.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.lblSeparator.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.lblSeparator_grpOpenScreen.Cursor = System.Windows.Forms.Cursors.HSplit;
-			this.lblSeparator_grpOpenScreen.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-			this.lblSeparator_grpOpenScreen.ForeColor = System.Drawing.Color.Red;
-			this.lblSeparator_grpOpenScreen.Location = new System.Drawing.Point(13, 232);
-			this.lblSeparator_grpOpenScreen.Name = "lblSeparator_grpOpenScreen";
-			this.lblSeparator_grpOpenScreen.Size = new System.Drawing.Size(403, 19);
-			this.lblSeparator_grpOpenScreen.TabIndex = 30;
-			this.lblSeparator_grpOpenScreen.Text = resources.GetString("lblSeparator_grpOpenScreen.Text");
-			this.lblSeparator_grpOpenScreen.Visible = false;
-			this.lblSeparator_grpOpenScreen.MouseMove += new System.Windows.Forms.MouseEventHandler(this.lblSeparator_grpOpenScreen_MouseMove);
+			this.lblSeparator.Cursor = System.Windows.Forms.Cursors.HSplit;
+			this.lblSeparator.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.lblSeparator.ForeColor = System.Drawing.Color.Red;
+			this.lblSeparator.Location = new System.Drawing.Point(13, 232);
+			this.lblSeparator.Name = "lblSeparator";
+			this.lblSeparator.Size = new System.Drawing.Size(403, 19);
+			this.lblSeparator.TabIndex = 30;
+			this.lblSeparator.Text = resources.GetString("lblSeparator.Text");
+			this.lblSeparator.Visible = false;
+			this.lblSeparator.MouseMove += new System.Windows.Forms.MouseEventHandler(this.lblSeparator_MouseMove);
 			// 
 			// menuStrip1
 			// 
@@ -305,9 +305,9 @@ namespace myJournal.subforms
 			this.Controls.Add(this.lbl1stSelection);
 			this.Controls.Add(this.lblSelectAJournal);
 			this.Controls.Add(this.txtJournalPIN);
-			this.Controls.Add(this.lblSeparator_grpOpenScreen);
+			this.Controls.Add(this.lblSeparator);
 			this.Controls.Add(this.label4);
-			this.Controls.Add(this.rtbSelectedEntry_Main);
+			this.Controls.Add(this.rtbSelectedEntry);
 			this.Controls.Add(this.grpSelectedEntryLabels);
 			this.Controls.Add(this.lstEntries);
 			this.Controls.Add(this.label1);
@@ -340,8 +340,8 @@ namespace myJournal.subforms
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.ListBox lstEntries;
 		private System.Windows.Forms.Label lblSelectAJournal;
-		private System.Windows.Forms.RichTextBox rtbSelectedEntry_Main;
-		private System.Windows.Forms.Label lblSeparator_grpOpenScreen;
+		private System.Windows.Forms.RichTextBox rtbSelectedEntry;
+		private System.Windows.Forms.Label lblSeparator;
 		private System.Windows.Forms.MenuStrip menuStrip1;
 		private System.Windows.Forms.ToolStripMenuItem mnuJournal;
 		private System.Windows.Forms.ToolStripMenuItem mnuJournal_Create;

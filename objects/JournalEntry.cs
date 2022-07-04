@@ -54,6 +54,5 @@ namespace myJournal
 		public string ClearText(){ return EncryptDecrypt.Decrypt(this.Text, Program.PIN, ConfigurationManager.AppSettings["PrivateKey"]); }
 		public string ClearTitle() { return EncryptDecrypt.Decrypt(this.Title, Program.PIN, ConfigurationManager.AppSettings["PrivateKey"]); }
 		public string ClearTags() { return this.Tags == null ? String.Empty : EncryptDecrypt.Decrypt(this.Tags, Program.PIN, ConfigurationManager.AppSettings["PrivateKey"]); }
-
 	}
 }

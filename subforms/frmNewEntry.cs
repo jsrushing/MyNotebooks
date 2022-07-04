@@ -11,18 +11,10 @@ namespace myJournal.subforms
 	public partial class frmNewEntry : Form
 	{
 		public JournalEntry entry = null;
-		private string PIN = string.Empty;
 
-		public frmNewEntry(string PIN)
+		public frmNewEntry()
 		{
 			InitializeComponent();
-			this.PIN = PIN;
-		}
-
-		private void btnCancel_Click(object sender, EventArgs e)
-		{
-			txtNewEntryTitle.Text = string.Empty;
-			rtbNewEntry.Text = string.Empty;
 		}
 
 		private void frmNewEntry_Load(object sender, EventArgs e)
@@ -31,6 +23,12 @@ namespace myJournal.subforms
 			grpCreateEntry.Size = new Size(this.Width - 35, this.Height - 50);
 			pnlButtons.Location = new Point(grpCreateEntry.Width / 2 - (pnlButtons.Width / 2), lstTags.Top + lstTags.Height + 10);
 			LoadTags();
+		}
+
+		private void btnCancel_Click(object sender, EventArgs e)
+		{
+			txtNewEntryTitle.Text = string.Empty;
+			rtbNewEntry.Text = string.Empty;
 		}
 
 		private void btnOK_Click(object sender, EventArgs e)
@@ -58,6 +56,5 @@ namespace myJournal.subforms
 				lstTags.Items.Add(group);
 			}
 		}
-
 	}
 }
