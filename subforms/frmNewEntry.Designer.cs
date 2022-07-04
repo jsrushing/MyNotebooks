@@ -30,34 +30,34 @@ namespace myJournal.subforms
 		private void InitializeComponent()
 		{
 			this.grpCreateEntry = new System.Windows.Forms.GroupBox();
+			this.lblManageLabels = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
 			this.pnlButtons = new System.Windows.Forms.Panel();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.btnOK = new System.Windows.Forms.Button();
 			this.lblTagManager2 = new System.Windows.Forms.Label();
 			this.lblEntryText_Hidden = new System.Windows.Forms.Label();
 			this.lblEntryTitle_Hidden = new System.Windows.Forms.Label();
-			this.lstTags = new System.Windows.Forms.CheckedListBox();
+			this.lstLabels = new System.Windows.Forms.CheckedListBox();
 			this.label14 = new System.Windows.Forms.Label();
 			this.lblFont_NewEntry = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.rtbNewEntry = new System.Windows.Forms.RichTextBox();
 			this.txtNewEntryTitle = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
-			this.label1 = new System.Windows.Forms.Label();
-			this.label4 = new System.Windows.Forms.Label();
 			this.grpCreateEntry.SuspendLayout();
 			this.pnlButtons.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// grpCreateEntry
 			// 
-			this.grpCreateEntry.Controls.Add(this.label1);
+			this.grpCreateEntry.Controls.Add(this.lblManageLabels);
 			this.grpCreateEntry.Controls.Add(this.label4);
 			this.grpCreateEntry.Controls.Add(this.pnlButtons);
 			this.grpCreateEntry.Controls.Add(this.lblTagManager2);
 			this.grpCreateEntry.Controls.Add(this.lblEntryText_Hidden);
 			this.grpCreateEntry.Controls.Add(this.lblEntryTitle_Hidden);
-			this.grpCreateEntry.Controls.Add(this.lstTags);
+			this.grpCreateEntry.Controls.Add(this.lstLabels);
 			this.grpCreateEntry.Controls.Add(this.label14);
 			this.grpCreateEntry.Controls.Add(this.lblFont_NewEntry);
 			this.grpCreateEntry.Controls.Add(this.label3);
@@ -69,6 +69,32 @@ namespace myJournal.subforms
 			this.grpCreateEntry.Size = new System.Drawing.Size(414, 576);
 			this.grpCreateEntry.TabIndex = 5;
 			this.grpCreateEntry.TabStop = false;
+			// 
+			// lblManageLabels
+			// 
+			this.lblManageLabels.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.lblManageLabels.AutoSize = true;
+			this.lblManageLabels.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.lblManageLabels.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.lblManageLabels.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.lblManageLabels.Location = new System.Drawing.Point(218, 412);
+			this.lblManageLabels.Name = "lblManageLabels";
+			this.lblManageLabels.Size = new System.Drawing.Size(97, 17);
+			this.lblManageLabels.TabIndex = 40;
+			this.lblManageLabels.Text = "manage labels";
+			this.lblManageLabels.Click += new System.EventHandler(this.lblManageLabels_Click);
+			// 
+			// label4
+			// 
+			this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.label4.AutoSize = true;
+			this.label4.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.label4.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.label4.Location = new System.Drawing.Point(13, 412);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(44, 17);
+			this.label4.TabIndex = 38;
+			this.label4.Text = "labels";
 			// 
 			// pnlButtons
 			// 
@@ -132,17 +158,17 @@ namespace myJournal.subforms
 			this.lblEntryTitle_Hidden.Text = "hidden title";
 			this.lblEntryTitle_Hidden.Visible = false;
 			// 
-			// lstTags
+			// lstLabels
 			// 
-			this.lstTags.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.lstLabels.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.lstTags.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.lstTags.CheckOnClick = true;
-			this.lstTags.FormattingEnabled = true;
-			this.lstTags.Location = new System.Drawing.Point(6, 432);
-			this.lstTags.Name = "lstTags";
-			this.lstTags.Size = new System.Drawing.Size(395, 90);
-			this.lstTags.TabIndex = 27;
+			this.lstLabels.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.lstLabels.CheckOnClick = true;
+			this.lstLabels.FormattingEnabled = true;
+			this.lstLabels.Location = new System.Drawing.Point(6, 432);
+			this.lstLabels.Name = "lstLabels";
+			this.lstLabels.Size = new System.Drawing.Size(395, 90);
+			this.lstLabels.TabIndex = 27;
 			// 
 			// label14
 			// 
@@ -215,31 +241,6 @@ namespace myJournal.subforms
 			this.label2.TabIndex = 0;
 			this.label2.Text = "Title:";
 			// 
-			// label1
-			// 
-			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.label1.AutoSize = true;
-			this.label1.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.label1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-			this.label1.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.label1.Location = new System.Drawing.Point(218, 413);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(87, 17);
-			this.label1.TabIndex = 40;
-			this.label1.Text = "manage tags";
-			// 
-			// label4
-			// 
-			this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.label4.AutoSize = true;
-			this.label4.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-			this.label4.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.label4.Location = new System.Drawing.Point(13, 412);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(34, 17);
-			this.label4.TabIndex = 38;
-			this.label4.Text = "tags";
-			// 
 			// frmNewEntry
 			// 
 			this.AcceptButton = this.btnOK;
@@ -265,7 +266,7 @@ namespace myJournal.subforms
 		private System.Windows.Forms.Label lblTagManager2;
 		private System.Windows.Forms.Label lblEntryText_Hidden;
 		private System.Windows.Forms.Label lblEntryTitle_Hidden;
-		private System.Windows.Forms.CheckedListBox lstTags;
+		private System.Windows.Forms.CheckedListBox lstLabels;
 		private System.Windows.Forms.Label label14;
 		private System.Windows.Forms.Label lblFont_NewEntry;
 		private System.Windows.Forms.Label label3;
@@ -275,7 +276,7 @@ namespace myJournal.subforms
 		private System.Windows.Forms.Button btnOK;
 		private System.Windows.Forms.Button btnCancel;
 		private System.Windows.Forms.Panel pnlButtons;
-		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label lblManageLabels;
 		private System.Windows.Forms.Label label4;
 	}
 }

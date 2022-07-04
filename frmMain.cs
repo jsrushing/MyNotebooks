@@ -6,6 +6,7 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using myJournal.subforms;
+using myJournal.objects;
 
 namespace myJournal.subforms
 {
@@ -77,7 +78,7 @@ namespace myJournal.subforms
 		private void mnuEntryCreate_Click(object sender, EventArgs e)
 		{
 			frmNewEntry frm = new frmNewEntry();
-			ShowForm(frm, 10, 10);
+			Utilities.Showform(frm, this);
 			if(frm.entry != null)
 			{
 				currentJournal.AddEntry(frm.entry);
@@ -90,12 +91,12 @@ namespace myJournal.subforms
 		private void mnuJournal_Create_Click(object sender, EventArgs e)
 		{
 			frmNewJournal frm = new frmNewJournal();
-			ShowForm(frm);
-			string pin = frm.sPIN == null ? string.Empty : frm.sPIN;
+			Utilities.Showform(frm, this);
+			Program.PIN = frm.sPIN == null ? string.Empty : frm.sPIN;
 			string name = frm.sJournalName == null ? string.Empty : frm.sJournalName;
 			frm.Close();
 
-			if ( pin.Length > 0 |  name.Length > 0){
+			if (name.Length > 0){
 				Journal j = new Journal(name);
 				j.Create();
 				LoadJournals();
@@ -265,28 +266,6 @@ namespace myJournal.subforms
 			grpSelectedEntryLabels.Top = lblSeparator.Top + lblSeparator.Height + 10;
 			rtbSelectedEntry.Top = grpSelectedEntryLabels.Top + grpSelectedEntryLabels.Height;
 			rtbSelectedEntry.Height = this.Height - rtbSelectedEntry.Top - 50;
-		}
-
-		private void ShowForm(Form frm, int left = -1, int top = -1)
-		{
-			frm.StartPosition = FormStartPosition.Manual;
-
-			frm.Location = new Point(this.Left, this.Top);
-			frm.Size = new Size(this.Width, this.Height);
-
-			//frm.Location = left > -1 | top > -1 ?
-			//	new Point(this.Left + left, this.Top + top) :
-			//	new Point(this.Left + (this.Width / 2) - (frm.Width / 2), (this.Top + (this.Height / 2) - (frm.Width / 2)));
-
-			//if (left > -1 & top > -1)
-			//{
-			//	frm.Location =  new Point(this.Left + left, this.Top + top);
-			//}
-			//else
-			//{
-			//	frm.Location = new Point(this.Left + (this.Width / 2) - (frm.Width / 2), (this.Top + (this.Height / 2) - (frm.Width / 2)));
-			//}
-			frm.ShowDialog();
 		}
 
 		protected override CreateParams CreateParams {

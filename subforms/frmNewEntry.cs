@@ -5,6 +5,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
+using myJournal.objects;
 
 namespace myJournal.subforms
 {
@@ -21,7 +22,7 @@ namespace myJournal.subforms
 		{
 			grpCreateEntry.Location = new Point(10, 0);
 			grpCreateEntry.Size = new Size(this.Width - 35, this.Height - 50);
-			pnlButtons.Location = new Point(grpCreateEntry.Width / 2 - (pnlButtons.Width / 2), lstTags.Top + lstTags.Height + 10);
+			pnlButtons.Location = new Point(grpCreateEntry.Width / 2 - (pnlButtons.Width / 2), lstLabels.Top + lstLabels.Height + 10);
 			LoadTags();
 		}
 
@@ -37,9 +38,9 @@ namespace myJournal.subforms
 			{
 				string groups = string.Empty;
 
-				for (int i = 0; i < lstTags.CheckedItems.Count; i++)
+				for (int i = 0; i < lstLabels.CheckedItems.Count; i++)
 				{
-					groups += lstTags.CheckedItems[i].ToString() + ",";
+					groups += lstLabels.CheckedItems[i].ToString() + ",";
 				}
 				groups = groups.Length > 0 ? groups.Substring(0, groups.Length - 1) : string.Empty;
 				entry = new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, groups, false);
@@ -49,12 +50,18 @@ namespace myJournal.subforms
 
 		private void LoadTags()
 		{
-			lstTags.Items.Clear();
+			lstLabels.Items.Clear();
 
 			foreach (string group in File.ReadAllLines(AppDomain.CurrentDomain.BaseDirectory + "/settings/groups"))
 			{
-				lstTags.Items.Add(group);
+				lstLabels.Items.Add(group);
 			}
+		}
+
+		private void lblManageLabels_Click(object sender, EventArgs e)
+		{
+			frmManageTags frm = new frmManageTags();
+			Utilities.Showform(frm, this);	
 		}
 	}
 }
