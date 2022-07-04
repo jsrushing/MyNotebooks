@@ -44,7 +44,7 @@ namespace myJournal.subforms
 					groups += lstTags.CheckedItems[i].ToString() + ",";
 				}
 				groups = groups.Length > 0 ? groups.Substring(0, groups.Length - 1) : string.Empty;
-				entry = new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, groups, this.PIN, false);
+				entry = new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, groups, false);
 			}
 			this.Hide();
 		}

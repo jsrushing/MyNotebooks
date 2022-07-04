@@ -216,45 +216,45 @@ namespace myJournal
 		/// <param name="e"></param>
 		private void btnAddEntry_Click(object sender, EventArgs e)
         {
-            if (rtbNewEntry.Text.Length > 0 && txtNewEntryTitle.Text.Length > 0)
-            {
-                string sGroups = string.Empty;
+    //        if (rtbNewEntry.Text.Length > 0 && txtNewEntryTitle.Text.Length > 0)
+    //        {
+    //            string sGroups = string.Empty;
 
-                for (int i = 0; i < lstTags.CheckedItems.Count; i++)
-                {
-                    sGroups += lstTags.CheckedItems[i].ToString() + ",";
-                }
-                sGroups = sGroups.Length > 0 ? sGroups.Substring(0, sGroups.Length - 1) : string.Empty;
+    //            for (int i = 0; i < lstTags.CheckedItems.Count; i++)
+    //            {
+    //                sGroups += lstTags.CheckedItems[i].ToString() + ",";
+    //            }
+    //            sGroups = sGroups.Length > 0 ? sGroups.Substring(0, sGroups.Length - 1) : string.Empty;
                 
-				if (grpAppendDeleteOriginal.Visible)
-				{
-                    string sTitle = txtNewEntryTitle.Text;
-                    string sText = rtbNewEntry.Text + " ";
+				//if (grpAppendDeleteOriginal.Visible)
+				//{
+    //                string sTitle = txtNewEntryTitle.Text;
+    //                string sText = rtbNewEntry.Text + " ";
 
-                    if (radOriginal_Append.Checked)
-					{
-						sTitle = txtNewEntryTitle.Text;
-					}
-					else
-					{
-						sTitle = lblEntryTitle_Hidden.Text;
-                        sText = lblEntryText_Hidden.Text;
-					}
+    //                if (radOriginal_Append.Checked)
+				//	{
+				//		sTitle = txtNewEntryTitle.Text;
+				//	}
+				//	else
+				//	{
+				//		sTitle = lblEntryTitle_Hidden.Text;
+    //                    sText = lblEntryText_Hidden.Text;
+				//	}
 
-					currentJournal.ReplaceEntry(currentEntry, new JournalEntry(sTitle, sText, sGroups, ConfigurationManager.AppSettings["PIN"], true));
-				}
-				else
-				{
-					currentJournal.AddEntry(new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, sGroups, ConfigurationManager.AppSettings["PIN"], true));
-				}
-                currentJournal.Save();
-                PopulateEntries(lstEntries);
-            }
+				//	currentJournal.ReplaceEntry(currentEntry, new JournalEntry(sTitle, sText, sGroups, ConfigurationManager.AppSettings["PIN"], true));
+				//}
+				//else
+				//{
+				//	currentJournal.AddEntry(new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, sGroups, ConfigurationManager.AppSettings["PIN"], true));
+				//}
+    //            currentJournal.Save();
+    //            PopulateEntries(lstEntries);
+    //        }
 
-            txtNewEntryTitle.Text = String.Empty;
-            rtbNewEntry.Clear();
-            foreach(int i in lstTags.CheckedIndices) { lstTags.SetItemChecked(i, false); }
-            ActivateGroupBox(grpOpenScreen);
+    //        txtNewEntryTitle.Text = String.Empty;
+    //        rtbNewEntry.Clear();
+    //        foreach(int i in lstTags.CheckedIndices) { lstTags.SetItemChecked(i, false); }
+    //        ActivateGroupBox(grpOpenScreen);
         }
 
 		/// <summary>

@@ -20,7 +20,7 @@ namespace myJournal
         StringBuilder JournalText = new StringBuilder();
         public List<JournalEntry> Entries = new List<JournalEntry>();
         string root = "journals\\";
-		private string PIN;
+		//private string PIN;
 
         public Journal(string _name = null) 
         {
@@ -31,28 +31,19 @@ namespace myJournal
             {
                 this.Name = _name;
                 this.FileName = AppDomain.CurrentDomain.BaseDirectory + this.root + this.Name;
-				this.PIN = frm.GetPin();	// _PIN;
+				//this.PIN = frm.GetPin();	// _PIN;
 			}
         }
 
         public void AddEntry(JournalEntry entryToAdd) { Entries.Add(entryToAdd); }
 
-        private void AddFirstEntry() { Entries.Add(new JournalEntry("created", "-", "", PIN)); }
+        private void AddFirstEntry() { Entries.Add(new JournalEntry("created", "-", "")); }
 
         public void Create()
         {
             AddFirstEntry();
             Save();
         }
-
-		public void ChangePIN(string newPIN)
-		{
-			foreach (JournalEntry je in this.Entries)
-			{
-				JournalEntry newJE = new JournalEntry(je.ClearTitle(), je.ClearText(), je.ClearTags(), newPIN);
-				newJE.Date = je.Date;
-			}
-		}
 
         public void Delete() { File.Delete(this.FileName); }
 
@@ -62,7 +53,7 @@ namespace myJournal
 			//sb.AppendLine("Journal: " + this.Name);
 			foreach(JournalEntry je in this.Entries)
 			{
-				sb.Append(String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Editing"].Replace("Original ", ""), je.Date, je.ClearTitle(this.PIN), je.ClearText(this.PIN)));
+				sb.Append(String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Editing"].Replace("Original ", ""), je.Date, je.ClearTitle(), je.ClearText()));
 			}
 			return sb.ToString();
 		}
@@ -70,7 +61,7 @@ namespace myJournal
         public JournalEntry GetEntry(string _title, string _date)
         {
             JournalEntry je = null;
-			try { je = this.Entries.First(a => a.ClearTitle(this.PIN) + a.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) == _title + _date); }
+			try { je = this.Entries.First(a => a.ClearTitle() + a.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) == _title + _date); }
             catch(Exception) { }
             return je;
         }
@@ -86,7 +77,7 @@ namespace myJournal
                     BinaryFormatter formatter = new BinaryFormatter();
                     jRtrn = (Journal)formatter.Deserialize(stream);
 					jRtrn.FileName = AppDomain.CurrentDomain.BaseDirectory + this.root + journalToOpen;
-					jRtrn.PIN = this.PIN;
+					//jRtrn.PIN = this.PIN;
 				}
             }
             catch(Exception) { }

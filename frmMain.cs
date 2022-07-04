@@ -29,22 +29,30 @@ namespace myJournal.subforms
 			lstEntries.Items.Clear();
 			rtbSelectedEntry_Main.Text = string.Empty;
 			Program.PIN = txtJournalPIN.Text;
+			lblWrongPin.Visible = false;
 
 			try
 			{
 				currentJournal = new Journal(ddlJournals.Text).Open(ddlJournals.Text);
 
-				//				currentJournal = new Journal(ConfigurationManager.AppSettings["PIN"], ddlJournals.Text).Open(ddlJournals.Text);
-
 				if (currentJournal != null)
 				{
 					PopulateEntries();
-					lblSelectAJournal.Enabled = true;
-					lblSelectAJournal.Text = "Entries";
-					lstEntries.Height = this.Height - lstEntries.Top - 50;
-					lbl1stSelection.Text = "1";
-					mnuEntryTop.Enabled = true;
-					lstEntries.Visible = lstEntries.Items.Count > 0;
+
+					if(lstEntries.Items.Count > 0)
+					{
+						lblSelectAJournal.Enabled = true;
+						lblSelectAJournal.Text = "Entries";
+						lstEntries.Height = this.Height - lstEntries.Top - 50;
+						lbl1stSelection.Text = "1";
+						mnuEntryTop.Enabled = true;
+						lstEntries.Visible = true;					
+					}
+					else
+					{
+						lblWrongPin.Visible = true;
+						lstEntries.Visible = false;
+					}	
 				}
 				else
 				{
@@ -235,13 +243,10 @@ namespace myJournal.subforms
 
 			foreach (JournalEntry je in currentJournal.Entries)
 			{
-				//if (txtJournalPIN.Text == je.PIN)	// je.ClearPIN(txtJournalPIN.Text))
-				//{
-					foreach(string s in je.EntryAsList(lstEntries.Width))
-					{
-						lstEntries.Items.Add(s);
-					}
-				//}
+				foreach(string s in je.EntryAsList(lstEntries.Width))
+				{
+					lstEntries.Items.Add(s);
+				}
 			}
 
 			lstEntries.Height = this.Height - lstEntries.Top - 50;

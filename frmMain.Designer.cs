@@ -52,6 +52,7 @@ namespace myJournal.subforms
 			this.mnuEntryCreate = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEntryEditDelete = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEntryFind = new System.Windows.Forms.ToolStripMenuItem();
+			this.lblWrongPin = new System.Windows.Forms.Label();
 			this.grpSelectedEntryLabels.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -70,7 +71,7 @@ namespace myJournal.subforms
 			// lbl1stSelection
 			// 
 			this.lbl1stSelection.AutoSize = true;
-			this.lbl1stSelection.Location = new System.Drawing.Point(274, 85);
+			this.lbl1stSelection.Location = new System.Drawing.Point(376, 29);
 			this.lbl1stSelection.Name = "lbl1stSelection";
 			this.lbl1stSelection.Size = new System.Drawing.Size(13, 15);
 			this.lbl1stSelection.TabIndex = 35;
@@ -281,6 +282,17 @@ namespace myJournal.subforms
 			this.mnuEntryFind.Size = new System.Drawing.Size(132, 22);
 			this.mnuEntryFind.Text = "Find";
 			// 
+			// lblWrongPin
+			// 
+			this.lblWrongPin.AutoSize = true;
+			this.lblWrongPin.ForeColor = System.Drawing.Color.Red;
+			this.lblWrongPin.Location = new System.Drawing.Point(289, 81);
+			this.lblWrongPin.Name = "lblWrongPin";
+			this.lblWrongPin.Size = new System.Drawing.Size(63, 15);
+			this.lblWrongPin.TabIndex = 38;
+			this.lblWrongPin.Text = "wrong PIN";
+			this.lblWrongPin.Visible = false;
+			// 
 			// frmMain
 			// 
 			this.AcceptButton = this.btnLoadJournal;
@@ -288,6 +300,7 @@ namespace myJournal.subforms
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.Window;
 			this.ClientSize = new System.Drawing.Size(425, 474);
+			this.Controls.Add(this.lblWrongPin);
 			this.Controls.Add(this.btnLoadJournal);
 			this.Controls.Add(this.lbl1stSelection);
 			this.Controls.Add(this.lblSelectAJournal);
@@ -337,5 +350,6 @@ namespace myJournal.subforms
 		private System.Windows.Forms.ToolStripMenuItem mnuEntryCreate;
 		private System.Windows.Forms.ToolStripMenuItem mnuEntryEditDelete;
 		private System.Windows.Forms.ToolStripMenuItem mnuEntryFind;
+		private System.Windows.Forms.Label lblWrongPin;
 	}
 }
