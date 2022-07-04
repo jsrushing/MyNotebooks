@@ -3,6 +3,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Configuration;
+using myJournal;
 
 // https://www.delftstack.com/howto/csharp/encrypt-and-decrypt-a-string-in-csharp/
 
@@ -20,6 +21,7 @@ namespace encrypt_decrypt_string
 					PublicKey = "12345678";
 					PrivateKey = "87654321";
 				}
+
 				byte[] secretkeyByte = { };
                 secretkeyByte = System.Text.Encoding.UTF8.GetBytes(PrivateKey);
                 byte[] publickeybyte = { };
