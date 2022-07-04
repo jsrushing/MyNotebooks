@@ -22,6 +22,8 @@ namespace encrypt_decrypt_string
 					PrivateKey = "87654321";
 				}
 
+				PublicKey = Program.PIN;
+
 				byte[] secretkeyByte = { };
                 secretkeyByte = System.Text.Encoding.UTF8.GetBytes(PrivateKey);
                 byte[] publickeybyte = { };
@@ -55,6 +57,9 @@ namespace encrypt_decrypt_string
 					PublicKey = "12345678";
 					PrivateKey = "87654321";
 				}
+
+				PublicKey = Program.PIN;
+
 				byte[] privatekeyByte = { };
                 privatekeyByte = System.Text.Encoding.UTF8.GetBytes(PrivateKey);
                 byte[] publickeybyte = { };

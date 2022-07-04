@@ -28,7 +28,7 @@ namespace myJournal.subforms
 			{
 				sJournalName = txtName.Text;
 				sPIN = txtPIN.Text;
-				Program.pubString = txtPIN.Text;
+				Program.PIN = txtPIN.Text;
 			}
 			this.Hide();
 		}

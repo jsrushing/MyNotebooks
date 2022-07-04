@@ -28,6 +28,7 @@ namespace myJournal.subforms
 		{
 			lstEntries.Items.Clear();
 			rtbSelectedEntry_Main.Text = string.Empty;
+			Program.PIN = txtJournalPIN.Text;
 
 			try
 			{

@@ -58,9 +58,13 @@ namespace myJournal
 
 		}
 
-		public string ClearText(string _pin = null) { _pin = this.PIN == string.Empty ? null : this.PIN; return EncryptDecrypt.Decrypt(this.Text, _pin, ConfigurationManager.AppSettings["PrivateKey"]); }
-		public string ClearTitle(string _pin = null) { _pin = this.PIN == string.Empty ? null : this.PIN; return EncryptDecrypt.Decrypt(this.Title, _pin, ConfigurationManager.AppSettings["PrivateKey"]); }
-		public string ClearTags(string _pin = null) { _pin = this.PIN == string.Empty ? null : this.PIN; return this.Tags == null ? String.Empty : EncryptDecrypt.Decrypt(this.Tags, _pin, ConfigurationManager.AppSettings["PrivateKey"]); }
-		public string ClearPIN(string _pin = null) { _pin = this.PIN == string.Empty ? null : this.PIN; return this.Tags == null ? String.Empty : EncryptDecrypt.Decrypt(this.PIN, _pin, ConfigurationManager.AppSettings["PrivateKey"]); }
+		//public string ClearText(string _pin = null) { _pin = this.PIN == string.Empty ? null : this.PIN; return EncryptDecrypt.Decrypt(this.Text, _pin, ConfigurationManager.AppSettings["PrivateKey"]); }
+		//public string ClearTitle(string _pin = null) { _pin = this.PIN == string.Empty ? null : this.PIN; return EncryptDecrypt.Decrypt(this.Title, _pin, ConfigurationManager.AppSettings["PrivateKey"]); }
+		//public string ClearTags(string _pin = null) { _pin = this.PIN == string.Empty ? null : this.PIN; return this.Tags == null ? String.Empty : EncryptDecrypt.Decrypt(this.Tags, _pin, ConfigurationManager.AppSettings["PrivateKey"]); }
+		//public string ClearPIN(string _pin = null) { _pin = this.PIN == string.Empty ? null : this.PIN; return this.Tags == null ? String.Empty : EncryptDecrypt.Decrypt(this.PIN, _pin, ConfigurationManager.AppSettings["PrivateKey"]); }
+		public string ClearText( string i = "" ){ return EncryptDecrypt.Decrypt(this.Text, Program.PIN, ConfigurationManager.AppSettings["PrivateKey"]); }
+		public string ClearTitle(string i = "") { return EncryptDecrypt.Decrypt(this.Title, Program.PIN, ConfigurationManager.AppSettings["PrivateKey"]); }
+		public string ClearTags(string i = "") { return this.Tags == null ? String.Empty : EncryptDecrypt.Decrypt(this.Tags, Program.PIN, ConfigurationManager.AppSettings["PrivateKey"]); }
+
 	}
 }

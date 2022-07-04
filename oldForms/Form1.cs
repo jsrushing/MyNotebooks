@@ -305,21 +305,21 @@ namespace myJournal
         /// <param name="e"></param>
         private void btnOK_NewJrnl_Click(object sender, EventArgs e)
         {
-			if (lblMessage_BadJournalName.Visible)
-			{
-				lblMessage_BadJournalName.Visible = false;
-			}
-			else
-			{
-				try
-				{
-					Journal jrnl = new Journal(ConfigurationManager.AppSettings["PIN"], txtNewJournalName.Text);
-					jrnl.Create();
-					LoadJournals();
-					ActivateGroupBox(grpOpenScreen);
-				}
-				catch (Exception) { lblMessage_BadJournalName.Visible = true; }
-			}
+			//if (lblMessage_BadJournalName.Visible)
+			//{
+			//	lblMessage_BadJournalName.Visible = false;
+			//}
+			//else
+			//{
+			//	try
+			//	{
+			//		Journal jrnl = new Journal(ConfigurationManager.AppSettings["PIN"], txtNewJournalName.Text);
+			//		jrnl.Create();
+			//		LoadJournals();
+			//		ActivateGroupBox(grpOpenScreen);
+			//	}
+			//	catch (Exception) { lblMessage_BadJournalName.Visible = true; }
+			//}
         }
 
 		/// <summary>
@@ -345,31 +345,31 @@ namespace myJournal
 		/// <param name="e"></param>
 		private void ddlJournals_SelectedIndexChanged(object sender, EventArgs e)
         {
-			pnlMenu.Visible = false;
-			lstEntries.Items.Clear();
-			rtbSelectedEntry_Main.Text = string.Empty;
+			//pnlMenu.Visible = false;
+			//lstEntries.Items.Clear();
+			//rtbSelectedEntry_Main.Text = string.Empty;
 
-			try
-			{
-				currentJournal = new Journal(ConfigurationManager.AppSettings["PIN"], ddlJournals.Text).Open(ddlJournals.Text);
+			//try
+			//{
+			//	currentJournal = new Journal(ConfigurationManager.AppSettings["PIN"], ddlJournals.Text).Open(ddlJournals.Text);
 
-				if (currentJournal != null)
-				{
-					PopulateEntries(lstEntries);
-					lblCreateEntry.Enabled = true;
-					lblFindEntry.Enabled = true;
-					lblViewJournal.Enabled = true;
-					lblSelectAJournal.Enabled = true;
-					lblSelectAJournal.Text = "Entries";
-					lstEntries.Height = grpOpenScreen.Height - 100;
-					lbl1stSelection.Text = "1";
-				}
-				else
-				{
-					lstEntries.Focus();
-				}
-			}
-			catch (Exception) { }
+			//	if (currentJournal != null)
+			//	{
+			//		PopulateEntries(lstEntries);
+			//		lblCreateEntry.Enabled = true;
+			//		lblFindEntry.Enabled = true;
+			//		lblViewJournal.Enabled = true;
+			//		lblSelectAJournal.Enabled = true;
+			//		lblSelectAJournal.Text = "Entries";
+			//		lstEntries.Height = grpOpenScreen.Height - 100;
+			//		lbl1stSelection.Text = "1";
+			//	}
+			//	else
+			//	{
+			//		lstEntries.Focus();
+			//	}
+			//}
+			//catch (Exception) { }
 		}
 
         #region Tags
@@ -826,30 +826,30 @@ namespace myJournal
         /// <param name="entries"></param>
         private void PopulateEntries(ListBox lstBoxToPopulate, List<JournalEntry> entries = null)
         {
-			entries = entries != null ? currentJournal.Entries : null;
-			int iTextChunkLength = Convert.ToInt16(lstBoxToPopulate.Width * .15);
-            lstBoxToPopulate.Items.Clear();
+			//entries = entries != null ? currentJournal.Entries : null;
+			//int iTextChunkLength = Convert.ToInt16(lstBoxToPopulate.Width * .15);
+   //         lstBoxToPopulate.Items.Clear();
 
-            foreach(JournalEntry je in currentJournal.Entries)
-            {
-				// add display of isEdited here
-                lstBoxToPopulate.Items.Add(je.ClearTitle(txtJournalPIN.Text) + " (" + je.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"); //+ (je.isEdited ? " - EDITED" : ""));
-                string sEntryText = je.ClearText();
+   //         foreach(JournalEntry je in currentJournal.Entries)
+   //         {
+			//	// add display of isEdited here
+   //             lstBoxToPopulate.Items.Add(je.ClearTitle(txtJournalPIN.Text) + " (" + je.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"); //+ (je.isEdited ? " - EDITED" : ""));
+   //             string sEntryText = je.ClearText();
 
-                lstBoxToPopulate.Items.Add(sEntryText.Length < iTextChunkLength ?
-                    sEntryText :
-                    sEntryText.Substring(0, iTextChunkLength) + " ...");
+   //             lstBoxToPopulate.Items.Add(sEntryText.Length < iTextChunkLength ?
+   //                 sEntryText :
+   //                 sEntryText.Substring(0, iTextChunkLength) + " ...");
 
-                lstBoxToPopulate.Items.Add("tags: " + je.ClearTags());
-                lstBoxToPopulate.Items.Add("---------------------");
-            }
+   //             lstBoxToPopulate.Items.Add("tags: " + je.ClearTags());
+   //             lstBoxToPopulate.Items.Add("---------------------");
+   //         }
 
-			if(lstBoxToPopulate.Items.Count > 0)
-			{
-				lstBoxToPopulate.Height = lstBoxToPopulate.Height + rtbSelectedEntry_Main.Height;
-			}
+			//if(lstBoxToPopulate.Items.Count > 0)
+			//{
+			//	lstBoxToPopulate.Height = lstBoxToPopulate.Height + rtbSelectedEntry_Main.Height;
+			//}
 
-			lblJournal_Save.Enabled = true;
+			//lblJournal_Save.Enabled = true;
         }
 
 		private void PrintPage(object sender, PrintPageEventArgs e)
@@ -1000,43 +1000,43 @@ namespace myJournal
 		{
 			// decrypt <journalname>.p with appsetting "masterPIN". Match to txtJournalPINtry
 
-			try
-			{
-				string s = EncryptDecrypt.Decrypt(File.ReadAllText(ddlJournals.Text + ".p"), ConfigurationManager.AppSettings["masterPIN"], ConfigurationManager.AppSettings["PrivateKey"]);
-			}
-			catch (FileNotFoundException) { } // PIN file does not exist. Is v .5 or earlier }
+			//try
+			//{
+			//	string s = EncryptDecrypt.Decrypt(File.ReadAllText(ddlJournals.Text + ".p"), ConfigurationManager.AppSettings["masterPIN"], ConfigurationManager.AppSettings["PrivateKey"]);
+			//}
+			//catch (FileNotFoundException) { } // PIN file does not exist. Is v .5 or earlier }
 
-			try
-			{
-				currentJournal = new Journal(txtJournalPIN.Text, ddlJournals.Text).Open(ddlJournals.Text);
+			//try
+			//{
+			//	currentJournal = new Journal(txtJournalPIN.Text, ddlJournals.Text).Open(ddlJournals.Text);
 
-				if (currentJournal != null)
-				{
-					pnlMenu.Visible = false;
-					lstEntries.Items.Clear();
-					rtbSelectedEntry_Main.Text = string.Empty;
-					PopulateEntries(lstEntries);
-					lblCreateEntry.Enabled = true;
-					lblFindEntry.Enabled = true;
-					lblViewJournal.Enabled = true;
-					lblSelectAJournal.Enabled = true;
-					lblSelectAJournal.Text = "Entries";
-					lstEntries.Height = grpOpenScreen.Height - 100;
-					lbl1stSelection.Text = "1";
-				}
-				else
-				{
-					lstEntries.Focus();
-				}
-			}
-			catch (Exception) { }
+			//	if (currentJournal != null)
+			//	{
+			//		pnlMenu.Visible = false;
+			//		lstEntries.Items.Clear();
+			//		rtbSelectedEntry_Main.Text = string.Empty;
+			//		PopulateEntries(lstEntries);
+			//		lblCreateEntry.Enabled = true;
+			//		lblFindEntry.Enabled = true;
+			//		lblViewJournal.Enabled = true;
+			//		lblSelectAJournal.Enabled = true;
+			//		lblSelectAJournal.Text = "Entries";
+			//		lstEntries.Height = grpOpenScreen.Height - 100;
+			//		lbl1stSelection.Text = "1";
+			//	}
+			//	else
+			//	{
+			//		lstEntries.Focus();
+			//	}
+			//}
+			//catch (Exception) { }
 
 		}
 
 		private void lblJournal_Save_Click(object sender, EventArgs e)
 		{
-			currentJournal.PIN = txtJournalPIN.Text;
-			currentJournal.Save();
+			//currentJournal.PIN = txtJournalPIN.Text;
+			//currentJournal.Save();
 		}
 	}
 }

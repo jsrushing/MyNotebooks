@@ -6,7 +6,7 @@ namespace myJournal
 {
 	static class Program
     {
-		public static string pubString = string.Empty;
+		public static string PIN = string.Empty;
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
