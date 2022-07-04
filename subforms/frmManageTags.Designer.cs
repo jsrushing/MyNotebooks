@@ -1,7 +1,7 @@
 ﻿
 namespace myJournal.subforms
 {
-	partial class frmManageTags
+	partial class frmManageLabels
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -30,6 +30,11 @@ namespace myJournal.subforms
 		private void InitializeComponent()
 		{
 			this.panel1 = new System.Windows.Forms.Panel();
+			this.pnlNewLabelName = new System.Windows.Forms.Panel();
+			this.btnCancel = new System.Windows.Forms.Button();
+			this.btnOK = new System.Windows.Forms.Button();
+			this.lblOperation = new System.Windows.Forms.Label();
+			this.txtLabelName = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.lstLabels = new System.Windows.Forms.ListBox();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -41,6 +46,7 @@ namespace myJournal.subforms
 			this.mnuDelete = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuExit = new System.Windows.Forms.ToolStripMenuItem();
 			this.panel1.SuspendLayout();
+			this.pnlNewLabelName.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -49,12 +55,61 @@ namespace myJournal.subforms
 			this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.panel1.Controls.Add(this.pnlNewLabelName);
 			this.panel1.Controls.Add(this.label1);
 			this.panel1.Controls.Add(this.lstLabels);
 			this.panel1.Location = new System.Drawing.Point(12, 28);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(356, 260);
+			this.panel1.Size = new System.Drawing.Size(341, 283);
 			this.panel1.TabIndex = 0;
+			// 
+			// pnlNewLabelName
+			// 
+			this.pnlNewLabelName.Controls.Add(this.btnCancel);
+			this.pnlNewLabelName.Controls.Add(this.btnOK);
+			this.pnlNewLabelName.Controls.Add(this.lblOperation);
+			this.pnlNewLabelName.Controls.Add(this.txtLabelName);
+			this.pnlNewLabelName.Location = new System.Drawing.Point(19, 6);
+			this.pnlNewLabelName.Name = "pnlNewLabelName";
+			this.pnlNewLabelName.Size = new System.Drawing.Size(287, 94);
+			this.pnlNewLabelName.TabIndex = 2;
+			this.pnlNewLabelName.Visible = false;
+			// 
+			// btnCancel
+			// 
+			this.btnCancel.Location = new System.Drawing.Point(139, 56);
+			this.btnCancel.Name = "btnCancel";
+			this.btnCancel.Size = new System.Drawing.Size(75, 23);
+			this.btnCancel.TabIndex = 3;
+			this.btnCancel.Text = "&Cancel";
+			this.btnCancel.UseVisualStyleBackColor = true;
+			this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+			// 
+			// btnOK
+			// 
+			this.btnOK.Location = new System.Drawing.Point(32, 56);
+			this.btnOK.Name = "btnOK";
+			this.btnOK.Size = new System.Drawing.Size(75, 23);
+			this.btnOK.TabIndex = 2;
+			this.btnOK.Text = "&Ok";
+			this.btnOK.UseVisualStyleBackColor = true;
+			this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
+			// 
+			// lblOperation
+			// 
+			this.lblOperation.Location = new System.Drawing.Point(0, 20);
+			this.lblOperation.Name = "lblOperation";
+			this.lblOperation.Size = new System.Drawing.Size(87, 15);
+			this.lblOperation.TabIndex = 1;
+			this.lblOperation.Text = "Label Name:";
+			this.lblOperation.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// txtLabelName
+			// 
+			this.txtLabelName.Location = new System.Drawing.Point(89, 16);
+			this.txtLabelName.Name = "txtLabelName";
+			this.txtLabelName.Size = new System.Drawing.Size(182, 23);
+			this.txtLabelName.TabIndex = 0;
 			// 
 			// label1
 			// 
@@ -74,7 +129,7 @@ namespace myJournal.subforms
 			this.lstLabels.ItemHeight = 15;
 			this.lstLabels.Location = new System.Drawing.Point(9, 27);
 			this.lstLabels.Name = "lstLabels";
-			this.lstLabels.Size = new System.Drawing.Size(337, 214);
+			this.lstLabels.Size = new System.Drawing.Size(322, 244);
 			this.lstLabels.TabIndex = 0;
 			this.lstLabels.SelectedIndexChanged += new System.EventHandler(this.lstLabels_SelectedIndexChanged);
 			// 
@@ -88,7 +143,7 @@ namespace myJournal.subforms
             this.mnuExit});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(381, 24);
+			this.menuStrip1.Size = new System.Drawing.Size(366, 24);
 			this.menuStrip1.TabIndex = 1;
 			this.menuStrip1.Text = "menuStrip1";
 			// 
@@ -146,20 +201,22 @@ namespace myJournal.subforms
 			this.mnuExit.Text = "Exit";
 			this.mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
 			// 
-			// frmManageTags
+			// frmManageLabels
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(381, 303);
+			this.ClientSize = new System.Drawing.Size(366, 323);
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.menuStrip1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.MainMenuStrip = this.menuStrip1;
-			this.Name = "frmManageTags";
+			this.Name = "frmManageLabels";
 			this.Text = "Manage Labels";
-			this.Load += new System.EventHandler(this.frmManageTags_Load);
+			this.Load += new System.EventHandler(this.frmManageLabels_Load);
 			this.panel1.ResumeLayout(false);
 			this.panel1.PerformLayout();
+			this.pnlNewLabelName.ResumeLayout(false);
+			this.pnlNewLabelName.PerformLayout();
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
 			this.ResumeLayout(false);
@@ -180,5 +237,10 @@ namespace myJournal.subforms
 		private System.Windows.Forms.ToolStripMenuItem mnuMoveUp;
 		private System.Windows.Forms.ToolStripMenuItem mnuMoveDown;
 		private System.Windows.Forms.ToolStripMenuItem mnuExit;
+		private System.Windows.Forms.Panel pnlNewLabelName;
+		private System.Windows.Forms.Button btnCancel;
+		private System.Windows.Forms.Button btnOK;
+		private System.Windows.Forms.Label lblOperation;
+		private System.Windows.Forms.TextBox txtLabelName;
 	}
 }
