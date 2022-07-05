@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Linq;
+using myJournal.objects;
 
 namespace myJournal.subforms
 {
@@ -16,18 +18,7 @@ namespace myJournal.subforms
 		{
 			InitializeComponent();
 			SearchList = entriesToSearch;
-		}
-
-		private void lblFindEntries_Click(object sender, EventArgs e)
-		{
-			// search by date(s)
-			
-			// search by tags
-
-			// search by title
-
-			// search by text
-
+			Utilities.PopulateLabelsList(lstLabelsForSearch);
 		}
 
 		private void chkUseDateRange_CheckedChanged(object sender, EventArgs e)
@@ -39,6 +30,63 @@ namespace myJournal.subforms
 		private void chkUseDate_CheckedChanged(object sender, EventArgs e)
 		{
 			dtFindDate.Enabled = chkUseDate.Enabled;
+		}
+
+		private void searchToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			// labels
+			string labels = string.Empty;
+			string[] groups = null;
+
+			for (int i = 0; i < lstLabelsForSearch.CheckedItems.Count; i++)
+			{
+				labels += lstLabelsForSearch.CheckedItems[i].ToString() + ",";
+			}
+			labels = labels.Length > 0 ? labels.Substring(0, labels.Length - 1) : string.Empty;
+
+			if (labels.Length > 0)
+			{
+				groups = labels.Split(',');
+			}
+
+			List<JournalEntry> foundEntries = new List<JournalEntry>();
+
+			foreach (JournalEntry je in SearchList)
+			{
+				// date
+				if (chkUseDate.Checked)
+				{
+					if (je.Date == dtFindDate.Value)
+					{
+						foundEntries.Add(je);
+					}
+				}
+				if (chkUseDateRange.Checked)
+				{
+					if (je.Date >= dtFindDate_From.Value && je.Date <= dtFindDate_To.Value)
+					{
+						foundEntries.Add(je);
+					}
+				}
+
+				if(groups != null)
+				{
+					foreach (string group in groups)
+					{
+						if (je.ClearTags().Contains(group)) { foundEntries.Add(je); }
+					}
+				}
+
+				if(txtSearchText.Text.Length > 0) { if(je.ClearText().Contains(txtSearchText.Text)) { foundEntries.Add(je); } }
+
+				if (txtSearchTitle.Text.Length > 0) { if (je.ClearTitle().Contains(txtSearchTitle.Text)) { foundEntries.Add(je); } }
+
+				if (foundEntries.Count > 0)
+				{
+					Utilities.PopulateEntries(lstFoundEntries, foundEntries);
+					lblFoundEntries.Visible = true;
+				}
+			}
 		}
 	}
 }

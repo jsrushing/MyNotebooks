@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using myJournal.objects;
 
 namespace myJournal.subforms
 {
@@ -24,7 +25,7 @@ namespace myJournal.subforms
 
 		private void frmManageLabels_Load(object sender, EventArgs e)
 		{
-			PopulateLabels();
+			Utilities.PopulateLabelsList(null, lstLabels);
 			pnlNewLabelName.Location = new Point(0, 0);
 			pnlNewLabelName.Size = this.Size;
 		}
@@ -77,16 +78,6 @@ namespace myJournal.subforms
 			pnlNewLabelName.Visible = true;
 			txtLabelName.Focus();
 			txtLabelName.SelectAll();
-		}
-
-		private void PopulateLabels()
-		{
-			lstLabels.Items.Clear();
-
-			foreach (string group in File.ReadAllLines(AppDomain.CurrentDomain.BaseDirectory + "/settings/groups"))
-			{
-				lstLabels.Items.Add(group);
-			}
 		}
 
 		private void lstLabels_SelectedIndexChanged(object sender, EventArgs e)

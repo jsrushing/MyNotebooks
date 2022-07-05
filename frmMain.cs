@@ -47,7 +47,7 @@ namespace myJournal.subforms
 
 				if (currentJournal != null)
 				{
-					PopulateEntries();
+					Utilities.PopulateEntries(lstEntries, currentJournal.Entries);
 
 					if(lstEntries.Items.Count > 0)
 					{
@@ -187,7 +187,7 @@ namespace myJournal.subforms
 			{
 				currentJournal.AddEntry(frm.entry);
 				currentJournal.Save();
-				PopulateEntries();
+				Utilities.PopulateEntries(lstEntries, currentJournal.Entries);
 			}
 			frm.Close();
 		}
@@ -222,6 +222,7 @@ namespace myJournal.subforms
 
 		private void mnuSearch_Click(object sender, EventArgs e)
 		{
+			Program.PIN = txtJournalPIN.Text;
 			frmSearch frm = new frmSearch(currentJournal.Entries);
 			Utilities.Showform(frm, this);
 		}
@@ -252,23 +253,6 @@ namespace myJournal.subforms
 			lstEntries.Visible = false;
 			ShowHideEntriesArea(false);
 			ShowHideJournalMenus(false);
-		}
-
-		private void PopulateEntries(List<JournalEntry> entries = null)
-		{
-			entries = entries != null ? currentJournal.Entries : null;
-			lstEntries.Items.Clear();			
-
-			foreach (JournalEntry je in currentJournal.Entries)
-			{
-				foreach(string s in je.EntryAsList(lstEntries.Width))
-				{
-					lstEntries.Items.Add(s);
-				}
-			}
-
-			lstEntries.Height = this.Height - lstEntries.Top - 50;
-			ShowHideEntriesArea(false);
 		}
 
 		private void ResizeListsAndRTBs()

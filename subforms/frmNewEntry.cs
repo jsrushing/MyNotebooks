@@ -23,7 +23,7 @@ namespace myJournal.subforms
 			grpCreateEntry.Location = new Point(10, 0);
 			grpCreateEntry.Size = new Size(this.Width - 35, this.Height - 50);
 			pnlButtons.Location = new Point(grpCreateEntry.Width / 2 - (pnlButtons.Width / 2), lstLabels.Top + lstLabels.Height + 10);
-			LoadLabels();
+			Utilities.PopulateLabelsList(lstLabels);
 		}
 
 		private void btnCancel_Click(object sender, EventArgs e)
@@ -48,21 +48,11 @@ namespace myJournal.subforms
 			this.Hide();
 		}
 
-		private void LoadLabels()
-		{
-			lstLabels.Items.Clear();
-
-			foreach (string group in File.ReadAllLines(AppDomain.CurrentDomain.BaseDirectory + "/settings/groups"))
-			{
-				lstLabels.Items.Add(group);
-			}
-		}
-
 		private void lblManageLabels_Click(object sender, EventArgs e)
 		{
 			frmManageLabels frm = new frmManageLabels();
 			Utilities.Showform(frm, this);
-			LoadLabels();
+			Utilities.PopulateLabelsList(lstLabels);
 		}
 	}
 }
