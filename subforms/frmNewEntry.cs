@@ -12,11 +12,13 @@ namespace myJournal.subforms
 	public partial class frmNewEntry : Form
 	{
 		public JournalEntry entry = null;
+		private bool isEdit = false;
 
 		public frmNewEntry(JournalEntry entryToEdit = null)
 		{
 			InitializeComponent();
 			entry = entryToEdit;
+			isEdit = entry != null;
 		}
 
 		private void frmNewEntry_Load(object sender, EventArgs e)
@@ -25,12 +27,29 @@ namespace myJournal.subforms
 			grpCreateEntry.Size = new Size(this.Width - 35, this.Height - 50);
 			pnlButtons.Location = new Point(grpCreateEntry.Width / 2 - (pnlButtons.Width / 2), lstLabels.Top + lstLabels.Height + 10);
 			Utilities.PopulateLabelsList(lstLabels);
+
+			if (isEdit)
+			{
+				txtNewEntryTitle.Text = entry.ClearTitle();
+				rtbNewEntry.Text = entry.ClearText();
+				string labels = entry.ClearTags() + ",";
+
+				for(int i = 0; i < lstLabels.Items.Count; i++)
+				{
+					if(labels.Contains(lstLabels.Items[i].ToString() + ","))
+					{
+						lstLabels.SetItemChecked(i, true);
+					}
+				}
+			}
 		}
 
 		private void btnCancel_Click(object sender, EventArgs e)
 		{
 			txtNewEntryTitle.Text = string.Empty;
 			rtbNewEntry.Text = string.Empty;
+			entry = null;
+			this.Hide();
 		}
 
 		private void btnOK_Click(object sender, EventArgs e)
