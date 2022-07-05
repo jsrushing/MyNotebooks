@@ -55,9 +55,8 @@ namespace myJournal.subforms
 						lblSelectAJournal.Text = "Entries";
 						lstEntries.Height = this.Height - lstEntries.Top - 50;
 						lbl1stSelection.Text = "1";
-						mnuEntryTop.Enabled = true;
 						lstEntries.Visible = true;
-						mnuSearch.Enabled = true;
+						ShowHideJournalMenus(true);
 					}
 					else
 					{
@@ -75,7 +74,6 @@ namespace myJournal.subforms
 
 		private void ddlJournals_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			mnuJournal_Delete.Enabled = true;
 			btnLoadJournal.Enabled = true;
 			txtJournalPIN.Text = string.Empty;
 			lstEntries.Items.Clear();
@@ -83,6 +81,7 @@ namespace myJournal.subforms
 			txtJournalPIN.Focus();
 			rtbSelectedEntry.Text = string.Empty;
 			ShowHideEntriesArea(false);
+			ShowHideJournalMenus(false);
 		}
 
 		private void lstEntries_SelectEntry(object sender, EventArgs e)
@@ -210,16 +209,20 @@ namespace myJournal.subforms
 
 		private void mnuJournal_Delete_Click(object sender, EventArgs e)
 		{
-			currentJournal.Delete();
-			currentJournal = null;
-			ddlJournals.Text = string.Empty;
-			lstEntries.Items.Clear();
-            LoadJournals();
+			frmConfirmDeleteJournal frm = new frmConfirmDeleteJournal(currentJournal);
+			Utilities.Showform(frm, this);
+			if (frm.deleted)
+			{
+				currentJournal = null;
+				ddlJournals.Text = string.Empty;
+				lstEntries.Items.Clear();
+				LoadJournals();
+			}
 		}
 
 		private void mnuSearch_Click(object sender, EventArgs e)
 		{
-			frmSearch frm = new frmSearch();
+			frmSearch frm = new frmSearch(currentJournal.Entries);
 			Utilities.Showform(frm, this);
 		}
 
@@ -245,6 +248,10 @@ namespace myJournal.subforms
 			ddlJournals.Enabled = ddlJournals.Items.Count > 0;
 			ddlJournals.SelectedIndex = ddlJournals.Items.Count == 1 ? 0 : -1;
 			btnLoadJournal.Enabled = false;
+			txtJournalPIN.Text = string.Empty;
+			lstEntries.Visible = false;
+			ShowHideEntriesArea(false);
+			ShowHideJournalMenus(false);
 		}
 
 		private void PopulateEntries(List<JournalEntry> entries = null)
@@ -282,6 +289,13 @@ namespace myJournal.subforms
 			rtbSelectedEntry.Visible = show;
 			lblSeparator.Visible = show;
 			lblSelectionType.Visible = false;
+		}
+
+		private void ShowHideJournalMenus(bool show)
+		{
+			mnuEntryTop.Enabled = show;
+			mnuJournal_Delete.Enabled = show;
+			mnuSearch.Enabled = show;
 		}
 
 		protected override CreateParams CreateParams {

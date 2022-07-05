@@ -104,6 +104,7 @@ namespace myJournal.subforms
 			this.chkUseDateRange.TabIndex = 34;
 			this.chkUseDateRange.Text = "use date range";
 			this.chkUseDateRange.UseVisualStyleBackColor = true;
+			this.chkUseDateRange.CheckedChanged += new System.EventHandler(this.chkUseDateRange_CheckedChanged);
 			// 
 			// chkUseDate
 			// 
@@ -114,6 +115,7 @@ namespace myJournal.subforms
 			this.chkUseDate.TabIndex = 33;
 			this.chkUseDate.Text = "use date";
 			this.chkUseDate.UseVisualStyleBackColor = true;
+			this.chkUseDate.CheckedChanged += new System.EventHandler(this.chkUseDate_CheckedChanged);
 			// 
 			// lstGroupsForSearch
 			// 
@@ -236,6 +238,7 @@ namespace myJournal.subforms
 			this.lblFindEntries.Size = new System.Drawing.Size(59, 15);
 			this.lblFindEntries.TabIndex = 16;
 			this.lblFindEntries.Text = "Find Now";
+			this.lblFindEntries.Click += new System.EventHandler(this.lblFindEntries_Click);
 			// 
 			// rtbSelectedEntry_Found
 			// 
@@ -243,9 +246,9 @@ namespace myJournal.subforms
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.rtbSelectedEntry_Found.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.rtbSelectedEntry_Found.Location = new System.Drawing.Point(6, 334);
+			this.rtbSelectedEntry_Found.Location = new System.Drawing.Point(6, 330);
 			this.rtbSelectedEntry_Found.Name = "rtbSelectedEntry_Found";
-			this.rtbSelectedEntry_Found.Size = new System.Drawing.Size(397, 88);
+			this.rtbSelectedEntry_Found.Size = new System.Drawing.Size(397, 133);
 			this.rtbSelectedEntry_Found.TabIndex = 12;
 			this.rtbSelectedEntry_Found.Text = "";
 			// 
@@ -265,7 +268,7 @@ namespace myJournal.subforms
 			this.lblSelectedFoundEntry.AutoSize = true;
 			this.lblSelectedFoundEntry.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			this.lblSelectedFoundEntry.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblSelectedFoundEntry.Location = new System.Drawing.Point(3, 313);
+			this.lblSelectedFoundEntry.Location = new System.Drawing.Point(3, 309);
 			this.lblSelectedFoundEntry.Name = "lblSelectedFoundEntry";
 			this.lblSelectedFoundEntry.Size = new System.Drawing.Size(96, 17);
 			this.lblSelectedFoundEntry.TabIndex = 15;
