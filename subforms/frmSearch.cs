@@ -12,10 +12,6 @@ namespace myJournal.subforms
 	{
 		private List<JournalEntry> SearchList = null;
 
-		public frmSearch()
-		{
-		}
-
 		public frmSearch(List<JournalEntry> entriesToSearch)
 		{
 			InitializeComponent();

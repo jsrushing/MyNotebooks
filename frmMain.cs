@@ -289,5 +289,10 @@ namespace myJournal.subforms
 				return cp;
 			}
 		}
+
+		private void mnuEntryEditDelete_Click(object sender, EventArgs e)
+		{
+
+		}
 	}
 }

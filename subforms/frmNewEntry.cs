@@ -13,9 +13,10 @@ namespace myJournal.subforms
 	{
 		public JournalEntry entry = null;
 
-		public frmNewEntry()
+		public frmNewEntry(JournalEntry entryToEdit = null)
 		{
 			InitializeComponent();
+			entry = entryToEdit;
 		}
 
 		private void frmNewEntry_Load(object sender, EventArgs e)

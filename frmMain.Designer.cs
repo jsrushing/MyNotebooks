@@ -241,7 +241,7 @@ namespace myJournal.subforms
 			// mnuJournal_Create
 			// 
 			this.mnuJournal_Create.Name = "mnuJournal_Create";
-			this.mnuJournal_Create.Size = new System.Drawing.Size(180, 22);
+			this.mnuJournal_Create.Size = new System.Drawing.Size(109, 22);
 			this.mnuJournal_Create.Text = "Create";
 			this.mnuJournal_Create.Click += new System.EventHandler(this.mnuJournal_Create_Click);
 			// 
@@ -249,7 +249,7 @@ namespace myJournal.subforms
 			// 
 			this.mnuJournal_Delete.Enabled = false;
 			this.mnuJournal_Delete.Name = "mnuJournal_Delete";
-			this.mnuJournal_Delete.Size = new System.Drawing.Size(180, 22);
+			this.mnuJournal_Delete.Size = new System.Drawing.Size(109, 22);
 			this.mnuJournal_Delete.Text = "Delete";
 			this.mnuJournal_Delete.Click += new System.EventHandler(this.mnuJournal_Delete_Click);
 			// 
@@ -257,7 +257,7 @@ namespace myJournal.subforms
 			// 
 			this.mnuSearch.Enabled = false;
 			this.mnuSearch.Name = "mnuSearch";
-			this.mnuSearch.Size = new System.Drawing.Size(180, 22);
+			this.mnuSearch.Size = new System.Drawing.Size(109, 22);
 			this.mnuSearch.Text = "Search";
 			this.mnuSearch.Click += new System.EventHandler(this.mnuSearch_Click);
 			// 
@@ -275,7 +275,7 @@ namespace myJournal.subforms
 			// mnuEntryCreate
 			// 
 			this.mnuEntryCreate.Name = "mnuEntryCreate";
-			this.mnuEntryCreate.Size = new System.Drawing.Size(132, 22);
+			this.mnuEntryCreate.Size = new System.Drawing.Size(180, 22);
 			this.mnuEntryCreate.Text = "Create";
 			this.mnuEntryCreate.Click += new System.EventHandler(this.mnuEntryCreate_Click);
 			// 
@@ -283,13 +283,14 @@ namespace myJournal.subforms
 			// 
 			this.mnuEntryEditDelete.Enabled = false;
 			this.mnuEntryEditDelete.Name = "mnuEntryEditDelete";
-			this.mnuEntryEditDelete.Size = new System.Drawing.Size(132, 22);
+			this.mnuEntryEditDelete.Size = new System.Drawing.Size(180, 22);
 			this.mnuEntryEditDelete.Text = "Edit/Delete";
+			this.mnuEntryEditDelete.Click += new System.EventHandler(this.mnuEntryEditDelete_Click);
 			// 
 			// mnuEntryFind
 			// 
 			this.mnuEntryFind.Name = "mnuEntryFind";
-			this.mnuEntryFind.Size = new System.Drawing.Size(132, 22);
+			this.mnuEntryFind.Size = new System.Drawing.Size(180, 22);
 			this.mnuEntryFind.Text = "Find";
 			// 
 			// lblWrongPin
