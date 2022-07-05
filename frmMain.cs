@@ -25,6 +25,15 @@ namespace myJournal.subforms
 			LoadJournals();
 		}
 
+		private void frmMain_Resize(object sender, EventArgs e)
+		{
+			if (!rtbSelectedEntry.Visible)
+			{
+				lstEntries.Height = this.Height - 170;
+				lstEntries.Width = this.Width - 40;
+			}
+		}
+
 		private void btnLoadJournal_Click(object sender, EventArgs e)
 		{
 			lstEntries.Items.Clear();
@@ -47,7 +56,8 @@ namespace myJournal.subforms
 						lstEntries.Height = this.Height - lstEntries.Top - 50;
 						lbl1stSelection.Text = "1";
 						mnuEntryTop.Enabled = true;
-						lstEntries.Visible = true;					
+						lstEntries.Visible = true;
+						mnuSearch.Enabled = true;
 					}
 					else
 					{
@@ -73,53 +83,6 @@ namespace myJournal.subforms
 			txtJournalPIN.Focus();
 			rtbSelectedEntry.Text = string.Empty;
 			ShowHideEntriesArea(false);
-		}
-
-		private void mnuEntryCreate_Click(object sender, EventArgs e)
-		{
-			frmNewEntry frm = new frmNewEntry();
-			Utilities.Showform(frm, this);
-			if(frm.entry != null)
-			{
-				currentJournal.AddEntry(frm.entry);
-				currentJournal.Save();
-				PopulateEntries();
-			}
-			frm.Close();
-		}
-
-		private void mnuJournal_Create_Click(object sender, EventArgs e)
-		{
-			frmNewJournal frm = new frmNewJournal();
-			Utilities.Showform(frm, this);
-			Program.PIN = frm.sPIN == null ? string.Empty : frm.sPIN;
-			string name = frm.sJournalName == null ? string.Empty : frm.sJournalName;
-			frm.Close();
-
-			if (name.Length > 0){
-				Journal j = new Journal(name);
-				j.Create();
-				LoadJournals();
-			}
-		}
-
-		private void mnuJournal_Delete_Click(object sender, EventArgs e)
-		{
-			currentJournal.Delete();
-			currentJournal = null;
-			ddlJournals.Text = string.Empty;
-			lstEntries.Items.Clear();
-            LoadJournals();
-		}
-
-		private void lblSeparator_MouseMove(object sender, MouseEventArgs e)
-		{
-			if (e.Button == MouseButtons.Left)
-			{
-				lblSeparator.Top += e.Y;
-				ResizeListsAndRTBs();
-				lstEntries.TopIndex = lstEntries.SelectedIndices[0];
-			}
 		}
 
 		private void lstEntries_SelectEntry(object sender, EventArgs e)
@@ -207,6 +170,59 @@ namespace myJournal.subforms
 			rtbSelectedEntry.Visible = rtbSelectedEntry.Text.Length > 0;			
 		}
 
+		private void lblSeparator_MouseMove(object sender, MouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Left)
+			{
+				lblSeparator.Top += e.Y;
+				ResizeListsAndRTBs();
+				lstEntries.TopIndex = lstEntries.SelectedIndices[0];
+			}
+		}
+
+		private void mnuEntryCreate_Click(object sender, EventArgs e)
+		{
+			frmNewEntry frm = new frmNewEntry();
+			Utilities.Showform(frm, this);
+			if(frm.entry != null)
+			{
+				currentJournal.AddEntry(frm.entry);
+				currentJournal.Save();
+				PopulateEntries();
+			}
+			frm.Close();
+		}
+
+		private void mnuJournal_Create_Click(object sender, EventArgs e)
+		{
+			frmNewJournal frm = new frmNewJournal();
+			Utilities.Showform(frm, this);
+			Program.PIN = frm.sPIN == null ? string.Empty : frm.sPIN;
+			string name = frm.sJournalName == null ? string.Empty : frm.sJournalName;
+			frm.Close();
+
+			if (name.Length > 0){
+				Journal j = new Journal(name);
+				j.Create();
+				LoadJournals();
+			}
+		}
+
+		private void mnuJournal_Delete_Click(object sender, EventArgs e)
+		{
+			currentJournal.Delete();
+			currentJournal = null;
+			ddlJournals.Text = string.Empty;
+			lstEntries.Items.Clear();
+            LoadJournals();
+		}
+
+		private void mnuSearch_Click(object sender, EventArgs e)
+		{
+			frmSearch frm = new frmSearch();
+			Utilities.Showform(frm, this);
+		}
+
 		private void LoadJournals()
 		{
 			string rootPath = AppDomain.CurrentDomain.BaseDirectory;
@@ -248,13 +264,6 @@ namespace myJournal.subforms
 			ShowHideEntriesArea(false);
 		}
 
-		private void ShowHideEntriesArea(bool show)
-		{
-			rtbSelectedEntry.Visible = show;
-			lblSeparator.Visible = show;
-			
-		}
-
 		private void ResizeListsAndRTBs()
 		{
 			int iBoxCenter = lstEntries.Width / 2;
@@ -264,8 +273,15 @@ namespace myJournal.subforms
 			lblSeparator.Width = lstEntries.Width - 20;
 			lstEntries.Height = lblSeparator.Top - lstEntries.Top - 5;
 			grpSelectedEntryLabels.Top = lblSeparator.Top + lblSeparator.Height + 10;
-			rtbSelectedEntry.Top = grpSelectedEntryLabels.Top + grpSelectedEntryLabels.Height;
+			rtbSelectedEntry.Top = grpSelectedEntryLabels.Top + grpSelectedEntryLabels.Height - 20;
 			rtbSelectedEntry.Height = this.Height - rtbSelectedEntry.Top - 50;
+		}
+
+		private void ShowHideEntriesArea(bool show)
+		{
+			rtbSelectedEntry.Visible = show;
+			lblSeparator.Visible = show;
+			lblSelectionType.Visible = false;
 		}
 
 		protected override CreateParams CreateParams {
@@ -275,6 +291,5 @@ namespace myJournal.subforms
 				return cp;
 			}
 		}
-
 	}
 }
