@@ -30,6 +30,8 @@ namespace myJournal.subforms
 		private void InitializeComponent()
 		{
 			this.grpFindEntry = new System.Windows.Forms.GroupBox();
+			this.radBtnAnd = new System.Windows.Forms.RadioButton();
+			this.radBtnOr = new System.Windows.Forms.RadioButton();
 			this.lstFoundEntries = new System.Windows.Forms.ListBox();
 			this.chkUseDateRange = new System.Windows.Forms.CheckBox();
 			this.chkUseDate = new System.Windows.Forms.CheckBox();
@@ -49,8 +51,6 @@ namespace myJournal.subforms
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.clearFieldsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.radBtnOr = new System.Windows.Forms.RadioButton();
-			this.radBtnAnd = new System.Windows.Forms.RadioButton();
 			this.grpFindEntry.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -78,11 +78,34 @@ namespace myJournal.subforms
 			this.grpFindEntry.Controls.Add(this.lblSelectedFoundEntry);
 			this.grpFindEntry.Controls.Add(this.label8);
 			this.grpFindEntry.Controls.Add(this.lblFoundEntries);
-			this.grpFindEntry.Location = new System.Drawing.Point(16, 38);
+			this.grpFindEntry.Location = new System.Drawing.Point(16, 22);
 			this.grpFindEntry.Name = "grpFindEntry";
-			this.grpFindEntry.Size = new System.Drawing.Size(531, 469);
+			this.grpFindEntry.Size = new System.Drawing.Size(531, 439);
 			this.grpFindEntry.TabIndex = 7;
 			this.grpFindEntry.TabStop = false;
+			// 
+			// radBtnAnd
+			// 
+			this.radBtnAnd.AutoSize = true;
+			this.radBtnAnd.Location = new System.Drawing.Point(292, 36);
+			this.radBtnAnd.Name = "radBtnAnd";
+			this.radBtnAnd.Size = new System.Drawing.Size(45, 19);
+			this.radBtnAnd.TabIndex = 36;
+			this.radBtnAnd.TabStop = true;
+			this.radBtnAnd.Text = "and";
+			this.radBtnAnd.UseVisualStyleBackColor = true;
+			// 
+			// radBtnOr
+			// 
+			this.radBtnOr.AutoSize = true;
+			this.radBtnOr.Checked = true;
+			this.radBtnOr.Location = new System.Drawing.Point(254, 36);
+			this.radBtnOr.Name = "radBtnOr";
+			this.radBtnOr.Size = new System.Drawing.Size(36, 19);
+			this.radBtnOr.TabIndex = 35;
+			this.radBtnOr.TabStop = true;
+			this.radBtnOr.Text = "or";
+			this.radBtnOr.UseVisualStyleBackColor = true;
 			// 
 			// lstFoundEntries
 			// 
@@ -208,7 +231,7 @@ namespace myJournal.subforms
 			this.rtbSelectedEntry_Found.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.rtbSelectedEntry_Found.Location = new System.Drawing.Point(6, 294);
 			this.rtbSelectedEntry_Found.Name = "rtbSelectedEntry_Found";
-			this.rtbSelectedEntry_Found.Size = new System.Drawing.Size(519, 169);
+			this.rtbSelectedEntry_Found.Size = new System.Drawing.Size(519, 139);
 			this.rtbSelectedEntry_Found.TabIndex = 12;
 			this.rtbSelectedEntry_Found.Text = "";
 			// 
@@ -281,29 +304,6 @@ namespace myJournal.subforms
 			this.clearFieldsToolStripMenuItem.Size = new System.Drawing.Size(79, 20);
 			this.clearFieldsToolStripMenuItem.Text = "Clear Fields";
 			// 
-			// radBtnOr
-			// 
-			this.radBtnOr.AutoSize = true;
-			this.radBtnOr.Checked = true;
-			this.radBtnOr.Location = new System.Drawing.Point(254, 36);
-			this.radBtnOr.Name = "radBtnOr";
-			this.radBtnOr.Size = new System.Drawing.Size(36, 19);
-			this.radBtnOr.TabIndex = 35;
-			this.radBtnOr.TabStop = true;
-			this.radBtnOr.Text = "or";
-			this.radBtnOr.UseVisualStyleBackColor = true;
-			// 
-			// radBtnAnd
-			// 
-			this.radBtnAnd.AutoSize = true;
-			this.radBtnAnd.Location = new System.Drawing.Point(292, 36);
-			this.radBtnAnd.Name = "radBtnAnd";
-			this.radBtnAnd.Size = new System.Drawing.Size(45, 19);
-			this.radBtnAnd.TabIndex = 36;
-			this.radBtnAnd.TabStop = true;
-			this.radBtnAnd.Text = "and";
-			this.radBtnAnd.UseVisualStyleBackColor = true;
-			// 
 			// frmSearch
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -315,6 +315,7 @@ namespace myJournal.subforms
 			this.MainMenuStrip = this.menuStrip1;
 			this.Name = "frmSearch";
 			this.Text = "Search";
+			this.Load += new System.EventHandler(this.frmSearch_Load);
 			this.grpFindEntry.ResumeLayout(false);
 			this.grpFindEntry.PerformLayout();
 			this.menuStrip1.ResumeLayout(false);

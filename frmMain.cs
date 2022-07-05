@@ -29,7 +29,7 @@ namespace myJournal.subforms
 		{
 			if (!rtbSelectedEntry.Visible)
 			{
-				lstEntries.Height = this.Height - 170;
+				lstEntries.Height = this.Height - 160;
 				lstEntries.Width = this.Width - 40;
 			}
 		}
@@ -59,8 +59,11 @@ namespace myJournal.subforms
 					else
 					{
 						lblWrongPin.Visible = true;
-						lstEntries.Visible = false;
+						txtJournalPIN.Focus();
+						txtJournalPIN.SelectAll();
+						ShowHideEntriesArea(false);
 					}	
+					btnLoadJournal.Enabled = false;
 				}
 				else
 				{
@@ -80,7 +83,8 @@ namespace myJournal.subforms
 			rtbSelectedEntry.Text = string.Empty;
 			ShowHideEntriesArea(false);
 			ShowHideJournalMenus(false);
-			mnuEntryEditDelete.Enabled = false;
+			mnuEntryEdit.Enabled = false;
+			mnuEntryDelete.Enabled = false;
 		}
 
 		private void lstEntries_SelectEntry(object sender, EventArgs e)
@@ -166,7 +170,8 @@ namespace myJournal.subforms
 
 			lb.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectEntry);
 			rtbSelectedEntry.Visible = rtbSelectedEntry.Text.Length > 0;
-			mnuEntryEditDelete.Enabled = rtbSelectedEntry.Text.Length > 0;
+			mnuEntryEdit.Enabled = rtbSelectedEntry.Text.Length > 0;
+			mnuEntryDelete.Enabled = mnuEntryEdit.Enabled;
 		}
 
 		private void lblSeparator_MouseMove(object sender, MouseEventArgs e)
@@ -190,6 +195,23 @@ namespace myJournal.subforms
 				Utilities.PopulateEntries(lstEntries, currentJournal.Entries);
 			}
 			frm.Close();
+			this.Show();
+		}
+
+		private void mnuEntryEdit_Click(object sender, EventArgs e)
+		{
+			frmNewEntry frm = new frmNewEntry(currentEntry);
+			Utilities.Showform(frm, this);
+			if (frm.entry != null)
+			{
+				currentEntry.Replace(frm.entry);
+				currentJournal.Save();
+				Utilities.PopulateEntries(lstEntries, currentJournal.Entries);
+				ShowHideEntriesArea(false);
+			}
+			frm.Close();
+			this.Show();
+			this.Height += 1;
 		}
 
 		private void mnuJournal_Create_Click(object sender, EventArgs e)
@@ -205,6 +227,7 @@ namespace myJournal.subforms
 				j.Create();
 				LoadJournals();
 			}
+			this.Show();
 		}
 
 		private void mnuJournal_Delete_Click(object sender, EventArgs e)
@@ -218,6 +241,7 @@ namespace myJournal.subforms
 				lstEntries.Items.Clear();
 				LoadJournals();
 			}
+			this.Show();
 		}
 
 		private void mnuSearch_Click(object sender, EventArgs e)
@@ -225,6 +249,7 @@ namespace myJournal.subforms
 			Program.PIN = txtJournalPIN.Text;
 			frmSearch frm = new frmSearch(currentJournal.Entries);
 			Utilities.Showform(frm, this);
+			this.Show();
 		}
 
 		private void LoadJournals()
@@ -274,6 +299,7 @@ namespace myJournal.subforms
 			lblSeparator.Visible = show;
 			lblSelectionType.Visible = show;
 			lblEntries.Visible = show;
+			lstEntries.Visible = show;
 		}
 
 		private void ShowHideJournalMenus(bool show)
@@ -292,19 +318,22 @@ namespace myJournal.subforms
 			}
 		}
 
-		private void mnuEntryEditDelete_Click(object sender, EventArgs e)
+		private void txtJournalPIN_TextChanged(object sender, EventArgs e)
 		{
-			frmNewEntry frm = new frmNewEntry(currentEntry);
+			btnLoadJournal.Enabled = true;
+		}
+
+		private void mnuEntryDelete_Click(object sender, EventArgs e)
+		{
+			frmMessage frm = new frmMessage(frmMessage.OperationType.DeleteEntry, currentEntry.ClearTitle());
 			Utilities.Showform(frm, this);
-			if (frm.entry != null)
+			if(frm.result == frmMessage.ReturnResult.Yes) 
 			{
-				currentEntry = frm.entry;
-				//currentJournal.AddEntry(frm.entry);
-				//currentJournal.Entries.Remove(currentEntry);
+				currentJournal.Entries.Remove(currentEntry);
 				currentJournal.Save();
 				Utilities.PopulateEntries(lstEntries, currentJournal.Entries);
 			}
-			frm.Close();
+			this.Show();
 		}
 	}
 }

@@ -31,6 +31,8 @@ namespace myJournal.subforms
 		{
 			this.grpCreateEntry = new System.Windows.Forms.GroupBox();
 			this.lblManageLabels = new System.Windows.Forms.Label();
+			this.txtNewEntryTitle = new System.Windows.Forms.TextBox();
+			this.label2 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
 			this.pnlButtons = new System.Windows.Forms.Panel();
 			this.btnCancel = new System.Windows.Forms.Button();
@@ -43,8 +45,6 @@ namespace myJournal.subforms
 			this.lblFont_NewEntry = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.rtbNewEntry = new System.Windows.Forms.RichTextBox();
-			this.txtNewEntryTitle = new System.Windows.Forms.TextBox();
-			this.label2 = new System.Windows.Forms.Label();
 			this.grpCreateEntry.SuspendLayout();
 			this.pnlButtons.SuspendLayout();
 			this.SuspendLayout();
@@ -52,6 +52,8 @@ namespace myJournal.subforms
 			// grpCreateEntry
 			// 
 			this.grpCreateEntry.Controls.Add(this.lblManageLabels);
+			this.grpCreateEntry.Controls.Add(this.txtNewEntryTitle);
+			this.grpCreateEntry.Controls.Add(this.label2);
 			this.grpCreateEntry.Controls.Add(this.label4);
 			this.grpCreateEntry.Controls.Add(this.pnlButtons);
 			this.grpCreateEntry.Controls.Add(this.lblTagManager2);
@@ -62,9 +64,7 @@ namespace myJournal.subforms
 			this.grpCreateEntry.Controls.Add(this.lblFont_NewEntry);
 			this.grpCreateEntry.Controls.Add(this.label3);
 			this.grpCreateEntry.Controls.Add(this.rtbNewEntry);
-			this.grpCreateEntry.Controls.Add(this.txtNewEntryTitle);
-			this.grpCreateEntry.Controls.Add(this.label2);
-			this.grpCreateEntry.Location = new System.Drawing.Point(12, 0);
+			this.grpCreateEntry.Location = new System.Drawing.Point(12, 1);
 			this.grpCreateEntry.Name = "grpCreateEntry";
 			this.grpCreateEntry.Size = new System.Drawing.Size(414, 576);
 			this.grpCreateEntry.TabIndex = 5;
@@ -83,6 +83,28 @@ namespace myJournal.subforms
 			this.lblManageLabels.TabIndex = 40;
 			this.lblManageLabels.Text = "manage labels";
 			this.lblManageLabels.Click += new System.EventHandler(this.lblManageLabels_Click);
+			// 
+			// txtNewEntryTitle
+			// 
+			this.txtNewEntryTitle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.txtNewEntryTitle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.txtNewEntryTitle.Location = new System.Drawing.Point(46, 19);
+			this.txtNewEntryTitle.Multiline = true;
+			this.txtNewEntryTitle.Name = "txtNewEntryTitle";
+			this.txtNewEntryTitle.Size = new System.Drawing.Size(355, 23);
+			this.txtNewEntryTitle.TabIndex = 1;
+			// 
+			// label2
+			// 
+			this.label2.AutoSize = true;
+			this.label2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.label2.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.label2.Location = new System.Drawing.Point(6, 19);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(40, 17);
+			this.label2.TabIndex = 0;
+			this.label2.Text = "Title:";
 			// 
 			// label4
 			// 
@@ -219,35 +241,13 @@ namespace myJournal.subforms
 			this.rtbNewEntry.TabIndex = 2;
 			this.rtbNewEntry.Text = "";
 			// 
-			// txtNewEntryTitle
-			// 
-			this.txtNewEntryTitle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtNewEntryTitle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.txtNewEntryTitle.Location = new System.Drawing.Point(46, 19);
-			this.txtNewEntryTitle.Multiline = true;
-			this.txtNewEntryTitle.Name = "txtNewEntryTitle";
-			this.txtNewEntryTitle.Size = new System.Drawing.Size(355, 23);
-			this.txtNewEntryTitle.TabIndex = 1;
-			// 
-			// label2
-			// 
-			this.label2.AutoSize = true;
-			this.label2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-			this.label2.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.label2.Location = new System.Drawing.Point(6, 19);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(40, 17);
-			this.label2.TabIndex = 0;
-			this.label2.Text = "Title:";
-			// 
 			// frmNewEntry
 			// 
 			this.AcceptButton = this.btnOK;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.btnCancel;
-			this.ClientSize = new System.Drawing.Size(469, 710);
+			this.ClientSize = new System.Drawing.Size(990, 710);
 			this.Controls.Add(this.grpCreateEntry);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Name = "frmNewEntry";

@@ -13,6 +13,7 @@ namespace myJournal.subforms
 	{
 		public JournalEntry entry = null;
 		private bool isEdit = false;
+		public bool deleteConfirmed = false;
 
 		public frmNewEntry(JournalEntry entryToEdit = null)
 		{
@@ -24,7 +25,7 @@ namespace myJournal.subforms
 		private void frmNewEntry_Load(object sender, EventArgs e)
 		{
 			grpCreateEntry.Location = new Point(10, 0);
-			grpCreateEntry.Size = new Size(this.Width - 35, this.Height - 50);
+			grpCreateEntry.Size = new Size(this.Width - 35, this.Height - grpCreateEntry.Top - 50);
 			pnlButtons.Location = new Point(grpCreateEntry.Width / 2 - (pnlButtons.Width / 2), lstLabels.Top + lstLabels.Height + 10);
 			Utilities.PopulateLabelsList(lstLabels);
 
@@ -72,7 +73,9 @@ namespace myJournal.subforms
 		{
 			frmManageLabels frm = new frmManageLabels();
 			Utilities.Showform(frm, this);
+			this.Show();
 			Utilities.PopulateLabelsList(lstLabels);
 		}
+
 	}
 }

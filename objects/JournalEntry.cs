@@ -51,6 +51,13 @@ namespace myJournal
 			return lstRtrn;
 		}
 
+		public void Replace(JournalEntry newEntry)
+		{
+			this.Tags = newEntry.Tags;
+			this.Text = newEntry.Text;
+			this.Title = newEntry.Title;
+		}
+
 		public string ClearText(){ return EncryptDecrypt.Decrypt(this.Text, Program.PIN, ConfigurationManager.AppSettings["PrivateKey"]); }
 		public string ClearTitle() { return EncryptDecrypt.Decrypt(this.Title, Program.PIN, ConfigurationManager.AppSettings["PrivateKey"]); }
 		public string ClearTags() { return this.Tags == null ? String.Empty : EncryptDecrypt.Decrypt(this.Tags, Program.PIN, ConfigurationManager.AppSettings["PrivateKey"]); }

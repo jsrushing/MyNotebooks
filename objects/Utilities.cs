@@ -16,6 +16,7 @@ namespace myJournal.objects
 			frm.StartPosition = FormStartPosition.Manual;
 			frm.Location = new Point(frmParent.Left, frmParent.Top);
 			frm.Size = new Size(frmParent.Width, frmParent.Height);
+			frmParent.Hide();
 			frm.ShowDialog();
 		}
 
