@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
 using myJournal.objects;
+using System.Configuration;
 
 namespace myJournal.subforms
 {
@@ -32,7 +33,13 @@ namespace myJournal.subforms
 			if (isEdit)
 			{
 				txtNewEntryTitle.Text = entry.ClearTitle();
-				rtbNewEntry.Text = entry.ClearText();
+				txtNewEntryTitle.TabStop = false;
+
+				string newLine = System.Environment.NewLine;
+
+				rtbNewEntry.Text = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Editing"], entry.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"])
+					, entry.ClearTitle(), entry.ClearText());
+
 				string labels = entry.ClearTags() + ",";
 
 				for(int i = 0; i < lstLabels.Items.Count; i++)
@@ -42,6 +49,9 @@ namespace myJournal.subforms
 						lstLabels.SetItemChecked(i, true);
 					}
 				}
+
+				rtbNewEntry.SelectionStart = 0;
+				rtbNewEntry.Focus();
 			}
 		}
 

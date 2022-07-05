@@ -198,16 +198,31 @@ namespace myJournal.subforms
 			this.Show();
 		}
 
+		private void mnuEntryDelete_Click(object sender, EventArgs e)
+		{
+			frmMessage frm = new frmMessage(frmMessage.OperationType.DeleteEntry, currentEntry.ClearTitle());
+			Utilities.Showform(frm, this);
+			if(frm.result == frmMessage.ReturnResult.Yes) 
+			{
+				currentJournal.Entries.Remove(currentEntry);
+				currentJournal.Save();
+				Utilities.PopulateEntries(lstEntries, currentJournal.Entries);
+			}
+			this.Show();
+		}
+
 		private void mnuEntryEdit_Click(object sender, EventArgs e)
 		{
 			frmNewEntry frm = new frmNewEntry(currentEntry);
 			Utilities.Showform(frm, this);
+
 			if (frm.entry != null)
 			{
 				currentEntry.Replace(frm.entry);
 				currentJournal.Save();
 				Utilities.PopulateEntries(lstEntries, currentJournal.Entries);
 				ShowHideEntriesArea(false);
+				lstEntries.Visible = true;
 			}
 			frm.Close();
 			this.Show();
@@ -232,11 +247,11 @@ namespace myJournal.subforms
 
 		private void mnuJournal_Delete_Click(object sender, EventArgs e)
 		{
-			frmConfirmDeleteJournal frm = new frmConfirmDeleteJournal(currentJournal);
+			frmMessage frm = new frmMessage(frmMessage.OperationType.DeleteJournal, currentJournal.Name);
 			Utilities.Showform(frm, this);
-			if (frm.deleted)
+			if (frm.result == frmMessage.ReturnResult.Yes)
 			{
-				currentJournal = null;
+				currentJournal.Delete();
 				ddlJournals.Text = string.Empty;
 				lstEntries.Items.Clear();
 				LoadJournals();
@@ -323,17 +338,5 @@ namespace myJournal.subforms
 			btnLoadJournal.Enabled = true;
 		}
 
-		private void mnuEntryDelete_Click(object sender, EventArgs e)
-		{
-			frmMessage frm = new frmMessage(frmMessage.OperationType.DeleteEntry, currentEntry.ClearTitle());
-			Utilities.Showform(frm, this);
-			if(frm.result == frmMessage.ReturnResult.Yes) 
-			{
-				currentJournal.Entries.Remove(currentEntry);
-				currentJournal.Save();
-				Utilities.PopulateEntries(lstEntries, currentJournal.Entries);
-			}
-			this.Show();
-		}
 	}
 }
