@@ -92,8 +92,8 @@ namespace myJournal.subforms
 
 		private void GrayOriginalText()
 		{
-			rtbNewEntry.SelectionStart = rtbNewEntry.Text.Length - originalText.Length;
-			rtbNewEntry.SelectionLength = originalText.Length;
+			rtbNewEntry.SelectionStart = rtbNewEntry.Text.Length - originalText.Length - 1;
+			rtbNewEntry.SelectionLength = originalText.Length + 1;
 			rtbNewEntry.SelectionColor = Color.Gray;
 			rtbNewEntry.SelectionLength = 0;
 			rtbNewEntry.SelectionStart = 0;

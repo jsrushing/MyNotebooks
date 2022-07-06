@@ -65,6 +65,19 @@ namespace myJournal.objects
 			}
 		}
 
+		public static void ResizeListsAndRTBs(ListBox entriesList, RichTextBox entryRTB, Label seperatorLabel, Label typeLabel, Form callingForm)
+		{
+			int iBoxCenter = entriesList.Width / 2;
+			seperatorLabel.Visible = true;
+			entryRTB.Visible = true;
+			seperatorLabel.Left = entriesList.Left + 10;
+			seperatorLabel.Width = entriesList.Width - 20;
+			entriesList.Height = seperatorLabel.Top - entriesList.Top;
+			typeLabel.Top = seperatorLabel.Top + seperatorLabel.Height;
+			entryRTB.Top = typeLabel.Top + typeLabel.Height;
+			entryRTB.Height = callingForm.Height - entryRTB.Top - 50;
+		}
+
 		public static JournalEntry SelectEntry(RichTextBox rtb, ListBox lb, Journal currentJournal, bool FirstSelection)
 		{
 			rtb.Clear();

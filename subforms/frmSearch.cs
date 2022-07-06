@@ -11,11 +11,13 @@ namespace myJournal.subforms
 	public partial class frmSearch : Form
 	{
 		private List<JournalEntry> SearchList = null;
-
-		public frmSearch(List<JournalEntry> entriesToSearch)
+		private bool firstSelection = true;
+		private Journal currentJournal;
+		public frmSearch(Journal jrnl)
 		{
 			InitializeComponent();
-			SearchList = entriesToSearch;
+			currentJournal = jrnl;
+			SearchList = jrnl.Entries;
 			Utilities.PopulateLabelsList(lstLabelsForSearch);
 		}
 
@@ -103,5 +105,35 @@ namespace myJournal.subforms
 
 		private void frmSearch_Load(object sender, EventArgs e)
 		{ }
+
+		private void lstFoundEntries_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			ListBox lb = (ListBox)sender;
+			RichTextBox rtb = rtbSelectedEntry_Found;
+			lb.SelectedIndexChanged -= new System.EventHandler(this.lstFoundEntries_SelectedIndexChanged);
+
+			JournalEntry currentEntry = Utilities.SelectEntry(rtb, lb, currentJournal, firstSelection);
+			firstSelection = false;
+
+			lblSelectionType.Visible = rtb.Text.Length > 0;
+			lblSeparator.Visible = rtb.Text.Length > 0;
+			Utilities.ResizeListsAndRTBs(lb, rtb, lblSeparator, lblSelectionType, this);
+			lb.SelectedIndexChanged += new System.EventHandler(this.lstFoundEntries_SelectedIndexChanged);
+		}
+
+		private void lblSeparator_MouseMove(object sender, MouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Left)
+			{
+				lblSeparator.Top += e.Y;
+				Utilities.ResizeListsAndRTBs(lstFoundEntries, rtbSelectedEntry_Found, lblSeparator, lblSelectionType, this);
+				lstFoundEntries.TopIndex = lstFoundEntries.SelectedIndices[0];
+			}
+		}
+
+		private void mnuExit_Click(object sender, EventArgs e)
+		{
+			this.Hide();
+		}
 	}
 }

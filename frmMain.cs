@@ -98,7 +98,7 @@ namespace myJournal.subforms
 			lblSelectionType.Visible = rtb.Text.Length > 0;
 			lblSeparator.Visible = rtb.Text.Length > 0;
 			lblSelectionType.Text = "Selected Entry";
-			ResizeListsAndRTBs();
+			Utilities.ResizeListsAndRTBs(lstEntries, rtbSelectedEntry, lblSeparator, lblSelectionType, this);
 			lb.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectEntry);
 			mnuEntryEdit.Enabled = rtbSelectedEntry.Text.Length > 0;
 			mnuEntryDelete.Enabled = mnuEntryEdit.Enabled;
@@ -109,7 +109,7 @@ namespace myJournal.subforms
 			if (e.Button == MouseButtons.Left)
 			{
 				lblSeparator.Top += e.Y;
-				ResizeListsAndRTBs();
+				Utilities.ResizeListsAndRTBs(lstEntries, rtbSelectedEntry, lblSeparator, lblSelectionType, this);
 				lstEntries.TopIndex = lstEntries.SelectedIndices[0];
 			}
 		}
@@ -137,6 +137,9 @@ namespace myJournal.subforms
 				currentJournal.Entries.Remove(currentEntry);
 				currentJournal.Save();
 				Utilities.PopulateEntries(lstEntries, currentJournal.Entries);
+				ShowHideEntriesArea(false);
+				lstEntries.Visible = true;
+				lstEntries.Height = this.Height - 160;
 			}
 			this.Show();
 		}
@@ -192,7 +195,7 @@ namespace myJournal.subforms
 		private void mnuSearch_Click(object sender, EventArgs e)
 		{
 			Program.PIN = txtJournalPIN.Text;
-			frmSearch frm = new frmSearch(currentJournal.Entries);
+			frmSearch frm = new frmSearch(currentJournal);
 			Utilities.Showform(frm, this);
 			this.Show();
 		}
@@ -225,21 +228,9 @@ namespace myJournal.subforms
 			ShowHideJournalMenus(false);
 		}
 
-		private void ResizeListsAndRTBs()
-		{
-			int iBoxCenter = lstEntries.Width / 2;
-			lblSeparator.Visible = true;
-			rtbSelectedEntry.Visible = true;
-			lblSeparator.Left = lstEntries.Left + 10;
-			lblSeparator.Width = lstEntries.Width - 20;
-			lstEntries.Height = lblSeparator.Top - lstEntries.Top;
-			lblSelectionType.Top = lblSeparator.Top + lblSeparator.Height;
-			rtbSelectedEntry.Top = lblSelectionType.Top + lblSelectionType.Height;
-			rtbSelectedEntry.Height = this.Height - rtbSelectedEntry.Top - 50;
-		}
-
 		private void ShowHideEntriesArea(bool show)
 		{
+			rtbSelectedEntry.Text = show ? rtbSelectedEntry.Text : string.Empty;
 			rtbSelectedEntry.Visible = show;
 			lblSeparator.Visible = show;
 			lblSelectionType.Visible = show;

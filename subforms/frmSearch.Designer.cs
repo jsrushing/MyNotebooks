@@ -29,7 +29,9 @@ namespace myJournal.subforms
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSearch));
 			this.grpFindEntry = new System.Windows.Forms.GroupBox();
+			this.lblSeparator = new System.Windows.Forms.Label();
 			this.radBtnAnd = new System.Windows.Forms.RadioButton();
 			this.radBtnOr = new System.Windows.Forms.RadioButton();
 			this.lstFoundEntries = new System.Windows.Forms.ListBox();
@@ -45,12 +47,13 @@ namespace myJournal.subforms
 			this.dtFindDate_From = new System.Windows.Forms.DateTimePicker();
 			this.rtbSelectedEntry_Found = new System.Windows.Forms.RichTextBox();
 			this.label9 = new System.Windows.Forms.Label();
-			this.lblSelectedFoundEntry = new System.Windows.Forms.Label();
+			this.lblSelectionType = new System.Windows.Forms.Label();
 			this.label8 = new System.Windows.Forms.Label();
 			this.lblFoundEntries = new System.Windows.Forms.Label();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.clearFieldsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuExit = new System.Windows.Forms.ToolStripMenuItem();
 			this.grpFindEntry.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -60,6 +63,7 @@ namespace myJournal.subforms
 			this.grpFindEntry.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.grpFindEntry.Controls.Add(this.lblSeparator);
 			this.grpFindEntry.Controls.Add(this.radBtnAnd);
 			this.grpFindEntry.Controls.Add(this.radBtnOr);
 			this.grpFindEntry.Controls.Add(this.lstFoundEntries);
@@ -75,7 +79,7 @@ namespace myJournal.subforms
 			this.grpFindEntry.Controls.Add(this.dtFindDate_From);
 			this.grpFindEntry.Controls.Add(this.rtbSelectedEntry_Found);
 			this.grpFindEntry.Controls.Add(this.label9);
-			this.grpFindEntry.Controls.Add(this.lblSelectedFoundEntry);
+			this.grpFindEntry.Controls.Add(this.lblSelectionType);
 			this.grpFindEntry.Controls.Add(this.label8);
 			this.grpFindEntry.Controls.Add(this.lblFoundEntries);
 			this.grpFindEntry.Location = new System.Drawing.Point(16, 22);
@@ -83,6 +87,21 @@ namespace myJournal.subforms
 			this.grpFindEntry.Size = new System.Drawing.Size(430, 439);
 			this.grpFindEntry.TabIndex = 7;
 			this.grpFindEntry.TabStop = false;
+			// 
+			// lblSeparator
+			// 
+			this.lblSeparator.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.lblSeparator.Cursor = System.Windows.Forms.Cursors.HSplit;
+			this.lblSeparator.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.lblSeparator.ForeColor = System.Drawing.Color.Red;
+			this.lblSeparator.Location = new System.Drawing.Point(105, 270);
+			this.lblSeparator.Name = "lblSeparator";
+			this.lblSeparator.Size = new System.Drawing.Size(313, 19);
+			this.lblSeparator.TabIndex = 37;
+			this.lblSeparator.Text = resources.GetString("lblSeparator.Text");
+			this.lblSeparator.Visible = false;
+			this.lblSeparator.MouseMove += new System.Windows.Forms.MouseEventHandler(this.lblSeparator_MouseMove);
 			// 
 			// radBtnAnd
 			// 
@@ -121,6 +140,7 @@ namespace myJournal.subforms
 			this.lstFoundEntries.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
 			this.lstFoundEntries.Size = new System.Drawing.Size(418, 105);
 			this.lstFoundEntries.TabIndex = 14;
+			this.lstFoundEntries.SelectedIndexChanged += new System.EventHandler(this.lstFoundEntries_SelectedIndexChanged);
 			// 
 			// chkUseDateRange
 			// 
@@ -259,16 +279,16 @@ namespace myJournal.subforms
 			this.label9.TabIndex = 3;
 			this.label9.Text = "Entry:";
 			// 
-			// lblSelectedFoundEntry
+			// lblSelectionType
 			// 
-			this.lblSelectedFoundEntry.AutoSize = true;
-			this.lblSelectedFoundEntry.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-			this.lblSelectedFoundEntry.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblSelectedFoundEntry.Location = new System.Drawing.Point(3, 273);
-			this.lblSelectedFoundEntry.Name = "lblSelectedFoundEntry";
-			this.lblSelectedFoundEntry.Size = new System.Drawing.Size(96, 17);
-			this.lblSelectedFoundEntry.TabIndex = 15;
-			this.lblSelectedFoundEntry.Text = "Selected Entry";
+			this.lblSelectionType.AutoSize = true;
+			this.lblSelectionType.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.lblSelectionType.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.lblSelectionType.Location = new System.Drawing.Point(3, 273);
+			this.lblSelectionType.Name = "lblSelectionType";
+			this.lblSelectionType.Size = new System.Drawing.Size(96, 17);
+			this.lblSelectionType.TabIndex = 15;
+			this.lblSelectionType.Text = "Selected Entry";
 			// 
 			// label8
 			// 
@@ -298,7 +318,8 @@ namespace myJournal.subforms
 			// 
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.searchToolStripMenuItem,
-            this.clearFieldsToolStripMenuItem});
+            this.clearFieldsToolStripMenuItem,
+            this.mnuExit});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
 			this.menuStrip1.Size = new System.Drawing.Size(458, 24);
@@ -317,6 +338,13 @@ namespace myJournal.subforms
 			this.clearFieldsToolStripMenuItem.Name = "clearFieldsToolStripMenuItem";
 			this.clearFieldsToolStripMenuItem.Size = new System.Drawing.Size(79, 20);
 			this.clearFieldsToolStripMenuItem.Text = "Clear Fields";
+			// 
+			// mnuExit
+			// 
+			this.mnuExit.Name = "mnuExit";
+			this.mnuExit.Size = new System.Drawing.Size(38, 20);
+			this.mnuExit.Text = "Exit";
+			this.mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
 			// 
 			// frmSearch
 			// 
@@ -355,7 +383,7 @@ namespace myJournal.subforms
 		private System.Windows.Forms.DateTimePicker dtFindDate_From;
 		private System.Windows.Forms.RichTextBox rtbSelectedEntry_Found;
 		private System.Windows.Forms.Label label9;
-		private System.Windows.Forms.Label lblSelectedFoundEntry;
+		private System.Windows.Forms.Label lblSelectionType;
 		private System.Windows.Forms.Label label8;
 		private System.Windows.Forms.Label lblFoundEntries;
 		private System.Windows.Forms.MenuStrip menuStrip1;
@@ -363,5 +391,7 @@ namespace myJournal.subforms
 		private System.Windows.Forms.ToolStripMenuItem clearFieldsToolStripMenuItem;
 		private System.Windows.Forms.RadioButton radBtnAnd;
 		private System.Windows.Forms.RadioButton radBtnOr;
+		private System.Windows.Forms.Label lblSeparator;
+		private System.Windows.Forms.ToolStripMenuItem mnuExit;
 	}
 }
