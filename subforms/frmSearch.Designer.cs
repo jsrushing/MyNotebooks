@@ -185,9 +185,9 @@ namespace myJournal.subforms
 			// 
 			this.txtSearchText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.txtSearchText.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.txtSearchText.Location = new System.Drawing.Point(192, 57);
+			this.txtSearchText.Location = new System.Drawing.Point(196, 57);
 			this.txtSearchText.Name = "txtSearchText";
-			this.txtSearchText.Size = new System.Drawing.Size(200, 16);
+			this.txtSearchText.Size = new System.Drawing.Size(222, 16);
 			this.txtSearchText.TabIndex = 22;
 			// 
 			// txtSearchTitle
@@ -196,7 +196,7 @@ namespace myJournal.subforms
 			this.txtSearchTitle.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.txtSearchTitle.Location = new System.Drawing.Point(192, 19);
 			this.txtSearchTitle.Name = "txtSearchTitle";
-			this.txtSearchTitle.Size = new System.Drawing.Size(200, 16);
+			this.txtSearchTitle.Size = new System.Drawing.Size(226, 16);
 			this.txtSearchTitle.TabIndex = 21;
 			// 
 			// dtFindDate_To
@@ -253,7 +253,7 @@ namespace myJournal.subforms
 			this.label9.AutoSize = true;
 			this.label9.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			this.label9.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.label9.Location = new System.Drawing.Point(144, 55);
+			this.label9.Location = new System.Drawing.Point(148, 55);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(45, 17);
 			this.label9.TabIndex = 3;

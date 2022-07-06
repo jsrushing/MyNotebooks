@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Drawing;
+﻿/* Main form.
+ * 4/1/22
+ */
+using System;
 using System.IO;
-using System.Text;
 using System.Windows.Forms;
-using myJournal.subforms;
 using myJournal.objects;
 
 namespace myJournal.subforms
@@ -14,6 +12,7 @@ namespace myJournal.subforms
 	{
 		Journal currentJournal;
 		JournalEntry currentEntry;
+		private bool firstSelection = true;
 
 		public frmMain()
 		{
@@ -91,85 +90,14 @@ namespace myJournal.subforms
 		{
 			ListBox lb = (ListBox)sender;
 			RichTextBox rtb = rtbSelectedEntry;
-			rtb.Clear();
-			List<int> targets = new List<int>();
 			lb.SelectedIndexChanged -= new System.EventHandler(this.lstEntries_SelectEntry);
-
-			try
-			{
-				if (lb.SelectedIndices.Count > 1)
-				{
-					for (int i = 0; i < lb.SelectedIndices.Count - 1; i++)
-					{
-						if (lb.SelectedIndices[i] == lb.SelectedIndices[i + 1] - 1)
-						{
-							targets.Add(lb.SelectedIndices[i]);
-							targets.Add(lb.SelectedIndices[i + 1]);
-							targets.Add(lb.SelectedIndices[i + 2]);
-							break;
-						}
-					}
-				}
-			}
-			catch (Exception) { }
-
-			if (targets.Count == 3)
-			{
-				foreach (int i in targets)
-				{
-					lb.SelectedIndices.Remove(i);
-				}
-			}
-
-			int ctr = lb.SelectedIndex;
-
-			if (lb.Items[ctr].ToString().StartsWith("--")) ctr--;
-
-			while (!lb.Items[ctr].ToString().StartsWith("--") & ctr > 0)
-			{
-				ctr--;
-				if (ctr < 0) break;
-			}
-
-			if (ctr > 0) { ctr += 1; }
-			lb.SelectedIndices.Clear();                             // Select the whole short entry ...
-			lb.SelectedIndices.Add(ctr);
-			lb.SelectedIndices.Add(ctr + 1);
-			lb.SelectedIndices.Add(ctr + 2);                        //
-
-			// this is where you have to account for isEdited
-
-			string sTitleAndDate = lb.Items[ctr].ToString().Replace(" - EDITED", "");        // Use the title and date of the entry to create a JournalEntry object whose .ClearText will populate the display ...
-			string sTitle = sTitleAndDate.Substring(0, sTitleAndDate.IndexOf('(') - 1);
-			string sDate = sTitleAndDate.Substring(sTitleAndDate.IndexOf('(') + 1, sTitleAndDate.Length - 2 - sTitleAndDate.IndexOf('('));
-
-			currentEntry = currentJournal.GetEntry(sTitle, sDate);
-
-			if (currentEntry != null)
-			{
-				StringBuilder sb = new StringBuilder();
-				rtb.Text = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
-					, currentEntry.ClearTitle(), currentEntry.Date
-					, currentEntry.ClearTags()
-					, currentEntry.ClearText());
-				if (rtb.Text.Length == 0) { lstEntries.TopIndex = lstEntries.Top + lstEntries.Height < rtbSelectedEntry.Top ? ctr : lstEntries.TopIndex; }
-				//lblPrint.Visible = rtb.Text.Length > 0;
-				lblSelectionType.Visible = rtb.Text.Length > 0;
-				lblSeparator.Visible = rtb.Text.Length > 0;
-				lblSelectionType.Text = "Selected Entry";
-				lstEntries.Height = rtb.Text.Length > 0 ? rtbSelectedEntry.Top - 132 : 100;
-
-				if (lbl1stSelection.Text.Equals("1"))
-				{
-					lstEntries.TopIndex = lstEntries.Top + lstEntries.Height < rtbSelectedEntry.Top ? ctr : lstEntries.TopIndex;
-					lbl1stSelection.Text = "0";
-				}
-
-				ResizeListsAndRTBs();
-			}
-
+			Utilities.SelectEntry(rtb, lb, currentEntry, currentJournal, firstSelection);
+			firstSelection = false;
+			lblSelectionType.Visible = rtb.Text.Length > 0;
+			lblSeparator.Visible = rtb.Text.Length > 0;
+			lblSelectionType.Text = "Selected Entry";
+			ResizeListsAndRTBs();
 			lb.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectEntry);
-			rtbSelectedEntry.Visible = rtbSelectedEntry.Text.Length > 0;
 			mnuEntryEdit.Enabled = rtbSelectedEntry.Text.Length > 0;
 			mnuEntryDelete.Enabled = mnuEntryEdit.Enabled;
 		}

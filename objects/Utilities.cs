@@ -1,4 +1,7 @@
-﻿using System;
+﻿/* Utility functions.
+ * 7/9/22
+ */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
+using System.Configuration;
 
 namespace myJournal.objects
 {
@@ -59,6 +63,83 @@ namespace myJournal.objects
 					clb.Items.Add(group);
 				}
 			}
+		}
+
+		public static void SelectEntry(RichTextBox rtb, ListBox lb, JournalEntry currentEntry, Journal currentJournal, bool FirstSelection)
+		{
+			rtb.Clear();
+			List<int> targets = new List<int>();
+			
+
+			try
+			{
+				if (lb.SelectedIndices.Count > 1)
+				{
+					for (int i = 0; i < lb.SelectedIndices.Count - 1; i++)
+					{
+						if (lb.SelectedIndices[i] == lb.SelectedIndices[i + 1] - 1)
+						{
+							targets.Add(lb.SelectedIndices[i]);
+							targets.Add(lb.SelectedIndices[i + 1]);
+							targets.Add(lb.SelectedIndices[i + 2]);
+							break;
+						}
+					}
+				}
+			}
+			catch (Exception) { }
+
+			if (targets.Count == 3)
+			{
+				foreach (int i in targets)
+				{
+					lb.SelectedIndices.Remove(i);
+				}
+			}
+
+			int ctr = lb.SelectedIndex;
+
+			if (lb.Items[ctr].ToString().StartsWith("--")) ctr--;
+
+			while (!lb.Items[ctr].ToString().StartsWith("--") & ctr > 0)
+			{
+				ctr--;
+				if (ctr < 0) break;
+			}
+
+			if (ctr > 0) { ctr += 1; }
+			lb.SelectedIndices.Clear();                             // Select the whole short entry ...
+			lb.SelectedIndices.Add(ctr);
+			lb.SelectedIndices.Add(ctr + 1);
+			lb.SelectedIndices.Add(ctr + 2);                        //
+
+			// this is where you have to account for isEdited
+
+			string sTitleAndDate = lb.Items[ctr].ToString().Replace(" - EDITED", "");        // Use the title and date of the entry to create a JournalEntry object whose .ClearText will populate the display ...
+			string sTitle = sTitleAndDate.Substring(0, sTitleAndDate.IndexOf('(') - 1);
+			string sDate = sTitleAndDate.Substring(sTitleAndDate.IndexOf('(') + 1, sTitleAndDate.Length - 2 - sTitleAndDate.IndexOf('('));
+
+			currentEntry = currentJournal.GetEntry(sTitle, sDate);
+
+			if (currentEntry != null)
+			{
+				StringBuilder sb = new StringBuilder();
+				rtb.Text = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
+					, currentEntry.ClearTitle(), currentEntry.Date
+					, currentEntry.ClearTags()
+					, currentEntry.ClearText());
+				if (rtb.Text.Length == 0) { lb.TopIndex = lb.Top + lb.Height < rtb.Top ? ctr : lb.TopIndex; }
+				//lblPrint.Visible = rtb.Text.Length > 0;
+				lb.Height = rtb.Text.Length > 0 ? rtb.Top - 132 : 100;
+
+				if (FirstSelection)
+				{
+					lb.TopIndex = lb.Top + lb.Height < rtb.Top ? ctr : lb.TopIndex;
+					//lbl1stSelection.Text = "0";
+				}
+			}
+
+			rtb.Visible = rtb.Text.Length > 0;
 		}
 
 	}

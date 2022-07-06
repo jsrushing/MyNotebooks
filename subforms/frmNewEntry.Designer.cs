@@ -44,8 +44,8 @@ namespace myJournal.subforms
 			this.rtbNewEntry = new System.Windows.Forms.RichTextBox();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.mnuSaveEntry = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuCancelExit = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEditOriginalText = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuCancelExit = new System.Windows.Forms.ToolStripMenuItem();
 			this.grpCreateEntry.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -80,7 +80,7 @@ namespace myJournal.subforms
 			this.lblManageLabels.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.lblManageLabels.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			this.lblManageLabels.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblManageLabels.Location = new System.Drawing.Point(218, 295);
+			this.lblManageLabels.Location = new System.Drawing.Point(218, 299);
 			this.lblManageLabels.Name = "lblManageLabels";
 			this.lblManageLabels.Size = new System.Drawing.Size(97, 17);
 			this.lblManageLabels.TabIndex = 40;
@@ -115,7 +115,7 @@ namespace myJournal.subforms
 			this.label4.AutoSize = true;
 			this.label4.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			this.label4.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.label4.Location = new System.Drawing.Point(13, 295);
+			this.label4.Location = new System.Drawing.Point(13, 299);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(44, 17);
 			this.label4.TabIndex = 38;
@@ -161,9 +161,9 @@ namespace myJournal.subforms
 			this.lstLabels.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.lstLabels.CheckOnClick = true;
 			this.lstLabels.FormattingEnabled = true;
-			this.lstLabels.Location = new System.Drawing.Point(6, 315);
+			this.lstLabels.Location = new System.Drawing.Point(6, 321);
 			this.lstLabels.Name = "lstLabels";
-			this.lstLabels.Size = new System.Drawing.Size(418, 90);
+			this.lstLabels.Size = new System.Drawing.Size(418, 126);
 			this.lstLabels.TabIndex = 27;
 			// 
 			// label14
@@ -235,19 +235,19 @@ namespace myJournal.subforms
 			this.mnuSaveEntry.Text = "Save Entry";
 			this.mnuSaveEntry.Click += new System.EventHandler(this.mnuSaveEntry_Click);
 			// 
-			// mnuCancelExit
-			// 
-			this.mnuCancelExit.Name = "mnuCancelExit";
-			this.mnuCancelExit.Size = new System.Drawing.Size(79, 20);
-			this.mnuCancelExit.Text = "Cancel/Exit";
-			this.mnuCancelExit.Click += new System.EventHandler(this.mnuCancelExit_Click);
-			// 
 			// mnuEditOriginalText
 			// 
 			this.mnuEditOriginalText.Name = "mnuEditOriginalText";
 			this.mnuEditOriginalText.Size = new System.Drawing.Size(108, 20);
 			this.mnuEditOriginalText.Text = "Edit Original Text";
 			this.mnuEditOriginalText.Click += new System.EventHandler(this.mnuEditOriginalText_Click);
+			// 
+			// mnuCancelExit
+			// 
+			this.mnuCancelExit.Name = "mnuCancelExit";
+			this.mnuCancelExit.Size = new System.Drawing.Size(79, 20);
+			this.mnuCancelExit.Text = "Cancel/Exit";
+			this.mnuCancelExit.Click += new System.EventHandler(this.mnuCancelExit_Click);
 			// 
 			// frmNewEntry
 			// 
