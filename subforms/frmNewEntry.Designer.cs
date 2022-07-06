@@ -220,8 +220,8 @@ namespace myJournal.subforms
 			// 
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuSaveEntry,
-            this.mnuCancelExit,
-            this.mnuEditOriginalText});
+            this.mnuEditOriginalText,
+            this.mnuCancelExit});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
 			this.menuStrip1.Size = new System.Drawing.Size(458, 24);
@@ -256,7 +256,6 @@ namespace myJournal.subforms
 			this.ClientSize = new System.Drawing.Size(458, 492);
 			this.Controls.Add(this.grpCreateEntry);
 			this.Controls.Add(this.menuStrip1);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
 			this.MainMenuStrip = this.menuStrip1;
 			this.MinimumSize = new System.Drawing.Size(372, 439);
 			this.Name = "frmNewEntry";

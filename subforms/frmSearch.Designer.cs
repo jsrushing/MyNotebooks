@@ -80,14 +80,15 @@ namespace myJournal.subforms
 			this.grpFindEntry.Controls.Add(this.lblFoundEntries);
 			this.grpFindEntry.Location = new System.Drawing.Point(16, 22);
 			this.grpFindEntry.Name = "grpFindEntry";
-			this.grpFindEntry.Size = new System.Drawing.Size(531, 439);
+			this.grpFindEntry.Size = new System.Drawing.Size(430, 439);
 			this.grpFindEntry.TabIndex = 7;
 			this.grpFindEntry.TabStop = false;
 			// 
 			// radBtnAnd
 			// 
+			this.radBtnAnd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.radBtnAnd.AutoSize = true;
-			this.radBtnAnd.Location = new System.Drawing.Point(292, 36);
+			this.radBtnAnd.Location = new System.Drawing.Point(237, 36);
 			this.radBtnAnd.Name = "radBtnAnd";
 			this.radBtnAnd.Size = new System.Drawing.Size(45, 19);
 			this.radBtnAnd.TabIndex = 36;
@@ -97,9 +98,10 @@ namespace myJournal.subforms
 			// 
 			// radBtnOr
 			// 
+			this.radBtnOr.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.radBtnOr.AutoSize = true;
 			this.radBtnOr.Checked = true;
-			this.radBtnOr.Location = new System.Drawing.Point(254, 36);
+			this.radBtnOr.Location = new System.Drawing.Point(199, 36);
 			this.radBtnOr.Name = "radBtnOr";
 			this.radBtnOr.Size = new System.Drawing.Size(36, 19);
 			this.radBtnOr.TabIndex = 35;
@@ -117,13 +119,14 @@ namespace myJournal.subforms
 			this.lstFoundEntries.Location = new System.Drawing.Point(6, 165);
 			this.lstFoundEntries.Name = "lstFoundEntries";
 			this.lstFoundEntries.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
-			this.lstFoundEntries.Size = new System.Drawing.Size(519, 105);
+			this.lstFoundEntries.Size = new System.Drawing.Size(418, 105);
 			this.lstFoundEntries.TabIndex = 14;
 			// 
 			// chkUseDateRange
 			// 
+			this.chkUseDateRange.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.chkUseDateRange.AutoSize = true;
-			this.chkUseDateRange.Location = new System.Drawing.Point(197, 120);
+			this.chkUseDateRange.Location = new System.Drawing.Point(149, 120);
 			this.chkUseDateRange.Name = "chkUseDateRange";
 			this.chkUseDateRange.Size = new System.Drawing.Size(82, 19);
 			this.chkUseDateRange.TabIndex = 34;
@@ -133,8 +136,9 @@ namespace myJournal.subforms
 			// 
 			// chkUseDate
 			// 
+			this.chkUseDate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.chkUseDate.AutoSize = true;
-			this.chkUseDate.Location = new System.Drawing.Point(197, 90);
+			this.chkUseDate.Location = new System.Drawing.Point(149, 90);
 			this.chkUseDate.Name = "chkUseDate";
 			this.chkUseDate.Size = new System.Drawing.Size(49, 19);
 			this.chkUseDate.TabIndex = 33;
@@ -144,11 +148,13 @@ namespace myJournal.subforms
 			// 
 			// lstLabelsForSearch
 			// 
+			this.lstLabelsForSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.lstLabelsForSearch.CheckOnClick = true;
 			this.lstLabelsForSearch.FormattingEnabled = true;
 			this.lstLabelsForSearch.Location = new System.Drawing.Point(6, 30);
 			this.lstLabelsForSearch.Name = "lstLabelsForSearch";
-			this.lstLabelsForSearch.Size = new System.Drawing.Size(171, 94);
+			this.lstLabelsForSearch.Size = new System.Drawing.Size(127, 112);
 			this.lstLabelsForSearch.TabIndex = 29;
 			// 
 			// label17
@@ -164,10 +170,11 @@ namespace myJournal.subforms
 			// 
 			// dtFindDate
 			// 
+			this.dtFindDate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.dtFindDate.CustomFormat = "M/d/yyyy";
 			this.dtFindDate.Enabled = false;
 			this.dtFindDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-			this.dtFindDate.Location = new System.Drawing.Point(247, 88);
+			this.dtFindDate.Location = new System.Drawing.Point(199, 88);
 			this.dtFindDate.Name = "dtFindDate";
 			this.dtFindDate.ShowUpDown = true;
 			this.dtFindDate.Size = new System.Drawing.Size(79, 23);
@@ -176,26 +183,29 @@ namespace myJournal.subforms
 			// 
 			// txtSearchText
 			// 
+			this.txtSearchText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.txtSearchText.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.txtSearchText.Location = new System.Drawing.Point(247, 57);
+			this.txtSearchText.Location = new System.Drawing.Point(192, 57);
 			this.txtSearchText.Name = "txtSearchText";
 			this.txtSearchText.Size = new System.Drawing.Size(200, 16);
 			this.txtSearchText.TabIndex = 22;
 			// 
 			// txtSearchTitle
 			// 
+			this.txtSearchTitle.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.txtSearchTitle.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.txtSearchTitle.Location = new System.Drawing.Point(247, 19);
+			this.txtSearchTitle.Location = new System.Drawing.Point(192, 19);
 			this.txtSearchTitle.Name = "txtSearchTitle";
 			this.txtSearchTitle.Size = new System.Drawing.Size(200, 16);
 			this.txtSearchTitle.TabIndex = 21;
 			// 
 			// dtFindDate_To
 			// 
+			this.dtFindDate_To.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.dtFindDate_To.CustomFormat = "M/d/yyyy";
 			this.dtFindDate_To.Enabled = false;
 			this.dtFindDate_To.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-			this.dtFindDate_To.Location = new System.Drawing.Point(387, 118);
+			this.dtFindDate_To.Location = new System.Drawing.Point(339, 118);
 			this.dtFindDate_To.Name = "dtFindDate_To";
 			this.dtFindDate_To.ShowUpDown = true;
 			this.dtFindDate_To.Size = new System.Drawing.Size(79, 23);
@@ -204,8 +214,9 @@ namespace myJournal.subforms
 			// 
 			// label12
 			// 
+			this.label12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label12.AutoSize = true;
-			this.label12.Location = new System.Drawing.Point(364, 122);
+			this.label12.Location = new System.Drawing.Point(316, 122);
 			this.label12.Name = "label12";
 			this.label12.Size = new System.Drawing.Size(18, 15);
 			this.label12.TabIndex = 19;
@@ -213,10 +224,11 @@ namespace myJournal.subforms
 			// 
 			// dtFindDate_From
 			// 
+			this.dtFindDate_From.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.dtFindDate_From.CustomFormat = "M/d/yyyy";
 			this.dtFindDate_From.Enabled = false;
 			this.dtFindDate_From.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-			this.dtFindDate_From.Location = new System.Drawing.Point(281, 118);
+			this.dtFindDate_From.Location = new System.Drawing.Point(233, 118);
 			this.dtFindDate_From.Name = "dtFindDate_From";
 			this.dtFindDate_From.ShowUpDown = true;
 			this.dtFindDate_From.Size = new System.Drawing.Size(79, 23);
@@ -231,16 +243,17 @@ namespace myJournal.subforms
 			this.rtbSelectedEntry_Found.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.rtbSelectedEntry_Found.Location = new System.Drawing.Point(6, 294);
 			this.rtbSelectedEntry_Found.Name = "rtbSelectedEntry_Found";
-			this.rtbSelectedEntry_Found.Size = new System.Drawing.Size(519, 139);
+			this.rtbSelectedEntry_Found.Size = new System.Drawing.Size(418, 139);
 			this.rtbSelectedEntry_Found.TabIndex = 12;
 			this.rtbSelectedEntry_Found.Text = "";
 			// 
 			// label9
 			// 
+			this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label9.AutoSize = true;
 			this.label9.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			this.label9.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.label9.Location = new System.Drawing.Point(199, 55);
+			this.label9.Location = new System.Drawing.Point(144, 55);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(45, 17);
 			this.label9.TabIndex = 3;
@@ -259,10 +272,11 @@ namespace myJournal.subforms
 			// 
 			// label8
 			// 
+			this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label8.AutoSize = true;
 			this.label8.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			this.label8.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.label8.Location = new System.Drawing.Point(204, 19);
+			this.label8.Location = new System.Drawing.Point(149, 19);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(40, 17);
 			this.label8.TabIndex = 2;
@@ -287,7 +301,7 @@ namespace myJournal.subforms
             this.clearFieldsToolStripMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(559, 24);
+			this.menuStrip1.Size = new System.Drawing.Size(458, 24);
 			this.menuStrip1.TabIndex = 8;
 			this.menuStrip1.Text = "menuStrip1";
 			// 
@@ -308,11 +322,11 @@ namespace myJournal.subforms
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(559, 473);
+			this.ClientSize = new System.Drawing.Size(458, 473);
 			this.Controls.Add(this.grpFindEntry);
 			this.Controls.Add(this.menuStrip1);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.MainMenuStrip = this.menuStrip1;
+			this.MinimumSize = new System.Drawing.Size(474, 512);
 			this.Name = "frmSearch";
 			this.Text = "Search";
 			this.Load += new System.EventHandler(this.frmSearch_Load);

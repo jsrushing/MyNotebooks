@@ -208,7 +208,6 @@ namespace myJournal.subforms
 			this.ClientSize = new System.Drawing.Size(366, 323);
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.menuStrip1);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.MainMenuStrip = this.menuStrip1;
 			this.Name = "frmManageLabels";
 			this.Text = "Manage Labels";
