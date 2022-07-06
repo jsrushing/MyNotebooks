@@ -20,6 +20,29 @@ namespace myJournal.objects
 			frm.ShowDialog();
 		}
 
+		public static void CheckExistingLabels(CheckedListBox clb, JournalEntry entry)
+		{
+			string labels = entry.ClearTags() + ",";
+
+			for (int i = 0; i < clb.Items.Count; i++)
+			{
+				clb.SetItemChecked(i, labels.Contains(clb.Items[i].ToString() + ","));
+			}
+		}
+
+		public static void PopulateEntries(ListBox lbxToPopulate, List<JournalEntry> entries)
+		{
+			lbxToPopulate.Items.Clear();
+
+			foreach (JournalEntry je in entries)
+			{
+				foreach (string s in je.EntryAsList(lbxToPopulate.Width))
+				{
+					lbxToPopulate.Items.Add(s);
+				}
+			}
+		}
+
 		public static void PopulateLabelsList(CheckedListBox clb, ListBox lb = null)
 		{
 			if (clb != null) { clb.Items.Clear(); }
@@ -38,18 +61,5 @@ namespace myJournal.objects
 			}
 		}
 
-		public static void PopulateEntries(ListBox lbxToPopulate, List<JournalEntry> entries)
-		{
-			lbxToPopulate.Items.Clear();
-
-			foreach (JournalEntry je in entries)
-			{
-				foreach (string s in je.EntryAsList(lbxToPopulate.Width))
-				{
-					lbxToPopulate.Items.Add(s);
-				}
-			}
-
-		}
 	}
 }

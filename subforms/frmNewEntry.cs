@@ -15,6 +15,7 @@ namespace myJournal.subforms
 		public JournalEntry entry = null;
 		private bool isEdit = false;
 		public bool deleteConfirmed = false;
+		private int originalEntryLength = -1;
 
 		public frmNewEntry(JournalEntry entryToEdit = null)
 		{
@@ -25,9 +26,6 @@ namespace myJournal.subforms
 
 		private void frmNewEntry_Load(object sender, EventArgs e)
 		{
-			grpCreateEntry.Location = new Point(10, 0);
-			grpCreateEntry.Size = new Size(this.Width - 35, this.Height - grpCreateEntry.Top - 50);
-			pnlButtons.Location = new Point(grpCreateEntry.Width / 2 - (pnlButtons.Width / 2), lstLabels.Top + lstLabels.Height + 10);
 			Utilities.PopulateLabelsList(lstLabels);
 
 			if (isEdit)
@@ -35,48 +33,14 @@ namespace myJournal.subforms
 				txtNewEntryTitle.Text = entry.ClearTitle();
 				txtNewEntryTitle.TabStop = false;
 
-				string newLine = System.Environment.NewLine;
-
 				rtbNewEntry.Text = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Editing"], entry.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"])
 					, entry.ClearTitle(), entry.ClearText());
 
-				string labels = entry.ClearTags() + ",";
-
-				for(int i = 0; i < lstLabels.Items.Count; i++)
-				{
-					if(labels.Contains(lstLabels.Items[i].ToString() + ","))
-					{
-						lstLabels.SetItemChecked(i, true);
-					}
-				}
-
+				Utilities.CheckExistingLabels(lstLabels, entry);
+				originalEntryLength = rtbNewEntry.Text.Length - 1;
 				rtbNewEntry.SelectionStart = 0;
 				rtbNewEntry.Focus();
 			}
-		}
-
-		private void btnCancel_Click(object sender, EventArgs e)
-		{
-			txtNewEntryTitle.Text = string.Empty;
-			rtbNewEntry.Text = string.Empty;
-			entry = null;
-			this.Hide();
-		}
-
-		private void btnOK_Click(object sender, EventArgs e)
-		{
-			if (rtbNewEntry.Text.Length > 0 && txtNewEntryTitle.Text.Length > 0)
-			{
-				string groups = string.Empty;
-
-				for (int i = 0; i < lstLabels.CheckedItems.Count; i++)
-				{
-					groups += lstLabels.CheckedItems[i].ToString() + ",";
-				}
-				groups = groups.Length > 0 ? groups.Substring(0, groups.Length - 1) : string.Empty;
-				entry = new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, groups, false);
-			}
-			this.Hide();
 		}
 
 		private void lblManageLabels_Click(object sender, EventArgs e)
@@ -85,6 +49,36 @@ namespace myJournal.subforms
 			Utilities.Showform(frm, this);
 			this.Show();
 			Utilities.PopulateLabelsList(lstLabels);
+		}
+
+		private void mnuSaveEntry_Click(object sender, EventArgs e)
+		{
+			if (rtbNewEntry.Text.Length > 0 && txtNewEntryTitle.Text.Length > 0)
+			{
+				string labels = string.Empty;
+
+				for (int i = 0; i < lstLabels.CheckedItems.Count; i++)
+				{
+					labels += lstLabels.CheckedItems[i].ToString() + ",";
+				}
+
+				labels = labels.Length > 0 ? labels.Substring(0, labels.Length - 1) : string.Empty;
+				entry = new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, labels, false);
+			}
+			this.Hide();
+		}
+
+		private void mnuCancelExit_Click(object sender, EventArgs e)
+		{
+			txtNewEntryTitle.Text = string.Empty;
+			rtbNewEntry.Text = string.Empty;
+			entry = null;
+			this.Hide();
+		}
+
+		private void rtbNewEntry_Click(object sender, EventArgs e)
+		{
+			if(rtbNewEntry.SelectionStart >= rtbNewEntry.Text.Length - originalEntryLength) { rtbNewEntry.SelectionStart = 0; }
 		}
 
 	}
