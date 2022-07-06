@@ -65,11 +65,11 @@ namespace myJournal.objects
 			}
 		}
 
-		public static void SelectEntry(RichTextBox rtb, ListBox lb, JournalEntry currentEntry, Journal currentJournal, bool FirstSelection)
+		public static JournalEntry SelectEntry(RichTextBox rtb, ListBox lb, Journal currentJournal, bool FirstSelection)
 		{
 			rtb.Clear();
 			List<int> targets = new List<int>();
-			
+			JournalEntry currentEntry;
 
 			try
 			{
@@ -114,11 +114,9 @@ namespace myJournal.objects
 			lb.SelectedIndices.Add(ctr + 2);                        //
 
 			// this is where you have to account for isEdited
-
 			string sTitleAndDate = lb.Items[ctr].ToString().Replace(" - EDITED", "");        // Use the title and date of the entry to create a JournalEntry object whose .ClearText will populate the display ...
 			string sTitle = sTitleAndDate.Substring(0, sTitleAndDate.IndexOf('(') - 1);
 			string sDate = sTitleAndDate.Substring(sTitleAndDate.IndexOf('(') + 1, sTitleAndDate.Length - 2 - sTitleAndDate.IndexOf('('));
-
 			currentEntry = currentJournal.GetEntry(sTitle, sDate);
 
 			if (currentEntry != null)
@@ -129,17 +127,16 @@ namespace myJournal.objects
 					, currentEntry.ClearTags()
 					, currentEntry.ClearText());
 				if (rtb.Text.Length == 0) { lb.TopIndex = lb.Top + lb.Height < rtb.Top ? ctr : lb.TopIndex; }
-				//lblPrint.Visible = rtb.Text.Length > 0;
 				lb.Height = rtb.Text.Length > 0 ? rtb.Top - 132 : 100;
 
 				if (FirstSelection)
 				{
 					lb.TopIndex = lb.Top + lb.Height < rtb.Top ? ctr : lb.TopIndex;
-					//lbl1stSelection.Text = "0";
 				}
 			}
 
 			rtb.Visible = rtb.Text.Length > 0;
+			return currentEntry;
 		}
 
 	}

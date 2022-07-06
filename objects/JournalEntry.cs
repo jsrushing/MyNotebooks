@@ -19,6 +19,8 @@ namespace myJournal
 		public bool isEdited = false;
         public string Id;
 
+		public JournalEntry() { }
+
 		public JournalEntry(string _title, string _text, string _tags, bool _edited = false)
         {
 			this.Date	= DateTime.Now;

@@ -91,8 +91,10 @@ namespace myJournal.subforms
 			ListBox lb = (ListBox)sender;
 			RichTextBox rtb = rtbSelectedEntry;
 			lb.SelectedIndexChanged -= new System.EventHandler(this.lstEntries_SelectEntry);
-			Utilities.SelectEntry(rtb, lb, currentEntry, currentJournal, firstSelection);
+
+			currentEntry = Utilities.SelectEntry(rtb, lb, currentJournal, firstSelection);
 			firstSelection = false;
+
 			lblSelectionType.Visible = rtb.Text.Length > 0;
 			lblSeparator.Visible = rtb.Text.Length > 0;
 			lblSelectionType.Text = "Selected Entry";
