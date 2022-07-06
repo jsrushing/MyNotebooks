@@ -16,6 +16,7 @@ namespace myJournal.subforms
 		private bool isEdit = false;
 		public bool deleteConfirmed = false;
 		private int originalEntryLength = -1;
+		private string originalText;
 
 		public frmNewEntry(JournalEntry entryToEdit = null)
 		{
@@ -38,7 +39,8 @@ namespace myJournal.subforms
 
 				Utilities.CheckExistingLabels(lstLabels, entry);
 				originalEntryLength = rtbNewEntry.Text.Length - 1;
-				rtbNewEntry.SelectionStart = 0;
+				originalText = rtbNewEntry.Text.Substring(rtbNewEntry.Text.Length - originalEntryLength + 2);
+				GrayOriginalText();
 				rtbNewEntry.Focus();
 			}
 		}
@@ -81,5 +83,20 @@ namespace myJournal.subforms
 			if(rtbNewEntry.SelectionStart >= rtbNewEntry.Text.Length - originalEntryLength) { rtbNewEntry.SelectionStart = 0; }
 		}
 
+		private void mnuEditOriginalText_Click(object sender, EventArgs e)
+		{
+			rtbNewEntry.Text = originalText + System.Environment.NewLine + rtbNewEntry.Text;
+			GrayOriginalText();
+			mnuEditOriginalText.Enabled = false;
+		}
+
+		private void GrayOriginalText()
+		{
+			rtbNewEntry.SelectionStart = rtbNewEntry.Text.Length - originalText.Length;
+			rtbNewEntry.SelectionLength = originalText.Length;
+			rtbNewEntry.SelectionColor = Color.Gray;
+			rtbNewEntry.SelectionLength = 0;
+			rtbNewEntry.SelectionStart = 0;
+		}
 	}
 }

@@ -30,7 +30,6 @@ namespace myJournal.subforms
 		private void InitializeComponent()
 		{
 			this.grpCreateEntry = new System.Windows.Forms.GroupBox();
-			this.label1 = new System.Windows.Forms.Label();
 			this.lblManageLabels = new System.Windows.Forms.Label();
 			this.txtNewEntryTitle = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
@@ -46,6 +45,7 @@ namespace myJournal.subforms
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.mnuSaveEntry = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuCancelExit = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuEditOriginalText = new System.Windows.Forms.ToolStripMenuItem();
 			this.grpCreateEntry.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -55,7 +55,6 @@ namespace myJournal.subforms
 			this.grpCreateEntry.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.grpCreateEntry.Controls.Add(this.label1);
 			this.grpCreateEntry.Controls.Add(this.lblManageLabels);
 			this.grpCreateEntry.Controls.Add(this.txtNewEntryTitle);
 			this.grpCreateEntry.Controls.Add(this.label2);
@@ -68,20 +67,11 @@ namespace myJournal.subforms
 			this.grpCreateEntry.Controls.Add(this.lblFont_NewEntry);
 			this.grpCreateEntry.Controls.Add(this.label3);
 			this.grpCreateEntry.Controls.Add(this.rtbNewEntry);
-			this.grpCreateEntry.Location = new System.Drawing.Point(10, 21);
+			this.grpCreateEntry.Location = new System.Drawing.Point(10, 25);
 			this.grpCreateEntry.Name = "grpCreateEntry";
 			this.grpCreateEntry.Size = new System.Drawing.Size(437, 459);
 			this.grpCreateEntry.TabIndex = 5;
 			this.grpCreateEntry.TabStop = false;
-			// 
-			// label1
-			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(344, 48);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(38, 15);
-			this.label1.TabIndex = 41;
-			this.label1.Text = "label1";
 			// 
 			// lblManageLabels
 			// 
@@ -230,7 +220,8 @@ namespace myJournal.subforms
 			// 
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuSaveEntry,
-            this.mnuCancelExit});
+            this.mnuCancelExit,
+            this.mnuEditOriginalText});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
 			this.menuStrip1.Size = new System.Drawing.Size(458, 24);
@@ -250,6 +241,13 @@ namespace myJournal.subforms
 			this.mnuCancelExit.Size = new System.Drawing.Size(79, 20);
 			this.mnuCancelExit.Text = "Cancel/Exit";
 			this.mnuCancelExit.Click += new System.EventHandler(this.mnuCancelExit_Click);
+			// 
+			// mnuEditOriginalText
+			// 
+			this.mnuEditOriginalText.Name = "mnuEditOriginalText";
+			this.mnuEditOriginalText.Size = new System.Drawing.Size(108, 20);
+			this.mnuEditOriginalText.Text = "Edit Original Text";
+			this.mnuEditOriginalText.Click += new System.EventHandler(this.mnuEditOriginalText_Click);
 			// 
 			// frmNewEntry
 			// 
@@ -291,6 +289,6 @@ namespace myJournal.subforms
 		private System.Windows.Forms.MenuStrip menuStrip1;
 		private System.Windows.Forms.ToolStripMenuItem mnuSaveEntry;
 		private System.Windows.Forms.ToolStripMenuItem mnuCancelExit;
-		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.ToolStripMenuItem mnuEditOriginalText;
 	}
 }
