@@ -51,13 +51,14 @@ namespace myJournal.subforms
 			this.mnuEntryDelete = new System.Windows.Forms.ToolStripMenuItem();
 			this.lblWrongPin = new System.Windows.Forms.Label();
 			this.lblEntries = new System.Windows.Forms.Label();
+			this.lblShowPIN = new System.Windows.Forms.Label();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// btnLoadJournal
 			// 
 			this.btnLoadJournal.Enabled = false;
-			this.btnLoadJournal.Location = new System.Drawing.Point(168, 59);
+			this.btnLoadJournal.Location = new System.Drawing.Point(170, 59);
 			this.btnLoadJournal.Name = "btnLoadJournal";
 			this.btnLoadJournal.Size = new System.Drawing.Size(75, 23);
 			this.btnLoadJournal.TabIndex = 36;
@@ -79,6 +80,7 @@ namespace myJournal.subforms
 			// 
 			this.txtJournalPIN.Location = new System.Drawing.Point(61, 59);
 			this.txtJournalPIN.Name = "txtJournalPIN";
+			this.txtJournalPIN.PasswordChar = '*';
 			this.txtJournalPIN.Size = new System.Drawing.Size(100, 23);
 			this.txtJournalPIN.TabIndex = 34;
 			this.txtJournalPIN.TextChanged += new System.EventHandler(this.txtJournalPIN_TextChanged);
@@ -269,6 +271,18 @@ namespace myJournal.subforms
 			this.lblEntries.Text = "Entries";
 			this.lblEntries.Visible = false;
 			// 
+			// lblShowPIN
+			// 
+			this.lblShowPIN.AutoSize = true;
+			this.lblShowPIN.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+			this.lblShowPIN.Location = new System.Drawing.Point(123, 82);
+			this.lblShowPIN.Name = "lblShowPIN";
+			this.lblShowPIN.Size = new System.Drawing.Size(35, 13);
+			this.lblShowPIN.TabIndex = 40;
+			this.lblShowPIN.Text = "show";
+			this.lblShowPIN.Visible = false;
+			this.lblShowPIN.Click += new System.EventHandler(this.lblShowPIN_Click);
+			// 
 			// frmMain
 			// 
 			this.AcceptButton = this.btnLoadJournal;
@@ -276,6 +290,7 @@ namespace myJournal.subforms
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.Window;
 			this.ClientSize = new System.Drawing.Size(425, 474);
+			this.Controls.Add(this.lblShowPIN);
 			this.Controls.Add(this.lblEntries);
 			this.Controls.Add(this.lblWrongPin);
 			this.Controls.Add(this.lblSelectionType);
@@ -323,5 +338,6 @@ namespace myJournal.subforms
 		private System.Windows.Forms.ToolStripMenuItem mnuSearch;
 		private System.Windows.Forms.Label lblEntries;
 		private System.Windows.Forms.ToolStripMenuItem mnuEntryDelete;
+		private System.Windows.Forms.Label lblShowPIN;
 	}
 }

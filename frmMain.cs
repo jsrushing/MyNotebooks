@@ -1,5 +1,17 @@
 ﻿/* Main form.
- * 4/1/22
+	4/1/22
+	7/6/22 - Dev. ended. In test.
+	bug list:
+		7/7/22 1100
+			You can arrow down or right into no type area.
+			You can select and drag into or out of no type area.
+				1400 Fixed
+	features:
+		7/7/22 1730 Added password char for PIN and show/hide function.
+	ToDo:
+		7/7/22 : Entry RTB formatting controls.
+				 Store .RichText instead of just .Text;
+
  */
 using System;
 using System.IO;
@@ -21,6 +33,10 @@ namespace myJournal.subforms
 
 		private void frmMain_Load(object sender, EventArgs e)
 		{
+			System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+			System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
+			string version = fvi.FileVersion;
+			this.Text = "myJournal " + version;
 			LoadJournals();
 		}
 
@@ -91,13 +107,10 @@ namespace myJournal.subforms
 			ListBox lb = (ListBox)sender;
 			RichTextBox rtb = rtbSelectedEntry;
 			lb.SelectedIndexChanged -= new System.EventHandler(this.lstEntries_SelectEntry);
-
 			currentEntry = Utilities.SelectEntry(rtb, lb, currentJournal, firstSelection);
 			firstSelection = false;
-
 			lblSelectionType.Visible = rtb.Text.Length > 0;
 			lblSeparator.Visible = rtb.Text.Length > 0;
-			lblSelectionType.Text = "Selected Entry";
 			Utilities.ResizeListsAndRTBs(lstEntries, rtbSelectedEntry, lblSeparator, lblSelectionType, this);
 			lb.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectEntry);
 			mnuEntryEdit.Enabled = rtbSelectedEntry.Text.Length > 0;
@@ -112,6 +125,12 @@ namespace myJournal.subforms
 				Utilities.ResizeListsAndRTBs(lstEntries, rtbSelectedEntry, lblSeparator, lblSelectionType, this);
 				lstEntries.TopIndex = lstEntries.SelectedIndices[0];
 			}
+		}
+
+		private void lblShowPIN_Click(object sender, EventArgs e)
+		{
+			txtJournalPIN.PasswordChar = txtJournalPIN.PasswordChar == '*' ? '\0' : '*';
+			lblShowPIN.Text = lblShowPIN.Text == "show" ? "hide" : "show";
 		}
 
 		private void mnuEntryCreate_Click(object sender, EventArgs e)
@@ -257,7 +276,7 @@ namespace myJournal.subforms
 		private void txtJournalPIN_TextChanged(object sender, EventArgs e)
 		{
 			btnLoadJournal.Enabled = true;
+			lblShowPIN.Visible = txtJournalPIN.Text.Length > 0;
 		}
-
 	}
 }

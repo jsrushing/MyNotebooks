@@ -241,6 +241,7 @@ namespace myJournal.subforms
 			this.mnuEditOriginalText.Name = "mnuEditOriginalText";
 			this.mnuEditOriginalText.Size = new System.Drawing.Size(108, 20);
 			this.mnuEditOriginalText.Text = "Edit Original Text";
+			this.mnuEditOriginalText.Visible = false;
 			this.mnuEditOriginalText.Click += new System.EventHandler(this.mnuEditOriginalText_Click);
 			// 
 			// mnuCancelExit

@@ -39,9 +39,10 @@ namespace myJournal.subforms
 
 				Utilities.CheckExistingLabels(lstLabels, entry);
 				originalEntryLength = rtbNewEntry.Text.Length - 1;
-				originalText = rtbNewEntry.Text.Substring(rtbNewEntry.Text.Length - originalEntryLength + 2);
+				originalText = rtbNewEntry.Text.Substring(rtbNewEntry.Text.Length - originalEntryLength + 1);
 				GrayOriginalText();
 				rtbNewEntry.Focus();
+				mnuEditOriginalText.Visible = true;
 			}
 		}
 
