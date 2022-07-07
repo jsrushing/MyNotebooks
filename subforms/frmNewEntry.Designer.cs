@@ -214,7 +214,8 @@ namespace myJournal.subforms
 			this.rtbNewEntry.Size = new System.Drawing.Size(418, 228);
 			this.rtbNewEntry.TabIndex = 2;
 			this.rtbNewEntry.Text = "";
-			this.rtbNewEntry.Click += new System.EventHandler(this.rtbNewEntry_Click);
+			this.rtbNewEntry.KeyUp += new System.Windows.Forms.KeyEventHandler(this.rtbNewEntry_KeyUp);
+			this.rtbNewEntry.MouseUp += new System.Windows.Forms.MouseEventHandler(this.rtbNewEntry_MouseUp);
 			// 
 			// menuStrip1
 			// 

@@ -22,17 +22,5 @@ namespace myJournal.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string masterPIN {
-            get {
-                return ((string)(this["masterPIN"]));
-            }
-            set {
-                this["masterPIN"] = value;
-            }
-        }
     }
 }

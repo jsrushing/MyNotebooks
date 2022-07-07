@@ -151,6 +151,5 @@ namespace myJournal.objects
 			rtb.Visible = rtb.Text.Length > 0;
 			return currentEntry;
 		}
-
 	}
 }

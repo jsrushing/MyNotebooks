@@ -78,11 +78,6 @@ namespace myJournal.subforms
 			this.Hide();
 		}
 
-		private void rtbNewEntry_Click(object sender, EventArgs e)
-		{
-			if(rtbNewEntry.SelectionStart >= rtbNewEntry.Text.Length - originalEntryLength) { rtbNewEntry.SelectionStart = 0; }
-		}
-
 		private void mnuEditOriginalText_Click(object sender, EventArgs e)
 		{
 			rtbNewEntry.Text = originalText + System.Environment.NewLine + rtbNewEntry.Text;
@@ -97,6 +92,28 @@ namespace myJournal.subforms
 			rtbNewEntry.SelectionColor = Color.Gray;
 			rtbNewEntry.SelectionLength = 0;
 			rtbNewEntry.SelectionStart = 0;
+		}
+
+		private void InNoTypeArea(bool clicked = false)
+		{
+			int positionToCheck = rtbNewEntry.SelectionStart;
+			positionToCheck += rtbNewEntry.SelectionLength;
+			bool inNoType = positionToCheck >= rtbNewEntry.Text.Length - originalEntryLength;
+			rtbNewEntry.SelectionStart = inNoType ? rtbNewEntry.Text.Length - originalEntryLength - 1 : rtbNewEntry.SelectionStart;
+			if(inNoType & rtbNewEntry.SelectionLength > 0) { rtbNewEntry.SelectionLength = 0; } 
+		}
+
+		private void rtbNewEntry_KeyUp(object sender, KeyEventArgs e)
+		{
+			if(e.KeyCode == Keys.Down || e.KeyCode == Keys.Right)
+			{
+				InNoTypeArea();
+			}
+		}
+
+		private void rtbNewEntry_MouseUp(object sender, MouseEventArgs e)
+		{
+			InNoTypeArea();
 		}
 	}
 }
