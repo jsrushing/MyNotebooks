@@ -62,7 +62,7 @@ namespace myJournal
         {
             JournalEntry je = null;
 			try { je = this.Entries.First(a => a.ClearTitle() + a.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) == _title + _date); }
-            catch(Exception) { }
+            catch(Exception ex) { }
             return je;
         }
 

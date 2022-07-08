@@ -3,12 +3,16 @@
 	7/6/22 - Dev. ended. In test.
 	bug list:
 		7/7/22 1100
-			Can arrow down or right into no type area.
-			Can select and drag into or out of no type area.
+			0001 Can arrow down or right into no type area.
+			0002 Can select and drag into or out of no type area.
 				1400 Fixed
 		7/8/22 1000
-			Save entry edit sometimes leaves out Text.
-			Entries with no text cannot be edited or deleted (menus are disabled because they toggle on rtbSelectedEntry.Text.Length > 0).
+			0003 Save entry edit sometimes leaves out Text.
+				1740 Found issue. Entries with '(' in the title cause failure to build currentEntry (it remains null after entry is selected).
+				1745 Fixed: When selecting in the short entry (lstEntries) get LastIndexOf('(') instead of just .IndexOf.
+
+			0004 Entries with no text cannot be edited or deleted (menus are disabled because they toggle on rtbSelectedEntry.Text.Length > 0).
+				1745 Fixed with 0003. This should never happen and only came up because of 0003.
 
 	features:
 		7/7/22 1730 Added password char for PIN and show/hide function.
@@ -125,7 +129,7 @@ namespace myJournal.subforms
 			lblSeparator.Visible = rtb.Text.Length > 0;
 			Utilities.ResizeListsAndRTBs(lstEntries, rtbSelectedEntry, lblSeparator, lblSelectionType, this);
 			lb.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectEntry);
-			mnuEntryEdit.Enabled = rtbSelectedEntry.Text.Length > 0;
+			mnuEntryEdit.Enabled = true;	// rtbSelectedEntry.Text.Length > 0;
 			mnuEntryDelete.Enabled = mnuEntryEdit.Enabled;
 		}
 
