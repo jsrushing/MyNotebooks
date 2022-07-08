@@ -54,27 +54,8 @@ namespace myJournal.subforms
 			Utilities.PopulateLabelsList(lstLabels);
 		}
 
-		private void mnuSaveEntry_Click(object sender, EventArgs e)
-		{
-			if (rtbNewEntry.Text.Length > 0 && txtNewEntryTitle.Text.Length > 0)
-			{
-				string labels = string.Empty;
-
-				for (int i = 0; i < lstLabels.CheckedItems.Count; i++)
-				{
-					labels += lstLabels.CheckedItems[i].ToString() + ",";
-				}
-
-				labels = labels.Length > 0 ? labels.Substring(0, labels.Length - 1) : string.Empty;
-				entry = new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, labels, false);
-			}
-			this.Hide();
-		}
-
 		private void mnuCancelExit_Click(object sender, EventArgs e)
 		{
-			txtNewEntryTitle.Text = string.Empty;
-			rtbNewEntry.Text = string.Empty;
 			entry = null;
 			this.Hide();
 		}
@@ -84,6 +65,21 @@ namespace myJournal.subforms
 			rtbNewEntry.Text = originalText + System.Environment.NewLine + rtbNewEntry.Text;
 			GrayOriginalText();
 			mnuEditOriginalText.Enabled = false;
+		}
+
+		private void mnuSaveEntry_Click(object sender, EventArgs e)
+		{
+			if (rtbNewEntry.Text.Length > 0 && txtNewEntryTitle.Text.Length > 0)
+			{
+				entry = new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, Utilities.GetCheckedLabels(lstLabels), false);
+				this.Hide();
+			}
+			else
+			{
+				frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "You must enter both a title and text to save an entry.");
+				Utilities.Showform(frm, this);
+				this.Show();
+			}
 		}
 
 		private void GrayOriginalText()
@@ -104,17 +100,10 @@ namespace myJournal.subforms
 			if(inNoType & rtbNewEntry.SelectionLength > 0) { rtbNewEntry.SelectionLength = 0; } 
 		}
 
-		private void rtbNewEntry_KeyUp(object sender, KeyEventArgs e)
-		{
-			if(e.KeyCode == Keys.Down || e.KeyCode == Keys.Right)
-			{
-				InNoTypeArea();
-			}
-		}
+		private void rtbNewEntry_KeyUp(object sender, KeyEventArgs e) { if(e.KeyCode == Keys.Down || e.KeyCode == Keys.Right) { InNoTypeArea(); }}
 
-		private void rtbNewEntry_MouseUp(object sender, MouseEventArgs e)
-		{
-			InNoTypeArea();
-		}
+		private void rtbNewEntry_MouseUp(object sender, MouseEventArgs e) { InNoTypeArea(); }
+
+		private void lstLabels_SelectedIndexChanged(object sender, EventArgs e) { lstLabels.SelectedIndices.Clear(); }
 	}
 }

@@ -34,6 +34,17 @@ namespace myJournal.objects
 			}
 		}
 
+		public static string GetCheckedLabels(CheckedListBox cbx)
+		{
+			string labels = string.Empty;
+			for (int i = 0; i < cbx.CheckedItems.Count; i++)
+			{
+				labels += cbx.CheckedItems[i].ToString() + ",";
+			}
+			labels = labels.Length > 0 ? labels.Substring(0, labels.Length - 1) : string.Empty;
+			return labels;
+		}
+
 		public static void PopulateEntries(ListBox lbxToPopulate, List<JournalEntry> entries)
 		{
 			lbxToPopulate.Items.Clear();

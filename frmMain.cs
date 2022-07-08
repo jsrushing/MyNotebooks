@@ -3,14 +3,27 @@
 	7/6/22 - Dev. ended. In test.
 	bug list:
 		7/7/22 1100
-			You can arrow down or right into no type area.
-			You can select and drag into or out of no type area.
+			Can arrow down or right into no type area.
+			Can select and drag into or out of no type area.
 				1400 Fixed
+		7/8/22 1000
+			Save entry edit sometimes leaves out Text.
+			Entries with no text cannot be edited or deleted (menus are disabled because they toggle on rtbSelectedEntry.Text.Length > 0).
+
 	features:
 		7/7/22 1730 Added password char for PIN and show/hide function.
-	ToDo:
+
+	toDo:
 		7/7/22 : Entry RTB formatting controls.
 				 Store .RichText instead of just .Text;
+		7/8/22 : Column tab stops in rtbNewEntry.
+				 Save new entry without exiting (to save incrementally).
+				 Allow selection length > 1 in editing entry notypearea for copying. Catch key code, only allow Ctrl.
+				 Don't allow save of entry with no text or title.
+					16:50 Done
+				 Context menu for entries? (Delete, Edit)
+				 Disallow clicking/typing in shown entry (rtbSelectedEntry after clicking entry).
+				 PIN show/hide on frmNewJournal.
 
  */
 using System;
@@ -67,7 +80,6 @@ namespace myJournal.subforms
 					if(lstEntries.Items.Count > 0)
 					{
 						lstEntries.Height = this.Height - lstEntries.Top - 50;
-						lbl1stSelection.Text = "1";
 						lstEntries.Visible = true;
 						ShowHideJournalMenus(true);
 					}
@@ -160,6 +172,7 @@ namespace myJournal.subforms
 				lstEntries.Visible = true;
 				lstEntries.Height = this.Height - 160;
 			}
+			frm.Close();
 			this.Show();
 		}
 

@@ -78,7 +78,7 @@ namespace myJournal.subforms
 			this.lblManageLabels.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.lblManageLabels.AutoSize = true;
 			this.lblManageLabels.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.lblManageLabels.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.lblManageLabels.Font = new System.Drawing.Font("Segoe UI", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
 			this.lblManageLabels.ForeColor = System.Drawing.SystemColors.MenuHighlight;
 			this.lblManageLabels.Location = new System.Drawing.Point(218, 299);
 			this.lblManageLabels.Name = "lblManageLabels";
@@ -165,6 +165,7 @@ namespace myJournal.subforms
 			this.lstLabels.Name = "lstLabels";
 			this.lstLabels.Size = new System.Drawing.Size(418, 126);
 			this.lstLabels.TabIndex = 27;
+			this.lstLabels.SelectedIndexChanged += new System.EventHandler(this.lstLabels_SelectedIndexChanged);
 			// 
 			// label14
 			// 

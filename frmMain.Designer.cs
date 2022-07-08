@@ -31,7 +31,6 @@ namespace myJournal.subforms
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
 			this.btnLoadJournal = new System.Windows.Forms.Button();
-			this.lbl1stSelection = new System.Windows.Forms.Label();
 			this.txtJournalPIN = new System.Windows.Forms.TextBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.lblSelectionType = new System.Windows.Forms.Label();
@@ -65,16 +64,6 @@ namespace myJournal.subforms
 			this.btnLoadJournal.Text = "&Load";
 			this.btnLoadJournal.UseVisualStyleBackColor = true;
 			this.btnLoadJournal.Click += new System.EventHandler(this.btnLoadJournal_Click);
-			// 
-			// lbl1stSelection
-			// 
-			this.lbl1stSelection.AutoSize = true;
-			this.lbl1stSelection.Location = new System.Drawing.Point(376, 67);
-			this.lbl1stSelection.Name = "lbl1stSelection";
-			this.lbl1stSelection.Size = new System.Drawing.Size(13, 15);
-			this.lbl1stSelection.TabIndex = 35;
-			this.lbl1stSelection.Text = "x";
-			this.lbl1stSelection.Visible = false;
 			// 
 			// txtJournalPIN
 			// 
@@ -273,13 +262,13 @@ namespace myJournal.subforms
 			// 
 			// lblShowPIN
 			// 
-			this.lblShowPIN.AutoSize = true;
 			this.lblShowPIN.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
 			this.lblShowPIN.Location = new System.Drawing.Point(123, 82);
 			this.lblShowPIN.Name = "lblShowPIN";
 			this.lblShowPIN.Size = new System.Drawing.Size(35, 13);
 			this.lblShowPIN.TabIndex = 40;
 			this.lblShowPIN.Text = "show";
+			this.lblShowPIN.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.lblShowPIN.Visible = false;
 			this.lblShowPIN.Click += new System.EventHandler(this.lblShowPIN_Click);
 			// 
@@ -295,7 +284,6 @@ namespace myJournal.subforms
 			this.Controls.Add(this.lblWrongPin);
 			this.Controls.Add(this.lblSelectionType);
 			this.Controls.Add(this.btnLoadJournal);
-			this.Controls.Add(this.lbl1stSelection);
 			this.Controls.Add(this.txtJournalPIN);
 			this.Controls.Add(this.lblSeparator);
 			this.Controls.Add(this.label4);
@@ -318,7 +306,6 @@ namespace myJournal.subforms
 
 		#endregion
 		private System.Windows.Forms.Button btnLoadJournal;
-		private System.Windows.Forms.Label lbl1stSelection;
 		private System.Windows.Forms.TextBox txtJournalPIN;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.Label lblSelectionType;
