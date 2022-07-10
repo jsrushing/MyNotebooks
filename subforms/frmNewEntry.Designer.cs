@@ -205,6 +205,7 @@ namespace myJournal.subforms
 			// 
 			// rtbNewEntry
 			// 
+			this.rtbNewEntry.AcceptsTab = true;
 			this.rtbNewEntry.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -215,7 +216,6 @@ namespace myJournal.subforms
 			this.rtbNewEntry.Size = new System.Drawing.Size(418, 228);
 			this.rtbNewEntry.TabIndex = 2;
 			this.rtbNewEntry.Text = "";
-			this.rtbNewEntry.KeyUp += new System.Windows.Forms.KeyEventHandler(this.rtbNewEntry_KeyUp);
 			this.rtbNewEntry.MouseUp += new System.Windows.Forms.MouseEventHandler(this.rtbNewEntry_MouseUp);
 			// 
 			// menuStrip1

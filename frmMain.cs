@@ -19,17 +19,20 @@
 		07/10/22 1130 Added Yes/No/Cancel prompt for Cancel/Exit on frmNewEntry.
 
 	toDo:
-		07/07/22 : 001 Entry RTB formatting controls.
-				 002 Store .RichText instead of just .Text;
-		07/08/22 : 003 Column tab stops in rtbNewEntry.
+		07/07/22 001 Entry RTB formatting controls.
+				 > 002 Store .RichText instead of just .Text;
+		07/08/22 003x Column tab stops in rtbNewEntry.
+					07/10/22 1810 Done (was simple properties setting - .AcceptTab)
 				 004 Save new entry without exiting (to save incrementally).
 				 005 Allow selection length > 1 in editing entry notypearea for copying. Catch key code, only allow Ctrl.
-				 006 Don't allow save of entry with no text or title.
+				 006x Don't allow save of entry with no text or title.
 					16:50 Done
 				 007 Context menu for entries? (Delete, Edit)
-				 008 Disallow clicking/typing in shown entry (rtbSelectedEntry after clicking entry).
+				 008x Disallow clicking/typing in Selected Entry text on frmMain.
 					07/10/22 1145 Done.
-				 009 PIN show/hide on frmNewJournal.
+				 009x PIN show/hide on frmNewJournal.
+					7/10/22 1400 Done.
+		07/10/22 010 Search criteria is case sensitive. Should be a user choice (default insensitive).
 
  */
 using System;
@@ -302,6 +305,5 @@ namespace myJournal.subforms
 				return cp;
 			}
 		}
-
 	}
 }

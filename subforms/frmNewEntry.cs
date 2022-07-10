@@ -2,11 +2,10 @@
  * 6/15/22
  */
 using System;
+using System.Configuration;
 using System.Drawing;
 using System.Windows.Forms;
-using System.IO;
 using myJournal.objects;
-using System.Configuration;
 
 namespace myJournal.subforms
 {
@@ -119,10 +118,9 @@ namespace myJournal.subforms
 			if(inNoType & rtbNewEntry.SelectionLength > 0) { rtbNewEntry.SelectionLength = 0; } 
 		}
 
-		private void rtbNewEntry_KeyUp(object sender, KeyEventArgs e) { if(e.KeyCode == Keys.Down || e.KeyCode == Keys.Right) { InNoTypeArea(); }}
-
 		private void rtbNewEntry_MouseUp(object sender, MouseEventArgs e) { InNoTypeArea(); }
 
 		private void lstLabels_SelectedIndexChanged(object sender, EventArgs e) { lstLabels.SelectedIndices.Clear(); }
+
 	}
 }

@@ -40,14 +40,14 @@ namespace myJournal
 			{
 				int iTextChunkLength = Convert.ToInt16(ListboxWidth * .15);
 
-				lstRtrn.Add(this.ClearTitle() + " (" + this.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"); //+ (je.isEdited ? " - EDITED" : ""));
+				lstRtrn.Add(this.ClearTitle() + " (" + this.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")");
 				string sEntryText = this.ClearText();
 
 				lstRtrn.Add(sEntryText.Length < iTextChunkLength ?
 					sEntryText :
 					sEntryText.Substring(0, iTextChunkLength) + " ...");
 
-				lstRtrn.Add("tags: " + this.ClearTags());
+				lstRtrn.Add("labels: " + this.ClearTags());
 				lstRtrn.Add("---------------------");
 			}
 			return lstRtrn;

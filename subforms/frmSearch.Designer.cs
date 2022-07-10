@@ -357,7 +357,6 @@ namespace myJournal.subforms
 			this.MinimumSize = new System.Drawing.Size(474, 512);
 			this.Name = "frmSearch";
 			this.Text = "Search";
-			this.Load += new System.EventHandler(this.frmSearch_Load);
 			this.grpFindEntry.ResumeLayout(false);
 			this.grpFindEntry.PerformLayout();
 			this.menuStrip1.ResumeLayout(false);

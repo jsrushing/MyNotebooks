@@ -10,14 +10,13 @@ namespace myJournal.subforms
 {
 	public partial class frmSearch : Form
 	{
-		private List<JournalEntry> SearchList = null;
 		private bool firstSelection = true;
-		private Journal currentJournal;
+		private Journal entryJournal;
+
 		public frmSearch(Journal jrnl)
 		{
 			InitializeComponent();
-			currentJournal = jrnl;
-			SearchList = jrnl.Entries;
+			entryJournal = jrnl;
 			Utilities.PopulateLabelsList(lstLabelsForSearch);
 		}
 
@@ -28,66 +27,41 @@ namespace myJournal.subforms
 		}
 
 		private void chkUseDate_CheckedChanged(object sender, EventArgs e)
-		{
-			dtFindDate.Enabled = chkUseDate.Enabled;
-		}
+		{ dtFindDate.Enabled = chkUseDate.Enabled; }
 
 		private void searchToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			// labels
 			string labels = string.Empty;
-			string[] groups = null;
+			string[] labelsArray = null;
 			List<JournalEntry> foundEntries = new List<JournalEntry>();
 
 			for (int i = 0; i < lstLabelsForSearch.CheckedItems.Count; i++)
-			{
-				labels += lstLabelsForSearch.CheckedItems[i].ToString() + ",";
-			}
+			{ labels += lstLabelsForSearch.CheckedItems[i].ToString() + ","; }
 
 			labels = labels.Length > 0 ? labels.Substring(0, labels.Length - 1) : string.Empty;
-			groups = labels.Length > 0 ? labels.Split(',') : null;
+			labelsArray = labels.Length > 0 ? labels.Split(',') : null;
 
-			foreach (JournalEntry je in SearchList)
+			foreach (JournalEntry je in entryJournal.Entries)
 			{
 				// date
 				if (chkUseDate.Checked)
-				{
-					if (je.Date.ToShortDateString() == dtFindDate.Value.ToShortDateString())
-					{
-						foundEntries.Add(je);
-					}
-				}
+				{ if (je.Date.ToShortDateString() == dtFindDate.Value.ToShortDateString()) { foundEntries.Add(je); }}
 
 				if (chkUseDateRange.Checked)
-				{
-					if (je.Date >= dtFindDate_From.Value && je.Date <= dtFindDate_To.Value)
-					{
-						foundEntries.Add(je);
-					}
-				}
+				{ if (je.Date >= dtFindDate_From.Value && je.Date <= dtFindDate_To.Value) { foundEntries.Add(je); }}
 
-				if(groups != null)
-				{
-					foreach (string group in groups)
-					{
-						if (je.ClearTags().Contains(group)) { foundEntries.Add(je); }
-					}
-				}
+				// labels
+				if(labelsArray != null)
+				{ foreach (string group in labelsArray) { if (je.ClearTags().Contains(group)) { foundEntries.Add(je); }}}
 
+				// title and/or text
 				if (radBtnAnd.Checked)
 				{
 					if(txtSearchTitle.Text.Length > 0 & txtSearchText.Text.Length > 0)
-					{
-						if (je.ClearText().Contains(txtSearchText.Text) & je.ClearTitle().Contains(txtSearchTitle.Text)) { foundEntries.Add(je); }
-					}
-					else if(txtSearchText.Text.Length > 0) 
-					{
-						if (je.ClearText().Contains(txtSearchText.Text)) { foundEntries.Add(je); }
-					}
-					else if (txtSearchTitle.Text.Length > 0)
-					{
-						if (je.ClearTitle().Contains(txtSearchTitle.Text)) { foundEntries.Add(je); }
-					}
+					{ if (je.ClearText().Contains(txtSearchText.Text) & je.ClearTitle().Contains(txtSearchTitle.Text)) { foundEntries.Add(je); }}
+					else if(txtSearchText.Text.Length > 0) { if (je.ClearText().Contains(txtSearchText.Text)) { foundEntries.Add(je); }}
+					else if (txtSearchTitle.Text.Length > 0) { if (je.ClearTitle().Contains(txtSearchTitle.Text)) { foundEntries.Add(je); }}
 				}
 				else
 				{
@@ -95,6 +69,7 @@ namespace myJournal.subforms
 					if (txtSearchTitle.Text.Length > 0) { if (je.ClearTitle().Contains(txtSearchTitle.Text)) { foundEntries.Add(je); } }
 				}
 
+				// show results
 				if (foundEntries.Count > 0)
 				{
 					Utilities.PopulateEntries(lstFoundEntries, foundEntries);
@@ -102,9 +77,6 @@ namespace myJournal.subforms
 				}
 			}
 		}
-
-		private void frmSearch_Load(object sender, EventArgs e)
-		{ }
 
 		private void lblSeparator_MouseMove(object sender, MouseEventArgs e)
 		{
@@ -121,7 +93,7 @@ namespace myJournal.subforms
 			ListBox lb = (ListBox)sender;
 			RichTextBox rtb = rtbSelectedEntry_Found;
 			lb.SelectedIndexChanged -= new System.EventHandler(this.lstFoundEntries_SelectedIndexChanged);
-			JournalEntry currentEntry = Utilities.SelectEntry(rtb, lb, currentJournal, firstSelection);
+			JournalEntry currentEntry = Utilities.SelectEntry(rtb, lb, entryJournal, firstSelection);
 			firstSelection = false;
 			lblSelectionType.Visible = rtb.Text.Length > 0;
 			lblSeparator.Visible = rtb.Text.Length > 0;
@@ -129,9 +101,6 @@ namespace myJournal.subforms
 			lb.SelectedIndexChanged += new System.EventHandler(this.lstFoundEntries_SelectedIndexChanged);
 		}
 
-		private void mnuExit_Click(object sender, EventArgs e)
-		{
-			this.Hide();
-		}
+		private void mnuExit_Click(object sender, EventArgs e) { this.Hide(); }
 	}
 }
