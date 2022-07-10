@@ -22,17 +22,6 @@ namespace myJournal.subforms
 
 		private void frmNewJournal_Activated(object sender, EventArgs e) { txtName.Focus(); }
 
-		private void btnOk_Click(object sender, EventArgs e)
-		{
-			if (txtPIN.Text.Length > 0 | txtName.Text.Length > 0)
-			{
-				sJournalName = txtName.Text;
-				sPIN = txtPIN.Text;
-				Program.PIN = txtPIN.Text;
-			}
-			this.Hide();
-		}
-
 		private void frmNewJournal_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			if (txtPIN.Text.Length > 0 | txtName.Text.Length > 0)
@@ -49,6 +38,28 @@ namespace myJournal.subforms
 			txtName.Text = string.Empty;
 			txtPIN.Text = string.Empty;
 			this.Hide();
+		}
+
+		private void btnOk_Click(object sender, EventArgs e)
+		{
+			if (txtPIN.Text.Length > 0 | txtName.Text.Length > 0)
+			{
+				sJournalName = txtName.Text;
+				sPIN = txtPIN.Text;
+				Program.PIN = txtPIN.Text;
+			}
+			this.Hide();
+		}
+
+		private void lblShowPIN_Click(object sender, EventArgs e)
+		{
+			txtPIN.PasswordChar = txtPIN.PasswordChar == '*' ? '\0' : '*';
+			lblShowPIN.Text = lblShowPIN.Text == "show" ? "hide" : "show";
+		}
+
+		private void txtPIN_TextChanged(object sender, EventArgs e)
+		{
+			lblShowPIN.Visible = txtPIN.Text.Length > 0;
 		}
 	}
 }

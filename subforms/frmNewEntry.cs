@@ -56,8 +56,26 @@ namespace myJournal.subforms
 
 		private void mnuCancelExit_Click(object sender, EventArgs e)
 		{
-			entry = null;
-			this.Hide();
+			if(txtNewEntryTitle.Text.Length > 0 | rtbNewEntry.Text.Length > 0)
+			{
+				frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Do you want to save your changes?");
+				Utilities.Showform(frm, this);
+				if(frm.result == frmMessage.ReturnResult.No)
+				{
+					entry = null;
+					frm.Close();
+					this.Hide();
+				}
+				else if(frm.result == frmMessage.ReturnResult.Yes)
+				{
+					mnuSaveEntry_Click(null, null);
+				}
+				else
+				{
+					frm.Close();
+					this.Show();
+				}
+			}
 		}
 
 		private void mnuEditOriginalText_Click(object sender, EventArgs e)
@@ -78,6 +96,7 @@ namespace myJournal.subforms
 			{
 				frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "You must enter both a title and text to save an entry.");
 				Utilities.Showform(frm, this);
+				frm.Close();
 				this.Show();
 			}
 		}

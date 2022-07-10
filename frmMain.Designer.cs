@@ -143,6 +143,7 @@ namespace myJournal.subforms
 			this.rtbSelectedEntry.TabStop = false;
 			this.rtbSelectedEntry.Text = "";
 			this.rtbSelectedEntry.Visible = false;
+			this.rtbSelectedEntry.MouseDown += new System.Windows.Forms.MouseEventHandler(this.rtbSelectedEntry_MouseDown);
 			// 
 			// lblSeparator
 			// 

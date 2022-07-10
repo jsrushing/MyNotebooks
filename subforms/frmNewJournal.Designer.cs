@@ -36,6 +36,7 @@ namespace myJournal.subforms
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.btnOk = new System.Windows.Forms.Button();
 			this.grp1 = new System.Windows.Forms.Panel();
+			this.lblShowPIN = new System.Windows.Forms.Label();
 			this.lblMessage_BadJournalName = new System.Windows.Forms.Label();
 			this.grp1.SuspendLayout();
 			this.SuspendLayout();
@@ -69,8 +70,10 @@ namespace myJournal.subforms
 			// 
 			this.txtPIN.Location = new System.Drawing.Point(91, 57);
 			this.txtPIN.Name = "txtPIN";
+			this.txtPIN.PasswordChar = '*';
 			this.txtPIN.Size = new System.Drawing.Size(128, 23);
 			this.txtPIN.TabIndex = 3;
+			this.txtPIN.TextChanged += new System.EventHandler(this.txtPIN_TextChanged);
 			// 
 			// btnCancel
 			// 
@@ -94,6 +97,7 @@ namespace myJournal.subforms
 			// 
 			// grp1
 			// 
+			this.grp1.Controls.Add(this.lblShowPIN);
 			this.grp1.Controls.Add(this.lblMessage_BadJournalName);
 			this.grp1.Controls.Add(this.txtPIN);
 			this.grp1.Controls.Add(this.btnCancel);
@@ -105,6 +109,18 @@ namespace myJournal.subforms
 			this.grp1.Name = "grp1";
 			this.grp1.Size = new System.Drawing.Size(230, 184);
 			this.grp1.TabIndex = 6;
+			// 
+			// lblShowPIN
+			// 
+			this.lblShowPIN.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+			this.lblShowPIN.Location = new System.Drawing.Point(184, 80);
+			this.lblShowPIN.Name = "lblShowPIN";
+			this.lblShowPIN.Size = new System.Drawing.Size(35, 13);
+			this.lblShowPIN.TabIndex = 41;
+			this.lblShowPIN.Text = "show";
+			this.lblShowPIN.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.lblShowPIN.Visible = false;
+			this.lblShowPIN.Click += new System.EventHandler(this.lblShowPIN_Click);
 			// 
 			// lblMessage_BadJournalName
 			// 
@@ -145,5 +161,6 @@ namespace myJournal.subforms
 		private System.Windows.Forms.Button btnOk;
 		private System.Windows.Forms.Panel grp1;
 		private System.Windows.Forms.Label lblMessage_BadJournalName;
+		private System.Windows.Forms.Label lblShowPIN;
 	}
 }

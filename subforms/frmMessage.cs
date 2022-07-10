@@ -20,7 +20,8 @@ namespace myJournal.subforms
 		{
 			Message,
 			DeleteJournal,
-			DeleteEntry
+			DeleteEntry,
+			YesNoQuestion
 		}
 
 		public enum ReturnResult
@@ -60,6 +61,10 @@ namespace myJournal.subforms
 					lblMessage.Text = msg;
 					pnlOk.Visible = true;
 					break;
+				case OperationType.YesNoQuestion:
+					lblMessage.Text = msg;
+					pnlYesNoCancel.Visible = true;
+					break;
 			}
 		}
 
@@ -77,7 +82,7 @@ namespace myJournal.subforms
 
 		private void btnCancel_Click(object sender, EventArgs e)
 		{
-			result = ReturnResult.None;
+			result = ReturnResult.Cancel;
 			this.Hide();
 		}
 

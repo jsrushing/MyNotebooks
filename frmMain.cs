@@ -1,33 +1,35 @@
 ﻿/* Main form.
-	4/1/22
-	7/6/22 - Dev. ended. In test.
+	04/01/22
+	07/06/22 - Dev. ended. In test.
 	bug list:
-		7/7/22 1100
+		07/07/22 1100
 			0001 Can arrow down or right into no type area.
 			0002 Can select and drag into or out of no type area.
 				1400 Fixed
-		7/8/22 1000
+		07/08/22 1000
 			0003 Save entry edit sometimes leaves out Text.
 				1740 Found issue. Entries with '(' in the title cause failure to build currentEntry (it remains null after entry is selected).
 				1745 Fixed: When selecting in the short entry (lstEntries) get LastIndexOf('(') instead of just .IndexOf.
 
 			0004 Entries with no text cannot be edited or deleted (menus are disabled because they toggle on rtbSelectedEntry.Text.Length > 0).
-				1745 Fixed with 0003. This should never happen and only came up because of 0003.
+				1745 Fixed with 0003. This should never happen. Only came up because of 0003.
 
 	features:
-		7/7/22 1730 Added password char for PIN and show/hide function.
+		07/07/22 1730 Added password char for PIN and show/hide function.
+		07/10/22 1130 Added Yes/No/Cancel prompt for Cancel/Exit on frmNewEntry.
 
 	toDo:
-		7/7/22 : Entry RTB formatting controls.
-				 Store .RichText instead of just .Text;
-		7/8/22 : Column tab stops in rtbNewEntry.
-				 Save new entry without exiting (to save incrementally).
-				 Allow selection length > 1 in editing entry notypearea for copying. Catch key code, only allow Ctrl.
-				 Don't allow save of entry with no text or title.
+		07/07/22 : 001 Entry RTB formatting controls.
+				 002 Store .RichText instead of just .Text;
+		07/08/22 : 003 Column tab stops in rtbNewEntry.
+				 004 Save new entry without exiting (to save incrementally).
+				 005 Allow selection length > 1 in editing entry notypearea for copying. Catch key code, only allow Ctrl.
+				 006 Don't allow save of entry with no text or title.
 					16:50 Done
-				 Context menu for entries? (Delete, Edit)
-				 Disallow clicking/typing in shown entry (rtbSelectedEntry after clicking entry).
-				 PIN show/hide on frmNewJournal.
+				 007 Context menu for entries? (Delete, Edit)
+				 008 Disallow clicking/typing in shown entry (rtbSelectedEntry after clicking entry).
+					07/10/22 1145 Done.
+				 009 PIN show/hide on frmNewJournal.
 
  */
 using System;
@@ -236,6 +238,17 @@ namespace myJournal.subforms
 			this.Show();
 		}
 
+		private void rtbSelectedEntry_MouseDown(object sender, MouseEventArgs e)
+		{
+			lstEntries.Focus();
+		}
+
+		private void txtJournalPIN_TextChanged(object sender, EventArgs e)
+		{
+			btnLoadJournal.Enabled = true;
+			lblShowPIN.Visible = txtJournalPIN.Text.Length > 0;
+		}
+
 		private void LoadJournals()
 		{
 			string rootPath = AppDomain.CurrentDomain.BaseDirectory;
@@ -290,10 +303,5 @@ namespace myJournal.subforms
 			}
 		}
 
-		private void txtJournalPIN_TextChanged(object sender, EventArgs e)
-		{
-			btnLoadJournal.Enabled = true;
-			lblShowPIN.Visible = txtJournalPIN.Text.Length > 0;
-		}
 	}
 }
