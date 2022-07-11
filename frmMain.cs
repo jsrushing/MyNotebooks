@@ -3,36 +3,39 @@
 	07/06/22 - Dev. ended. In test.
 	bug list:
 		07/07/22 1100
-			0001 Can arrow down or right into no type area.
-			0002 Can select and drag into or out of no type area.
+			0001x Can arrow down or right into no type area.
+			> 0002x Can select and drag into or out of no type area.
 				1400 Fixed
 		07/08/22 1000
-			0003 Save entry edit sometimes leaves out Text.
+			0003x Save entry edit sometimes leaves out Text.
 				1740 Found issue. Entries with '(' in the title cause failure to build currentEntry (it remains null after entry is selected).
 				1745 Fixed: When selecting in the short entry (lstEntries) get LastIndexOf('(') instead of just .IndexOf.
 
-			0004 Entries with no text cannot be edited or deleted (menus are disabled because they toggle on rtbSelectedEntry.Text.Length > 0).
+			0004x Entries with no text cannot be edited or deleted (menus are disabled because they toggle on rtbSelectedEntry.Text.Length > 0).
 				1745 Fixed with 0003. This should never happen. Only came up because of 0003.
-
-	features:
-		07/07/22 1730 Added password char for PIN and show/hide function.
-		07/10/22 1130 Added Yes/No/Cancel prompt for Cancel/Exit on frmNewEntry.
 
 	toDo:
 		07/07/22 001 Entry RTB formatting controls.
-				 > 002 Store .RichText instead of just .Text;
+				 > 002 Save .RichText instead of just .Text;
+				002ax Add password char for PIN and show/hide function.
+					1730 Done.
 		07/08/22 003x Column tab stops in rtbNewEntry.
 					07/10/22 1810 Done (was simple properties setting - .AcceptTab)
-				 004 Save new entry without exiting (to save incrementally).
-				 005 Allow selection length > 1 in editing entry notypearea for copying. Catch key code, only allow Ctrl.
+				 004x Save new entry without exiting (to save incrementally)?
+					07/11/22 1445 No. Have user save entry then edit if desired.
+				 005 Allow selection length > 1 in editing entry notypearea for copying? Catch key code, only allow Ctrl.
 				 006x Don't allow save of entry with no text or title.
 					16:50 Done
-				 007 Context menu for entries? (Delete, Edit)
+				 007x Context menu for entries? (Delete, Edit)
+					07/11/22 1445 No. This functionality isn't important since app is destined for mobile UI.
 				 008x Disallow clicking/typing in Selected Entry text on frmMain.
 					07/10/22 1145 Done.
 				 009x PIN show/hide on frmNewJournal.
 					7/10/22 1400 Done.
-		07/10/22 010 Search criteria is case sensitive. Should be a user choice (default insensitive).
+		07/10/22 010x Search criteria is case sensitive. Should be a user choice (default insensitive).
+					07/11/22 1430 Fixed.
+				 011x Add Yes/No/Cancel prompt for Cancel/Exit on frmNewEntry.
+					1130 Done.
 
  */
 using System;

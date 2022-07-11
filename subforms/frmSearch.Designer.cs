@@ -31,6 +31,7 @@ namespace myJournal.subforms
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSearch));
 			this.grpFindEntry = new System.Windows.Forms.GroupBox();
+			this.chkMatchCase = new System.Windows.Forms.CheckBox();
 			this.lblSeparator = new System.Windows.Forms.Label();
 			this.radBtnAnd = new System.Windows.Forms.RadioButton();
 			this.radBtnOr = new System.Windows.Forms.RadioButton();
@@ -63,6 +64,7 @@ namespace myJournal.subforms
 			this.grpFindEntry.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.grpFindEntry.Controls.Add(this.chkMatchCase);
 			this.grpFindEntry.Controls.Add(this.lblSeparator);
 			this.grpFindEntry.Controls.Add(this.radBtnAnd);
 			this.grpFindEntry.Controls.Add(this.radBtnOr);
@@ -87,6 +89,16 @@ namespace myJournal.subforms
 			this.grpFindEntry.Size = new System.Drawing.Size(430, 439);
 			this.grpFindEntry.TabIndex = 7;
 			this.grpFindEntry.TabStop = false;
+			// 
+			// chkMatchCase
+			// 
+			this.chkMatchCase.AutoSize = true;
+			this.chkMatchCase.Location = new System.Drawing.Point(332, 37);
+			this.chkMatchCase.Name = "chkMatchCase";
+			this.chkMatchCase.Size = new System.Drawing.Size(86, 19);
+			this.chkMatchCase.TabIndex = 38;
+			this.chkMatchCase.Text = "match case";
+			this.chkMatchCase.UseVisualStyleBackColor = true;
 			// 
 			// lblSeparator
 			// 
@@ -338,6 +350,7 @@ namespace myJournal.subforms
 			this.clearFieldsToolStripMenuItem.Name = "clearFieldsToolStripMenuItem";
 			this.clearFieldsToolStripMenuItem.Size = new System.Drawing.Size(79, 20);
 			this.clearFieldsToolStripMenuItem.Text = "Clear Fields";
+			this.clearFieldsToolStripMenuItem.Click += new System.EventHandler(this.clearFieldsToolStripMenuItem_Click);
 			// 
 			// mnuExit
 			// 
@@ -392,5 +405,6 @@ namespace myJournal.subforms
 		private System.Windows.Forms.RadioButton radBtnOr;
 		private System.Windows.Forms.Label lblSeparator;
 		private System.Windows.Forms.ToolStripMenuItem mnuExit;
+		private System.Windows.Forms.CheckBox chkMatchCase;
 	}
 }

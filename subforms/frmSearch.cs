@@ -35,6 +35,11 @@ namespace myJournal.subforms
 			string labels = string.Empty;
 			string[] labelsArray = null;
 			List<JournalEntry> foundEntries = new List<JournalEntry>();
+			string searchTitle = string.Empty;
+			string searchText = string.Empty;
+			string entryText = string.Empty;
+			string entryTitle = string.Empty;
+			lstFoundEntries.Items.Clear();
 
 			for (int i = 0; i < lstLabelsForSearch.CheckedItems.Count; i++)
 			{ labels += lstLabelsForSearch.CheckedItems[i].ToString() + ","; }
@@ -55,18 +60,23 @@ namespace myJournal.subforms
 				if(labelsArray != null)
 				{ foreach (string group in labelsArray) { if (je.ClearTags().Contains(group)) { foundEntries.Add(je); }}}
 
+				searchTitle = chkMatchCase.Checked ? txtSearchTitle.Text : txtSearchTitle.Text.ToLower();
+				searchText = chkMatchCase.Checked ? txtSearchText.Text : txtSearchText.Text.ToLower();
+				entryText = chkMatchCase.Checked ? je.ClearText() : je.ClearText().ToLower();
+				entryTitle = chkMatchCase.Checked ? je.ClearTitle() : je.ClearTitle().ToLower();
+
 				// title and/or text
 				if (radBtnAnd.Checked)
 				{
-					if(txtSearchTitle.Text.Length > 0 & txtSearchText.Text.Length > 0)
-					{ if (je.ClearText().Contains(txtSearchText.Text) & je.ClearTitle().Contains(txtSearchTitle.Text)) { foundEntries.Add(je); }}
-					else if(txtSearchText.Text.Length > 0) { if (je.ClearText().Contains(txtSearchText.Text)) { foundEntries.Add(je); }}
-					else if (txtSearchTitle.Text.Length > 0) { if (je.ClearTitle().Contains(txtSearchTitle.Text)) { foundEntries.Add(je); }}
+					if(searchTitle.Length > 0 & searchText.Length > 0)
+					{ if (entryText.Contains(searchText) & entryTitle.Contains(searchTitle)) { foundEntries.Add(je); }}
+					else if(searchText.Length > 0) { if (entryText.Contains(searchText)) { foundEntries.Add(je); }}
+					else if (searchTitle.Length > 0) { if (entryTitle.Contains(searchTitle)) { foundEntries.Add(je); }}
 				}
 				else
 				{
-					if (txtSearchText.Text.Length > 0) { if (je.ClearText().Contains(txtSearchText.Text)) { foundEntries.Add(je); } }
-					if (txtSearchTitle.Text.Length > 0) { if (je.ClearTitle().Contains(txtSearchTitle.Text)) { foundEntries.Add(je); } }
+					if (searchText.Length > 0) { if (entryText.Contains(searchText)) { foundEntries.Add(je); } }
+					if (searchTitle.Length > 0) { if (entryTitle.Contains(searchTitle)) { foundEntries.Add(je); } }
 				}
 
 				// show results
@@ -76,6 +86,8 @@ namespace myJournal.subforms
 					lblFoundEntries.Visible = true;
 				}
 			}
+
+			if(lstFoundEntries.Items.Count == 0) { lstFoundEntries.Items.Add("no matches found"); }
 		}
 
 		private void lblSeparator_MouseMove(object sender, MouseEventArgs e)
@@ -102,5 +114,22 @@ namespace myJournal.subforms
 		}
 
 		private void mnuExit_Click(object sender, EventArgs e) { this.Hide(); }
+
+		private void clearFieldsToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			for (int i = 0; i < lstLabelsForSearch.Items.Count; i++)
+			{
+				lstLabelsForSearch.SetItemChecked(i, false);
+			}
+			txtSearchText.Text = string.Empty;
+			txtSearchTitle.Text = string.Empty;
+			chkMatchCase.Checked = false;
+			radBtnOr.Checked = true;
+			chkUseDate.Checked = false;
+			chkUseDateRange.Checked = false;
+			lstFoundEntries.Items.Clear();
+			rtbSelectedEntry_Found.Text = string.Empty;
+			lblSeparator.Visible = false;
+		}
 	}
 }
