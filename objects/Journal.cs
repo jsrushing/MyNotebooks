@@ -37,7 +37,7 @@ namespace myJournal
 
         public void AddEntry(JournalEntry entryToAdd) { Entries.Add(entryToAdd); }
 
-        private void AddFirstEntry() { Entries.Add(new JournalEntry("created", "-", "")); }
+        private void AddFirstEntry() { Entries.Add(new JournalEntry("created", "-", "-", "")); }
 
         public void Create()
         {

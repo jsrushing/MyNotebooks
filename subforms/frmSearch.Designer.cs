@@ -52,8 +52,8 @@ namespace myJournal.subforms
 			this.label8 = new System.Windows.Forms.Label();
 			this.lblFoundEntries = new System.Windows.Forms.Label();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-			this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.clearFieldsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuSearch = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuClearFields = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuExit = new System.Windows.Forms.ToolStripMenuItem();
 			this.grpFindEntry.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
@@ -329,8 +329,8 @@ namespace myJournal.subforms
 			// menuStrip1
 			// 
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.searchToolStripMenuItem,
-            this.clearFieldsToolStripMenuItem,
+            this.mnuSearch,
+            this.mnuClearFields,
             this.mnuExit});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
@@ -338,19 +338,19 @@ namespace myJournal.subforms
 			this.menuStrip1.TabIndex = 8;
 			this.menuStrip1.Text = "menuStrip1";
 			// 
-			// searchToolStripMenuItem
+			// mnuSearch
 			// 
-			this.searchToolStripMenuItem.Name = "searchToolStripMenuItem";
-			this.searchToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
-			this.searchToolStripMenuItem.Text = "Search";
-			this.searchToolStripMenuItem.Click += new System.EventHandler(this.searchToolStripMenuItem_Click);
+			this.mnuSearch.Name = "mnuSearch";
+			this.mnuSearch.Size = new System.Drawing.Size(54, 20);
+			this.mnuSearch.Text = "Search";
+			this.mnuSearch.Click += new System.EventHandler(this.mnuSearch_Click);
 			// 
-			// clearFieldsToolStripMenuItem
+			// mnuClearFields
 			// 
-			this.clearFieldsToolStripMenuItem.Name = "clearFieldsToolStripMenuItem";
-			this.clearFieldsToolStripMenuItem.Size = new System.Drawing.Size(79, 20);
-			this.clearFieldsToolStripMenuItem.Text = "Clear Fields";
-			this.clearFieldsToolStripMenuItem.Click += new System.EventHandler(this.clearFieldsToolStripMenuItem_Click);
+			this.mnuClearFields.Name = "mnuClearFields";
+			this.mnuClearFields.Size = new System.Drawing.Size(79, 20);
+			this.mnuClearFields.Text = "Clear Fields";
+			this.mnuClearFields.Click += new System.EventHandler(this.mnuClearFields_Click);
 			// 
 			// mnuExit
 			// 
@@ -399,8 +399,8 @@ namespace myJournal.subforms
 		private System.Windows.Forms.Label label8;
 		private System.Windows.Forms.Label lblFoundEntries;
 		private System.Windows.Forms.MenuStrip menuStrip1;
-		private System.Windows.Forms.ToolStripMenuItem searchToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem clearFieldsToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem mnuSearch;
+		private System.Windows.Forms.ToolStripMenuItem mnuClearFields;
 		private System.Windows.Forms.RadioButton radBtnAnd;
 		private System.Windows.Forms.RadioButton radBtnOr;
 		private System.Windows.Forms.Label lblSeparator;

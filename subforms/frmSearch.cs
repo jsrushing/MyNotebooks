@@ -29,7 +29,7 @@ namespace myJournal.subforms
 		private void chkUseDate_CheckedChanged(object sender, EventArgs e)
 		{ dtFindDate.Enabled = chkUseDate.Enabled; }
 
-		private void searchToolStripMenuItem_Click(object sender, EventArgs e)
+		private void mnuSearch_Click(object sender, EventArgs e)
 		{
 			// labels
 			string labels = string.Empty;
@@ -113,9 +113,7 @@ namespace myJournal.subforms
 			lb.SelectedIndexChanged += new System.EventHandler(this.lstFoundEntries_SelectedIndexChanged);
 		}
 
-		private void mnuExit_Click(object sender, EventArgs e) { this.Hide(); }
-
-		private void clearFieldsToolStripMenuItem_Click(object sender, EventArgs e)
+		private void mnuClearFields_Click(object sender, EventArgs e)
 		{
 			for (int i = 0; i < lstLabelsForSearch.Items.Count; i++)
 			{
@@ -131,5 +129,8 @@ namespace myJournal.subforms
 			rtbSelectedEntry_Found.Text = string.Empty;
 			lblSeparator.Visible = false;
 		}
+
+		private void mnuExit_Click(object sender, EventArgs e) { this.Hide(); }
+
 	}
 }

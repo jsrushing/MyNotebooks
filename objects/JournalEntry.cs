@@ -15,19 +15,21 @@ namespace myJournal
         public DateTime Date;
         string Text;
         string Title;
-        string Tags;
+		string RTF;
+        string Labels;
 		public bool isEdited = false;
         public string Id;
 
 		public JournalEntry() { }
 
-		public JournalEntry(string _title, string _text, string _tags, bool _edited = false)
+		public JournalEntry(string _title, string _text, string _RTF, string _labels, bool _edited = false)
         {
 			this.Date	= DateTime.Now;
 			string key	= ConfigurationManager.AppSettings["PrivateKey"];
 			this.Text	= EncryptDecrypt.Encrypt(_text, Program.PIN, key);
             this.Title	= EncryptDecrypt.Encrypt(_title, Program.PIN, key);
-            this.Tags	= EncryptDecrypt.Encrypt(_tags, Program.PIN, key);
+			this.RTF	= EncryptDecrypt.Encrypt(_RTF, Program.PIN, key);
+            this.Labels	= EncryptDecrypt.Encrypt(_labels, Program.PIN, key);
             this.Id		= Guid.NewGuid().ToString();
 			this.isEdited = _edited;
 		}
@@ -38,7 +40,7 @@ namespace myJournal
 			
 			if(this.ClearTitle().Length > 0)
 			{
-				int iTextChunkLength = Convert.ToInt16(ListboxWidth * .15);
+				int iTextChunkLength = Convert.ToInt16(ListboxWidth * .35);
 
 				lstRtrn.Add(this.ClearTitle() + " (" + this.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")");
 				string sEntryText = this.ClearText();
@@ -55,13 +57,14 @@ namespace myJournal
 
 		public void Replace(JournalEntry newEntry)
 		{
-			this.Tags = newEntry.Tags;
+			this.Labels = newEntry.Labels;
 			this.Text = newEntry.Text;
 			this.Title = newEntry.Title;
 		}
 
-		public string ClearText(){ return EncryptDecrypt.Decrypt(this.Text, Program.PIN, ConfigurationManager.AppSettings["PrivateKey"]); }
-		public string ClearTitle() { return EncryptDecrypt.Decrypt(this.Title, Program.PIN, ConfigurationManager.AppSettings["PrivateKey"]); }
-		public string ClearTags() { return this.Tags == null ? String.Empty : EncryptDecrypt.Decrypt(this.Tags, Program.PIN, ConfigurationManager.AppSettings["PrivateKey"]); }
+		public string ClearText()	{ return EncryptDecrypt.Decrypt(this.Text, Program.PIN, ConfigurationManager.AppSettings["PrivateKey"]); }
+		public string ClearTitle()	{ return EncryptDecrypt.Decrypt(this.Title, Program.PIN, ConfigurationManager.AppSettings["PrivateKey"]); }
+		public string ClearRTF()	{ return EncryptDecrypt.Decrypt(this.RTF, Program.PIN, ConfigurationManager.AppSettings["PrivateKey"]); }
+		public string ClearTags()	{ return this.Labels == null ? String.Empty : EncryptDecrypt.Decrypt(this.Labels, Program.PIN, ConfigurationManager.AppSettings["PrivateKey"]); }
 	}
 }

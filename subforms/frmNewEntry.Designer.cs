@@ -29,7 +29,14 @@ namespace myJournal.subforms
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmNewEntry));
 			this.grpCreateEntry = new System.Windows.Forms.GroupBox();
+			this.toolsRTB = new System.Windows.Forms.ToolStrip();
+			this.toolsBold = new System.Windows.Forms.ToolStripButton();
+			this.toolsUnderline = new System.Windows.Forms.ToolStripButton();
+			this.toolsItalic = new System.Windows.Forms.ToolStripButton();
+			this.toolsFonts = new System.Windows.Forms.ToolStripComboBox();
+			this.toolsFontSizes = new System.Windows.Forms.ToolStripComboBox();
 			this.lblManageLabels = new System.Windows.Forms.Label();
 			this.txtNewEntryTitle = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
@@ -47,6 +54,7 @@ namespace myJournal.subforms
 			this.mnuEditOriginalText = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuCancelExit = new System.Windows.Forms.ToolStripMenuItem();
 			this.grpCreateEntry.SuspendLayout();
+			this.toolsRTB.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -55,6 +63,7 @@ namespace myJournal.subforms
 			this.grpCreateEntry.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.grpCreateEntry.Controls.Add(this.toolsRTB);
 			this.grpCreateEntry.Controls.Add(this.lblManageLabels);
 			this.grpCreateEntry.Controls.Add(this.txtNewEntryTitle);
 			this.grpCreateEntry.Controls.Add(this.label2);
@@ -72,6 +81,69 @@ namespace myJournal.subforms
 			this.grpCreateEntry.Size = new System.Drawing.Size(437, 459);
 			this.grpCreateEntry.TabIndex = 5;
 			this.grpCreateEntry.TabStop = false;
+			// 
+			// toolsRTB
+			// 
+			this.toolsRTB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.toolsRTB.Dock = System.Windows.Forms.DockStyle.None;
+			this.toolsRTB.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolsBold,
+            this.toolsUnderline,
+            this.toolsItalic,
+            this.toolsFonts,
+            this.toolsFontSizes});
+			this.toolsRTB.Location = new System.Drawing.Point(145, 44);
+			this.toolsRTB.Name = "toolsRTB";
+			this.toolsRTB.Size = new System.Drawing.Size(274, 27);
+			this.toolsRTB.TabIndex = 41;
+			this.toolsRTB.Text = "toolStrip1";
+			// 
+			// toolsBold
+			// 
+			this.toolsBold.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolsBold.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.toolsBold.Image = ((System.Drawing.Image)(resources.GetObject("toolsBold.Image")));
+			this.toolsBold.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolsBold.Name = "toolsBold";
+			this.toolsBold.Size = new System.Drawing.Size(23, 24);
+			this.toolsBold.Text = "B";
+			this.toolsBold.Click += new System.EventHandler(this.ToolsMenuClick);
+			// 
+			// toolsUnderline
+			// 
+			this.toolsUnderline.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolsUnderline.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+			this.toolsUnderline.Image = ((System.Drawing.Image)(resources.GetObject("toolsUnderline.Image")));
+			this.toolsUnderline.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolsUnderline.Name = "toolsUnderline";
+			this.toolsUnderline.Size = new System.Drawing.Size(23, 24);
+			this.toolsUnderline.Text = "U";
+			this.toolsUnderline.Click += new System.EventHandler(this.ToolsMenuClick);
+			// 
+			// toolsItalic
+			// 
+			this.toolsItalic.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolsItalic.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point);
+			this.toolsItalic.Image = ((System.Drawing.Image)(resources.GetObject("toolsItalic.Image")));
+			this.toolsItalic.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolsItalic.Name = "toolsItalic";
+			this.toolsItalic.Size = new System.Drawing.Size(23, 24);
+			this.toolsItalic.Text = "I";
+			this.toolsItalic.Click += new System.EventHandler(this.ToolsMenuClick);
+			// 
+			// toolsFonts
+			// 
+			this.toolsFonts.AutoSize = false;
+			this.toolsFonts.Name = "toolsFonts";
+			this.toolsFonts.Size = new System.Drawing.Size(121, 23);
+			this.toolsFonts.Text = "Times New Roman";
+			// 
+			// toolsFontSizes
+			// 
+			this.toolsFontSizes.AutoSize = false;
+			this.toolsFontSizes.Name = "toolsFontSizes";
+			this.toolsFontSizes.Size = new System.Drawing.Size(35, 23);
+			this.toolsFontSizes.Text = "10";
 			// 
 			// lblManageLabels
 			// 
@@ -197,7 +269,7 @@ namespace myJournal.subforms
 			this.label3.AutoSize = true;
 			this.label3.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			this.label3.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.label3.Location = new System.Drawing.Point(6, 45);
+			this.label3.Location = new System.Drawing.Point(6, 50);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(41, 17);
 			this.label3.TabIndex = 3;
@@ -211,9 +283,9 @@ namespace myJournal.subforms
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.rtbNewEntry.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.rtbNewEntry.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.rtbNewEntry.Location = new System.Drawing.Point(6, 64);
+			this.rtbNewEntry.Location = new System.Drawing.Point(6, 69);
 			this.rtbNewEntry.Name = "rtbNewEntry";
-			this.rtbNewEntry.Size = new System.Drawing.Size(418, 228);
+			this.rtbNewEntry.Size = new System.Drawing.Size(418, 222);
 			this.rtbNewEntry.TabIndex = 2;
 			this.rtbNewEntry.Text = "";
 			this.rtbNewEntry.MouseUp += new System.Windows.Forms.MouseEventHandler(this.rtbNewEntry_MouseUp);
@@ -266,6 +338,8 @@ namespace myJournal.subforms
 			this.Load += new System.EventHandler(this.frmNewEntry_Load);
 			this.grpCreateEntry.ResumeLayout(false);
 			this.grpCreateEntry.PerformLayout();
+			this.toolsRTB.ResumeLayout(false);
+			this.toolsRTB.PerformLayout();
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
 			this.ResumeLayout(false);
@@ -292,5 +366,11 @@ namespace myJournal.subforms
 		private System.Windows.Forms.ToolStripMenuItem mnuSaveEntry;
 		private System.Windows.Forms.ToolStripMenuItem mnuCancelExit;
 		private System.Windows.Forms.ToolStripMenuItem mnuEditOriginalText;
+		private System.Windows.Forms.ToolStrip toolsRTB;
+		private System.Windows.Forms.ToolStripButton toolsBold;
+		private System.Windows.Forms.ToolStripButton toolsUnderline;
+		private System.Windows.Forms.ToolStripButton toolsItalic;
+		private System.Windows.Forms.ToolStripComboBox toolsFonts;
+		private System.Windows.Forms.ToolStripComboBox toolsFontSizes;
 	}
 }

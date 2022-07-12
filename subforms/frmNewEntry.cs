@@ -88,7 +88,7 @@ namespace myJournal.subforms
 		{
 			if (rtbNewEntry.Text.Length > 0 && txtNewEntryTitle.Text.Length > 0)
 			{
-				entry = new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, Utilities.GetCheckedLabels(lstLabels), false);
+				entry = new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, rtbNewEntry.Rtf, Utilities.GetCheckedLabels(lstLabels), false); ;
 				this.Hide();
 			}
 			else
@@ -122,5 +122,14 @@ namespace myJournal.subforms
 
 		private void lstLabels_SelectedIndexChanged(object sender, EventArgs e) { lstLabels.SelectedIndices.Clear(); }
 
+		private void ModifyFontStyle(FontStyle style)
+		{ rtbNewEntry.SelectionFont = new Font(rtbNewEntry.SelectionFont, rtbNewEntry.SelectionFont.Style ^ style); }
+
+		private void ToolsMenuClick(object sender, EventArgs e)
+		{
+			string btnName = ((ToolStripButton)sender).Name.ToLower();
+			FontStyle style = btnName.Contains("bold") ? FontStyle.Bold : btnName.Contains("underline") ? FontStyle.Underline : FontStyle.Italic;
+			ModifyFontStyle(style);
+		}
 	}
 }
