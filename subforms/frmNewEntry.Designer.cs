@@ -92,11 +92,12 @@ namespace myJournal.subforms
             this.toolsItalic,
             this.toolsFonts,
             this.toolsFontSizes});
-			this.toolsRTB.Location = new System.Drawing.Point(145, 44);
+			this.toolsRTB.Location = new System.Drawing.Point(178, 44);
 			this.toolsRTB.Name = "toolsRTB";
-			this.toolsRTB.Size = new System.Drawing.Size(274, 27);
+			this.toolsRTB.Size = new System.Drawing.Size(241, 25);
 			this.toolsRTB.TabIndex = 41;
 			this.toolsRTB.Text = "toolStrip1";
+			this.toolsRTB.Visible = false;
 			// 
 			// toolsBold
 			// 
@@ -105,7 +106,7 @@ namespace myJournal.subforms
 			this.toolsBold.Image = ((System.Drawing.Image)(resources.GetObject("toolsBold.Image")));
 			this.toolsBold.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolsBold.Name = "toolsBold";
-			this.toolsBold.Size = new System.Drawing.Size(23, 24);
+			this.toolsBold.Size = new System.Drawing.Size(23, 22);
 			this.toolsBold.Text = "B";
 			this.toolsBold.Click += new System.EventHandler(this.ToolsMenuClick);
 			// 
@@ -116,7 +117,7 @@ namespace myJournal.subforms
 			this.toolsUnderline.Image = ((System.Drawing.Image)(resources.GetObject("toolsUnderline.Image")));
 			this.toolsUnderline.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolsUnderline.Name = "toolsUnderline";
-			this.toolsUnderline.Size = new System.Drawing.Size(23, 24);
+			this.toolsUnderline.Size = new System.Drawing.Size(23, 22);
 			this.toolsUnderline.Text = "U";
 			this.toolsUnderline.Click += new System.EventHandler(this.ToolsMenuClick);
 			// 
@@ -127,7 +128,7 @@ namespace myJournal.subforms
 			this.toolsItalic.Image = ((System.Drawing.Image)(resources.GetObject("toolsItalic.Image")));
 			this.toolsItalic.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolsItalic.Name = "toolsItalic";
-			this.toolsItalic.Size = new System.Drawing.Size(23, 24);
+			this.toolsItalic.Size = new System.Drawing.Size(23, 22);
 			this.toolsItalic.Text = "I";
 			this.toolsItalic.Click += new System.EventHandler(this.ToolsMenuClick);
 			// 
@@ -288,6 +289,7 @@ namespace myJournal.subforms
 			this.rtbNewEntry.Size = new System.Drawing.Size(418, 222);
 			this.rtbNewEntry.TabIndex = 2;
 			this.rtbNewEntry.Text = "";
+			this.rtbNewEntry.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rtbNewEntry_KeyDown);
 			this.rtbNewEntry.MouseUp += new System.Windows.Forms.MouseEventHandler(this.rtbNewEntry_MouseUp);
 			// 
 			// menuStrip1

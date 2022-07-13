@@ -38,6 +38,8 @@
 				 011x Add Yes/No/Cancel prompt for Cancel/Exit on frmNewEntry.
 					1130 Done.
 
+	07/13/22 Dev. closed. v1.0 released.
+
  */
 using System;
 using System.IO;
@@ -140,6 +142,7 @@ namespace myJournal.subforms
 			lb.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectEntry);
 			mnuEntryEdit.Enabled = true;	// rtbSelectedEntry.Text.Length > 0;
 			mnuEntryDelete.Enabled = mnuEntryEdit.Enabled;
+			mnuEntryEdit_Click(null, null);
 		}
 
 		private void lblSeparator_MouseMove(object sender, MouseEventArgs e)
@@ -192,7 +195,7 @@ namespace myJournal.subforms
 		private void mnuEntryEdit_Click(object sender, EventArgs e)
 		{
 			frmNewEntry frm = new frmNewEntry(currentEntry);
-			Utilities.Showform(frm, this);
+			Utilities.Showform(frm, this); 
 
 			if (frm.entry != null)
 			{

@@ -40,10 +40,10 @@ namespace myJournal
 			
 			if(this.ClearTitle().Length > 0)
 			{
-				int iTextChunkLength = Convert.ToInt16(ListboxWidth * .35);
+				int iTextChunkLength = Convert.ToInt16(ListboxWidth * .165);
+				string sEntryText = this.ClearText();
 
 				lstRtrn.Add(this.ClearTitle() + " (" + this.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")");
-				string sEntryText = this.ClearText();
 
 				lstRtrn.Add(sEntryText.Length < iTextChunkLength ?
 					sEntryText :

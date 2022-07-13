@@ -3,13 +3,11 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.Configuration;
 using System.Drawing;
 using System.IO;
-using System.Configuration;
+using System.Text;
+using System.Windows.Forms;
 
 namespace myJournal.objects
 {

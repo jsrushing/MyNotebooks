@@ -31,16 +31,20 @@ namespace myJournal.subforms
 			if (isEdit)
 			{
 				txtNewEntryTitle.Text = entry.ClearTitle();
-				txtNewEntryTitle.TabStop = false;
+
+				string s = entry.ClearText();
+				//s = s.Substring(1);
+				//s = s.Substring(0, s.Length - 1);
 
 				rtbNewEntry.Text = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Editing"], entry.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"])
-					, entry.ClearTitle(), entry.ClearText());
+					, entry.ClearTitle(), s);
 
 				Utilities.CheckExistingLabels(lstLabels, entry);
 				originalEntryLength = rtbNewEntry.Text.Length - 1;
 				originalText = rtbNewEntry.Text.Substring(rtbNewEntry.Text.Length - originalEntryLength + 1);
 				GrayOriginalText();
 				rtbNewEntry.Focus();
+				rtbNewEntry.SelectionStart = 0;
 				mnuEditOriginalText.Visible = true;
 			}
 		}
@@ -115,7 +119,7 @@ namespace myJournal.subforms
 			positionToCheck += rtbNewEntry.SelectionLength;
 			bool inNoType = positionToCheck >= rtbNewEntry.Text.Length - originalEntryLength;
 			rtbNewEntry.SelectionStart = inNoType ? rtbNewEntry.Text.Length - originalEntryLength - 1 : rtbNewEntry.SelectionStart;
-			if(inNoType & rtbNewEntry.SelectionLength > 0) { rtbNewEntry.SelectionLength = 0; } 
+			if(inNoType & rtbNewEntry.SelectionLength > 0) { rtbNewEntry.SelectionLength = 0; InNoTypeArea(); } 
 		}
 
 		private void rtbNewEntry_MouseUp(object sender, MouseEventArgs e) { InNoTypeArea(); }
@@ -130,6 +134,16 @@ namespace myJournal.subforms
 			string btnName = ((ToolStripButton)sender).Name.ToLower();
 			FontStyle style = btnName.Contains("bold") ? FontStyle.Bold : btnName.Contains("underline") ? FontStyle.Underline : FontStyle.Italic;
 			ModifyFontStyle(style);
+		}
+
+		private void rtbNewEntry_KeyUp(object sender, KeyEventArgs e)
+		{
+			//if(e.KeyCode == Keys.Right || e.KeyCode == Keys.Down) { InNoTypeArea(); }
+		}
+
+		private void rtbNewEntry_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Right || e.KeyCode == Keys.Down) { InNoTypeArea(); }
 		}
 	}
 }
