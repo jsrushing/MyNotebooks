@@ -51,10 +51,14 @@ namespace myJournal.subforms
 			this.lblWrongPin = new System.Windows.Forms.Label();
 			this.lblEntries = new System.Windows.Forms.Label();
 			this.lblShowPIN = new System.Windows.Forms.Label();
+			this.cbxDates = new System.Windows.Forms.ComboBox();
 			this.label2 = new System.Windows.Forms.Label();
-			this.label3 = new System.Windows.Forms.Label();
-			this.cbxWeeks = new System.Windows.Forms.ComboBox();
+			this.label5 = new System.Windows.Forms.Label();
+			this.radLastWeek = new System.Windows.Forms.RadioButton();
+			this.radLastMonth = new System.Windows.Forms.RadioButton();
+			this.pnlDateFilters = new System.Windows.Forms.Panel();
 			this.menuStrip1.SuspendLayout();
+			this.pnlDateFilters.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// btnLoadJournal
@@ -141,7 +145,7 @@ namespace myJournal.subforms
 			this.rtbSelectedEntry.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.rtbSelectedEntry.Location = new System.Drawing.Point(15, 271);
 			this.rtbSelectedEntry.Name = "rtbSelectedEntry";
-			this.rtbSelectedEntry.Size = new System.Drawing.Size(413, 244);
+			this.rtbSelectedEntry.Size = new System.Drawing.Size(413, 62);
 			this.rtbSelectedEntry.TabIndex = 5;
 			this.rtbSelectedEntry.TabStop = false;
 			this.rtbSelectedEntry.Text = "";
@@ -276,32 +280,69 @@ namespace myJournal.subforms
 			this.lblShowPIN.Visible = false;
 			this.lblShowPIN.Click += new System.EventHandler(this.lblShowPIN_Click);
 			// 
+			// cbxDates
+			// 
+			this.cbxDates.FormattingEnabled = true;
+			this.cbxDates.Location = new System.Drawing.Point(103, 3);
+			this.cbxDates.Name = "cbxDates";
+			this.cbxDates.Size = new System.Drawing.Size(98, 23);
+			this.cbxDates.TabIndex = 44;
+			this.cbxDates.SelectedIndexChanged += new System.EventHandler(this.cbxWeeks_SelectedIndexChanged);
+			// 
 			// label2
 			// 
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(272, 63);
+			this.label2.Location = new System.Drawing.Point(34, 9);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(25, 15);
+			this.label2.Size = new System.Drawing.Size(70, 15);
 			this.label2.TabIndex = 41;
-			this.label2.Text = "last";
+			this.label2.Text = "show from: ";
 			// 
-			// label3
+			// label5
 			// 
-			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(344, 63);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(39, 15);
-			this.label3.TabIndex = 43;
-			this.label3.Text = "weeks";
+			this.label5.AutoSize = true;
+			this.label5.Location = new System.Drawing.Point(2, 31);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(80, 15);
+			this.label5.TabIndex = 46;
+			this.label5.Text = "start with last:";
 			// 
-			// cbxWeeks
+			// radLastWeek
 			// 
-			this.cbxWeeks.FormattingEnabled = true;
-			this.cbxWeeks.Location = new System.Drawing.Point(300, 60);
-			this.cbxWeeks.Name = "cbxWeeks";
-			this.cbxWeeks.Size = new System.Drawing.Size(42, 23);
-			this.cbxWeeks.TabIndex = 44;
-			this.cbxWeeks.SelectedIndexChanged += new System.EventHandler(this.cbxWeeks_SelectedIndexChanged);
+			this.radLastWeek.AutoSize = true;
+			this.radLastWeek.Location = new System.Drawing.Point(85, 29);
+			this.radLastWeek.Name = "radLastWeek";
+			this.radLastWeek.Size = new System.Drawing.Size(52, 19);
+			this.radLastWeek.TabIndex = 47;
+			this.radLastWeek.TabStop = true;
+			this.radLastWeek.Text = "week";
+			this.radLastWeek.UseVisualStyleBackColor = true;
+			this.radLastWeek.CheckedChanged += new System.EventHandler(this.radStartFrom_CheckedChanged);
+			// 
+			// radLastMonth
+			// 
+			this.radLastMonth.AutoSize = true;
+			this.radLastMonth.Location = new System.Drawing.Point(137, 29);
+			this.radLastMonth.Name = "radLastMonth";
+			this.radLastMonth.Size = new System.Drawing.Size(61, 19);
+			this.radLastMonth.TabIndex = 48;
+			this.radLastMonth.TabStop = true;
+			this.radLastMonth.Text = "month";
+			this.radLastMonth.UseVisualStyleBackColor = true;
+			this.radLastMonth.CheckedChanged += new System.EventHandler(this.radStartFrom_CheckedChanged);
+			// 
+			// pnlDateFilters
+			// 
+			this.pnlDateFilters.Controls.Add(this.cbxDates);
+			this.pnlDateFilters.Controls.Add(this.radLastMonth);
+			this.pnlDateFilters.Controls.Add(this.label2);
+			this.pnlDateFilters.Controls.Add(this.radLastWeek);
+			this.pnlDateFilters.Controls.Add(this.label5);
+			this.pnlDateFilters.Location = new System.Drawing.Point(227, 54);
+			this.pnlDateFilters.Name = "pnlDateFilters";
+			this.pnlDateFilters.Size = new System.Drawing.Size(205, 52);
+			this.pnlDateFilters.TabIndex = 49;
+			this.pnlDateFilters.Visible = false;
 			// 
 			// frmMain
 			// 
@@ -310,14 +351,12 @@ namespace myJournal.subforms
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.Window;
 			this.ClientSize = new System.Drawing.Size(440, 527);
-			this.Controls.Add(this.cbxWeeks);
-			this.Controls.Add(this.label3);
-			this.Controls.Add(this.label2);
+			this.Controls.Add(this.btnLoadJournal);
+			this.Controls.Add(this.pnlDateFilters);
 			this.Controls.Add(this.lblShowPIN);
 			this.Controls.Add(this.lblEntries);
 			this.Controls.Add(this.lblWrongPin);
 			this.Controls.Add(this.lblSelectionType);
-			this.Controls.Add(this.btnLoadJournal);
 			this.Controls.Add(this.txtJournalPIN);
 			this.Controls.Add(this.lblSeparator);
 			this.Controls.Add(this.label4);
@@ -333,6 +372,8 @@ namespace myJournal.subforms
 			this.Resize += new System.EventHandler(this.frmMain_Resize);
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
+			this.pnlDateFilters.ResumeLayout(false);
+			this.pnlDateFilters.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -360,8 +401,11 @@ namespace myJournal.subforms
 		private System.Windows.Forms.Label lblEntries;
 		private System.Windows.Forms.ToolStripMenuItem mnuEntryDelete;
 		private System.Windows.Forms.Label lblShowPIN;
+		private System.Windows.Forms.ComboBox cbxDates;
 		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.ComboBox cbxWeeks;
+		private System.Windows.Forms.Label label5;
+		private System.Windows.Forms.RadioButton radLastWeek;
+		private System.Windows.Forms.RadioButton radLastMonth;
+		private System.Windows.Forms.Panel pnlDateFilters;
 	}
 }

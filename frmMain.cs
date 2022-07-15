@@ -50,6 +50,8 @@
  */
 using System;
 using System.IO;
+using System.Linq;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using myJournal.objects;
 
@@ -73,12 +75,12 @@ namespace myJournal.subforms
 			string version = fvi.FileVersion;
 			this.Text = "myJournal " + version;
 			LoadJournals();
-			for(int i = 1; i < 52; i++)
-			{
-				cbxWeeks.Items.Add(i.ToString());
-			}
-			cbxWeeks.Items.Add("ALL");
-			cbxWeeks.Text = "4";
+			//for(int i = 1; i < 52; i++)
+			//{
+			//	cbxWeeks.Items.Add(i.ToString());
+			//}
+			//cbxWeeks.Items.Add("ALL");
+			//cbxWeeks.Text = "4";
 		}
 
 		private void frmMain_Resize(object sender, EventArgs e)
@@ -103,13 +105,16 @@ namespace myJournal.subforms
 
 				if (currentJournal != null)
 				{
-					Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxWeeks.Text.ToLower().Equals("all") ? -1 : Convert.ToInt16(cbxWeeks.Text));
+					Utilities.PopulateEntries(lstEntries, currentJournal.Entries);
 
 					if(lstEntries.Items.Count > 0)
 					{
 						lstEntries.Height = this.Height - lstEntries.Top - 50;
 						lstEntries.Visible = true;
 						ShowHideJournalMenus(true);
+						PopulateShowFromDates();
+						radLastWeek.Checked = true;
+						pnlDateFilters.Visible = true;
 					}
 					else
 					{
@@ -128,6 +133,12 @@ namespace myJournal.subforms
 			catch (Exception ex) { }
 		}
 
+		private void cbxWeeks_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if(currentJournal != null) 
+			{ Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text); }	
+		}
+
 		private void ddlJournals_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			btnLoadJournal.Enabled = true;
@@ -138,9 +149,11 @@ namespace myJournal.subforms
 			rtbSelectedEntry.Text = string.Empty;
 			ShowHideEntriesArea(false);
 			ShowHideJournalMenus(false);
-			mnuEntryEdit.Enabled = false;
-			mnuEntryDelete.Enabled = false;
+			cbxDates.DataSource = null;
+			radLastWeek.Checked = false;
+			radLastMonth.Checked = false;
 			lblWrongPin.Visible = false;
+			pnlDateFilters.Visible = false;
 		}
 
 		private void lstEntries_SelectEntry(object sender, EventArgs e)
@@ -183,7 +196,7 @@ namespace myJournal.subforms
 			{
 				currentJournal.AddEntry(frm.entry);
 				currentJournal.Save();
-				Utilities.PopulateEntries(lstEntries, currentJournal.Entries);
+				Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text);
 			}
 			frm.Close();
 			this.Show();
@@ -197,7 +210,7 @@ namespace myJournal.subforms
 			{
 				currentJournal.Entries.Remove(currentEntry);
 				currentJournal.Save();
-				Utilities.PopulateEntries(lstEntries, currentJournal.Entries);
+				Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text);
 				ShowHideEntriesArea(false);
 				lstEntries.Visible = true;
 				lstEntries.Height = this.Height - 160;
@@ -215,7 +228,7 @@ namespace myJournal.subforms
 			{
 				currentEntry.Replace(frm.entry);
 				currentJournal.Save();
-				Utilities.PopulateEntries(lstEntries, currentJournal.Entries);
+				Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text);
 				ShowHideEntriesArea(false);
 				lstEntries.Visible = true;
 			}
@@ -303,6 +316,13 @@ namespace myJournal.subforms
 			ShowHideJournalMenus(false);
 		}
 
+		private void PopulateShowFromDates()
+		{
+			cbxDates.DataSource = null;
+			List<string> l = currentJournal.Entries.Select(e => e.Date.ToShortDateString()).Distinct().ToList();
+			cbxDates.DataSource = l;
+		}
+
 		private void ShowHideEntriesArea(bool show)
 		{
 			rtbSelectedEntry.Text = show ? rtbSelectedEntry.Text : string.Empty;
@@ -319,6 +339,8 @@ namespace myJournal.subforms
 			mnuJournal_Delete.Enabled = show;
 			mnuSearch.Enabled = show;
 			lblEntries.Visible = show;
+			mnuEntryEdit.Enabled = show;
+			mnuEntryDelete.Enabled = show;
 		}
 
 		protected override CreateParams CreateParams {
@@ -329,10 +351,30 @@ namespace myJournal.subforms
 			}
 		}
 
-		private void cbxWeeks_SelectedIndexChanged(object sender, EventArgs e)
+		private void radStartFrom_CheckedChanged(object sender, EventArgs e)
 		{
-			if(currentJournal != null) 
-			{ Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxWeeks.Text.ToLower().Equals("all") ? -1 : Convert.ToInt16(cbxWeeks.Text)); }	
+			if(cbxDates.Items.Count > 0)
+			{
+				DateTime targetDate;
+
+				if (radLastMonth.Checked)
+				{
+					targetDate = DateTime.Now.AddDays(-30);
+				}
+				else
+				{
+					targetDate = DateTime.Now.AddDays(-7);
+				}
+
+				for(int i = 0; i < cbxDates.Items.Count; i++)
+				{
+					if(DateTime.Parse(cbxDates.Items[i].ToString()) >= targetDate)
+					{
+						cbxDates.SelectedIndex = i;
+						break;
+					}
+				}
+			}
 		}
 	}
 }

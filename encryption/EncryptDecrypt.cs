@@ -11,24 +11,23 @@ namespace encrypt_decrypt_string
 {
     class EncryptDecrypt
     {
-        public static string Encrypt(string TextToEncrypt, string PublicKey, string PrivateKey)
+        public static string Encrypt(string TextToEncrypt)
         {
             try
             {
                 string ToReturn = "";
-				PublicKey = Program.PIN;
+				string PublicKey = ConfigurationManager.AppSettings["PublicKey"];
 
-				if(PublicKey == null || PublicKey.Length == 0)
+				if(Program.PIN == null || Program.PIN.Length == 0)
 				{
-					PublicKey = "12345678";
-					PrivateKey = "87654321";
+					Program.PIN = "12345678";
+					PublicKey = "87654321";
 				}
 
-
 				byte[] secretkeyByte = { };
-                secretkeyByte = System.Text.Encoding.UTF8.GetBytes(PrivateKey);
+                secretkeyByte = System.Text.Encoding.UTF8.GetBytes(PublicKey);
                 byte[] publickeybyte = { };
-                publickeybyte = System.Text.Encoding.UTF8.GetBytes(FullPin(PublicKey));
+                publickeybyte = System.Text.Encoding.UTF8.GetBytes(FullPin(Program.PIN));
                 MemoryStream ms = null;
                 CryptoStream cs = null;
                 byte[] inputbyteArray = System.Text.Encoding.UTF8.GetBytes(TextToEncrypt);
@@ -48,24 +47,24 @@ namespace encrypt_decrypt_string
             }
         }
 
-        public static string Decrypt(string TextToDecrypt, string PublicKey, string PrivateKey)
+        public static string Decrypt(string TextToDecrypt)
         {
             try
             {
                 string ToReturn = "";
-				PublicKey = Program.PIN;
+				string PublicKey = ConfigurationManager.AppSettings["PublicKey"];	// Program.PIN;
 
-				if (PublicKey == null || PublicKey.Length == 0)
+				if (Program.PIN == null || Program.PIN.Length == 0)
 				{
-					PublicKey = "12345678";
-					PrivateKey = "87654321";
+					Program.PIN = "12345678";
+					PublicKey = "87654321";
 				}
 
 
 				byte[] privatekeyByte = { };
-                privatekeyByte = System.Text.Encoding.UTF8.GetBytes(PrivateKey);
+                privatekeyByte = System.Text.Encoding.UTF8.GetBytes(PublicKey);
                 byte[] publickeybyte = { };
-                publickeybyte = System.Text.Encoding.UTF8.GetBytes(FullPin(PublicKey)); 
+                publickeybyte = System.Text.Encoding.UTF8.GetBytes(FullPin(Program.PIN)); 
                 MemoryStream ms = null;
                 CryptoStream cs = null;
                 byte[] inputbyteArray = new byte[TextToDecrypt.Replace(" ", "+").Length];

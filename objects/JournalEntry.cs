@@ -25,11 +25,11 @@ namespace myJournal
 		public JournalEntry(string _title, string _text, string _RTF, string _labels, bool _edited = false)
         {
 			this.Date	= DateTime.Now;
-			string key	= ConfigurationManager.AppSettings["PrivateKey"];
-			this.Text	= EncryptDecrypt.Encrypt(_text, Program.PIN, key);
-            this.Title	= EncryptDecrypt.Encrypt(_title, Program.PIN, key);
-			this.RTF	= EncryptDecrypt.Encrypt(_RTF, Program.PIN, key);
-            this.Labels	= EncryptDecrypt.Encrypt(_labels, Program.PIN, key);
+			//string key	= ConfigurationManager.AppSettings["PublicKey"];
+			this.Text	= EncryptDecrypt.Encrypt(_text);
+            this.Title	= EncryptDecrypt.Encrypt(_title);
+			this.RTF	= EncryptDecrypt.Encrypt(_RTF);
+            this.Labels	= EncryptDecrypt.Encrypt(_labels);
             this.Id		= Guid.NewGuid().ToString();
 			this.isEdited = _edited;
 		}
@@ -62,9 +62,9 @@ namespace myJournal
 			this.Title = newEntry.Title;
 		}
 
-		public string ClearText()	{ return EncryptDecrypt.Decrypt(this.Text, Program.PIN, ConfigurationManager.AppSettings["PrivateKey"]); }
-		public string ClearTitle()	{ return EncryptDecrypt.Decrypt(this.Title, Program.PIN, ConfigurationManager.AppSettings["PrivateKey"]); }
-		public string ClearRTF()	{ return EncryptDecrypt.Decrypt(this.RTF, Program.PIN, ConfigurationManager.AppSettings["PrivateKey"]); }
-		public string ClearTags()	{ return this.Labels == null ? String.Empty : EncryptDecrypt.Decrypt(this.Labels, Program.PIN, ConfigurationManager.AppSettings["PrivateKey"]); }
+		public string ClearText()	{ return EncryptDecrypt.Decrypt(this.Text); }
+		public string ClearTitle()	{ return EncryptDecrypt.Decrypt(this.Title); }
+		public string ClearRTF()	{ return EncryptDecrypt.Decrypt(this.RTF); }
+		public string ClearTags()	{ return this.Labels == null ? String.Empty : EncryptDecrypt.Decrypt(this.Labels); }
 	}
 }

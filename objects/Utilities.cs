@@ -44,26 +44,20 @@ namespace myJournal.objects
 			return labels;
 		}
 
-		public static void PopulateEntries(ListBox lbxToPopulate, List<JournalEntry> entries, int weekCount = -1)
+		public static void PopulateEntries(ListBox lbxToPopulate, List<JournalEntry> entries, string startDate = "")
 		{
 			lbxToPopulate.Items.Clear();
-			IEnumerable<JournalEntry> tmpEntries = null;
-			//IEnumerable<JournalEntry> t;
-			DateTime startDate = DateTime.Now.AddDays(weekCount * 7 * -1);
+			List<JournalEntry> tmpEntries = null;
 
-			if(weekCount > 0)
-			{
-				tmpEntries = entries.Where(x => x.Date > startDate);
-				//tmpEntries = (List<JournalEntry>)t;	// (List <JournalEntry>)entries.Where(x => x.Date > startDate);
-			}
+			if (startDate.Length > 0) { tmpEntries = (List<JournalEntry>)entries.Where(x => x.Date >= DateTime.Parse(startDate)).ToList(); }
+			else { tmpEntries = entries; }
 
-			foreach (JournalEntry je in tmpEntries == null ? entries : tmpEntries)
-			{
-				foreach (string s in je.EntryAsList(lbxToPopulate.Width))
-				{
-					lbxToPopulate.Items.Add(s);
-				}
-			}
+			//List<string> entriesAsString = (List<string>)(tmpEntries.Select(e => e.EntryAsList(lbxToPopulate.Width)).ToList());
+
+			//lbxToPopulate.DataSource = entriesAsString.ToList();
+
+			foreach (JournalEntry je in tmpEntries)
+			{ foreach (string s in je.EntryAsList(lbxToPopulate.Width)) { lbxToPopulate.Items.Add(s); } }
 		}
 
 		public static void PopulateLabelsList(CheckedListBox clb, ListBox lb = null)
