@@ -16,12 +16,20 @@ namespace myJournal.subforms
 		public bool deleteConfirmed = false;
 		private int originalEntryLength = -1;
 		private string originalText;
-
+		private bool isDirty = false;
 		public frmNewEntry(JournalEntry entryToEdit = null)
 		{
 			InitializeComponent();
 			entry = entryToEdit;
 			isEdit = entry != null;
+		}
+
+		private void Alert(string msg)
+		{
+			frmMessage frm = new frmMessage(frmMessage.OperationType.Message, msg);
+			Utilities.Showform(frm, this);
+			frm.ShowDialog();
+			this.Show();
 		}
 
 		private void frmNewEntry_Load(object sender, EventArgs e)
@@ -47,6 +55,8 @@ namespace myJournal.subforms
 				rtbNewEntry.SelectionStart = 0;
 				mnuEditOriginalText.Visible = true;
 			}
+
+			isDirty = false;
 		}
 
 		private void lblManageLabels_Click(object sender, EventArgs e)
@@ -59,25 +69,21 @@ namespace myJournal.subforms
 
 		private void mnuCancelExit_Click(object sender, EventArgs e)
 		{
-			if(txtNewEntryTitle.Text.Length > 0 | rtbNewEntry.Text.Length > 0)
+			if (isDirty)
 			{
 				frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Do you want to save your changes?");
 				Utilities.Showform(frm, this);
-				if(frm.result == frmMessage.ReturnResult.No)
-				{
-					entry = null;
-					frm.Close();
-					this.Hide();
-				}
-				else if(frm.result == frmMessage.ReturnResult.Yes)
-				{
-					mnuSaveEntry_Click(null, null);
-				}
-				else
-				{
-					frm.Close();
-					this.Show();
-				}
+
+				if(frm.result == frmMessage.ReturnResult.No) { entry = null; }
+				else if(frm.result == frmMessage.ReturnResult.Yes)  { mnuSaveEntry_Click(null, null); }
+
+				frm.Close();
+				this.Hide();
+			}
+			else
+			{
+				this.entry = null;
+				this.Hide();
 			}
 		}
 
@@ -92,15 +98,12 @@ namespace myJournal.subforms
 		{
 			if (rtbNewEntry.Text.Length > 0 && txtNewEntryTitle.Text.Length > 0)
 			{
-				entry = new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, rtbNewEntry.Rtf, Utilities.GetCheckedLabels(lstLabels), false); ;
+				entry = new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, rtbNewEntry.Rtf, Utilities.GetCheckedLabels(lstLabels), false);
 				this.Hide();
 			}
 			else
 			{
-				frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "You must enter both a title and text to save an entry.");
-				Utilities.Showform(frm, this);
-				frm.Close();
-				this.Show();
+				Alert("You must enter both a title and text to save an entry.");
 			}
 		}
 
@@ -122,9 +125,19 @@ namespace myJournal.subforms
 			if(inNoType & rtbNewEntry.SelectionLength > 0) { rtbNewEntry.SelectionLength = 0; InNoTypeArea(); } 
 		}
 
+		private void rtbNewEntry_KeyUp(object sender, KeyEventArgs e)
+		{
+			//if(e.KeyCode == Keys.Right || e.KeyCode == Keys.Down) { InNoTypeArea(); }
+		}
+
+		private void rtbNewEntry_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Right || e.KeyCode == Keys.Down) { InNoTypeArea(); }
+		}
+
 		private void rtbNewEntry_MouseUp(object sender, MouseEventArgs e) { InNoTypeArea(); }
 
-		private void lstLabels_SelectedIndexChanged(object sender, EventArgs e) { lstLabels.SelectedIndices.Clear(); }
+		private void lstLabels_SelectedIndexChanged(object sender, EventArgs e) { isDirty = true; }
 
 		private void ModifyFontStyle(FontStyle style)
 		{ rtbNewEntry.SelectionFont = new Font(rtbNewEntry.SelectionFont, rtbNewEntry.SelectionFont.Style ^ style); }
@@ -136,14 +149,8 @@ namespace myJournal.subforms
 			ModifyFontStyle(style);
 		}
 
-		private void rtbNewEntry_KeyUp(object sender, KeyEventArgs e)
-		{
-			//if(e.KeyCode == Keys.Right || e.KeyCode == Keys.Down) { InNoTypeArea(); }
-		}
+		private void txtNewEntryTitle_TextChanged(object sender, EventArgs e) { isDirty = true; }
 
-		private void rtbNewEntry_KeyDown(object sender, KeyEventArgs e)
-		{
-			if (e.KeyCode == Keys.Right || e.KeyCode == Keys.Down) { InNoTypeArea(); }
-		}
+		private void rtbNewEntry_TextChanged(object sender, EventArgs e) { isDirty = true; }
 	}
 }

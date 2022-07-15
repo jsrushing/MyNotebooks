@@ -40,6 +40,13 @@
 
 	07/13/22 Dev. closed. v1.0 released.
 
+	bugs/hotfixes:
+
+	enhancements:
+		07/14/22 001 Add date selection for shown entries (e.g. last <x> days)
+			07/15/22 0230 Is working with user specified number of weeks.
+							> Should have user input a date? From a list of dates for all entries?
+
  */
 using System;
 using System.IO;
@@ -66,6 +73,12 @@ namespace myJournal.subforms
 			string version = fvi.FileVersion;
 			this.Text = "myJournal " + version;
 			LoadJournals();
+			for(int i = 1; i < 52; i++)
+			{
+				cbxWeeks.Items.Add(i.ToString());
+			}
+			cbxWeeks.Items.Add("ALL");
+			cbxWeeks.Text = "4";
 		}
 
 		private void frmMain_Resize(object sender, EventArgs e)
@@ -90,7 +103,7 @@ namespace myJournal.subforms
 
 				if (currentJournal != null)
 				{
-					Utilities.PopulateEntries(lstEntries, currentJournal.Entries);
+					Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxWeeks.Text.ToLower().Equals("all") ? -1 : Convert.ToInt16(cbxWeeks.Text));
 
 					if(lstEntries.Items.Count > 0)
 					{
@@ -112,7 +125,7 @@ namespace myJournal.subforms
 					lstEntries.Focus();
 				}
 			}
-			catch (Exception) { }
+			catch (Exception ex) { }
 		}
 
 		private void ddlJournals_SelectedIndexChanged(object sender, EventArgs e)
@@ -127,6 +140,7 @@ namespace myJournal.subforms
 			ShowHideJournalMenus(false);
 			mnuEntryEdit.Enabled = false;
 			mnuEntryDelete.Enabled = false;
+			lblWrongPin.Visible = false;
 		}
 
 		private void lstEntries_SelectEntry(object sender, EventArgs e)
@@ -257,6 +271,7 @@ namespace myJournal.subforms
 		{
 			btnLoadJournal.Enabled = true;
 			lblShowPIN.Visible = txtJournalPIN.Text.Length > 0;
+			lblWrongPin.Visible = false;
 		}
 
 		private void LoadJournals()
@@ -278,6 +293,7 @@ namespace myJournal.subforms
 					ddlJournals.Items.Add(s.Replace(rootPath + "/journals/", ""));
 				}
 			}
+
 			ddlJournals.Enabled = ddlJournals.Items.Count > 0;
 			ddlJournals.SelectedIndex = ddlJournals.Items.Count == 1 ? 0 : -1;
 			btnLoadJournal.Enabled = false;
@@ -311,6 +327,12 @@ namespace myJournal.subforms
 				cp.ExStyle |= 0x02000000;  // Turn on WS_EX_COMPOSITED
 				return cp;
 			}
+		}
+
+		private void cbxWeeks_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if(currentJournal != null) 
+			{ Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxWeeks.Text.ToLower().Equals("all") ? -1 : Convert.ToInt16(cbxWeeks.Text)); }	
 		}
 	}
 }

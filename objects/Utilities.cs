@@ -8,6 +8,7 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace myJournal.objects
 {
@@ -43,11 +44,20 @@ namespace myJournal.objects
 			return labels;
 		}
 
-		public static void PopulateEntries(ListBox lbxToPopulate, List<JournalEntry> entries)
+		public static void PopulateEntries(ListBox lbxToPopulate, List<JournalEntry> entries, int weekCount = -1)
 		{
 			lbxToPopulate.Items.Clear();
+			IEnumerable<JournalEntry> tmpEntries = null;
+			//IEnumerable<JournalEntry> t;
+			DateTime startDate = DateTime.Now.AddDays(weekCount * 7 * -1);
 
-			foreach (JournalEntry je in entries)
+			if(weekCount > 0)
+			{
+				tmpEntries = entries.Where(x => x.Date > startDate);
+				//tmpEntries = (List<JournalEntry>)t;	// (List <JournalEntry>)entries.Where(x => x.Date > startDate);
+			}
+
+			foreach (JournalEntry je in tmpEntries == null ? entries : tmpEntries)
 			{
 				foreach (string s in je.EntryAsList(lbxToPopulate.Width))
 				{

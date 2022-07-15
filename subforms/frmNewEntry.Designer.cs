@@ -170,6 +170,7 @@ namespace myJournal.subforms
 			this.txtNewEntryTitle.Name = "txtNewEntryTitle";
 			this.txtNewEntryTitle.Size = new System.Drawing.Size(378, 23);
 			this.txtNewEntryTitle.TabIndex = 1;
+			this.txtNewEntryTitle.TextChanged += new System.EventHandler(this.txtNewEntryTitle_TextChanged);
 			// 
 			// label2
 			// 
@@ -289,6 +290,7 @@ namespace myJournal.subforms
 			this.rtbNewEntry.Size = new System.Drawing.Size(418, 222);
 			this.rtbNewEntry.TabIndex = 2;
 			this.rtbNewEntry.Text = "";
+			this.rtbNewEntry.TextChanged += new System.EventHandler(this.rtbNewEntry_TextChanged);
 			this.rtbNewEntry.KeyDown += new System.Windows.Forms.KeyEventHandler(this.rtbNewEntry_KeyDown);
 			this.rtbNewEntry.MouseUp += new System.Windows.Forms.MouseEventHandler(this.rtbNewEntry_MouseUp);
 			// 

@@ -51,6 +51,9 @@ namespace myJournal.subforms
 			this.lblWrongPin = new System.Windows.Forms.Label();
 			this.lblEntries = new System.Windows.Forms.Label();
 			this.lblShowPIN = new System.Windows.Forms.Label();
+			this.label2 = new System.Windows.Forms.Label();
+			this.label3 = new System.Windows.Forms.Label();
+			this.cbxWeeks = new System.Windows.Forms.ComboBox();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -101,7 +104,7 @@ namespace myJournal.subforms
 			this.ddlJournals.FormattingEnabled = true;
 			this.ddlJournals.Location = new System.Drawing.Point(61, 30);
 			this.ddlJournals.Name = "ddlJournals";
-			this.ddlJournals.Size = new System.Drawing.Size(352, 23);
+			this.ddlJournals.Size = new System.Drawing.Size(367, 23);
 			this.ddlJournals.TabIndex = 1;
 			this.ddlJournals.SelectedIndexChanged += new System.EventHandler(this.ddlJournals_SelectedIndexChanged);
 			// 
@@ -125,7 +128,7 @@ namespace myJournal.subforms
 			this.lstEntries.Location = new System.Drawing.Point(12, 106);
 			this.lstEntries.Name = "lstEntries";
 			this.lstEntries.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
-			this.lstEntries.Size = new System.Drawing.Size(401, 123);
+			this.lstEntries.Size = new System.Drawing.Size(416, 123);
 			this.lstEntries.TabIndex = 8;
 			this.lstEntries.Visible = false;
 			this.lstEntries.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectEntry);
@@ -138,7 +141,7 @@ namespace myJournal.subforms
 			this.rtbSelectedEntry.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.rtbSelectedEntry.Location = new System.Drawing.Point(15, 271);
 			this.rtbSelectedEntry.Name = "rtbSelectedEntry";
-			this.rtbSelectedEntry.Size = new System.Drawing.Size(398, 191);
+			this.rtbSelectedEntry.Size = new System.Drawing.Size(413, 244);
 			this.rtbSelectedEntry.TabIndex = 5;
 			this.rtbSelectedEntry.TabStop = false;
 			this.rtbSelectedEntry.Text = "";
@@ -154,7 +157,7 @@ namespace myJournal.subforms
 			this.lblSeparator.ForeColor = System.Drawing.Color.Red;
 			this.lblSeparator.Location = new System.Drawing.Point(13, 232);
 			this.lblSeparator.Name = "lblSeparator";
-			this.lblSeparator.Size = new System.Drawing.Size(403, 19);
+			this.lblSeparator.Size = new System.Drawing.Size(418, 19);
 			this.lblSeparator.TabIndex = 30;
 			this.lblSeparator.Text = resources.GetString("lblSeparator.Text");
 			this.lblSeparator.Visible = false;
@@ -167,7 +170,7 @@ namespace myJournal.subforms
             this.mnuEntryTop});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(425, 24);
+			this.menuStrip1.Size = new System.Drawing.Size(440, 24);
 			this.menuStrip1.TabIndex = 37;
 			this.menuStrip1.Text = "menuStrip1";
 			// 
@@ -242,7 +245,7 @@ namespace myJournal.subforms
 			// 
 			this.lblWrongPin.AutoSize = true;
 			this.lblWrongPin.ForeColor = System.Drawing.Color.Red;
-			this.lblWrongPin.Location = new System.Drawing.Point(289, 63);
+			this.lblWrongPin.Location = new System.Drawing.Point(54, 85);
 			this.lblWrongPin.Name = "lblWrongPin";
 			this.lblWrongPin.Size = new System.Drawing.Size(63, 15);
 			this.lblWrongPin.TabIndex = 38;
@@ -273,13 +276,43 @@ namespace myJournal.subforms
 			this.lblShowPIN.Visible = false;
 			this.lblShowPIN.Click += new System.EventHandler(this.lblShowPIN_Click);
 			// 
+			// label2
+			// 
+			this.label2.AutoSize = true;
+			this.label2.Location = new System.Drawing.Point(272, 63);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(25, 15);
+			this.label2.TabIndex = 41;
+			this.label2.Text = "last";
+			// 
+			// label3
+			// 
+			this.label3.AutoSize = true;
+			this.label3.Location = new System.Drawing.Point(344, 63);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(39, 15);
+			this.label3.TabIndex = 43;
+			this.label3.Text = "weeks";
+			// 
+			// cbxWeeks
+			// 
+			this.cbxWeeks.FormattingEnabled = true;
+			this.cbxWeeks.Location = new System.Drawing.Point(300, 60);
+			this.cbxWeeks.Name = "cbxWeeks";
+			this.cbxWeeks.Size = new System.Drawing.Size(42, 23);
+			this.cbxWeeks.TabIndex = 44;
+			this.cbxWeeks.SelectedIndexChanged += new System.EventHandler(this.cbxWeeks_SelectedIndexChanged);
+			// 
 			// frmMain
 			// 
 			this.AcceptButton = this.btnLoadJournal;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.Window;
-			this.ClientSize = new System.Drawing.Size(425, 474);
+			this.ClientSize = new System.Drawing.Size(440, 527);
+			this.Controls.Add(this.cbxWeeks);
+			this.Controls.Add(this.label3);
+			this.Controls.Add(this.label2);
 			this.Controls.Add(this.lblShowPIN);
 			this.Controls.Add(this.lblEntries);
 			this.Controls.Add(this.lblWrongPin);
@@ -327,5 +360,8 @@ namespace myJournal.subforms
 		private System.Windows.Forms.Label lblEntries;
 		private System.Windows.Forms.ToolStripMenuItem mnuEntryDelete;
 		private System.Windows.Forms.Label lblShowPIN;
+		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.ComboBox cbxWeeks;
 	}
 }
