@@ -62,6 +62,7 @@ namespace myJournal.subforms
 		Journal currentJournal;
 		JournalEntry currentEntry;
 		private bool firstSelection = true;
+		private bool skipProcessing = false;
 
 		public frmMain()
 		{
@@ -133,10 +134,20 @@ namespace myJournal.subforms
 			catch (Exception ex) { }
 		}
 
-		private void cbxWeeks_SelectedIndexChanged(object sender, EventArgs e)
+		private void cbxDates_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if(currentJournal != null) 
-			{ Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text); }	
+			{ 
+				Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text);
+				DateTime selectedDate = DateTime.Parse(cbxDates.Text);
+				skipProcessing = true;
+				radLastWeek.Checked = false;
+				radLastMonth.Checked = false;
+				radLastWeek.Checked = selectedDate == DateTime.Now.AddDays(-7);
+				radLastMonth.Checked = selectedDate == DateTime.Now.AddDays(-30);
+
+				skipProcessing = false;
+			}	
 		}
 
 		private void ddlJournals_SelectedIndexChanged(object sender, EventArgs e)
@@ -353,25 +364,28 @@ namespace myJournal.subforms
 
 		private void radStartFrom_CheckedChanged(object sender, EventArgs e)
 		{
-			if(cbxDates.Items.Count > 0)
+			if (!skipProcessing)
 			{
-				DateTime targetDate;
+				if(cbxDates.Items.Count > 0)
+				{
+					DateTime targetDate;
 
-				if (radLastMonth.Checked)
-				{
-					targetDate = DateTime.Now.AddDays(-30);
-				}
-				else
-				{
-					targetDate = DateTime.Now.AddDays(-7);
-				}
-
-				for(int i = 0; i < cbxDates.Items.Count; i++)
-				{
-					if(DateTime.Parse(cbxDates.Items[i].ToString()) >= targetDate)
+					if (radLastMonth.Checked)
 					{
-						cbxDates.SelectedIndex = i;
-						break;
+						targetDate = DateTime.Now.AddDays(-30);
+					}
+					else
+					{
+						targetDate = DateTime.Now.AddDays(-7);
+					}
+
+					for(int i = 0; i < cbxDates.Items.Count; i++)
+					{
+						if(DateTime.Parse(cbxDates.Items[i].ToString()) >= targetDate)
+						{
+							cbxDates.SelectedIndex = i;
+							break;
+						}
 					}
 				}
 			}

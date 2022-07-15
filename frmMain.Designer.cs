@@ -287,7 +287,7 @@ namespace myJournal.subforms
 			this.cbxDates.Name = "cbxDates";
 			this.cbxDates.Size = new System.Drawing.Size(98, 23);
 			this.cbxDates.TabIndex = 44;
-			this.cbxDates.SelectedIndexChanged += new System.EventHandler(this.cbxWeeks_SelectedIndexChanged);
+			this.cbxDates.SelectedIndexChanged += new System.EventHandler(this.cbxDates_SelectedIndexChanged);
 			// 
 			// label2
 			// 
