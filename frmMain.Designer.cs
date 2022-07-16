@@ -54,9 +54,9 @@ namespace myJournal.subforms
 			this.cbxDates = new System.Windows.Forms.ComboBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
-			this.radLastWeek = new System.Windows.Forms.RadioButton();
-			this.radLastMonth = new System.Windows.Forms.RadioButton();
 			this.pnlDateFilters = new System.Windows.Forms.Panel();
+			this.btnMonth = new System.Windows.Forms.Button();
+			this.btnWeek = new System.Windows.Forms.Button();
 			this.menuStrip1.SuspendLayout();
 			this.pnlDateFilters.SuspendLayout();
 			this.SuspendLayout();
@@ -145,7 +145,7 @@ namespace myJournal.subforms
 			this.rtbSelectedEntry.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.rtbSelectedEntry.Location = new System.Drawing.Point(15, 271);
 			this.rtbSelectedEntry.Name = "rtbSelectedEntry";
-			this.rtbSelectedEntry.Size = new System.Drawing.Size(413, 62);
+			this.rtbSelectedEntry.Size = new System.Drawing.Size(413, 83);
 			this.rtbSelectedEntry.TabIndex = 5;
 			this.rtbSelectedEntry.TabStop = false;
 			this.rtbSelectedEntry.Text = "";
@@ -301,48 +301,48 @@ namespace myJournal.subforms
 			// label5
 			// 
 			this.label5.AutoSize = true;
-			this.label5.Location = new System.Drawing.Point(2, 31);
+			this.label5.Location = new System.Drawing.Point(10, 31);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(80, 15);
+			this.label5.Size = new System.Drawing.Size(83, 15);
 			this.label5.TabIndex = 46;
-			this.label5.Text = "start with last:";
-			// 
-			// radLastWeek
-			// 
-			this.radLastWeek.AutoSize = true;
-			this.radLastWeek.Location = new System.Drawing.Point(85, 29);
-			this.radLastWeek.Name = "radLastWeek";
-			this.radLastWeek.Size = new System.Drawing.Size(52, 19);
-			this.radLastWeek.TabIndex = 47;
-			this.radLastWeek.TabStop = true;
-			this.radLastWeek.Text = "week";
-			this.radLastWeek.UseVisualStyleBackColor = true;
-			this.radLastWeek.CheckedChanged += new System.EventHandler(this.radStartFrom_CheckedChanged);
-			// 
-			// radLastMonth
-			// 
-			this.radLastMonth.AutoSize = true;
-			this.radLastMonth.Location = new System.Drawing.Point(137, 29);
-			this.radLastMonth.Name = "radLastMonth";
-			this.radLastMonth.Size = new System.Drawing.Size(61, 19);
-			this.radLastMonth.TabIndex = 48;
-			this.radLastMonth.TabStop = true;
-			this.radLastMonth.Text = "month";
-			this.radLastMonth.UseVisualStyleBackColor = true;
-			this.radLastMonth.CheckedChanged += new System.EventHandler(this.radStartFrom_CheckedChanged);
+			this.label5.Text = "start from last:";
 			// 
 			// pnlDateFilters
 			// 
+			this.pnlDateFilters.Controls.Add(this.btnMonth);
+			this.pnlDateFilters.Controls.Add(this.btnWeek);
 			this.pnlDateFilters.Controls.Add(this.cbxDates);
-			this.pnlDateFilters.Controls.Add(this.radLastMonth);
 			this.pnlDateFilters.Controls.Add(this.label2);
-			this.pnlDateFilters.Controls.Add(this.radLastWeek);
 			this.pnlDateFilters.Controls.Add(this.label5);
 			this.pnlDateFilters.Location = new System.Drawing.Point(227, 54);
 			this.pnlDateFilters.Name = "pnlDateFilters";
 			this.pnlDateFilters.Size = new System.Drawing.Size(205, 52);
 			this.pnlDateFilters.TabIndex = 49;
 			this.pnlDateFilters.Visible = false;
+			// 
+			// btnMonth
+			// 
+			this.btnMonth.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.btnMonth.Location = new System.Drawing.Point(135, 28);
+			this.btnMonth.Name = "btnMonth";
+			this.btnMonth.Size = new System.Drawing.Size(53, 20);
+			this.btnMonth.TabIndex = 48;
+			this.btnMonth.Text = "month";
+			this.btnMonth.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.btnMonth.UseVisualStyleBackColor = true;
+			this.btnMonth.Click += new System.EventHandler(this.btnWeekMonth_Click);
+			// 
+			// btnWeek
+			// 
+			this.btnWeek.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.btnWeek.Location = new System.Drawing.Point(94, 28);
+			this.btnWeek.Name = "btnWeek";
+			this.btnWeek.Size = new System.Drawing.Size(43, 20);
+			this.btnWeek.TabIndex = 47;
+			this.btnWeek.Text = "week";
+			this.btnWeek.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.btnWeek.UseVisualStyleBackColor = true;
+			this.btnWeek.Click += new System.EventHandler(this.btnWeekMonth_Click);
 			// 
 			// frmMain
 			// 
@@ -404,8 +404,8 @@ namespace myJournal.subforms
 		private System.Windows.Forms.ComboBox cbxDates;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label label5;
-		private System.Windows.Forms.RadioButton radLastWeek;
-		private System.Windows.Forms.RadioButton radLastMonth;
 		private System.Windows.Forms.Panel pnlDateFilters;
+		private System.Windows.Forms.Button btnMonth;
+		private System.Windows.Forms.Button btnWeek;
 	}
 }

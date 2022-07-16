@@ -53,7 +53,6 @@ namespace myJournal.objects
 			else { tmpEntries = entries; }
 
 			//List<string> entriesAsString = (List<string>)(tmpEntries.Select(e => e.EntryAsList(lbxToPopulate.Width)).ToList());
-
 			//lbxToPopulate.DataSource = entriesAsString.ToList();
 
 			foreach (JournalEntry je in tmpEntries)
