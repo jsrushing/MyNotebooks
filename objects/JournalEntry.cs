@@ -14,6 +14,7 @@ namespace myJournal
     {
         public DateTime Date;
         string Text;
+		public string DisplayText;
         string Title;
 		string RTF;
         string Labels;
@@ -25,30 +26,29 @@ namespace myJournal
 		public JournalEntry(string _title, string _text, string _RTF, string _labels, bool _edited = false)
         {
 			this.Date	= DateTime.Now;
-			//string key	= ConfigurationManager.AppSettings["PublicKey"];
 			this.Text	= EncryptDecrypt.Encrypt(_text);
             this.Title	= EncryptDecrypt.Encrypt(_title);
 			this.RTF	= EncryptDecrypt.Encrypt(_RTF);
             this.Labels	= EncryptDecrypt.Encrypt(_labels);
             this.Id		= Guid.NewGuid().ToString();
 			this.isEdited = _edited;
+
+			this.DisplayText = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
+						, this.ClearTitle(), this.Date
+						, this.ClearTags()
+						, this.ClearText());
 		}
 
-		public List<string> EntryAsList(int ListboxWidth)
+		public List<string> ShortDisplayText(int ListboxWidth)
 		{
 			List<string> lstRtrn = new List<string>();
 			
 			if(this.ClearTitle().Length > 0)
 			{
 				int iTextChunkLength = Convert.ToInt16(ListboxWidth * .165);
-				string sEntryText = this.ClearText();
-
 				lstRtrn.Add(this.ClearTitle() + " (" + this.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")");
-
-				lstRtrn.Add(sEntryText.Length < iTextChunkLength ?
-					sEntryText :
-					sEntryText.Substring(0, iTextChunkLength) + " ...");
-
+				string sEntryText = this.ClearText();
+				lstRtrn.Add(sEntryText.Length < iTextChunkLength ? sEntryText : sEntryText.Substring(0, iTextChunkLength) + " ...");
 				lstRtrn.Add("labels: " + this.ClearTags());
 				lstRtrn.Add("---------------------");
 			}

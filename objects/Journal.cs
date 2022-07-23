@@ -9,6 +9,7 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using myJournal.subforms;
+using System.Windows.Forms;
 
 namespace myJournal
 {
@@ -102,5 +103,39 @@ namespace myJournal
                 formatter.Serialize(stream, this);
             }
         }
+
+		public List<JournalEntry> Search(CheckBox chkUseDate, CheckBox chkUseDateRange, CheckBox chkMatchCase, DateTimePicker dtFindDate, DateTimePicker dtFindDate_From, 
+			DateTimePicker dtFindDate_To , RadioButton radBtnAnd, string searchTitle, string searchText, string[] labelsArray)
+		{
+			List<JournalEntry> foundEntries = new List<JournalEntry>();
+			string entryText = string.Empty;
+			string entryTitle = string.Empty;
+
+			foreach (JournalEntry je in this.Entries)
+			{
+				// date
+				if (chkUseDate.Checked)
+				{ if (je.Date.ToShortDateString() == dtFindDate.Value.ToShortDateString()) { foundEntries.Add(je); } }
+
+				if (chkUseDateRange.Checked)
+				{ if (je.Date >= dtFindDate_From.Value && je.Date <= dtFindDate_To.Value) { foundEntries.Add(je); } }
+
+				// labels
+				if (labelsArray != null)
+				{ foreach (string group in labelsArray) { if (je.ClearTags().Contains(group)) { foundEntries.Add(je); } } }
+
+				// title and/or text
+				searchTitle = chkMatchCase.Checked ? searchTitle : searchTitle.ToLower();
+				searchText	= chkMatchCase.Checked ? searchText : searchText.ToLower();
+				entryText	= chkMatchCase.Checked ? je.ClearText() : je.ClearText().ToLower();
+				entryTitle	= chkMatchCase.Checked ? je.ClearTitle() : je.ClearTitle().ToLower();
+
+				if (radBtnAnd.Checked)
+				{ if (entryText.Contains(searchText) & entryTitle.Contains(searchTitle)) { foundEntries.Add(je); }}
+				else
+				{ if (entryText.Contains(searchText) ) { foundEntries.Add(je); }}
+			}
+			return foundEntries;
+		}
     }
 }

@@ -186,20 +186,20 @@ namespace myJournal.subforms
             this.mnuSearch});
 			this.mnuJournal.Name = "mnuJournal";
 			this.mnuJournal.Size = new System.Drawing.Size(57, 20);
-			this.mnuJournal.Text = "Journal";
+			this.mnuJournal.Text = "&Journal";
 			// 
 			// mnuJournal_Create
 			// 
 			this.mnuJournal_Create.Name = "mnuJournal_Create";
-			this.mnuJournal_Create.Size = new System.Drawing.Size(109, 22);
-			this.mnuJournal_Create.Text = "Create";
+			this.mnuJournal_Create.Size = new System.Drawing.Size(180, 22);
+			this.mnuJournal_Create.Text = "C&reate";
 			this.mnuJournal_Create.Click += new System.EventHandler(this.mnuJournal_Create_Click);
 			// 
 			// mnuJournal_Delete
 			// 
 			this.mnuJournal_Delete.Enabled = false;
 			this.mnuJournal_Delete.Name = "mnuJournal_Delete";
-			this.mnuJournal_Delete.Size = new System.Drawing.Size(109, 22);
+			this.mnuJournal_Delete.Size = new System.Drawing.Size(180, 22);
 			this.mnuJournal_Delete.Text = "Delete";
 			this.mnuJournal_Delete.Click += new System.EventHandler(this.mnuJournal_Delete_Click);
 			// 
@@ -207,8 +207,8 @@ namespace myJournal.subforms
 			// 
 			this.mnuSearch.Enabled = false;
 			this.mnuSearch.Name = "mnuSearch";
-			this.mnuSearch.Size = new System.Drawing.Size(109, 22);
-			this.mnuSearch.Text = "Search";
+			this.mnuSearch.Size = new System.Drawing.Size(180, 22);
+			this.mnuSearch.Text = "&Search";
 			this.mnuSearch.Click += new System.EventHandler(this.mnuSearch_Click);
 			// 
 			// mnuEntryTop
@@ -220,28 +220,28 @@ namespace myJournal.subforms
 			this.mnuEntryTop.Enabled = false;
 			this.mnuEntryTop.Name = "mnuEntryTop";
 			this.mnuEntryTop.Size = new System.Drawing.Size(46, 20);
-			this.mnuEntryTop.Text = "Entry";
+			this.mnuEntryTop.Text = "&Entry";
 			// 
 			// mnuEntryCreate
 			// 
 			this.mnuEntryCreate.Name = "mnuEntryCreate";
-			this.mnuEntryCreate.Size = new System.Drawing.Size(108, 22);
-			this.mnuEntryCreate.Text = "Create";
+			this.mnuEntryCreate.Size = new System.Drawing.Size(180, 22);
+			this.mnuEntryCreate.Text = "&Create";
 			this.mnuEntryCreate.Click += new System.EventHandler(this.mnuEntryCreate_Click);
 			// 
 			// mnuEntryEdit
 			// 
 			this.mnuEntryEdit.Enabled = false;
 			this.mnuEntryEdit.Name = "mnuEntryEdit";
-			this.mnuEntryEdit.Size = new System.Drawing.Size(108, 22);
-			this.mnuEntryEdit.Text = "Edit";
+			this.mnuEntryEdit.Size = new System.Drawing.Size(180, 22);
+			this.mnuEntryEdit.Text = "E&dit";
 			this.mnuEntryEdit.Click += new System.EventHandler(this.mnuEntryEdit_Click);
 			// 
 			// mnuEntryDelete
 			// 
 			this.mnuEntryDelete.Enabled = false;
 			this.mnuEntryDelete.Name = "mnuEntryDelete";
-			this.mnuEntryDelete.Size = new System.Drawing.Size(108, 22);
+			this.mnuEntryDelete.Size = new System.Drawing.Size(180, 22);
 			this.mnuEntryDelete.Text = "Delete";
 			this.mnuEntryDelete.Click += new System.EventHandler(this.mnuEntryDelete_Click);
 			// 
@@ -249,7 +249,7 @@ namespace myJournal.subforms
 			// 
 			this.lblWrongPin.AutoSize = true;
 			this.lblWrongPin.ForeColor = System.Drawing.Color.Red;
-			this.lblWrongPin.Location = new System.Drawing.Point(54, 85);
+			this.lblWrongPin.Location = new System.Drawing.Point(54, 84);
 			this.lblWrongPin.Name = "lblWrongPin";
 			this.lblWrongPin.Size = new System.Drawing.Size(63, 15);
 			this.lblWrongPin.TabIndex = 38;

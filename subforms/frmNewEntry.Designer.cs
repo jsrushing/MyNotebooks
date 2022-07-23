@@ -309,15 +309,15 @@ namespace myJournal.subforms
 			// mnuSaveEntry
 			// 
 			this.mnuSaveEntry.Name = "mnuSaveEntry";
-			this.mnuSaveEntry.Size = new System.Drawing.Size(73, 20);
-			this.mnuSaveEntry.Text = "Save Entry";
+			this.mnuSaveEntry.Size = new System.Drawing.Size(43, 20);
+			this.mnuSaveEntry.Text = "&Save";
 			this.mnuSaveEntry.Click += new System.EventHandler(this.mnuSaveEntry_Click);
 			// 
 			// mnuEditOriginalText
 			// 
 			this.mnuEditOriginalText.Name = "mnuEditOriginalText";
 			this.mnuEditOriginalText.Size = new System.Drawing.Size(108, 20);
-			this.mnuEditOriginalText.Text = "Edit Original Text";
+			this.mnuEditOriginalText.Text = "Edit &Original Text";
 			this.mnuEditOriginalText.Visible = false;
 			this.mnuEditOriginalText.Click += new System.EventHandler(this.mnuEditOriginalText_Click);
 			// 
@@ -325,7 +325,7 @@ namespace myJournal.subforms
 			// 
 			this.mnuCancelExit.Name = "mnuCancelExit";
 			this.mnuCancelExit.Size = new System.Drawing.Size(79, 20);
-			this.mnuCancelExit.Text = "Cancel/Exit";
+			this.mnuCancelExit.Text = "Cancel/E&xit";
 			this.mnuCancelExit.Click += new System.EventHandler(this.mnuCancelExit_Click);
 			// 
 			// frmNewEntry

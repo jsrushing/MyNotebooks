@@ -11,12 +11,13 @@ namespace myJournal.subforms
 	public partial class frmSearch : Form
 	{
 		private bool firstSelection = true;
-		private Journal entryJournal;
+		//private Journal entryJournal;
+		private List<Journal> journalsToSearch = new List<Journal>();
 
 		public frmSearch(Journal jrnl)
 		{
 			InitializeComponent();
-			entryJournal = jrnl;
+			journalsToSearch.Add(jrnl);
 			Utilities.PopulateLabelsList(lstLabelsForSearch);
 		}
 
@@ -34,11 +35,11 @@ namespace myJournal.subforms
 			// labels
 			string labels = string.Empty;
 			string[] labelsArray = null;
-			List<JournalEntry> foundEntries = new List<JournalEntry>();
-			string searchTitle = string.Empty;
-			string searchText = string.Empty;
-			string entryText = string.Empty;
-			string entryTitle = string.Empty;
+			//List<JournalEntry> foundEntries = new List<JournalEntry>();
+			//string searchTitle = string.Empty;
+			//string searchText = string.Empty;
+			//string entryText = string.Empty;
+			//string entryTitle = string.Empty;
 			lstFoundEntries.Items.Clear();
 
 			for (int i = 0; i < lstLabelsForSearch.CheckedItems.Count; i++)
@@ -47,45 +48,48 @@ namespace myJournal.subforms
 			labels = labels.Length > 0 ? labels.Substring(0, labels.Length - 1) : string.Empty;
 			labelsArray = labels.Length > 0 ? labels.Split(',') : null;
 
-			foreach (JournalEntry je in entryJournal.Entries)
+			foreach(Journal j in journalsToSearch)
 			{
-				// date
-				if (chkUseDate.Checked)
-				{ if (je.Date.ToShortDateString() == dtFindDate.Value.ToShortDateString()) { foundEntries.Add(je); }}
-
-				if (chkUseDateRange.Checked)
-				{ if (je.Date >= dtFindDate_From.Value && je.Date <= dtFindDate_To.Value) { foundEntries.Add(je); }}
-
-				// labels
-				if(labelsArray != null)
-				{ foreach (string group in labelsArray) { if (je.ClearTags().Contains(group)) { foundEntries.Add(je); }}}
-
-				searchTitle = chkMatchCase.Checked ? txtSearchTitle.Text : txtSearchTitle.Text.ToLower();
-				searchText = chkMatchCase.Checked ? txtSearchText.Text : txtSearchText.Text.ToLower();
-				entryText = chkMatchCase.Checked ? je.ClearText() : je.ClearText().ToLower();
-				entryTitle = chkMatchCase.Checked ? je.ClearTitle() : je.ClearTitle().ToLower();
-
-				// title and/or text
-				if (radBtnAnd.Checked)
-				{
-					if(searchTitle.Length > 0 & searchText.Length > 0)
-					{ if (entryText.Contains(searchText) & entryTitle.Contains(searchTitle)) { foundEntries.Add(je); }}
-					else if(searchText.Length > 0) { if (entryText.Contains(searchText)) { foundEntries.Add(je); }}
-					else if (searchTitle.Length > 0) { if (entryTitle.Contains(searchTitle)) { foundEntries.Add(je); }}
-				}
-				else
-				{
-					if (searchText.Length > 0) { if (entryText.Contains(searchText)) { foundEntries.Add(je); } }
-					if (searchTitle.Length > 0) { if (entryTitle.Contains(searchTitle)) { foundEntries.Add(je); } }
-				}
-
-				// show results
-				if (foundEntries.Count > 0)
-				{
-					Utilities.PopulateEntries(lstFoundEntries, foundEntries);
-					lblFoundEntries.Visible = true;
-				}
+				List<JournalEntry> foundEntries = j.Search(chkUseDate, chkUseDateRange, chkMatchCase, dtFindDate, dtFindDate_From, dtFindDate_To, radBtnAnd, txtSearchTitle.Text, txtSearchText.Text, labelsArray);
+				Utilities.PopulateEntries(lstFoundEntries, foundEntries, "", false, j.Name);
 			}
+
+			//foreach (JournalEntry je in entryJournal.Entries)
+			//{
+			//	// date
+			//	if (chkUseDate.Checked)
+			//	{ if (je.Date.ToShortDateString() == dtFindDate.Value.ToShortDateString()) { foundEntries.Add(je); }}
+
+			//	if (chkUseDateRange.Checked)
+			//	{ if (je.Date >= dtFindDate_From.Value && je.Date <= dtFindDate_To.Value) { foundEntries.Add(je); }}
+
+			//	// labels
+			//	if(labelsArray != null)
+			//	{ foreach (string group in labelsArray) { if (je.ClearTags().Contains(group)) { foundEntries.Add(je); }}}
+
+			//	// title and/or text
+			//	searchTitle	= chkMatchCase.Checked ? txtSearchTitle.Text : txtSearchTitle.Text.ToLower();
+			//	searchText	= chkMatchCase.Checked ? txtSearchText.Text : txtSearchText.Text.ToLower();
+			//	entryText	= chkMatchCase.Checked ? je.ClearText() : je.ClearText().ToLower();
+			//	entryTitle	= chkMatchCase.Checked ? je.ClearTitle() : je.ClearTitle().ToLower();
+
+			//	if (radBtnAnd.Checked)
+			//	{
+			//		if (entryText.Contains(searchText) & entryTitle.Contains(searchTitle)) { foundEntries.Add(je); }
+			//	}
+			//	else
+			//	{
+			//		if (entryText.Contains(searchText)) { foundEntries.Add(je); }
+			//		if (entryTitle.Contains(searchTitle)) { foundEntries.Add(je); }
+			//	}
+
+			//	// show results
+			//	if (foundEntries.Count > 0)
+			//	{
+			//		Utilities.PopulateEntries(lstFoundEntries, foundEntries);
+			//		lblFoundEntries.Visible = true;
+			//	}
+			//}
 
 			if(lstFoundEntries.Items.Count == 0) { lstFoundEntries.Items.Add("no matches found"); }
 		}
@@ -105,7 +109,7 @@ namespace myJournal.subforms
 			ListBox lb = (ListBox)sender;
 			RichTextBox rtb = rtbSelectedEntry_Found;
 			lb.SelectedIndexChanged -= new System.EventHandler(this.lstFoundEntries_SelectedIndexChanged);
-			JournalEntry currentEntry = Utilities.SelectEntry(rtb, lb, entryJournal, firstSelection);
+			JournalEntry currentEntry = Utilities.SelectEntry(rtb, lb, GetEntryJournal(), firstSelection);
 			firstSelection = false;
 			lblSelectionType.Visible = rtb.Text.Length > 0;
 			lblSeparator.Visible = rtb.Text.Length > 0;
@@ -132,5 +136,39 @@ namespace myJournal.subforms
 
 		private void mnuExit_Click(object sender, EventArgs e) { this.Hide(); }
 
+		private void mnuSelectJournals_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private Journal GetEntryJournal()
+		{
+			Journal jrnlRtrn = new Journal();
+
+			if(journalsToSearch.Count == 1)
+			{
+				jrnlRtrn = new Journal(journalsToSearch[0].Name);
+			}
+			else
+			{
+				jrnlRtrn = new Journal(GetJournalNameFromDisplay());
+			}
+
+			return jrnlRtrn;
+		}
+
+		private string GetJournalNameFromDisplay()
+		{
+			string sRtrn = string.Empty;
+			int i2 = lstFoundEntries.SelectedIndex;
+
+			while (!lstFoundEntries.Items[i2].ToString().ToLower().StartsWith("journal") & i2 != -1)
+			{
+				i2--;
+			}
+
+			sRtrn = i2 > -1 ? lstFoundEntries.Items[i2].ToString() : "";
+			return sRtrn;
+		}
 	}
 }

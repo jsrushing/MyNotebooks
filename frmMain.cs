@@ -3,16 +3,17 @@
 	07/06/22 - Dev. ended. In test.
 	bug list:
 		07/07/22 1100
-			0001x Can arrow down or right into no type area.
-			> 0002x Can select and drag into or out of no type area.
+			001x Can arrow down or right into no type area.
+			> 002x Can select and drag into or out of no type area.
 				1400 Fixed
 		07/08/22 1000
-			0003x Save entry edit sometimes leaves out Text.
+			003x Save entry edit sometimes leaves out Text.
 				1740 Found issue. Entries with '(' in the title cause failure to build currentEntry (it remains null after entry is selected).
 				1745 Fixed: When selecting in the short entry (lstEntries) get LastIndexOf('(') instead of just .IndexOf.
 
-			0004x Entries with no text cannot be edited or deleted (menus are disabled because they toggle on rtbSelectedEntry.Text.Length > 0).
+			004x Entries with no text cannot be edited or deleted (menus are disabled because they toggle on rtbSelectedEntry.Text.Length > 0).
 				1745 Fixed with 0003. This should never happen. Only came up because of 0003.
+
 
 	toDo:
 		07/07/22 001 Entry RTB formatting controls.
@@ -41,6 +42,17 @@
 	07/13/22 Dev. closed. v1.0 released.
 
 	bugs/hotfixes:
+		bugs:
+		001h 07/23/22 1330
+			Fatal error when selecting an entry from lstEntries AFTER selecting entry > clicking 'week' or 'month' filter > selecting one of the entries shown in the filtered results.
+
+		toDo:
+		07/23/22 001h Related to bug 001h.
+					WHEN CLICKING 'week' OR 'month' FILTER ...
+						1) IF an entry is clicked, remember it.
+						2) Clear currentEntry + rtb
+						3) Show the filtered entries
+						4) If one is the entry remembered in 1), select it.
 
 	enhancements:
 		07/14/22 001x Add date selection for shown entries (e.g. last <x> days)
@@ -62,6 +74,7 @@ namespace myJournal.subforms
 	{
 		Journal currentJournal;
 		JournalEntry currentEntry;
+		JournalEntry storedEntry;
 		private bool firstSelection = true;
 
 		public frmMain()
@@ -100,7 +113,7 @@ namespace myJournal.subforms
 
 				if (currentJournal != null)
 				{
-					Utilities.PopulateEntries(lstEntries, currentJournal.Entries, DateTime.Now.AddDays(-7).ToShortDateString());
+					Utilities.PopulateEntries(lstEntries, currentJournal.Entries, DateTime.Now.AddDays(-30).ToShortDateString());
 
 					if(lstEntries.Items.Count > 0)
 					{
@@ -109,7 +122,7 @@ namespace myJournal.subforms
 						ShowHideJournalMenus(true);
 						PopulateShowFromDates();
 						pnlDateFilters.Visible = true;
-						btnWeekMonth_Click(btnWeek, null);
+						btnWeekMonth_Click(btnMonth, null);
 					}
 					else
 					{
@@ -130,6 +143,8 @@ namespace myJournal.subforms
 
 		private void btnWeekMonth_Click(object sender, EventArgs e)
 		{
+			storedEntry = currentEntry;
+
 			if (cbxDates.Items.Count > 0)
 			{
 				DateTime targetDate = DateTime.Now.AddDays(((Button)sender).Text.ToLower().Equals("week") ? -7 : -30);
@@ -143,6 +158,11 @@ namespace myJournal.subforms
 		{
 			if(currentJournal != null) 
 			{ Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text); }	
+
+			if(storedEntry != null && currentJournal.Entries.Contains(storedEntry))
+			{
+				Utilities.SelectEntry(rtbSelectedEntry, lstEntries, null, false, currentJournal.GetEntry(storedEntry.ClearTitle(), storedEntry.Date.ToShortDateString()));
+			}
 		}
 
 		private void ddlJournals_SelectedIndexChanged(object sender, EventArgs e)
@@ -173,7 +193,7 @@ namespace myJournal.subforms
 			lb.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectEntry);
 			mnuEntryEdit.Enabled = true;	// rtbSelectedEntry.Text.Length > 0;
 			mnuEntryDelete.Enabled = mnuEntryEdit.Enabled;
-			mnuEntryEdit_Click(null, null);
+			//mnuEntryEdit_Click(null, null);
 		}
 
 		private void lblSeparator_MouseMove(object sender, MouseEventArgs e)

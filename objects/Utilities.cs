@@ -44,9 +44,21 @@ namespace myJournal.objects
 			return labels;
 		}
 
-		public static void PopulateEntries(ListBox lbxToPopulate, List<JournalEntry> entries, string startDate = "")
+		private static int GetEntryIndex(ListBox lb, JournalEntry je)
 		{
-			lbxToPopulate.Items.Clear();
+			for(int i = 0; i < lb.Items.Count; i++)
+			{
+				if(lb.Items[i].ToString().Equals(je.ClearTitle() + " (" + je.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"))
+				{
+					return i;
+				}
+			}
+			return -1;
+		}
+
+		public static void PopulateEntries(ListBox lbxToPopulate, List<JournalEntry> entries, string startDate = "", bool clearPrevious = true, string journalName = "")
+		{
+			if(clearPrevious) lbxToPopulate.Items.Clear();
 			List<JournalEntry> tmpEntries = null;
 
 			if (startDate.Length > 0) { tmpEntries = (List<JournalEntry>)entries.Where(x => x.Date >= DateTime.Parse(startDate)).ToList(); }
@@ -55,8 +67,10 @@ namespace myJournal.objects
 			//List<string> entriesAsString = (List<string>)(tmpEntries.Select(e => e.EntryAsList(lbxToPopulate.Width)).ToList());
 			//lbxToPopulate.DataSource = entriesAsString.ToList();
 
+			if (journalName.Length > 0) { lbxToPopulate.Items.Add(""); lbxToPopulate.Items.Add("Journal: " + journalName); }
+
 			foreach (JournalEntry je in tmpEntries)
-			{ foreach (string s in je.EntryAsList(lbxToPopulate.Width)) { lbxToPopulate.Items.Add(s); } }
+			{ foreach (string s in je.ShortDisplayText(lbxToPopulate.Width)) { lbxToPopulate.Items.Add(s); }}
 		}
 
 		public static void PopulateLabelsList(CheckedListBox clb, ListBox lb = null)
@@ -90,78 +104,103 @@ namespace myJournal.objects
 			entryRTB.Height = callingForm.Height - entryRTB.Top - 50;
 		}
 
-		public static JournalEntry SelectEntry(RichTextBox rtb, ListBox lb, Journal currentJournal, bool FirstSelection)
+		public static JournalEntry SelectEntry(RichTextBox rtb, ListBox lb, Journal currentJournal, bool FirstSelection, JournalEntry je = null)
 		{
 			rtb.Clear();
 			List<int> targets = new List<int>();
-			JournalEntry currentEntry;
-
-			try
+			JournalEntry entryRtrn = null;
+			
+			if(je != null)
 			{
-				if (lb.SelectedIndices.Count > 1)
+				for (int i = 0; i < lb.Items.Count; i++)
 				{
-					for (int i = 0; i < lb.SelectedIndices.Count - 1; i++)
+					if (lb.Items[i].ToString().Equals(je.ClearTitle() + " (" + je.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"))
 					{
-						if (lb.SelectedIndices[i] == lb.SelectedIndices[i + 1] - 1)
-						{
-							targets.Add(lb.SelectedIndices[i]);
-							targets.Add(lb.SelectedIndices[i + 1]);
-							targets.Add(lb.SelectedIndices[i + 2]);
-							break;
-						}
+						lb.SelectedIndices.Add(i);
+						lb.SelectedIndices.Add(i + 1); 
+						lb.SelectedIndices.Add(i + 2);
+						rtb.Text = je.DisplayText;
 					}
 				}
 			}
-			catch (Exception) { }
-
-			if (targets.Count == 3)
+			else if(currentJournal != null)
 			{
-				foreach (int i in targets)
+				try
 				{
-					lb.SelectedIndices.Remove(i);
+					if (lb.SelectedIndices.Count > 1)
+					{
+						for (int i = 0; i < lb.SelectedIndices.Count - 1; i++)
+						{
+							if (lb.SelectedIndices[i] == lb.SelectedIndices[i + 1] - 1)
+							{
+								targets.Add(lb.SelectedIndices[i]);
+								targets.Add(lb.SelectedIndices[i + 1]);
+								targets.Add(lb.SelectedIndices[i + 2]);
+								break;
+							}
+						}
+					}
 				}
-			}
+				catch (Exception) { }
 
-			int ctr = lb.SelectedIndex;
-
-			if (lb.Items[ctr].ToString().StartsWith("--")) ctr--;
-
-			while (!lb.Items[ctr].ToString().StartsWith("--") & ctr > 0)
-			{
-				ctr--;
-				if (ctr < 0) break;
-			}
-
-			if (ctr > 0) { ctr += 1; }
-			lb.SelectedIndices.Clear();                             // Select the whole short entry ...
-			lb.SelectedIndices.Add(ctr);
-			lb.SelectedIndices.Add(ctr + 1);
-			lb.SelectedIndices.Add(ctr + 2);                        //
-
-			// this is where you have to account for isEdited
-			string sTitleAndDate = lb.Items[ctr].ToString().Replace(" - EDITED", "");        // Use the title and date of the entry to create a JournalEntry object whose .ClearText will populate the display ...
-			string sTitle = sTitleAndDate.Substring(0, sTitleAndDate.LastIndexOf('(') - 1);
-			string sDate = sTitleAndDate.Substring(sTitleAndDate.LastIndexOf('(') + 1, sTitleAndDate.Length - 2 - sTitleAndDate.LastIndexOf('('));
-			currentEntry = currentJournal.GetEntry(sTitle, sDate);
-
-			if (currentEntry != null)
-			{
-				StringBuilder sb = new StringBuilder();
-				rtb.Text = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
-					, currentEntry.ClearTitle(), currentEntry.Date
-					, currentEntry.ClearTags()
-					, currentEntry.ClearText());
-				if (rtb.Text.Length == 0) { lb.TopIndex = lb.Top + lb.Height < rtb.Top ? ctr : lb.TopIndex; }
-				lb.Height = rtb.Text.Length > 0 ? rtb.Top - 132 : 100;
-
-				if (FirstSelection)
+				if (targets.Count == 3)
 				{
-					lb.TopIndex = lb.Top + lb.Height < rtb.Top ? ctr : lb.TopIndex;
+					foreach (int i in targets)
+					{
+						lb.SelectedIndices.Remove(i);
+					}
 				}
+
+				int ctr = lb.SelectedIndex;
+
+				if (lb.Items[ctr].ToString().StartsWith("--")) ctr--;
+
+				while (!lb.Items[ctr].ToString().StartsWith("--") & ctr > 0)
+				{
+					ctr--;
+					if (ctr < 0) break;
+				}
+
+				if (ctr > 0) { ctr += 1; }
+				lb.SelectedIndices.Clear();                             // Select the whole short entry ...
+				lb.SelectedIndices.Add(ctr);
+				lb.SelectedIndices.Add(ctr + 1);
+				lb.SelectedIndices.Add(ctr + 2);                        //
+
+				// this is where you have to account for isEdited
+				string sTitleAndDate = lb.Items[ctr].ToString().Replace(" - EDITED", "");        // Use the title and date of the entry to create a JournalEntry object whose .ClearText will populate the display ...
+				string sTitle = sTitleAndDate.Substring(0, sTitleAndDate.LastIndexOf('(') - 1);
+				string sDate = sTitleAndDate.Substring(sTitleAndDate.LastIndexOf('(') + 1, sTitleAndDate.Length - 2 - sTitleAndDate.LastIndexOf('('));
+				
+				entryRtrn = currentJournal.GetEntry(sTitle, sDate);
+
+				if (entryRtrn != null)
+				{
+					StringBuilder sb = new StringBuilder();
+					
+					if(entryRtrn.DisplayText != null)    // entries prior to 1.0.0.1 will not have .DisplayText
+					{
+						rtb.Text = entryRtrn.DisplayText;
+					}
+					else
+					{
+						rtb.Text = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
+						, entryRtrn.ClearTitle(), entryRtrn.Date, entryRtrn.ClearTags(), entryRtrn.ClearText());
+					}
+					
+					if (rtb.Text.Length == 0) { lb.TopIndex = lb.Top + lb.Height < rtb.Top ? ctr : lb.TopIndex; }
+					lb.Height = rtb.Text.Length > 0 ? rtb.Top - 132 : 100;
+
+					if (FirstSelection)
+					{
+						lb.TopIndex = lb.Top + lb.Height < rtb.Top ? ctr : lb.TopIndex;
+					}
+				}
+
+				rtb.Visible = rtb.Text.Length > 0;
 			}
 
-			rtb.Visible = rtb.Text.Length > 0;
-			return currentEntry;
+			return entryRtrn;
 		}
 	}
 }
