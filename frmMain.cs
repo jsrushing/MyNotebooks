@@ -59,6 +59,8 @@
 			07/15/22 0230 Is working with user specified number of weeks.
 							> Should have user input a date? From a list of dates for all entries?
 					 2315 Done with date selection and last week/month filter.
+		07/27/22 002a For edit entry, edit original text, only show previous entry's .ClearText().
+						Done.
 
  */
 using System;
@@ -143,7 +145,7 @@ namespace myJournal.subforms
 
 		private void btnWeekMonth_Click(object sender, EventArgs e)
 		{
-			storedEntry = currentEntry;
+			//storedEntry = currentEntry;
 
 			if (cbxDates.Items.Count > 0)
 			{
@@ -156,12 +158,12 @@ namespace myJournal.subforms
 
 		private void cbxDates_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if(currentJournal != null) 
-			{ Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text); }	
+			Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text);
 
-			if(storedEntry != null && currentJournal.Entries.Contains(storedEntry))
+			if (lstEntries.SelectedIndex == -1 && currentJournal.Entries.Contains(currentEntry))
 			{
-				Utilities.SelectEntry(rtbSelectedEntry, lstEntries, null, false, currentJournal.GetEntry(storedEntry.ClearTitle(), storedEntry.Date.ToShortDateString()));
+				Utilities.SelectEntry(rtbSelectedEntry, lstEntries, null, true, currentEntry);	// currentJournal.GetEntry(currentEntry.ClearTitle(), currentEntry.Date.ToShortDateString()));
+				//storedEntry = null;
 			}
 		}
 
@@ -182,18 +184,22 @@ namespace myJournal.subforms
 
 		private void lstEntries_SelectEntry(object sender, EventArgs e)
 		{
-			ListBox lb = (ListBox)sender;
-			RichTextBox rtb = rtbSelectedEntry;
-			lb.SelectedIndexChanged -= new System.EventHandler(this.lstEntries_SelectEntry);
-			currentEntry = Utilities.SelectEntry(rtb, lb, currentJournal, firstSelection);
-			firstSelection = false;
-			lblSelectionType.Visible = rtb.Text.Length > 0;
-			lblSeparator.Visible = rtb.Text.Length > 0;
-			Utilities.ResizeListsAndRTBs(lstEntries, rtbSelectedEntry, lblSeparator, lblSelectionType, this);
-			lb.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectEntry);
-			mnuEntryEdit.Enabled = true;	// rtbSelectedEntry.Text.Length > 0;
-			mnuEntryDelete.Enabled = mnuEntryEdit.Enabled;
-			//mnuEntryEdit_Click(null, null);
+			//if(currentEntry == null)
+			//{
+				ListBox lb = (ListBox)sender;
+				RichTextBox rtb = rtbSelectedEntry;
+				lb.SelectedIndexChanged -= new System.EventHandler(this.lstEntries_SelectEntry);
+				currentEntry = Utilities.SelectEntry(rtb, lb, currentJournal, firstSelection);
+				firstSelection = false;
+				lblSelectionType.Visible = rtb.Text.Length > 0;
+				lblSeparator.Visible = rtb.Text.Length > 0;
+				Utilities.ResizeListsAndRTBs(lstEntries, rtbSelectedEntry, lblSeparator, lblSelectionType, this);
+				lb.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectEntry);
+				mnuEntryEdit.Enabled = true;	// rtbSelectedEntry.Text.Length > 0;
+				mnuEntryDelete.Enabled = mnuEntryEdit.Enabled;
+				//currentEntry = null;
+				//mnuEntryEdit_Click(null, null);
+			//}
 		}
 
 		private void lblSeparator_MouseMove(object sender, MouseEventArgs e)

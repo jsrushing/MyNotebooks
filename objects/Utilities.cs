@@ -70,7 +70,15 @@ namespace myJournal.objects
 			if (journalName.Length > 0) { lbxToPopulate.Items.Add(""); lbxToPopulate.Items.Add("Journal: " + journalName); }
 
 			foreach (JournalEntry je in tmpEntries)
-			{ foreach (string s in je.ShortDisplayText(lbxToPopulate.Width)) { lbxToPopulate.Items.Add(s); }}
+			{
+				for(int i = 0; i < je.Synopsis.Length; i++)
+				{
+					lbxToPopulate.Items.Add(je.Synopsis[i]);
+				}
+				//lbxToPopulate.Items.Add(je);
+				//foreach (string s in je.ShortDisplayText(lbxToPopulate.Width)) { lbxToPopulate.Items.Add(s); }
+			}
+
 		}
 
 		public static void PopulateLabelsList(CheckedListBox clb, ListBox lb = null)
@@ -112,18 +120,21 @@ namespace myJournal.objects
 			
 			if(je != null)
 			{
+				entryRtrn = je;
+
 				for (int i = 0; i < lb.Items.Count; i++)
 				{
-					if (lb.Items[i].ToString().Equals(je.ClearTitle() + " (" + je.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"))
+					if (lb.Items[i].ToString().Equals(je.Synopsis[0].ToString()))	//  je.ClearTitle() + " (" + je.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"))
 					{
 						lb.SelectedIndices.Add(i);
 						lb.SelectedIndices.Add(i + 1); 
 						lb.SelectedIndices.Add(i + 2);
 						rtb.Text = je.DisplayText;
+						break;
 					}
 				}
 			}
-			else if(currentJournal != null)
+			else 
 			{
 				try
 				{

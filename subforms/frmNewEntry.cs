@@ -15,7 +15,8 @@ namespace myJournal.subforms
 		private bool isEdit = false;
 		public bool deleteConfirmed = false;
 		private int originalEntryLength = -1;
-		private string originalText;
+		private string originalText_Full;
+		private string originalText_TextOnly;
 		private bool isDirty = false;
 		public frmNewEntry(JournalEntry entryToEdit = null)
 		{
@@ -39,17 +40,14 @@ namespace myJournal.subforms
 			if (isEdit)
 			{
 				txtNewEntryTitle.Text = entry.ClearTitle();
-
-				string s = entry.ClearText();
-				//s = s.Substring(1);
-				//s = s.Substring(0, s.Length - 1);
+				originalText_TextOnly = entry.ClearText();
 
 				rtbNewEntry.Text = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Editing"], entry.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"])
-					, entry.ClearTitle(), s);
+					, entry.ClearTitle(), originalText_TextOnly);
 
 				Utilities.CheckExistingLabels(lstLabels, entry);
 				originalEntryLength = rtbNewEntry.Text.Length - 1;
-				originalText = rtbNewEntry.Text.Substring(rtbNewEntry.Text.Length - originalEntryLength + 1);
+				originalText_Full = rtbNewEntry.Text.Substring(rtbNewEntry.Text.Length - originalEntryLength + 1);
 				GrayOriginalText();
 				rtbNewEntry.Focus();
 				rtbNewEntry.SelectionStart = 0;
@@ -89,7 +87,7 @@ namespace myJournal.subforms
 
 		private void mnuEditOriginalText_Click(object sender, EventArgs e)
 		{
-			rtbNewEntry.Text = originalText + System.Environment.NewLine + rtbNewEntry.Text;
+			rtbNewEntry.Text = originalText_TextOnly + rtbNewEntry.Text;
 			GrayOriginalText();
 			mnuEditOriginalText.Enabled = false;
 		}
@@ -109,8 +107,8 @@ namespace myJournal.subforms
 
 		private void GrayOriginalText()
 		{
-			rtbNewEntry.SelectionStart = rtbNewEntry.Text.Length - originalText.Length - 1;
-			rtbNewEntry.SelectionLength = originalText.Length + 1;
+			rtbNewEntry.SelectionStart = rtbNewEntry.Text.Length - originalText_Full.Length - 1;
+			rtbNewEntry.SelectionLength = originalText_Full.Length + 1;
 			rtbNewEntry.SelectionColor = Color.Gray;
 			rtbNewEntry.SelectionLength = 0;
 			rtbNewEntry.SelectionStart = 0;

@@ -5,6 +5,7 @@ using System;
 using System.Configuration;
 using encrypt_decrypt_string;
 using System.Collections.Generic;
+using System.Text;
 using myJournal.subforms;
 
 namespace myJournal
@@ -13,9 +14,13 @@ namespace myJournal
     public class JournalEntry
     {
         public DateTime Date;
-        string Text;
-		public string DisplayText;
-        string Title;
+        public string Text;
+		public string[] Synopsis{ get { return GetSynopsis(); } }
+		public string DisplayTitle { get { return GetTitleDisplayText(); } }
+		public string DisplayText { get { return GetTextDisplayText(); } set { DisplayText = value; } }
+
+
+		public string Title;
 		string RTF;
         string Labels;
 		public bool isEdited = false;
@@ -25,46 +30,58 @@ namespace myJournal
 
 		public JournalEntry(string _title, string _text, string _RTF, string _labels, bool _edited = false)
         {
-			this.Date	= DateTime.Now;
-			this.Text	= EncryptDecrypt.Encrypt(_text);
-            this.Title	= EncryptDecrypt.Encrypt(_title);
-			this.RTF	= EncryptDecrypt.Encrypt(_RTF);
-            this.Labels	= EncryptDecrypt.Encrypt(_labels);
-            this.Id		= Guid.NewGuid().ToString();
-			this.isEdited = _edited;
-
-			this.DisplayText = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
-						, this.ClearTitle(), this.Date
-						, this.ClearTags()
-						, this.ClearText());
+			Date	= DateTime.Now;
+			Text	= EncryptDecrypt.Encrypt(_text);
+            Title	= EncryptDecrypt.Encrypt(_title);
+			RTF		= EncryptDecrypt.Encrypt(_RTF);
+            Labels	= EncryptDecrypt.Encrypt(_labels);
+            Id		= Guid.NewGuid().ToString();
+			isEdited = _edited;	
 		}
 
-		public List<string> ShortDisplayText(int ListboxWidth)
+		string GetTextDisplayText()
 		{
-			List<string> lstRtrn = new List<string>();
-			
-			if(this.ClearTitle().Length > 0)
-			{
-				int iTextChunkLength = Convert.ToInt16(ListboxWidth * .165);
-				lstRtrn.Add(this.ClearTitle() + " (" + this.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")");
-				string sEntryText = this.ClearText();
-				lstRtrn.Add(sEntryText.Length < iTextChunkLength ? sEntryText : sEntryText.Substring(0, iTextChunkLength) + " ...");
-				lstRtrn.Add("labels: " + this.ClearTags());
-				lstRtrn.Add("---------------------");
-			}
-			return lstRtrn;
+			return String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
+				, ClearTitle(), Date, ClearTags(), ClearText());
+		}
+
+		string GetTitleDisplayText()
+		{
+			StringBuilder sb = new StringBuilder();
+
+			return sb.ToString();
+		}
+
+		string[] GetSynopsis()
+		{
+			string[] sRtrn = new string[4];
+			int iTextChunkLength = 150;
+
+			sRtrn[0] = ClearTitle() + " (" + Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")";
+			string sEntryText = ClearText();
+			sEntryText = (sEntryText.Length < iTextChunkLength ? sEntryText : sEntryText.Substring(0, iTextChunkLength) + " ...");
+			sRtrn[1] = sEntryText;
+			sRtrn[2] = "labels: " + ClearTags();
+			sRtrn[3] = "---------------------";
+			return sRtrn;
 		}
 
 		public void Replace(JournalEntry newEntry)
 		{
-			this.Labels = newEntry.Labels;
-			this.Text = newEntry.Text;
-			this.Title = newEntry.Title;
+			Labels = newEntry.Labels;
+			Text = newEntry.Text;
+			Title = newEntry.Title;
 		}
 
-		public string ClearText()	{ return EncryptDecrypt.Decrypt(this.Text); }
-		public string ClearTitle()	{ return EncryptDecrypt.Decrypt(this.Title); }
-		public string ClearRTF()	{ return EncryptDecrypt.Decrypt(this.RTF); }
-		public string ClearTags()	{ return this.Labels == null ? String.Empty : EncryptDecrypt.Decrypt(this.Labels); }
+		public void UpdateTo1001()
+		{
+			DisplayText = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
+				, ClearTitle(), Date, ClearTags(), ClearText());
+		}
+
+		public string ClearText()	{ return EncryptDecrypt.Decrypt(Text); }
+		public string ClearTitle()	{ return EncryptDecrypt.Decrypt(Title); }
+		public string ClearRTF()	{ return EncryptDecrypt.Decrypt(RTF); }
+		public string ClearTags()	{ return Labels == null ? String.Empty : EncryptDecrypt.Decrypt(Labels); }
 	}
 }
