@@ -178,7 +178,6 @@ namespace myJournal.objects
 				lb.SelectedIndices.Add(ctr + 1);
 				lb.SelectedIndices.Add(ctr + 2);                        //
 
-				// this is where you have to account for isEdited
 				string sTitleAndDate = lb.Items[ctr].ToString().Replace(" - EDITED", "");        // Use the title and date of the entry to create a JournalEntry object whose .ClearText will populate the display ...
 				string sTitle = sTitleAndDate.Substring(0, sTitleAndDate.LastIndexOf('(') - 1);
 				string sDate = sTitleAndDate.Substring(sTitleAndDate.LastIndexOf('(') + 1, sTitleAndDate.Length - 2 - sTitleAndDate.LastIndexOf('('));

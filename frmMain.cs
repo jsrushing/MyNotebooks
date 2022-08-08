@@ -42,17 +42,22 @@
 	07/13/22 Dev. closed. v1.0 released.
 
 	bugs/hotfixes:
-		bugs:
-		001h 07/23/22 1330
+		bugs: 
+		001 07/23/22 1330
 			Fatal error when selecting an entry from lstEntries AFTER selecting entry > clicking 'week' or 'month' filter > selecting one of the entries shown in the filtered results.
+			08/02/22 Declared fixed. Bug hasn't been seen since this incident. It is probably related to old journals and entries. Deleted all old test journals.
 
+		002 08/02/22 07:20
+			There's a problem with date display. Some (older?) entry dates are "H:m:s" and others are "HH:mm:ss".
+			
 		toDo:
-		07/23/22 001h Related to bug 001h.
+		07/23/22 001 Related to bug 001.
 					WHEN CLICKING 'week' OR 'month' FILTER ...
 						1) IF an entry is clicked, remember it.
 						2) Clear currentEntry + rtb
 						3) Show the filtered entries
 						4) If one is the entry remembered in 1), select it.
+			08/02/22 Update. Have disabled filter actions. NEEDS ATTENTION. HIDE FILTER CONTROLS UNTIL FIXED !!!
 
 	enhancements:
 		07/14/22 001x Add date selection for shown entries (e.g. last <x> days)
@@ -76,7 +81,6 @@ namespace myJournal.subforms
 	{
 		Journal currentJournal;
 		JournalEntry currentEntry;
-		JournalEntry storedEntry;
 		private bool firstSelection = true;
 
 		public frmMain()
@@ -158,12 +162,14 @@ namespace myJournal.subforms
 
 		private void cbxDates_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text);
-
-			if (lstEntries.SelectedIndex == -1 && currentJournal.Entries.Contains(currentEntry))
+			if(currentJournal != null)
 			{
-				Utilities.SelectEntry(rtbSelectedEntry, lstEntries, null, true, currentEntry);	// currentJournal.GetEntry(currentEntry.ClearTitle(), currentEntry.Date.ToShortDateString()));
-				//storedEntry = null;
+				Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text);
+
+				if (lstEntries.SelectedIndex == -1 && currentJournal.Entries.Contains(currentEntry))
+				{
+					Utilities.SelectEntry(rtbSelectedEntry, lstEntries, null, true, currentEntry);
+				}
 			}
 		}
 
@@ -177,6 +183,8 @@ namespace myJournal.subforms
 			rtbSelectedEntry.Text = string.Empty;
 			ShowHideEntriesArea(false);
 			ShowHideJournalMenus(false);
+			currentEntry = null;
+			currentJournal = null;
 			cbxDates.DataSource = null;
 			lblWrongPin.Visible = false;
 			pnlDateFilters.Visible = false;
@@ -221,6 +229,7 @@ namespace myJournal.subforms
 		private void mnuEntryCreate_Click(object sender, EventArgs e)
 		{
 			frmNewEntry frm = new frmNewEntry();
+			frm.Text = "New entry in " + currentJournal.Name;
 			Utilities.Showform(frm, this);
 			if(frm.entry != null)
 			{
@@ -252,6 +261,7 @@ namespace myJournal.subforms
 		private void mnuEntryEdit_Click(object sender, EventArgs e)
 		{
 			frmNewEntry frm = new frmNewEntry(currentEntry);
+			frm.Text = "Edit entry in " + currentJournal.Name;
 			Utilities.Showform(frm, this); 
 
 			if (frm.entry != null)

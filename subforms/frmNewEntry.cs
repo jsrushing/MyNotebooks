@@ -18,6 +18,7 @@ namespace myJournal.subforms
 		private string originalText_Full;
 		private string originalText_TextOnly;
 		private bool isDirty = false;
+
 		public frmNewEntry(JournalEntry entryToEdit = null)
 		{
 			InitializeComponent();
