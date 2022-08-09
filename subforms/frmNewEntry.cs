@@ -124,11 +124,6 @@ namespace myJournal.subforms
 			if(inNoType & rtbNewEntry.SelectionLength > 0) { rtbNewEntry.SelectionLength = 0; InNoTypeArea(); } 
 		}
 
-		private void rtbNewEntry_KeyUp(object sender, KeyEventArgs e)
-		{
-			//if(e.KeyCode == Keys.Right || e.KeyCode == Keys.Down) { InNoTypeArea(); }
-		}
-
 		private void rtbNewEntry_KeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.KeyCode == Keys.Right || e.KeyCode == Keys.Down) { InNoTypeArea(); }

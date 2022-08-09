@@ -66,6 +66,7 @@
 					 2315 Done with date selection and last week/month filter.
 		07/27/22 002a For edit entry, edit original text, only show previous entry's .ClearText().
 						Done.
+		08/09/22 003 See frmSearch & Journal
 
  */
 using System;
@@ -263,7 +264,6 @@ namespace myJournal.subforms
 			frmNewEntry frm = new frmNewEntry(currentEntry);
 			frm.Text = "Edit entry in " + currentJournal.Name;
 			Utilities.Showform(frm, this); 
-
 			if (frm.entry != null)
 			{
 				currentEntry.Replace(frm.entry);

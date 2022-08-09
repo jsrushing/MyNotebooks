@@ -31,6 +31,8 @@ namespace myJournal.subforms
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSearch));
 			this.grpFindEntry = new System.Windows.Forms.GroupBox();
+			this.label2 = new System.Windows.Forms.Label();
+			this.chkMatchWholeWord = new System.Windows.Forms.CheckBox();
 			this.comboBox1 = new System.Windows.Forms.ComboBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.chkMatchCase = new System.Windows.Forms.CheckBox();
@@ -58,8 +60,6 @@ namespace myJournal.subforms
 			this.mnuSelectJournals = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuClearFields = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuExit = new System.Windows.Forms.ToolStripMenuItem();
-			this.chkMatchWholeWord = new System.Windows.Forms.CheckBox();
-			this.label2 = new System.Windows.Forms.Label();
 			this.grpFindEntry.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -98,6 +98,25 @@ namespace myJournal.subforms
 			this.grpFindEntry.Size = new System.Drawing.Size(465, 439);
 			this.grpFindEntry.TabIndex = 7;
 			this.grpFindEntry.TabStop = false;
+			// 
+			// label2
+			// 
+			this.label2.AutoSize = true;
+			this.label2.Location = new System.Drawing.Point(278, 62);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(47, 15);
+			this.label2.TabIndex = 42;
+			this.label2.Text = "match: ";
+			// 
+			// chkMatchWholeWord
+			// 
+			this.chkMatchWholeWord.AutoSize = true;
+			this.chkMatchWholeWord.Location = new System.Drawing.Point(372, 61);
+			this.chkMatchWholeWord.Name = "chkMatchWholeWord";
+			this.chkMatchWholeWord.Size = new System.Drawing.Size(88, 19);
+			this.chkMatchWholeWord.TabIndex = 41;
+			this.chkMatchWholeWord.Text = "whole word";
+			this.chkMatchWholeWord.UseVisualStyleBackColor = true;
 			// 
 			// comboBox1
 			// 
@@ -369,6 +388,7 @@ namespace myJournal.subforms
 			this.mnuSelectJournals.Name = "mnuSelectJournals";
 			this.mnuSelectJournals.Size = new System.Drawing.Size(96, 20);
 			this.mnuSelectJournals.Text = "Select &Journals";
+			this.mnuSelectJournals.Visible = false;
 			this.mnuSelectJournals.Click += new System.EventHandler(this.mnuSelectJournals_Click);
 			// 
 			// mnuClearFields
@@ -384,25 +404,6 @@ namespace myJournal.subforms
 			this.mnuExit.Size = new System.Drawing.Size(38, 20);
 			this.mnuExit.Text = "E&xit";
 			this.mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
-			// 
-			// chkMatchWholeWord
-			// 
-			this.chkMatchWholeWord.AutoSize = true;
-			this.chkMatchWholeWord.Location = new System.Drawing.Point(372, 61);
-			this.chkMatchWholeWord.Name = "chkMatchWholeWord";
-			this.chkMatchWholeWord.Size = new System.Drawing.Size(88, 19);
-			this.chkMatchWholeWord.TabIndex = 41;
-			this.chkMatchWholeWord.Text = "whole word";
-			this.chkMatchWholeWord.UseVisualStyleBackColor = true;
-			// 
-			// label2
-			// 
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(278, 62);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(47, 15);
-			this.label2.TabIndex = 42;
-			this.label2.Text = "match: ";
 			// 
 			// frmSearch
 			// 

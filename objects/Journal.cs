@@ -1,5 +1,8 @@
 ﻿/* Journal object
  * 8/1//21
+ *  * enhancements:
+ *	08/09/22 001 Convert search function to LINQ.
+ *	
  */
 using System;
 using System.Collections.Generic;
