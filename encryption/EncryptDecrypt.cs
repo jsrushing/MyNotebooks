@@ -60,7 +60,6 @@ namespace encrypt_decrypt_string
 					PublicKey = "87654321";
 				}
 
-
 				byte[] privatekeyByte = { };
                 privatekeyByte = System.Text.Encoding.UTF8.GetBytes(PublicKey);
                 byte[] publickeybyte = { };
