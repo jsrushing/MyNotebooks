@@ -318,6 +318,7 @@ namespace myJournal.subforms
 			// 
 			// mnuSaveAndExit
 			// 
+			this.mnuSaveAndExit.Enabled = false;
 			this.mnuSaveAndExit.Name = "mnuSaveAndExit";
 			this.mnuSaveAndExit.Size = new System.Drawing.Size(88, 20);
 			this.mnuSaveAndExit.Text = "Save and &Exit";
@@ -334,8 +335,8 @@ namespace myJournal.subforms
 			// mnuCancelExit
 			// 
 			this.mnuCancelExit.Name = "mnuCancelExit";
-			this.mnuCancelExit.Size = new System.Drawing.Size(79, 20);
-			this.mnuCancelExit.Text = "Cancel/E&xit";
+			this.mnuCancelExit.Size = new System.Drawing.Size(38, 20);
+			this.mnuCancelExit.Text = "E&xit";
 			this.mnuCancelExit.Click += new System.EventHandler(this.mnuCancelExit_Click);
 			// 
 			// frmNewEntry

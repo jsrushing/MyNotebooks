@@ -175,8 +175,12 @@ namespace myJournal.subforms
 
 		private void SetIsDirty(bool dirty)
 		{
-			isDirty = dirty;
-			mnuSaveEntry.Enabled = isDirty;
+			if(txtNewEntryTitle.Text.Length > 0 & rtbNewEntry.Text.Length > 0)
+			{
+				isDirty = dirty;
+				mnuSaveEntry.Enabled = isDirty;
+				mnuSaveAndExit.Enabled = isDirty;
+			}
 		}
 
 		private void ToolsMenuClick(object sender, EventArgs e)
