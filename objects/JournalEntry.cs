@@ -73,12 +73,6 @@ namespace myJournal
 			Title = newEntry.Title;
 		}
 
-		public void UpdateTo1001()
-		{
-			DisplayText = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
-				, ClearTitle(), Date, ClearTags(), ClearText());
-		}
-
 		public string ClearText()	{ return EncryptDecrypt.Decrypt(Text); }
 		public string ClearTitle()	{ return EncryptDecrypt.Decrypt(Title); }
 		public string ClearRTF()	{ return EncryptDecrypt.Decrypt(RTF); }

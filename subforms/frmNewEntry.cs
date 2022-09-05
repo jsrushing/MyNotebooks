@@ -12,18 +12,21 @@ namespace myJournal.subforms
 	public partial class frmNewEntry : Form
 	{
 		public JournalEntry entry = null;
+		public Journal journal = null;
 		private bool isEdit = false;
 		public bool deleteConfirmed = false;
 		private int originalEntryLength = -1;
 		private string originalText_Full;
 		private string originalText_TextOnly;
 		private bool isDirty = false;
+		public bool saved = false;
 
-		public frmNewEntry(JournalEntry entryToEdit = null)
+		public frmNewEntry(Journal currentJournal, JournalEntry entryToEdit = null)
 		{
 			InitializeComponent();
 			entry = entryToEdit;
 			isEdit = entry != null;
+			journal = currentJournal;
 		}
 
 		private void Alert(string msg)
@@ -61,10 +64,16 @@ namespace myJournal.subforms
 		private void lblManageLabels_Click(object sender, EventArgs e)
 		{
 			frmManageLabels frm = new frmManageLabels();
-			Utilities.Showform(frm, this);
-			this.Show();
+			Utilities.Showform(frm, this); // ShowDialog() happens here.
+			// labels file is modified as directed on frmManageLabels then flow returns here ...
 			Utilities.PopulateLabelsList(lstLabels);
+			this.Show();
 		}
+
+		private void lstLabels_SelectedIndexChanged(object sender, EventArgs e) { isDirty = true; }
+
+		private void ModifyFontStyle(FontStyle style)
+		{ rtbNewEntry.SelectionFont = new Font(rtbNewEntry.SelectionFont, rtbNewEntry.SelectionFont.Style ^ style); }
 
 		private void mnuCancelExit_Click(object sender, EventArgs e)
 		{
@@ -93,12 +102,16 @@ namespace myJournal.subforms
 			mnuEditOriginalText.Enabled = false;
 		}
 
+		private void mnuSaveAndExit_Click(object sender, EventArgs e)
+		{
+			SaveOptions(true);
+		}
+
 		private void mnuSaveEntry_Click(object sender, EventArgs e)
 		{
 			if (rtbNewEntry.Text.Length > 0 && txtNewEntryTitle.Text.Length > 0)
 			{
-				entry = new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, rtbNewEntry.Rtf, Utilities.GetCheckedLabels(lstLabels), false);
-				this.Hide();
+				SaveOptions(false);
 			}
 			else
 			{
@@ -131,10 +144,40 @@ namespace myJournal.subforms
 
 		private void rtbNewEntry_MouseUp(object sender, MouseEventArgs e) { InNoTypeArea(); }
 
-		private void lstLabels_SelectedIndexChanged(object sender, EventArgs e) { isDirty = true; }
+		private void rtbNewEntry_TextChanged(object sender, EventArgs e) { SetIsDirty(true); }
 
-		private void ModifyFontStyle(FontStyle style)
-		{ rtbNewEntry.SelectionFont = new Font(rtbNewEntry.SelectionFont, rtbNewEntry.SelectionFont.Style ^ style); }
+		private void SaveOptions(bool saveAndExit)
+		{
+			JournalEntry newEntry = new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, rtbNewEntry.Rtf, Utilities.GetCheckedLabels(lstLabels), false);
+
+			if (saveAndExit)
+			{
+				mnuCancelExit_Click(null, null);
+				this.Hide();
+			}
+			else
+			{
+				if(entry == null)
+				{
+					journal.AddEntry(newEntry);
+				}
+				else
+				{
+					journal.ReplaceEntry(entry, newEntry);
+				}
+
+				journal.Save();
+				entry = newEntry;
+				saved = true;
+				SetIsDirty(false);
+			}
+		}
+
+		private void SetIsDirty(bool dirty)
+		{
+			isDirty = dirty;
+			mnuSaveEntry.Enabled = isDirty;
+		}
 
 		private void ToolsMenuClick(object sender, EventArgs e)
 		{
@@ -143,8 +186,7 @@ namespace myJournal.subforms
 			ModifyFontStyle(style);
 		}
 
-		private void txtNewEntryTitle_TextChanged(object sender, EventArgs e) { isDirty = true; }
+		private void txtNewEntryTitle_TextChanged(object sender, EventArgs e) { SetIsDirty(true); }
 
-		private void rtbNewEntry_TextChanged(object sender, EventArgs e) { isDirty = true; }
 	}
 }

@@ -51,6 +51,7 @@ namespace myJournal.subforms
 			this.rtbNewEntry = new System.Windows.Forms.RichTextBox();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.mnuSaveEntry = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuSaveAndExit = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEditOriginalText = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuCancelExit = new System.Windows.Forms.ToolStripMenuItem();
 			this.grpCreateEntry.SuspendLayout();
@@ -298,6 +299,7 @@ namespace myJournal.subforms
 			// 
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuSaveEntry,
+            this.mnuSaveAndExit,
             this.mnuEditOriginalText,
             this.mnuCancelExit});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
@@ -308,10 +310,18 @@ namespace myJournal.subforms
 			// 
 			// mnuSaveEntry
 			// 
+			this.mnuSaveEntry.Enabled = false;
 			this.mnuSaveEntry.Name = "mnuSaveEntry";
 			this.mnuSaveEntry.Size = new System.Drawing.Size(43, 20);
 			this.mnuSaveEntry.Text = "&Save";
 			this.mnuSaveEntry.Click += new System.EventHandler(this.mnuSaveEntry_Click);
+			// 
+			// mnuSaveAndExit
+			// 
+			this.mnuSaveAndExit.Name = "mnuSaveAndExit";
+			this.mnuSaveAndExit.Size = new System.Drawing.Size(88, 20);
+			this.mnuSaveAndExit.Text = "Save and &Exit";
+			this.mnuSaveAndExit.Click += new System.EventHandler(this.mnuSaveAndExit_Click);
 			// 
 			// mnuEditOriginalText
 			// 
@@ -376,5 +386,6 @@ namespace myJournal.subforms
 		private System.Windows.Forms.ToolStripButton toolsItalic;
 		private System.Windows.Forms.ToolStripComboBox toolsFonts;
 		private System.Windows.Forms.ToolStripComboBox toolsFontSizes;
+		private System.Windows.Forms.ToolStripMenuItem mnuSaveAndExit;
 	}
 }

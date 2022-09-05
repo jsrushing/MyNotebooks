@@ -93,7 +93,7 @@ namespace myJournal.subforms
 			string[] tags = lstLabels.Items.OfType<string>().ToArray();
 			StringBuilder sb = new StringBuilder();
 			foreach (string s in tags) { sb.AppendLine(s); }
-			File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "/settings/groups", sb.ToString());
+			File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "/settings/labels", sb.ToString());
 		}
 
 		private void btnCancel_Click(object sender, EventArgs e)

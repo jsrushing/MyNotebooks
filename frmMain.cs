@@ -139,6 +139,7 @@ namespace myJournal.subforms
 						ShowHideEntriesArea(false);
 					}	
 					btnLoadJournal.Enabled = false;
+					mnuEntryEdit.Enabled = false;
 				}
 				else
 				{
@@ -229,15 +230,13 @@ namespace myJournal.subforms
 
 		private void mnuEntryCreate_Click(object sender, EventArgs e)
 		{
-			frmNewEntry frm = new frmNewEntry();
+			frmNewEntry frm = new frmNewEntry(currentJournal);
 			frm.Text = "New entry in " + currentJournal.Name;
 			Utilities.Showform(frm, this);
-			if(frm.entry != null)
-			{
-				currentJournal.AddEntry(frm.entry);
-				currentJournal.Save();
-				Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text);
-			}
+
+			if(frm.saved)
+			{ Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text); }
+
 			frm.Close();
 			this.Show();
 		}
@@ -261,17 +260,23 @@ namespace myJournal.subforms
 
 		private void mnuEntryEdit_Click(object sender, EventArgs e)
 		{
-			frmNewEntry frm = new frmNewEntry(currentEntry);
-			frm.Text = "Edit entry in " + currentJournal.Name;
+			frmNewEntry frm = new frmNewEntry(currentJournal, currentEntry);
+			frm.Text = "Edit '" + currentEntry.ClearTitle() + "' in '" + currentJournal.Name + "'";
 			Utilities.Showform(frm, this); 
-			if (frm.entry != null)
+
+			if (frm.entry != null | !frm.saved)
 			{
-				currentEntry.Replace(frm.entry);
-				currentJournal.Save();
-				Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text);
+				if (!frm.saved)
+				{
+					currentEntry.Replace(frm.entry);
+					currentJournal.Save();
+				}
+
 				ShowHideEntriesArea(false);
 				lstEntries.Visible = true;
 			}
+
+			Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text);
 			frm.Close();
 			this.Show();
 			this.Height += 1;
@@ -337,7 +342,7 @@ namespace myJournal.subforms
 				Directory.CreateDirectory(rootPath + "/journals/");
 				Directory.CreateDirectory(rootPath + "/settings/");
 				File.Create(rootPath + "/settings/settings");
-				File.Create(rootPath + "/settings/groups");
+				File.Create(rootPath + "/settings/labels");
 			}
 			else
 			{

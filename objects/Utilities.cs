@@ -64,21 +64,14 @@ namespace myJournal.objects
 			if (startDate.Length > 0) { tmpEntries = (List<JournalEntry>)entries.Where(x => x.Date >= DateTime.Parse(startDate)).ToList(); }
 			else { tmpEntries = entries; }
 
-			//List<string> entriesAsString = (List<string>)(tmpEntries.Select(e => e.EntryAsList(lbxToPopulate.Width)).ToList());
-			//lbxToPopulate.DataSource = entriesAsString.ToList();
-
-			if (journalName.Length > 0) { lbxToPopulate.Items.Add(""); lbxToPopulate.Items.Add("Journal: " + journalName); }
-
-			foreach (JournalEntry je in tmpEntries)
-			{
-				for(int i = 0; i < je.Synopsis.Length; i++)
-				{
-					lbxToPopulate.Items.Add(je.Synopsis[i]);
-				}
-				//lbxToPopulate.Items.Add(je);
-				//foreach (string s in je.ShortDisplayText(lbxToPopulate.Width)) { lbxToPopulate.Items.Add(s); }
+			if (journalName.Length > 0) 
+			{ 
+				lbxToPopulate.Items.Add(""); 
+				lbxToPopulate.Items.Add("Journal: " + journalName); 
 			}
 
+			foreach (JournalEntry je in tmpEntries)
+			{ for(int i = 0; i < je.Synopsis.Length; i++) { lbxToPopulate.Items.Add(je.Synopsis[i]); } }
 		}
 
 		public static void PopulateLabelsList(CheckedListBox clb, ListBox lb = null)
@@ -86,16 +79,12 @@ namespace myJournal.objects
 			if (clb != null) { clb.Items.Clear(); }
 			if (lb != null) { lb.Items.Clear(); }
 
-			foreach (string group in File.ReadAllLines(AppDomain.CurrentDomain.BaseDirectory + "/settings/groups"))
+			foreach (string label in File.ReadAllLines(AppDomain.CurrentDomain.BaseDirectory + "/settings/labels"))
 			{
 				if (lb != null)
-				{
-					lb.Items.Add(group);
-				}
+				{ lb.Items.Add(label); }
 				else
-				{
-					clb.Items.Add(group);
-				}
+				{ clb.Items.Add(label); }
 			}
 		}
 
