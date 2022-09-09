@@ -194,22 +194,17 @@ namespace myJournal.subforms
 
 		private void lstEntries_SelectEntry(object sender, EventArgs e)
 		{
-			//if(currentEntry == null)
-			//{
-				ListBox lb = (ListBox)sender;
-				RichTextBox rtb = rtbSelectedEntry;
-				lb.SelectedIndexChanged -= new System.EventHandler(this.lstEntries_SelectEntry);
-				currentEntry = Utilities.SelectEntry(rtb, lb, currentJournal, firstSelection);
-				firstSelection = false;
-				lblSelectionType.Visible = rtb.Text.Length > 0;
-				lblSeparator.Visible = rtb.Text.Length > 0;
-				Utilities.ResizeListsAndRTBs(lstEntries, rtbSelectedEntry, lblSeparator, lblSelectionType, this);
-				lb.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectEntry);
-				mnuEntryEdit.Enabled = true;	// rtbSelectedEntry.Text.Length > 0;
-				mnuEntryDelete.Enabled = mnuEntryEdit.Enabled;
-				//currentEntry = null;
-				//mnuEntryEdit_Click(null, null);
-			//}
+			ListBox lb = (ListBox)sender;
+			RichTextBox rtb = rtbSelectedEntry;
+			lb.SelectedIndexChanged -= new System.EventHandler(this.lstEntries_SelectEntry);
+			currentEntry = Utilities.SelectEntry(rtb, lb, currentJournal, firstSelection);
+			firstSelection = false;
+			lblSelectionType.Visible = rtb.Text.Length > 0;
+			lblSeparator.Visible = rtb.Text.Length > 0;
+			Utilities.ResizeListsAndRTBs(lstEntries, rtbSelectedEntry, lblSeparator, lblSelectionType, this);
+			lb.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectEntry);
+			mnuEntryEdit.Enabled = true;
+			mnuEntryDelete.Enabled = mnuEntryEdit.Enabled;
 		}
 
 		private void lblSeparator_MouseMove(object sender, MouseEventArgs e)
@@ -260,15 +255,18 @@ namespace myJournal.subforms
 
 		private void mnuEntryEdit_Click(object sender, EventArgs e)
 		{
+			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
+
 			frmNewEntry frm = new frmNewEntry(currentJournal, currentEntry);
 			frm.Text = "Edit '" + currentEntry.ClearTitle() + "' in '" + currentJournal.Name + "'";
+			frm.preserveOriginalText = mnu.Text.ToLower().StartsWith("preserve");
 			Utilities.Showform(frm, this); 
 
 			if (frm.entry != null | !frm.saved)
 			{
 				if (!frm.saved)
 				{
-					currentEntry.Replace(frm.entry);
+					currentJournal.ReplaceEntry(currentEntry, frm.entry);
 					currentJournal.Save();
 				}
 
@@ -395,8 +393,5 @@ namespace myJournal.subforms
 				return cp;
 			}
 		}
-
 	}
-
-
 }

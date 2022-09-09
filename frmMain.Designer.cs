@@ -47,6 +47,8 @@ namespace myJournal.subforms
 			this.mnuEntryTop = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEntryCreate = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEntryEdit = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuPreserveOriginalText = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuDiscardOriginalText = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEntryDelete = new System.Windows.Forms.ToolStripMenuItem();
 			this.lblWrongPin = new System.Windows.Forms.Label();
 			this.lblEntries = new System.Windows.Forms.Label();
@@ -108,7 +110,7 @@ namespace myJournal.subforms
 			this.ddlJournals.FormattingEnabled = true;
 			this.ddlJournals.Location = new System.Drawing.Point(61, 30);
 			this.ddlJournals.Name = "ddlJournals";
-			this.ddlJournals.Size = new System.Drawing.Size(367, 23);
+			this.ddlJournals.Size = new System.Drawing.Size(939, 23);
 			this.ddlJournals.TabIndex = 1;
 			this.ddlJournals.SelectedIndexChanged += new System.EventHandler(this.ddlJournals_SelectedIndexChanged);
 			// 
@@ -132,7 +134,7 @@ namespace myJournal.subforms
 			this.lstEntries.Location = new System.Drawing.Point(12, 106);
 			this.lstEntries.Name = "lstEntries";
 			this.lstEntries.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
-			this.lstEntries.Size = new System.Drawing.Size(416, 123);
+			this.lstEntries.Size = new System.Drawing.Size(988, 123);
 			this.lstEntries.TabIndex = 8;
 			this.lstEntries.Visible = false;
 			this.lstEntries.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectEntry);
@@ -145,7 +147,7 @@ namespace myJournal.subforms
 			this.rtbSelectedEntry.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.rtbSelectedEntry.Location = new System.Drawing.Point(15, 271);
 			this.rtbSelectedEntry.Name = "rtbSelectedEntry";
-			this.rtbSelectedEntry.Size = new System.Drawing.Size(413, 83);
+			this.rtbSelectedEntry.Size = new System.Drawing.Size(985, 184);
 			this.rtbSelectedEntry.TabIndex = 5;
 			this.rtbSelectedEntry.TabStop = false;
 			this.rtbSelectedEntry.Text = "";
@@ -161,7 +163,7 @@ namespace myJournal.subforms
 			this.lblSeparator.ForeColor = System.Drawing.Color.Red;
 			this.lblSeparator.Location = new System.Drawing.Point(13, 232);
 			this.lblSeparator.Name = "lblSeparator";
-			this.lblSeparator.Size = new System.Drawing.Size(418, 19);
+			this.lblSeparator.Size = new System.Drawing.Size(990, 19);
 			this.lblSeparator.TabIndex = 30;
 			this.lblSeparator.Text = resources.GetString("lblSeparator.Text");
 			this.lblSeparator.Visible = false;
@@ -174,7 +176,7 @@ namespace myJournal.subforms
             this.mnuEntryTop});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(440, 24);
+			this.menuStrip1.Size = new System.Drawing.Size(1012, 24);
 			this.menuStrip1.TabIndex = 37;
 			this.menuStrip1.Text = "menuStrip1";
 			// 
@@ -191,7 +193,7 @@ namespace myJournal.subforms
 			// mnuJournal_Create
 			// 
 			this.mnuJournal_Create.Name = "mnuJournal_Create";
-			this.mnuJournal_Create.Size = new System.Drawing.Size(180, 22);
+			this.mnuJournal_Create.Size = new System.Drawing.Size(109, 22);
 			this.mnuJournal_Create.Text = "C&reate";
 			this.mnuJournal_Create.Click += new System.EventHandler(this.mnuJournal_Create_Click);
 			// 
@@ -199,7 +201,7 @@ namespace myJournal.subforms
 			// 
 			this.mnuJournal_Delete.Enabled = false;
 			this.mnuJournal_Delete.Name = "mnuJournal_Delete";
-			this.mnuJournal_Delete.Size = new System.Drawing.Size(180, 22);
+			this.mnuJournal_Delete.Size = new System.Drawing.Size(109, 22);
 			this.mnuJournal_Delete.Text = "Delete";
 			this.mnuJournal_Delete.Click += new System.EventHandler(this.mnuJournal_Delete_Click);
 			// 
@@ -207,7 +209,7 @@ namespace myJournal.subforms
 			// 
 			this.mnuSearch.Enabled = false;
 			this.mnuSearch.Name = "mnuSearch";
-			this.mnuSearch.Size = new System.Drawing.Size(180, 22);
+			this.mnuSearch.Size = new System.Drawing.Size(109, 22);
 			this.mnuSearch.Text = "&Search";
 			this.mnuSearch.Click += new System.EventHandler(this.mnuSearch_Click);
 			// 
@@ -231,11 +233,28 @@ namespace myJournal.subforms
 			// 
 			// mnuEntryEdit
 			// 
+			this.mnuEntryEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuPreserveOriginalText,
+            this.mnuDiscardOriginalText});
 			this.mnuEntryEdit.Enabled = false;
 			this.mnuEntryEdit.Name = "mnuEntryEdit";
 			this.mnuEntryEdit.Size = new System.Drawing.Size(180, 22);
 			this.mnuEntryEdit.Text = "E&dit";
 			this.mnuEntryEdit.Click += new System.EventHandler(this.mnuEntryEdit_Click);
+			// 
+			// mnuPreserveOriginalText
+			// 
+			this.mnuPreserveOriginalText.Name = "mnuPreserveOriginalText";
+			this.mnuPreserveOriginalText.Size = new System.Drawing.Size(187, 22);
+			this.mnuPreserveOriginalText.Text = "Preserve Original Text";
+			this.mnuPreserveOriginalText.Click += new System.EventHandler(this.mnuEntryEdit_Click);
+			// 
+			// mnuDiscardOriginalText
+			// 
+			this.mnuDiscardOriginalText.Name = "mnuDiscardOriginalText";
+			this.mnuDiscardOriginalText.Size = new System.Drawing.Size(187, 22);
+			this.mnuDiscardOriginalText.Text = "Edit Original Text";
+			this.mnuDiscardOriginalText.Click += new System.EventHandler(this.mnuEntryEdit_Click);
 			// 
 			// mnuEntryDelete
 			// 
@@ -350,7 +369,7 @@ namespace myJournal.subforms
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.Window;
-			this.ClientSize = new System.Drawing.Size(440, 527);
+			this.ClientSize = new System.Drawing.Size(1012, 628);
 			this.Controls.Add(this.btnLoadJournal);
 			this.Controls.Add(this.pnlDateFilters);
 			this.Controls.Add(this.lblShowPIN);
@@ -407,5 +426,7 @@ namespace myJournal.subforms
 		private System.Windows.Forms.Panel pnlDateFilters;
 		private System.Windows.Forms.Button btnMonth;
 		private System.Windows.Forms.Button btnWeek;
+		private System.Windows.Forms.ToolStripMenuItem mnuPreserveOriginalText;
+		private System.Windows.Forms.ToolStripMenuItem mnuDiscardOriginalText;
 	}
 }

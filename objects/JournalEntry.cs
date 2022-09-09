@@ -19,10 +19,9 @@ namespace myJournal
 		public string DisplayTitle { get { return GetTitleDisplayText(); } }
 		public string DisplayText { get { return GetTextDisplayText(); } set { DisplayText = value; } }
 
-
+		private string RTF;
+        private string Labels;
 		public string Title;
-		string RTF;
-        string Labels;
 		public bool isEdited = false;
         public string Id;
 
@@ -45,10 +44,9 @@ namespace myJournal
 				, ClearTitle(), Date, ClearTags(), ClearText());
 		}
 
-		string GetTitleDisplayText()
+		string GetTitleDisplayText()	// 09/05/22 : jsr : Why is this here?
 		{
 			StringBuilder sb = new StringBuilder();
-
 			return sb.ToString();
 		}
 
@@ -56,7 +54,6 @@ namespace myJournal
 		{
 			string[] sRtrn = new string[4];
 			int iTextChunkLength = 150;
-
 			sRtrn[0] = ClearTitle() + " (" + Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")";
 			string sEntryText = ClearText();
 			sEntryText = (sEntryText.Length < iTextChunkLength ? sEntryText : sEntryText.Substring(0, iTextChunkLength) + " ...");

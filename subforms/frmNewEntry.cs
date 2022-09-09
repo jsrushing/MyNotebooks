@@ -20,6 +20,7 @@ namespace myJournal.subforms
 		private string originalText_TextOnly;
 		private bool isDirty = false;
 		public bool saved = false;
+		public bool preserveOriginalText;
 
 		public frmNewEntry(Journal currentJournal, JournalEntry entryToEdit = null)
 		{
@@ -46,13 +47,22 @@ namespace myJournal.subforms
 				txtNewEntryTitle.Text = entry.ClearTitle();
 				originalText_TextOnly = entry.ClearText();
 
-				rtbNewEntry.Text = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Editing"], entry.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"])
+				//rtbNewEntry.Text = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Editing"], entry.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"])
+				//	, entry.ClearTitle(), originalText_TextOnly);
+				
+				originalText_Full = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Editing"], entry.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"])
 					, entry.ClearTitle(), originalText_TextOnly);
 
+				originalEntryLength = originalText_Full.Length - 1;
+				originalText_Full = originalText_Full.Substring(originalText_Full.Length - originalEntryLength + 1);
+				rtbNewEntry.Text = originalText_Full;
+
+				if (preserveOriginalText)
+				{
+					GrayOriginalText();
+				}
+
 				Utilities.CheckExistingLabels(lstLabels, entry);
-				originalEntryLength = rtbNewEntry.Text.Length - 1;
-				originalText_Full = rtbNewEntry.Text.Substring(rtbNewEntry.Text.Length - originalEntryLength + 1);
-				GrayOriginalText();
 				rtbNewEntry.Focus();
 				rtbNewEntry.SelectionStart = 0;
 				mnuEditOriginalText.Visible = true;
@@ -95,23 +105,31 @@ namespace myJournal.subforms
 			}
 		}
 
-		private void mnuEditOriginalText_Click(object sender, EventArgs e)
-		{
-			rtbNewEntry.Text = originalText_TextOnly + rtbNewEntry.Text;
-			GrayOriginalText();
-			mnuEditOriginalText.Enabled = false;
-		}
+		//private void mnuEditOriginalText_Click(object sender, EventArgs e)
+		//{
+		//	ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
+		//	string txt = rtbNewEntry.Text;
+		//	rtbNewEntry.Text = originalText_TextOnly;   // + rtbNewEntry.Text;
+
+		//	if (mnu.Text.ToLower().StartsWith("preserve"))
+		//	{
+		//		rtbNewEntry.Text += rtbNewEntry.Text + txt;
+		//		GrayOriginalText();
+		//	}
+		//	mnuEditOriginalText.Visible = false;
+		//}
 
 		private void mnuSaveAndExit_Click(object sender, EventArgs e)
 		{
-			SaveOptions(true);
+			Save();
+			this.Hide();
 		}
 
 		private void mnuSaveEntry_Click(object sender, EventArgs e)
 		{
 			if (rtbNewEntry.Text.Length > 0 && txtNewEntryTitle.Text.Length > 0)
 			{
-				SaveOptions(false);
+				Save();
 			}
 			else
 			{
@@ -130,11 +148,14 @@ namespace myJournal.subforms
 
 		private void InNoTypeArea(bool clicked = false)
 		{
-			int positionToCheck = rtbNewEntry.SelectionStart;
-			positionToCheck += rtbNewEntry.SelectionLength;
-			bool inNoType = positionToCheck >= rtbNewEntry.Text.Length - originalEntryLength;
-			rtbNewEntry.SelectionStart = inNoType ? rtbNewEntry.Text.Length - originalEntryLength - 1 : rtbNewEntry.SelectionStart;
-			if(inNoType & rtbNewEntry.SelectionLength > 0) { rtbNewEntry.SelectionLength = 0; InNoTypeArea(); } 
+			if (preserveOriginalText)
+			{
+				int positionToCheck = rtbNewEntry.SelectionStart;
+				positionToCheck += rtbNewEntry.SelectionLength;
+				bool inNoType = positionToCheck >= rtbNewEntry.Text.Length - originalEntryLength;
+				rtbNewEntry.SelectionStart = inNoType ? rtbNewEntry.Text.Length - originalEntryLength - 1 : rtbNewEntry.SelectionStart;
+				if(inNoType & rtbNewEntry.SelectionLength > 0) { rtbNewEntry.SelectionLength = 0; InNoTypeArea(); } 
+			}
 		}
 
 		private void rtbNewEntry_KeyDown(object sender, KeyEventArgs e)
@@ -146,31 +167,23 @@ namespace myJournal.subforms
 
 		private void rtbNewEntry_TextChanged(object sender, EventArgs e) { SetIsDirty(true); }
 
-		private void SaveOptions(bool saveAndExit)
+		private void Save()
 		{
 			JournalEntry newEntry = new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, rtbNewEntry.Rtf, Utilities.GetCheckedLabels(lstLabels), false);
 
-			if (saveAndExit)
+			if(entry == null)
 			{
-				mnuCancelExit_Click(null, null);
-				this.Hide();
+				journal.AddEntry(newEntry);
 			}
 			else
 			{
-				if(entry == null)
-				{
-					journal.AddEntry(newEntry);
-				}
-				else
-				{
-					journal.ReplaceEntry(entry, newEntry);
-				}
-
-				journal.Save();
-				entry = newEntry;
-				saved = true;
-				SetIsDirty(false);
+				journal.ReplaceEntry(entry, newEntry);
 			}
+
+			journal.Save();
+			entry = newEntry;
+			saved = true;
+			SetIsDirty(false);
 		}
 
 		private void SetIsDirty(bool dirty)

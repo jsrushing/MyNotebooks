@@ -61,8 +61,15 @@ namespace myJournal.objects
 			if(clearPrevious) lbxToPopulate.Items.Clear();
 			List<JournalEntry> tmpEntries = null;
 
-			if (startDate.Length > 0) { tmpEntries = (List<JournalEntry>)entries.Where(x => x.Date >= DateTime.Parse(startDate)).ToList(); }
-			else { tmpEntries = entries; }
+			//try
+			//{
+			//	if (startDate.Length > 0) { tmpEntries = (List<JournalEntry>)entries.Where(x => x.Date >= DateTime.Parse(startDate)).ToList(); }
+			//	else { tmpEntries = entries; }
+
+			//}
+			//catch (NullReferenceException) { tmpEntries = entries; }
+
+			tmpEntries = entries;
 
 			if (journalName.Length > 0) 
 			{ 
