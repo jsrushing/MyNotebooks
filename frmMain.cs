@@ -146,7 +146,7 @@ namespace myJournal.subforms
 					lstEntries.Focus();
 				}
 			}
-			catch (Exception ex) { }
+			catch (Exception ex) { Console.Write(ex.Message); }
 		}
 
 		private void btnWeekMonth_Click(object sender, EventArgs e)
@@ -260,21 +260,15 @@ namespace myJournal.subforms
 			frmNewEntry frm = new frmNewEntry(currentJournal, currentEntry);
 			frm.Text = "Edit '" + currentEntry.ClearTitle() + "' in '" + currentJournal.Name + "'";
 			frm.preserveOriginalText = mnu.Text.ToLower().StartsWith("preserve");
-			Utilities.Showform(frm, this); 
+			Utilities.Showform(frm, this);
 
-			if (frm.entry != null | !frm.saved)
+			if (frm.saved)
 			{
-				if (!frm.saved)
-				{
-					currentJournal.ReplaceEntry(currentEntry, frm.entry);
-					currentJournal.Save();
-				}
-
+				Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text);
 				ShowHideEntriesArea(false);
 				lstEntries.Visible = true;
 			}
 
-			Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text);
 			frm.Close();
 			this.Show();
 			this.Height += 1;

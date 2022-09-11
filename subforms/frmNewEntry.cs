@@ -19,6 +19,7 @@ namespace myJournal.subforms
 		private string originalText_Full;
 		private string originalText_TextOnly;
 		private bool isDirty = false;
+		private string originalTitle;
 		public bool saved = false;
 		public bool preserveOriginalText;
 
@@ -38,17 +39,24 @@ namespace myJournal.subforms
 			this.Show();
 		}
 
+		private void GrayOriginalText()
+		{
+			rtbNewEntry.SelectionStart = 1;
+			rtbNewEntry.SelectionLength = originalText_Full.Length + 1;
+			rtbNewEntry.SelectionColor = Color.Gray;
+			rtbNewEntry.SelectionLength = 0;
+			rtbNewEntry.SelectionStart = 0;
+		}
+
 		private void frmNewEntry_Load(object sender, EventArgs e)
 		{
 			Utilities.PopulateLabelsList(lstLabels);
+			originalTitle = this.Text;
 
 			if (isEdit)
 			{
 				txtNewEntryTitle.Text = entry.ClearTitle();
 				originalText_TextOnly = entry.ClearText();
-
-				//rtbNewEntry.Text = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Editing"], entry.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"])
-				//	, entry.ClearTitle(), originalText_TextOnly);
 				
 				originalText_Full = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Editing"], entry.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"])
 					, entry.ClearTitle(), originalText_TextOnly);
@@ -65,10 +73,21 @@ namespace myJournal.subforms
 				Utilities.CheckExistingLabels(lstLabels, entry);
 				rtbNewEntry.Focus();
 				rtbNewEntry.SelectionStart = 0;
-				mnuEditOriginalText.Visible = true;
 			}
 
-			isDirty = false;
+			SetIsDirty(false);
+		}
+
+		private void InNoTypeArea(bool clicked = false)
+		{
+			if (preserveOriginalText)
+			{
+				int positionToCheck = rtbNewEntry.SelectionStart;
+				positionToCheck += rtbNewEntry.SelectionLength;
+				bool inNoType = positionToCheck >= rtbNewEntry.Text.Length - originalEntryLength;
+				rtbNewEntry.SelectionStart = inNoType ? rtbNewEntry.Text.Length - originalEntryLength + 4 : rtbNewEntry.SelectionStart;
+				if (inNoType & rtbNewEntry.SelectionLength > 0) { rtbNewEntry.SelectionLength = 0; InNoTypeArea(); } 
+			}
 		}
 
 		private void lblManageLabels_Click(object sender, EventArgs e)
@@ -80,7 +99,7 @@ namespace myJournal.subforms
 			this.Show();
 		}
 
-		private void lstLabels_SelectedIndexChanged(object sender, EventArgs e) { isDirty = true; }
+		private void lstLabels_SelectedIndexChanged(object sender, EventArgs e) { SetIsDirty(true); }
 
 		private void ModifyFontStyle(FontStyle style)
 		{ rtbNewEntry.SelectionFont = new Font(rtbNewEntry.SelectionFont, rtbNewEntry.SelectionFont.Style ^ style); }
@@ -93,7 +112,7 @@ namespace myJournal.subforms
 				Utilities.Showform(frm, this);
 
 				if(frm.result == frmMessage.ReturnResult.No) { entry = null; }
-				else if(frm.result == frmMessage.ReturnResult.Yes)  { mnuSaveEntry_Click(null, null); }
+				else if(frm.result == frmMessage.ReturnResult.Yes)  { Save(); }
 
 				frm.Close();
 				this.Hide();
@@ -104,20 +123,6 @@ namespace myJournal.subforms
 				this.Hide();
 			}
 		}
-
-		//private void mnuEditOriginalText_Click(object sender, EventArgs e)
-		//{
-		//	ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
-		//	string txt = rtbNewEntry.Text;
-		//	rtbNewEntry.Text = originalText_TextOnly;   // + rtbNewEntry.Text;
-
-		//	if (mnu.Text.ToLower().StartsWith("preserve"))
-		//	{
-		//		rtbNewEntry.Text += rtbNewEntry.Text + txt;
-		//		GrayOriginalText();
-		//	}
-		//	mnuEditOriginalText.Visible = false;
-		//}
 
 		private void mnuSaveAndExit_Click(object sender, EventArgs e)
 		{
@@ -137,31 +142,7 @@ namespace myJournal.subforms
 			}
 		}
 
-		private void GrayOriginalText()
-		{
-			rtbNewEntry.SelectionStart = rtbNewEntry.Text.Length - originalText_Full.Length - 1;
-			rtbNewEntry.SelectionLength = originalText_Full.Length + 1;
-			rtbNewEntry.SelectionColor = Color.Gray;
-			rtbNewEntry.SelectionLength = 0;
-			rtbNewEntry.SelectionStart = 0;
-		}
-
-		private void InNoTypeArea(bool clicked = false)
-		{
-			if (preserveOriginalText)
-			{
-				int positionToCheck = rtbNewEntry.SelectionStart;
-				positionToCheck += rtbNewEntry.SelectionLength;
-				bool inNoType = positionToCheck >= rtbNewEntry.Text.Length - originalEntryLength;
-				rtbNewEntry.SelectionStart = inNoType ? rtbNewEntry.Text.Length - originalEntryLength - 1 : rtbNewEntry.SelectionStart;
-				if(inNoType & rtbNewEntry.SelectionLength > 0) { rtbNewEntry.SelectionLength = 0; InNoTypeArea(); } 
-			}
-		}
-
-		private void rtbNewEntry_KeyDown(object sender, KeyEventArgs e)
-		{
-			if (e.KeyCode == Keys.Right || e.KeyCode == Keys.Down) { InNoTypeArea(); }
-		}
+		private void rtbNewEntry_KeyDown(object sender, KeyEventArgs e) { if (e.KeyCode == Keys.Right || e.KeyCode == Keys.Down) { InNoTypeArea(); }}
 
 		private void rtbNewEntry_MouseUp(object sender, MouseEventArgs e) { InNoTypeArea(); }
 
@@ -194,6 +175,8 @@ namespace myJournal.subforms
 				mnuSaveEntry.Enabled = isDirty;
 				mnuSaveAndExit.Enabled = isDirty;
 			}
+
+			this.Text = dirty ? originalTitle + "*" : originalTitle;
 		}
 
 		private void ToolsMenuClick(object sender, EventArgs e)

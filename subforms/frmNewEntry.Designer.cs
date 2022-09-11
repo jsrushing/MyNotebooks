@@ -52,7 +52,6 @@ namespace myJournal.subforms
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.mnuSaveEntry = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuSaveAndExit = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuEditOriginalText = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuCancelExit = new System.Windows.Forms.ToolStripMenuItem();
 			this.grpCreateEntry.SuspendLayout();
 			this.toolsRTB.SuspendLayout();
@@ -300,7 +299,6 @@ namespace myJournal.subforms
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuSaveEntry,
             this.mnuSaveAndExit,
-            this.mnuEditOriginalText,
             this.mnuCancelExit});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
@@ -323,13 +321,6 @@ namespace myJournal.subforms
 			this.mnuSaveAndExit.Size = new System.Drawing.Size(88, 20);
 			this.mnuSaveAndExit.Text = "Save and &Exit";
 			this.mnuSaveAndExit.Click += new System.EventHandler(this.mnuSaveAndExit_Click);
-			// 
-			// mnuEditOriginalText
-			// 
-			this.mnuEditOriginalText.Name = "mnuEditOriginalText";
-			this.mnuEditOriginalText.Size = new System.Drawing.Size(108, 20);
-			this.mnuEditOriginalText.Text = "Edit &Original Text";
-			this.mnuEditOriginalText.Visible = false;
 			// 
 			// mnuCancelExit
 			// 
@@ -379,7 +370,6 @@ namespace myJournal.subforms
 		private System.Windows.Forms.MenuStrip menuStrip1;
 		private System.Windows.Forms.ToolStripMenuItem mnuSaveEntry;
 		private System.Windows.Forms.ToolStripMenuItem mnuCancelExit;
-		private System.Windows.Forms.ToolStripMenuItem mnuEditOriginalText;
 		private System.Windows.Forms.ToolStrip toolsRTB;
 		private System.Windows.Forms.ToolStripButton toolsBold;
 		private System.Windows.Forms.ToolStripButton toolsUnderline;

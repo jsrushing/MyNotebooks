@@ -15,7 +15,7 @@ namespace encrypt_decrypt_string
         {
             try
             {
-                string ToReturn = "";
+                string strReturn = "";
 				string PublicKey = ConfigurationManager.AppSettings["PublicKey"];
 
 				if(Program.PIN == null || Program.PIN.Length == 0)
@@ -37,13 +37,15 @@ namespace encrypt_decrypt_string
                     cs = new CryptoStream(ms, des.CreateEncryptor(publickeybyte, secretkeyByte), CryptoStreamMode.Write);
                     cs.Write(inputbyteArray, 0, inputbyteArray.Length);
                     cs.FlushFinalBlock();
-                    ToReturn = Convert.ToBase64String(ms.ToArray());
+                    strReturn = Convert.ToBase64String(ms.ToArray());
                 }
-                return ToReturn;
+                return strReturn;
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message, ex.InnerException);
+				Console.Write(ex.Message);
+				return string.Empty;
+				//throw new Exception(ex.Message, ex.InnerException);
             }
         }
 
@@ -51,7 +53,7 @@ namespace encrypt_decrypt_string
         {
             try
             {
-                string ToReturn = "";
+                string strReturn = "";
 				string PublicKey = ConfigurationManager.AppSettings["PublicKey"];	// Program.PIN;
 
 				if (Program.PIN == null || Program.PIN.Length == 0)
@@ -75,13 +77,14 @@ namespace encrypt_decrypt_string
                     cs.Write(inputbyteArray, 0, inputbyteArray.Length);
                     cs.FlushFinalBlock();
                     Encoding encoding = Encoding.UTF8;
-                    ToReturn = encoding.GetString(ms.ToArray());
+                    strReturn = encoding.GetString(ms.ToArray());
                 }
-                return ToReturn;
+                return strReturn;
             }
             
 			catch (Exception ex)
             {
+				Console.Write(ex.Message);
 				return string.Empty;
             }
         }

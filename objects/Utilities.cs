@@ -61,13 +61,8 @@ namespace myJournal.objects
 			if(clearPrevious) lbxToPopulate.Items.Clear();
 			List<JournalEntry> tmpEntries = null;
 
-			//try
-			//{
-			//	if (startDate.Length > 0) { tmpEntries = (List<JournalEntry>)entries.Where(x => x.Date >= DateTime.Parse(startDate)).ToList(); }
-			//	else { tmpEntries = entries; }
-
-			//}
-			//catch (NullReferenceException) { tmpEntries = entries; }
+			//if (startDate.Length > 0) { tmpEntries = (List<JournalEntry>)entries.Where(x => x.Date >= DateTime.Parse(startDate)).ToList(); }
+			//else { tmpEntries = entries; }
 
 			tmpEntries = entries;
 
@@ -77,8 +72,15 @@ namespace myJournal.objects
 				lbxToPopulate.Items.Add("Journal: " + journalName); 
 			}
 
+			//for(int i = 0; i < tmpEntries.Count; i++)
+			//{
+			//	if (tmpEntries[i] == null) { tmpEntries[i] = new JournalEntry("Null title", "Null text", "", ""); }
+			//}
+
 			foreach (JournalEntry je in tmpEntries)
-			{ for(int i = 0; i < je.Synopsis.Length; i++) { lbxToPopulate.Items.Add(je.Synopsis[i]); } }
+			{
+				for(int i = 0; i < je.Synopsis.Length; i++) { lbxToPopulate.Items.Add(je.Synopsis[i]); } 
+			}
 		}
 
 		public static void PopulateLabelsList(CheckedListBox clb, ListBox lb = null)

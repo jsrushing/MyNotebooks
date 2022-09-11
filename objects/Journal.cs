@@ -41,12 +41,10 @@ namespace myJournal
 
         public void AddEntry(JournalEntry entryToAdd) { Entries.Add(entryToAdd); }
 
-        private void AddFirstEntry() { Entries.Add(new JournalEntry("created", "-", "-", "")); }
-
         public void Create()
         {
-            AddFirstEntry();
-            Save();
+			Entries.Add(new JournalEntry("created", "-", "-", ""));
+			this.Save();
         }
 
         public void Delete() { File.Delete(this.FileName); }
@@ -66,7 +64,7 @@ namespace myJournal
         {
             JournalEntry je = null;
 			try { je = this.Entries.First(a => a.ClearTitle() + a.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) == _title + _date); }
-            catch(Exception ex) { }
+            catch(Exception ex) { Console.Write(ex.Message); }
             return je;
         }
 
