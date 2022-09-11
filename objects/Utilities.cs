@@ -193,7 +193,7 @@ namespace myJournal.objects
 					else
 					{
 						rtb.Text = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
-						, entryRtrn.ClearTitle(), entryRtrn.Date, entryRtrn.ClearTags(), entryRtrn.ClearText());
+						, entryRtrn.ClearTitle(), entryRtrn.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), entryRtrn.ClearTags(), entryRtrn.ClearText());
 					}
 					
 					if (rtb.Text.Length == 0) { lb.TopIndex = lb.Top + lb.Height < rtb.Top ? ctr : lb.TopIndex; }

@@ -41,7 +41,7 @@ namespace myJournal
 		string GetTextDisplayText()
 		{
 			return String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
-				, ClearTitle(), Date, ClearTags(), ClearText());
+				, ClearTitle(), Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), ClearTags(), ClearText());
 		}
 
 		string GetTitleDisplayText()	// 09/05/22 : jsr : Why is this here?
