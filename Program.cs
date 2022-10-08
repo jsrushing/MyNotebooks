@@ -1,12 +1,15 @@
 using System;
 using System.Windows.Forms;
 using myJournal.subforms;
+using System.Collections.Generic;
 
 namespace myJournal
 {
 	static class Program
     {
 		public static string PIN = string.Empty;
+		public static List<ListViewItem> lstFonts = new List<ListViewItem>();
+
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>

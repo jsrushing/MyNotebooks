@@ -16,7 +16,6 @@ namespace myJournal
         public DateTime Date;
         public string Text;
 		public string[] Synopsis{ get { return GetSynopsis(); } }
-		public string DisplayTitle { get { return GetTitleDisplayText(); } }
 		public string DisplayText { get { return GetTextDisplayText(); } set { DisplayText = value; } }
 
 		private string RTF;
@@ -42,12 +41,6 @@ namespace myJournal
 		{
 			return String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
 				, ClearTitle(), Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), ClearTags(), ClearText());
-		}
-
-		string GetTitleDisplayText()	// 09/05/22 : jsr : Why is this here?
-		{
-			StringBuilder sb = new StringBuilder();
-			return sb.ToString();
 		}
 
 		string[] GetSynopsis()

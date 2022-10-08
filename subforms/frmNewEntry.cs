@@ -52,6 +52,7 @@ namespace myJournal.subforms
 		{
 			Utilities.PopulateLabelsList(lstLabels);
 			originalTitle = this.Text;
+			ddlFonts.DataSource = Program.lstFonts;
 
 			if (isEdit)
 			{
@@ -188,5 +189,26 @@ namespace myJournal.subforms
 
 		private void txtNewEntryTitle_TextChanged(object sender, EventArgs e) { SetIsDirty(true); }
 
+		private void mnuFindTextBox_TextChanged(object sender, EventArgs e)
+		{
+			// do find operation here
+		}
+
+		private void mnuFind_Click(object sender, EventArgs e)
+		{
+			txtFind.Text = string.Empty;
+			txtFind.Focus();
+		}
+
+		private void ddlFonts_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			lblSelectedFont.Font = new Font(ddlFonts.SelectedItem.ToString(), 9);
+			lblSelectedFont.Text = lblSelectedFont.Font.Name;
+		}
+
+		private void ddlFonts_MouseMove(object sender, MouseEventArgs e)
+		{
+			string gs = ddlFonts.SelectedText;
+		}
 	}
 }

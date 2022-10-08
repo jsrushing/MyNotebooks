@@ -1,6 +1,7 @@
 ﻿/* Main form.
 	04/01/22
 	07/06/22 - Dev. ended. In test.
+
 	bug list:
 		07/07/22 1100
 			001x Can arrow down or right into no type area.
@@ -43,12 +44,13 @@
 
 	bugs/hotfixes:
 		bugs: 
-		001 07/23/22 1330
+		001x 07/23/22 1330
 			Fatal error when selecting an entry from lstEntries AFTER selecting entry > clicking 'week' or 'month' filter > selecting one of the entries shown in the filtered results.
 			08/02/22 Declared fixed. Bug hasn't been seen since this incident. It is probably related to old journals and entries. Deleted all old test journals.
 
-		002 08/02/22 07:20
+		002X 08/02/22 07:20
 			There's a problem with date display. Some (older?) entry dates are "H:m:s" and others are "HH:mm:ss".
+			09/10/22 FIXED
 			
 		toDo:
 		07/23/22 001 Related to bug 001.
@@ -66,10 +68,19 @@
 					 2315 Done with date selection and last week/month filter.
 		07/27/22 002a For edit entry, edit original text, only show previous entry's .ClearText().
 						Done.
+
 		08/09/22 003 See frmSearch & Journal
+
+		09/10/22 *************************** DATES ARE STILL NOT WORKING! SEE TODO 001 AND BUG 001 ABOVE! *************************************
+
+		09/12/22 004 Add formatting to RTB's
+					> frmNewEntry
+					> frmMain (displaying full entry w/ richtext).
+
 
  */
 using System;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
@@ -96,6 +107,20 @@ namespace myJournal.subforms
 			string version = fvi.FileVersion;
 			this.Text = "myJournal " + version;
 			LoadJournals();
+			LoadFonts();
+		}
+
+		private void LoadFonts()
+		{
+			ListViewItem lvi = null;
+
+			foreach (FontFamily f in System.Drawing.FontFamily.Families)
+			{
+				lvi = new ListViewItem();
+				lvi.Font = new Font(f.Name, 8);
+				lvi.Text = f.Name;
+				Program.lstFonts.Add(lvi);
+			}
 		}
 
 		private void frmMain_Resize(object sender, EventArgs e)

@@ -31,6 +31,15 @@ namespace myJournal.subforms
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmNewEntry));
 			this.grpCreateEntry = new System.Windows.Forms.GroupBox();
+			this.panel1 = new System.Windows.Forms.Panel();
+			this.lblSelectedFont = new System.Windows.Forms.Label();
+			this.btnColor = new System.Windows.Forms.Button();
+			this.btnStrikeout = new System.Windows.Forms.Button();
+			this.btnUnderline = new System.Windows.Forms.Button();
+			this.btnItalic = new System.Windows.Forms.Button();
+			this.btnBold = new System.Windows.Forms.Button();
+			this.ddlFonts = new System.Windows.Forms.ComboBox();
+			this.label1 = new System.Windows.Forms.Label();
 			this.toolsRTB = new System.Windows.Forms.ToolStrip();
 			this.toolsBold = new System.Windows.Forms.ToolStripButton();
 			this.toolsUnderline = new System.Windows.Forms.ToolStripButton();
@@ -52,8 +61,11 @@ namespace myJournal.subforms
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.mnuSaveEntry = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuSaveAndExit = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuFind = new System.Windows.Forms.ToolStripMenuItem();
+			this.txtFind = new System.Windows.Forms.ToolStripTextBox();
 			this.mnuCancelExit = new System.Windows.Forms.ToolStripMenuItem();
 			this.grpCreateEntry.SuspendLayout();
+			this.panel1.SuspendLayout();
 			this.toolsRTB.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -63,6 +75,7 @@ namespace myJournal.subforms
 			this.grpCreateEntry.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.grpCreateEntry.Controls.Add(this.panel1);
 			this.grpCreateEntry.Controls.Add(this.toolsRTB);
 			this.grpCreateEntry.Controls.Add(this.lblManageLabels);
 			this.grpCreateEntry.Controls.Add(this.txtNewEntryTitle);
@@ -78,9 +91,101 @@ namespace myJournal.subforms
 			this.grpCreateEntry.Controls.Add(this.rtbNewEntry);
 			this.grpCreateEntry.Location = new System.Drawing.Point(10, 25);
 			this.grpCreateEntry.Name = "grpCreateEntry";
-			this.grpCreateEntry.Size = new System.Drawing.Size(437, 459);
+			this.grpCreateEntry.Size = new System.Drawing.Size(580, 459);
 			this.grpCreateEntry.TabIndex = 5;
 			this.grpCreateEntry.TabStop = false;
+			// 
+			// panel1
+			// 
+			this.panel1.Controls.Add(this.lblSelectedFont);
+			this.panel1.Controls.Add(this.btnColor);
+			this.panel1.Controls.Add(this.btnStrikeout);
+			this.panel1.Controls.Add(this.btnUnderline);
+			this.panel1.Controls.Add(this.btnItalic);
+			this.panel1.Controls.Add(this.btnBold);
+			this.panel1.Controls.Add(this.ddlFonts);
+			this.panel1.Controls.Add(this.label1);
+			this.panel1.Location = new System.Drawing.Point(73, 44);
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new System.Drawing.Size(446, 23);
+			this.panel1.TabIndex = 42;
+			// 
+			// lblSelectedFont
+			// 
+			this.lblSelectedFont.AutoSize = true;
+			this.lblSelectedFont.Location = new System.Drawing.Point(312, 5);
+			this.lblSelectedFont.Name = "lblSelectedFont";
+			this.lblSelectedFont.Size = new System.Drawing.Size(0, 15);
+			this.lblSelectedFont.TabIndex = 45;
+			// 
+			// btnColor
+			// 
+			this.btnColor.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.btnColor.Location = new System.Drawing.Point(247, 0);
+			this.btnColor.Name = "btnColor";
+			this.btnColor.Size = new System.Drawing.Size(59, 23);
+			this.btnColor.TabIndex = 44;
+			this.btnColor.Text = "Color";
+			this.btnColor.UseVisualStyleBackColor = true;
+			// 
+			// btnStrikeout
+			// 
+			this.btnStrikeout.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Strikeout, System.Drawing.GraphicsUnit.Point);
+			this.btnStrikeout.Location = new System.Drawing.Point(227, 0);
+			this.btnStrikeout.Name = "btnStrikeout";
+			this.btnStrikeout.Size = new System.Drawing.Size(22, 23);
+			this.btnStrikeout.TabIndex = 43;
+			this.btnStrikeout.Text = "U";
+			this.btnStrikeout.UseVisualStyleBackColor = true;
+			// 
+			// btnUnderline
+			// 
+			this.btnUnderline.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
+			this.btnUnderline.Location = new System.Drawing.Point(207, 0);
+			this.btnUnderline.Name = "btnUnderline";
+			this.btnUnderline.Size = new System.Drawing.Size(22, 23);
+			this.btnUnderline.TabIndex = 4;
+			this.btnUnderline.Text = "U";
+			this.btnUnderline.UseVisualStyleBackColor = true;
+			// 
+			// btnItalic
+			// 
+			this.btnItalic.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point);
+			this.btnItalic.Location = new System.Drawing.Point(187, 0);
+			this.btnItalic.Name = "btnItalic";
+			this.btnItalic.Size = new System.Drawing.Size(22, 23);
+			this.btnItalic.TabIndex = 3;
+			this.btnItalic.Text = "I";
+			this.btnItalic.UseVisualStyleBackColor = true;
+			// 
+			// btnBold
+			// 
+			this.btnBold.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.btnBold.Location = new System.Drawing.Point(169, 0);
+			this.btnBold.Name = "btnBold";
+			this.btnBold.Size = new System.Drawing.Size(22, 23);
+			this.btnBold.TabIndex = 2;
+			this.btnBold.Text = "B";
+			this.btnBold.UseVisualStyleBackColor = true;
+			// 
+			// ddlFonts
+			// 
+			this.ddlFonts.FormattingEnabled = true;
+			this.ddlFonts.Location = new System.Drawing.Point(41, 0);
+			this.ddlFonts.Name = "ddlFonts";
+			this.ddlFonts.Size = new System.Drawing.Size(121, 23);
+			this.ddlFonts.TabIndex = 1;
+			this.ddlFonts.SelectedIndexChanged += new System.EventHandler(this.ddlFonts_SelectedIndexChanged);
+			this.ddlFonts.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ddlFonts_MouseMove);
+			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(7, 4);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(32, 15);
+			this.label1.TabIndex = 0;
+			this.label1.Text = "font:";
 			// 
 			// toolsRTB
 			// 
@@ -92,7 +197,7 @@ namespace myJournal.subforms
             this.toolsItalic,
             this.toolsFonts,
             this.toolsFontSizes});
-			this.toolsRTB.Location = new System.Drawing.Point(178, 44);
+			this.toolsRTB.Location = new System.Drawing.Point(321, 44);
 			this.toolsRTB.Name = "toolsRTB";
 			this.toolsRTB.Size = new System.Drawing.Size(241, 25);
 			this.toolsRTB.TabIndex = 41;
@@ -168,7 +273,7 @@ namespace myJournal.subforms
 			this.txtNewEntryTitle.Location = new System.Drawing.Point(46, 19);
 			this.txtNewEntryTitle.Multiline = true;
 			this.txtNewEntryTitle.Name = "txtNewEntryTitle";
-			this.txtNewEntryTitle.Size = new System.Drawing.Size(378, 23);
+			this.txtNewEntryTitle.Size = new System.Drawing.Size(521, 23);
 			this.txtNewEntryTitle.TabIndex = 1;
 			this.txtNewEntryTitle.TextChanged += new System.EventHandler(this.txtNewEntryTitle_TextChanged);
 			// 
@@ -202,7 +307,7 @@ namespace myJournal.subforms
 			this.lblTagManager2.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.lblTagManager2.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
 			this.lblTagManager2.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblTagManager2.Location = new System.Drawing.Point(466, 400);
+			this.lblTagManager2.Location = new System.Drawing.Point(609, 400);
 			this.lblTagManager2.Name = "lblTagManager2";
 			this.lblTagManager2.Size = new System.Drawing.Size(51, 15);
 			this.lblTagManager2.TabIndex = 36;
@@ -237,7 +342,7 @@ namespace myJournal.subforms
 			this.lstLabels.FormattingEnabled = true;
 			this.lstLabels.Location = new System.Drawing.Point(6, 321);
 			this.lstLabels.Name = "lstLabels";
-			this.lstLabels.Size = new System.Drawing.Size(418, 126);
+			this.lstLabels.Size = new System.Drawing.Size(561, 126);
 			this.lstLabels.TabIndex = 27;
 			this.lstLabels.SelectedIndexChanged += new System.EventHandler(this.lstLabels_SelectedIndexChanged);
 			// 
@@ -260,7 +365,7 @@ namespace myJournal.subforms
 			this.lblFont_NewEntry.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.lblFont_NewEntry.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
 			this.lblFont_NewEntry.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblFont_NewEntry.Location = new System.Drawing.Point(486, 70);
+			this.lblFont_NewEntry.Location = new System.Drawing.Point(629, 70);
 			this.lblFont_NewEntry.Name = "lblFont_NewEntry";
 			this.lblFont_NewEntry.Size = new System.Drawing.Size(31, 15);
 			this.lblFont_NewEntry.TabIndex = 5;
@@ -287,7 +392,7 @@ namespace myJournal.subforms
 			this.rtbNewEntry.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.rtbNewEntry.Location = new System.Drawing.Point(6, 69);
 			this.rtbNewEntry.Name = "rtbNewEntry";
-			this.rtbNewEntry.Size = new System.Drawing.Size(418, 222);
+			this.rtbNewEntry.Size = new System.Drawing.Size(561, 222);
 			this.rtbNewEntry.TabIndex = 2;
 			this.rtbNewEntry.Text = "";
 			this.rtbNewEntry.TextChanged += new System.EventHandler(this.rtbNewEntry_TextChanged);
@@ -299,10 +404,11 @@ namespace myJournal.subforms
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuSaveEntry,
             this.mnuSaveAndExit,
+            this.mnuFind,
             this.mnuCancelExit});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(458, 24);
+			this.menuStrip1.Size = new System.Drawing.Size(601, 24);
 			this.menuStrip1.TabIndex = 6;
 			this.menuStrip1.Text = "Save Entry";
 			// 
@@ -322,6 +428,22 @@ namespace myJournal.subforms
 			this.mnuSaveAndExit.Text = "Save and &Exit";
 			this.mnuSaveAndExit.Click += new System.EventHandler(this.mnuSaveAndExit_Click);
 			// 
+			// mnuFind
+			// 
+			this.mnuFind.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.txtFind});
+			this.mnuFind.Name = "mnuFind";
+			this.mnuFind.Size = new System.Drawing.Size(42, 20);
+			this.mnuFind.Text = "&Find";
+			this.mnuFind.Click += new System.EventHandler(this.mnuFind_Click);
+			// 
+			// txtFind
+			// 
+			this.txtFind.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.txtFind.Name = "txtFind";
+			this.txtFind.Size = new System.Drawing.Size(100, 23);
+			this.txtFind.TextChanged += new System.EventHandler(this.mnuFindTextBox_TextChanged);
+			// 
 			// mnuCancelExit
 			// 
 			this.mnuCancelExit.Name = "mnuCancelExit";
@@ -333,7 +455,7 @@ namespace myJournal.subforms
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(458, 492);
+			this.ClientSize = new System.Drawing.Size(601, 492);
 			this.Controls.Add(this.grpCreateEntry);
 			this.Controls.Add(this.menuStrip1);
 			this.MainMenuStrip = this.menuStrip1;
@@ -343,6 +465,8 @@ namespace myJournal.subforms
 			this.Load += new System.EventHandler(this.frmNewEntry_Load);
 			this.grpCreateEntry.ResumeLayout(false);
 			this.grpCreateEntry.PerformLayout();
+			this.panel1.ResumeLayout(false);
+			this.panel1.PerformLayout();
 			this.toolsRTB.ResumeLayout(false);
 			this.toolsRTB.PerformLayout();
 			this.menuStrip1.ResumeLayout(false);
@@ -377,5 +501,16 @@ namespace myJournal.subforms
 		private System.Windows.Forms.ToolStripComboBox toolsFonts;
 		private System.Windows.Forms.ToolStripComboBox toolsFontSizes;
 		private System.Windows.Forms.ToolStripMenuItem mnuSaveAndExit;
+		private System.Windows.Forms.Panel panel1;
+		private System.Windows.Forms.Button btnColor;
+		private System.Windows.Forms.Button btnStrikeout;
+		private System.Windows.Forms.Button btnUnderline;
+		private System.Windows.Forms.Button btnItalic;
+		private System.Windows.Forms.Button btnBold;
+		private System.Windows.Forms.ComboBox ddlFonts;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.ToolStripMenuItem mnuFind;
+		private System.Windows.Forms.ToolStripTextBox txtFind;
+		private System.Windows.Forms.Label lblSelectedFont;
 	}
 }
