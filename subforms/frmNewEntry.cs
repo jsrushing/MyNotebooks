@@ -53,6 +53,7 @@ namespace myJournal.subforms
 			Utilities.PopulateLabelsList(lstLabels);
 			originalTitle = this.Text;
 			ddlFonts.DataSource = Program.lstFonts;
+			ddlFonts.DisplayMember = "text";
 
 			if (isEdit)
 			{

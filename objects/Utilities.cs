@@ -72,10 +72,7 @@ namespace myJournal.objects
 				lbxToPopulate.Items.Add("Journal: " + journalName); 
 			}
 
-			//for(int i = 0; i < tmpEntries.Count; i++)
-			//{
-			//	if (tmpEntries[i] == null) { tmpEntries[i] = new JournalEntry("Null title", "Null text", "", ""); }
-			//}
+			tmpEntries.Sort((x, y) => -x.Date.CompareTo(y.Date));
 
 			foreach (JournalEntry je in tmpEntries)
 			{

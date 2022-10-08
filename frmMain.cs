@@ -153,7 +153,7 @@ namespace myJournal.subforms
 						lstEntries.Visible = true;
 						ShowHideJournalMenus(true);
 						PopulateShowFromDates();
-						pnlDateFilters.Visible = true;
+						//pnlDateFilters.Visible = true;
 						btnWeekMonth_Click(btnMonth, null);
 					}
 					else
@@ -214,7 +214,7 @@ namespace myJournal.subforms
 			currentJournal = null;
 			cbxDates.DataSource = null;
 			lblWrongPin.Visible = false;
-			pnlDateFilters.Visible = false;
+			//pnlDateFilters.Visible = false;
 		}
 
 		private void lstEntries_SelectEntry(object sender, EventArgs e)
