@@ -86,6 +86,15 @@ namespace myJournal
             return jRtrn;
         }
 
+		public void Rename(string newName)
+		{
+			string s = this.FileName.Substring(0, this.FileName.LastIndexOf("\\")) + "\\" + newName;
+
+			File.Move(this.FileName, this.FileName.Substring(0, this.FileName.LastIndexOf("\\")) + "\\" + newName);
+			//this.Name = newName;
+			//this.Save();
+		}
+
         public void ReplaceEntry(JournalEntry jeToReplace, JournalEntry jeToInsert)
 		{
 			int idx;

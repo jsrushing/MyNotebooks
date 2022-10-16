@@ -178,7 +178,15 @@ namespace myJournal.subforms
 				mnuSaveAndExit.Enabled = isDirty;
 			}
 
-			this.Text = dirty ? originalTitle + "*" : originalTitle;
+			if(this.entry != null)
+			{
+				this.Text = "editing '" + entry.ClearTitle() + "' in " + journal.Name;
+			}
+			else
+			{
+				this.Text = dirty ? originalTitle + "*" : originalTitle;
+			}
+
 		}
 
 		private void ToolsMenuClick(object sender, EventArgs e)
@@ -203,13 +211,9 @@ namespace myJournal.subforms
 
 		private void ddlFonts_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			lblSelectedFont.Font = new Font(ddlFonts.SelectedItem.ToString(), 9);
+			lblSelectedFont.Font = new Font(ddlFonts.Text, 10);
 			lblSelectedFont.Text = lblSelectedFont.Font.Name;
-		}
-
-		private void ddlFonts_MouseMove(object sender, MouseEventArgs e)
-		{
-			string gs = ddlFonts.SelectedText;
+			Application.DoEvents();
 		}
 	}
 }

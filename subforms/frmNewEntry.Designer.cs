@@ -107,7 +107,7 @@ namespace myJournal.subforms
 			this.panel1.Controls.Add(this.label1);
 			this.panel1.Location = new System.Drawing.Point(73, 44);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(446, 23);
+			this.panel1.Size = new System.Drawing.Size(494, 23);
 			this.panel1.TabIndex = 42;
 			// 
 			// lblSelectedFont
@@ -176,7 +176,6 @@ namespace myJournal.subforms
 			this.ddlFonts.Size = new System.Drawing.Size(121, 23);
 			this.ddlFonts.TabIndex = 1;
 			this.ddlFonts.SelectedIndexChanged += new System.EventHandler(this.ddlFonts_SelectedIndexChanged);
-			this.ddlFonts.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ddlFonts_MouseMove);
 			// 
 			// label1
 			// 

@@ -78,6 +78,13 @@
 					> frmMain (displaying full entry w/ richtext).
 
 
+	10/15/22
+		Fix search error when clicking found entry.
+		Change frmNewEntry.Text after saving from 'new entry in <jrnl>' to 'editing <entry name>'.
+			done
+		Journal rename?
+			did it
+
  */
 using System;
 using System.Drawing;
@@ -329,6 +336,18 @@ namespace myJournal.subforms
 			this.Show();
 		}
 
+		private void mnuRenameJournal_Click(object sender, EventArgs e)
+		{
+			frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox);
+			Utilities.Showform(frm, this);
+			if (frm.result == frmMessage.ReturnResult.Ok && frm.input.Length > 0)
+			{
+				currentJournal.Rename(frm.input);
+				LoadJournals();
+			}
+			this.Show();
+		}
+
 		private void mnuSearch_Click(object sender, EventArgs e)
 		{
 			Program.PIN = txtJournalPIN.Text;
@@ -353,6 +372,7 @@ namespace myJournal.subforms
 		{
 			string rootPath = AppDomain.CurrentDomain.BaseDirectory;
 			ddlJournals.Items.Clear();
+			ddlJournals.Text = string.Empty;
 
 			if (!Directory.Exists(rootPath + "/journals/"))
 			{
@@ -403,6 +423,7 @@ namespace myJournal.subforms
 			lblEntries.Visible = show;
 			mnuEntryEdit.Enabled = show;
 			mnuEntryDelete.Enabled = show;
+			mnuRenameJournal.Enabled = show;
 		}
 
 		protected override CreateParams CreateParams {

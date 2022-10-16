@@ -11,13 +11,15 @@ namespace myJournal.subforms
 		OperationType opType;
 		string msg;
 		public ReturnResult result;
+		public string input;
 
 		public enum OperationType
 		{
 			Message,
 			DeleteJournal,
 			DeleteEntry,
-			YesNoQuestion
+			YesNoQuestion,
+			InputBox
 		}
 
 		public enum ReturnResult
@@ -29,11 +31,16 @@ namespace myJournal.subforms
 			None
 		}
 
-		public frmMessage(OperationType type, string message)
+		public frmMessage(OperationType type, string message = "")
 		{
 			InitializeComponent();
 			opType = type;
 			msg = message;
+		}
+
+		private void frmMessage_Activated(object sender, EventArgs e)
+		{
+			if (pnlTextBox.Visible) { txtInput.Focus(); }
 		}
 
 		private void frmMessage_Load(object sender, EventArgs e)
@@ -42,6 +49,8 @@ namespace myJournal.subforms
 			{
 				if(c.GetType() == typeof(Panel)) { c.Top = 30; }
 			}
+
+			lblMessage.Text = msg;
 
 			switch (opType)
 			{
@@ -54,12 +63,17 @@ namespace myJournal.subforms
 					pnlYesNo.Visible = true;
 					break;
 				case OperationType.Message:
-					lblMessage.Text = msg;
 					pnlOk.Visible = true;
 					break;
 				case OperationType.YesNoQuestion:
-					lblMessage.Text = msg;
 					pnlYesNoCancel.Visible = true;
+					break;
+				case OperationType.InputBox:
+					lblMessage.Text = "Enter the new Journal name.";
+					pnlOkCancel.Visible = true;
+					pnlOkCancel.Top = pnlOkCancel.Top + 38;
+					pnlTextBox.Visible = true;
+					this.AcceptButton = btnOk1;
 					break;
 			}
 		}
@@ -85,6 +99,7 @@ namespace myJournal.subforms
 		private void btnOk_Click(object sender, EventArgs e)
 		{
 			result = ReturnResult.Ok;
+			input = txtInput.Text;
 			this.Hide();
 		}
 	}
