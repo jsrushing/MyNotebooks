@@ -60,6 +60,7 @@ namespace myJournal.subforms
 			this.pnlDateFilters = new System.Windows.Forms.Panel();
 			this.btnMonth = new System.Windows.Forms.Button();
 			this.btnWeek = new System.Windows.Forms.Button();
+			this.btnNewEntry = new System.Windows.Forms.Button();
 			this.menuStrip1.SuspendLayout();
 			this.pnlDateFilters.SuspendLayout();
 			this.SuspendLayout();
@@ -195,7 +196,7 @@ namespace myJournal.subforms
 			// mnuJournal_Create
 			// 
 			this.mnuJournal_Create.Name = "mnuJournal_Create";
-			this.mnuJournal_Create.Size = new System.Drawing.Size(180, 22);
+			this.mnuJournal_Create.Size = new System.Drawing.Size(117, 22);
 			this.mnuJournal_Create.Text = "C&reate";
 			this.mnuJournal_Create.Click += new System.EventHandler(this.mnuJournal_Create_Click);
 			// 
@@ -203,7 +204,7 @@ namespace myJournal.subforms
 			// 
 			this.mnuJournal_Delete.Enabled = false;
 			this.mnuJournal_Delete.Name = "mnuJournal_Delete";
-			this.mnuJournal_Delete.Size = new System.Drawing.Size(180, 22);
+			this.mnuJournal_Delete.Size = new System.Drawing.Size(117, 22);
 			this.mnuJournal_Delete.Text = "Delete";
 			this.mnuJournal_Delete.Click += new System.EventHandler(this.mnuJournal_Delete_Click);
 			// 
@@ -211,7 +212,7 @@ namespace myJournal.subforms
 			// 
 			this.mnuSearch.Enabled = false;
 			this.mnuSearch.Name = "mnuSearch";
-			this.mnuSearch.Size = new System.Drawing.Size(180, 22);
+			this.mnuSearch.Size = new System.Drawing.Size(117, 22);
 			this.mnuSearch.Text = "&Search";
 			this.mnuSearch.Click += new System.EventHandler(this.mnuSearch_Click);
 			// 
@@ -219,7 +220,7 @@ namespace myJournal.subforms
 			// 
 			this.mnuRenameJournal.Enabled = false;
 			this.mnuRenameJournal.Name = "mnuRenameJournal";
-			this.mnuRenameJournal.Size = new System.Drawing.Size(180, 22);
+			this.mnuRenameJournal.Size = new System.Drawing.Size(117, 22);
 			this.mnuRenameJournal.Text = "Rename";
 			this.mnuRenameJournal.Click += new System.EventHandler(this.mnuRenameJournal_Click);
 			// 
@@ -373,6 +374,17 @@ namespace myJournal.subforms
 			this.btnWeek.UseVisualStyleBackColor = true;
 			this.btnWeek.Click += new System.EventHandler(this.btnWeekMonth_Click);
 			// 
+			// btnNewEntry
+			// 
+			this.btnNewEntry.Location = new System.Drawing.Point(115, 1);
+			this.btnNewEntry.Name = "btnNewEntry";
+			this.btnNewEntry.Size = new System.Drawing.Size(75, 23);
+			this.btnNewEntry.TabIndex = 50;
+			this.btnNewEntry.Text = "&New Entry";
+			this.btnNewEntry.UseVisualStyleBackColor = true;
+			this.btnNewEntry.Visible = false;
+			this.btnNewEntry.Click += new System.EventHandler(this.btnNewEntry_Click);
+			// 
 			// frmMain
 			// 
 			this.AcceptButton = this.btnLoadJournal;
@@ -380,6 +392,7 @@ namespace myJournal.subforms
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.Window;
 			this.ClientSize = new System.Drawing.Size(1012, 628);
+			this.Controls.Add(this.btnNewEntry);
 			this.Controls.Add(this.btnLoadJournal);
 			this.Controls.Add(this.pnlDateFilters);
 			this.Controls.Add(this.lblShowPIN);
@@ -439,5 +452,6 @@ namespace myJournal.subforms
 		private System.Windows.Forms.ToolStripMenuItem mnuPreserveOriginalText;
 		private System.Windows.Forms.ToolStripMenuItem mnuDiscardOriginalText;
 		private System.Windows.Forms.ToolStripMenuItem mnuRenameJournal;
+		private System.Windows.Forms.Button btnNewEntry;
 	}
 }

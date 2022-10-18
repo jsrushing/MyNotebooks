@@ -167,8 +167,6 @@ namespace myJournal.subforms
 					{
 						lstEntries.Height = this.Height - lstEntries.Top - 50;
 						lstEntries.Visible = true;
-						//ShowHideJournalMenus(true);
-						//PopulateShowFromDates();
 						//pnlDateFilters.Visible = true;
 						btnWeekMonth_Click(btnMonth, null);
 					}
@@ -177,11 +175,9 @@ namespace myJournal.subforms
 						lblWrongPin.Visible = true;
 						txtJournalPIN.Focus();
 						txtJournalPIN.SelectAll();
-						//ShowHideEntriesArea(false);
 					}	
 
 					btnLoadJournal.Enabled = false;
-					//mnuEntryEdit.Enabled = false;
 					ShowHideMenusAndControls(SelectionState.JournalLoaded);
 				}
 				else
@@ -226,11 +222,7 @@ namespace myJournal.subforms
 			lstEntries.Visible = false;
 			txtJournalPIN.Focus();
 			rtbSelectedEntry.Text = string.Empty;
-
-			//ShowHideEntriesArea(false);
-			//ShowHideJournalMenus(false);
 			ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
-
 			currentEntry = null;
 			currentJournal = null;
 			cbxDates.DataSource = null;
@@ -249,10 +241,7 @@ namespace myJournal.subforms
 			lblSeparator.Visible = rtb.Text.Length > 0;
 			Utilities.ResizeListsAndRTBs(lstEntries, rtbSelectedEntry, lblSeparator, lblSelectionType, this);
 			lb.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectEntry);
-
 			ShowHideMenusAndControls(SelectionState.EntrySelected);
-			//mnuEntryEdit.Enabled = true;
-			//mnuEntryDelete.Enabled = mnuEntryEdit.Enabled;
 		}
 
 		private void lblSeparator_MouseMove(object sender, MouseEventArgs e)
@@ -293,12 +282,7 @@ namespace myJournal.subforms
 				currentJournal.Entries.Remove(currentEntry);
 				currentJournal.Save();
 				Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text);
-
-				//ShowHideEntriesArea(false);
 				ShowHideMenusAndControls(SelectionState.JournalLoaded);
-
-				lstEntries.Visible = true;
-				lstEntries.Height = this.Height - 160;
 			}
 			frm.Close();
 			this.Show();
@@ -316,11 +300,7 @@ namespace myJournal.subforms
 			if (frm.saved)
 			{
 				Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text);
-
-				//ShowHideEntriesArea(false);
 				ShowHideMenusAndControls(SelectionState.JournalLoaded);
-
-				lstEntries.Visible = true;
 			}
 
 			frm.Close();
@@ -416,10 +396,7 @@ namespace myJournal.subforms
 			btnLoadJournal.Enabled = false;
 			txtJournalPIN.Text = string.Empty;
 			lstEntries.Visible = false;
-
 			ShowHideMenusAndControls(SelectionState.HideAll);
-			//ShowHideEntriesArea(false);
-			//ShowHideJournalMenus(false);
 		}
 
 		private void PopulateShowFromDates()
@@ -428,27 +405,6 @@ namespace myJournal.subforms
 			List<string> l = currentJournal.Entries.Select(e => e.Date.ToShortDateString()).Distinct().ToList();
 			cbxDates.DataSource = l;
 		}
-
-		//private void ShowHideEntriesArea(bool show)
-		//{
-		//	rtbSelectedEntry.Text = show ? rtbSelectedEntry.Text : string.Empty;
-		//	rtbSelectedEntry.Visible = show;
-		//	lblSeparator.Visible = show;
-		//	lblSelectionType.Visible = show;
-		//	lblEntries.Visible = show;
-		//	lstEntries.Visible = show;
-		//}
-
-		//private void ShowHideJournalMenus(bool show)
-		//{
-		//	mnuEntryTop.Enabled = show;
-		//	mnuJournal_Delete.Enabled = show;
-		//	mnuSearch.Enabled = show;
-		//	lblEntries.Visible = show;
-		//	mnuEntryEdit.Enabled = show;
-		//	mnuEntryDelete.Enabled = show;
-		//	mnuRenameJournal.Enabled = show;
-		//}
 
 		private void ShowHideMenusAndControls(SelectionState st)
 		{
@@ -463,7 +419,9 @@ namespace myJournal.subforms
 				mnuEntryCreate.Enabled = false;
 				mnuEntryDelete.Enabled = false;
 				mnuEntryEdit.Enabled = false;
+				btnNewEntry.Visible = false;
 				mnuJournal_Delete.Enabled = false;
+				mnuRenameJournal.Enabled = false;
 				mnuSearch.Enabled = false;
 				rtbSelectedEntry.Text = string.Empty;
 			}
@@ -471,12 +429,15 @@ namespace myJournal.subforms
 			{
 				ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
 				lstEntries.Visible = true;
+				lstEntries.Height = this.Height - 160;
 				mnuJournal.Enabled = true;
 				mnuJournal_Delete.Enabled = true;
 				mnuEntryTop.Enabled = true;
 				mnuEntryCreate.Enabled = true;
+				btnNewEntry.Visible = true;
 				mnuSearch.Enabled = true;
 				mnuJournal_Delete.Enabled = true;
+				mnuRenameJournal.Enabled = true;
 			}
 			else if(st == SelectionState.EntrySelected)
 			{
@@ -495,6 +456,11 @@ namespace myJournal.subforms
 				cp.ExStyle |= 0x02000000;  // Turn on WS_EX_COMPOSITED
 				return cp;
 			}
+		}
+
+		private void btnNewEntry_Click(object sender, EventArgs e)
+		{
+			mnuEntryCreate_Click(btnNewEntry, null);
 		}
 	}
 }
