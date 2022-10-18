@@ -102,6 +102,14 @@ namespace myJournal.subforms
 		JournalEntry currentEntry;
 		private bool firstSelection = true;
 
+		private enum SelectionState
+		{
+			JournalSelectedNotLoaded,
+			JournalLoaded,
+			EntrySelected,
+			HideAll
+		}
+
 		public frmMain()
 		{
 			InitializeComponent();
@@ -115,6 +123,7 @@ namespace myJournal.subforms
 			this.Text = "myJournal " + version;
 			LoadJournals();
 			LoadFonts();
+			ShowHideMenusAndControls(SelectionState.HideAll);
 		}
 
 		private void LoadFonts()
@@ -158,8 +167,8 @@ namespace myJournal.subforms
 					{
 						lstEntries.Height = this.Height - lstEntries.Top - 50;
 						lstEntries.Visible = true;
-						ShowHideJournalMenus(true);
-						PopulateShowFromDates();
+						//ShowHideJournalMenus(true);
+						//PopulateShowFromDates();
 						//pnlDateFilters.Visible = true;
 						btnWeekMonth_Click(btnMonth, null);
 					}
@@ -168,10 +177,12 @@ namespace myJournal.subforms
 						lblWrongPin.Visible = true;
 						txtJournalPIN.Focus();
 						txtJournalPIN.SelectAll();
-						ShowHideEntriesArea(false);
+						//ShowHideEntriesArea(false);
 					}	
+
 					btnLoadJournal.Enabled = false;
-					mnuEntryEdit.Enabled = false;
+					//mnuEntryEdit.Enabled = false;
+					ShowHideMenusAndControls(SelectionState.JournalLoaded);
 				}
 				else
 				{
@@ -215,8 +226,11 @@ namespace myJournal.subforms
 			lstEntries.Visible = false;
 			txtJournalPIN.Focus();
 			rtbSelectedEntry.Text = string.Empty;
-			ShowHideEntriesArea(false);
-			ShowHideJournalMenus(false);
+
+			//ShowHideEntriesArea(false);
+			//ShowHideJournalMenus(false);
+			ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
+
 			currentEntry = null;
 			currentJournal = null;
 			cbxDates.DataSource = null;
@@ -235,8 +249,10 @@ namespace myJournal.subforms
 			lblSeparator.Visible = rtb.Text.Length > 0;
 			Utilities.ResizeListsAndRTBs(lstEntries, rtbSelectedEntry, lblSeparator, lblSelectionType, this);
 			lb.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectEntry);
-			mnuEntryEdit.Enabled = true;
-			mnuEntryDelete.Enabled = mnuEntryEdit.Enabled;
+
+			ShowHideMenusAndControls(SelectionState.EntrySelected);
+			//mnuEntryEdit.Enabled = true;
+			//mnuEntryDelete.Enabled = mnuEntryEdit.Enabled;
 		}
 
 		private void lblSeparator_MouseMove(object sender, MouseEventArgs e)
@@ -277,7 +293,10 @@ namespace myJournal.subforms
 				currentJournal.Entries.Remove(currentEntry);
 				currentJournal.Save();
 				Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text);
-				ShowHideEntriesArea(false);
+
+				//ShowHideEntriesArea(false);
+				ShowHideMenusAndControls(SelectionState.JournalLoaded);
+
 				lstEntries.Visible = true;
 				lstEntries.Height = this.Height - 160;
 			}
@@ -297,7 +316,10 @@ namespace myJournal.subforms
 			if (frm.saved)
 			{
 				Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text);
-				ShowHideEntriesArea(false);
+
+				//ShowHideEntriesArea(false);
+				ShowHideMenusAndControls(SelectionState.JournalLoaded);
+
 				lstEntries.Visible = true;
 			}
 
@@ -394,8 +416,10 @@ namespace myJournal.subforms
 			btnLoadJournal.Enabled = false;
 			txtJournalPIN.Text = string.Empty;
 			lstEntries.Visible = false;
-			ShowHideEntriesArea(false);
-			ShowHideJournalMenus(false);
+
+			ShowHideMenusAndControls(SelectionState.HideAll);
+			//ShowHideEntriesArea(false);
+			//ShowHideJournalMenus(false);
 		}
 
 		private void PopulateShowFromDates()
@@ -405,25 +429,64 @@ namespace myJournal.subforms
 			cbxDates.DataSource = l;
 		}
 
-		private void ShowHideEntriesArea(bool show)
-		{
-			rtbSelectedEntry.Text = show ? rtbSelectedEntry.Text : string.Empty;
-			rtbSelectedEntry.Visible = show;
-			lblSeparator.Visible = show;
-			lblSelectionType.Visible = show;
-			lblEntries.Visible = show;
-			lstEntries.Visible = show;
-		}
+		//private void ShowHideEntriesArea(bool show)
+		//{
+		//	rtbSelectedEntry.Text = show ? rtbSelectedEntry.Text : string.Empty;
+		//	rtbSelectedEntry.Visible = show;
+		//	lblSeparator.Visible = show;
+		//	lblSelectionType.Visible = show;
+		//	lblEntries.Visible = show;
+		//	lstEntries.Visible = show;
+		//}
 
-		private void ShowHideJournalMenus(bool show)
+		//private void ShowHideJournalMenus(bool show)
+		//{
+		//	mnuEntryTop.Enabled = show;
+		//	mnuJournal_Delete.Enabled = show;
+		//	mnuSearch.Enabled = show;
+		//	lblEntries.Visible = show;
+		//	mnuEntryEdit.Enabled = show;
+		//	mnuEntryDelete.Enabled = show;
+		//	mnuRenameJournal.Enabled = show;
+		//}
+
+		private void ShowHideMenusAndControls(SelectionState st)
 		{
-			mnuEntryTop.Enabled = show;
-			mnuJournal_Delete.Enabled = show;
-			mnuSearch.Enabled = show;
-			lblEntries.Visible = show;
-			mnuEntryEdit.Enabled = show;
-			mnuEntryDelete.Enabled = show;
-			mnuRenameJournal.Enabled = show;
+			if(st == SelectionState.JournalSelectedNotLoaded)
+			{
+				rtbSelectedEntry.Visible = false;
+				lblSeparator.Visible = false;
+				lblSelectionType.Visible = false;
+				lblEntries.Visible = false;
+				lstEntries.Visible = false;
+				mnuEntryTop.Enabled = false;
+				mnuEntryCreate.Enabled = false;
+				mnuEntryDelete.Enabled = false;
+				mnuEntryEdit.Enabled = false;
+				mnuJournal_Delete.Enabled = false;
+				mnuSearch.Enabled = false;
+				rtbSelectedEntry.Text = string.Empty;
+			}
+			else if(st == SelectionState.JournalLoaded)
+			{
+				ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
+				lstEntries.Visible = true;
+				mnuJournal.Enabled = true;
+				mnuJournal_Delete.Enabled = true;
+				mnuEntryTop.Enabled = true;
+				mnuEntryCreate.Enabled = true;
+				mnuSearch.Enabled = true;
+				mnuJournal_Delete.Enabled = true;
+			}
+			else if(st == SelectionState.EntrySelected)
+			{
+				mnuEntryEdit.Enabled = true;
+				mnuEntryDelete.Enabled = true;
+				rtbSelectedEntry.Visible = true;
+				lblSeparator.Visible = true;
+				lblSelectionType.Visible = true;
+				lblEntries.Visible = true;
+			}
 		}
 
 		protected override CreateParams CreateParams {

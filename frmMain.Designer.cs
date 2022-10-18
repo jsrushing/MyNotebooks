@@ -44,6 +44,7 @@ namespace myJournal.subforms
 			this.mnuJournal_Create = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuJournal_Delete = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuSearch = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuRenameJournal = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEntryTop = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEntryCreate = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEntryEdit = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,7 +60,6 @@ namespace myJournal.subforms
 			this.pnlDateFilters = new System.Windows.Forms.Panel();
 			this.btnMonth = new System.Windows.Forms.Button();
 			this.btnWeek = new System.Windows.Forms.Button();
-			this.mnuRenameJournal = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.pnlDateFilters.SuspendLayout();
 			this.SuspendLayout();
@@ -215,6 +215,14 @@ namespace myJournal.subforms
 			this.mnuSearch.Text = "&Search";
 			this.mnuSearch.Click += new System.EventHandler(this.mnuSearch_Click);
 			// 
+			// mnuRenameJournal
+			// 
+			this.mnuRenameJournal.Enabled = false;
+			this.mnuRenameJournal.Name = "mnuRenameJournal";
+			this.mnuRenameJournal.Size = new System.Drawing.Size(180, 22);
+			this.mnuRenameJournal.Text = "Rename";
+			this.mnuRenameJournal.Click += new System.EventHandler(this.mnuRenameJournal_Click);
+			// 
 			// mnuEntryTop
 			// 
 			this.mnuEntryTop.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -229,7 +237,7 @@ namespace myJournal.subforms
 			// mnuEntryCreate
 			// 
 			this.mnuEntryCreate.Name = "mnuEntryCreate";
-			this.mnuEntryCreate.Size = new System.Drawing.Size(180, 22);
+			this.mnuEntryCreate.Size = new System.Drawing.Size(108, 22);
 			this.mnuEntryCreate.Text = "&Create";
 			this.mnuEntryCreate.Click += new System.EventHandler(this.mnuEntryCreate_Click);
 			// 
@@ -240,7 +248,7 @@ namespace myJournal.subforms
             this.mnuDiscardOriginalText});
 			this.mnuEntryEdit.Enabled = false;
 			this.mnuEntryEdit.Name = "mnuEntryEdit";
-			this.mnuEntryEdit.Size = new System.Drawing.Size(180, 22);
+			this.mnuEntryEdit.Size = new System.Drawing.Size(108, 22);
 			this.mnuEntryEdit.Text = "E&dit";
 			this.mnuEntryEdit.Click += new System.EventHandler(this.mnuEntryEdit_Click);
 			// 
@@ -262,7 +270,7 @@ namespace myJournal.subforms
 			// 
 			this.mnuEntryDelete.Enabled = false;
 			this.mnuEntryDelete.Name = "mnuEntryDelete";
-			this.mnuEntryDelete.Size = new System.Drawing.Size(180, 22);
+			this.mnuEntryDelete.Size = new System.Drawing.Size(108, 22);
 			this.mnuEntryDelete.Text = "Delete";
 			this.mnuEntryDelete.Click += new System.EventHandler(this.mnuEntryDelete_Click);
 			// 
@@ -364,14 +372,6 @@ namespace myJournal.subforms
 			this.btnWeek.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.btnWeek.UseVisualStyleBackColor = true;
 			this.btnWeek.Click += new System.EventHandler(this.btnWeekMonth_Click);
-			// 
-			// mnuRenameJournal
-			// 
-			this.mnuRenameJournal.Enabled = false;
-			this.mnuRenameJournal.Name = "mnuRenameJournal";
-			this.mnuRenameJournal.Size = new System.Drawing.Size(180, 22);
-			this.mnuRenameJournal.Text = "Rename";
-			this.mnuRenameJournal.Click += new System.EventHandler(this.mnuRenameJournal_Click);
 			// 
 			// frmMain
 			// 
