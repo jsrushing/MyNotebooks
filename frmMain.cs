@@ -188,6 +188,11 @@ namespace myJournal.subforms
 			catch (Exception ex) { Console.Write(ex.Message); }
 		}
 
+		private void btnNewEntry_Click(object sender, EventArgs e)
+		{
+			mnuEntryCreate_Click(btnNewEntry, null);
+		}
+
 		private void btnWeekMonth_Click(object sender, EventArgs e)
 		{
 			//storedEntry = currentEntry;
@@ -456,11 +461,6 @@ namespace myJournal.subforms
 				cp.ExStyle |= 0x02000000;  // Turn on WS_EX_COMPOSITED
 				return cp;
 			}
-		}
-
-		private void btnNewEntry_Click(object sender, EventArgs e)
-		{
-			mnuEntryCreate_Click(btnNewEntry, null);
 		}
 	}
 }

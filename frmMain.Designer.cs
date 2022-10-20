@@ -104,6 +104,7 @@ namespace myJournal.subforms
 			this.lblSelectionType.Size = new System.Drawing.Size(96, 17);
 			this.lblSelectionType.TabIndex = 9;
 			this.lblSelectionType.Text = "Selected Entry";
+			this.lblSelectionType.Visible = false;
 			// 
 			// ddlJournals
 			// 
