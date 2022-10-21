@@ -104,7 +104,7 @@ namespace myJournal.subforms
 		private Journal GetEntryJournal()
 		{
 			Journal jrnlRtrn = new Journal();
-			if(journalsToSearch.Count == 1) { jrnlRtrn = new Journal(journalsToSearch[0].Name); }
+			if (journalsToSearch.Count == 1) { jrnlRtrn = journalsToSearch[0]; }	// new Journal(journalsToSearch[0].Name); }
 			else { jrnlRtrn = new Journal(GetJournalNameFromDisplay()); }
 			return jrnlRtrn;
 		}

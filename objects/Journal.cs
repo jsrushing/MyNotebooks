@@ -131,6 +131,9 @@ namespace myJournal
 				{ if (je.Date >= dtFindDate_From.Value && je.Date <= dtFindDate_To.Value) { foundEntries.Add(je); } }
 
 				// labels
+
+				string s = je.ClearTags();
+
 				if (labelsArray != null)
 				{ foreach (string group in labelsArray) { if (je.ClearTags().Contains(group)) { foundEntries.Add(je); } } }
 
@@ -143,7 +146,7 @@ namespace myJournal
 				if (radBtnAnd.Checked)
 				{ if (entryText.Contains(searchText) & entryTitle.Contains(searchTitle)) { foundEntries.Add(je); }}
 				else
-				{ if (entryText.Contains(searchText) ) { foundEntries.Add(je); }}
+				{ if (searchText.Length > 0 && entryText.Contains(searchText) ) { foundEntries.Add(je); }}
 			}
 			return foundEntries;
 		}

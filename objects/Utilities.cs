@@ -66,17 +66,29 @@ namespace myJournal.objects
 
 			tmpEntries = entries;
 
-			if (journalName.Length > 0) 
-			{ 
-				lbxToPopulate.Items.Add(""); 
-				lbxToPopulate.Items.Add("Journal: " + journalName); 
-			}
+			//if (journalName.Length > 0) 
+			//{ 
+			//	lbxToPopulate.Items.Add(""); 
+			//	lbxToPopulate.Items.Add("Journal: " + journalName); 
+			//}
 
 			tmpEntries.Sort((x, y) => -x.Date.CompareTo(y.Date));
 
 			foreach (JournalEntry je in tmpEntries)
 			{
-				for(int i = 0; i < je.Synopsis.Length; i++) { lbxToPopulate.Items.Add(je.Synopsis[i]); } 
+				for(int i = 0; i < je.Synopsis.Length; i++) 
+				{ 
+					//if(i == 0 && journalName.Length > 0)
+					//{
+					//	lbxToPopulate.Items.Add(je.Synopsis[i]); //	+ " - Journal: " + journalName) ;
+					//}
+					//else
+					//{
+					//	lbxToPopulate.Items.Add(je.Synopsis[i]); 
+					//}
+
+					lbxToPopulate.Items.Add(je.Synopsis[i]);
+				} 
 			}
 		}
 
@@ -119,7 +131,7 @@ namespace myJournal.objects
 
 				for (int i = 0; i < lb.Items.Count; i++)
 				{
-					if (lb.Items[i].ToString().Equals(je.Synopsis[0].ToString()))	//  je.ClearTitle() + " (" + je.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"))
+					if (lb.Items[i].ToString().StartsWith(je.Synopsis[0].ToString()))	//  je.ClearTitle() + " (" + je.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"))
 					{
 						lb.SelectedIndices.Add(i);
 						lb.SelectedIndices.Add(i + 1); 
@@ -175,14 +187,12 @@ namespace myJournal.objects
 
 				string sTitleAndDate = lb.Items[ctr].ToString().Replace(" - EDITED", "");        // Use the title and date of the entry to create a JournalEntry object whose .ClearText will populate the display ...
 				string sTitle = sTitleAndDate.Substring(0, sTitleAndDate.LastIndexOf('(') - 1);
-				string sDate = sTitleAndDate.Substring(sTitleAndDate.LastIndexOf('(') + 1, sTitleAndDate.Length - 2 - sTitleAndDate.LastIndexOf('('));
+				string sDate = sTitleAndDate.Substring(sTitleAndDate.LastIndexOf('(') + 1, sTitleAndDate.LastIndexOf(')') - sTitleAndDate.LastIndexOf('(') - 1);
 				
 				entryRtrn = currentJournal.GetEntry(sTitle, sDate);
 
 				if (entryRtrn != null)
 				{
-					StringBuilder sb = new StringBuilder();
-					
 					if(entryRtrn.DisplayText != null)    // entries prior to 1.0.0.1 will not have .DisplayText
 					{
 						rtb.Text = entryRtrn.DisplayText;
