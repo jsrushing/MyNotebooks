@@ -24,22 +24,29 @@ namespace myJournal
         StringBuilder JournalText = new StringBuilder();
         public List<JournalEntry> Entries = new List<JournalEntry>();
         string root = "journals\\";
-		//private string PIN;
 
         public Journal(string _name = null) 
         {
-			//if (_PIN == null || _PIN.Length == 0) { _PIN = null; }
 			frmMain frm = new frmMain();
 
             if(_name != null)
             {
                 this.Name = _name;
                 this.FileName = AppDomain.CurrentDomain.BaseDirectory + this.root + this.Name;
-				//this.PIN = frm.GetPin();	// _PIN;
 			}
         }
 
         public void AddEntry(JournalEntry entryToAdd) { Entries.Add(entryToAdd); }
+
+		public void Backup()
+		{
+			if (!System.IO.Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "journals\\backups\\"))
+			{
+				System.IO.Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + "journals\\backups\\");
+			}
+			this.Name = FileName.Substring(FileName.LastIndexOf("\\"));
+			File.Copy(this.FileName, AppDomain.CurrentDomain.BaseDirectory + "journals\\backups\\" + this.Name, true);
+		}
 
         public void Create()
         {
@@ -79,7 +86,6 @@ namespace myJournal
                     BinaryFormatter formatter = new BinaryFormatter();
                     jRtrn = (Journal)formatter.Deserialize(stream);
 					jRtrn.FileName = AppDomain.CurrentDomain.BaseDirectory + this.root + journalToOpen;
-					//jRtrn.PIN = this.PIN;
 				}
             }
             catch(Exception) { }
@@ -105,13 +111,12 @@ namespace myJournal
 
         public void Save()
         {
-            try { File.Delete(this.FileName); } catch (Exception) { }
-
             using (Stream stream = File.Open(this.FileName, FileMode.Create))
             {
                 BinaryFormatter formatter = new BinaryFormatter();
                 formatter.Serialize(stream, this);
             }
+			Backup();
         }
 
 		public List<JournalEntry> Search(CheckBox chkUseDate, CheckBox chkUseDateRange, CheckBox chkMatchCase, DateTimePicker dtFindDate, DateTimePicker dtFindDate_From, 

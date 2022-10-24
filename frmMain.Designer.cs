@@ -280,7 +280,7 @@ namespace myJournal.subforms
 			// 
 			this.lblWrongPin.AutoSize = true;
 			this.lblWrongPin.ForeColor = System.Drawing.Color.Red;
-			this.lblWrongPin.Location = new System.Drawing.Point(54, 84);
+			this.lblWrongPin.Location = new System.Drawing.Point(99, 84);
 			this.lblWrongPin.Name = "lblWrongPin";
 			this.lblWrongPin.Size = new System.Drawing.Size(63, 15);
 			this.lblWrongPin.TabIndex = 38;
@@ -302,7 +302,7 @@ namespace myJournal.subforms
 			// lblShowPIN
 			// 
 			this.lblShowPIN.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
-			this.lblShowPIN.Location = new System.Drawing.Point(123, 82);
+			this.lblShowPIN.Location = new System.Drawing.Point(63, 82);
 			this.lblShowPIN.Name = "lblShowPIN";
 			this.lblShowPIN.Size = new System.Drawing.Size(35, 13);
 			this.lblShowPIN.TabIndex = 40;

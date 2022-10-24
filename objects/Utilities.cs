@@ -44,49 +44,17 @@ namespace myJournal.objects
 			return labels;
 		}
 
-		private static int GetEntryIndex(ListBox lb, JournalEntry je)
-		{
-			for(int i = 0; i < lb.Items.Count; i++)
-			{
-				if(lb.Items[i].ToString().Equals(je.ClearTitle() + " (" + je.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"))
-				{
-					return i;
-				}
-			}
-			return -1;
-		}
-
 		public static void PopulateEntries(ListBox lbxToPopulate, List<JournalEntry> entries, string startDate = "", bool clearPrevious = true, string journalName = "")
 		{
 			if(clearPrevious) lbxToPopulate.Items.Clear();
 			List<JournalEntry> tmpEntries = null;
-
-			//if (startDate.Length > 0) { tmpEntries = (List<JournalEntry>)entries.Where(x => x.Date >= DateTime.Parse(startDate)).ToList(); }
-			//else { tmpEntries = entries; }
-
 			tmpEntries = entries;
-
-			//if (journalName.Length > 0) 
-			//{ 
-			//	lbxToPopulate.Items.Add(""); 
-			//	lbxToPopulate.Items.Add("Journal: " + journalName); 
-			//}
-
 			tmpEntries.Sort((x, y) => -x.Date.CompareTo(y.Date));
 
 			foreach (JournalEntry je in tmpEntries)
 			{
 				for(int i = 0; i < je.Synopsis.Length; i++) 
 				{ 
-					//if(i == 0 && journalName.Length > 0)
-					//{
-					//	lbxToPopulate.Items.Add(je.Synopsis[i]); //	+ " - Journal: " + journalName) ;
-					//}
-					//else
-					//{
-					//	lbxToPopulate.Items.Add(je.Synopsis[i]); 
-					//}
-
 					lbxToPopulate.Items.Add(je.Synopsis[i]);
 				} 
 			}

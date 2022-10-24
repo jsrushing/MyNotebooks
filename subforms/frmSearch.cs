@@ -1,7 +1,5 @@
 ﻿/* Search journal entries.
  * 7/9/22
- * enhancements:
- *	08/09/22 001 Add multi-journal search, not just current journal
  *	
  */
 using System;
@@ -14,7 +12,6 @@ namespace myJournal.subforms
 	public partial class frmSearch : Form
 	{
 		private bool firstSelection = true;
-		//private Journal entryJournal;
 		private List<Journal> journalsToSearch = new List<Journal>();
 
 		public frmSearch(Journal jrnl)
@@ -104,7 +101,7 @@ namespace myJournal.subforms
 		private Journal GetEntryJournal()
 		{
 			Journal jrnlRtrn = new Journal();
-			if (journalsToSearch.Count == 1) { jrnlRtrn = journalsToSearch[0]; }	// new Journal(journalsToSearch[0].Name); }
+			if (journalsToSearch.Count == 1) { jrnlRtrn = jrnlRtrn.Open(journalsToSearch[0].Name); }
 			else { jrnlRtrn = new Journal(GetJournalNameFromDisplay()); }
 			return jrnlRtrn;
 		}

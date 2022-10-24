@@ -161,24 +161,27 @@ namespace myJournal.subforms
 
 				if (currentJournal != null)
 				{
-					Utilities.PopulateEntries(lstEntries, currentJournal.Entries, DateTime.Now.AddDays(-30).ToShortDateString());
-
-					if(lstEntries.Items.Count > 0)
-					{
-						lstEntries.Height = this.Height - lstEntries.Top - 50;
-						lstEntries.Visible = true;
-						//pnlDateFilters.Visible = true;
-						btnWeekMonth_Click(btnMonth, null);
-					}
-					else
+					if(currentJournal.Entries[0].ClearText().Length == 0)
 					{
 						lblWrongPin.Visible = true;
 						txtJournalPIN.Focus();
 						txtJournalPIN.SelectAll();
-					}	
+					}
+					else
+					{
+						Utilities.PopulateEntries(lstEntries, currentJournal.Entries, DateTime.Now.AddDays(-30).ToShortDateString());
 
-					btnLoadJournal.Enabled = false;
-					ShowHideMenusAndControls(SelectionState.JournalLoaded);
+						if(lstEntries.Items.Count > 0)
+						{
+							lstEntries.Height = this.Height - lstEntries.Top - 50;
+							lstEntries.Visible = true;
+							//pnlDateFilters.Visible = true;
+							//btnWeekMonth_Click(btnMonth, null);
+						}
+
+						btnLoadJournal.Enabled = false;
+						ShowHideMenusAndControls(SelectionState.JournalLoaded);
+					}
 				}
 				else
 				{
