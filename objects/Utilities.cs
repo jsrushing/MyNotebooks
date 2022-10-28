@@ -48,8 +48,8 @@ namespace myJournal.objects
 		{
 			if(clearPrevious) lbxToPopulate.Items.Clear();
 			List<JournalEntry> tmpEntries = null;
-			tmpEntries = startDate.Length > 0 ? entries.Where(d => d.Date > DateTime.Parse(startDate)).ToList() : entries;
-			tmpEntries = endDate.Length > 0 ? tmpEntries.Where(d => d.Date < DateTime.Parse(endDate)).ToList() : tmpEntries;
+			tmpEntries = startDate.Length > 0 ? entries.Where(d => DateTime.Parse(d.Date.ToShortDateString()) >= DateTime.Parse(startDate)).ToList() : entries;
+			tmpEntries = endDate.Length > 0 ? tmpEntries.Where(d => DateTime.Parse(d.Date.ToShortDateString()) <= DateTime.Parse(endDate)).ToList() : tmpEntries;
 			tmpEntries.Sort((x, y) => -x.Date.CompareTo(y.Date));
 
 			foreach (JournalEntry je in tmpEntries)

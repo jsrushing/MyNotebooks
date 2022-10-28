@@ -425,6 +425,7 @@ namespace myJournal.subforms
 			cbxDates.DataSource = null;
 			List<string> l = currentJournal.Entries.Select(e => e.Date.ToShortDateString()).Distinct().ToList();
 			cbxDates.DataSource = l;
+			//cbxDatesTo.Items.AddRange(cbxDates.Items.Cast<Object>().ToArray());
 			foreach(string s in cbxDates.Items) { cbxDatesTo.Items.Add(s); }
 			suppressDateClick = false;
 		}
