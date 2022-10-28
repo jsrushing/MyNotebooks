@@ -19,6 +19,11 @@ namespace myJournal.subforms
 {
 	public partial class frmBackupManager : Form
 	{
+		string journalsFolder			= AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"];
+		string backupFolder_Forced		= AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"];
+		string backupFolder_Incremental = AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"];
+		public bool backupRestored { get; set; }
+
 		public frmBackupManager()
 		{
 			InitializeComponent();
@@ -26,11 +31,10 @@ namespace myJournal.subforms
 
 		private void frmBackupManager_Load(object sender, EventArgs e)
 		{
-			string rootPath = AppDomain.CurrentDomain.BaseDirectory;
-			foreach (string s in Directory.GetFiles(rootPath + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"]))
-			{ lstIncrementalBackups.Items.Add(s.Replace(rootPath + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"], "")); }
-			foreach (string s in Directory.GetFiles(rootPath + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"]))
-			{ lstForcedBackups.Items.Add(s.Replace(rootPath + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"], "")); }
+			foreach (string s in Directory.GetFiles(backupFolder_Incremental))
+			{ lstIncrementalBackups.Items.Add(s.Replace(backupFolder_Incremental, "")); }
+			foreach (string s in Directory.GetFiles(backupFolder_Forced))
+			{ lstForcedBackups.Items.Add(s.Replace(backupFolder_Forced, "")); }
 			this.Size = this.MinimumSize;
 		}
 
@@ -38,12 +42,29 @@ namespace myJournal.subforms
 
 		private void btnRestore_Click(object sender, EventArgs e)
 		{
+			string backupFilePath = lstIncrementalBackups.SelectedIndices.Count > 0 ? backupFolder_Incremental + lstIncrementalBackups.SelectedItem.ToString() : string.Empty;
+			string journalsFolderPath = lstIncrementalBackups.SelectedIndices.Count > 0 ? journalsFolder + lstIncrementalBackups.SelectedItem.ToString() : string.Empty;
+
+			if (lstForcedBackups.SelectedIndices.Count > 0)
+			{ 
+				backupFilePath = backupFolder_Forced + lstForcedBackups.SelectedItem.ToString();
+				string truncatedForcedFileName = lstForcedBackups.SelectedItem.ToString();
+				FileInfo fi = new FileInfo(backupFilePath);
+				truncatedForcedFileName = truncatedForcedFileName.Substring(0, truncatedForcedFileName.IndexOf('_' + fi.CreationTime.ToString(ConfigurationManager.AppSettings["DateFormat_ForcedBackupFileName"])));
+				journalsFolderPath = journalsFolder + truncatedForcedFileName; 
+			}
+
 			frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Do you want to restore the backup? The existing journal cannot be recovered!");
 			Utilities.Showform(frm, this);
-			if(frm.result == frmMessage.ReturnResult.Yes)
+
+			if(frm.result == frmMessage.ReturnResult.Yes) 
 			{
-				File.Copy("", "");
+				File.Move(backupFilePath, journalsFolderPath, true);
+				frm.Close();
+				frm = new frmMessage(frmMessage.OperationType.Message, "The backup is restored.");
+				backupRestored = true;
 			}
+			this.Hide();
 		}
 
 		private void lstAvailableFiles_SelectedIndexChanged(object sender, EventArgs e)
@@ -58,14 +79,12 @@ namespace myJournal.subforms
 			Label lblSize = lblFileSize_Incremental;
 			Label lblDate = lblFileDate_Incremental;
 			Panel pnl = pnlFileInfo_Incremental;
-			string fName = string.Empty;
-			string root = AppDomain.CurrentDomain.BaseDirectory;
+			string fName = lstIncrementalBackups.SelectedIndices.Count > 0 ? backupFolder_Incremental + lstIncrementalBackups.SelectedItem.ToString() : string.Empty;
 
-			if(lb != null && lb.SelectedItems.Count == 1)
+			if (lb != null && lb.SelectedItems.Count == 1)
 			{
 				if(lb == lstIncrementalBackups)
 				{ 
-					fName = root + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"] + lstIncrementalBackups.SelectedItem.ToString();
 					lstForcedBackups.SelectedItems.Clear();
 				}
 				else if(lb == lstForcedBackups)
@@ -73,7 +92,7 @@ namespace myJournal.subforms
 					lblSize = lblFileSize_Forced;
 					lblDate = lblFileDate_Forced;
 					pnl = pnlFileInfo_Forced;
-					fName = root + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"] + lstForcedBackups.SelectedItem.ToString();
+					fName = backupFolder_Forced + lstForcedBackups.SelectedItem.ToString();
 					lstIncrementalBackups.SelectedItems.Clear();
 				}
 

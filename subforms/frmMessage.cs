@@ -41,10 +41,18 @@ namespace myJournal.subforms
 		private void frmMessage_Activated(object sender, EventArgs e)
 		{
 			if (pnlTextBox.Visible) { txtInput.Focus(); }
+
+			foreach(Control c in this.Controls)
+			{
+				if(c.GetType() == typeof(Panel)) { c.Top = lblMessage.Top + lblMessage.Height + 4; }
+			}
+			pnlTextBox.Top = pnlOk.Top + pnlOk.Height + 4;
 		}
 
 		private void frmMessage_Load(object sender, EventArgs e)
 		{
+			this.Size = this.MinimumSize;
+
 			foreach(Control c in this.Controls)
 			{
 				if(c.GetType() == typeof(Panel)) { c.Top = 30; }
@@ -69,9 +77,8 @@ namespace myJournal.subforms
 					pnlYesNoCancel.Visible = true;
 					break;
 				case OperationType.InputBox:
-					lblMessage.Text = "Enter the new Journal name.";
+					lblMessage.Text = msg;
 					pnlOkCancel.Visible = true;
-					pnlOkCancel.Top = pnlOkCancel.Top + 38;
 					pnlTextBox.Visible = true;
 					this.AcceptButton = btnOk1;
 					break;

@@ -53,10 +53,9 @@ namespace myJournal.subforms
 			// 
 			// lblMessage
 			// 
-			this.lblMessage.AutoSize = true;
-			this.lblMessage.Location = new System.Drawing.Point(5, 9);
+			this.lblMessage.Location = new System.Drawing.Point(5, 5);
 			this.lblMessage.Name = "lblMessage";
-			this.lblMessage.Size = new System.Drawing.Size(164, 15);
+			this.lblMessage.Size = new System.Drawing.Size(251, 55);
 			this.lblMessage.TabIndex = 0;
 			this.lblMessage.Text = "Delete entry \'this is the entry\'?";
 			// 
@@ -65,7 +64,7 @@ namespace myJournal.subforms
 			this.pnlYesNoCancel.Controls.Add(this.btnNo1);
 			this.pnlYesNoCancel.Controls.Add(this.btnCancel1);
 			this.pnlYesNoCancel.Controls.Add(this.btnYes1);
-			this.pnlYesNoCancel.Location = new System.Drawing.Point(3, 31);
+			this.pnlYesNoCancel.Location = new System.Drawing.Point(3, 64);
 			this.pnlYesNoCancel.Name = "pnlYesNoCancel";
 			this.pnlYesNoCancel.Size = new System.Drawing.Size(253, 32);
 			this.pnlYesNoCancel.TabIndex = 1;
@@ -105,7 +104,7 @@ namespace myJournal.subforms
 			// 
 			this.pnlYesNo.Controls.Add(this.btnNo2);
 			this.pnlYesNo.Controls.Add(this.btnYes2);
-			this.pnlYesNo.Location = new System.Drawing.Point(3, 69);
+			this.pnlYesNo.Location = new System.Drawing.Point(3, 102);
 			this.pnlYesNo.Name = "pnlYesNo";
 			this.pnlYesNo.Size = new System.Drawing.Size(253, 32);
 			this.pnlYesNo.TabIndex = 2;
@@ -135,7 +134,7 @@ namespace myJournal.subforms
 			// 
 			this.pnlOkCancel.Controls.Add(this.btnCancel2);
 			this.pnlOkCancel.Controls.Add(this.btnOk1);
-			this.pnlOkCancel.Location = new System.Drawing.Point(3, 107);
+			this.pnlOkCancel.Location = new System.Drawing.Point(3, 140);
 			this.pnlOkCancel.Name = "pnlOkCancel";
 			this.pnlOkCancel.Size = new System.Drawing.Size(253, 32);
 			this.pnlOkCancel.TabIndex = 3;
@@ -164,7 +163,7 @@ namespace myJournal.subforms
 			// pnlOk
 			// 
 			this.pnlOk.Controls.Add(this.btnOk2);
-			this.pnlOk.Location = new System.Drawing.Point(3, 145);
+			this.pnlOk.Location = new System.Drawing.Point(3, 178);
 			this.pnlOk.Name = "pnlOk";
 			this.pnlOk.Size = new System.Drawing.Size(253, 32);
 			this.pnlOk.TabIndex = 4;
@@ -183,7 +182,7 @@ namespace myJournal.subforms
 			// pnlTextBox
 			// 
 			this.pnlTextBox.Controls.Add(this.txtInput);
-			this.pnlTextBox.Location = new System.Drawing.Point(5, 184);
+			this.pnlTextBox.Location = new System.Drawing.Point(5, 217);
 			this.pnlTextBox.Name = "pnlTextBox";
 			this.pnlTextBox.Size = new System.Drawing.Size(253, 32);
 			this.pnlTextBox.TabIndex = 5;
@@ -200,7 +199,7 @@ namespace myJournal.subforms
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(289, 379);
+			this.ClientSize = new System.Drawing.Size(269, 264);
 			this.Controls.Add(this.pnlTextBox);
 			this.Controls.Add(this.pnlOk);
 			this.Controls.Add(this.pnlOkCancel);
@@ -208,6 +207,7 @@ namespace myJournal.subforms
 			this.Controls.Add(this.pnlYesNoCancel);
 			this.Controls.Add(this.lblMessage);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+			this.MinimumSize = new System.Drawing.Size(285, 275);
 			this.Name = "frmMessage";
 			this.Text = "Please Confirm";
 			this.Activated += new System.EventHandler(this.frmMessage_Activated);
@@ -219,7 +219,6 @@ namespace myJournal.subforms
 			this.pnlTextBox.ResumeLayout(false);
 			this.pnlTextBox.PerformLayout();
 			this.ResumeLayout(false);
-			this.PerformLayout();
 
 		}
 

@@ -12,6 +12,7 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using myJournal.subforms;
+using myJournal.objects;
 using System.Windows.Forms;
 
 namespace myJournal
@@ -24,6 +25,7 @@ namespace myJournal
         StringBuilder JournalText = new StringBuilder();
         public List<JournalEntry> Entries = new List<JournalEntry>();
         string root = "journals\\";
+		public bool backupCompleted { get; set; }
 
         public Journal(string _name = null) 
         {
@@ -47,10 +49,17 @@ namespace myJournal
 
 		public void Backup_Forced()
 		{
-			string dir = ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"];
-			if (!System.IO.Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + dir))
-			{ System.IO.Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + dir); }
-			File.Copy(this.FileName, AppDomain.CurrentDomain.BaseDirectory + dir + this.Name + "_" + DateTime.Now.ToString("MMddyy_HHMMss"));
+			try
+			{
+				string dir = AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"];
+				if (!System.IO.Directory.Exists(dir))
+				{ System.IO.Directory.CreateDirectory(dir); }
+				File.Copy(this.FileName, dir + this.Name);
+				FileInfo fi = new FileInfo(dir + this.Name);
+				File.Move(dir + this.Name, dir + this.Name + "_" + fi.CreationTime.ToString(ConfigurationManager.AppSettings["DateFormat_ForcedBackupFileName"]), true);
+				backupCompleted = true;
+			}
+			catch (Exception) { }
 		}
 
 		public void Create()
@@ -99,11 +108,9 @@ namespace myJournal
 
 		public void Rename(string newName)
 		{
-			string s = this.FileName.Substring(0, this.FileName.LastIndexOf("\\")) + "\\" + newName;
-
+			this.Name = newName;
+			this.Save();
 			File.Move(this.FileName, this.FileName.Substring(0, this.FileName.LastIndexOf("\\")) + "\\" + newName);
-			//this.Name = newName;
-			//this.Save();
 		}
 
         public void ReplaceEntry(JournalEntry jeToReplace, JournalEntry jeToInsert)

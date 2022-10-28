@@ -202,7 +202,7 @@ namespace myJournal.subforms
 					}
 					else
 					{
-						Utilities.PopulateEntries(lstEntries, currentJournal.Entries, DateTime.Now.AddDays(-60).ToString());
+						Utilities.PopulateEntries(lstEntries, currentJournal.Entries, DateTime.Now.AddDays(-61).ToString());
 
 						if(lstEntries.Items.Count > 0)
 						{
@@ -211,12 +211,10 @@ namespace myJournal.subforms
 							pnlDateFilters.Visible = true;
 							PopulateShowFromDates();
 
-							DateTime targetDate = DateTime.Now.AddDays(-60);
-							suppressDateClick = true; 
-
 							for (int i = 0; i < cbxDates.Items.Count; i++)
-							{ if (DateTime.Parse(cbxDates.Items[i].ToString()) <= targetDate) {cbxDates.SelectedIndex = i; break; } }
+							{ if (DateTime.Parse(cbxDates.Items[i].ToString()) <= DateTime.Now.AddDays(-60)) {cbxDates.SelectedIndex = i; break; } }
 
+							suppressDateClick = true;
 							cbxDatesTo.SelectedIndex = 0;
 							suppressDateClick = false;
 						}
@@ -240,13 +238,7 @@ namespace myJournal.subforms
 
 		private void cbxDates_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!suppressDateClick)
-			{
-				if(currentJournal != null)
-				{
-					ProcessDateFilters();
-				}
-			}
+			if (!suppressDateClick) { ProcessDateFilters(); }
 		}
 
 		private void ddlJournals_SelectedIndexChanged(object sender, EventArgs e)
@@ -269,14 +261,18 @@ namespace myJournal.subforms
 		{
 			ListBox lb = (ListBox)sender;
 			RichTextBox rtb = rtbSelectedEntry;
-			lb.SelectedIndexChanged -= new System.EventHandler(this.lstEntries_SelectEntry);
-			currentEntry = Utilities.SelectEntry(rtb, lb, currentJournal, firstSelection);
-			firstSelection = false;
-			lblSelectionType.Visible = rtb.Text.Length > 0;
-			lblSeparator.Visible = rtb.Text.Length > 0;
-			Utilities.ResizeListsAndRTBs(lstEntries, rtbSelectedEntry, lblSeparator, lblSelectionType, this);
-			lb.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectEntry);
-			ShowHideMenusAndControls(SelectionState.EntrySelected);
+
+			if(lb.SelectedIndex > -1)
+			{
+				lb.SelectedIndexChanged -= new System.EventHandler(this.lstEntries_SelectEntry);
+				currentEntry = Utilities.SelectEntry(rtb, lb, currentJournal, firstSelection);
+				firstSelection = false;
+				lblSelectionType.Visible = rtb.Text.Length > 0;
+				lblSeparator.Visible = rtb.Text.Length > 0;
+				Utilities.ResizeListsAndRTBs(lstEntries, rtbSelectedEntry, lblSeparator, lblSelectionType, this);
+				lb.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectEntry);
+				ShowHideMenusAndControls(SelectionState.EntrySelected);
+			}
 		}
 
 		private void lblSeparator_MouseMove(object sender, MouseEventArgs e)
@@ -376,12 +372,17 @@ namespace myJournal.subforms
 		private void mnuJournal_ForceBackup_Click(object sender, EventArgs e)
 		{
 			currentJournal.Backup_Forced();
+			string sMsg = currentJournal.backupCompleted ? "The backup was completed" : "An error occurred. The backup was not completed.";
+			frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg);
+			Utilities.Showform(frm, this);
+			this.Show();
 		}
 
 		private void mnuJournal_Rename_Click(object sender, EventArgs e)
 		{
-			frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox);
+			frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "Please enter the new journal name.");		
 			Utilities.Showform(frm, this);
+
 			if (frm.result == frmMessage.ReturnResult.Ok && frm.input.Length > 0)
 			{
 				currentJournal.Rename(frm.input);
@@ -392,11 +393,11 @@ namespace myJournal.subforms
 
 		private void mnuJournal_RestoreBackups_Click(object sender, EventArgs e)
 		{
-			Form frm = new frmBackupManager();
+			string sJournalName = ddlJournals.Text;
+			frmBackupManager frm = new frmBackupManager();
 			Utilities.Showform(frm, this);
-
+			if (frm.backupRestored) { LoadJournals(); }
 			this.Show();
-
 		}
 
 		private void mnuJournal_Search_Click(object sender, EventArgs e)
@@ -423,7 +424,9 @@ namespace myJournal.subforms
 		{
 			suppressDateClick = true;
 			cbxDates.DataSource = null;
+			cbxDatesTo.Items.Clear();
 			List<string> l = currentJournal.Entries.Select(e => e.Date.ToShortDateString()).Distinct().ToList();
+			l.Sort((x, y) => -DateTime.Parse(x).CompareTo(DateTime.Parse(y)));
 			cbxDates.DataSource = l;
 			//cbxDatesTo.Items.AddRange(cbxDates.Items.Cast<Object>().ToArray());
 			foreach(string s in cbxDates.Items) { cbxDatesTo.Items.Add(s); }
@@ -432,11 +435,14 @@ namespace myJournal.subforms
 
 		private void ProcessDateFilters()
 		{
-			Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text, cbxDatesTo.Text);
-
-			if (lstEntries.SelectedIndex == -1 && currentJournal.Entries.Contains(currentEntry))
+			if(cbxDates.Text.Length > 0 && cbxDatesTo.Text.Length > 0)
 			{
-				Utilities.SelectEntry(rtbSelectedEntry, lstEntries, null, true, currentEntry);
+				Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text, cbxDatesTo.Text);
+
+				if (lstEntries.SelectedIndex == -1 && currentJournal.Entries.Contains(currentEntry))
+				{
+					Utilities.SelectEntry(rtbSelectedEntry, lstEntries, null, true, currentEntry);
+				}
 			}
 		}
 
