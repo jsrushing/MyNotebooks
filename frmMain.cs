@@ -102,6 +102,7 @@ namespace myJournal.subforms
 		Journal currentJournal;
 		JournalEntry currentEntry;
 		private bool firstSelection = true;
+		bool suppressDateClick = false;
 
 		private enum SelectionState
 		{
@@ -197,11 +198,11 @@ namespace myJournal.subforms
 					{
 						lblWrongPin.Visible = true;
 						txtJournalPIN.Focus();
-						//txtJournalPIN.SelectAll();
+						txtJournalPIN.SelectAll();
 					}
 					else
 					{
-						Utilities.PopulateEntries(lstEntries, currentJournal.Entries, DateTime.Now.AddDays(-90).ToString());
+						Utilities.PopulateEntries(lstEntries, currentJournal.Entries, DateTime.Now.AddDays(-60).ToString());
 
 						if(lstEntries.Items.Count > 0)
 						{
@@ -209,7 +210,15 @@ namespace myJournal.subforms
 							lstEntries.Visible = true;
 							pnlDateFilters.Visible = true;
 							PopulateShowFromDates();
-							btnWeekMonth_Click(btnMonth, null);
+
+							DateTime targetDate = DateTime.Now.AddDays(-60);
+							suppressDateClick = true; 
+
+							for (int i = 0; i < cbxDates.Items.Count; i++)
+							{ if (DateTime.Parse(cbxDates.Items[i].ToString()) <= targetDate) {cbxDates.SelectedIndex = i; break; } }
+
+							cbxDatesTo.SelectedIndex = 0;
+							suppressDateClick = false;
 						}
 
 						btnLoadJournal.Enabled = false;
@@ -229,26 +238,13 @@ namespace myJournal.subforms
 			mnuEntryCreate_Click(btnNewEntry, null);
 		}
 
-		private void btnWeekMonth_Click(object sender, EventArgs e)
-		{
-			if (cbxDates.Items.Count > 0)
-			{
-				DateTime targetDate = DateTime.Now.AddDays(((Button)sender).Text.ToLower().Equals("week") ? -7 : -30);
-
-				for (int i = 0; i < cbxDates.Items.Count; i++)
-				{ if (DateTime.Parse(cbxDates.Items[i].ToString()) >= targetDate) { cbxDates.SelectedIndex = i; break; } }
-			}
-		}
-
 		private void cbxDates_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if(currentJournal != null)
+			if (!suppressDateClick)
 			{
-				Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text);
-
-				if (lstEntries.SelectedIndex == -1 && currentJournal.Entries.Contains(currentEntry))
+				if(currentJournal != null)
 				{
-					Utilities.SelectEntry(rtbSelectedEntry, lstEntries, null, true, currentEntry);
+					ProcessDateFilters();
 				}
 			}
 		}
@@ -425,9 +421,22 @@ namespace myJournal.subforms
 
 		private void PopulateShowFromDates()
 		{
+			suppressDateClick = true;
 			cbxDates.DataSource = null;
 			List<string> l = currentJournal.Entries.Select(e => e.Date.ToShortDateString()).Distinct().ToList();
 			cbxDates.DataSource = l;
+			foreach(string s in cbxDates.Items) { cbxDatesTo.Items.Add(s); }
+			suppressDateClick = false;
+		}
+
+		private void ProcessDateFilters()
+		{
+			Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text, cbxDatesTo.Text);
+
+			if (lstEntries.SelectedIndex == -1 && currentJournal.Entries.Contains(currentEntry))
+			{
+				Utilities.SelectEntry(rtbSelectedEntry, lstEntries, null, true, currentEntry);
+			}
 		}
 
 		private void ShowHideMenusAndControls(SelectionState st)

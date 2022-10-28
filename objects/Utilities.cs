@@ -44,11 +44,12 @@ namespace myJournal.objects
 			return labels;
 		}
 
-		public static void PopulateEntries(ListBox lbxToPopulate, List<JournalEntry> entries, string startDate = "", bool clearPrevious = true, string journalName = "")
+		public static void PopulateEntries(ListBox lbxToPopulate, List<JournalEntry> entries, string startDate = "", string endDate = "", bool clearPrevious = true, string journalName = "")
 		{
 			if(clearPrevious) lbxToPopulate.Items.Clear();
 			List<JournalEntry> tmpEntries = null;
 			tmpEntries = startDate.Length > 0 ? entries.Where(d => d.Date > DateTime.Parse(startDate)).ToList() : entries;
+			tmpEntries = endDate.Length > 0 ? tmpEntries.Where(d => d.Date < DateTime.Parse(endDate)).ToList() : tmpEntries;
 			tmpEntries.Sort((x, y) => -x.Date.CompareTo(y.Date));
 
 			foreach (JournalEntry je in tmpEntries)

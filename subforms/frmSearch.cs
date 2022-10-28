@@ -45,7 +45,7 @@ namespace myJournal.subforms
 			foreach(Journal j in journalsToSearch)
 			{
 				List<JournalEntry> foundEntries = j.Search(chkUseDate, chkUseDateRange, chkMatchCase, dtFindDate, dtFindDate_From, dtFindDate_To, radBtnAnd, txtSearchTitle.Text, txtSearchText.Text, labelsArray);
-				Utilities.PopulateEntries(lstFoundEntries, foundEntries, "", false, j.Name);
+				Utilities.PopulateEntries(lstFoundEntries, foundEntries, "", "", false, j.Name);
 			}
 
 			if(lstFoundEntries.Items.Count == 0) { lstFoundEntries.Items.Add("no matches found"); }
