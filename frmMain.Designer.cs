@@ -43,8 +43,9 @@ namespace myJournal.subforms
 			this.mnuJournal = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuJournal_Create = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuJournal_Delete = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuSearch = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuRenameJournal = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuJournal_Search = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuJournal_Rename = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuJournal_ForceBackup = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEntryTop = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEntryCreate = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEntryEdit = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,6 +62,7 @@ namespace myJournal.subforms
 			this.btnMonth = new System.Windows.Forms.Button();
 			this.btnWeek = new System.Windows.Forms.Button();
 			this.btnNewEntry = new System.Windows.Forms.Button();
+			this.mnuJournal_RestoreBackups = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.pnlDateFilters.SuspendLayout();
 			this.SuspendLayout();
@@ -188,8 +190,10 @@ namespace myJournal.subforms
 			this.mnuJournal.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuJournal_Create,
             this.mnuJournal_Delete,
-            this.mnuSearch,
-            this.mnuRenameJournal});
+            this.mnuJournal_Search,
+            this.mnuJournal_Rename,
+            this.mnuJournal_ForceBackup,
+            this.mnuJournal_RestoreBackups});
 			this.mnuJournal.Name = "mnuJournal";
 			this.mnuJournal.Size = new System.Drawing.Size(57, 20);
 			this.mnuJournal.Text = "&Journal";
@@ -197,7 +201,7 @@ namespace myJournal.subforms
 			// mnuJournal_Create
 			// 
 			this.mnuJournal_Create.Name = "mnuJournal_Create";
-			this.mnuJournal_Create.Size = new System.Drawing.Size(117, 22);
+			this.mnuJournal_Create.Size = new System.Drawing.Size(180, 22);
 			this.mnuJournal_Create.Text = "C&reate";
 			this.mnuJournal_Create.Click += new System.EventHandler(this.mnuJournal_Create_Click);
 			// 
@@ -205,25 +209,33 @@ namespace myJournal.subforms
 			// 
 			this.mnuJournal_Delete.Enabled = false;
 			this.mnuJournal_Delete.Name = "mnuJournal_Delete";
-			this.mnuJournal_Delete.Size = new System.Drawing.Size(117, 22);
+			this.mnuJournal_Delete.Size = new System.Drawing.Size(180, 22);
 			this.mnuJournal_Delete.Text = "Delete";
 			this.mnuJournal_Delete.Click += new System.EventHandler(this.mnuJournal_Delete_Click);
 			// 
-			// mnuSearch
+			// mnuJournal_Search
 			// 
-			this.mnuSearch.Enabled = false;
-			this.mnuSearch.Name = "mnuSearch";
-			this.mnuSearch.Size = new System.Drawing.Size(117, 22);
-			this.mnuSearch.Text = "&Search";
-			this.mnuSearch.Click += new System.EventHandler(this.mnuSearch_Click);
+			this.mnuJournal_Search.Enabled = false;
+			this.mnuJournal_Search.Name = "mnuJournal_Search";
+			this.mnuJournal_Search.Size = new System.Drawing.Size(180, 22);
+			this.mnuJournal_Search.Text = "&Search";
+			this.mnuJournal_Search.Click += new System.EventHandler(this.mnuJournal_Search_Click);
 			// 
-			// mnuRenameJournal
+			// mnuJournal_Rename
 			// 
-			this.mnuRenameJournal.Enabled = false;
-			this.mnuRenameJournal.Name = "mnuRenameJournal";
-			this.mnuRenameJournal.Size = new System.Drawing.Size(117, 22);
-			this.mnuRenameJournal.Text = "Rename";
-			this.mnuRenameJournal.Click += new System.EventHandler(this.mnuRenameJournal_Click);
+			this.mnuJournal_Rename.Enabled = false;
+			this.mnuJournal_Rename.Name = "mnuJournal_Rename";
+			this.mnuJournal_Rename.Size = new System.Drawing.Size(180, 22);
+			this.mnuJournal_Rename.Text = "Rename";
+			this.mnuJournal_Rename.Click += new System.EventHandler(this.mnuJournal_Rename_Click);
+			// 
+			// mnuJournal_ForceBackup
+			// 
+			this.mnuJournal_ForceBackup.Enabled = false;
+			this.mnuJournal_ForceBackup.Name = "mnuJournal_ForceBackup";
+			this.mnuJournal_ForceBackup.Size = new System.Drawing.Size(180, 22);
+			this.mnuJournal_ForceBackup.Text = "Force &Backup";
+			this.mnuJournal_ForceBackup.Click += new System.EventHandler(this.mnuJournal_ForceBackup_Click);
 			// 
 			// mnuEntryTop
 			// 
@@ -386,6 +398,13 @@ namespace myJournal.subforms
 			this.btnNewEntry.Visible = false;
 			this.btnNewEntry.Click += new System.EventHandler(this.btnNewEntry_Click);
 			// 
+			// mnuJournal_RestoreBackups
+			// 
+			this.mnuJournal_RestoreBackups.Name = "mnuJournal_RestoreBackups";
+			this.mnuJournal_RestoreBackups.Size = new System.Drawing.Size(180, 22);
+			this.mnuJournal_RestoreBackups.Text = "&Restore Backups";
+			this.mnuJournal_RestoreBackups.Click += new System.EventHandler(this.mnuJournal_RestoreBackups_Click);
+			// 
 			// frmMain
 			// 
 			this.AcceptButton = this.btnLoadJournal;
@@ -440,7 +459,7 @@ namespace myJournal.subforms
 		private System.Windows.Forms.ToolStripMenuItem mnuEntryCreate;
 		private System.Windows.Forms.ToolStripMenuItem mnuEntryEdit;
 		private System.Windows.Forms.Label lblWrongPin;
-		private System.Windows.Forms.ToolStripMenuItem mnuSearch;
+		private System.Windows.Forms.ToolStripMenuItem mnuJournal_Search;
 		private System.Windows.Forms.Label lblEntries;
 		private System.Windows.Forms.ToolStripMenuItem mnuEntryDelete;
 		private System.Windows.Forms.Label lblShowPIN;
@@ -452,7 +471,9 @@ namespace myJournal.subforms
 		private System.Windows.Forms.Button btnWeek;
 		private System.Windows.Forms.ToolStripMenuItem mnuPreserveOriginalText;
 		private System.Windows.Forms.ToolStripMenuItem mnuDiscardOriginalText;
-		private System.Windows.Forms.ToolStripMenuItem mnuRenameJournal;
+		private System.Windows.Forms.ToolStripMenuItem mnuJournal_Rename;
 		private System.Windows.Forms.Button btnNewEntry;
+		private System.Windows.Forms.ToolStripMenuItem mnuJournal_ForceBackup;
+		private System.Windows.Forms.ToolStripMenuItem mnuJournal_RestoreBackups;
 	}
 }

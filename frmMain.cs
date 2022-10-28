@@ -91,6 +91,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Windows.Forms;
 using myJournal.objects;
 
@@ -139,6 +140,37 @@ namespace myJournal.subforms
 			}
 		}
 
+		private void LoadJournals()
+		{
+			string rootPath = AppDomain.CurrentDomain.BaseDirectory;
+			ddlJournals.Items.Clear();
+			ddlJournals.Text = string.Empty;
+
+			if (!Directory.Exists(rootPath + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]))
+			{
+				Directory.CreateDirectory(rootPath + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]);
+				Directory.CreateDirectory(rootPath + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"]);
+				Directory.CreateDirectory(rootPath + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"]);
+				Directory.CreateDirectory(rootPath + "/settings/");
+				File.Create(rootPath + "/settings/settings");
+				File.Create(rootPath + "/settings/labels");
+			}
+			else
+			{
+				foreach (string s in Directory.GetFiles(rootPath + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]))
+				{
+					ddlJournals.Items.Add(s.Replace(rootPath + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"], ""));
+				}
+			}
+
+			ddlJournals.Enabled = ddlJournals.Items.Count > 0;
+			ddlJournals.SelectedIndex = ddlJournals.Items.Count == 1 ? 0 : -1;
+			btnLoadJournal.Enabled = false;
+			txtJournalPIN.Text = string.Empty;
+			lstEntries.Visible = false;
+			ShowHideMenusAndControls(SelectionState.HideAll);
+		}
+
 		private void frmMain_Resize(object sender, EventArgs e)
 		{
 			if (!rtbSelectedEntry.Visible)
@@ -165,18 +197,19 @@ namespace myJournal.subforms
 					{
 						lblWrongPin.Visible = true;
 						txtJournalPIN.Focus();
-						txtJournalPIN.SelectAll();
+						//txtJournalPIN.SelectAll();
 					}
 					else
 					{
-						Utilities.PopulateEntries(lstEntries, currentJournal.Entries, DateTime.Now.AddDays(-30).ToShortDateString());
+						Utilities.PopulateEntries(lstEntries, currentJournal.Entries, DateTime.Now.AddDays(-90).ToString());
 
 						if(lstEntries.Items.Count > 0)
 						{
 							lstEntries.Height = this.Height - lstEntries.Top - 50;
 							lstEntries.Visible = true;
-							//pnlDateFilters.Visible = true;
-							//btnWeekMonth_Click(btnMonth, null);
+							pnlDateFilters.Visible = true;
+							PopulateShowFromDates();
+							btnWeekMonth_Click(btnMonth, null);
 						}
 
 						btnLoadJournal.Enabled = false;
@@ -198,8 +231,6 @@ namespace myJournal.subforms
 
 		private void btnWeekMonth_Click(object sender, EventArgs e)
 		{
-			//storedEntry = currentEntry;
-
 			if (cbxDates.Items.Count > 0)
 			{
 				DateTime targetDate = DateTime.Now.AddDays(((Button)sender).Text.ToLower().Equals("week") ? -7 : -30);
@@ -235,7 +266,7 @@ namespace myJournal.subforms
 			currentJournal = null;
 			cbxDates.DataSource = null;
 			lblWrongPin.Visible = false;
-			//pnlDateFilters.Visible = false;
+			pnlDateFilters.Visible = false;
 		}
 
 		private void lstEntries_SelectEntry(object sender, EventArgs e)
@@ -346,7 +377,12 @@ namespace myJournal.subforms
 			this.Show();
 		}
 
-		private void mnuRenameJournal_Click(object sender, EventArgs e)
+		private void mnuJournal_ForceBackup_Click(object sender, EventArgs e)
+		{
+			currentJournal.Backup_Forced();
+		}
+
+		private void mnuJournal_Rename_Click(object sender, EventArgs e)
 		{
 			frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox);
 			Utilities.Showform(frm, this);
@@ -358,7 +394,16 @@ namespace myJournal.subforms
 			this.Show();
 		}
 
-		private void mnuSearch_Click(object sender, EventArgs e)
+		private void mnuJournal_RestoreBackups_Click(object sender, EventArgs e)
+		{
+			Form frm = new frmBackupManager();
+			Utilities.Showform(frm, this);
+
+			this.Show();
+
+		}
+
+		private void mnuJournal_Search_Click(object sender, EventArgs e)
 		{
 			Program.PIN = txtJournalPIN.Text;
 			frmSearch frm = new frmSearch(currentJournal);
@@ -378,35 +423,6 @@ namespace myJournal.subforms
 			lblWrongPin.Visible = false;
 		}
 
-		private void LoadJournals()
-		{
-			string rootPath = AppDomain.CurrentDomain.BaseDirectory;
-			ddlJournals.Items.Clear();
-			ddlJournals.Text = string.Empty;
-
-			if (!Directory.Exists(rootPath + "/journals/"))
-			{
-				Directory.CreateDirectory(rootPath + "/journals/");
-				Directory.CreateDirectory(rootPath + "/settings/");
-				File.Create(rootPath + "/settings/settings");
-				File.Create(rootPath + "/settings/labels");
-			}
-			else
-			{
-				foreach (string s in Directory.GetFiles(rootPath + "/journals/"))
-				{
-					ddlJournals.Items.Add(s.Replace(rootPath + "/journals/", ""));
-				}
-			}
-
-			ddlJournals.Enabled = ddlJournals.Items.Count > 0;
-			ddlJournals.SelectedIndex = ddlJournals.Items.Count == 1 ? 0 : -1;
-			btnLoadJournal.Enabled = false;
-			txtJournalPIN.Text = string.Empty;
-			lstEntries.Visible = false;
-			ShowHideMenusAndControls(SelectionState.HideAll);
-		}
-
 		private void PopulateShowFromDates()
 		{
 			cbxDates.DataSource = null;
@@ -418,40 +434,50 @@ namespace myJournal.subforms
 		{
 			if(st == SelectionState.JournalSelectedNotLoaded)
 			{
+				rtbSelectedEntry.Text = string.Empty;
 				rtbSelectedEntry.Visible = false;
+				lstEntries.Visible = false;
+
 				lblSeparator.Visible = false;
 				lblSelectionType.Visible = false;
 				lblEntries.Visible = false;
-				lstEntries.Visible = false;
+
 				mnuEntryTop.Enabled = false;
 				mnuEntryCreate.Enabled = false;
 				mnuEntryDelete.Enabled = false;
 				mnuEntryEdit.Enabled = false;
+
 				btnNewEntry.Visible = false;
+
 				mnuJournal_Delete.Enabled = false;
-				mnuRenameJournal.Enabled = false;
-				mnuSearch.Enabled = false;
-				rtbSelectedEntry.Text = string.Empty;
+				mnuJournal_Rename.Enabled = false;
+				mnuJournal_Search.Enabled = false;
+				mnuJournal_ForceBackup.Enabled = false;
 			}
 			else if(st == SelectionState.JournalLoaded)
 			{
 				ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
+
 				lstEntries.Visible = true;
 				lstEntries.Height = this.Height - 160;
-				mnuJournal.Enabled = true;
-				mnuJournal_Delete.Enabled = true;
+
 				mnuEntryTop.Enabled = true;
 				mnuEntryCreate.Enabled = true;
-				btnNewEntry.Visible = true;
-				mnuSearch.Enabled = true;
+
 				mnuJournal_Delete.Enabled = true;
-				mnuRenameJournal.Enabled = true;
+				mnuJournal_Rename.Enabled = true;
+				mnuJournal_Search.Enabled = true;
+				mnuJournal_ForceBackup.Enabled = true;
+
+				btnNewEntry.Visible = true;
 			}
 			else if(st == SelectionState.EntrySelected)
 			{
+				rtbSelectedEntry.Visible = true;
+
 				mnuEntryEdit.Enabled = true;
 				mnuEntryDelete.Enabled = true;
-				rtbSelectedEntry.Visible = true;
+
 				lblSeparator.Visible = true;
 				lblSelectionType.Visible = true;
 				lblEntries.Visible = true;

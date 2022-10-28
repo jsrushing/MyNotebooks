@@ -48,7 +48,7 @@ namespace myJournal.objects
 		{
 			if(clearPrevious) lbxToPopulate.Items.Clear();
 			List<JournalEntry> tmpEntries = null;
-			tmpEntries = entries;
+			tmpEntries = startDate.Length > 0 ? entries.Where(d => d.Date > DateTime.Parse(startDate)).ToList() : entries;
 			tmpEntries.Sort((x, y) => -x.Date.CompareTo(y.Date));
 
 			foreach (JournalEntry je in tmpEntries)

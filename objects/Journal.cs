@@ -27,8 +27,6 @@ namespace myJournal
 
         public Journal(string _name = null) 
         {
-			frmMain frm = new frmMain();
-
             if(_name != null)
             {
                 this.Name = _name;
@@ -40,15 +38,22 @@ namespace myJournal
 
 		public void Backup()
 		{
-			if (!System.IO.Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "journals\\backups\\"))
-			{
-				System.IO.Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + "journals\\backups\\");
-			}
-			this.Name = FileName.Substring(FileName.LastIndexOf("\\"));
-			File.Copy(this.FileName, AppDomain.CurrentDomain.BaseDirectory + "journals\\backups\\" + this.Name, true);
+			string dir = ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"];
+			if (!System.IO.Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + dir))
+			{ System.IO.Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + dir); }
+			this.Name = FileName.Substring(FileName.LastIndexOf("\\") + 1);
+			File.Copy(this.FileName, AppDomain.CurrentDomain.BaseDirectory + dir + this.Name, true);
 		}
 
-        public void Create()
+		public void Backup_Forced()
+		{
+			string dir = ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"];
+			if (!System.IO.Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + dir))
+			{ System.IO.Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + dir); }
+			File.Copy(this.FileName, AppDomain.CurrentDomain.BaseDirectory + dir + this.Name + "_" + DateTime.Now.ToString("MMddyy_HHMMss"));
+		}
+
+		public void Create()
         {
 			Entries.Add(new JournalEntry("created", "-", "-", ""));
 			this.Save();

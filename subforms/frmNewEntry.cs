@@ -35,7 +35,6 @@ namespace myJournal.subforms
 		{
 			frmMessage frm = new frmMessage(frmMessage.OperationType.Message, msg);
 			Utilities.Showform(frm, this);
-			frm.ShowDialog();
 			this.Show();
 		}
 
