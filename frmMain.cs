@@ -128,6 +128,107 @@ namespace myJournal.subforms
 			ShowHideMenusAndControls(SelectionState.HideAll);
 		}
 
+		private void frmMain_Resize(object sender, EventArgs e)
+		{
+			if (!rtbSelectedEntry.Visible)
+			{
+				lstEntries.Height = this.Height - 160;
+				lstEntries.Width = this.Width - 40;
+			}
+		}
+
+		private void btnLoadJournal_Click(object sender, EventArgs e)
+		{
+			lstEntries.Items.Clear();
+			rtbSelectedEntry.Text = string.Empty;
+			Program.PIN = txtJournalPIN.Text;
+			lblWrongPin.Visible = false;
+
+			try
+			{
+				currentJournal = new Journal(ddlJournals.Text).Open(ddlJournals.Text);
+
+				if (currentJournal != null)
+				{
+					if(currentJournal.Entries[0].ClearText().Length == 0)
+					{
+						lblWrongPin.Visible = true;
+						txtJournalPIN.Focus();
+						txtJournalPIN.SelectAll();
+					}
+					else
+					{
+						Utilities.PopulateEntries(lstEntries, currentJournal.Entries, DateTime.Now.AddDays(-61).ToString());
+
+						if(lstEntries.Items.Count == 0) { Utilities.PopulateEntries(lstEntries, currentJournal.Entries); }
+
+						if(lstEntries.Items.Count > 0)
+						{
+							lstEntries.Height = this.Height - lstEntries.Top - 50;
+							lstEntries.Visible = true;
+							pnlDateFilters.Visible = true;
+							PopulateShowFromDates();
+
+							for (int i = 0; i < cbxDates.Items.Count; i++)
+							{ if (DateTime.Parse(cbxDates.Items[i].ToString()) <= DateTime.Parse(cbxDatesTo.Text).AddDays(-60) || i == cbxDates.Items.Count - 1) {cbxDates.SelectedIndex = i; break; } }
+
+							suppressDateClick = true;
+							cbxDatesTo.SelectedIndex = 0;
+							suppressDateClick = false;
+						}
+
+						btnLoadJournal.Enabled = false;
+						ShowHideMenusAndControls(SelectionState.JournalLoaded);
+					}
+				}
+				else
+				{
+					lstEntries.Focus();
+				}
+			}
+			catch (Exception ex) { Console.Write(ex.Message); }
+		}
+
+		private void btnNewEntry_Click(object sender, EventArgs e)
+		{
+			mnuEntryCreate_Click(btnNewEntry, null);
+		}
+
+		private void cbxDates_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (!suppressDateClick) { ProcessDateFilters(); }
+		}
+
+		private void ddlJournals_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			btnLoadJournal.Enabled = true;
+			txtJournalPIN.Text = string.Empty;
+			txtJournalPIN.Focus();
+			currentEntry = null;
+			currentJournal = null;
+			cbxDates.DataSource = null;
+			lblWrongPin.Visible = false;
+			pnlDateFilters.Visible = false;
+			lstEntries.Items.Clear();
+			lstEntries.Visible = false;
+		}
+
+		private void lblSeparator_MouseMove(object sender, MouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Left)
+			{
+				lblSeparator.Top += e.Y;
+				Utilities.ResizeListsAndRTBs(lstEntries, rtbSelectedEntry, lblSeparator, lblSelectionType, this);
+				lstEntries.TopIndex = lstEntries.SelectedIndices[0];
+			}
+		}
+
+		private void lblShowPIN_Click(object sender, EventArgs e)
+		{
+			txtJournalPIN.PasswordChar = txtJournalPIN.PasswordChar == '*' ? '\0' : '*';
+			lblShowPIN.Text = lblShowPIN.Text == "show" ? "hide" : "show";
+		}
+
 		private void LoadFonts()
 		{
 			ListViewItem lvi = null;
@@ -172,91 +273,6 @@ namespace myJournal.subforms
 			ShowHideMenusAndControls(SelectionState.HideAll);
 		}
 
-		private void frmMain_Resize(object sender, EventArgs e)
-		{
-			if (!rtbSelectedEntry.Visible)
-			{
-				lstEntries.Height = this.Height - 160;
-				lstEntries.Width = this.Width - 40;
-			}
-		}
-
-		private void btnLoadJournal_Click(object sender, EventArgs e)
-		{
-			lstEntries.Items.Clear();
-			rtbSelectedEntry.Text = string.Empty;
-			Program.PIN = txtJournalPIN.Text;
-			lblWrongPin.Visible = false;
-
-			try
-			{
-				currentJournal = new Journal(ddlJournals.Text).Open(ddlJournals.Text);
-
-				if (currentJournal != null)
-				{
-					if(currentJournal.Entries[0].ClearText().Length == 0)
-					{
-						lblWrongPin.Visible = true;
-						txtJournalPIN.Focus();
-						txtJournalPIN.SelectAll();
-					}
-					else
-					{
-						Utilities.PopulateEntries(lstEntries, currentJournal.Entries, DateTime.Now.AddDays(-61).ToString());
-
-						if(lstEntries.Items.Count > 0)
-						{
-							lstEntries.Height = this.Height - lstEntries.Top - 50;
-							lstEntries.Visible = true;
-							pnlDateFilters.Visible = true;
-							PopulateShowFromDates();
-
-							for (int i = 0; i < cbxDates.Items.Count; i++)
-							{ if (DateTime.Parse(cbxDates.Items[i].ToString()) <= DateTime.Now.AddDays(-60)) {cbxDates.SelectedIndex = i; break; } }
-
-							suppressDateClick = true;
-							cbxDatesTo.SelectedIndex = 0;
-							suppressDateClick = false;
-						}
-
-						btnLoadJournal.Enabled = false;
-						ShowHideMenusAndControls(SelectionState.JournalLoaded);
-					}
-				}
-				else
-				{
-					lstEntries.Focus();
-				}
-			}
-			catch (Exception ex) { Console.Write(ex.Message); }
-		}
-
-		private void btnNewEntry_Click(object sender, EventArgs e)
-		{
-			mnuEntryCreate_Click(btnNewEntry, null);
-		}
-
-		private void cbxDates_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			if (!suppressDateClick) { ProcessDateFilters(); }
-		}
-
-		private void ddlJournals_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			btnLoadJournal.Enabled = true;
-			txtJournalPIN.Text = string.Empty;
-			lstEntries.Items.Clear();
-			lstEntries.Visible = false;
-			txtJournalPIN.Focus();
-			rtbSelectedEntry.Text = string.Empty;
-			ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
-			currentEntry = null;
-			currentJournal = null;
-			cbxDates.DataSource = null;
-			lblWrongPin.Visible = false;
-			pnlDateFilters.Visible = false;
-		}
-
 		private void lstEntries_SelectEntry(object sender, EventArgs e)
 		{
 			ListBox lb = (ListBox)sender;
@@ -273,22 +289,6 @@ namespace myJournal.subforms
 				lb.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectEntry);
 				ShowHideMenusAndControls(SelectionState.EntrySelected);
 			}
-		}
-
-		private void lblSeparator_MouseMove(object sender, MouseEventArgs e)
-		{
-			if (e.Button == MouseButtons.Left)
-			{
-				lblSeparator.Top += e.Y;
-				Utilities.ResizeListsAndRTBs(lstEntries, rtbSelectedEntry, lblSeparator, lblSelectionType, this);
-				lstEntries.TopIndex = lstEntries.SelectedIndices[0];
-			}
-		}
-
-		private void lblShowPIN_Click(object sender, EventArgs e)
-		{
-			txtJournalPIN.PasswordChar = txtJournalPIN.PasswordChar == '*' ? '\0' : '*';
-			lblShowPIN.Text = lblShowPIN.Text == "show" ? "hide" : "show";
 		}
 
 		private void mnuEntryCreate_Click(object sender, EventArgs e)
@@ -380,7 +380,7 @@ namespace myJournal.subforms
 
 		private void mnuJournal_Rename_Click(object sender, EventArgs e)
 		{
-			frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "Please enter the new journal name.");		
+			frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "Enter the new journal name.");		
 			Utilities.Showform(frm, this);
 
 			if (frm.result == frmMessage.ReturnResult.Ok && frm.input.Length > 0)
@@ -430,6 +430,7 @@ namespace myJournal.subforms
 			cbxDates.DataSource = l;
 			//cbxDatesTo.Items.AddRange(cbxDates.Items.Cast<Object>().ToArray());
 			foreach(string s in cbxDates.Items) { cbxDatesTo.Items.Add(s); }
+			cbxDatesTo.SelectedIndex = 0;
 			suppressDateClick = false;
 		}
 
@@ -452,7 +453,7 @@ namespace myJournal.subforms
 			{
 				rtbSelectedEntry.Text = string.Empty;
 				rtbSelectedEntry.Visible = false;
-				lstEntries.Visible = false;
+
 
 				lblSeparator.Visible = false;
 				lblSelectionType.Visible = false;

@@ -105,7 +105,7 @@ namespace myJournal.subforms
 
 		private void btnOk_Click(object sender, EventArgs e)
 		{
-			result = ReturnResult.Ok;
+			result = txtInput.Visible && txtInput.Text.Length == 0 ? ReturnResult.Cancel : ReturnResult.Ok;
 			input = txtInput.Text;
 			this.Hide();
 		}
