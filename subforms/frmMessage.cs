@@ -10,6 +10,7 @@ namespace myJournal.subforms
 	{
 		OperationType opType;
 		string msg;
+		string _defaultText;
 		public ReturnResult result;
 		public string input;
 
@@ -31,11 +32,12 @@ namespace myJournal.subforms
 			None
 		}
 
-		public frmMessage(OperationType type, string message = "")
+		public frmMessage(OperationType type, string message = "", string defaultText = "")
 		{
 			InitializeComponent();
 			opType = type;
 			msg = message;
+			_defaultText = defaultText;
 		}
 
 		private void frmMessage_Activated(object sender, EventArgs e)
@@ -58,6 +60,8 @@ namespace myJournal.subforms
 				if(c.GetType() == typeof(Panel)) { c.Top = 30; }
 			}
 
+			pnlTextBox.Top = lblMessage.Top + lblMessage.Height + 30;
+
 			lblMessage.Text = msg;
 
 			switch (opType)
@@ -65,21 +69,28 @@ namespace myJournal.subforms
 				case OperationType.DeleteEntry:
 					lblMessage.Text = "Delete entry '" + msg + "'?";
 					pnlYesNo.Visible = true;
+					this.AcceptButton = btnNo2;
 					break;
 				case OperationType.DeleteJournal:
 					lblMessage.Text = "Delete journal '" + msg + "'?";
 					pnlYesNo.Visible = true;
+					this.AcceptButton = btnNo2;
 					break;
 				case OperationType.Message:
 					pnlOk.Visible = true;
+					this.AcceptButton = btnOk2;
 					break;
 				case OperationType.YesNoQuestion:
 					pnlYesNoCancel.Visible = true;
+					this.AcceptButton = btnCancel1;
 					break;
 				case OperationType.InputBox:
 					lblMessage.Text = msg;
+					txtInput.Text = _defaultText;
+					pnlOkCancel.Top = pnlTextBox.Top + pnlTextBox.Height + 4;
 					pnlOkCancel.Visible = true;
 					pnlTextBox.Visible = true;
+					txtInput.SelectAll();
 					this.AcceptButton = btnOk1;
 					break;
 			}

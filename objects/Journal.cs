@@ -20,8 +20,8 @@ namespace myJournal
 	[Serializable]
     public class Journal
     {
-		public string Name = string.Empty;
-        string FileName = string.Empty;
+		public string Name { get; set; }
+        string FileName { get; set; }
         StringBuilder JournalText = new StringBuilder();
         public List<JournalEntry> Entries = new List<JournalEntry>();
         string root = "journals\\";
@@ -100,6 +100,7 @@ namespace myJournal
                     BinaryFormatter formatter = new BinaryFormatter();
                     jRtrn = (Journal)formatter.Deserialize(stream);
 					jRtrn.FileName = AppDomain.CurrentDomain.BaseDirectory + this.root + journalToOpen;
+					jRtrn.Name = journalToOpen;
 				}
             }
             catch(Exception) { }

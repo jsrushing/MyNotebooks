@@ -150,7 +150,7 @@ namespace myJournal.subforms
 
 				if (currentJournal != null)
 				{
-					if(currentJournal.Entries[0].ClearText().Length == 0)
+					if(currentJournal.Entries[0].ClearText().Length == 0)	// the PIN is wrong
 					{
 						lblWrongPin.Visible = true;
 						txtJournalPIN.Focus();
@@ -162,21 +162,17 @@ namespace myJournal.subforms
 
 						if(lstEntries.Items.Count == 0) { Utilities.PopulateEntries(lstEntries, currentJournal.Entries); }
 
-						if(lstEntries.Items.Count > 0)
-						{
-							lstEntries.Height = this.Height - lstEntries.Top - 50;
-							lstEntries.Visible = true;
-							pnlDateFilters.Visible = true;
-							PopulateShowFromDates();
+						lstEntries.Height = this.Height - lstEntries.Top - 50;
+						lstEntries.Visible = true;
+						pnlDateFilters.Visible = true;
+						PopulateShowFromDates();
 
-							for (int i = 0; i < cbxDates.Items.Count; i++)
-							{ if (DateTime.Parse(cbxDates.Items[i].ToString()) <= DateTime.Parse(cbxDatesTo.Text).AddDays(-60) || i == cbxDates.Items.Count - 1) {cbxDates.SelectedIndex = i; break; } }
+						for (int i = 0; i < cbxDates.Items.Count; i++)
+						{ if (DateTime.Parse(cbxDates.Items[i].ToString()) <= DateTime.Parse(cbxDatesTo.Text).AddDays(-60) || i == cbxDates.Items.Count - 1) {cbxDates.SelectedIndex = i; break; } }
 
-							suppressDateClick = true;
-							cbxDatesTo.SelectedIndex = 0;
-							suppressDateClick = false;
-						}
-
+						suppressDateClick = true;
+						cbxDatesTo.SelectedIndex = 0;
+						suppressDateClick = false;
 						btnLoadJournal.Enabled = false;
 						ShowHideMenusAndControls(SelectionState.JournalLoaded);
 					}
@@ -201,6 +197,7 @@ namespace myJournal.subforms
 
 		private void ddlJournals_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
 			btnLoadJournal.Enabled = true;
 			txtJournalPIN.Text = string.Empty;
 			txtJournalPIN.Focus();
@@ -259,10 +256,13 @@ namespace myJournal.subforms
 			}
 			else
 			{
-				foreach (string s in Directory.GetFiles(rootPath + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]))
+				foreach (Journal j in Utilities.AllJournals())
 				{
-					ddlJournals.Items.Add(s.Replace(rootPath + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"], ""));
+					ddlJournals.Items.Add(j.Name);
 				}
+
+				//ddlJournals.DataSource = Utilities.AllJournals();
+				//ddlJournals.DisplayMember = "Name";
 			}
 
 			ddlJournals.Enabled = ddlJournals.Items.Count > 0;
@@ -270,7 +270,7 @@ namespace myJournal.subforms
 			btnLoadJournal.Enabled = false;
 			txtJournalPIN.Text = string.Empty;
 			lstEntries.Visible = false;
-			ShowHideMenusAndControls(SelectionState.HideAll);
+			ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
 		}
 
 		private void lstEntries_SelectEntry(object sender, EventArgs e)
@@ -357,7 +357,7 @@ namespace myJournal.subforms
 
 		private void mnuJournal_Delete_Click(object sender, EventArgs e)
 		{
-			frmMessage frm = new frmMessage(frmMessage.OperationType.DeleteJournal, currentJournal.Name);
+			frmMessage frm = new frmMessage(frmMessage.OperationType.DeleteJournal, currentJournal.Name.Replace("\\", ""));
 			Utilities.Showform(frm, this);
 			if (frm.result == frmMessage.ReturnResult.Yes)
 			{
@@ -365,6 +365,8 @@ namespace myJournal.subforms
 				ddlJournals.Text = string.Empty;
 				lstEntries.Items.Clear();
 				LoadJournals();
+				ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
+				pnlDateFilters.Visible = false;
 			}
 			this.Show();
 		}
@@ -380,7 +382,7 @@ namespace myJournal.subforms
 
 		private void mnuJournal_Rename_Click(object sender, EventArgs e)
 		{
-			frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "Enter the new journal name.");		
+			frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "Enter the new journal name.", currentJournal.Name);		
 			Utilities.Showform(frm, this);
 
 			if (frm.result == frmMessage.ReturnResult.Ok && frm.input.Length > 0)
@@ -453,7 +455,7 @@ namespace myJournal.subforms
 			{
 				rtbSelectedEntry.Text = string.Empty;
 				rtbSelectedEntry.Visible = false;
-
+				pnlDateFilters.Visible = false;
 
 				lblSeparator.Visible = false;
 				lblSelectionType.Visible = false;
@@ -487,6 +489,7 @@ namespace myJournal.subforms
 				mnuJournal_ForceBackup.Enabled = true;
 
 				btnNewEntry.Visible = true;
+				pnlDateFilters.Visible = true;
 			}
 			else if(st == SelectionState.EntrySelected)
 			{

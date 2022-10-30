@@ -44,6 +44,22 @@ namespace myJournal.objects
 			return labels;
 		}
 
+		public static List<Journal> AllJournals()
+		{
+			string rootPath = AppDomain.CurrentDomain.BaseDirectory;
+			List<Journal> jrnlReturn = new List<Journal>();
+			Journal tmpJrnl = new Journal();
+			string sJrnlDiskName;
+
+			foreach (string s in Directory.GetFiles(rootPath + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]))
+			{
+				sJrnlDiskName = s.Replace(rootPath + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"], "");
+				jrnlReturn.Add(new Journal(sJrnlDiskName).Open(sJrnlDiskName));
+			}
+
+			return jrnlReturn;
+		}
+
 		public static void PopulateEntries(ListBox lbxToPopulate, List<JournalEntry> entries, string startDate = "", string endDate = "", bool clearPrevious = true, string journalName = "")
 		{
 			if(clearPrevious) lbxToPopulate.Items.Clear();

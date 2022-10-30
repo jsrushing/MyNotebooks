@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using myJournal.objects;
 
@@ -103,6 +104,9 @@ namespace myJournal.subforms
 
 		private void btnOK_Click(object sender, EventArgs e)
 		{
+			string labelName = lstLabels.SelectedItem.ToString();
+			string sNewTagName;
+
 			if (Adding)
 			{
 				if(txtLabelName.Text.Length > 0)
@@ -114,6 +118,24 @@ namespace myJournal.subforms
 
 			if (Renaming)
 			{
+				foreach(Journal j in Utilities.AllJournals())
+				{
+					List<JournalEntry> lJe = j.Entries.Where(t => t.ClearTags().Contains(labelName + ",") | t.ClearTags().Contains("," + labelName)).ToList();
+
+					if(lJe.Count > 0)
+					{
+						foreach(JournalEntry je2 in lJe)
+						{
+							sNewTagName = txtLabelName.Text;
+							sNewTagName = je2.ClearTags().Contains(labelName + ",") ? sNewTagName + "," : "," + sNewTagName;
+								
+								//je2.ClearTags().Replace(labelName + ",", txtLabelName.Text + ",") : 
+							j.ReplaceEntry(je2, new JournalEntry(je2.ClearTitle(), je2.ClearText(), "", je2.ClearTags().Replace(labelName, txtLabelName.Text)));
+						}
+						j.Save();
+					}
+				}
+
 				lstLabels.Items.Insert(lstLabels.SelectedIndex, txtLabelName.Text);
 				lstLabels.Items.RemoveAt(lstLabels.SelectedIndex);
 				Renaming = false;
