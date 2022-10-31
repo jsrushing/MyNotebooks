@@ -59,9 +59,9 @@ namespace myJournal.subforms
 			this.cbxDates = new System.Windows.Forms.ComboBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.pnlDateFilters = new System.Windows.Forms.Panel();
-			this.btnNewEntry = new System.Windows.Forms.Button();
-			this.cbxDatesTo = new System.Windows.Forms.ComboBox();
 			this.label3 = new System.Windows.Forms.Label();
+			this.cbxDatesTo = new System.Windows.Forms.ComboBox();
+			this.mnuLabels = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.pnlDateFilters.SuspendLayout();
 			this.SuspendLayout();
@@ -177,7 +177,8 @@ namespace myJournal.subforms
 			// 
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuJournal,
-            this.mnuEntryTop});
+            this.mnuEntryTop,
+            this.mnuLabels});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
 			this.menuStrip1.Size = new System.Drawing.Size(1012, 24);
@@ -359,16 +360,14 @@ namespace myJournal.subforms
 			this.pnlDateFilters.TabIndex = 49;
 			this.pnlDateFilters.Visible = false;
 			// 
-			// btnNewEntry
+			// label3
 			// 
-			this.btnNewEntry.Location = new System.Drawing.Point(115, 1);
-			this.btnNewEntry.Name = "btnNewEntry";
-			this.btnNewEntry.Size = new System.Drawing.Size(75, 23);
-			this.btnNewEntry.TabIndex = 50;
-			this.btnNewEntry.Text = "&New Entry";
-			this.btnNewEntry.UseVisualStyleBackColor = true;
-			this.btnNewEntry.Visible = false;
-			this.btnNewEntry.Click += new System.EventHandler(this.btnNewEntry_Click);
+			this.label3.AutoSize = true;
+			this.label3.Location = new System.Drawing.Point(166, 9);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(18, 15);
+			this.label3.TabIndex = 46;
+			this.label3.Text = "to";
 			// 
 			// cbxDatesTo
 			// 
@@ -379,14 +378,12 @@ namespace myJournal.subforms
 			this.cbxDatesTo.TabIndex = 45;
 			this.cbxDatesTo.SelectedIndexChanged += new System.EventHandler(this.cbxDates_SelectedIndexChanged);
 			// 
-			// label3
+			// mnuLabels
 			// 
-			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(166, 9);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(18, 15);
-			this.label3.TabIndex = 46;
-			this.label3.Text = "to";
+			this.mnuLabels.Name = "mnuLabels";
+			this.mnuLabels.Size = new System.Drawing.Size(52, 20);
+			this.mnuLabels.Text = "Labels";
+			this.mnuLabels.Click += new System.EventHandler(this.mnuLabels_Click);
 			// 
 			// frmMain
 			// 
@@ -395,7 +392,6 @@ namespace myJournal.subforms
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.Window;
 			this.ClientSize = new System.Drawing.Size(1012, 628);
-			this.Controls.Add(this.btnNewEntry);
 			this.Controls.Add(this.btnLoadJournal);
 			this.Controls.Add(this.pnlDateFilters);
 			this.Controls.Add(this.lblShowPIN);
@@ -452,10 +448,10 @@ namespace myJournal.subforms
 		private System.Windows.Forms.ToolStripMenuItem mnuPreserveOriginalText;
 		private System.Windows.Forms.ToolStripMenuItem mnuDiscardOriginalText;
 		private System.Windows.Forms.ToolStripMenuItem mnuJournal_Rename;
-		private System.Windows.Forms.Button btnNewEntry;
 		private System.Windows.Forms.ToolStripMenuItem mnuJournal_ForceBackup;
 		private System.Windows.Forms.ToolStripMenuItem mnuJournal_RestoreBackups;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.ComboBox cbxDatesTo;
+		private System.Windows.Forms.ToolStripMenuItem mnuLabels;
 	}
 }

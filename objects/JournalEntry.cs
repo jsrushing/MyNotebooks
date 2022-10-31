@@ -3,6 +3,7 @@
  */
 using System;
 using System.Configuration;
+using System.Linq;
 using encrypt_decrypt_string;
 using System.Collections.Generic;
 using System.Text;
@@ -61,6 +62,50 @@ namespace myJournal
 			Labels = newEntry.Labels;
 			Text = newEntry.Text;
 			Title = newEntry.Title;
+		}
+
+		public bool RemoveTag(string TagToRemove)
+		{
+			string[] arrTags = this.ClearTags().Split(',');
+			bool bTagReplaced = false;
+
+			if (Array.IndexOf(arrTags, TagToRemove) > -1)
+			{
+				arrTags = arrTags.Select(t => t.Remove(Array.IndexOf(arrTags, TagToRemove))).ToArray();
+				//string allTags = String.Join(",", arrTags);
+				this.Labels = EncryptDecrypt.Encrypt(String.Join(",", arrTags));
+				bTagReplaced = true;
+			}
+
+			return bTagReplaced;
+		}
+
+		public bool ReplaceTag(string oldTag, string newTag)
+		{
+			string[] arrTags = this.ClearTags().Split(',');
+			bool bTagReplaced = false;
+
+			if(Array.IndexOf(arrTags, oldTag) > -1)
+			{
+				arrTags = arrTags.Select(t => t.Replace(oldTag, newTag)).ToArray();
+				//string allTags = String.Join(",", arrTags);
+				this.Labels = EncryptDecrypt.Encrypt(String.Join(",", arrTags));
+				bTagReplaced = true;
+			}
+
+			return bTagReplaced;
+			
+			//// bracket oldTags with commas so we're sure to get the exact oldtag instead of possibly a tag with <oldTag> in the tag name
+			//string sEntryTagsWithCommas = "," + this.ClearTags() + ",";
+
+			//// if the old tag is found BRACKETED BY COMMAS, replace it. If not then leave sNewClearTags blank.
+			//string sNewClearTags = sEntryTagsWithCommas.Contains("," + oldTag + ",") ? sEntryTagsWithCommas.Replace(oldTag, newTag) : string.Empty;
+
+			//// remove any trailing and leading commas
+			//while (sNewClearTags.StartsWith(',') | sNewClearTags.EndsWith(',')) { sNewClearTags = sNewClearTags.Trim(','); }
+
+			//if (sNewClearTags.Length > 0) { Labels = EncryptDecrypt.Encrypt(sNewClearTags); }
+			//return sNewClearTags.Length > 0;
 		}
 
 		public string ClearText()	{ return EncryptDecrypt.Decrypt(Text); }

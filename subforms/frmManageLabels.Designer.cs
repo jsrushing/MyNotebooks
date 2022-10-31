@@ -40,6 +40,8 @@ namespace myJournal.subforms
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.mnuAdd = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRename = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuRename_InAllJournals = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuRename_InCurrentJournal = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuMoveTop = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuMoveUp = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuMoveDown = new System.Windows.Forms.ToolStripMenuItem();
@@ -69,7 +71,7 @@ namespace myJournal.subforms
 			this.pnlNewLabelName.Controls.Add(this.btnOK);
 			this.pnlNewLabelName.Controls.Add(this.lblOperation);
 			this.pnlNewLabelName.Controls.Add(this.txtLabelName);
-			this.pnlNewLabelName.Location = new System.Drawing.Point(19, 6);
+			this.pnlNewLabelName.Location = new System.Drawing.Point(18, 72);
 			this.pnlNewLabelName.Name = "pnlNewLabelName";
 			this.pnlNewLabelName.Size = new System.Drawing.Size(287, 94);
 			this.pnlNewLabelName.TabIndex = 2;
@@ -97,7 +99,7 @@ namespace myJournal.subforms
 			// 
 			// lblOperation
 			// 
-			this.lblOperation.Location = new System.Drawing.Point(0, 20);
+			this.lblOperation.Location = new System.Drawing.Point(16, 20);
 			this.lblOperation.Name = "lblOperation";
 			this.lblOperation.Size = new System.Drawing.Size(87, 15);
 			this.lblOperation.TabIndex = 1;
@@ -106,9 +108,9 @@ namespace myJournal.subforms
 			// 
 			// txtLabelName
 			// 
-			this.txtLabelName.Location = new System.Drawing.Point(89, 16);
+			this.txtLabelName.Location = new System.Drawing.Point(104, 16);
 			this.txtLabelName.Name = "txtLabelName";
-			this.txtLabelName.Size = new System.Drawing.Size(182, 23);
+			this.txtLabelName.Size = new System.Drawing.Size(167, 23);
 			this.txtLabelName.TabIndex = 0;
 			// 
 			// label1
@@ -156,11 +158,27 @@ namespace myJournal.subforms
 			// 
 			// mnuRename
 			// 
+			this.mnuRename.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuRename_InAllJournals,
+            this.mnuRename_InCurrentJournal});
 			this.mnuRename.Enabled = false;
 			this.mnuRename.Name = "mnuRename";
 			this.mnuRename.Size = new System.Drawing.Size(62, 20);
 			this.mnuRename.Text = "&Rename";
-			this.mnuRename.Click += new System.EventHandler(this.mnuRename_Click);
+			// 
+			// mnuRename_InAllJournals
+			// 
+			this.mnuRename_InAllJournals.Name = "mnuRename_InAllJournals";
+			this.mnuRename_InAllJournals.Size = new System.Drawing.Size(180, 22);
+			this.mnuRename_InAllJournals.Text = "In All Journals";
+			this.mnuRename_InAllJournals.Click += new System.EventHandler(this.mnuRename_Click);
+			// 
+			// mnuRename_InCurrentJournal
+			// 
+			this.mnuRename_InCurrentJournal.Name = "mnuRename_InCurrentJournal";
+			this.mnuRename_InCurrentJournal.Size = new System.Drawing.Size(180, 22);
+			this.mnuRename_InCurrentJournal.Text = "In ";
+			this.mnuRename_InCurrentJournal.Click += new System.EventHandler(this.mnuRename_Click);
 			// 
 			// mnuMoveTop
 			// 
@@ -209,6 +227,7 @@ namespace myJournal.subforms
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.menuStrip1);
 			this.MainMenuStrip = this.menuStrip1;
+			this.MinimumSize = new System.Drawing.Size(382, 362);
 			this.Name = "frmManageLabels";
 			this.Text = "Manage Labels";
 			this.Load += new System.EventHandler(this.frmManageLabels_Load);
@@ -241,5 +260,7 @@ namespace myJournal.subforms
 		private System.Windows.Forms.Button btnOK;
 		private System.Windows.Forms.Label lblOperation;
 		private System.Windows.Forms.TextBox txtLabelName;
+		private System.Windows.Forms.ToolStripMenuItem mnuRename_InAllJournals;
+		private System.Windows.Forms.ToolStripMenuItem mnuRename_InCurrentJournal;
 	}
 }

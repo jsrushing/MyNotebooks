@@ -12,7 +12,7 @@ namespace myJournal.subforms
 	public partial class frmNewEntry : Form
 	{
 		public JournalEntry entry = null;
-		public Journal journal = null;
+		public Journal currentJournal = null;
 		private bool isEdit = false;
 		public bool deleteConfirmed = false;
 		private int originalEntryLength = -1;
@@ -23,12 +23,12 @@ namespace myJournal.subforms
 		public bool saved = false;
 		public bool preserveOriginalText;
 
-		public frmNewEntry(Journal currentJournal, JournalEntry entryToEdit = null)
+		public frmNewEntry(Journal journal, JournalEntry entryToEdit = null)
 		{
 			InitializeComponent();
 			entry = entryToEdit;
 			isEdit = entry != null;
-			journal = currentJournal;
+			this.currentJournal = journal;
 		}
 
 		private void Alert(string msg)
@@ -93,7 +93,7 @@ namespace myJournal.subforms
 
 		private void lblManageLabels_Click(object sender, EventArgs e)
 		{
-			frmManageLabels frm = new frmManageLabels();
+			frmManageLabels frm = new frmManageLabels(this.currentJournal);
 			Utilities.Showform(frm, this); // ShowDialog() happens here.
 			// labels file is modified as directed on frmManageLabels then flow returns here ...
 			Utilities.PopulateLabelsList(lstLabels);
@@ -155,14 +155,14 @@ namespace myJournal.subforms
 
 			if(entry == null)
 			{
-				journal.AddEntry(newEntry);
+				currentJournal.AddEntry(newEntry);
 			}
 			else
 			{
-				journal.ReplaceEntry(entry, newEntry);
+				currentJournal.ReplaceEntry(entry, newEntry);
 			}
 
-			journal.Save();
+			currentJournal.Save();
 			entry = newEntry;
 			saved = true;
 			SetIsDirty(false);
@@ -179,7 +179,7 @@ namespace myJournal.subforms
 
 			if(this.entry != null)
 			{
-				this.Text = "editing '" + entry.ClearTitle() + "' in " + journal.Name;
+				this.Text = "editing '" + entry.ClearTitle() + "' in " + currentJournal.Name;
 			}
 			else
 			{

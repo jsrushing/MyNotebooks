@@ -185,11 +185,6 @@ namespace myJournal.subforms
 			catch (Exception ex) { Console.Write(ex.Message); }
 		}
 
-		private void btnNewEntry_Click(object sender, EventArgs e)
-		{
-			mnuEntryCreate_Click(btnNewEntry, null);
-		}
-
 		private void cbxDates_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!suppressDateClick) { ProcessDateFilters(); }
@@ -466,8 +461,6 @@ namespace myJournal.subforms
 				mnuEntryDelete.Enabled = false;
 				mnuEntryEdit.Enabled = false;
 
-				btnNewEntry.Visible = false;
-
 				mnuJournal_Delete.Enabled = false;
 				mnuJournal_Rename.Enabled = false;
 				mnuJournal_Search.Enabled = false;
@@ -488,7 +481,6 @@ namespace myJournal.subforms
 				mnuJournal_Search.Enabled = true;
 				mnuJournal_ForceBackup.Enabled = true;
 
-				btnNewEntry.Visible = true;
 				pnlDateFilters.Visible = true;
 			}
 			else if(st == SelectionState.EntrySelected)
@@ -510,6 +502,15 @@ namespace myJournal.subforms
 				cp.ExStyle |= 0x02000000;  // Turn on WS_EX_COMPOSITED
 				return cp;
 			}
+		}
+
+		private void mnuLabels_Click(object sender, EventArgs e)
+		{
+			frmManageLabels frm = new frmManageLabels(this.currentJournal);
+			Utilities.Showform(frm, this);
+			if (frm.ActionTaken && currentJournal != null) { Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text, cbxDatesTo.Text); }
+			frm.Close();
+			this.Show();
 		}
 	}
 }
