@@ -82,7 +82,7 @@ namespace myJournal.objects
 			if (clb != null) { clb.Items.Clear(); }
 			if (lb != null) { lb.Items.Clear(); }
 
-			foreach (string label in File.ReadAllLines(AppDomain.CurrentDomain.BaseDirectory + "/settings/labels"))
+			foreach (string label in File.ReadAllLines(AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]))
 			{
 				if (lb != null)
 				{ lb.Items.Add(label); }
