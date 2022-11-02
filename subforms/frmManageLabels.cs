@@ -44,6 +44,7 @@ namespace myJournal.subforms
 			pnlJournalPINs.Visible = true;
 			pnlMain.Visible = false;
 			mnuMain.Visible = false;
+			lstLabels.Height = lstLabels.Height + lstOccurrences.Height + 35;
 			foreach (Journal j in Utilities.AllJournals()) { lstJournalPINs.Items.Add(j.Name); }
 		}
 
@@ -197,6 +198,7 @@ namespace myJournal.subforms
 		private void mnuFindAll_Click(object sender, EventArgs e)
 		{
 			PopulateOccurrences();
+			lstLabels.Height = lstLabels.Height > lstOccurrences.Top ? lstLabels.Height = lstLabels.Height - lstOccurrences.Height - 30  : lstLabels.Height;
 		}
 
 		private void mnuMoveUp_Click(object sender, EventArgs e)

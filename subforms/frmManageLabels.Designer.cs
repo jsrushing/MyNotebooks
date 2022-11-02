@@ -30,6 +30,7 @@ namespace myJournal.subforms
 		private void InitializeComponent()
 		{
 			this.pnlMain = new System.Windows.Forms.Panel();
+			this.label3 = new System.Windows.Forms.Label();
 			this.pnlNewLabelName = new System.Windows.Forms.Panel();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.btnOK = new System.Windows.Forms.Button();
@@ -67,12 +68,22 @@ namespace myJournal.subforms
 			// 
 			this.pnlMain.Controls.Add(this.pnlNewLabelName);
 			this.pnlMain.Controls.Add(this.lstLabels);
+			this.pnlMain.Controls.Add(this.label3);
 			this.pnlMain.Controls.Add(this.lstOccurrences);
 			this.pnlMain.Controls.Add(this.label1);
 			this.pnlMain.Location = new System.Drawing.Point(16, 25);
 			this.pnlMain.Name = "pnlMain";
 			this.pnlMain.Size = new System.Drawing.Size(341, 439);
 			this.pnlMain.TabIndex = 0;
+			// 
+			// label3
+			// 
+			this.label3.AutoSize = true;
+			this.label3.Location = new System.Drawing.Point(9, 210);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(193, 15);
+			this.label3.TabIndex = 4;
+			this.label3.Text = "Found Entries (double-click to Edit)";
 			// 
 			// pnlNewLabelName
 			// 
@@ -131,7 +142,7 @@ namespace myJournal.subforms
 			this.lstLabels.ItemHeight = 15;
 			this.lstLabels.Location = new System.Drawing.Point(9, 23);
 			this.lstLabels.Name = "lstLabels";
-			this.lstLabels.Size = new System.Drawing.Size(322, 199);
+			this.lstLabels.Size = new System.Drawing.Size(322, 184);
 			this.lstLabels.TabIndex = 0;
 			this.lstLabels.SelectedIndexChanged += new System.EventHandler(this.lstLabels_SelectedIndexChanged);
 			// 
@@ -147,7 +158,7 @@ namespace myJournal.subforms
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(3, 3);
+			this.label1.Location = new System.Drawing.Point(9, 1);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(43, 15);
 			this.label1.TabIndex = 1;
@@ -387,5 +398,6 @@ namespace myJournal.subforms
 		private System.Windows.Forms.Button btnPINsOK;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.ToolStripMenuItem mnuAssignPINs;
+		private System.Windows.Forms.Label label3;
 	}
 }
