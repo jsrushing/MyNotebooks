@@ -40,7 +40,7 @@ namespace myJournal.subforms
 			this.Size = this.MinimumSize;
 			pnlNewLabelName.Location = new Point(0, 0);
 			pnlNewLabelName.Size = this.Size;
-			pnlJournalPINs.Location = pnlMain.Location;
+			pnlJournalPINs.Location = new Point(pnlMain.Location.X, 0);
 			pnlJournalPINs.Visible = true;
 			pnlMain.Visible = false;
 			mnuMain.Visible = false;
@@ -62,6 +62,7 @@ namespace myJournal.subforms
 			s = s + "|" + txtPIN.Text;
 			lstJournalPINs.Items.Insert(lstJournalPINs.SelectedIndex, s);
 			lstJournalPINs.Items.RemoveAt(lstJournalPINs.SelectedIndex);
+			txtPIN.Text = "(select a Journal)";
 			txtPIN.Enabled = false;
 			btnAddPIN.Enabled = false;
 		}
@@ -259,10 +260,11 @@ namespace myJournal.subforms
 		{
 			StringBuilder sb = new StringBuilder();
 			string[] arrTags = lstLabels.Items.OfType<string>().ToArray();
-			Array.Sort(arrTags, (x, y) => x.CompareTo(y));
+			//Array.Sort(arrTags, (x, y) => x.CompareTo(y));
 			foreach (string tag in arrTags) { sb.AppendLine(tag); }
 			File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"], sb.ToString());
 		}
 
+		private void txtPIN_KeyUp(object sender, KeyEventArgs e) { if(e.KeyCode == Keys.Enter) { btnAddPIN_Click(null, null); } }
 	}
 }

@@ -47,6 +47,7 @@ namespace myJournal.subforms
 			this.txtName.Name = "txtName";
 			this.txtName.Size = new System.Drawing.Size(128, 23);
 			this.txtName.TabIndex = 0;
+			this.txtName.TextChanged += new System.EventHandler(this.txtName_TextChanged);
 			// 
 			// label1
 			// 
@@ -139,7 +140,9 @@ namespace myJournal.subforms
 			this.CancelButton = this.btnCancel;
 			this.ClientSize = new System.Drawing.Size(255, 208);
 			this.Controls.Add(this.grp1);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			this.MaximizeBox = false;
+			this.MinimumSize = new System.Drawing.Size(271, 247);
 			this.Name = "frmNewJournal";
 			this.Text = "New Journal";
 			this.Activated += new System.EventHandler(this.frmNewJournal_Activated);

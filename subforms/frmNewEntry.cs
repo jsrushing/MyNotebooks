@@ -31,13 +31,6 @@ namespace myJournal.subforms
 			this.currentJournal = journal;
 		}
 
-		private void Alert(string msg)
-		{
-			frmMessage frm = new frmMessage(frmMessage.OperationType.Message, msg);
-			Utilities.Showform(frm, this);
-			this.Show();
-		}
-
 		private void GrayOriginalText()
 		{
 			rtbNewEntry.SelectionStart = 1;
@@ -139,7 +132,7 @@ namespace myJournal.subforms
 			}
 			else
 			{
-				Alert("You must enter both a title and text to save an entry.");
+				Utilities.ShowMessage("You must enter both a title and text to save an entry.", this);
 			}
 		}
 

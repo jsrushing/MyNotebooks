@@ -69,7 +69,7 @@ namespace myJournal.subforms
 			this.pnlMain.Controls.Add(this.lstLabels);
 			this.pnlMain.Controls.Add(this.lstOccurrences);
 			this.pnlMain.Controls.Add(this.label1);
-			this.pnlMain.Location = new System.Drawing.Point(16, 28);
+			this.pnlMain.Location = new System.Drawing.Point(16, 25);
 			this.pnlMain.Name = "pnlMain";
 			this.pnlMain.Size = new System.Drawing.Size(341, 439);
 			this.pnlMain.TabIndex = 0;
@@ -147,7 +147,7 @@ namespace myJournal.subforms
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(7, 6);
+			this.label1.Location = new System.Drawing.Point(3, 3);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(43, 15);
 			this.label1.TabIndex = 1;
@@ -214,14 +214,14 @@ namespace myJournal.subforms
 			// 
 			this.mnuMoveUp.Name = "mnuMoveUp";
 			this.mnuMoveUp.Size = new System.Drawing.Size(105, 22);
-			this.mnuMoveUp.Text = "Up";
+			this.mnuMoveUp.Text = "&Up";
 			this.mnuMoveUp.Click += new System.EventHandler(this.mnuMoveUp_Click);
 			// 
 			// mnuMoveDown
 			// 
 			this.mnuMoveDown.Name = "mnuMoveDown";
 			this.mnuMoveDown.Size = new System.Drawing.Size(105, 22);
-			this.mnuMoveDown.Text = "Down";
+			this.mnuMoveDown.Text = "D&own";
 			this.mnuMoveDown.Click += new System.EventHandler(this.mnuMoveDown_Click);
 			// 
 			// mnuDelete
@@ -261,16 +261,16 @@ namespace myJournal.subforms
 			this.pnlJournalPINs.Controls.Add(this.txtPIN);
 			this.pnlJournalPINs.Controls.Add(this.lblEnterPIN);
 			this.pnlJournalPINs.Controls.Add(this.lstJournalPINs);
-			this.pnlJournalPINs.Location = new System.Drawing.Point(381, 28);
+			this.pnlJournalPINs.Location = new System.Drawing.Point(381, 0);
 			this.pnlJournalPINs.Name = "pnlJournalPINs";
-			this.pnlJournalPINs.Size = new System.Drawing.Size(336, 439);
+			this.pnlJournalPINs.Size = new System.Drawing.Size(336, 464);
 			this.pnlJournalPINs.TabIndex = 2;
 			this.pnlJournalPINs.Visible = false;
 			// 
 			// label2
 			// 
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(72, 39);
+			this.label2.Location = new System.Drawing.Point(72, 31);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(26, 15);
 			this.label2.TabIndex = 6;
@@ -278,7 +278,7 @@ namespace myJournal.subforms
 			// 
 			// btnPINsOK
 			// 
-			this.btnPINsOK.Location = new System.Drawing.Point(108, 406);
+			this.btnPINsOK.Location = new System.Drawing.Point(108, 437);
 			this.btnPINsOK.Name = "btnPINsOK";
 			this.btnPINsOK.Size = new System.Drawing.Size(120, 23);
 			this.btnPINsOK.TabIndex = 5;
@@ -289,7 +289,7 @@ namespace myJournal.subforms
 			// btnAddPIN
 			// 
 			this.btnAddPIN.Enabled = false;
-			this.btnAddPIN.Location = new System.Drawing.Point(210, 34);
+			this.btnAddPIN.Location = new System.Drawing.Point(210, 26);
 			this.btnAddPIN.Name = "btnAddPIN";
 			this.btnAddPIN.Size = new System.Drawing.Size(66, 23);
 			this.btnAddPIN.TabIndex = 4;
@@ -300,16 +300,18 @@ namespace myJournal.subforms
 			// txtPIN
 			// 
 			this.txtPIN.Enabled = false;
-			this.txtPIN.Location = new System.Drawing.Point(103, 34);
+			this.txtPIN.Location = new System.Drawing.Point(103, 26);
 			this.txtPIN.Name = "txtPIN";
 			this.txtPIN.Size = new System.Drawing.Size(100, 23);
 			this.txtPIN.TabIndex = 3;
+			this.txtPIN.Text = "(select a Journal)";
+			this.txtPIN.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtPIN_KeyUp);
 			// 
 			// lblEnterPIN
 			// 
 			this.lblEnterPIN.Location = new System.Drawing.Point(2, 2);
 			this.lblEnterPIN.Name = "lblEnterPIN";
-			this.lblEnterPIN.Size = new System.Drawing.Size(331, 32);
+			this.lblEnterPIN.Size = new System.Drawing.Size(331, 16);
 			this.lblEnterPIN.TabIndex = 2;
 			this.lblEnterPIN.Text = "Specify a PIN for all protected Journals you wish to work with.";
 			this.lblEnterPIN.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -321,9 +323,9 @@ namespace myJournal.subforms
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.lstJournalPINs.FormattingEnabled = true;
 			this.lstJournalPINs.ItemHeight = 15;
-			this.lstJournalPINs.Location = new System.Drawing.Point(7, 64);
+			this.lstJournalPINs.Location = new System.Drawing.Point(7, 56);
 			this.lstJournalPINs.Name = "lstJournalPINs";
-			this.lstJournalPINs.Size = new System.Drawing.Size(322, 334);
+			this.lstJournalPINs.Size = new System.Drawing.Size(322, 364);
 			this.lstJournalPINs.TabIndex = 1;
 			this.lstJournalPINs.SelectedIndexChanged += new System.EventHandler(this.lstJournalPINs_SelectedIndexChanged);
 			// 

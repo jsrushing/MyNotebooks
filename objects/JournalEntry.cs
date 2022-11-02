@@ -66,33 +66,40 @@ namespace myJournal
 
 		public bool RemoveTag(string TagToRemove)
 		{
-			string[] arrTags = this.ClearTags().Split(',');
+			string tags = this.ClearTags();
 			bool bTagReplaced = false;
 
-			if (Array.IndexOf(arrTags, TagToRemove) > -1)
+			if(tags.Length > 0)
 			{
-				arrTags = arrTags.Select(t => t.Remove(Array.IndexOf(arrTags, TagToRemove))).ToArray();
-				//string allTags = String.Join(",", arrTags);
-				this.Labels = EncryptDecrypt.Encrypt(String.Join(",", arrTags));
-				bTagReplaced = true;
-			}
+				string[] arrTags = tags.Split(',');
 
+				if (Array.IndexOf(arrTags, TagToRemove) > -1)
+				{
+					arrTags = arrTags.Select(t => t.Remove(Array.IndexOf(arrTags, TagToRemove))).ToArray();
+					this.Labels = EncryptDecrypt.Encrypt(String.Join(",", arrTags).Trim(','));
+					bTagReplaced = true;
+				}
+			}
 			return bTagReplaced;
 		}
 
 		public bool ReplaceTag(string oldTag, string newTag)
 		{
-			string[] arrTags = this.ClearTags().Split(',');
+			string tags = this.ClearTags();
 			bool bTagReplaced = false;
 
-			if(Array.IndexOf(arrTags, oldTag) > -1)
+			if(tags.Length > 0)
 			{
-				arrTags = arrTags.Select(t => t.Replace(oldTag, newTag)).ToArray();
-				//string allTags = String.Join(",", arrTags);
-				this.Labels = EncryptDecrypt.Encrypt(String.Join(",", arrTags));
-				bTagReplaced = true;
-			}
+				string[] arrTags = tags.Split(',');
 
+				if(Array.IndexOf(arrTags, oldTag) > -1)
+				{
+					arrTags = arrTags.Select(t => t.Replace(oldTag, newTag)).ToArray();
+					string finalTagsString = String.Join(",", arrTags).Trim(',').Replace(",,", ",");
+					this.Labels = finalTagsString.Length > 2 ? EncryptDecrypt.Encrypt(finalTagsString) : string.Empty;
+					bTagReplaced = true;
+				}
+			}
 			return bTagReplaced;
 			
 			//// bracket oldTags with commas so we're sure to get the exact oldtag instead of possibly a tag with <oldTag> in the tag name

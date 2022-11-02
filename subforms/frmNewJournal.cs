@@ -4,21 +4,20 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using myJournal.objects;
 
 namespace myJournal.subforms
 {
 	public partial class frmNewJournal : Form
 	{
 		public string sJournalName;
-		public string sPIN;
 
 		public frmNewJournal()
 		{ 
 			InitializeComponent();
 		}
 
-		private void frmNewJournal_Load(object sender, EventArgs e)
-		{ grp1.Location = new Point((this.Width / 2) - (grp1.Width / 2), 25); }
+		private void frmNewJournal_Load(object sender, EventArgs e) { this.Size = this.MinimumSize; }
 
 		private void frmNewJournal_Activated(object sender, EventArgs e) { txtName.Focus(); }
 
@@ -28,7 +27,6 @@ namespace myJournal.subforms
 			{
 				e.Cancel = true;
 				sJournalName = txtName.Text;
-				sPIN = txtPIN.Text;
 				this.Hide();
 			}
 		}
@@ -42,12 +40,8 @@ namespace myJournal.subforms
 
 		private void btnOk_Click(object sender, EventArgs e)
 		{
-			if (txtPIN.Text.Length > 0 | txtName.Text.Length > 0)
-			{
-				sJournalName = txtName.Text;
-				sPIN = txtPIN.Text;
-				Program.PIN = txtPIN.Text;
-			}
+			sJournalName = txtName.Text.Length > 0 ? txtName.Text : string.Empty;
+			Program.PIN = txtPIN.Text;
 			this.Hide();
 		}
 
@@ -57,9 +51,18 @@ namespace myJournal.subforms
 			lblShowPIN.Text = lblShowPIN.Text == "show" ? "hide" : "show";
 		}
 
-		private void txtPIN_TextChanged(object sender, EventArgs e)
+		private void txtPIN_TextChanged(object sender, EventArgs e) { lblShowPIN.Visible = txtPIN.Text.Length > 0; }
+
+		private void txtName_TextChanged(object sender, EventArgs e)
 		{
-			lblShowPIN.Visible = txtPIN.Text.Length > 0;
+			if (txtName.Text.Contains("|"))
+			{
+				Utilities.ShowMessage("Sorry, for operational reasons Journal names may not contain the '|' symbol.", this);
+				txtName.Text = txtName.Text.Replace("|", "");
+				txtName.SelectionStart = txtName.Text.Length;
+				txtName.Focus();
+			}
+
 		}
 	}
 }

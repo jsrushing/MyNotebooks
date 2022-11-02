@@ -9,6 +9,7 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using System.Linq;
+using myJournal.subforms;
 
 namespace myJournal.objects
 {
@@ -201,6 +202,14 @@ namespace myJournal.objects
 			}
 
 			return entryRtrn;
+		}
+
+		public static void ShowMessage(string message, Form parentForm)
+		{
+			frmMessage frm = new frmMessage(frmMessage.OperationType.Message, message);
+			Showform(frm, parentForm);
+			frm.Close();
+			parentForm.Show();
 		}
 	}
 }

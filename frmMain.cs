@@ -338,7 +338,6 @@ namespace myJournal.subforms
 		{
 			frmNewJournal frm = new frmNewJournal();
 			Utilities.Showform(frm, this);
-			Program.PIN = frm.sPIN == null ? string.Empty : frm.sPIN;
 			string name = frm.sJournalName == null ? string.Empty : frm.sJournalName;
 			frm.Close();
 
@@ -370,9 +369,7 @@ namespace myJournal.subforms
 		{
 			currentJournal.Backup_Forced();
 			string sMsg = currentJournal.backupCompleted ? "The backup was completed" : "An error occurred. The backup was not completed.";
-			frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg);
-			Utilities.Showform(frm, this);
-			this.Show();
+			Utilities.ShowMessage(sMsg, this);
 		}
 
 		private void mnuJournal_Rename_Click(object sender, EventArgs e)
