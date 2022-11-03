@@ -64,56 +64,75 @@ namespace myJournal
 			Title = newEntry.Title;
 		}
 
-		public bool RemoveTag(string TagToRemove)
+		public bool RemoveOrReplaceTag(string newTagName, string oldTagName, bool renaming = true)
 		{
 			string tags = this.ClearTags();
-			bool bTagReplaced = false;
+			bool bTagEdited = false;
 
-			if(tags.Length > 0)
+			if (tags.Length > 0)
 			{
-				string[] arrTags = tags.Split(',');
+				List<string> arrTags = tags.Split(',').ToList();
+				int iTagIndex = arrTags.IndexOf(oldTagName);	// Array.IndexOf(arrTags, oldTagName);
 
-				if (Array.IndexOf(arrTags, TagToRemove) > -1)
+				if (iTagIndex > -1)
 				{
-					arrTags = arrTags.Select(t => t.Remove(Array.IndexOf(arrTags, TagToRemove))).ToArray();
-					this.Labels = EncryptDecrypt.Encrypt(String.Join(",", arrTags).Trim(','));
-					bTagReplaced = true;
+					if (renaming)
+					{
+						arrTags.RemoveAt(iTagIndex);
+						arrTags.Insert(iTagIndex, newTagName);
+					}
+					else
+					{
+						arrTags.RemoveAt(iTagIndex);
+					}
+
+					string finalTagsString = String.Join(",", arrTags).Trim(',').Replace(",,", "");
+					this.Labels = finalTagsString.Length > 0 ? EncryptDecrypt.Encrypt(finalTagsString) : string.Empty;
+					bTagEdited = true;
 				}
 			}
-			return bTagReplaced;
+			return bTagEdited;
 		}
 
-		public bool ReplaceTag(string oldTag, string newTag)
-		{
-			string tags = this.ClearTags();
-			bool bTagReplaced = false;
+		//public bool RemoveTag(string TagToRemove)
+		//{
+		//	string tags = this.ClearTags();
+		//	bool bTagRemoved = false;
 
-			if(tags.Length > 0)
-			{
-				string[] arrTags = tags.Split(',');
+		//	if(tags.Length > 0)
+		//	{
+		//		string[] arrTags = tags.Split(',');
 
-				if(Array.IndexOf(arrTags, oldTag) > -1)
-				{
-					arrTags = arrTags.Select(t => t.Replace(oldTag, newTag)).ToArray();
-					string finalTagsString = String.Join(",", arrTags).Trim(',').Replace(",,", ",");
-					this.Labels = finalTagsString.Length > 2 ? EncryptDecrypt.Encrypt(finalTagsString) : string.Empty;
-					bTagReplaced = true;
-				}
-			}
-			return bTagReplaced;
-			
-			//// bracket oldTags with commas so we're sure to get the exact oldtag instead of possibly a tag with <oldTag> in the tag name
-			//string sEntryTagsWithCommas = "," + this.ClearTags() + ",";
+		//		if (Array.IndexOf(arrTags, TagToRemove) > -1)
+		//		{
+		//			arrTags = arrTags.Select(t => t.Remove(Array.IndexOf(arrTags, TagToRemove))).ToArray();
+		//			string finalTagsString = String.Join(",", arrTags).Trim(',').Replace(",,", "");
+		//			this.Labels = finalTagsString.Length > 0 ? EncryptDecrypt.Encrypt(finalTagsString) : string.Empty;
+		//			bTagRemoved = true;
+		//		}
+		//	}
+		//	return bTagRemoved;
+		//}
 
-			//// if the old tag is found BRACKETED BY COMMAS, replace it. If not then leave sNewClearTags blank.
-			//string sNewClearTags = sEntryTagsWithCommas.Contains("," + oldTag + ",") ? sEntryTagsWithCommas.Replace(oldTag, newTag) : string.Empty;
+		//public bool ReplaceTag(string oldTag, string newTag)
+		//{
+		//	string tags = this.ClearTags();
+		//	bool bTagReplaced = false;
 
-			//// remove any trailing and leading commas
-			//while (sNewClearTags.StartsWith(',') | sNewClearTags.EndsWith(',')) { sNewClearTags = sNewClearTags.Trim(','); }
+		//	if(tags.Length > 0)
+		//	{
+		//		string[] arrTags = tags.Split(',');
 
-			//if (sNewClearTags.Length > 0) { Labels = EncryptDecrypt.Encrypt(sNewClearTags); }
-			//return sNewClearTags.Length > 0;
-		}
+		//		if(Array.IndexOf(arrTags, oldTag) > -1)
+		//		{
+		//			arrTags = arrTags.Select(t => t.Replace(oldTag, newTag)).ToArray();
+		//			string finalTagsString = String.Join(",", arrTags).Trim(',').Replace(",,", ",");
+		//			this.Labels = finalTagsString.Length > 0 ? EncryptDecrypt.Encrypt(finalTagsString) : string.Empty;
+		//			bTagReplaced = true;
+		//		}
+		//	}
+		//	return bTagReplaced;
+		//}
 
 		public string ClearText()	{ return EncryptDecrypt.Decrypt(Text); }
 		public string ClearTitle()	{ return EncryptDecrypt.Decrypt(Title); }

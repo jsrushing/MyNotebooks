@@ -52,7 +52,10 @@ namespace myJournal.subforms
 		}
 
 		private void frmManageLabels_Resize(object sender, EventArgs e)
-		{ if (this.Width > this.MinimumSize.Width) { this.Width = this.MinimumSize.Width; } }
+		{ 
+			if (this.Width > this.MinimumSize.Width) { this.Width = this.MinimumSize.Width; }; 
+			ShowHideOccurrences();		
+		}
 
 		private void AddLabel()
 		{
@@ -98,19 +101,16 @@ namespace myJournal.subforms
 			{
 				bool proceed = true;
 
-				if (Renaming)
-				{
-					frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Are you sure you want to " +
-						"rename '" + lstLabels.SelectedItem.ToString() + "'?");
+				//frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Are you sure you want to " +
+				//	(Renaming ? "rename" : "delete") + "'" + lstLabels.SelectedItem.ToString() + " in " + (EditingAllJournals ? "all journals" : CurrentJournal.Name) + "'?");
+				 
+				//Utilities.Showform(frm, this);
+				//proceed = frm.result == frmMessage.ReturnResult.Yes;
+				//frm.Close();
+				//this.Show();
 
-					Utilities.Showform(frm, this);
-					proceed = frm.result == frmMessage.ReturnResult.Yes;
-					frm.Close();
-					this.Show();
-				}
-
-				if (proceed)
-				{
+				//if (proceed)
+				//{
 					List<Journal> journalsToEdit = EditingAllJournals ? Utilities.AllJournals() : new List<Journal>();
 
 					if (journalsToEdit.Count == 0) { journalsToEdit.Add(CurrentJournal); } // would be at least 1 if 'All Journals' was clicked
@@ -125,7 +125,8 @@ namespace myJournal.subforms
 						{
 							foreach (JournalEntry je in lstEntryHasOldTag)
 							{
-								bEdited = Renaming ? je.ReplaceTag(sOldTagName, txtLabelName.Text) : je.RemoveTag(sOldTagName);
+								// bEdited = Renaming ? je.ReplaceTag(sOldTagName, txtLabelName.Text) : je.RemoveTag(sOldTagName);
+								bEdited = je.RemoveOrReplaceTag(txtLabelName.Text, sOldTagName, Renaming);	
 								if (bEdited) { jrnl.Save(); }
 							}
 						}
@@ -146,9 +147,14 @@ namespace myJournal.subforms
 							}
 							else { AddLabel(); }    // the old label might exist in other entries, so add the new label only to the Labels file
 						}
-						else    // It was a delete. Global by default. No instances exist so just remove from list.
+						else    // It was a delete. If label exists in any journal, leave in list, otherwise remove from list.
 						{
-							lstLabels.Items.RemoveAt(lstLabels.SelectedIndex);
+							if (!LabelExistsInAnyJournal(txtLabelName.Text)) 
+							{ 
+								lstLabels.Items.RemoveAt(lstLabels.SelectedIndex);
+								lstOccurrences.Items.Clear();
+								ShowHideOccurrences();
+							}
 						}
 
 						SaveLabels();
@@ -162,7 +168,7 @@ namespace myJournal.subforms
 					txtLabelName.Text = string.Empty;
 					pnlNewLabelName.Visible = false;
 					PopulateOccurrences();
-				}
+				//}
 			}
 		}
 
@@ -179,6 +185,19 @@ namespace myJournal.subforms
 			string sJrnlPin = lstJournalPINs.Items.OfType<string>().ToArray().Single(x => x.StartsWith(journal.Name));
 			sPIN = sJrnlPin.Contains("|") ? sJrnlPin.Substring(sJrnlPin.IndexOf("|") + 1) : string.Empty;
 			Program.PIN = sPIN;
+		}
+
+		private bool LabelExistsInAnyJournal(string labelName)
+		{
+			foreach (Journal jrnl in Utilities.AllJournals())
+			{
+				SetProgramPINForSelectedJournal(jrnl);
+				if(jrnl.Entries.Where(t => ("," + t.ClearTags() + ",").Contains("," + labelName + ",")).ToList().Count > 0)
+				{
+					return true;
+				}	
+			}
+			return false;
 		}
 
 		private void lstJournalPINs_SelectedIndexChanged(object sender, EventArgs e)
@@ -303,11 +322,13 @@ namespace myJournal.subforms
 							foreach (JournalEntry je in foundItems) { lstOccurrences.Items.Add("   > " + je.ClearTitle()); }
 							lstOccurrences.Items.Add("-----------------------");
 						}
+
+						if (lstOccurrences.Items.Count == 0) { lstOccurrences.Items.Add("No occurrences found"); }
 					}	
 				}
 			}
+			else { lstOccurrences.Items.Clear(); }
 
-			if (lstOccurrences.Items.Count == 0) { lstOccurrences.Items.Add("No occurrences found"); }
 			ShowHideOccurrences();
 			ShowHideInCurrentJournalMenus();
 			this.Cursor = Cursors.Default;
@@ -334,7 +355,6 @@ namespace myJournal.subforms
 			if (lstOccurrences.Items.Count > 0)
 			{ lstLabels.Height = pnlMain.Height - lstOccurrences.Height - 45; }
 			else { lstLabels.Height = pnlMain.Height - 25; }
-
 		}
 
 		private void txtPIN_KeyUp(object sender, KeyEventArgs e) { if(e.KeyCode == Keys.Enter) { btnAddPIN_Click(null, null); } }

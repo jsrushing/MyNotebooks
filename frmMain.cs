@@ -517,5 +517,9 @@ namespace myJournal.subforms
 			}
 		}
 
+		private void ddlJournals_Click(object sender, EventArgs e)
+		{
+			ddlJournals.DroppedDown = true;
+		}
 	}
 }

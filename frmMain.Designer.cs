@@ -53,6 +53,7 @@ namespace myJournal.subforms
 			this.mnuPreserveOriginalText = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuDiscardOriginalText = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEntryDelete = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuLabels = new System.Windows.Forms.ToolStripMenuItem();
 			this.lblWrongPin = new System.Windows.Forms.Label();
 			this.lblEntries = new System.Windows.Forms.Label();
 			this.lblShowPIN = new System.Windows.Forms.Label();
@@ -61,7 +62,6 @@ namespace myJournal.subforms
 			this.pnlDateFilters = new System.Windows.Forms.Panel();
 			this.label3 = new System.Windows.Forms.Label();
 			this.cbxDatesTo = new System.Windows.Forms.ComboBox();
-			this.mnuLabels = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.pnlDateFilters.SuspendLayout();
 			this.SuspendLayout();
@@ -117,6 +117,7 @@ namespace myJournal.subforms
 			this.ddlJournals.Size = new System.Drawing.Size(939, 23);
 			this.ddlJournals.TabIndex = 1;
 			this.ddlJournals.SelectedIndexChanged += new System.EventHandler(this.ddlJournals_SelectedIndexChanged);
+			this.ddlJournals.Click += new System.EventHandler(this.ddlJournals_Click);
 			// 
 			// label1
 			// 
@@ -295,6 +296,13 @@ namespace myJournal.subforms
 			this.mnuEntryDelete.Text = "Delete";
 			this.mnuEntryDelete.Click += new System.EventHandler(this.mnuEntryDelete_Click);
 			// 
+			// mnuLabels
+			// 
+			this.mnuLabels.Name = "mnuLabels";
+			this.mnuLabels.Size = new System.Drawing.Size(52, 20);
+			this.mnuLabels.Text = "Labels";
+			this.mnuLabels.Click += new System.EventHandler(this.mnuLabels_Click);
+			// 
 			// lblWrongPin
 			// 
 			this.lblWrongPin.AutoSize = true;
@@ -377,13 +385,6 @@ namespace myJournal.subforms
 			this.cbxDatesTo.Size = new System.Drawing.Size(86, 23);
 			this.cbxDatesTo.TabIndex = 45;
 			this.cbxDatesTo.SelectedIndexChanged += new System.EventHandler(this.cbxDates_SelectedIndexChanged);
-			// 
-			// mnuLabels
-			// 
-			this.mnuLabels.Name = "mnuLabels";
-			this.mnuLabels.Size = new System.Drawing.Size(52, 20);
-			this.mnuLabels.Text = "Labels";
-			this.mnuLabels.Click += new System.EventHandler(this.mnuLabels_Click);
 			// 
 			// frmMain
 			// 
