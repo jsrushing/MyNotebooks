@@ -174,6 +174,7 @@ namespace myJournal.subforms
 			this.lstOccurrences.Name = "lstOccurrences";
 			this.lstOccurrences.Size = new System.Drawing.Size(316, 208);
 			this.lstOccurrences.TabIndex = 3;
+			this.lstOccurrences.DoubleClick += new System.EventHandler(this.lstOccurrences_DoubleClick);
 			// 
 			// label1
 			// 

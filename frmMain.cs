@@ -418,6 +418,7 @@ namespace myJournal.subforms
 			frm.Close();
 			this.Show();
 		}
+
 		private void rtbSelectedEntry_MouseDown(object sender, MouseEventArgs e)
 		{
 			lstEntries.Focus();
