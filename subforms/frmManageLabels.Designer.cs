@@ -145,9 +145,8 @@ namespace myJournal.subforms
 			// 
 			// lstLabels
 			// 
-			this.lstLabels.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
 			this.lstLabels.FormattingEnabled = true;
+			this.lstLabels.IntegralHeight = false;
 			this.lstLabels.ItemHeight = 15;
 			this.lstLabels.Location = new System.Drawing.Point(9, 23);
 			this.lstLabels.Name = "lstLabels";
@@ -166,14 +165,14 @@ namespace myJournal.subforms
 			// 
 			// lstOccurrences
 			// 
-			this.lstOccurrences.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.lstOccurrences.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
 			this.lstOccurrences.FormattingEnabled = true;
+			this.lstOccurrences.IntegralHeight = false;
 			this.lstOccurrences.ItemHeight = 15;
 			this.lstOccurrences.Location = new System.Drawing.Point(9, 227);
 			this.lstOccurrences.Name = "lstOccurrences";
-			this.lstOccurrences.Size = new System.Drawing.Size(316, 214);
+			this.lstOccurrences.Size = new System.Drawing.Size(316, 208);
 			this.lstOccurrences.TabIndex = 3;
 			// 
 			// label1
@@ -241,18 +240,19 @@ namespace myJournal.subforms
 			this.mnuMoveTop.Name = "mnuMoveTop";
 			this.mnuMoveTop.Size = new System.Drawing.Size(49, 20);
 			this.mnuMoveTop.Text = "&Move";
+			this.mnuMoveTop.Visible = false;
 			// 
 			// mnuMoveUp
 			// 
 			this.mnuMoveUp.Name = "mnuMoveUp";
-			this.mnuMoveUp.Size = new System.Drawing.Size(105, 22);
+			this.mnuMoveUp.Size = new System.Drawing.Size(180, 22);
 			this.mnuMoveUp.Text = "&Up";
 			this.mnuMoveUp.Click += new System.EventHandler(this.mnuMoveUp_Click);
 			// 
 			// mnuMoveDown
 			// 
 			this.mnuMoveDown.Name = "mnuMoveDown";
-			this.mnuMoveDown.Size = new System.Drawing.Size(105, 22);
+			this.mnuMoveDown.Size = new System.Drawing.Size(180, 22);
 			this.mnuMoveDown.Text = "D&own";
 			this.mnuMoveDown.Click += new System.EventHandler(this.mnuMoveDown_Click);
 			// 

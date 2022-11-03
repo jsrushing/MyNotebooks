@@ -51,9 +51,13 @@ namespace myJournal.subforms
 			foreach (Journal j in Utilities.AllJournals()) { lstJournalPINs.Items.Add(j.Name); }
 		}
 
+		private void frmManageLabels_ResizeBegin(object sender, EventArgs e)
+		{
+		}
+
 		private void frmManageLabels_Resize(object sender, EventArgs e)
 		{ 
-			if (this.Width > this.MinimumSize.Width) { this.Width = this.MinimumSize.Width; }; 
+			if (this.Width > this.MinimumSize.Width) { this.Width = this.MinimumSize.Width; };
 			ShowHideOccurrences();		
 		}
 
@@ -323,8 +327,9 @@ namespace myJournal.subforms
 							lstOccurrences.Items.Add("-----------------------");
 						}
 
-						if (lstOccurrences.Items.Count == 0) { lstOccurrences.Items.Add("No occurrences found"); }
-					}	
+					}
+					
+					if (lstOccurrences.Items.Count == 0) { lstOccurrences.Items.Add("No occurrences found"); }
 				}
 			}
 			else { lstOccurrences.Items.Clear(); }
@@ -353,8 +358,8 @@ namespace myJournal.subforms
 		private void ShowHideOccurrences()
 		{
 			if (lstOccurrences.Items.Count > 0)
-			{ lstLabels.Height = pnlMain.Height - lstOccurrences.Height - 45; }
-			else { lstLabels.Height = pnlMain.Height - 25; }
+			{ lstLabels.Height = 184; }
+			else { lstLabels.Height = pnlMain.Height - 30; }
 		}
 
 		private void txtPIN_KeyUp(object sender, KeyEventArgs e) { if(e.KeyCode == Keys.Enter) { btnAddPIN_Click(null, null); } }
