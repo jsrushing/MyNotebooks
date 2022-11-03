@@ -180,9 +180,9 @@ namespace myJournal.subforms
 			this.label1.AutoSize = true;
 			this.label1.Location = new System.Drawing.Point(4, 6);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(43, 15);
+			this.label1.Size = new System.Drawing.Size(176, 15);
 			this.label1.TabIndex = 1;
-			this.label1.Text = "Labels:";
+			this.label1.Text = "Labels (click to see occurrences)";
 			// 
 			// mnuMain
 			// 
@@ -245,14 +245,14 @@ namespace myJournal.subforms
 			// mnuMoveUp
 			// 
 			this.mnuMoveUp.Name = "mnuMoveUp";
-			this.mnuMoveUp.Size = new System.Drawing.Size(180, 22);
+			this.mnuMoveUp.Size = new System.Drawing.Size(105, 22);
 			this.mnuMoveUp.Text = "&Up";
 			this.mnuMoveUp.Click += new System.EventHandler(this.mnuMoveUp_Click);
 			// 
 			// mnuMoveDown
 			// 
 			this.mnuMoveDown.Name = "mnuMoveDown";
-			this.mnuMoveDown.Size = new System.Drawing.Size(180, 22);
+			this.mnuMoveDown.Size = new System.Drawing.Size(105, 22);
 			this.mnuMoveDown.Text = "D&own";
 			this.mnuMoveDown.Click += new System.EventHandler(this.mnuMoveDown_Click);
 			// 

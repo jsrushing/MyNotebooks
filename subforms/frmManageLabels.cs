@@ -147,7 +147,6 @@ namespace myJournal.subforms
 									lstLabels.Items.Insert(lstLabels.SelectedIndex, txtLabelName.Text); 
 									lstLabels.Items.RemoveAt(lstLabels.SelectedIndex);
 								}
-
 							}
 							else { AddLabel(); }    // the old label might exist in other entries, so add the new label only to the Labels file
 						}
