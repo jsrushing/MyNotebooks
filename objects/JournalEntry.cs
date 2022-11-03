@@ -41,7 +41,7 @@ namespace myJournal
 		string GetTextDisplayText()
 		{
 			return String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
-				, ClearTitle(), Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), ClearTags(), ClearText());
+				, ClearTitle(), Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), ClearTags().Replace(",", ", "), ClearText());
 		}
 
 		string[] GetSynopsis()
@@ -52,7 +52,7 @@ namespace myJournal
 			string sEntryText = ClearText();
 			sEntryText = (sEntryText.Length < iTextChunkLength ? sEntryText : sEntryText.Substring(0, iTextChunkLength) + " ...");
 			sRtrn[1] = sEntryText;
-			sRtrn[2] = "labels: " + ClearTags();
+			sRtrn[2] = "labels: " + ClearTags().Replace(",", ", ");
 			sRtrn[3] = "---------------------";
 			return sRtrn;
 		}

@@ -29,14 +29,17 @@ namespace myJournal.subforms
 			if(_jrnl != null)
 			{
 				CurrentJournal = _jrnl;
-				mnuRename_InCurrentJournal.Text = "In " + CurrentJournal.Name + " only";
+				mnuRename_InCurrentJournal.Text = "In '" + CurrentJournal.Name + "'";
+				mnuDelete_InCurrentJournal.Text = "In '" + CurrentJournal.Name + "'";
 			}
-			else { mnuRename_InCurrentJournal.Visible = false; }
+			else { mnuRename_InCurrentJournal.Visible = false; mnuDelete_InCurrentJournal.Visible = false; }
 		}
 
 		private void frmManageLabels_Load(object sender, EventArgs e)
 		{
 			Utilities.PopulateLabelsList(null, lstLabels);
+			lstLabels.Sorted = true;
+			lstJournalPINs.Sorted = true;
 			this.Size = this.MinimumSize;
 			pnlNewLabelName.Location = new Point(0, 0);
 			pnlNewLabelName.Size = this.Size;
@@ -44,9 +47,12 @@ namespace myJournal.subforms
 			pnlJournalPINs.Visible = true;
 			pnlMain.Visible = false;
 			mnuMain.Visible = false;
-			lstLabels.Height = lstLabels.Height + lstOccurrences.Height + 35;
+			ShowHideOccurrences();
 			foreach (Journal j in Utilities.AllJournals()) { lstJournalPINs.Items.Add(j.Name); }
 		}
+
+		private void frmManageLabels_Resize(object sender, EventArgs e)
+		{ if (this.Width > this.MinimumSize.Width) { this.Width = this.MinimumSize.Width; } }
 
 		private void AddLabel()
 		{
@@ -78,56 +84,86 @@ namespace myJournal.subforms
 			string sOldTagName = lstLabels.SelectedItem != null ? lstLabels.SelectedItem.ToString() : string.Empty;
 			bool bEdited = true;
 
-			if (Adding) { AddLabel(); SaveLabels(); Utilities.PopulateLabelsList(null, lstLabels); }
+			if (Adding) 
+			{ 
+				AddLabel(); 
+				SaveLabels(); 
+				pnlNewLabelName.Visible = false;
+				Utilities.PopulateLabelsList(null, lstLabels);
+				lstOccurrences.Items.Clear();
+				ShowHideOccurrences();
+			}
 
 			if (Renaming | Deleting)
 			{
-				List<Journal> journalsToEdit = EditingAllJournals ? Utilities.AllJournals() :  new List<Journal>();
+				bool proceed = true;
 
-				if (journalsToEdit.Count == 0) { journalsToEdit.Add(CurrentJournal); } // would be at least 1 if 'All Journals' was clicked
-
-				foreach (Journal jrnl in journalsToEdit)
+				if (Renaming)
 				{
-					SetPINForJournal(jrnl);
-					
-					List<JournalEntry> lstEntryHasOldTag = jrnl.Entries.Where(t => ("," + t.ClearTags() + ",").Contains("," + sOldTagName + ",")).ToList();
+					frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Are you sure you want to " +
+						"rename '" + lstLabels.SelectedItem.ToString() + "'?");
 
-					if (lstEntryHasOldTag.Count > 0)
-					{
-						foreach (JournalEntry je in lstEntryHasOldTag)
-						{
-							bEdited = Renaming ? je.ReplaceTag(sOldTagName, txtLabelName.Text) : je.RemoveTag(sOldTagName);
-							if (bEdited) { jrnl.Save(); }
-						}
-					}
+					Utilities.Showform(frm, this);
+					proceed = frm.result == frmMessage.ReturnResult.Yes;
+					frm.Close();
+					this.Show();
 				}
 
-				if (bEdited) 
+				if (proceed)
 				{
-					if (Renaming)
+					List<Journal> journalsToEdit = EditingAllJournals ? Utilities.AllJournals() : new List<Journal>();
+
+					if (journalsToEdit.Count == 0) { journalsToEdit.Add(CurrentJournal); } // would be at least 1 if 'All Journals' was clicked
+
+					foreach (Journal jrnl in journalsToEdit)
 					{
-						if (EditingAllJournals)	// it was a global change - the old label doesn't exist in any entry in any journal so remove it from the Labels file
+						SetProgramPINForSelectedJournal(jrnl);
+
+						List<JournalEntry> lstEntryHasOldTag = jrnl.Entries.Where(t => ("," + t.ClearTags() + ",").Contains("," + sOldTagName + ",")).ToList();
+
+						if (lstEntryHasOldTag.Count > 0)
 						{
-							lstLabels.Items.Insert(lstLabels.SelectedIndex, txtLabelName.Text);
+							foreach (JournalEntry je in lstEntryHasOldTag)
+							{
+								bEdited = Renaming ? je.ReplaceTag(sOldTagName, txtLabelName.Text) : je.RemoveTag(sOldTagName);
+								if (bEdited) { jrnl.Save(); }
+							}
+						}
+					}
+
+					if (bEdited)
+					{
+						if (Renaming)
+						{
+							if (EditingAllJournals) // it was a global change - the old label doesn't exist in any entry in any journal so remove it from the Labels file
+							{
+								if (!lstLabels.Items.Contains(txtLabelName.Text))
+								{ 
+									lstLabels.Items.Insert(lstLabels.SelectedIndex, txtLabelName.Text); 
+									lstLabels.Items.RemoveAt(lstLabels.SelectedIndex);
+								}
+
+							}
+							else { AddLabel(); }    // the old label might exist in other entries, so add the new label only to the Labels file
+						}
+						else    // It was a delete. Global by default. No instances exist so just remove from list.
+						{
 							lstLabels.Items.RemoveAt(lstLabels.SelectedIndex);
 						}
-						else { AddLabel(); }    // the old label might exist in other entries, so add the new label only to the Labels file
+
+						SaveLabels();
 					}
-					else	// It was a delete. Global by default. No instances exist so just remove from list.
-					{
-						lstLabels.Items.RemoveAt(lstLabels.SelectedIndex);
-					}
+
+					ActionTaken = bEdited;
+					Adding = false;
+					Deleting = false;
+					Renaming = false;
+					txtLabelName.Enabled = true;
+					txtLabelName.Text = string.Empty;
+					pnlNewLabelName.Visible = false;
+					PopulateOccurrences();
 				}
 			}
-
-			if (bEdited) SaveLabels();
-			ActionTaken = bEdited;
-			Adding = false;
-			Deleting = false;
-			Renaming = false;
-			txtLabelName.Enabled = true;
-			txtLabelName.Text = string.Empty;
-			pnlNewLabelName.Visible = false;
 		}
 
 		private void btnPINsOK_Click(object sender, EventArgs e)
@@ -137,7 +173,7 @@ namespace myJournal.subforms
 			mnuMain.Visible = true;
 		}
 
-		private void SetPINForJournal(Journal journal)
+		private void SetProgramPINForSelectedJournal(Journal journal)
 		{
 			string sPIN = string.Empty;
 			string sJrnlPin = lstJournalPINs.Items.OfType<string>().ToArray().Single(x => x.StartsWith(journal.Name));
@@ -147,20 +183,27 @@ namespace myJournal.subforms
 
 		private void lstJournalPINs_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			txtPIN.Text = string.Empty;
-			txtPIN.Enabled = true;
-			btnAddPIN.Enabled = true;
-			txtPIN.Focus();
+			if(lstJournalPINs.SelectedIndex > -1)
+			{
+				txtPIN.Text = string.Empty;
+				txtPIN.Enabled = true;
+				btnAddPIN.Enabled = true;
+				txtPIN.Focus();
+			}
 		}
 
 		private void lstLabels_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			mnuRename.Enabled = true;
-			mnuDelete.Enabled = true;
-			mnuMoveTop.Enabled = true;
-			mnuMoveUp.Enabled = lstLabels.SelectedIndex > 0;
-			mnuMoveDown.Enabled = lstLabels.SelectedIndex != lstLabels.Items.Count - 1;
-			lstOccurrences.Items.Clear();
+			if(lstLabels.SelectedIndex > -1)
+			{
+				mnuRename.Enabled = true;
+				mnuDelete.Enabled = true;
+				mnuMoveTop.Enabled = true;
+				mnuMoveUp.Enabled = lstLabels.SelectedIndex > 0;
+				mnuMoveDown.Enabled = lstLabels.SelectedIndex != lstLabels.Items.Count - 1;
+				lstOccurrences.Items.Clear();
+				mnuFindAll_Click(null, null);
+			}
 		}
 
 		private void mnuAdd_Click(object sender, EventArgs e)
@@ -169,6 +212,7 @@ namespace myJournal.subforms
 			lblOperation.Text = "Label Name:";
 			pnlNewLabelName.Visible = true;
 			txtLabelName.Focus();
+			this.AcceptButton = btnOK;
 		}
 
 		private void mnuAssignPINs_Click(object sender, EventArgs e)
@@ -178,16 +222,19 @@ namespace myJournal.subforms
 
 			if(lstJournalPINs.Items.Count == 0)
 			{ foreach(Journal j in Utilities.AllJournals()) { lstJournalPINs.Items.Add(j.Name); } }
+
+			this.Size = this.MinimumSize;
 		}
 
 		private void mnuDelete_Click(object sender, EventArgs e)
 		{
 			Deleting = true;
-			EditingAllJournals = true;
-			lblOperation.Text = "Delete Label? ";
+			EditingAllJournals = ((ToolStripMenuItem)sender).Text.ToLower().StartsWith("in all");
+			lblOperation.Text = "Delete this label in " + (EditingAllJournals ? "all journals" : "'" + this.CurrentJournal.Name) + "'?";
 			pnlNewLabelName.Visible = true;
 			txtLabelName.Text = lstLabels.SelectedItem.ToString();
 			txtLabelName.Enabled = false;
+			btnCancel.Focus();
 		}
 
 		private void mnuExit_Click(object sender, EventArgs e)
@@ -198,7 +245,7 @@ namespace myJournal.subforms
 		private void mnuFindAll_Click(object sender, EventArgs e)
 		{
 			PopulateOccurrences();
-			lstLabels.Height = lstLabels.Height > lstOccurrences.Top ? lstLabels.Height = lstLabels.Height - lstOccurrences.Height - 30  : lstLabels.Height;
+			this.FormBorderStyle = FormBorderStyle.Sizable;
 		}
 
 		private void mnuMoveUp_Click(object sender, EventArgs e)
@@ -226,35 +273,43 @@ namespace myJournal.subforms
 			lblOperation.Text = "New Label Name:";
 			txtLabelName.Text = lstLabels.SelectedItem.ToString();
 			pnlNewLabelName.Visible = true;
+			txtLabelName.Visible = true;
 			txtLabelName.Focus();
 			txtLabelName.SelectAll();
+			this.AcceptButton = btnOK;
 		}
 
 		private void PopulateOccurrences()
 		{
-			string sTagName = lstLabels.SelectedItem.ToString();
-			lstOccurrences.Items.Clear();
-			this.Cursor = Cursors.WaitCursor;
-			List<JournalEntry> foundItems_Loop = new List<JournalEntry>();
-			List<JournalEntry> foundItems;
-			string sPIN = string.Empty;
-
-			if (sTagName.Length > 0)
+			if(lstLabels.SelectedItem != null)
 			{
-				foreach(Journal jrnl in Utilities.AllJournals())
-				{
-					SetPINForJournal(jrnl);
-					foundItems = jrnl.Entries.Where(t => ("," + t.ClearTags() + ",").Contains("," + sTagName + ",")).ToList();
+				string sTagName = lstLabels.SelectedItem.ToString();
+				lstOccurrences.Items.Clear();
+				this.Cursor = Cursors.WaitCursor;
+				List<JournalEntry> foundItems_Loop = new List<JournalEntry>();
+				List<JournalEntry> foundItems;
+				string sPIN = string.Empty;
 
-					if (foundItems.Count > 0)
+				if (sTagName.Length > 0)
+				{
+					foreach(Journal jrnl in Utilities.AllJournals())
 					{
-						lstOccurrences.Items.Add("in '" + jrnl.Name + "'");
-						foreach (JournalEntry je in foundItems) { lstOccurrences.Items.Add("   > " + je.ClearTitle()); }
-						lstOccurrences.Items.Add("-----------------------");
-					}
+						SetProgramPINForSelectedJournal(jrnl);
+						foundItems = jrnl.Entries.Where(t => ("," + t.ClearTags() + ",").Contains("," + sTagName + ",")).ToList();
+
+						if (foundItems.Count > 0)
+						{
+							lstOccurrences.Items.Add("in '" + jrnl.Name + "'");
+							foreach (JournalEntry je in foundItems) { lstOccurrences.Items.Add("   > " + je.ClearTitle()); }
+							lstOccurrences.Items.Add("-----------------------");
+						}
+					}	
 				}
 			}
-			if(lstOccurrences.Items.Count == 0) { lstOccurrences.Items.Add("No occurrences found"); }
+
+			if (lstOccurrences.Items.Count == 0) { lstOccurrences.Items.Add("No occurrences found"); }
+			ShowHideOccurrences();
+			ShowHideInCurrentJournalMenus();
 			this.Cursor = Cursors.Default;
 		}
 
@@ -267,6 +322,27 @@ namespace myJournal.subforms
 			File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"], sb.ToString());
 		}
 
+		private void ShowHideInCurrentJournalMenus()
+		{
+			bool b = lstOccurrences.Items.Contains("in '" + (CurrentJournal == null ? "" : CurrentJournal.Name) + "'");
+			mnuDelete_InCurrentJournal.Visible = b;
+			mnuRename_InCurrentJournal.Visible = b;
+		}
+
+		private void ShowHideOccurrences()
+		{
+			if (lstOccurrences.Items.Count > 0)
+			{ lstLabels.Height = pnlMain.Height - lstOccurrences.Height - 45; }
+			else { lstLabels.Height = pnlMain.Height - 25; }
+
+		}
+
 		private void txtPIN_KeyUp(object sender, KeyEventArgs e) { if(e.KeyCode == Keys.Enter) { btnAddPIN_Click(null, null); } }
+
+		private void txtLabelName_TextChanged(object sender, EventArgs e)
+		{
+			btnOK.Visible = Deleting ? true : !lstLabels.Items.Contains(txtLabelName.Text.Trim()); 
+			lblTagExists.Visible = !btnOK.Visible; 
+		}
 	}
 }

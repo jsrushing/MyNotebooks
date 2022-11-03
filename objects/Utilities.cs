@@ -117,7 +117,7 @@ namespace myJournal.objects
 
 				for (int i = 0; i < lb.Items.Count; i++)
 				{
-					if (lb.Items[i].ToString().StartsWith(je.Synopsis[0].ToString()))	//  je.ClearTitle() + " (" + je.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"))
+					if (lb.Items[i].ToString().StartsWith(je.Synopsis[0].ToString()))
 					{
 						lb.SelectedIndices.Add(i);
 						lb.SelectedIndices.Add(i + 1); 
@@ -190,6 +190,7 @@ namespace myJournal.objects
 					}
 					
 					if (rtb.Text.Length == 0) { lb.TopIndex = lb.Top + lb.Height < rtb.Top ? ctr : lb.TopIndex; }
+
 					lb.Height = rtb.Text.Length > 0 ? rtb.Top - 132 : 100;
 
 					if (FirstSelection)

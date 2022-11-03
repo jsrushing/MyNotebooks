@@ -402,6 +402,22 @@ namespace myJournal.subforms
 			this.Show();
 		}
 
+		private void mnuLabels_Click(object sender, EventArgs e)
+		{
+			frmManageLabels frm = new frmManageLabels(this.currentJournal);
+			Utilities.Showform(frm, this);
+			
+			if (frm.ActionTaken)
+			{
+				//if(currentJournal != null)
+				//{ Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text, cbxDatesTo.Text); }
+				//else { LoadJournals(); }
+				LoadJournals();
+			}
+
+			frm.Close();
+			this.Show();
+		}
 		private void rtbSelectedEntry_MouseDown(object sender, MouseEventArgs e)
 		{
 			lstEntries.Focus();
@@ -501,13 +517,5 @@ namespace myJournal.subforms
 			}
 		}
 
-		private void mnuLabels_Click(object sender, EventArgs e)
-		{
-			frmManageLabels frm = new frmManageLabels(this.currentJournal);
-			Utilities.Showform(frm, this);
-			if (frm.ActionTaken && currentJournal != null) { Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text, cbxDatesTo.Text); }
-			frm.Close();
-			this.Show();
-		}
 	}
 }
