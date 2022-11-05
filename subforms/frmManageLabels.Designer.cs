@@ -159,9 +159,9 @@ namespace myJournal.subforms
 			this.label3.AutoSize = true;
 			this.label3.Location = new System.Drawing.Point(9, 210);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(193, 15);
+			this.label3.Size = new System.Drawing.Size(79, 15);
 			this.label3.TabIndex = 4;
-			this.label3.Text = "Found Entries (double-click to Edit)";
+			this.label3.Text = "Found Entries";
 			// 
 			// lstOccurrences
 			// 
@@ -174,7 +174,6 @@ namespace myJournal.subforms
 			this.lstOccurrences.Name = "lstOccurrences";
 			this.lstOccurrences.Size = new System.Drawing.Size(316, 208);
 			this.lstOccurrences.TabIndex = 3;
-			this.lstOccurrences.DoubleClick += new System.EventHandler(this.lstOccurrences_DoubleClick);
 			// 
 			// label1
 			// 

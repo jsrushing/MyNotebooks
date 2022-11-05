@@ -211,16 +211,12 @@ namespace myJournal.subforms
 			}
 		}
 
-		private void lstOccurrences_DoubleClick(object sender, EventArgs e)
-		{
-
-		}
-
 		private void mnuAdd_Click(object sender, EventArgs e)
 		{
 			Adding = true;
 			lblOperation.Text = "Label Name:";
 			pnlNewLabelName.Visible = true;
+			txtLabelName.Text = string.Empty;
 			txtLabelName.Focus();
 			this.AcceptButton = btnOK;
 		}

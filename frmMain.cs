@@ -245,24 +245,16 @@ namespace myJournal.subforms
 				Directory.CreateDirectory(rootPath + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]);
 				Directory.CreateDirectory(rootPath + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"]);
 				Directory.CreateDirectory(rootPath + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"]);
-				Directory.CreateDirectory(rootPath + "/settings/");
-				File.Create(rootPath + "/settings/settings");
-				File.Create(rootPath + "/settings/labels");
+				Directory.CreateDirectory(rootPath + ConfigurationManager.AppSettings["FolderStructure_SettingsFolder"]);
+				File.Create(rootPath + ConfigurationManager.AppSettings["FolderStructure_SettingsFile"]).Close();
+				File.Create(rootPath + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Close();
 			}
 			else
-			{
-				foreach (Journal j in Utilities.AllJournals())
-				{
-					ddlJournals.Items.Add(j.Name);
-				}
-
-				//ddlJournals.DataSource = Utilities.AllJournals();
-				//ddlJournals.DisplayMember = "Name";
-			}
+			{ foreach (Journal j in Utilities.AllJournals()) { ddlJournals.Items.Add(j.Name); } }
 
 			ddlJournals.Enabled = ddlJournals.Items.Count > 0;
 			ddlJournals.SelectedIndex = ddlJournals.Items.Count == 1 ? 0 : -1;
-			btnLoadJournal.Enabled = false;
+			btnLoadJournal.Enabled = ddlJournals.Items.Count == 1;
 			txtJournalPIN.Text = string.Empty;
 			lstEntries.Visible = false;
 			ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
