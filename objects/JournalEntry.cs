@@ -94,46 +94,6 @@ namespace myJournal
 			return bTagEdited;
 		}
 
-		//public bool RemoveTag(string TagToRemove)
-		//{
-		//	string tags = this.ClearTags();
-		//	bool bTagRemoved = false;
-
-		//	if(tags.Length > 0)
-		//	{
-		//		string[] arrTags = tags.Split(',');
-
-		//		if (Array.IndexOf(arrTags, TagToRemove) > -1)
-		//		{
-		//			arrTags = arrTags.Select(t => t.Remove(Array.IndexOf(arrTags, TagToRemove))).ToArray();
-		//			string finalTagsString = String.Join(",", arrTags).Trim(',').Replace(",,", "");
-		//			this.Labels = finalTagsString.Length > 0 ? EncryptDecrypt.Encrypt(finalTagsString) : string.Empty;
-		//			bTagRemoved = true;
-		//		}
-		//	}
-		//	return bTagRemoved;
-		//}
-
-		//public bool ReplaceTag(string oldTag, string newTag)
-		//{
-		//	string tags = this.ClearTags();
-		//	bool bTagReplaced = false;
-
-		//	if(tags.Length > 0)
-		//	{
-		//		string[] arrTags = tags.Split(',');
-
-		//		if(Array.IndexOf(arrTags, oldTag) > -1)
-		//		{
-		//			arrTags = arrTags.Select(t => t.Replace(oldTag, newTag)).ToArray();
-		//			string finalTagsString = String.Join(",", arrTags).Trim(',').Replace(",,", ",");
-		//			this.Labels = finalTagsString.Length > 0 ? EncryptDecrypt.Encrypt(finalTagsString) : string.Empty;
-		//			bTagReplaced = true;
-		//		}
-		//	}
-		//	return bTagReplaced;
-		//}
-
 		public string ClearText()	{ return EncryptDecrypt.Decrypt(Text); }
 		public string ClearTitle()	{ return EncryptDecrypt.Decrypt(Title); }
 		public string ClearRTF()	{ return EncryptDecrypt.Decrypt(RTF); }

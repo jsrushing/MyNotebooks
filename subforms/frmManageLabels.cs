@@ -1,5 +1,6 @@
 ﻿/* Manage labels.
  * 7/9/22
+ * 11/5/22 : Completed major work on Rename and Delete (in 1 journal or Global)
  */
 using System;
 using System.Configuration;

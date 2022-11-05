@@ -22,10 +22,9 @@ namespace myJournal
     {
 		public string Name { get; set; }
         string FileName { get; set; }
-        StringBuilder JournalText = new StringBuilder();
         public List<JournalEntry> Entries = new List<JournalEntry>();
         string root = "journals\\";
-		public bool backupCompleted { get; set; }
+		public bool BackupCompleted { get; private set; }
 
         public Journal(string _name = null) 
         {
@@ -57,7 +56,7 @@ namespace myJournal
 				File.Copy(this.FileName, dir + this.Name);
 				FileInfo fi = new FileInfo(dir + this.Name);
 				File.Move(dir + this.Name, dir + this.Name + "_" + fi.CreationTime.ToString(ConfigurationManager.AppSettings["DateFormat_ForcedBackupFileName"]), true);
-				backupCompleted = true;
+				BackupCompleted = true;
 			}
 			catch (Exception) { }
 		}

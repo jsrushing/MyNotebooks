@@ -360,7 +360,7 @@ namespace myJournal.subforms
 		private void mnuJournal_ForceBackup_Click(object sender, EventArgs e)
 		{
 			currentJournal.Backup_Forced();
-			string sMsg = currentJournal.backupCompleted ? "The backup was completed" : "An error occurred. The backup was not completed.";
+			string sMsg = currentJournal.BackupCompleted ? "The backup was completed" : "An error occurred. The backup was not completed.";
 			Utilities.ShowMessage(sMsg, this);
 		}
 
@@ -382,7 +382,7 @@ namespace myJournal.subforms
 			string sJournalName = ddlJournals.Text;
 			frmBackupManager frm = new frmBackupManager();
 			Utilities.Showform(frm, this);
-			if (frm.backupRestored) { LoadJournals(); }
+			if (frm.BackupRestored) { LoadJournals(); }
 			this.Show();
 		}
 

@@ -22,7 +22,7 @@ namespace myJournal.subforms
 		string journalsFolder			= AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"];
 		string backupFolder_Forced		= AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"];
 		string backupFolder_Incremental = AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"];
-		public bool backupRestored { get; set; }
+		public bool BackupRestored { get; private set; }
 
 		public frmBackupManager()
 		{
@@ -62,7 +62,7 @@ namespace myJournal.subforms
 				File.Move(backupFilePath, journalsFolderPath, true);
 				frm.Close();
 				frm = new frmMessage(frmMessage.OperationType.Message, "The backup is restored.");
-				backupRestored = true;
+				BackupRestored = true;
 			}
 			this.Hide();
 		}
