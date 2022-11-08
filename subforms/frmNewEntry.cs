@@ -86,7 +86,7 @@ namespace myJournal.subforms
 
 		private void lblManageLabels_Click(object sender, EventArgs e)
 		{
-			frmManageLabels frm = new frmManageLabels(this.currentJournal);
+			frmLabelsManager frm = new frmLabelsManager(this.currentJournal);
 			Utilities.Showform(frm, this); // ShowDialog() happens here.
 			// labels file is modified as directed on frmManageLabels then flow returns here ...
 			Utilities.PopulateLabelsList(lstLabels);

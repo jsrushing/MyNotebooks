@@ -30,11 +30,11 @@ namespace myJournal.subforms
 		private void InitializeComponent()
 		{
 			this.panel1 = new System.Windows.Forms.Panel();
-			this.label1 = new System.Windows.Forms.Label();
-			this.lstJournals = new System.Windows.Forms.ListBox();
 			this.lblShowPIN = new System.Windows.Forms.Label();
+			this.lstJournals = new System.Windows.Forms.ListBox();
 			this.txtCommonPIN = new System.Windows.Forms.TextBox();
 			this.btnCancel = new System.Windows.Forms.Button();
+			this.label1 = new System.Windows.Forms.Label();
 			this.btnOk = new System.Windows.Forms.Button();
 			this.label2 = new System.Windows.Forms.Label();
 			this.panel1.SuspendLayout();
@@ -54,24 +54,6 @@ namespace myJournal.subforms
 			this.panel1.Size = new System.Drawing.Size(218, 246);
 			this.panel1.TabIndex = 0;
 			// 
-			// label1
-			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(6, 6);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(106, 15);
-			this.label1.TabIndex = 0;
-			this.label1.Text = "Journals To Search:";
-			// 
-			// lstJournals
-			// 
-			this.lstJournals.FormattingEnabled = true;
-			this.lstJournals.ItemHeight = 15;
-			this.lstJournals.Location = new System.Drawing.Point(6, 25);
-			this.lstJournals.Name = "lstJournals";
-			this.lstJournals.Size = new System.Drawing.Size(204, 109);
-			this.lstJournals.TabIndex = 1;
-			// 
 			// lblShowPIN
 			// 
 			this.lblShowPIN.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
@@ -82,6 +64,15 @@ namespace myJournal.subforms
 			this.lblShowPIN.Text = "show";
 			this.lblShowPIN.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.lblShowPIN.Visible = false;
+			// 
+			// lstJournals
+			// 
+			this.lstJournals.FormattingEnabled = true;
+			this.lstJournals.ItemHeight = 15;
+			this.lstJournals.Location = new System.Drawing.Point(6, 25);
+			this.lstJournals.Name = "lstJournals";
+			this.lstJournals.Size = new System.Drawing.Size(204, 109);
+			this.lstJournals.TabIndex = 1;
 			// 
 			// txtCommonPIN
 			// 
@@ -100,6 +91,15 @@ namespace myJournal.subforms
 			this.btnCancel.Text = "&Cancel";
 			this.btnCancel.UseVisualStyleBackColor = true;
 			this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(6, 6);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(106, 15);
+			this.label1.TabIndex = 0;
+			this.label1.Text = "Journals To Search:";
 			// 
 			// btnOk
 			// 
@@ -124,7 +124,7 @@ namespace myJournal.subforms
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(326, 327);
+			this.ClientSize = new System.Drawing.Size(303, 327);
 			this.Controls.Add(this.panel1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
 			this.Name = "frmSelectJournalsToSearch";

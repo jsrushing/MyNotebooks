@@ -14,32 +14,37 @@ using myJournal.objects;
 
 namespace myJournal.subforms
 {
-	public partial class frmManageLabels : Form
+	public partial class frmLabelsManager : Form
 	{
 		private bool Renaming = false;
 		private bool Adding = false;
 		private bool Deleting = false;
 		private bool EditingAllJournals;
 		public bool ActionTaken { get; private set; }
+
+		public LabelsManager LabelsManager = new LabelsManager();
+
 		private Journal CurrentJournal;
 
-		public frmManageLabels(Journal _jrnl = null)
+		public frmLabelsManager(Journal _jrnl = null)
 		{
 			InitializeComponent();
 
 			if(_jrnl != null)
 			{
+				//LabelsManager.Journal = _jrnl;
 				CurrentJournal = _jrnl;
-				mnuRename_InCurrentJournal.Text = "In '" + CurrentJournal.Name + "'";
-				mnuDelete_InCurrentJournal.Text = "In '" + CurrentJournal.Name + "'";
+
+				mnuRename_InCurrentJournal.Text = "In '" + _jrnl.Name + "'";
+				mnuDelete_InCurrentJournal.Text = "In '" + _jrnl.Name + "'";
 			}
 			else { mnuRename_InCurrentJournal.Visible = false; mnuDelete_InCurrentJournal.Visible = false; }
 		}
 
-		private void frmManageLabels_Load(object sender, EventArgs e)
+		private void frmLabelsManager_Load(object sender, EventArgs e)
 		{
 			Utilities.PopulateLabelsList(null, lstLabels);
-			lstLabels.Sorted = true;
+			//lstLabels.Sorted = true;
 			lstJournalPINs.Sorted = true;
 			this.Size = this.MinimumSize;
 			pnlNewLabelName.Location = new Point(0, 0);
@@ -48,17 +53,18 @@ namespace myJournal.subforms
 			pnlJournalPINs.Visible = true;
 			pnlMain.Visible = false;
 			mnuMain.Visible = false;
+			this.Width = pnlMain.Width + 47;
 			ShowHideOccurrences();
 			foreach (Journal j in Utilities.AllJournals()) { lstJournalPINs.Items.Add(j.Name); }
 		}
 
-		private void frmManageLabels_Resize(object sender, EventArgs e)
+		private void frmLabelsManager_Resize(object sender, EventArgs e)
 		{ 
 			if (this.Width > this.MinimumSize.Width) { this.Width = this.MinimumSize.Width; };
 			ShowHideOccurrences();		
 		}
 
-		private void AddLabel()
+		private void AddLabelToUIListbox()
 		{
 			if (txtLabelName.Text.Length > 0)
 			{
@@ -90,10 +96,14 @@ namespace myJournal.subforms
 
 			if (Adding) 
 			{ 
-				AddLabel(); 
+				AddLabelToUIListbox();
+
+				//LabelsManager.SaveLabels(lstLabels.Items.OfType<string>().ToList());
 				SaveLabels(); 
+
 				pnlNewLabelName.Visible = false;
 				Utilities.PopulateLabelsList(null, lstLabels);
+
 				lstOccurrences.Items.Clear();
 				ShowHideOccurrences();
 			}
@@ -108,14 +118,19 @@ namespace myJournal.subforms
 				{
 					SetProgramPINForSelectedJournal(jrnl);
 
+					//foreach (JournalEntry je in LabelsManager.JournalHasLabel(CurrentJournal, lstLabels.SelectedItem != null ? lstLabels.SelectedItem.ToString() : string.Empty))
+					//{
+					//	bEdited = je.RemoveOrReplaceTag(txtLabelName.Text, sOldTagName, Renaming);
+					//	if (bEdited) { jrnl.Save(); }
+					//}
+
 					List<JournalEntry> lstEntryHasOldTag = jrnl.Entries.Where(t => ("," + t.ClearTags() + ",").Contains("," + sOldTagName + ",")).ToList();
 
 					if (lstEntryHasOldTag.Count > 0)
 					{
 						foreach (JournalEntry je in lstEntryHasOldTag)
 						{
-							// bEdited = Renaming ? je.ReplaceTag(sOldTagName, txtLabelName.Text) : je.RemoveTag(sOldTagName);
-							bEdited = je.RemoveOrReplaceTag(txtLabelName.Text, sOldTagName, Renaming);	
+							bEdited = je.RemoveOrReplaceTag(txtLabelName.Text, sOldTagName, Renaming);
 							if (bEdited) { jrnl.Save(); }
 						}
 					}
@@ -133,7 +148,7 @@ namespace myJournal.subforms
 								lstLabels.Items.RemoveAt(lstLabels.SelectedIndex);
 							}
 						}
-						else { AddLabel(); }    // the old label might exist in other entries, so add the new label only to the Labels file
+						else { AddLabelToUIListbox(); }    // the old label might exist in other entries, so add the new label only to the Labels file
 					}
 					else    // It was a delete. If label exists in any journal, leave in list, otherwise remove from list.
 					{
@@ -146,6 +161,7 @@ namespace myJournal.subforms
 					}
 
 					SaveLabels();
+					//LabelsManager.SaveLabels(lstLabels.Items.OfType<string>().ToList());
 				}
 
 				ActionTaken = bEdited;
@@ -329,7 +345,8 @@ namespace myJournal.subforms
 			string[] arrTags = lstLabels.Items.OfType<string>().ToArray();
 			//Array.Sort(arrTags, (x, y) => x.CompareTo(y));
 			foreach (string tag in arrTags) { sb.AppendLine(tag); }
-			File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"], sb.ToString());
+
+			File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_LabelsFolder"], sb.ToString());
 		}
 
 		private void ShowHideInCurrentJournalMenus()

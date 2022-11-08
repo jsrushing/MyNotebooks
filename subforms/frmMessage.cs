@@ -12,7 +12,7 @@ namespace myJournal.subforms
 		string msg;
 		string _defaultText;
 		public ReturnResult result;
-		public string input;
+		public string EnteredValue { get; private set; }
 
 		public enum OperationType
 		{
@@ -117,7 +117,7 @@ namespace myJournal.subforms
 		private void btnOk_Click(object sender, EventArgs e)
 		{
 			result = txtInput.Visible && txtInput.Text.Length == 0 ? ReturnResult.Cancel : ReturnResult.Ok;
-			input = txtInput.Text;
+			EnteredValue = txtInput.Text;
 			this.Hide();
 		}
 	}

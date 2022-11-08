@@ -55,7 +55,7 @@ namespace myJournal
 				{ System.IO.Directory.CreateDirectory(dir); }
 				File.Copy(this.FileName, dir + this.Name);
 				FileInfo fi = new FileInfo(dir + this.Name);
-				File.Move(dir + this.Name, dir + this.Name + "_" + fi.CreationTime.ToString(ConfigurationManager.AppSettings["DateFormat_ForcedBackupFileName"]), true);
+				File.Move(dir + this.Name, dir + this.Name + " (" + fi.CreationTime.ToString(ConfigurationManager.AppSettings["DateFormat_ForcedBackupFileName"] + ")"), true);
 				BackupCompleted = true;
 			}
 			catch (Exception) { }

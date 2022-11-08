@@ -42,16 +42,23 @@ namespace myJournal.subforms
 
 		private void btnRestore_Click(object sender, EventArgs e)
 		{
-			string backupFilePath = lstIncrementalBackups.SelectedIndices.Count > 0 ? backupFolder_Incremental + lstIncrementalBackups.SelectedItem.ToString() : string.Empty;
-			string journalsFolderPath = lstIncrementalBackups.SelectedIndices.Count > 0 ? journalsFolder + lstIncrementalBackups.SelectedItem.ToString() : string.Empty;
+			var backupFilePath = lstIncrementalBackups.SelectedIndices.Count > 0 ? backupFolder_Incremental + lstIncrementalBackups.SelectedItem.ToString() : string.Empty;
+			var journalsFolderPath = lstIncrementalBackups.SelectedIndices.Count > 0 ? journalsFolder + lstIncrementalBackups.SelectedItem.ToString() : string.Empty;
+			var isForcedBackupRestore = lstForcedBackups.SelectedIndices.Count > 0;
+			var truncatedForcedFileName = string.Empty;
 
-			if (lstForcedBackups.SelectedIndices.Count > 0)
+			if (isForcedBackupRestore)
 			{ 
 				backupFilePath = backupFolder_Forced + lstForcedBackups.SelectedItem.ToString();
-				string truncatedForcedFileName = lstForcedBackups.SelectedItem.ToString();
 				FileInfo fi = new FileInfo(backupFilePath);
-				truncatedForcedFileName = truncatedForcedFileName.Substring(0, truncatedForcedFileName.IndexOf('_' + fi.CreationTime.ToString(ConfigurationManager.AppSettings["DateFormat_ForcedBackupFileName"])));
-				journalsFolderPath = journalsFolder + truncatedForcedFileName; 
+				truncatedForcedFileName = lstForcedBackups.SelectedItem.ToString();
+				truncatedForcedFileName = truncatedForcedFileName.Substring(0, truncatedForcedFileName.LastIndexOf(" ("));
+				journalsFolderPath = journalsFolder + truncatedForcedFileName;
+				frmMessage frm2 = new frmMessage(frmMessage.OperationType.InputBox, "Enter the PIN for '" + truncatedForcedFileName + "'.");
+				Utilities.Showform(frm2, this);
+				Program.PIN = frm2.EnteredValue;
+				frm2.Close();
+				this.Show();
 			}
 
 			frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Do you want to restore the backup? The existing journal cannot be recovered!");
@@ -60,9 +67,11 @@ namespace myJournal.subforms
 			if(frm.result == frmMessage.ReturnResult.Yes) 
 			{
 				File.Move(backupFilePath, journalsFolderPath, true);
-				frm.Close();
 				frm = new frmMessage(frmMessage.OperationType.Message, "The backup is restored.");
+				Utilities.Showform(frm, this);
+				frm.Close();
 				BackupRestored = true;
+				if (isForcedBackupRestore) { Utilities.AddLabels(Utilities.FindOrphanLabels(new Journal(truncatedForcedFileName).Open())); }
 			}
 			this.Hide();
 		}
@@ -72,6 +81,11 @@ namespace myJournal.subforms
 			pnlFileInfo_Forced.Visible = false;
 			pnlFileInfo_Incremental.Visible = false;
 			ShowFileInfo((ListBox)sender);
+		}
+
+		private string GetJournalNameWithoutDate(string nameWithDate)
+		{
+			return nameWithDate.Contains(" (") ? nameWithDate.Substring(nameWithDate.LastIndexOf(" (") + 1).Trim(')') : string.Empty;
 		}
 
 		private void ShowFileInfo(ListBox lb = null)

@@ -236,18 +236,17 @@ namespace myJournal.subforms
 
 		private void LoadJournals()
 		{
-			string rootPath = AppDomain.CurrentDomain.BaseDirectory;
 			ddlJournals.Items.Clear();
 			ddlJournals.Text = string.Empty;
 
-			if (!Directory.Exists(rootPath + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]))
+			if (!Directory.Exists(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]))
 			{
-				Directory.CreateDirectory(rootPath + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]);
-				Directory.CreateDirectory(rootPath + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"]);
-				Directory.CreateDirectory(rootPath + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"]);
-				Directory.CreateDirectory(rootPath + ConfigurationManager.AppSettings["FolderStructure_SettingsFolder"]);
-				File.Create(rootPath + ConfigurationManager.AppSettings["FolderStructure_SettingsFile"]).Close();
-				File.Create(rootPath + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Close();
+				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]);
+				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"]);
+				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"]);
+				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFolder"]);
+				File.Create(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFile"]).Close();
+				File.Create(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFolder"]).Close();
 			}
 			else
 			{ foreach (Journal j in Utilities.AllJournals()) { ddlJournals.Items.Add(j.Name); } }
@@ -369,9 +368,9 @@ namespace myJournal.subforms
 			frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "Enter the new journal name.", currentJournal.Name);		
 			Utilities.Showform(frm, this);
 
-			if (frm.result == frmMessage.ReturnResult.Ok && frm.input.Length > 0)
+			if (frm.result == frmMessage.ReturnResult.Ok && frm.EnteredValue.Length > 0)
 			{
-				currentJournal.Rename(frm.input);
+				currentJournal.Rename(frm.EnteredValue);
 				LoadJournals();
 			}
 			this.Show();
@@ -396,7 +395,7 @@ namespace myJournal.subforms
 
 		private void mnuLabels_Click(object sender, EventArgs e)
 		{
-			frmManageLabels frm = new frmManageLabels(this.currentJournal);
+			frmLabelsManager frm = new frmLabelsManager(this.currentJournal);
 			Utilities.Showform(frm, this);
 			
 			if (frm.ActionTaken)

@@ -15,13 +15,30 @@ namespace myJournal.objects
 {
 	public static class Utilities
 	{
-		public static void Showform(Form frm, Form frmParent)
+		public static List<Journal> AllJournals()
 		{
-			frm.StartPosition = FormStartPosition.Manual;
-			frm.Location = new Point(frmParent.Left, frmParent.Top);
-			frm.Size = new Size(frmParent.Width, frmParent.Height);
-			frmParent.Hide();
-			frm.ShowDialog();
+			List<Journal> jrnlReturn = new List<Journal>();
+			Journal tmpJrnl = new Journal();
+			string sJrnlDiskName;
+
+			foreach (string s in Directory.GetFiles(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]))
+			{
+				sJrnlDiskName = s.Replace(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"], "");
+				jrnlReturn.Add(new Journal(sJrnlDiskName).Open(sJrnlDiskName));
+			}
+
+			return jrnlReturn;
+		}
+
+		public static void AddLabels(List<string> allLabels)
+		{
+			File.AppendAllLines(AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_LabelsFolder"], allLabels);
+
+		}
+
+		public static string[] AllLabels()
+		{
+			return File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFolder"]);
 		}
 
 		public static void CheckExistingLabels(CheckedListBox clb, JournalEntry entry)
@@ -34,6 +51,17 @@ namespace myJournal.objects
 			}
 		}
 
+		public static List<string> FindOrphanLabels(Journal journal, bool addFoundOrphansToLabels = false)
+		{
+			List<string> lstReturn = new List<string>();
+			string[] labels = AllLabels();
+
+			foreach(JournalEntry je in journal.Entries)
+			{ foreach(string jeLabel in je.ClearTags().Split(",")) { if (jeLabel.Length > 0 && !labels.Contains(jeLabel) && !lstReturn.Contains(jeLabel)) { lstReturn.Add(jeLabel); } } }
+
+			return lstReturn;
+		}
+
 		public static string GetCheckedLabels(CheckedListBox cbx)
 		{
 			string labels = string.Empty;
@@ -43,22 +71,6 @@ namespace myJournal.objects
 			}
 			labels = labels.Length > 0 ? labels.Substring(0, labels.Length - 1) : string.Empty;
 			return labels;
-		}
-
-		public static List<Journal> AllJournals()
-		{
-			string rootPath = AppDomain.CurrentDomain.BaseDirectory;
-			List<Journal> jrnlReturn = new List<Journal>();
-			Journal tmpJrnl = new Journal();
-			string sJrnlDiskName;
-
-			foreach (string s in Directory.GetFiles(rootPath + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]))
-			{
-				sJrnlDiskName = s.Replace(rootPath + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"], "");
-				jrnlReturn.Add(new Journal(sJrnlDiskName).Open(sJrnlDiskName));
-			}
-
-			return jrnlReturn;
 		}
 
 		public static void PopulateEntries(ListBox lbxToPopulate, List<JournalEntry> entries, string startDate = "", string endDate = "", bool clearPrevious = true, string journalName = "")
@@ -83,7 +95,7 @@ namespace myJournal.objects
 			if (clb != null) { clb.Items.Clear(); }
 			if (lb != null) { lb.Items.Clear(); }
 
-			foreach (string label in File.ReadAllLines(AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]))
+			foreach (string label in AllLabels())
 			{
 				if (lb != null)
 				{ lb.Items.Add(label); }
@@ -203,6 +215,15 @@ namespace myJournal.objects
 			}
 
 			return entryRtrn;
+		}
+
+		public static void Showform(Form frm, Form frmParent)
+		{
+			frm.StartPosition = FormStartPosition.Manual;
+			frm.Location = new Point(frmParent.Left, frmParent.Top);
+			frm.Size = new Size(frmParent.Width, frmParent.Height);
+			frmParent.Hide();
+			frm.ShowDialog();
 		}
 
 		public static void ShowMessage(string message, Form parentForm)

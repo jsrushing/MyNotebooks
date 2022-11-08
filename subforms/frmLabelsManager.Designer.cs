@@ -1,7 +1,7 @@
 ﻿
 namespace myJournal.subforms
 {
-	partial class frmManageLabels
+	partial class frmLabelsManager
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -61,6 +61,7 @@ namespace myJournal.subforms
 			this.txtPIN = new System.Windows.Forms.TextBox();
 			this.lblEnterPIN = new System.Windows.Forms.Label();
 			this.lstJournalPINs = new System.Windows.Forms.ListBox();
+			this.lblSortType = new System.Windows.Forms.Label();
 			this.pnlMain.SuspendLayout();
 			this.pnlNewLabelName.SuspendLayout();
 			this.mnuMain.SuspendLayout();
@@ -71,6 +72,7 @@ namespace myJournal.subforms
 			// 
 			this.pnlMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+			this.pnlMain.Controls.Add(this.lblSortType);
 			this.pnlMain.Controls.Add(this.pnlNewLabelName);
 			this.pnlMain.Controls.Add(this.lstLabels);
 			this.pnlMain.Controls.Add(this.label3);
@@ -240,19 +242,18 @@ namespace myJournal.subforms
 			this.mnuMoveTop.Name = "mnuMoveTop";
 			this.mnuMoveTop.Size = new System.Drawing.Size(49, 20);
 			this.mnuMoveTop.Text = "&Move";
-			this.mnuMoveTop.Visible = false;
 			// 
 			// mnuMoveUp
 			// 
 			this.mnuMoveUp.Name = "mnuMoveUp";
-			this.mnuMoveUp.Size = new System.Drawing.Size(105, 22);
+			this.mnuMoveUp.Size = new System.Drawing.Size(180, 22);
 			this.mnuMoveUp.Text = "&Up";
 			this.mnuMoveUp.Click += new System.EventHandler(this.mnuMoveUp_Click);
 			// 
 			// mnuMoveDown
 			// 
 			this.mnuMoveDown.Name = "mnuMoveDown";
-			this.mnuMoveDown.Size = new System.Drawing.Size(105, 22);
+			this.mnuMoveDown.Size = new System.Drawing.Size(180, 22);
 			this.mnuMoveDown.Text = "D&own";
 			this.mnuMoveDown.Click += new System.EventHandler(this.mnuMoveDown_Click);
 			// 
@@ -378,6 +379,17 @@ namespace myJournal.subforms
 			this.lstJournalPINs.TabIndex = 1;
 			this.lstJournalPINs.SelectedIndexChanged += new System.EventHandler(this.lstJournalPINs_SelectedIndexChanged);
 			// 
+			// lblSortType
+			// 
+			this.lblSortType.AutoSize = true;
+			this.lblSortType.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
+			this.lblSortType.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.lblSortType.Location = new System.Drawing.Point(233, 6);
+			this.lblSortType.Name = "lblSortType";
+			this.lblSortType.Size = new System.Drawing.Size(54, 15);
+			this.lblSortType.TabIndex = 5;
+			this.lblSortType.Text = "Sort A-Z";
+			// 
 			// frmManageLabels
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -392,8 +404,8 @@ namespace myJournal.subforms
 			this.MinimumSize = new System.Drawing.Size(382, 518);
 			this.Name = "frmManageLabels";
 			this.Text = "Manage Labels";
-			this.Load += new System.EventHandler(this.frmManageLabels_Load);
-			this.Resize += new System.EventHandler(this.frmManageLabels_Resize);
+			this.Load += new System.EventHandler(this.frmLabelsManager_Load);
+			this.Resize += new System.EventHandler(this.frmLabelsManager_Resize);
 			this.pnlMain.ResumeLayout(false);
 			this.pnlMain.PerformLayout();
 			this.pnlNewLabelName.ResumeLayout(false);
@@ -441,5 +453,6 @@ namespace myJournal.subforms
 		private System.Windows.Forms.Label lblTagExists;
 		private System.Windows.Forms.ToolStripMenuItem mnuDelete_InAllJournals;
 		private System.Windows.Forms.ToolStripMenuItem mnuDelete_InCurrentJournal;
+		private System.Windows.Forms.Label lblSortType;
 	}
 }
