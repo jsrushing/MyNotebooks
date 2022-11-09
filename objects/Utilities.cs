@@ -31,36 +31,21 @@ namespace myJournal.objects
 		}
 
 		public static void AddLabels(List<string> allLabels)
-		{
-			File.AppendAllLines(AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_LabelsFolder"], allLabels);
-
-		}
-
-		public static string[] AllLabels()
-		{
-			return File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFolder"]);
-		}
-
-		public static void CheckExistingLabels(CheckedListBox clb, JournalEntry entry)
-		{
-			string labels = entry.ClearTags() + ",";
-
-			for (int i = 0; i < clb.Items.Count; i++)
-			{
-				clb.SetItemChecked(i, labels.Contains(clb.Items[i].ToString() + ","));
-			}
-		}
+		{ File.AppendAllLines(AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_LabelsFolder"], allLabels);	}
 
 		public static List<string> FindOrphanLabels(Journal journal, bool addFoundOrphansToLabels = false)
 		{
 			List<string> lstReturn = new List<string>();
-			string[] labels = AllLabels();
+			string[] labels = GetAllLabels();
 
 			foreach(JournalEntry je in journal.Entries)
 			{ foreach(string jeLabel in je.ClearTags().Split(",")) { if (jeLabel.Length > 0 && !labels.Contains(jeLabel) && !lstReturn.Contains(jeLabel)) { lstReturn.Add(jeLabel); } } }
 
 			return lstReturn;
 		}
+
+		public static string[] GetAllLabels()
+		{ return File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFolder"]);	}
 
 		public static string GetCheckedLabels(CheckedListBox cbx)
 		{
@@ -95,7 +80,7 @@ namespace myJournal.objects
 			if (clb != null) { clb.Items.Clear(); }
 			if (lb != null) { lb.Items.Clear(); }
 
-			foreach (string label in AllLabels())
+			foreach (string label in GetAllLabels())
 			{
 				if (lb != null)
 				{ lb.Items.Add(label); }
@@ -215,6 +200,12 @@ namespace myJournal.objects
 			}
 
 			return entryRtrn;
+		}
+
+		public static void SetCheckedLabels(CheckedListBox clb, JournalEntry entry)
+		{
+			var labels = entry.ClearTags().Split(",");
+			for (var i = 0; i < clb.Items.Count; i++) { clb.SetItemChecked(i, labels.Contains(clb.Items[i].ToString())); }
 		}
 
 		public static void Showform(Form frm, Form frmParent)

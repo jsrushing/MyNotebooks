@@ -64,7 +64,7 @@ namespace myJournal.subforms
 					GrayOriginalText();
 				}
 
-				Utilities.CheckExistingLabels(lstLabels, entry);
+				Utilities.SetCheckedLabels(lstLabels, entry);
 				rtbNewEntry.Focus();
 				rtbNewEntry.SelectionStart = 0;
 			}

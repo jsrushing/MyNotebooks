@@ -54,7 +54,7 @@ namespace myJournal.subforms
 				truncatedForcedFileName = lstForcedBackups.SelectedItem.ToString();
 				truncatedForcedFileName = truncatedForcedFileName.Substring(0, truncatedForcedFileName.LastIndexOf(" ("));
 				journalsFolderPath = journalsFolder + truncatedForcedFileName;
-				frmMessage frm2 = new frmMessage(frmMessage.OperationType.InputBox, "Enter the PIN for '" + truncatedForcedFileName + "'.");
+				frmMessage frm2 = new frmMessage(frmMessage.OperationType.InputBox, "Enter the PIN for '" + truncatedForcedFileName + "' so orphaned labels can be restored.");
 				Utilities.Showform(frm2, this);
 				Program.PIN = frm2.EnteredValue;
 				frm2.Close();
@@ -73,6 +73,7 @@ namespace myJournal.subforms
 				BackupRestored = true;
 				if (isForcedBackupRestore) { Utilities.AddLabels(Utilities.FindOrphanLabels(new Journal(truncatedForcedFileName).Open())); }
 			}
+
 			this.Hide();
 		}
 
