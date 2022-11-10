@@ -62,14 +62,15 @@ namespace myJournal.subforms
 			this.pnlDateFilters = new System.Windows.Forms.Panel();
 			this.label3 = new System.Windows.Forms.Label();
 			this.cbxDatesTo = new System.Windows.Forms.ComboBox();
+			this.pnlPin = new System.Windows.Forms.Panel();
 			this.menuStrip1.SuspendLayout();
 			this.pnlDateFilters.SuspendLayout();
+			this.pnlPin.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// btnLoadJournal
 			// 
-			this.btnLoadJournal.Enabled = false;
-			this.btnLoadJournal.Location = new System.Drawing.Point(170, 59);
+			this.btnLoadJournal.Location = new System.Drawing.Point(137, 2);
 			this.btnLoadJournal.Name = "btnLoadJournal";
 			this.btnLoadJournal.Size = new System.Drawing.Size(75, 23);
 			this.btnLoadJournal.TabIndex = 36;
@@ -79,7 +80,7 @@ namespace myJournal.subforms
 			// 
 			// txtJournalPIN
 			// 
-			this.txtJournalPIN.Location = new System.Drawing.Point(61, 59);
+			this.txtJournalPIN.Location = new System.Drawing.Point(28, 2);
 			this.txtJournalPIN.Name = "txtJournalPIN";
 			this.txtJournalPIN.PasswordChar = '*';
 			this.txtJournalPIN.Size = new System.Drawing.Size(100, 23);
@@ -89,7 +90,7 @@ namespace myJournal.subforms
 			// label4
 			// 
 			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(34, 62);
+			this.label4.Location = new System.Drawing.Point(1, 5);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(26, 15);
 			this.label4.TabIndex = 33;
@@ -341,7 +342,7 @@ namespace myJournal.subforms
 			// cbxDates
 			// 
 			this.cbxDates.FormattingEnabled = true;
-			this.cbxDates.Location = new System.Drawing.Point(74, 3);
+			this.cbxDates.Location = new System.Drawing.Point(70, 2);
 			this.cbxDates.Name = "cbxDates";
 			this.cbxDates.Size = new System.Drawing.Size(86, 23);
 			this.cbxDates.TabIndex = 44;
@@ -350,7 +351,7 @@ namespace myJournal.subforms
 			// label2
 			// 
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(5, 9);
+			this.label2.Location = new System.Drawing.Point(1, 8);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(70, 15);
 			this.label2.TabIndex = 41;
@@ -362,16 +363,16 @@ namespace myJournal.subforms
 			this.pnlDateFilters.Controls.Add(this.cbxDatesTo);
 			this.pnlDateFilters.Controls.Add(this.cbxDates);
 			this.pnlDateFilters.Controls.Add(this.label2);
-			this.pnlDateFilters.Location = new System.Drawing.Point(243, 54);
+			this.pnlDateFilters.Location = new System.Drawing.Point(257, 57);
 			this.pnlDateFilters.Name = "pnlDateFilters";
-			this.pnlDateFilters.Size = new System.Drawing.Size(289, 41);
+			this.pnlDateFilters.Size = new System.Drawing.Size(289, 27);
 			this.pnlDateFilters.TabIndex = 49;
 			this.pnlDateFilters.Visible = false;
 			// 
 			// label3
 			// 
 			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(166, 9);
+			this.label3.Location = new System.Drawing.Point(162, 8);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(18, 15);
 			this.label3.TabIndex = 46;
@@ -380,11 +381,22 @@ namespace myJournal.subforms
 			// cbxDatesTo
 			// 
 			this.cbxDatesTo.FormattingEnabled = true;
-			this.cbxDatesTo.Location = new System.Drawing.Point(189, 3);
+			this.cbxDatesTo.Location = new System.Drawing.Point(185, 2);
 			this.cbxDatesTo.Name = "cbxDatesTo";
 			this.cbxDatesTo.Size = new System.Drawing.Size(86, 23);
 			this.cbxDatesTo.TabIndex = 45;
 			this.cbxDatesTo.SelectedIndexChanged += new System.EventHandler(this.cbxDates_SelectedIndexChanged);
+			// 
+			// pnlPin
+			// 
+			this.pnlPin.Controls.Add(this.btnLoadJournal);
+			this.pnlPin.Controls.Add(this.label4);
+			this.pnlPin.Controls.Add(this.txtJournalPIN);
+			this.pnlPin.Location = new System.Drawing.Point(33, 57);
+			this.pnlPin.Name = "pnlPin";
+			this.pnlPin.Size = new System.Drawing.Size(218, 27);
+			this.pnlPin.TabIndex = 50;
+			this.pnlPin.Visible = false;
 			// 
 			// frmMain
 			// 
@@ -393,15 +405,13 @@ namespace myJournal.subforms
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.Window;
 			this.ClientSize = new System.Drawing.Size(1012, 628);
-			this.Controls.Add(this.btnLoadJournal);
+			this.Controls.Add(this.pnlPin);
 			this.Controls.Add(this.pnlDateFilters);
 			this.Controls.Add(this.lblShowPIN);
 			this.Controls.Add(this.lblEntries);
 			this.Controls.Add(this.lblWrongPin);
 			this.Controls.Add(this.lblSelectionType);
-			this.Controls.Add(this.txtJournalPIN);
 			this.Controls.Add(this.lblSeparator);
-			this.Controls.Add(this.label4);
 			this.Controls.Add(this.rtbSelectedEntry);
 			this.Controls.Add(this.lstEntries);
 			this.Controls.Add(this.label1);
@@ -416,6 +426,8 @@ namespace myJournal.subforms
 			this.menuStrip1.PerformLayout();
 			this.pnlDateFilters.ResumeLayout(false);
 			this.pnlDateFilters.PerformLayout();
+			this.pnlPin.ResumeLayout(false);
+			this.pnlPin.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -454,5 +466,6 @@ namespace myJournal.subforms
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.ComboBox cbxDatesTo;
 		private System.Windows.Forms.ToolStripMenuItem mnuLabels;
+		private System.Windows.Forms.Panel pnlPin;
 	}
 }

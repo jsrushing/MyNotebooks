@@ -194,6 +194,7 @@ namespace myJournal.subforms
 		{
 			ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
 			btnLoadJournal.Enabled = true;
+			pnlPin.Visible = ddlJournals.SelectedIndex > -1;
 			txtJournalPIN.Text = string.Empty;
 			txtJournalPIN.Focus();
 			currentEntry = null;
@@ -204,6 +205,9 @@ namespace myJournal.subforms
 			lstEntries.Items.Clear();
 			lstEntries.Visible = false;
 		}
+
+		private void ddlJournals_Click(object sender, EventArgs e)
+		{ if (ddlJournals.SelectedIndex > -1) { ddlJournals.DroppedDown = true; } }
 
 		private void lblSeparator_MouseMove(object sender, MouseEventArgs e)
 		{
@@ -252,6 +256,7 @@ namespace myJournal.subforms
 			{ foreach (Journal j in Utilities.AllJournals()) { ddlJournals.Items.Add(j.Name); } }
 
 			ddlJournals.Enabled = ddlJournals.Items.Count > 0;
+			pnlPin.Visible = false;
 			ddlJournals.SelectedIndex = ddlJournals.Items.Count == 1 ? 0 : -1;
 			btnLoadJournal.Enabled = ddlJournals.Items.Count == 1;
 			txtJournalPIN.Text = string.Empty;
@@ -329,14 +334,14 @@ namespace myJournal.subforms
 		{
 			frmNewJournal frm = new frmNewJournal();
 			Utilities.Showform(frm, this);
-			string name = frm.sJournalName == null ? string.Empty : frm.sJournalName;
-			frm.Close();
 
-			if (name.Length > 0){
-				Journal j = new Journal(name);
+			if (frm.NewJournalName != null){
+				Journal j = new Journal(frm.NewJournalName);
 				j.Create();
 				LoadJournals();
 			}
+
+			frm.Close();
 			this.Show();
 		}
 
@@ -509,9 +514,5 @@ namespace myJournal.subforms
 			}
 		}
 
-		private void ddlJournals_Click(object sender, EventArgs e)
-		{
-			ddlJournals.DroppedDown = true;
-		}
 	}
 }

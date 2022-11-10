@@ -2,6 +2,7 @@
  * 6/15/22
  */
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using myJournal.objects;
@@ -10,7 +11,8 @@ namespace myJournal.subforms
 {
 	public partial class frmNewJournal : Form
 	{
-		public string sJournalName;
+		private List<string> lstAllJournalNames = Utilities.AllJournalNames();
+		public string NewJournalName { get; private set; }
 
 		public frmNewJournal()
 		{ 
@@ -21,26 +23,11 @@ namespace myJournal.subforms
 
 		private void frmNewJournal_Activated(object sender, EventArgs e) { txtName.Focus(); }
 
-		private void frmNewJournal_FormClosing(object sender, FormClosingEventArgs e)
-		{
-			if (txtPIN.Text.Length > 0 | txtName.Text.Length > 0)
-			{
-				e.Cancel = true;
-				sJournalName = txtName.Text;
-				this.Hide();
-			}
-		}
-
-		private void btnCancel_Click(object sender, EventArgs e)
-		{
-			txtName.Text = string.Empty;
-			txtPIN.Text = string.Empty;
-			this.Hide();
-		}
+		private void btnCancel_Click(object sender, EventArgs e) { this.Hide(); }
 
 		private void btnOk_Click(object sender, EventArgs e)
 		{
-			sJournalName = txtName.Text.Length > 0 ? txtName.Text : string.Empty;
+			NewJournalName = txtName.Text;
 			Program.PIN = txtPIN.Text;
 			this.Hide();
 		}
@@ -55,6 +42,9 @@ namespace myJournal.subforms
 
 		private void txtName_TextChanged(object sender, EventArgs e)
 		{
+			lblNameExists.Visible = lstAllJournalNames.Contains(txtName.Text);
+			btnOk.Enabled = txtName.Text.Length > 0 && !lblNameExists.Visible;
+
 			if (txtName.Text.Contains("|"))
 			{
 				Utilities.ShowMessage("Sorry, for operational reasons Journal names may not contain the '|' symbol.", this);

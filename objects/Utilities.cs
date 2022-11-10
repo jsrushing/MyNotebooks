@@ -15,10 +15,20 @@ namespace myJournal.objects
 {
 	public static class Utilities
 	{
+		public static List<string> AllJournalNames()
+		{
+			List<string> lstRtrn = new List<string>();
+
+			foreach(Journal j in AllJournals())
+			{
+				lstRtrn.Add(j.Name);
+			}
+
+			return lstRtrn;
+		}
 		public static List<Journal> AllJournals()
 		{
 			List<Journal> jrnlReturn = new List<Journal>();
-			Journal tmpJrnl = new Journal();
 			string sJrnlDiskName;
 
 			foreach (string s in Directory.GetFiles(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]))

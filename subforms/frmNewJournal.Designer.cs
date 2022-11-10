@@ -36,8 +36,8 @@ namespace myJournal.subforms
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.btnOk = new System.Windows.Forms.Button();
 			this.grp1 = new System.Windows.Forms.Panel();
+			this.lblNameExists = new System.Windows.Forms.Label();
 			this.lblShowPIN = new System.Windows.Forms.Label();
-			this.lblMessage_BadJournalName = new System.Windows.Forms.Label();
 			this.grp1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -88,6 +88,7 @@ namespace myJournal.subforms
 			// 
 			// btnOk
 			// 
+			this.btnOk.Enabled = false;
 			this.btnOk.Location = new System.Drawing.Point(77, 99);
 			this.btnOk.Name = "btnOk";
 			this.btnOk.Size = new System.Drawing.Size(75, 23);
@@ -98,18 +99,29 @@ namespace myJournal.subforms
 			// 
 			// grp1
 			// 
+			this.grp1.Controls.Add(this.lblNameExists);
 			this.grp1.Controls.Add(this.lblShowPIN);
-			this.grp1.Controls.Add(this.lblMessage_BadJournalName);
 			this.grp1.Controls.Add(this.txtPIN);
 			this.grp1.Controls.Add(this.btnCancel);
 			this.grp1.Controls.Add(this.txtName);
 			this.grp1.Controls.Add(this.btnOk);
 			this.grp1.Controls.Add(this.label1);
 			this.grp1.Controls.Add(this.label2);
-			this.grp1.Location = new System.Drawing.Point(12, 12);
+			this.grp1.Location = new System.Drawing.Point(12, -1);
 			this.grp1.Name = "grp1";
-			this.grp1.Size = new System.Drawing.Size(230, 184);
+			this.grp1.Size = new System.Drawing.Size(230, 158);
 			this.grp1.TabIndex = 6;
+			// 
+			// lblNameExists
+			// 
+			this.lblNameExists.AutoSize = true;
+			this.lblNameExists.ForeColor = System.Drawing.Color.Red;
+			this.lblNameExists.Location = new System.Drawing.Point(8, 6);
+			this.lblNameExists.Name = "lblNameExists";
+			this.lblNameExists.Size = new System.Drawing.Size(212, 15);
+			this.lblNameExists.TabIndex = 42;
+			this.lblNameExists.Text = "A journal with this name already exists.";
+			this.lblNameExists.Visible = false;
 			// 
 			// lblShowPIN
 			// 
@@ -123,30 +135,20 @@ namespace myJournal.subforms
 			this.lblShowPIN.Visible = false;
 			this.lblShowPIN.Click += new System.EventHandler(this.lblShowPIN_Click);
 			// 
-			// lblMessage_BadJournalName
-			// 
-			this.lblMessage_BadJournalName.AutoSize = true;
-			this.lblMessage_BadJournalName.ForeColor = System.Drawing.Color.Red;
-			this.lblMessage_BadJournalName.Location = new System.Drawing.Point(3, 166);
-			this.lblMessage_BadJournalName.Name = "lblMessage_BadJournalName";
-			this.lblMessage_BadJournalName.Size = new System.Drawing.Size(0, 15);
-			this.lblMessage_BadJournalName.TabIndex = 6;
-			// 
 			// frmNewJournal
 			// 
 			this.AcceptButton = this.btnOk;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.btnCancel;
-			this.ClientSize = new System.Drawing.Size(255, 208);
+			this.ClientSize = new System.Drawing.Size(255, 171);
 			this.Controls.Add(this.grp1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(271, 247);
+			this.MinimumSize = new System.Drawing.Size(271, 210);
 			this.Name = "frmNewJournal";
 			this.Text = "New Journal";
 			this.Activated += new System.EventHandler(this.frmNewJournal_Activated);
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmNewJournal_FormClosing);
 			this.Load += new System.EventHandler(this.frmNewJournal_Load);
 			this.grp1.ResumeLayout(false);
 			this.grp1.PerformLayout();
@@ -163,7 +165,7 @@ namespace myJournal.subforms
 		private System.Windows.Forms.Button btnCancel;
 		private System.Windows.Forms.Button btnOk;
 		private System.Windows.Forms.Panel grp1;
-		private System.Windows.Forms.Label lblMessage_BadJournalName;
 		private System.Windows.Forms.Label lblShowPIN;
+		private System.Windows.Forms.Label lblNameExists;
 	}
 }
