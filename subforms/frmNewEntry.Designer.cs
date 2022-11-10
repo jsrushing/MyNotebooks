@@ -31,6 +31,7 @@ namespace myJournal.subforms
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmNewEntry));
 			this.grpCreateEntry = new System.Windows.Forms.GroupBox();
+			this.lblSortType = new System.Windows.Forms.Label();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.lblSelectedFont = new System.Windows.Forms.Label();
 			this.btnColor = new System.Windows.Forms.Button();
@@ -53,7 +54,7 @@ namespace myJournal.subforms
 			this.lblTagManager2 = new System.Windows.Forms.Label();
 			this.lblEntryText_Hidden = new System.Windows.Forms.Label();
 			this.lblEntryTitle_Hidden = new System.Windows.Forms.Label();
-			this.lstLabels = new System.Windows.Forms.CheckedListBox();
+			this.clbLabels = new System.Windows.Forms.CheckedListBox();
 			this.label14 = new System.Windows.Forms.Label();
 			this.lblFont_NewEntry = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
@@ -75,6 +76,7 @@ namespace myJournal.subforms
 			this.grpCreateEntry.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.grpCreateEntry.Controls.Add(this.lblSortType);
 			this.grpCreateEntry.Controls.Add(this.panel1);
 			this.grpCreateEntry.Controls.Add(this.toolsRTB);
 			this.grpCreateEntry.Controls.Add(this.lblManageLabels);
@@ -84,7 +86,7 @@ namespace myJournal.subforms
 			this.grpCreateEntry.Controls.Add(this.lblTagManager2);
 			this.grpCreateEntry.Controls.Add(this.lblEntryText_Hidden);
 			this.grpCreateEntry.Controls.Add(this.lblEntryTitle_Hidden);
-			this.grpCreateEntry.Controls.Add(this.lstLabels);
+			this.grpCreateEntry.Controls.Add(this.clbLabels);
 			this.grpCreateEntry.Controls.Add(this.label14);
 			this.grpCreateEntry.Controls.Add(this.lblFont_NewEntry);
 			this.grpCreateEntry.Controls.Add(this.label3);
@@ -94,6 +96,20 @@ namespace myJournal.subforms
 			this.grpCreateEntry.Size = new System.Drawing.Size(580, 459);
 			this.grpCreateEntry.TabIndex = 5;
 			this.grpCreateEntry.TabStop = false;
+			// 
+			// lblSortType
+			// 
+			this.lblSortType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.lblSortType.AutoSize = true;
+			this.lblSortType.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.lblSortType.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
+			this.lblSortType.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.lblSortType.Location = new System.Drawing.Point(158, 301);
+			this.lblSortType.Name = "lblSortType";
+			this.lblSortType.Size = new System.Drawing.Size(54, 15);
+			this.lblSortType.TabIndex = 43;
+			this.lblSortType.Text = "Sort A-Z";
+			this.lblSortType.Click += new System.EventHandler(this.lblSortType_Click);
 			// 
 			// panel1
 			// 
@@ -332,18 +348,18 @@ namespace myJournal.subforms
 			this.lblEntryTitle_Hidden.Text = "hidden title";
 			this.lblEntryTitle_Hidden.Visible = false;
 			// 
-			// lstLabels
+			// clbLabels
 			// 
-			this.lstLabels.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+			this.clbLabels.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.lstLabels.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.lstLabels.CheckOnClick = true;
-			this.lstLabels.FormattingEnabled = true;
-			this.lstLabels.Location = new System.Drawing.Point(6, 321);
-			this.lstLabels.Name = "lstLabels";
-			this.lstLabels.Size = new System.Drawing.Size(561, 126);
-			this.lstLabels.TabIndex = 27;
-			this.lstLabels.SelectedIndexChanged += new System.EventHandler(this.lstLabels_SelectedIndexChanged);
+			this.clbLabels.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.clbLabels.CheckOnClick = true;
+			this.clbLabels.FormattingEnabled = true;
+			this.clbLabels.Location = new System.Drawing.Point(6, 321);
+			this.clbLabels.Name = "clbLabels";
+			this.clbLabels.Size = new System.Drawing.Size(561, 126);
+			this.clbLabels.TabIndex = 27;
+			this.clbLabels.SelectedIndexChanged += new System.EventHandler(this.lstLabels_SelectedIndexChanged);
 			// 
 			// label14
 			// 
@@ -481,7 +497,7 @@ namespace myJournal.subforms
 		private System.Windows.Forms.Label lblTagManager2;
 		private System.Windows.Forms.Label lblEntryText_Hidden;
 		private System.Windows.Forms.Label lblEntryTitle_Hidden;
-		private System.Windows.Forms.CheckedListBox lstLabels;
+		private System.Windows.Forms.CheckedListBox clbLabels;
 		private System.Windows.Forms.Label label14;
 		private System.Windows.Forms.Label lblFont_NewEntry;
 		private System.Windows.Forms.Label label3;
@@ -511,5 +527,6 @@ namespace myJournal.subforms
 		private System.Windows.Forms.ToolStripMenuItem mnuFind;
 		private System.Windows.Forms.ToolStripTextBox txtFind;
 		private System.Windows.Forms.Label lblSelectedFont;
+		private System.Windows.Forms.Label lblSortType;
 	}
 }

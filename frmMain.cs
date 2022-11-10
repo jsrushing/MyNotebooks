@@ -207,7 +207,7 @@ namespace myJournal.subforms
 		}
 
 		private void ddlJournals_Click(object sender, EventArgs e)
-		{ if (ddlJournals.SelectedIndex > -1) { ddlJournals.DroppedDown = true; } }
+		{ if (ddlJournals.Items.Count > 0) { ddlJournals.DroppedDown = true; } }
 
 		private void lblSeparator_MouseMove(object sender, MouseEventArgs e)
 		{

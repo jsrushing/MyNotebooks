@@ -15,6 +15,16 @@ namespace myJournal.objects
 {
 	public static class Utilities
 	{
+		public enum LabelsSortType
+		{
+			Ascending,
+			Descending,
+			None
+		}
+
+		public static void AddLabels(List<string> allLabels)
+		{ File.AppendAllLines(AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_LabelsFolder"], allLabels);	}
+
 		public static List<string> AllJournalNames()
 		{
 			List<string> lstRtrn = new List<string>();
@@ -26,6 +36,7 @@ namespace myJournal.objects
 
 			return lstRtrn;
 		}
+
 		public static List<Journal> AllJournals()
 		{
 			List<Journal> jrnlReturn = new List<Journal>();
@@ -40,22 +51,33 @@ namespace myJournal.objects
 			return jrnlReturn;
 		}
 
-		public static void AddLabels(List<string> allLabels)
-		{ File.AppendAllLines(AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_LabelsFolder"], allLabels);	}
+		public static string[] AllLabels(LabelsSortType sort = LabelsSortType.None)
+		{
+			string[] labels = File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFolder"]);
+
+			switch (sort)
+			{
+				case LabelsSortType.Descending:
+					Array.Sort(labels);
+					break;
+				case LabelsSortType.Ascending:
+					Array.Sort(labels);
+					Array.Reverse(labels);
+					break;
+			}
+			return labels;
+		}
 
 		public static List<string> FindOrphanLabels(Journal journal, bool addFoundOrphansToLabels = false)
 		{
 			List<string> lstReturn = new List<string>();
-			string[] labels = GetAllLabels();
+			string[] labels = AllLabels();
 
 			foreach(JournalEntry je in journal.Entries)
 			{ foreach(string jeLabel in je.ClearTags().Split(",")) { if (jeLabel.Length > 0 && !labels.Contains(jeLabel) && !lstReturn.Contains(jeLabel)) { lstReturn.Add(jeLabel); } } }
 
 			return lstReturn;
 		}
-
-		public static string[] GetAllLabels()
-		{ return File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFolder"]);	}
 
 		public static string GetCheckedLabels(CheckedListBox cbx)
 		{
@@ -85,12 +107,12 @@ namespace myJournal.objects
 			}
 		}
 
-		public static void PopulateLabelsList(CheckedListBox clb, ListBox lb = null)
+		public static void PopulateLabelsList(CheckedListBox clb = null, ListBox lb = null, LabelsSortType sort = LabelsSortType.None)
 		{
 			if (clb != null) { clb.Items.Clear(); }
 			if (lb != null) { lb.Items.Clear(); }
 
-			foreach (string label in GetAllLabels())
+			foreach (string label in AllLabels(sort))
 			{
 				if (lb != null)
 				{ lb.Items.Add(label); }

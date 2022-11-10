@@ -20,9 +20,16 @@ namespace myJournal.subforms
 		private bool Adding = false;
 		private bool Deleting = false;
 		private bool EditingAllJournals;
+		private LabelsSortType sort = LabelsSortType.None;
+
 		public bool ActionTaken { get; private set; }
 
-		public LabelsManager LabelsManager = new LabelsManager();
+		private enum LabelsSortType
+		{
+			Ascending,
+			Descending,
+			None
+		}
 
 		private Journal CurrentJournal;
 
@@ -44,8 +51,6 @@ namespace myJournal.subforms
 		private void frmLabelsManager_Load(object sender, EventArgs e)
 		{
 			Utilities.PopulateLabelsList(null, lstLabels);
-			//lstLabels.Sorted = true;
-			lstJournalPINs.Sorted = true;
 			this.Size = this.MinimumSize;
 			pnlNewLabelName.Location = new Point(0, 0);
 			pnlNewLabelName.Size = this.Size;
@@ -56,6 +61,8 @@ namespace myJournal.subforms
 			this.Width = pnlMain.Width + 47;
 			ShowHideOccurrences();
 			foreach (Journal j in Utilities.AllJournals()) { lstJournalPINs.Items.Add(j.Name); }
+			lstJournalPINs.Sorted = true;
+			sort = LabelsSortType.Ascending;
 		}
 
 		private void frmLabelsManager_Resize(object sender, EventArgs e)
@@ -201,6 +208,28 @@ namespace myJournal.subforms
 				}	
 			}
 			return false;
+		}
+
+		private void lblSortType_Click(object sender, EventArgs e)
+		{
+			switch (sort)
+			{
+				case LabelsSortType.None:
+					Utilities.PopulateLabelsList(null, lstLabels, Utilities.LabelsSortType.None);
+					lblSortType.Text = "Sort A-Z";
+					sort = LabelsSortType.Descending;
+					break;
+				case LabelsSortType.Ascending:
+					Utilities.PopulateLabelsList(null, lstLabels, Utilities.LabelsSortType.Descending);
+					lblSortType.Text = "Sort Z-A";
+					sort = LabelsSortType.Descending;
+					break;
+				case LabelsSortType.Descending:
+					Utilities.PopulateLabelsList(null, lstLabels, Utilities.LabelsSortType.Ascending);
+					lblSortType.Text = "Unsorted";
+					sort = LabelsSortType.Ascending;
+					break;
+			}
 		}
 
 		private void lstJournalPINs_SelectedIndexChanged(object sender, EventArgs e)

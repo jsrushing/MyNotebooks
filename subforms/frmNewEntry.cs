@@ -20,8 +20,16 @@ namespace myJournal.subforms
 		private string originalText_TextOnly;
 		private bool isDirty = false;
 		private string originalTitle;
+		private LabelsSortType sort = LabelsSortType.None;
 		public bool saved = false;
 		public bool preserveOriginalText;
+
+		private enum LabelsSortType
+		{
+			Ascending,
+			Descending,
+			None
+		}
 
 		public frmNewEntry(Journal journal, JournalEntry entryToEdit = null)
 		{
@@ -42,18 +50,19 @@ namespace myJournal.subforms
 
 		private void frmNewEntry_Load(object sender, EventArgs e)
 		{
-			Utilities.PopulateLabelsList(lstLabels);
+			Utilities.PopulateLabelsList(clbLabels);
 			originalTitle = this.Text;
 			ddlFonts.DataSource = Program.lstFonts;
 			ddlFonts.DisplayMember = "text";
+			sort = LabelsSortType.Ascending;
 
 			if (isEdit)
 			{
 				txtNewEntryTitle.Text = entry.ClearTitle();
 				originalText_TextOnly = entry.ClearText();
 				
-				originalText_Full = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Editing"], entry.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"])
-					, entry.ClearTitle(), originalText_TextOnly);
+				originalText_Full = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Editing"],
+					entry.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), entry.ClearTitle(), originalText_TextOnly);
 
 				originalEntryLength = originalText_Full.Length - 1;
 				originalText_Full = originalText_Full.Substring(originalText_Full.Length - originalEntryLength + 1);
@@ -64,7 +73,7 @@ namespace myJournal.subforms
 					GrayOriginalText();
 				}
 
-				Utilities.SetCheckedLabels(lstLabels, entry);
+				Utilities.SetCheckedLabels(clbLabels, entry);
 				rtbNewEntry.Focus();
 				rtbNewEntry.SelectionStart = 0;
 			}
@@ -89,8 +98,30 @@ namespace myJournal.subforms
 			frmLabelsManager frm = new frmLabelsManager(this.currentJournal);
 			Utilities.Showform(frm, this); // ShowDialog() happens here.
 			// labels file is modified as directed on frmManageLabels then flow returns here ...
-			Utilities.PopulateLabelsList(lstLabels);
+			Utilities.PopulateLabelsList(clbLabels);
 			this.Show();
+		}
+
+		private void lblSortType_Click(object sender, EventArgs e)
+		{
+			switch (sort)
+			{
+				case LabelsSortType.None:
+					Utilities.PopulateLabelsList(clbLabels, null, Utilities.LabelsSortType.None);
+					lblSortType.Text = "Sort A-Z";
+					sort = LabelsSortType.Descending;
+					break;
+				case LabelsSortType.Ascending:
+					Utilities.PopulateLabelsList(clbLabels, null, Utilities.LabelsSortType.Descending);
+					lblSortType.Text = "Sort Z-A";
+					sort = LabelsSortType.Descending;
+					break;
+				case LabelsSortType.Descending:
+					Utilities.PopulateLabelsList(clbLabels, null, Utilities.LabelsSortType.Ascending);
+					lblSortType.Text = "Unsorted";
+					sort = LabelsSortType.Ascending;
+					break;
+			}
 		}
 
 		private void lstLabels_SelectedIndexChanged(object sender, EventArgs e) { SetIsDirty(true); }
@@ -144,7 +175,7 @@ namespace myJournal.subforms
 
 		private void Save()
 		{
-			JournalEntry newEntry = new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, rtbNewEntry.Rtf, Utilities.GetCheckedLabels(lstLabels), false);
+			JournalEntry newEntry = new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, rtbNewEntry.Rtf, Utilities.GetCheckedLabels(clbLabels), false);
 
 			if(entry == null)
 			{
@@ -207,5 +238,6 @@ namespace myJournal.subforms
 			lblSelectedFont.Text = lblSelectedFont.Font.Name;
 			Application.DoEvents();
 		}
+
 	}
 }
