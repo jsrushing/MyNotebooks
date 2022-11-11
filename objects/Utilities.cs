@@ -206,6 +206,12 @@ namespace myJournal.objects
 				
 				entryRtrn = currentJournal.GetEntry(sTitle, sDate);
 
+				if(sTitle == "created")
+				{
+					lb.SelectedIndices.Clear();
+					entryRtrn = null;
+				}
+
 				if (entryRtrn != null)
 				{
 					if(entryRtrn.DisplayText != null)    // entries prior to 1.0.0.1 will not have .DisplayText

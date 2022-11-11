@@ -50,7 +50,6 @@ namespace myJournal.subforms
 
 		private void frmLabelsManager_Load(object sender, EventArgs e)
 		{
-			Utilities.PopulateLabelsList(null, lstLabels);
 			this.Size = this.MinimumSize;
 			pnlNewLabelName.Location = new Point(0, 0);
 			pnlNewLabelName.Size = this.Size;
@@ -62,7 +61,8 @@ namespace myJournal.subforms
 			ShowHideOccurrences();
 			foreach (Journal j in Utilities.AllJournals()) { lstJournalPINs.Items.Add(j.Name); }
 			lstJournalPINs.Sorted = true;
-			sort = LabelsSortType.Ascending;
+			sort = LabelsSortType.None;
+			lblSortType_Click(null, null);
 		}
 
 		private void frmLabelsManager_Resize(object sender, EventArgs e)
@@ -217,7 +217,7 @@ namespace myJournal.subforms
 				case LabelsSortType.None:
 					Utilities.PopulateLabelsList(null, lstLabels, Utilities.LabelsSortType.None);
 					lblSortType.Text = "Sort A-Z";
-					sort = LabelsSortType.Descending;
+					sort = LabelsSortType.Ascending;
 					break;
 				case LabelsSortType.Ascending:
 					Utilities.PopulateLabelsList(null, lstLabels, Utilities.LabelsSortType.Descending);
@@ -227,7 +227,7 @@ namespace myJournal.subforms
 				case LabelsSortType.Descending:
 					Utilities.PopulateLabelsList(null, lstLabels, Utilities.LabelsSortType.Ascending);
 					lblSortType.Text = "Unsorted";
-					sort = LabelsSortType.Ascending;
+					sort = LabelsSortType.None;
 					break;
 			}
 		}

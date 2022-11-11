@@ -273,12 +273,21 @@ namespace myJournal.subforms
 			{
 				lb.SelectedIndexChanged -= new System.EventHandler(this.lstEntries_SelectEntry);
 				currentEntry = Utilities.SelectEntry(rtb, lb, currentJournal, firstSelection);
-				firstSelection = false;
-				lblSelectionType.Visible = rtb.Text.Length > 0;
-				lblSeparator.Visible = rtb.Text.Length > 0;
-				Utilities.ResizeListsAndRTBs(lstEntries, rtbSelectedEntry, lblSeparator, lblSelectionType, this);
+				if(currentEntry != null)
+				{
+					firstSelection = false;
+					lblSelectionType.Visible = rtb.Text.Length > 0;
+					lblSeparator.Visible = rtb.Text.Length > 0;
+					Utilities.ResizeListsAndRTBs(lstEntries, rtbSelectedEntry, lblSeparator, lblSelectionType, this);
+					//lb.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectEntry);
+					ShowHideMenusAndControls(SelectionState.EntrySelected);
+				}
+				else
+				{
+					ShowHideMenusAndControls(SelectionState.JournalLoaded);
+					lstEntries.SelectedIndices.Clear();
+				}
 				lb.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectEntry);
-				ShowHideMenusAndControls(SelectionState.EntrySelected);
 			}
 		}
 

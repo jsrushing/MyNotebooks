@@ -11,18 +11,18 @@ namespace myJournal.subforms
 {
 	public partial class frmNewEntry : Form
 	{
-		public JournalEntry entry = null;
-		public Journal currentJournal = null;
-		private bool isEdit = false;
-		public bool deleteConfirmed = false;
-		private int originalEntryLength = -1;
-		private string originalText_Full;
-		private string originalText_TextOnly;
-		private bool isDirty = false;
-		private string originalTitle;
-		private LabelsSortType sort = LabelsSortType.None;
-		public bool saved = false;
-		public bool preserveOriginalText;
+		private JournalEntry	entry = null;
+		private Journal			currentJournal = null;
+		private bool			isEdit = false;
+		private int				originalEntryLength = -1;
+		private string			originalText_Full;
+		private string			originalText_TextOnly;
+		private bool			isDirty = false;
+		private string			originalTitle;
+		private LabelsSortType	sort = LabelsSortType.None;
+
+		public bool saved { get; private set; }
+		public bool preserveOriginalText { get; set; }
 
 		private enum LabelsSortType
 		{
@@ -39,13 +39,11 @@ namespace myJournal.subforms
 			this.currentJournal = journal;
 		}
 
-		private void GrayOriginalText()
+		private void ddlFonts_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			rtbNewEntry.SelectionStart = 1;
-			rtbNewEntry.SelectionLength = originalText_Full.Length + 1;
-			rtbNewEntry.SelectionColor = Color.Gray;
-			rtbNewEntry.SelectionLength = 0;
-			rtbNewEntry.SelectionStart = 0;
+			lblSelectedFont.Font = new Font(ddlFonts.Text, 10);
+			lblSelectedFont.Text = lblSelectedFont.Font.Name;
+			Application.DoEvents();
 		}
 
 		private void frmNewEntry_Load(object sender, EventArgs e)
@@ -81,6 +79,15 @@ namespace myJournal.subforms
 			SetIsDirty(false);
 		}
 
+		private void GrayOriginalText()
+		{
+			rtbNewEntry.SelectionStart = 1;
+			rtbNewEntry.SelectionLength = originalText_Full.Length + 1;
+			rtbNewEntry.SelectionColor = Color.Gray;
+			rtbNewEntry.SelectionLength = 0;
+			rtbNewEntry.SelectionStart = 0;
+		}
+
 		private void InNoTypeArea(bool clicked = false)
 		{
 			if (preserveOriginalText)
@@ -109,7 +116,7 @@ namespace myJournal.subforms
 				case LabelsSortType.None:
 					Utilities.PopulateLabelsList(clbLabels, null, Utilities.LabelsSortType.None);
 					lblSortType.Text = "Sort A-Z";
-					sort = LabelsSortType.Descending;
+					sort = LabelsSortType.Ascending;
 					break;
 				case LabelsSortType.Ascending:
 					Utilities.PopulateLabelsList(clbLabels, null, Utilities.LabelsSortType.Descending);
@@ -119,7 +126,7 @@ namespace myJournal.subforms
 				case LabelsSortType.Descending:
 					Utilities.PopulateLabelsList(clbLabels, null, Utilities.LabelsSortType.Ascending);
 					lblSortType.Text = "Unsorted";
-					sort = LabelsSortType.Ascending;
+					sort = LabelsSortType.None;
 					break;
 			}
 		}
@@ -147,6 +154,17 @@ namespace myJournal.subforms
 				this.entry = null;
 				this.Hide();
 			}
+		}
+
+		private void mnuFindTextBox_TextChanged(object sender, EventArgs e)
+		{
+			// do find operation here
+		}
+
+		private void mnuFind_Click(object sender, EventArgs e)
+		{
+			txtFind.Text = string.Empty;
+			txtFind.Focus();
 		}
 
 		private void mnuSaveAndExit_Click(object sender, EventArgs e)
@@ -220,24 +238,6 @@ namespace myJournal.subforms
 		}
 
 		private void txtNewEntryTitle_TextChanged(object sender, EventArgs e) { SetIsDirty(true); }
-
-		private void mnuFindTextBox_TextChanged(object sender, EventArgs e)
-		{
-			// do find operation here
-		}
-
-		private void mnuFind_Click(object sender, EventArgs e)
-		{
-			txtFind.Text = string.Empty;
-			txtFind.Focus();
-		}
-
-		private void ddlFonts_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			lblSelectedFont.Font = new Font(ddlFonts.Text, 10);
-			lblSelectedFont.Text = lblSelectedFont.Font.Name;
-			Application.DoEvents();
-		}
 
 	}
 }
