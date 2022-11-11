@@ -216,17 +216,17 @@ namespace myJournal.subforms
 			{
 				case LabelsSortType.None:
 					Utilities.PopulateLabelsList(null, lstLabels, Utilities.LabelsSortType.None);
-					lblSortType.Text = "Sort A-Z";
+					lblSortType.Text = "sort A-Z";
 					sort = LabelsSortType.Ascending;
 					break;
 				case LabelsSortType.Ascending:
 					Utilities.PopulateLabelsList(null, lstLabels, Utilities.LabelsSortType.Descending);
-					lblSortType.Text = "Sort Z-A";
+					lblSortType.Text = "sort Z-A";
 					sort = LabelsSortType.Descending;
 					break;
 				case LabelsSortType.Descending:
 					Utilities.PopulateLabelsList(null, lstLabels, Utilities.LabelsSortType.Ascending);
-					lblSortType.Text = "Unsorted";
+					lblSortType.Text = "unsorted";
 					sort = LabelsSortType.None;
 					break;
 			}
@@ -307,6 +307,7 @@ namespace myJournal.subforms
 			lstLabels.Items.RemoveAt(selIndx);
 			lstLabels.Items.Insert(selIndx - 1, sLbl);
 			lstLabels.SelectedIndex = selIndx - 1;
+			SaveLabels();
 		}
 
 		private void mnuMoveDown_Click(object sender, EventArgs e)
@@ -316,6 +317,7 @@ namespace myJournal.subforms
 			lstLabels.Items.RemoveAt(selIndx);
 			lstLabels.Items.Insert(selIndx + 1, sLbl);
 			lstLabels.SelectedIndex = selIndx + 1;
+			SaveLabels();
 		}
 
 		private void mnuRename_Click(object sender, EventArgs e)

@@ -48,11 +48,11 @@ namespace myJournal.subforms
 
 		private void frmNewEntry_Load(object sender, EventArgs e)
 		{
-			Utilities.PopulateLabelsList(clbLabels);
 			originalTitle = this.Text;
 			ddlFonts.DataSource = Program.lstFonts;
 			ddlFonts.DisplayMember = "text";
-			sort = LabelsSortType.Ascending;
+			sort = LabelsSortType.None;
+			lblSortType_Click(null, null);
 
 			if (isEdit)
 			{
@@ -115,17 +115,17 @@ namespace myJournal.subforms
 			{
 				case LabelsSortType.None:
 					Utilities.PopulateLabelsList(clbLabels, null, Utilities.LabelsSortType.None);
-					lblSortType.Text = "Sort A-Z";
+					lblSortType.Text = "sort A-Z";
 					sort = LabelsSortType.Ascending;
 					break;
 				case LabelsSortType.Ascending:
 					Utilities.PopulateLabelsList(clbLabels, null, Utilities.LabelsSortType.Descending);
-					lblSortType.Text = "Sort Z-A";
+					lblSortType.Text = "sort Z-A";
 					sort = LabelsSortType.Descending;
 					break;
 				case LabelsSortType.Descending:
 					Utilities.PopulateLabelsList(clbLabels, null, Utilities.LabelsSortType.Ascending);
-					lblSortType.Text = "Unsorted";
+					lblSortType.Text = "unsorted";
 					sort = LabelsSortType.None;
 					break;
 			}

@@ -149,11 +149,11 @@ namespace myJournal.subforms
 			// 
 			this.lblSortType.AutoSize = true;
 			this.lblSortType.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.lblSortType.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
+			this.lblSortType.Font = new System.Drawing.Font("Segoe UI", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
 			this.lblSortType.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblSortType.Location = new System.Drawing.Point(233, 6);
+			this.lblSortType.Location = new System.Drawing.Point(234, 4);
 			this.lblSortType.Name = "lblSortType";
-			this.lblSortType.Size = new System.Drawing.Size(54, 15);
+			this.lblSortType.Size = new System.Drawing.Size(59, 17);
 			this.lblSortType.TabIndex = 5;
 			this.lblSortType.Text = "Sort A-Z";
 			this.lblSortType.Click += new System.EventHandler(this.lblSortType_Click);
