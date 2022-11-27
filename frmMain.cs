@@ -59,11 +59,23 @@
 				> select Manage Labels 
 				> provide PIN for journals 
 				> Globally delete a label 
-				> New entry does not save and journal re-opens w/ no entry title + text
+				-> New entry does not save and journal re-opens w/ no entry title + text
 			Fix:
 				Apparently when the Label > Delete runs the Program.PIN is changed.
 				Added a class variable to frmLabelsManager storing the Program.PIN when launched. Reset Program.PIN to that variable value on Form_Closing(...).
+			Tested OK 11/27/22
 			
+		004 11/27/22
+			Replicate sequence:
+				> Open a journal
+				> Select an entry
+				> Create a new entry (Save and Exit)
+				->  frmMain is shown in EntrySelected mode but no entry is selected (because they reloaded). Therefore when lblSeperator is clicked on we throw an 'Index out of range' error 
+						because no entry is selected.
+			Fix:
+				Switch to JournalSelected mode when returning from Entry > Create.
+			Tested OK 11/27/22. The mode switch was already programmed for Entry delete and Entry edit modes - just wasn't doing that for Create.
+
 		toDo:
 		07/23/22 001 Related to bug 001.
 					WHEN CLICKING 'week' OR 'month' FILTER ...
@@ -313,7 +325,10 @@ namespace myJournal.subforms
 			Utilities.Showform(frm, this);
 
 			if(frm.saved)
-			{ Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text); }
+			{ 
+				Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text);
+				ShowHideMenusAndControls(SelectionState.JournalLoaded);
+			}
 
 			frm.Close();
 			this.Show();
