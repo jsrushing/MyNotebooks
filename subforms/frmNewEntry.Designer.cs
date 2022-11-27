@@ -125,6 +125,7 @@ namespace myJournal.subforms
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(494, 23);
 			this.panel1.TabIndex = 42;
+			this.panel1.Visible = false;
 			// 
 			// lblSelectedFont
 			// 

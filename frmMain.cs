@@ -51,6 +51,18 @@
 		002X 08/02/22 07:20
 			There's a problem with date display. Some (older?) entry dates are "H:m:s" and others are "HH:mm:ss".
 			09/10/22 FIXED
+
+		003x 11/27/22
+			Replicate sequence: 
+				> Open a PIN-protected journal 
+				> Open Create Entry 
+				> select Manage Labels 
+				> provide PIN for journals 
+				> Globally delete a label 
+				> New entry does not save and journal re-opens w/ no entry title + text
+			Fix:
+				Apparently when the Label > Delete runs the Program.PIN is changed.
+				Added a class variable to frmLabelsManager storing the Program.PIN when launched. Reset Program.PIN to that variable value on Form_Closing(...).
 			
 		toDo:
 		07/23/22 001 Related to bug 001.
@@ -84,6 +96,9 @@
 			done
 		Journal rename?
 			did it
+
+	11/27/22
+		
 
  */
 using System;
@@ -122,7 +137,7 @@ namespace myJournal.subforms
 			System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
 			System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
 			string version = fvi.FileVersion;
-			this.Text = "myJournal " + version;
+			this.Text = "myJournal " + version + (fvi.FileName.ToLower().Contains("debug") ? " - DEBUG MODE" : "");
 			LoadJournals();
 			LoadFonts();
 			ShowHideMenusAndControls(SelectionState.HideAll);

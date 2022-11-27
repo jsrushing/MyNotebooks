@@ -406,6 +406,7 @@ namespace myJournal.subforms
 			this.MinimumSize = new System.Drawing.Size(382, 518);
 			this.Name = "frmLabelsManager";
 			this.Text = "Manage Labels";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmLabelsManager_FormClosing);
 			this.Load += new System.EventHandler(this.frmLabelsManager_Load);
 			this.Resize += new System.EventHandler(this.frmLabelsManager_Resize);
 			this.pnlMain.ResumeLayout(false);

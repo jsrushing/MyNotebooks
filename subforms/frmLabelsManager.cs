@@ -21,6 +21,7 @@ namespace myJournal.subforms
 		private bool Deleting = false;
 		private bool EditingAllJournals;
 		private LabelsSortType sort = LabelsSortType.None;
+		private string OriginalPIN = Program.PIN;
 
 		public bool ActionTaken { get; private set; }
 
@@ -47,6 +48,8 @@ namespace myJournal.subforms
 			}
 			else { mnuRename_InCurrentJournal.Visible = false; mnuDelete_InCurrentJournal.Visible = false; }
 		}
+
+		private void frmLabelsManager_FormClosing(object sender, FormClosingEventArgs e) { Program.PIN = OriginalPIN; }
 
 		private void frmLabelsManager_Load(object sender, EventArgs e)
 		{

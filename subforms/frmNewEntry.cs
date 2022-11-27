@@ -57,18 +57,20 @@ namespace myJournal.subforms
 			if (isEdit)
 			{
 				txtNewEntryTitle.Text = entry.ClearTitle();
-				originalText_TextOnly = entry.ClearText();
-				
-				originalText_Full = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Editing"],
-					entry.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), entry.ClearTitle(), originalText_TextOnly);
-
-				originalEntryLength = originalText_Full.Length - 1;
-				originalText_Full = originalText_Full.Substring(originalText_Full.Length - originalEntryLength + 1);
-				rtbNewEntry.Text = originalText_Full;
 
 				if (preserveOriginalText)
 				{
+					originalText_Full = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Editing"],
+						entry.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), entry.ClearTitle(), entry.ClearText());
+
+					originalEntryLength = originalText_Full.Length - 1;
+					originalText_Full = originalText_Full.Substring(originalText_Full.Length - originalEntryLength + 1);
+					rtbNewEntry.Text = originalText_Full;
 					GrayOriginalText();
+				}
+				else
+				{
+					rtbNewEntry.Text = entry.ClearText();
 				}
 
 				Utilities.SetCheckedLabels(clbLabels, entry);
