@@ -62,6 +62,7 @@ namespace myJournal.subforms
 			this.txtPIN = new System.Windows.Forms.TextBox();
 			this.lblEnterPIN = new System.Windows.Forms.Label();
 			this.lstJournalPINs = new System.Windows.Forms.ListBox();
+			this.lstEntryObjects = new System.Windows.Forms.ListBox();
 			this.pnlMain.SuspendLayout();
 			this.pnlNewLabelName.SuspendLayout();
 			this.mnuMain.SuspendLayout();
@@ -189,6 +190,7 @@ namespace myJournal.subforms
 			this.lstOccurrences.Name = "lstOccurrences";
 			this.lstOccurrences.Size = new System.Drawing.Size(316, 208);
 			this.lstOccurrences.TabIndex = 3;
+			this.lstOccurrences.DoubleClick += new System.EventHandler(this.lstOccurrences_DoubleClick);
 			// 
 			// label1
 			// 
@@ -211,7 +213,7 @@ namespace myJournal.subforms
             this.mnuExit});
 			this.mnuMain.Location = new System.Drawing.Point(0, 0);
 			this.mnuMain.Name = "mnuMain";
-			this.mnuMain.Size = new System.Drawing.Size(366, 24);
+			this.mnuMain.Size = new System.Drawing.Size(894, 24);
 			this.mnuMain.TabIndex = 1;
 			this.mnuMain.Text = "menuStrip1";
 			// 
@@ -297,10 +299,7 @@ namespace myJournal.subforms
 			// mnuFindAll
 			// 
 			this.mnuFindAll.Name = "mnuFindAll";
-			this.mnuFindAll.Size = new System.Drawing.Size(59, 20);
-			this.mnuFindAll.Text = "&Find All";
-			this.mnuFindAll.Visible = false;
-			this.mnuFindAll.Click += new System.EventHandler(this.mnuFindAll_Click);
+			this.mnuFindAll.Size = new System.Drawing.Size(12, 20);
 			// 
 			// mnuAssignPINs
 			// 
@@ -392,11 +391,24 @@ namespace myJournal.subforms
 			this.lstJournalPINs.TabIndex = 1;
 			this.lstJournalPINs.SelectedIndexChanged += new System.EventHandler(this.lstJournalPINs_SelectedIndexChanged);
 			// 
+			// lstEntryObjects
+			// 
+			this.lstEntryObjects.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.lstEntryObjects.FormattingEnabled = true;
+			this.lstEntryObjects.IntegralHeight = false;
+			this.lstEntryObjects.ItemHeight = 15;
+			this.lstEntryObjects.Location = new System.Drawing.Point(738, 12);
+			this.lstEntryObjects.Name = "lstEntryObjects";
+			this.lstEntryObjects.Size = new System.Drawing.Size(114, 208);
+			this.lstEntryObjects.TabIndex = 4;
+			// 
 			// frmLabelsManager
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(366, 479);
+			this.ClientSize = new System.Drawing.Size(894, 479);
+			this.Controls.Add(this.lstEntryObjects);
 			this.Controls.Add(this.pnlJournalPINs);
 			this.Controls.Add(this.pnlMain);
 			this.Controls.Add(this.mnuMain);
@@ -457,5 +469,6 @@ namespace myJournal.subforms
 		private System.Windows.Forms.ToolStripMenuItem mnuDelete_InAllJournals;
 		private System.Windows.Forms.ToolStripMenuItem mnuDelete_InCurrentJournal;
 		private System.Windows.Forms.Label lblSortType;
+		private System.Windows.Forms.ListBox lstEntryObjects;
 	}
 }

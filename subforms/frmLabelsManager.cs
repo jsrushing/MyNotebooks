@@ -53,14 +53,14 @@ namespace myJournal.subforms
 
 		private void frmLabelsManager_Load(object sender, EventArgs e)
 		{
-			this.Size = this.MinimumSize;
+			//this.Size = this.MinimumSize;
 			pnlNewLabelName.Location = new Point(0, 0);
 			pnlNewLabelName.Size = this.Size;
 			pnlJournalPINs.Location = new Point(pnlMain.Location.X, 0);
 			pnlJournalPINs.Visible = true;
 			pnlMain.Visible = false;
 			mnuMain.Visible = false;
-			this.Width = pnlMain.Width + 47;
+			//this.Width = pnlMain.Width + 47;
 			ShowHideOccurrences();
 			foreach (Journal j in Utilities.AllJournals()) { lstJournalPINs.Items.Add(j.Name); }
 			lstJournalPINs.Sorted = true;
@@ -70,7 +70,7 @@ namespace myJournal.subforms
 
 		private void frmLabelsManager_Resize(object sender, EventArgs e)
 		{ 
-			if (this.Width > this.MinimumSize.Width) { this.Width = this.MinimumSize.Width; };
+			//if (this.Width > this.MinimumSize.Width) { this.Width = this.MinimumSize.Width; };
 			ShowHideOccurrences();		
 		}
 
@@ -107,13 +107,9 @@ namespace myJournal.subforms
 			if (Adding) 
 			{ 
 				AddLabelToUIListbox();
-
-				//LabelsManager.SaveLabels(lstLabels.Items.OfType<string>().ToList());
 				SaveLabels(); 
-
 				pnlNewLabelName.Visible = false;
 				Utilities.PopulateLabelsList(null, lstLabels);
-
 				lstOccurrences.Items.Clear();
 				ShowHideOccurrences();
 			}
@@ -127,12 +123,6 @@ namespace myJournal.subforms
 				foreach (Journal jrnl in journalsToEdit)
 				{
 					SetProgramPINForSelectedJournal(jrnl);
-
-					//foreach (JournalEntry je in LabelsManager.JournalHasLabel(CurrentJournal, lstLabels.SelectedItem != null ? lstLabels.SelectedItem.ToString() : string.Empty))
-					//{
-					//	bEdited = je.RemoveOrReplaceTag(txtLabelName.Text, sOldTagName, Renaming);
-					//	if (bEdited) { jrnl.Save(); }
-					//}
 
 					List<JournalEntry> lstEntryHasOldTag = jrnl.Entries.Where(t => ("," + t.ClearTags() + ",").Contains("," + sOldTagName + ",")).ToList();
 
@@ -256,8 +246,14 @@ namespace myJournal.subforms
 				mnuMoveUp.Enabled = lstLabels.SelectedIndex > 0;
 				mnuMoveDown.Enabled = lstLabels.SelectedIndex != lstLabels.Items.Count - 1;
 				lstOccurrences.Items.Clear();
-				mnuFindAll_Click(null, null);
+				//lstOccurrences.DataSource = null;
+				PopulateOccurrences();
+				this.FormBorderStyle = FormBorderStyle.Sizable;
 			}
+		}
+		private void lstOccurrences_DoubleClick(object sender, EventArgs e)
+		{
+
 		}
 
 		private void mnuAdd_Click(object sender, EventArgs e)
@@ -295,12 +291,6 @@ namespace myJournal.subforms
 		private void mnuExit_Click(object sender, EventArgs e)
 		{
 			this.Hide();
-		}
-
-		private void mnuFindAll_Click(object sender, EventArgs e)
-		{
-			PopulateOccurrences();
-			this.FormBorderStyle = FormBorderStyle.Sizable;
 		}
 
 		private void mnuMoveUp_Click(object sender, EventArgs e)
@@ -346,6 +336,7 @@ namespace myJournal.subforms
 				List<JournalEntry> foundItems_Loop = new List<JournalEntry>();
 				List<JournalEntry> foundItems;
 				string sPIN = string.Empty;
+				//Dictionary<string, JournalEntry> dict = new Dictionary<string, JournalEntry>();
 
 				if (sTagName.Length > 0)
 				{
@@ -356,13 +347,33 @@ namespace myJournal.subforms
 
 						if (foundItems.Count > 0)
 						{
+							//dict.Add("in '" + jrnl.Name + "'", null);
 							lstOccurrences.Items.Add("in '" + jrnl.Name + "'");
-							foreach (JournalEntry je in foundItems) { lstOccurrences.Items.Add("   > " + je.ClearTitle()); }
+
+							foreach (JournalEntry je in foundItems) 
+							{
+								//dict.Add("  > " + je.ClearTitle(), je);
+
+								lstOccurrences.Items.Add("   > " + je.ClearTitle()); 
+							}
+							
 							lstOccurrences.Items.Add("-----------------------");
+
+							//dict.Add("----------------", null);
 						}
 
 					}
-					
+					//if (dict.Count > 0)
+					//{
+					//	lstOccurrences.DataSource = new BindingSource(dict, null);
+					//	lstOccurrences.DisplayMember = "Key";
+					//	lstOccurrences.ValueMember = "Value";
+					//}
+					//else
+					//{
+					//	lstOccurrences.Items.Add("No occurrences found (are you missing a PIN?)");
+					//}
+
 					if (lstOccurrences.Items.Count == 0) { lstOccurrences.Items.Add("No occurrences found (are you missing a PIN?)"); }
 				}
 			}
