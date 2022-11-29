@@ -49,8 +49,8 @@ namespace myJournal.subforms
 		private void frmNewEntry_Load(object sender, EventArgs e)
 		{
 			originalTitle = this.Text;
-			ddlFonts.DataSource = Program.lstFonts;
-			ddlFonts.DisplayMember = "text";
+			//ddlFonts.DataSource = Program.lstFonts;
+			//ddlFonts.DisplayMember = "text";
 			sort = LabelsSortType.None;
 			lblSortType_Click(null, null);
 
@@ -223,7 +223,7 @@ namespace myJournal.subforms
 
 			if(this.entry != null)
 			{
-				this.Text = "editing '" + entry.ClearTitle() + "' in " + currentJournal.Name;
+				this.Text = "editing '" + entry.ClearTitle() + "' in '" + currentJournal.Name + "'";
 			}
 			else
 			{

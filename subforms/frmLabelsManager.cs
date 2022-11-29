@@ -53,14 +53,14 @@ namespace myJournal.subforms
 
 		private void frmLabelsManager_Load(object sender, EventArgs e)
 		{
-			//this.Size = this.MinimumSize;
+			this.Size = this.MinimumSize;
 			pnlNewLabelName.Location = new Point(0, 0);
 			pnlNewLabelName.Size = this.Size;
 			pnlJournalPINs.Location = new Point(pnlMain.Location.X, 0);
 			pnlJournalPINs.Visible = true;
 			pnlMain.Visible = false;
 			mnuMain.Visible = false;
-			//this.Width = pnlMain.Width + 47;
+			this.Width = pnlMain.Width + 47;
 			ShowHideOccurrences();
 			foreach (Journal j in Utilities.AllJournals()) { lstJournalPINs.Items.Add(j.Name); }
 			lstJournalPINs.Sorted = true;
@@ -70,7 +70,7 @@ namespace myJournal.subforms
 
 		private void frmLabelsManager_Resize(object sender, EventArgs e)
 		{ 
-			//if (this.Width > this.MinimumSize.Width) { this.Width = this.MinimumSize.Width; };
+			if (this.Width > this.MinimumSize.Width) { this.Width = this.MinimumSize.Width; };
 			ShowHideOccurrences();		
 		}
 
@@ -246,14 +246,25 @@ namespace myJournal.subforms
 				mnuMoveUp.Enabled = lstLabels.SelectedIndex > 0;
 				mnuMoveDown.Enabled = lstLabels.SelectedIndex != lstLabels.Items.Count - 1;
 				lstOccurrences.Items.Clear();
+				lstEntryObjects.Items.Clear();
 				//lstOccurrences.DataSource = null;
 				PopulateOccurrences();
 				this.FormBorderStyle = FormBorderStyle.Sizable;
 			}
 		}
+
 		private void lstOccurrences_DoubleClick(object sender, EventArgs e)
 		{
-
+			int i = lstOccurrences.SelectedIndex;
+			KeyValuePair<Journal, JournalEntry> kvp = (KeyValuePair<Journal, JournalEntry>)lstEntryObjects.Items[i];
+			Journal j = kvp.Key;
+			JournalEntry je = kvp.Value;
+			SetProgramPINForSelectedJournal(j);
+			frmNewEntry frm = new frmNewEntry(j, je);
+			Utilities.Showform(frm, this);
+			if (frm.saved) { ShowHideOccurrences(); }
+			frm.Close();
+			this.Show();
 		}
 
 		private void mnuAdd_Click(object sender, EventArgs e)
@@ -330,7 +341,7 @@ namespace myJournal.subforms
 		{
 			if(lstLabels.SelectedItem != null)
 			{
-				string sTagName = lstLabels.SelectedItem.ToString();
+				string sLabelName = lstLabels.SelectedItem.ToString();
 				lstOccurrences.Items.Clear();
 				this.Cursor = Cursors.WaitCursor;
 				List<JournalEntry> foundItems_Loop = new List<JournalEntry>();
@@ -338,26 +349,29 @@ namespace myJournal.subforms
 				string sPIN = string.Empty;
 				//Dictionary<string, JournalEntry> dict = new Dictionary<string, JournalEntry>();
 
-				if (sTagName.Length > 0)
+				if (sLabelName.Length > 0)
 				{
 					foreach(Journal jrnl in Utilities.AllJournals())
 					{
 						SetProgramPINForSelectedJournal(jrnl);
-						foundItems = jrnl.Entries.Where(t => ("," + t.ClearTags() + ",").Contains("," + sTagName + ",")).ToList();
+						foundItems = jrnl.Entries.Where(t => ("," + t.ClearTags() + ",").Contains("," + sLabelName + ",")).ToList();
 
 						if (foundItems.Count > 0)
 						{
 							//dict.Add("in '" + jrnl.Name + "'", null);
 							lstOccurrences.Items.Add("in '" + jrnl.Name + "'");
+							lstEntryObjects.Items.Add("");
 
 							foreach (JournalEntry je in foundItems) 
 							{
 								//dict.Add("  > " + je.ClearTitle(), je);
 
-								lstOccurrences.Items.Add("   > " + je.ClearTitle()); 
+								lstOccurrences.Items.Add("   > " + je.ClearTitle());
+								lstEntryObjects.Items.Add(new KeyValuePair<Journal, JournalEntry>(jrnl, je));		//(jrnl.Name + "|" + je.ClearTitle());
 							}
 							
 							lstOccurrences.Items.Add("-----------------------");
+							lstEntryObjects.Items.Add("");
 
 							//dict.Add("----------------", null);
 						}
