@@ -22,6 +22,7 @@ namespace myJournal.subforms
 		private bool EditingAllJournals;
 		private LabelsSortType sort = LabelsSortType.None;
 		private string OriginalPIN = Program.PIN;
+		private Dictionary<string, string> DictJournals = new Dictionary<string, string>();
 
 		public bool ActionTaken { get; private set; }
 
@@ -62,8 +63,17 @@ namespace myJournal.subforms
 			mnuMain.Visible = false;
 			this.Width = pnlMain.Width + 47;
 			ShowHideOccurrences();
-			foreach (Journal j in Utilities.AllJournals()) { lstJournalPINs.Items.Add(j.Name); }
-			lstJournalPINs.Sorted = true;
+
+			foreach (Journal j in Utilities.AllJournals()) 
+			{
+				DictJournals.Add(j.Name, "");
+				//lstJournalPINs.Items.Add(j.Name); 
+			}
+
+			lstJournalPINs.DataSource = new BindingSource(DictJournals, null);
+			lstJournalPINs.DisplayMember = "key";
+			lstJournalPINs.ValueMember = "value";
+			
 			sort = LabelsSortType.None;
 			lblSortType_Click(null, null);
 		}
@@ -84,14 +94,18 @@ namespace myJournal.subforms
 
 		private void btnAddPIN_Click(object sender, EventArgs e)
 		{
-			string s = lstJournalPINs.SelectedItem.ToString();
-			s = s.Contains("|") ? s.Substring(0, s.IndexOf("|")) : s;
-			s = s + "|" + txtPIN.Text;
-			lstJournalPINs.Items.Insert(lstJournalPINs.SelectedIndex, s);
-			lstJournalPINs.Items.RemoveAt(lstJournalPINs.SelectedIndex);
+			DictJournals[lstJournalPINs.Text] = txtPIN.Text;
+
+
+			//string s = lstJournalPINs.SelectedItem.ToString();
+			//s = s.Contains("|") ? s.Substring(0, s.IndexOf("|")) : s;
+			//s = s + "|" + txtPIN.Text;
+			//lstJournalPINs.Items.Insert(lstJournalPINs.SelectedIndex, s);
+			//lstJournalPINs.Items.RemoveAt(lstJournalPINs.SelectedIndex);
 			txtPIN.Text = "(select a Journal)";
 			txtPIN.Enabled = false;
 			btnAddPIN.Enabled = false;
+			lstJournalPINs.SelectedIndex = -1;
 		}
 
 		private void btnCancel_Click(object sender, EventArgs e)
@@ -182,14 +196,6 @@ namespace myJournal.subforms
 			mnuMain.Visible = true;
 		}
 
-		private void SetProgramPINForSelectedJournal(Journal journal)
-		{
-			string sPIN = string.Empty;
-			string sJrnlPin = lstJournalPINs.Items.OfType<string>().ToArray().Single(x => x.StartsWith(journal.Name));
-			sPIN = sJrnlPin.Contains("|") ? sJrnlPin.Substring(sJrnlPin.IndexOf("|") + 1) : string.Empty;
-			Program.PIN = sPIN;
-		}
-
 		private bool LabelExistsInAnyJournal(string labelName)
 		{
 			foreach (Journal jrnl in Utilities.AllJournals())
@@ -233,6 +239,7 @@ namespace myJournal.subforms
 				txtPIN.Enabled = true;
 				btnAddPIN.Enabled = true;
 				txtPIN.Focus();
+				txtPIN.Text = DictJournals[lstJournalPINs.Text];
 			}
 		}
 
@@ -247,7 +254,6 @@ namespace myJournal.subforms
 				mnuMoveDown.Enabled = lstLabels.SelectedIndex != lstLabels.Items.Count - 1;
 				lstOccurrences.Items.Clear();
 				lstEntryObjects.Items.Clear();
-				//lstOccurrences.DataSource = null;
 				PopulateOccurrences();
 				this.FormBorderStyle = FormBorderStyle.Sizable;
 			}
@@ -262,7 +268,7 @@ namespace myJournal.subforms
 			SetProgramPINForSelectedJournal(j);
 			frmNewEntry frm = new frmNewEntry(j, je);
 			Utilities.Showform(frm, this);
-			if (frm.saved) { ShowHideOccurrences(); }
+			if (frm.saved) { PopulateOccurrences(); }
 			frm.Close();
 			this.Show();
 		}
@@ -341,52 +347,34 @@ namespace myJournal.subforms
 		{
 			if(lstLabels.SelectedItem != null)
 			{
-				string sLabelName = lstLabels.SelectedItem.ToString();
-				lstOccurrences.Items.Clear();
-				this.Cursor = Cursors.WaitCursor;
-				List<JournalEntry> foundItems_Loop = new List<JournalEntry>();
-				List<JournalEntry> foundItems;
-				string sPIN = string.Empty;
-				//Dictionary<string, JournalEntry> dict = new Dictionary<string, JournalEntry>();
-
-				if (sLabelName.Length > 0)
+				if (lstLabels.SelectedItem.ToString().Length > 0)
 				{
+					this.Cursor = Cursors.WaitCursor;
+					lstOccurrences.Items.Clear();
+					List<JournalEntry> foundItems_Loop = new List<JournalEntry>();
+					List<JournalEntry> foundItems;
+
 					foreach(Journal jrnl in Utilities.AllJournals())
 					{
 						SetProgramPINForSelectedJournal(jrnl);
-						foundItems = jrnl.Entries.Where(t => ("," + t.ClearTags() + ",").Contains("," + sLabelName + ",")).ToList();
+						foundItems = jrnl.Entries.Where(t => ("," + t.ClearTags() + ",").Contains("," + lstLabels.SelectedItem.ToString() + ",")).ToList();
 
 						if (foundItems.Count > 0)
 						{
-							//dict.Add("in '" + jrnl.Name + "'", null);
 							lstOccurrences.Items.Add("in '" + jrnl.Name + "'");
 							lstEntryObjects.Items.Add("");
 
 							foreach (JournalEntry je in foundItems) 
 							{
-								//dict.Add("  > " + je.ClearTitle(), je);
-
 								lstOccurrences.Items.Add("   > " + je.ClearTitle());
-								lstEntryObjects.Items.Add(new KeyValuePair<Journal, JournalEntry>(jrnl, je));		//(jrnl.Name + "|" + je.ClearTitle());
+								lstEntryObjects.Items.Add(new KeyValuePair<Journal, JournalEntry>(jrnl, je));
 							}
 							
 							lstOccurrences.Items.Add("-----------------------");
 							lstEntryObjects.Items.Add("");
-
-							//dict.Add("----------------", null);
 						}
 
 					}
-					//if (dict.Count > 0)
-					//{
-					//	lstOccurrences.DataSource = new BindingSource(dict, null);
-					//	lstOccurrences.DisplayMember = "Key";
-					//	lstOccurrences.ValueMember = "Value";
-					//}
-					//else
-					//{
-					//	lstOccurrences.Items.Add("No occurrences found (are you missing a PIN?)");
-					//}
 
 					if (lstOccurrences.Items.Count == 0) { lstOccurrences.Items.Add("No occurrences found (are you missing a PIN?)"); }
 				}
@@ -406,6 +394,15 @@ namespace myJournal.subforms
 			foreach (string tag in arrTags) { sb.AppendLine(tag); }
 
 			File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_LabelsFolder"], sb.ToString());
+		}
+
+		private void SetProgramPINForSelectedJournal(Journal journal)
+		{
+			//string sPIN = string.Empty;
+			//string sJrnlPin = lstJournalPINs.Items.OfType<string>().ToArray().Single(x => x.StartsWith(journal.Name));
+			//sPIN = sJrnlPin.Contains("|") ? sJrnlPin.Substring(sJrnlPin.IndexOf("|") + 1) : string.Empty;
+			//Program.PIN = sPIN;
+			Program.PIN = DictJournals[journal.Name];
 		}
 
 		private void ShowHideInCurrentJournalMenus()
