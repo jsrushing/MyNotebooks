@@ -95,8 +95,6 @@
 
 		08/09/22 003 See frmSearch & Journal
 
-		09/10/22 *************************** DATES ARE STILL NOT WORKING! SEE TODO 001 AND BUG 001 ABOVE! *************************************
-
 		09/12/22 004 Add formatting to RTB's
 					> frmNewEntry
 					> frmMain (displaying full entry w/ richtext).
@@ -108,10 +106,6 @@
 			done
 		Journal rename?
 			did it
-
-	11/27/22
-		
-
  */
 using System;
 using System.Drawing;

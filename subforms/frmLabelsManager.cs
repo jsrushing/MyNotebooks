@@ -70,10 +70,6 @@ namespace myJournal.subforms
 				lstJournalPINs.Items.Add(j.Name); 
 			}
 
-			//lstJournalObjects.DataSource = new BindingSource(DictJournals, null);
-			//lstJournalPINs.DisplayMember = "key";
-			//lstJournalPINs.ValueMember = "value";
-
 			sort = LabelsSortType.None;
 			lblSortType_Click(null, null);
 		}
