@@ -213,7 +213,7 @@ namespace myJournal.subforms
             this.mnuExit});
 			this.mnuMain.Location = new System.Drawing.Point(0, 0);
 			this.mnuMain.Name = "mnuMain";
-			this.mnuMain.Size = new System.Drawing.Size(1184, 24);
+			this.mnuMain.Size = new System.Drawing.Size(965, 24);
 			this.mnuMain.TabIndex = 1;
 			this.mnuMain.Text = "menuStrip1";
 			// 
@@ -400,14 +400,15 @@ namespace myJournal.subforms
 			this.lstEntryObjects.ItemHeight = 15;
 			this.lstEntryObjects.Location = new System.Drawing.Point(738, 12);
 			this.lstEntryObjects.Name = "lstEntryObjects";
-			this.lstEntryObjects.Size = new System.Drawing.Size(347, 208);
+			this.lstEntryObjects.Size = new System.Drawing.Size(203, 37);
 			this.lstEntryObjects.TabIndex = 4;
+			this.lstEntryObjects.Visible = false;
 			// 
 			// frmLabelsManager
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(1184, 479);
+			this.ClientSize = new System.Drawing.Size(965, 479);
 			this.Controls.Add(this.lstEntryObjects);
 			this.Controls.Add(this.pnlJournalPINs);
 			this.Controls.Add(this.pnlMain);

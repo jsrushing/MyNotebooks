@@ -67,13 +67,13 @@ namespace myJournal.subforms
 			foreach (Journal j in Utilities.AllJournals()) 
 			{
 				DictJournals.Add(j.Name, "");
-				//lstJournalPINs.Items.Add(j.Name); 
+				lstJournalPINs.Items.Add(j.Name); 
 			}
 
-			lstJournalPINs.DataSource = new BindingSource(DictJournals, null);
-			lstJournalPINs.DisplayMember = "key";
-			lstJournalPINs.ValueMember = "value";
-			
+			//lstJournalObjects.DataSource = new BindingSource(DictJournals, null);
+			//lstJournalPINs.DisplayMember = "key";
+			//lstJournalPINs.ValueMember = "value";
+
 			sort = LabelsSortType.None;
 			lblSortType_Click(null, null);
 		}
@@ -94,14 +94,11 @@ namespace myJournal.subforms
 
 		private void btnAddPIN_Click(object sender, EventArgs e)
 		{
-			DictJournals[lstJournalPINs.Text] = txtPIN.Text;
-
-
-			//string s = lstJournalPINs.SelectedItem.ToString();
-			//s = s.Contains("|") ? s.Substring(0, s.IndexOf("|")) : s;
-			//s = s + "|" + txtPIN.Text;
-			//lstJournalPINs.Items.Insert(lstJournalPINs.SelectedIndex, s);
-			//lstJournalPINs.Items.RemoveAt(lstJournalPINs.SelectedIndex);
+			string s = lstJournalPINs.Text.Replace(" (****)", "");
+			DictJournals[s] = txtPIN.Text;
+			s += " (****)";
+			lstJournalPINs.Items.Insert(lstJournalPINs.SelectedIndex, s);
+			lstJournalPINs.Items.RemoveAt(lstJournalPINs.SelectedIndex);
 			txtPIN.Text = "(select a Journal)";
 			txtPIN.Enabled = false;
 			btnAddPIN.Enabled = false;
@@ -235,11 +232,10 @@ namespace myJournal.subforms
 		{
 			if(lstJournalPINs.SelectedIndex > -1)
 			{
-				txtPIN.Text = string.Empty;
+				txtPIN.Text = DictJournals[lstJournalPINs.Text.Replace(" (****)", "")];
 				txtPIN.Enabled = true;
 				btnAddPIN.Enabled = true;
 				txtPIN.Focus();
-				txtPIN.Text = DictJournals[lstJournalPINs.Text];
 			}
 		}
 
@@ -351,13 +347,11 @@ namespace myJournal.subforms
 				{
 					this.Cursor = Cursors.WaitCursor;
 					lstOccurrences.Items.Clear();
-					List<JournalEntry> foundItems_Loop = new List<JournalEntry>();
-					List<JournalEntry> foundItems;
 
 					foreach(Journal jrnl in Utilities.AllJournals())
 					{
 						SetProgramPINForSelectedJournal(jrnl);
-						foundItems = jrnl.Entries.Where(t => ("," + t.ClearTags() + ",").Contains("," + lstLabels.SelectedItem.ToString() + ",")).ToList();
+						List<JournalEntry> foundItems = jrnl.Entries.Where(t => ("," + t.ClearTags() + ",").Contains("," + lstLabels.SelectedItem.ToString() + ",")).ToList();
 
 						if (foundItems.Count > 0)
 						{
@@ -396,14 +390,7 @@ namespace myJournal.subforms
 			File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_LabelsFolder"], sb.ToString());
 		}
 
-		private void SetProgramPINForSelectedJournal(Journal journal)
-		{
-			//string sPIN = string.Empty;
-			//string sJrnlPin = lstJournalPINs.Items.OfType<string>().ToArray().Single(x => x.StartsWith(journal.Name));
-			//sPIN = sJrnlPin.Contains("|") ? sJrnlPin.Substring(sJrnlPin.IndexOf("|") + 1) : string.Empty;
-			//Program.PIN = sPIN;
-			Program.PIN = DictJournals[journal.Name];
-		}
+		private void SetProgramPINForSelectedJournal(Journal journal) { Program.PIN = DictJournals[journal.Name]; }
 
 		private void ShowHideInCurrentJournalMenus()
 		{
