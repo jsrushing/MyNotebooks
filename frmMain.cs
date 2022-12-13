@@ -84,17 +84,25 @@
 						3) Show the filtered entries
 						4) If one is the entry remembered in 1), select it.
 			08/02/22 Update. Have disabled filter actions. NEEDS ATTENTION. HIDE FILTER CONTROLS UNTIL FIXED !!!
+			12/13/22 Update. As of v1.5 date filters are working. 'week' and 'month' buttons are deprecated/removed.
 
 		12/1/22 
 			002 ClickOnce install
 				Got CO working w/ setup.exe on my desktop. Installed on laptop.
 					> Don't have app updates working yet. Thinking I need it to install from the web before I do that.
 					> Need to have it installing from web. GoDaddy is f'ng me w/ 'IP Address has changed' so I can't get to File Manager :(
+				12/13/22 CO is working from GoDaddy.
+					Still have to FTP newly published files to GoDaddy.
+					Would like to publish directly to FTP but apparently that's not an option in VS2022
+
 				003 Need to be able to distribute journals to multiple devices - so journals are portable.
 					> Export Journal via email?
 						Will need 'Import Journal' in app so user can browse to downloaded journal.
 						This isn't really portable since updates on one device will have to be emailed.
 							True portability will involve Journals being stored on web.
+					> Import Journals is working. Is NOT a final fix!
+						On update of ClickOnce deployment (which does work) there needs to be a mechanism to import Journals from 
+							previous (published) version.
 
 		12/7/22
 			003 checkbox lists
@@ -159,7 +167,7 @@ namespace myJournal.subforms
 			string version = fvi.FileVersion;
 			this.Text = "myJournal " + version + (fvi.FileName.ToLower().Contains("debug") ? " - DEBUG MODE" : "");
 			LoadJournals();
-			LoadFonts();
+			//LoadFonts();
 			ShowHideMenusAndControls(SelectionState.HideAll);
 		}
 
@@ -328,7 +336,7 @@ namespace myJournal.subforms
 
 		private void mnuAboutMyJournal_Click(object sender, EventArgs e)
 		{
-			Form frm = new frmAbout();
+			Form frm = new frmAbout(this);
 			frm.ShowDialog();
 		}
 
@@ -350,10 +358,10 @@ namespace myJournal.subforms
 
 		private void mnuEntryDelete_Click(object sender, EventArgs e)
 		{
-			frmMessage frm = new frmMessage(frmMessage.OperationType.DeleteEntry, currentEntry.ClearTitle());
+			frmMessage frm = new frmMessage(frmMessage.OperationType.DeleteEntry, currentEntry.ClearTitle(), "", this);
 			frm.ShowDialog();
-			//Utilities.Showform(frm, this);
-			if(frm.result == frmMessage.ReturnResult.Yes) 
+
+			if(frm.Result == frmMessage.ReturnResult.Yes) 
 			{
 				currentJournal.Entries.Remove(currentEntry);
 				currentJournal.Save();
@@ -384,44 +392,6 @@ namespace myJournal.subforms
 			this.Height += 1;
 		}
 
-
-		private void mnuImport_Click(object sender, EventArgs e)
-		{
-			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Multiselect = true;
-			
-			if (ofd.ShowDialog() == DialogResult.OK)
-			{
-				string tgt = String.Empty;
-				bool ok2copy = true;
-				bool filesCopied = false;
-
-				foreach(string fName in ofd.FileNames)
-				{
-					tgt = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + fName.Substring(fName.LastIndexOf("\\") + 1);
-
-					if (File.Exists(tgt))
-					{
-						frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "The journal '" + 
-							fName.Substring(fName.LastIndexOf("\\") + 1) + "' already exists. Do you want to ovewrwrite the journal?");
-						frm.ShowDialog();
-						ok2copy = frm.result == frmMessage.ReturnResult.Yes;
-					}
-
-					if (ok2copy)
-					{
-						File.Copy(fName, tgt, true);
-						filesCopied = true;
-					}
-
-					ok2copy = true;
-				}
-
-				if (filesCopied) { LoadJournals(); }
-
-			}
-		}
-
 		private void mnuJournal_Create_Click(object sender, EventArgs e)
 		{
 			frmNewJournal frm = new frmNewJournal();
@@ -439,10 +409,10 @@ namespace myJournal.subforms
 
 		private void mnuJournal_Delete_Click(object sender, EventArgs e)
 		{
-			frmMessage frm = new frmMessage(frmMessage.OperationType.DeleteJournal, currentJournal.Name.Replace("\\", ""));
+			frmMessage frm = new frmMessage(frmMessage.OperationType.DeleteJournal, currentJournal.Name.Replace("\\", ""),"",this);
 			frm.ShowDialog();
-			//Utilities.Showform(frm, this);
-			if (frm.result == frmMessage.ReturnResult.Yes)
+
+			if (frm.Result == frmMessage.ReturnResult.Yes)
 			{
 				currentJournal.Delete();
 				ddlJournals.Text = string.Empty;
@@ -458,16 +428,53 @@ namespace myJournal.subforms
 		{
 			currentJournal.Backup_Forced();
 			string sMsg = currentJournal.BackupCompleted ? "The backup was completed" : "An error occurred. The backup was not completed.";
-			Utilities.ShowMessage(sMsg, this);
+			frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The backup is complete.", "", this);
+			frm.ShowDialog();
+		}
+
+		private void mnuJournal_Import_Click(object sender, EventArgs e)
+		{
+			OpenFileDialog ofd = new OpenFileDialog();
+			ofd.Multiselect = true;
+			
+			if (ofd.ShowDialog() == DialogResult.OK)
+			{
+				string tgt = String.Empty;
+				bool ok2copy = true;
+				bool filesCopied = false;
+
+				foreach(string fName in ofd.FileNames)
+				{
+					tgt = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + fName.Substring(fName.LastIndexOf("\\") + 1);
+
+					if (File.Exists(tgt))
+					{
+						frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "The journal '" + 
+							fName.Substring(fName.LastIndexOf("\\") + 1) + "' already exists. Do you want to ovewrwrite the journal?", "", this);
+						frm.ShowDialog();
+						ok2copy = frm.Result == frmMessage.ReturnResult.Yes;
+					}
+
+					if (ok2copy)
+					{
+						File.Copy(fName, tgt, true);
+						filesCopied = true;
+					}
+
+					ok2copy = true;
+				}
+
+				if (filesCopied) { LoadJournals(); }
+
+			}
 		}
 
 		private void mnuJournal_Rename_Click(object sender, EventArgs e)
 		{
-			frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "Enter the new journal name.", currentJournal.Name);	
+			frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "Enter the new journal name.", currentJournal.Name, this);	
 			frm.ShowDialog();
-			//Utilities.Showform(frm, this);
 
-			if (frm.result == frmMessage.ReturnResult.Ok && frm.EnteredValue.Length > 0)
+			if (frm.Result == frmMessage.ReturnResult.Ok && frm.EnteredValue.Length > 0)
 			{
 				currentJournal.Rename(frm.EnteredValue);
 				LoadJournals();

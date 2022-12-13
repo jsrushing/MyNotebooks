@@ -189,7 +189,7 @@ namespace myJournal.subforms
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(269, 236);
+			this.ClientSize = new System.Drawing.Size(269, 225);
 			this.Controls.Add(this.txtInput);
 			this.Controls.Add(this.pnlOk);
 			this.Controls.Add(this.pnlOkCancel);
@@ -197,7 +197,6 @@ namespace myJournal.subforms
 			this.Controls.Add(this.pnlYesNoCancel);
 			this.Controls.Add(this.lblMessage);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-			this.MinimumSize = new System.Drawing.Size(285, 275);
 			this.Name = "frmMessage";
 			this.Text = "Please Confirm";
 			this.Activated += new System.EventHandler(this.frmMessage_Activated);

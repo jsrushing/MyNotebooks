@@ -257,8 +257,8 @@ namespace myJournal.objects
 
 		public static void ShowMessage(string message, Form parentForm)
 		{
-			frmMessage frm = new frmMessage(frmMessage.OperationType.Message, message);
-			Showform(frm, parentForm);
+			frmMessage frm = new frmMessage(frmMessage.OperationType.Message, message, "", parentForm);
+			frm.ShowDialog();
 			frm.Close();
 			parentForm.Show();
 		}

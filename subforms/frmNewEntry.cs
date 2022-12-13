@@ -142,21 +142,18 @@ namespace myJournal.subforms
 		{
 			if (isDirty)
 			{
-				frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Do you want to save your changes?");
+				frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Do you want to save your changes?", "", this);
 				frm.ShowDialog();
-				//Utilities.Showform(frm, this);
 
-				if(frm.result == frmMessage.ReturnResult.No) { entry = null; }
-				else if(frm.result == frmMessage.ReturnResult.Yes)  { Save(); }
-
-				//frm.Close();
-				this.Hide();
+				if(frm.Result == frmMessage.ReturnResult.No) { entry = null; }
+				else if(frm.Result == frmMessage.ReturnResult.Yes)  { Save(); }
 			}
 			else
 			{
 				this.entry = null;
-				this.Hide();
 			}
+
+			this.Hide();
 		}
 
 		private void mnuFindTextBox_TextChanged(object sender, EventArgs e)

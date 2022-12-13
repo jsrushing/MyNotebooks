@@ -47,6 +47,7 @@ namespace myJournal.subforms
 			this.mnuJournal_Rename = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuJournal_ForceBackup = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuJournal_RestoreBackups = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuJournal_Import = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEntryTop = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEntryCreate = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuEntryEdit = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,7 +66,6 @@ namespace myJournal.subforms
 			this.label3 = new System.Windows.Forms.Label();
 			this.cbxDatesTo = new System.Windows.Forms.ComboBox();
 			this.pnlPin = new System.Windows.Forms.Panel();
-			this.mnuImport = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.pnlDateFilters.SuspendLayout();
 			this.pnlPin.SuspendLayout();
@@ -200,7 +200,7 @@ namespace myJournal.subforms
             this.mnuJournal_Rename,
             this.mnuJournal_ForceBackup,
             this.mnuJournal_RestoreBackups,
-            this.mnuImport});
+            this.mnuJournal_Import});
 			this.mnuJournal.Name = "mnuJournal";
 			this.mnuJournal.Size = new System.Drawing.Size(57, 20);
 			this.mnuJournal.Text = "&Journal";
@@ -250,6 +250,13 @@ namespace myJournal.subforms
 			this.mnuJournal_RestoreBackups.Size = new System.Drawing.Size(180, 22);
 			this.mnuJournal_RestoreBackups.Text = "&Restore Backups";
 			this.mnuJournal_RestoreBackups.Click += new System.EventHandler(this.mnuJournal_RestoreBackups_Click);
+			// 
+			// mnuJournal_Import
+			// 
+			this.mnuJournal_Import.Name = "mnuJournal_Import";
+			this.mnuJournal_Import.Size = new System.Drawing.Size(180, 22);
+			this.mnuJournal_Import.Text = "Import";
+			this.mnuJournal_Import.Click += new System.EventHandler(this.mnuJournal_Import_Click);
 			// 
 			// mnuEntryTop
 			// 
@@ -418,13 +425,6 @@ namespace myJournal.subforms
 			this.pnlPin.TabIndex = 50;
 			this.pnlPin.Visible = false;
 			// 
-			// mnuImport
-			// 
-			this.mnuImport.Name = "mnuImport";
-			this.mnuImport.Size = new System.Drawing.Size(180, 22);
-			this.mnuImport.Text = "Import";
-			this.mnuImport.Click += new System.EventHandler(this.mnuImport_Click);
-			// 
 			// frmMain
 			// 
 			this.AcceptButton = this.btnLoadJournal;
@@ -496,6 +496,6 @@ namespace myJournal.subforms
 		private System.Windows.Forms.Panel pnlPin;
 		private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem mnuAboutMyJournal;
-		private System.Windows.Forms.ToolStripMenuItem mnuImport;
+		private System.Windows.Forms.ToolStripMenuItem mnuJournal_Import;
 	}
 }

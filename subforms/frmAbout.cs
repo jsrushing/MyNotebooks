@@ -10,9 +10,10 @@ namespace myJournal.subforms
 {
 	public partial class frmAbout : Form
 	{
-		public frmAbout()
+		public frmAbout(Form parent)
 		{
 			InitializeComponent();
+			this.Location = new System.Drawing.Point(parent.Left + 25, parent.Top + 25);
 		}
 
 		private void frmAbout_Load(object sender, EventArgs e)
