@@ -63,6 +63,8 @@ namespace myJournal.subforms
 			this.label3 = new System.Windows.Forms.Label();
 			this.cbxDatesTo = new System.Windows.Forms.ComboBox();
 			this.pnlPin = new System.Windows.Forms.Panel();
+			this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuAboutMyJournal = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.pnlDateFilters.SuspendLayout();
 			this.pnlPin.SuspendLayout();
@@ -180,7 +182,8 @@ namespace myJournal.subforms
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuJournal,
             this.mnuEntryTop,
-            this.mnuLabels});
+            this.mnuLabels,
+            this.helpToolStripMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
 			this.menuStrip1.Size = new System.Drawing.Size(1012, 24);
@@ -398,6 +401,21 @@ namespace myJournal.subforms
 			this.pnlPin.TabIndex = 50;
 			this.pnlPin.Visible = false;
 			// 
+			// helpToolStripMenuItem
+			// 
+			this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuAboutMyJournal});
+			this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+			this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+			this.helpToolStripMenuItem.Text = "Help";
+			// 
+			// mnuAboutMyJournal
+			// 
+			this.mnuAboutMyJournal.Name = "mnuAboutMyJournal";
+			this.mnuAboutMyJournal.Size = new System.Drawing.Size(180, 22);
+			this.mnuAboutMyJournal.Text = "About MyJournal";
+			this.mnuAboutMyJournal.Click += new System.EventHandler(this.mnuAboutMyJournal_Click);
+			// 
 			// frmMain
 			// 
 			this.AcceptButton = this.btnLoadJournal;
@@ -467,5 +485,7 @@ namespace myJournal.subforms
 		private System.Windows.Forms.ComboBox cbxDatesTo;
 		private System.Windows.Forms.ToolStripMenuItem mnuLabels;
 		private System.Windows.Forms.Panel pnlPin;
+		private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem mnuAboutMyJournal;
 	}
 }

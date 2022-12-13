@@ -85,6 +85,20 @@
 						4) If one is the entry remembered in 1), select it.
 			08/02/22 Update. Have disabled filter actions. NEEDS ATTENTION. HIDE FILTER CONTROLS UNTIL FIXED !!!
 
+		12/1/22 
+			002 ClickOnce install
+				Got CO working w/ setup.exe on my desktop. Installed on laptop.
+					> Don't have app updates working yet. Thinking I need it to install from the web before I do that.
+					> Need to have it installing from web. GoDaddy is f'ng me w/ 'IP Address has changed' so I can't get to File Manager :(
+				003 Need to be able to distribute journals to multiple devices - so journals are portable.
+					> Export Journal via email?
+						Will need 'Import Journal' in app so user can browse to downloaded journal.
+						This isn't really portable since updates on one device will have to be emailed.
+							True portability will involve Journals being stored on web.
+
+		12/7/22
+			003 checkbox lists
+
 	enhancements:
 		07/14/22 001x Add date selection for shown entries (e.g. last <x> days)
 			07/15/22 0230 Is working with user specified number of weeks.
@@ -310,6 +324,12 @@ namespace myJournal.subforms
 				}
 				lb.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectEntry);
 			}
+		}
+
+		private void mnuAboutMyJournal_Click(object sender, EventArgs e)
+		{
+			Form frm = new frmAbout();
+			frm.ShowDialog();
 		}
 
 		private void mnuEntryCreate_Click(object sender, EventArgs e)
