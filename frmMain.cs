@@ -567,5 +567,27 @@ namespace myJournal.subforms
 			}
 		}
 
+		private void mnuImport_Click(object sender, EventArgs e)
+		{
+			OpenFileDialog ofd = new OpenFileDialog();
+			if(ofd.ShowDialog() == DialogResult.OK)
+			{
+				string tgt = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + ofd.SafeFileName;
+				bool ok2copy = true;
+
+				if (File.Exists(tgt))
+				{
+					frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "The journal " + ofd.SafeFileName + " already exists! Do you want to ovewrwrite the journal?");
+					frm.ShowDialog();
+					ok2copy = frm.result == frmMessage.ReturnResult.Yes;
+				}
+
+				if (ok2copy)
+				{
+					File.Copy(ofd.FileName, tgt + ofd.SafeFileName, true);
+					LoadJournals();
+				}
+			}
+		}
 	}
 }
