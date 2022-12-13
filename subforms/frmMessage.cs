@@ -42,13 +42,12 @@ namespace myJournal.subforms
 
 		private void frmMessage_Activated(object sender, EventArgs e)
 		{
-			if (pnlTextBox.Visible) { txtInput.Focus(); }
+			if (txtInput.Visible) { txtInput.Focus(); }
 
 			foreach(Control c in this.Controls)
 			{
 				if(c.GetType() == typeof(Panel)) { c.Top = lblMessage.Top + lblMessage.Height + 4; }
 			}
-			pnlTextBox.Top = pnlOk.Top + pnlOk.Height + 4;
 		}
 
 		private void frmMessage_Load(object sender, EventArgs e)
@@ -59,8 +58,6 @@ namespace myJournal.subforms
 			{
 				if(c.GetType() == typeof(Panel)) { c.Top = 30; }
 			}
-
-			pnlTextBox.Top = lblMessage.Top + lblMessage.Height + 30;
 
 			lblMessage.Text = msg;
 
@@ -87,9 +84,9 @@ namespace myJournal.subforms
 				case OperationType.InputBox:
 					lblMessage.Text = msg;
 					txtInput.Text = _defaultText;
-					pnlOkCancel.Top = pnlTextBox.Top + pnlTextBox.Height + 4;
+					txtInput.Visible = true;
+					pnlOkCancel.Top = txtInput.Top + txtInput.Height + 4;
 					pnlOkCancel.Visible = true;
-					pnlTextBox.Visible = true;
 					txtInput.SelectAll();
 					this.AcceptButton = btnOk1;
 					break;

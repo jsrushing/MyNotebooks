@@ -62,14 +62,16 @@ namespace myJournal.subforms
 			}
 
 			frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Do you want to restore the backup? The existing journal cannot be recovered!");
-			Utilities.Showform(frm, this);
+			frm.ShowDialog();
+			//Utilities.Showform(frm, this);
 
 			if(frm.result == frmMessage.ReturnResult.Yes) 
 			{
 				File.Move(backupFilePath, journalsFolderPath, true);
 				frm = new frmMessage(frmMessage.OperationType.Message, "The backup is restored.");
-				Utilities.Showform(frm, this);
-				frm.Close();
+				frm.ShowDialog();
+				//Utilities.Showform(frm, this);
+				//frm.Close();
 				BackupRestored = true;
 				if (isForcedBackupRestore) { Utilities.AddLabels(Utilities.FindOrphanLabels(new Journal(truncatedForcedFileName).Open())); }
 			}

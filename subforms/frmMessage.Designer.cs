@@ -42,13 +42,11 @@ namespace myJournal.subforms
 			this.btnOk1 = new System.Windows.Forms.Button();
 			this.pnlOk = new System.Windows.Forms.Panel();
 			this.btnOk2 = new System.Windows.Forms.Button();
-			this.pnlTextBox = new System.Windows.Forms.Panel();
 			this.txtInput = new System.Windows.Forms.TextBox();
 			this.pnlYesNoCancel.SuspendLayout();
 			this.pnlYesNo.SuspendLayout();
 			this.pnlOkCancel.SuspendLayout();
 			this.pnlOk.SuspendLayout();
-			this.pnlTextBox.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// lblMessage
@@ -179,28 +177,20 @@ namespace myJournal.subforms
 			this.btnOk2.UseVisualStyleBackColor = true;
 			this.btnOk2.Click += new System.EventHandler(this.btnOk_Click);
 			// 
-			// pnlTextBox
-			// 
-			this.pnlTextBox.Controls.Add(this.txtInput);
-			this.pnlTextBox.Location = new System.Drawing.Point(5, 217);
-			this.pnlTextBox.Name = "pnlTextBox";
-			this.pnlTextBox.Size = new System.Drawing.Size(253, 32);
-			this.pnlTextBox.TabIndex = 5;
-			this.pnlTextBox.Visible = false;
-			// 
 			// txtInput
 			// 
-			this.txtInput.Location = new System.Drawing.Point(8, 5);
+			this.txtInput.Location = new System.Drawing.Point(13, 28);
 			this.txtInput.Name = "txtInput";
 			this.txtInput.Size = new System.Drawing.Size(237, 23);
 			this.txtInput.TabIndex = 0;
+			this.txtInput.Visible = false;
 			// 
 			// frmMessage
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(269, 264);
-			this.Controls.Add(this.pnlTextBox);
+			this.ClientSize = new System.Drawing.Size(269, 236);
+			this.Controls.Add(this.txtInput);
 			this.Controls.Add(this.pnlOk);
 			this.Controls.Add(this.pnlOkCancel);
 			this.Controls.Add(this.pnlYesNo);
@@ -216,9 +206,8 @@ namespace myJournal.subforms
 			this.pnlYesNo.ResumeLayout(false);
 			this.pnlOkCancel.ResumeLayout(false);
 			this.pnlOk.ResumeLayout(false);
-			this.pnlTextBox.ResumeLayout(false);
-			this.pnlTextBox.PerformLayout();
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -237,7 +226,6 @@ namespace myJournal.subforms
 		private System.Windows.Forms.Button btnOk1;
 		private System.Windows.Forms.Panel pnlOk;
 		private System.Windows.Forms.Button btnOk2;
-		private System.Windows.Forms.Panel pnlTextBox;
 		private System.Windows.Forms.TextBox txtInput;
 	}
 }

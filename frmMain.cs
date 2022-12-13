@@ -351,7 +351,8 @@ namespace myJournal.subforms
 		private void mnuEntryDelete_Click(object sender, EventArgs e)
 		{
 			frmMessage frm = new frmMessage(frmMessage.OperationType.DeleteEntry, currentEntry.ClearTitle());
-			Utilities.Showform(frm, this);
+			frm.ShowDialog();
+			//Utilities.Showform(frm, this);
 			if(frm.result == frmMessage.ReturnResult.Yes) 
 			{
 				currentJournal.Entries.Remove(currentEntry);
@@ -360,7 +361,7 @@ namespace myJournal.subforms
 				ShowHideMenusAndControls(SelectionState.JournalLoaded);
 			}
 			frm.Close();
-			this.Show();
+			//this.Show();
 		}
 
 		private void mnuEntryEdit_Click(object sender, EventArgs e)
@@ -401,7 +402,8 @@ namespace myJournal.subforms
 		private void mnuJournal_Delete_Click(object sender, EventArgs e)
 		{
 			frmMessage frm = new frmMessage(frmMessage.OperationType.DeleteJournal, currentJournal.Name.Replace("\\", ""));
-			Utilities.Showform(frm, this);
+			frm.ShowDialog();
+			//Utilities.Showform(frm, this);
 			if (frm.result == frmMessage.ReturnResult.Yes)
 			{
 				currentJournal.Delete();
@@ -411,7 +413,7 @@ namespace myJournal.subforms
 				ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
 				pnlDateFilters.Visible = false;
 			}
-			this.Show();
+			//this.Show();
 		}
 
 		private void mnuJournal_ForceBackup_Click(object sender, EventArgs e)
@@ -423,15 +425,16 @@ namespace myJournal.subforms
 
 		private void mnuJournal_Rename_Click(object sender, EventArgs e)
 		{
-			frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "Enter the new journal name.", currentJournal.Name);		
-			Utilities.Showform(frm, this);
+			frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "Enter the new journal name.", currentJournal.Name);	
+			frm.ShowDialog();
+			//Utilities.Showform(frm, this);
 
 			if (frm.result == frmMessage.ReturnResult.Ok && frm.EnteredValue.Length > 0)
 			{
 				currentJournal.Rename(frm.EnteredValue);
 				LoadJournals();
 			}
-			this.Show();
+			//this.Show();
 		}
 
 		private void mnuJournal_RestoreBackups_Click(object sender, EventArgs e)
