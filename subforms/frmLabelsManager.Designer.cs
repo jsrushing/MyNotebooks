@@ -56,6 +56,7 @@ namespace myJournal.subforms
 			this.mnuAssignPINs = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuExit = new System.Windows.Forms.ToolStripMenuItem();
 			this.pnlJournalPINs = new System.Windows.Forms.Panel();
+			this.lblShowPIN = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.btnPINsOK = new System.Windows.Forms.Button();
 			this.btnAddPIN = new System.Windows.Forms.Button();
@@ -317,6 +318,7 @@ namespace myJournal.subforms
 			// 
 			// pnlJournalPINs
 			// 
+			this.pnlJournalPINs.Controls.Add(this.lblShowPIN);
 			this.pnlJournalPINs.Controls.Add(this.label2);
 			this.pnlJournalPINs.Controls.Add(this.btnPINsOK);
 			this.pnlJournalPINs.Controls.Add(this.btnAddPIN);
@@ -328,6 +330,18 @@ namespace myJournal.subforms
 			this.pnlJournalPINs.Size = new System.Drawing.Size(336, 464);
 			this.pnlJournalPINs.TabIndex = 2;
 			this.pnlJournalPINs.Visible = false;
+			// 
+			// lblShowPIN
+			// 
+			this.lblShowPIN.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+			this.lblShowPIN.Location = new System.Drawing.Point(168, 50);
+			this.lblShowPIN.Name = "lblShowPIN";
+			this.lblShowPIN.Size = new System.Drawing.Size(35, 13);
+			this.lblShowPIN.TabIndex = 41;
+			this.lblShowPIN.Text = "show";
+			this.lblShowPIN.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.lblShowPIN.Visible = false;
+			this.lblShowPIN.Click += new System.EventHandler(this.lblShowPIN_Click);
 			// 
 			// label2
 			// 
@@ -385,9 +399,9 @@ namespace myJournal.subforms
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.lstJournalPINs.FormattingEnabled = true;
 			this.lstJournalPINs.ItemHeight = 15;
-			this.lstJournalPINs.Location = new System.Drawing.Point(7, 56);
+			this.lstJournalPINs.Location = new System.Drawing.Point(7, 68);
 			this.lstJournalPINs.Name = "lstJournalPINs";
-			this.lstJournalPINs.Size = new System.Drawing.Size(322, 364);
+			this.lstJournalPINs.Size = new System.Drawing.Size(322, 349);
 			this.lstJournalPINs.TabIndex = 1;
 			this.lstJournalPINs.SelectedIndexChanged += new System.EventHandler(this.lstJournalPINs_SelectedIndexChanged);
 			// 
@@ -471,5 +485,6 @@ namespace myJournal.subforms
 		private System.Windows.Forms.ToolStripMenuItem mnuDelete_InCurrentJournal;
 		private System.Windows.Forms.Label lblSortType;
 		private System.Windows.Forms.ListBox lstEntryObjects;
+		private System.Windows.Forms.Label lblShowPIN;
 	}
 }

@@ -103,6 +103,7 @@
 					> Import Journals is working. Is NOT a final fix!
 						On update of ClickOnce deployment (which does work) there needs to be a mechanism to import Journals from 
 							previous (published) version.
+						Need to scan for orphaned labels after an import. Put a new method in Journal.cs - 'AllLabels()'?
 
 		12/7/22
 			003 checkbox lists
@@ -432,7 +433,7 @@ namespace myJournal.subforms
 			frm.ShowDialog();
 		}
 
-		private void mnuJournal_Import_Click(object sender, EventArgs e)
+		private void mnuJournal_Import_Click(object sender, EventArgs e)    // Need to scan for orphaned labels after an import. Put a new method in Journal.cs - 'AllLabels()'?
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
 			ofd.Multiselect = true;
@@ -440,17 +441,19 @@ namespace myJournal.subforms
 			if (ofd.ShowDialog() == DialogResult.OK)
 			{
 				string tgt = String.Empty;
+				string jrnlName = string.Empty;
 				bool ok2copy = true;
 				bool filesCopied = false;
 
 				foreach(string fName in ofd.FileNames)
 				{
 					tgt = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + fName.Substring(fName.LastIndexOf("\\") + 1);
+					jrnlName = fName.Substring(fName.LastIndexOf("\\") + 1);
 
 					if (File.Exists(tgt))
 					{
-						frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "The journal '" + 
-							fName.Substring(fName.LastIndexOf("\\") + 1) + "' already exists. Do you want to ovewrwrite the journal?", "", this);
+						frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, 
+							"The journal '" + jrnlName + "' already exists. Do you want to ovewrwrite the journal?", "", this);
 						frm.ShowDialog();
 						ok2copy = frm.Result == frmMessage.ReturnResult.Yes;
 					}
@@ -462,6 +465,12 @@ namespace myJournal.subforms
 					}
 
 					ok2copy = true;
+					frmMessage frm2 = new frmMessage(frmMessage.OperationType.InputBox, "Please enter the PIN for '" + jrnlName + "'.", "", this);
+					frm2.ShowDialog();
+					var currentPIN = Program.PIN;
+					Program.PIN = frm2.EnteredValue;
+					Utilities.FindOrphanLabels(new Journal().Open(jrnlName), true);
+					Program.PIN = currentPIN;
 				}
 
 				if (filesCopied) { LoadJournals(); }

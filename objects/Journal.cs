@@ -69,17 +69,6 @@ namespace myJournal
 
         public void Delete() { File.Delete(this.FileName); }
 
-		public string GetAllEntries()
-		{
-			StringBuilder sb = new StringBuilder();
-			//sb.AppendLine("Journal: " + this.Name);
-			foreach(JournalEntry je in this.Entries)
-			{
-				sb.Append(String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Editing"].Replace("Original ", ""), je.Date, je.ClearTitle(), je.ClearText()));
-			}
-			return sb.ToString();
-		}
-
         public JournalEntry GetEntry(string _title, string _date)
         {
             JournalEntry je = null;

@@ -95,10 +95,12 @@ namespace myJournal.subforms
 			s += " (****)";
 			lstJournalPINs.Items.Insert(lstJournalPINs.SelectedIndex, s);
 			lstJournalPINs.Items.RemoveAt(lstJournalPINs.SelectedIndex);
+			txtPIN.PasswordChar = '\0';
 			txtPIN.Text = "(select a Journal)";
 			txtPIN.Enabled = false;
 			btnAddPIN.Enabled = false;
 			lstJournalPINs.SelectedIndex = -1;
+			lblShowPIN.Visible = false;
 		}
 
 		private void btnCancel_Click(object sender, EventArgs e)
@@ -228,10 +230,12 @@ namespace myJournal.subforms
 		{
 			if(lstJournalPINs.SelectedIndex > -1)
 			{
+				txtPIN.PasswordChar = '*';
 				txtPIN.Text = DictJournals[lstJournalPINs.Text.Replace(" (****)", "")];
 				txtPIN.Enabled = true;
 				btnAddPIN.Enabled = true;
 				txtPIN.Focus();
+				lblShowPIN.Visible = true;
 			}
 		}
 
@@ -410,5 +414,10 @@ namespace myJournal.subforms
 
 		private void txtPIN_KeyUp(object sender, KeyEventArgs e) { if(e.KeyCode == Keys.Enter) { btnAddPIN_Click(null, null); } }
 
+		private void lblShowPIN_Click(object sender, EventArgs e)
+		{
+			txtPIN.PasswordChar = txtPIN.PasswordChar == '*' ? '\0' : '*';
+			lblShowPIN.Text = lblShowPIN.Text == "show" ? "hide" : "show";
+		}
 	}
 }

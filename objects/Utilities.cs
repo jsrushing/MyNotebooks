@@ -22,8 +22,11 @@ namespace myJournal.objects
 			None
 		}
 
-		public static void AddLabels(List<string> allLabels)
-		{ File.AppendAllLines(AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_LabelsFolder"], allLabels);	}
+		public static void AddLabels(List<string> labelsToAdd)
+		{
+			string[] newLabels = ((labelsToAdd.ToArray()).Except(AllLabels())).ToArray();
+			File.AppendAllLines(AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_LabelsFolder"], newLabels);
+		}
 
 		public static List<string> AllJournalNames()
 		{
@@ -76,6 +79,7 @@ namespace myJournal.objects
 			foreach(JournalEntry je in journal.Entries)
 			{ foreach(string jeLabel in je.ClearTags().Split(",")) { if (jeLabel.Length > 0 && !labels.Contains(jeLabel) && !lstReturn.Contains(jeLabel)) { lstReturn.Add(jeLabel); } } }
 
+			if (addFoundOrphansToLabels) { AddLabels(lstReturn); }
 			return lstReturn;
 		}
 
