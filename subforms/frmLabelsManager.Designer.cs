@@ -42,6 +42,8 @@ namespace myJournal.subforms
 			this.lstOccurrences = new System.Windows.Forms.ListBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.mnuMain = new System.Windows.Forms.MenuStrip();
+			this.mnuLabelsOperations = new System.Windows.Forms.ToolStripMenuItem();
+			this.mnuFindOrphans = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuAdd = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRename = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuRename_InAllJournals = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,10 +66,17 @@ namespace myJournal.subforms
 			this.lblEnterPIN = new System.Windows.Forms.Label();
 			this.lstJournalPINs = new System.Windows.Forms.ListBox();
 			this.lstEntryObjects = new System.Windows.Forms.ListBox();
+			this.pnlOrphanedLabels = new System.Windows.Forms.Panel();
+			this.btnExitOrphans = new System.Windows.Forms.Button();
+			this.chkSelectAllOrphans = new System.Windows.Forms.CheckBox();
+			this.btnRemoveSelectedOrphans = new System.Windows.Forms.Button();
+			this.listBox1 = new System.Windows.Forms.ListBox();
+			this.label4 = new System.Windows.Forms.Label();
 			this.pnlMain.SuspendLayout();
 			this.pnlNewLabelName.SuspendLayout();
 			this.mnuMain.SuspendLayout();
 			this.pnlJournalPINs.SuspendLayout();
+			this.pnlOrphanedLabels.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// pnlMain
@@ -82,7 +91,7 @@ namespace myJournal.subforms
 			this.pnlMain.Controls.Add(this.label1);
 			this.pnlMain.Location = new System.Drawing.Point(16, 25);
 			this.pnlMain.Name = "pnlMain";
-			this.pnlMain.Size = new System.Drawing.Size(335, 452);
+			this.pnlMain.Size = new System.Drawing.Size(335, 535);
 			this.pnlMain.TabIndex = 0;
 			// 
 			// pnlNewLabelName
@@ -189,7 +198,7 @@ namespace myJournal.subforms
 			this.lstOccurrences.ItemHeight = 15;
 			this.lstOccurrences.Location = new System.Drawing.Point(9, 227);
 			this.lstOccurrences.Name = "lstOccurrences";
-			this.lstOccurrences.Size = new System.Drawing.Size(316, 208);
+			this.lstOccurrences.Size = new System.Drawing.Size(316, 291);
 			this.lstOccurrences.TabIndex = 3;
 			this.lstOccurrences.DoubleClick += new System.EventHandler(this.lstOccurrences_DoubleClick);
 			// 
@@ -205,6 +214,7 @@ namespace myJournal.subforms
 			// mnuMain
 			// 
 			this.mnuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuLabelsOperations,
             this.mnuAdd,
             this.mnuRename,
             this.mnuMoveTop,
@@ -214,9 +224,24 @@ namespace myJournal.subforms
             this.mnuExit});
 			this.mnuMain.Location = new System.Drawing.Point(0, 0);
 			this.mnuMain.Name = "mnuMain";
-			this.mnuMain.Size = new System.Drawing.Size(965, 24);
+			this.mnuMain.Size = new System.Drawing.Size(1310, 24);
 			this.mnuMain.TabIndex = 1;
 			this.mnuMain.Text = "menuStrip1";
+			// 
+			// mnuLabelsOperations
+			// 
+			this.mnuLabelsOperations.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuFindOrphans});
+			this.mnuLabelsOperations.Name = "mnuLabelsOperations";
+			this.mnuLabelsOperations.Size = new System.Drawing.Size(52, 20);
+			this.mnuLabelsOperations.Text = "Labels";
+			// 
+			// mnuFindOrphans
+			// 
+			this.mnuFindOrphans.Name = "mnuFindOrphans";
+			this.mnuFindOrphans.Size = new System.Drawing.Size(145, 22);
+			this.mnuFindOrphans.Text = "Find Orphans";
+			this.mnuFindOrphans.Click += new System.EventHandler(this.mnuFindOrphans_Click);
 			// 
 			// mnuAdd
 			// 
@@ -412,17 +437,80 @@ namespace myJournal.subforms
 			this.lstEntryObjects.FormattingEnabled = true;
 			this.lstEntryObjects.IntegralHeight = false;
 			this.lstEntryObjects.ItemHeight = 15;
-			this.lstEntryObjects.Location = new System.Drawing.Point(738, 12);
+			this.lstEntryObjects.Location = new System.Drawing.Point(1080, 8);
 			this.lstEntryObjects.Name = "lstEntryObjects";
-			this.lstEntryObjects.Size = new System.Drawing.Size(203, 37);
+			this.lstEntryObjects.Size = new System.Drawing.Size(203, 120);
 			this.lstEntryObjects.TabIndex = 4;
 			this.lstEntryObjects.Visible = false;
+			// 
+			// pnlOrphanedLabels
+			// 
+			this.pnlOrphanedLabels.Controls.Add(this.btnExitOrphans);
+			this.pnlOrphanedLabels.Controls.Add(this.chkSelectAllOrphans);
+			this.pnlOrphanedLabels.Controls.Add(this.btnRemoveSelectedOrphans);
+			this.pnlOrphanedLabels.Controls.Add(this.listBox1);
+			this.pnlOrphanedLabels.Controls.Add(this.label4);
+			this.pnlOrphanedLabels.Location = new System.Drawing.Point(738, 0);
+			this.pnlOrphanedLabels.Name = "pnlOrphanedLabels";
+			this.pnlOrphanedLabels.Size = new System.Drawing.Size(336, 464);
+			this.pnlOrphanedLabels.TabIndex = 5;
+			this.pnlOrphanedLabels.Visible = false;
+			// 
+			// btnExitOrphans
+			// 
+			this.btnExitOrphans.Location = new System.Drawing.Point(190, 394);
+			this.btnExitOrphans.Name = "btnExitOrphans";
+			this.btnExitOrphans.Size = new System.Drawing.Size(75, 23);
+			this.btnExitOrphans.TabIndex = 5;
+			this.btnExitOrphans.Text = "&Exit";
+			this.btnExitOrphans.UseVisualStyleBackColor = true;
+			// 
+			// chkSelectAllOrphans
+			// 
+			this.chkSelectAllOrphans.AutoSize = true;
+			this.chkSelectAllOrphans.Location = new System.Drawing.Point(246, 8);
+			this.chkSelectAllOrphans.Name = "chkSelectAllOrphans";
+			this.chkSelectAllOrphans.Size = new System.Drawing.Size(71, 19);
+			this.chkSelectAllOrphans.TabIndex = 4;
+			this.chkSelectAllOrphans.Text = "select all";
+			this.chkSelectAllOrphans.UseVisualStyleBackColor = true;
+			// 
+			// btnRemoveSelectedOrphans
+			// 
+			this.btnRemoveSelectedOrphans.Location = new System.Drawing.Point(43, 394);
+			this.btnRemoveSelectedOrphans.Name = "btnRemoveSelectedOrphans";
+			this.btnRemoveSelectedOrphans.Size = new System.Drawing.Size(111, 23);
+			this.btnRemoveSelectedOrphans.TabIndex = 3;
+			this.btnRemoveSelectedOrphans.Text = "&Remove Selected";
+			this.btnRemoveSelectedOrphans.UseVisualStyleBackColor = true;
+			// 
+			// listBox1
+			// 
+			this.listBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.listBox1.FormattingEnabled = true;
+			this.listBox1.ItemHeight = 15;
+			this.listBox1.Location = new System.Drawing.Point(7, 31);
+			this.listBox1.Name = "listBox1";
+			this.listBox1.Size = new System.Drawing.Size(322, 349);
+			this.listBox1.TabIndex = 2;
+			// 
+			// label4
+			// 
+			this.label4.AutoSize = true;
+			this.label4.Location = new System.Drawing.Point(9, 8);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(187, 15);
+			this.label4.TabIndex = 0;
+			this.label4.Text = "These orphaned labels were found";
 			// 
 			// frmLabelsManager
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(965, 479);
+			this.ClientSize = new System.Drawing.Size(1310, 562);
+			this.Controls.Add(this.pnlOrphanedLabels);
 			this.Controls.Add(this.lstEntryObjects);
 			this.Controls.Add(this.pnlJournalPINs);
 			this.Controls.Add(this.pnlMain);
@@ -444,6 +532,8 @@ namespace myJournal.subforms
 			this.mnuMain.PerformLayout();
 			this.pnlJournalPINs.ResumeLayout(false);
 			this.pnlJournalPINs.PerformLayout();
+			this.pnlOrphanedLabels.ResumeLayout(false);
+			this.pnlOrphanedLabels.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -453,10 +543,9 @@ namespace myJournal.subforms
 
 		private System.Windows.Forms.Panel pnlMain;
 		private System.Windows.Forms.MenuStrip mnuMain;
-		private System.Windows.Forms.ToolStripMenuItem mnuAdd;
-		private System.Windows.Forms.ToolStripMenuItem mnuRename;
-		private System.Windows.Forms.ToolStripMenuItem mnuMoveTop;
-		private System.Windows.Forms.ToolStripMenuItem mnuDelete;
+		private System.Windows.Forms.ToolStripMenuItem mnuAdda;
+		private System.Windows.Forms.ToolStripMenuItem mnuRenamea;
+		private System.Windows.Forms.ToolStripMenuItem mnuDeletea;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.ListBox lstLabels;
 		private System.Windows.Forms.ToolStripMenuItem mnuMoveUp;
@@ -470,7 +559,7 @@ namespace myJournal.subforms
 		private System.Windows.Forms.ToolStripMenuItem mnuRename_InAllJournals;
 		private System.Windows.Forms.ToolStripMenuItem mnuRename_InCurrentJournal;
 		private System.Windows.Forms.ListBox lstOccurrences;
-		private System.Windows.Forms.ToolStripMenuItem mnuFindAll;
+		private System.Windows.Forms.ToolStripMenuItem mnuFindAlla;
 		private System.Windows.Forms.Panel pnlJournalPINs;
 		private System.Windows.Forms.Button btnAddPIN;
 		private System.Windows.Forms.TextBox txtPIN;
@@ -486,5 +575,19 @@ namespace myJournal.subforms
 		private System.Windows.Forms.Label lblSortType;
 		private System.Windows.Forms.ListBox lstEntryObjects;
 		private System.Windows.Forms.Label lblShowPIN;
+		private System.Windows.Forms.ToolStripMenuItem mnuLabelsOperations;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem mnuFindAll;
+		private System.Windows.Forms.ToolStripMenuItem mnuDelete;
+		private System.Windows.Forms.ToolStripMenuItem mnuMoveTop;
+		private System.Windows.Forms.ToolStripMenuItem mnuRename;
+		private System.Windows.Forms.ToolStripMenuItem mnuAdd;
+		private System.Windows.Forms.ToolStripMenuItem mnuFindOrphans;
+		private System.Windows.Forms.Panel pnlOrphanedLabels;
+		private System.Windows.Forms.Button btnExitOrphans;
+		private System.Windows.Forms.CheckBox chkSelectAllOrphans;
+		private System.Windows.Forms.Button btnRemoveSelectedOrphans;
+		private System.Windows.Forms.ListBox listBox1;
+		private System.Windows.Forms.Label label4;
 	}
 }

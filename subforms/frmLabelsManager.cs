@@ -416,5 +416,10 @@ namespace myJournal.subforms
 			txtPIN.PasswordChar = txtPIN.PasswordChar == '*' ? '\0' : '*';
 			lblShowPIN.Text = lblShowPIN.Text == "show" ? "hide" : "show";
 		}
+
+		private void mnuFindOrphans_Click(object sender, EventArgs e)
+		{
+
+		}
 	}
 }

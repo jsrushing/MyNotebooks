@@ -61,10 +61,10 @@ namespace myJournal
 			catch (Exception) { }
 		}
 
-		public bool CheckPIN()
-		{
+		//public bool CheckPIN()
+		//{
 
-		}
+		//}
 
 		public void Create()
         {
