@@ -18,7 +18,7 @@ namespace myJournal.subforms
 		{
 			InitializeComponent();
 			journalsToSearch.Add(jrnl);
-			Utilities.PopulateLabelsList(lstLabelsForSearch);
+			Utilities.Labels_PopulateLabelsList(lstLabelsForSearch);
 		}
 
 		private void chkUseDateRange_CheckedChanged(object sender, EventArgs e)

@@ -22,12 +22,6 @@ namespace myJournal.objects
 			None
 		}
 
-		public static void AddLabels(List<string> labelsToAdd)
-		{
-			string[] newLabels = ((labelsToAdd.ToArray()).Except(AllLabels())).ToArray();
-			File.AppendAllLines(AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_LabelsFolder"], newLabels);
-		}
-
 		public static List<string> AllJournalNames()
 		{
 			List<string> lstRtrn = new List<string>();
@@ -54,7 +48,25 @@ namespace myJournal.objects
 			return jrnlReturn;
 		}
 
-		public static string[] AllLabels(LabelsSortType sort = LabelsSortType.None)
+		public static void Labels_Add(List<string> labelsToAdd)
+		{
+			string[] newLabels = ((labelsToAdd.ToArray()).Except(Labels_GetAll())).ToArray();
+			File.AppendAllLines(AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_LabelsFolder"], newLabels);
+		}
+
+		public static List<string> Labels_FindOrphans(Journal journal, bool addFoundOrphansToLabels = false)
+		{
+			List<string> lstReturn = new List<string>();
+			string[] labels = Labels_GetAll();
+
+			foreach(JournalEntry je in journal.Entries)
+			{ foreach(string jeLabel in je.ClearTags().Split(",")) { if (jeLabel.Length > 0 && !labels.Contains(jeLabel) && !lstReturn.Contains(jeLabel)) { lstReturn.Add(jeLabel); } } }
+
+			if (addFoundOrphansToLabels) { Labels_Add(lstReturn); }
+			return lstReturn;
+		}
+
+		public static string[] Labels_GetAll(LabelsSortType sort = LabelsSortType.None)
 		{
 			string[] labels = File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFolder"]);
 
@@ -71,19 +83,7 @@ namespace myJournal.objects
 			return labels;
 		}
 
-		public static List<string> FindOrphanLabels(Journal journal, bool addFoundOrphansToLabels = false)
-		{
-			List<string> lstReturn = new List<string>();
-			string[] labels = AllLabels();
-
-			foreach(JournalEntry je in journal.Entries)
-			{ foreach(string jeLabel in je.ClearTags().Split(",")) { if (jeLabel.Length > 0 && !labels.Contains(jeLabel) && !lstReturn.Contains(jeLabel)) { lstReturn.Add(jeLabel); } } }
-
-			if (addFoundOrphansToLabels) { AddLabels(lstReturn); }
-			return lstReturn;
-		}
-
-		public static string GetCheckedLabels(CheckedListBox cbx)
+		public static string Labels_GetCheckedLabels(CheckedListBox cbx)
 		{
 			string labels = string.Empty;
 			for (int i = 0; i < cbx.CheckedItems.Count; i++)
@@ -92,6 +92,26 @@ namespace myJournal.objects
 			}
 			labels = labels.Length > 0 ? labels.Substring(0, labels.Length - 1) : string.Empty;
 			return labels;
+		}
+
+		public static void Labels_PopulateLabelsList(CheckedListBox clb = null, ListBox lb = null, LabelsSortType sort = LabelsSortType.None)
+		{
+			if (clb != null) { clb.Items.Clear(); }
+			if (lb != null) { lb.Items.Clear(); }
+
+			foreach (string label in Labels_GetAll(sort))
+			{
+				if (lb != null)
+				{ lb.Items.Add(label); }
+				else
+				{ clb.Items.Add(label); }
+			}
+		}
+
+		public static void Labels_SetCheckedLabels(CheckedListBox clb, JournalEntry entry)
+		{
+			var labels = entry.ClearTags().Split(",");
+			for (var i = 0; i < clb.Items.Count; i++) { clb.SetItemChecked(i, labels.Contains(clb.Items[i].ToString())); }
 		}
 
 		public static void PopulateEntries(ListBox lbxToPopulate, List<JournalEntry> entries, string startDate = "", string endDate = "", bool clearPrevious = true, string journalName = "")
@@ -108,20 +128,6 @@ namespace myJournal.objects
 				{ 
 					lbxToPopulate.Items.Add(je.Synopsis[i]);
 				} 
-			}
-		}
-
-		public static void PopulateLabelsList(CheckedListBox clb = null, ListBox lb = null, LabelsSortType sort = LabelsSortType.None)
-		{
-			if (clb != null) { clb.Items.Clear(); }
-			if (lb != null) { lb.Items.Clear(); }
-
-			foreach (string label in AllLabels(sort))
-			{
-				if (lb != null)
-				{ lb.Items.Add(label); }
-				else
-				{ clb.Items.Add(label); }
 			}
 		}
 
@@ -242,12 +248,6 @@ namespace myJournal.objects
 			}
 
 			return entryRtrn;
-		}
-
-		public static void SetCheckedLabels(CheckedListBox clb, JournalEntry entry)
-		{
-			var labels = entry.ClearTags().Split(",");
-			for (var i = 0; i < clb.Items.Count; i++) { clb.SetItemChecked(i, labels.Contains(clb.Items[i].ToString())); }
 		}
 
 		public static void Showform(Form frm, Form frmParent)

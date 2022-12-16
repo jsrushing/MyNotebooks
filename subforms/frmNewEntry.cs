@@ -73,7 +73,7 @@ namespace myJournal.subforms
 					rtbNewEntry.Text = entry.ClearText();
 				}
 
-				Utilities.SetCheckedLabels(clbLabels, entry);
+				Utilities.Labels_SetCheckedLabels(clbLabels, entry);
 				rtbNewEntry.Focus();
 				rtbNewEntry.SelectionStart = 0;
 			}
@@ -107,7 +107,7 @@ namespace myJournal.subforms
 			frmLabelsManager frm = new frmLabelsManager(this.currentJournal);
 			Utilities.Showform(frm, this); // ShowDialog() happens here.
 			// labels file is modified as directed on frmManageLabels then flow returns here ...
-			Utilities.PopulateLabelsList(clbLabels);
+			Utilities.Labels_PopulateLabelsList(clbLabels);
 			this.Show();
 		}
 
@@ -116,17 +116,17 @@ namespace myJournal.subforms
 			switch (sort)
 			{
 				case LabelsSortType.None:
-					Utilities.PopulateLabelsList(clbLabels, null, Utilities.LabelsSortType.None);
+					Utilities.Labels_PopulateLabelsList(clbLabels, null, Utilities.LabelsSortType.None);
 					lblSortType.Text = "sort A-Z";
 					sort = LabelsSortType.Ascending;
 					break;
 				case LabelsSortType.Ascending:
-					Utilities.PopulateLabelsList(clbLabels, null, Utilities.LabelsSortType.Descending);
+					Utilities.Labels_PopulateLabelsList(clbLabels, null, Utilities.LabelsSortType.Descending);
 					lblSortType.Text = "sort Z-A";
 					sort = LabelsSortType.Descending;
 					break;
 				case LabelsSortType.Descending:
-					Utilities.PopulateLabelsList(clbLabels, null, Utilities.LabelsSortType.Ascending);
+					Utilities.Labels_PopulateLabelsList(clbLabels, null, Utilities.LabelsSortType.Ascending);
 					lblSortType.Text = "unsorted";
 					sort = LabelsSortType.None;
 					break;
@@ -193,7 +193,7 @@ namespace myJournal.subforms
 
 		private void Save()
 		{
-			JournalEntry newEntry = new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, rtbNewEntry.Rtf, Utilities.GetCheckedLabels(clbLabels), false);
+			JournalEntry newEntry = new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, rtbNewEntry.Rtf, Utilities.Labels_GetCheckedLabels(clbLabels), false);
 
 			if(entry == null)
 			{

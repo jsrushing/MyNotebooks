@@ -118,7 +118,7 @@ namespace myJournal.subforms
 				AddLabelToUIListbox();
 				SaveLabels(); 
 				pnlNewLabelName.Visible = false;
-				Utilities.PopulateLabelsList(null, lstLabels);
+				Utilities.Labels_PopulateLabelsList(null, lstLabels);
 				lstOccurrences.Items.Clear();
 				ShowHideOccurrences();
 			}
@@ -170,7 +170,6 @@ namespace myJournal.subforms
 					}
 
 					SaveLabels();
-					//LabelsManager.SaveLabels(lstLabels.Items.OfType<string>().ToList());
 				}
 
 				ActionTaken = bEdited;
@@ -207,17 +206,17 @@ namespace myJournal.subforms
 			switch (sort)
 			{
 				case LabelsSortType.None:
-					Utilities.PopulateLabelsList(null, lstLabels, Utilities.LabelsSortType.None);
+					Utilities.Labels_PopulateLabelsList(null, lstLabels, Utilities.LabelsSortType.None);
 					lblSortType.Text = "sort A-Z";
 					sort = LabelsSortType.Ascending;
 					break;
 				case LabelsSortType.Ascending:
-					Utilities.PopulateLabelsList(null, lstLabels, Utilities.LabelsSortType.Descending);
+					Utilities.Labels_PopulateLabelsList(null, lstLabels, Utilities.LabelsSortType.Descending);
 					lblSortType.Text = "sort Z-A";
 					sort = LabelsSortType.Descending;
 					break;
 				case LabelsSortType.Descending:
-					Utilities.PopulateLabelsList(null, lstLabels, Utilities.LabelsSortType.Ascending);
+					Utilities.Labels_PopulateLabelsList(null, lstLabels, Utilities.LabelsSortType.Ascending);
 					lblSortType.Text = "unsorted";
 					sort = LabelsSortType.None;
 					break;

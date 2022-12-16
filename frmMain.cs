@@ -471,7 +471,7 @@ namespace myJournal.subforms
 					frm2.ShowDialog();
 					var currentPIN = Program.PIN;
 					Program.PIN = frm2.EnteredValue;
-					Utilities.FindOrphanLabels(new Journal().Open(jrnlName), true);
+					Utilities.Labels_FindOrphans(new Journal().Open(jrnlName), true);
 					Program.PIN = currentPIN;
 				}
 
