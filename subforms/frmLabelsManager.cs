@@ -133,11 +133,11 @@ namespace myJournal.subforms
 				{
 					SetProgramPINForSelectedJournal(jrnl);
 
-					List<JournalEntry> lstEntryHasOldTag = jrnl.Entries.Where(t => ("," + t.ClearTags() + ",").Contains("," + sOldTagName + ",")).ToList();
+					List<JournalEntry> lstEntryHasOldLabel = jrnl.Entries.Where(t => ("," + t.ClearTags() + ",").Contains("," + sOldTagName + ",")).ToList();
 
-					if (lstEntryHasOldTag.Count > 0)
+					if (lstEntryHasOldLabel.Count > 0)
 					{
-						foreach (JournalEntry je in lstEntryHasOldTag)
+						foreach (JournalEntry je in lstEntryHasOldLabel)
 						{
 							bEdited = je.RemoveOrReplaceTag(txtLabelName.Text, sOldTagName, Renaming);
 							if (bEdited) { jrnl.Save(); }
@@ -197,9 +197,7 @@ namespace myJournal.subforms
 			{
 				SetProgramPINForSelectedJournal(jrnl);
 				if(jrnl.Entries.Where(t => ("," + t.ClearTags() + ",").Contains("," + labelName + ",")).ToList().Count > 0)
-				{
-					return true;
-				}	
+				{ return true; }	
 			}
 			return false;
 		}
@@ -294,7 +292,7 @@ namespace myJournal.subforms
 		{
 			Deleting = true;
 			EditingAllJournals = ((ToolStripMenuItem)sender).Text.ToLower().StartsWith("in all");
-			lblOperation.Text = "Delete this label in " + (EditingAllJournals ? "all journals" : "'" + this.CurrentJournal.Name) + "'?";
+			lblOperation.Text = "Delete this label in " + (EditingAllJournals ? "all journals?" : "'" + this.CurrentJournal.Name) + "'?";
 			pnlNewLabelName.Visible = true;
 			txtLabelName.Text = lstLabels.SelectedItem.ToString();
 			txtLabelName.Enabled = false;

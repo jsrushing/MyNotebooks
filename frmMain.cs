@@ -415,6 +415,8 @@ namespace myJournal.subforms
 
 			if (frm.Result == frmMessage.ReturnResult.Yes)
 			{
+				// delete labels in the journal IF they don't exist in any other journal.
+
 				currentJournal.Delete();
 				ddlJournals.Text = string.Empty;
 				lstEntries.Items.Clear();
