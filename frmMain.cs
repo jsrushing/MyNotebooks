@@ -410,21 +410,23 @@ namespace myJournal.subforms
 
 		private void mnuJournal_Delete_Click(object sender, EventArgs e)
 		{
-			frmMessage frm = new frmMessage(frmMessage.OperationType.DeleteJournal, currentJournal.Name.Replace("\\", ""),"",this);
-			frm.ShowDialog();
-
-			if (frm.Result == frmMessage.ReturnResult.Yes)
+			using (frmMessage frm = new frmMessage(frmMessage.OperationType.DeleteJournal, currentJournal.Name.Replace("\\", ""), "", this))
 			{
-				// delete labels in the journal IF they don't exist in any other journal.
+				frm.ShowDialog();
 
-				currentJournal.Delete();
-				ddlJournals.Text = string.Empty;
-				lstEntries.Items.Clear();
-				LoadJournals();
-				ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
-				pnlDateFilters.Visible = false;
+				if (frm.Result == frmMessage.ReturnResult.Yes)
+				{
+					// delete labels in the journal IF they don't exist in any other journal.
+
+					currentJournal.Delete();
+					ddlJournals.Text = string.Empty;
+					lstEntries.Items.Clear();
+					LoadJournals();
+					ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
+					pnlDateFilters.Visible = false;
+				}
+
 			}
-			//this.Show();
 		}
 
 		private void mnuJournal_ForceBackup_Click(object sender, EventArgs e)
@@ -471,7 +473,7 @@ namespace myJournal.subforms
 					frm2.ShowDialog();
 					var currentPIN = Program.PIN;
 					Program.PIN = frm2.EnteredValue;
-					Utilities.Labels_FindOrphans(new Journal().Open(jrnlName), true);
+					Utilities.Labels_FindOrphansInOneJournal(new Journal().Open(jrnlName), true);
 					Program.PIN = currentPIN;
 				}
 

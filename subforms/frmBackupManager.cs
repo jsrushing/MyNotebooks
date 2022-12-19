@@ -70,7 +70,7 @@ namespace myJournal.subforms
 				frm = new frmMessage(frmMessage.OperationType.Message, "The backup is restored.");
 				frm.ShowDialog();
 				BackupRestored = true;
-				if (isForcedBackupRestore) { Utilities.Labels_Add(Utilities.Labels_FindOrphans(new Journal(truncatedForcedFileName).Open())); }
+				if (isForcedBackupRestore) { Utilities.Labels_Add(Utilities.Labels_FindOrphansInOneJournal(new Journal(truncatedForcedFileName).Open())); }
 			}
 
 			this.Hide();

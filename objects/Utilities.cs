@@ -54,13 +54,23 @@ namespace myJournal.objects
 			File.AppendAllLines(AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_LabelsFolder"], newLabels);
 		}
 
-		public static List<string> Labels_FindOrphans(Journal journal, bool addFoundOrphansToLabels = false)
+		public static void Labels_Delete(string labelName)
+		{
+			Labels_Save(File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFolder"]).Where(c => c != labelName).ToArray());
+		}
+
+		public static List<string> Labels_FindOrphansInOneJournal(Journal journal, bool addFoundOrphansToLabels = false)
 		{
 			List<string> lstReturn = new List<string>();
-			string[] labels = Labels_GetAll();
+			string[] allLabels = Labels_GetAll();
 
 			foreach(JournalEntry je in journal.Entries)
-			{ foreach(string jeLabel in je.ClearTags().Split(",")) { if (jeLabel.Length > 0 && !labels.Contains(jeLabel) && !lstReturn.Contains(jeLabel)) { lstReturn.Add(jeLabel); } } }
+			{ 
+				foreach(string jeLabel in je.ClearTags().Split(",")) 
+				{ if (jeLabel.Length > 0 && !allLabels.Contains(jeLabel) && !lstReturn.Contains(jeLabel)) 
+					{ lstReturn.Add(jeLabel); } 
+				} 
+			}
 
 			if (addFoundOrphansToLabels) { Labels_Add(lstReturn); }
 			return lstReturn;
@@ -106,6 +116,13 @@ namespace myJournal.objects
 				else
 				{ clb.Items.Add(label); }
 			}
+		}
+
+		public static void Labels_Save(string[] arrLabels)
+		{
+			StringBuilder sb = new StringBuilder();
+			foreach (string lbl in arrLabels) { sb.AppendLine(lbl); }
+			File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_LabelsFolder"], sb.ToString());
 		}
 
 		public static void Labels_SetCheckedLabels(CheckedListBox clb, JournalEntry entry)

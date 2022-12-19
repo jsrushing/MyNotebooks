@@ -61,11 +61,6 @@ namespace myJournal
 			catch (Exception) { }
 		}
 
-		//public bool CheckPIN()
-		//{
-
-		//}
-
 		public void Create()
         {
 			Entries.Add(new JournalEntry("created", "-", "-", ""));
