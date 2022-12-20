@@ -416,16 +416,27 @@ namespace myJournal.subforms
 
 				if (frm.Result == frmMessage.ReturnResult.Yes)
 				{
-					// delete labels in the journal IF they don't exist in any other journal.
-
 					currentJournal.Delete();
 					ddlJournals.Text = string.Empty;
 					lstEntries.Items.Clear();
 					LoadJournals();
 					ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
 					pnlDateFilters.Visible = false;
-				}
 
+					using(frmMessage frm2 = new frmMessage(frmMessage.OperationType.YesNoQuestion, "The Joural was deleted. " +
+						"You should check for orpahned labels using the Labels Manager. Would you like to do that now?","", this))
+					{
+						frm2.ShowDialog();
+
+						if(frm2.Result == frmMessage.ReturnResult.Yes)
+						{
+							using (frmLabelsManager frm3 = new frmLabelsManager())
+							{
+								frm3.ShowDialog();
+							}							
+						}
+					}
+				}
 			}
 		}
 
