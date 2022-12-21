@@ -198,6 +198,8 @@ namespace myJournal.subforms
 					Utilities.Labels_PopulateLabelsList(null, lstLabels);
 					ShowHideOccurrences();
 				}
+				lstLabels.SelectedItems.Clear();
+				lstOccurrences.Items.Clear();
 				ShowPanel(pnlMain);
 			}
 		}
@@ -288,7 +290,7 @@ namespace myJournal.subforms
 			SetProgramPINForSelectedJournal(j);
 
 			using (frmNewEntry frm = new frmNewEntry(j, je))
-			{ if (frm.saved) { PopulateOccurrences(); } }
+			{ frm.ShowDialog(); if (frm.saved) { PopulateOccurrences(); } }
 		}
 
 		private void mnuAdd_Click(object sender, EventArgs e)

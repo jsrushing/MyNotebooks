@@ -233,7 +233,7 @@ namespace myJournal.subforms
 			// mnuAdd
 			// 
 			this.mnuAdd.Name = "mnuAdd";
-			this.mnuAdd.Size = new System.Drawing.Size(145, 22);
+			this.mnuAdd.Size = new System.Drawing.Size(180, 22);
 			this.mnuAdd.Text = "&Add";
 			this.mnuAdd.Click += new System.EventHandler(this.mnuAdd_Click);
 			// 
@@ -243,7 +243,7 @@ namespace myJournal.subforms
             this.mnuRename_InCurrentJournal,
             this.mnuRename_InAllJournals});
 			this.mnuRename.Name = "mnuRename";
-			this.mnuRename.Size = new System.Drawing.Size(145, 22);
+			this.mnuRename.Size = new System.Drawing.Size(180, 22);
 			this.mnuRename.Text = "&Rename";
 			this.mnuRename.Click += new System.EventHandler(this.mnuRename_Click);
 			// 
@@ -265,26 +265,28 @@ namespace myJournal.subforms
             this.mnuDelete_InCurrentJournal,
             this.mnuDelete_InAllJournals});
 			this.mnuDelete.Name = "mnuDelete";
-			this.mnuDelete.Size = new System.Drawing.Size(145, 22);
+			this.mnuDelete.Size = new System.Drawing.Size(180, 22);
 			this.mnuDelete.Text = "&Delete";
 			this.mnuDelete.Click += new System.EventHandler(this.mnuDelete_Click);
 			// 
 			// mnuDelete_InCurrentJournal
 			// 
 			this.mnuDelete_InCurrentJournal.Name = "mnuDelete_InCurrentJournal";
-			this.mnuDelete_InCurrentJournal.Size = new System.Drawing.Size(168, 22);
+			this.mnuDelete_InCurrentJournal.Size = new System.Drawing.Size(180, 22);
 			this.mnuDelete_InCurrentJournal.Text = "In Current Journal";
+			this.mnuDelete_InCurrentJournal.Click += new System.EventHandler(this.mnuDelete_Click);
 			// 
 			// mnuDelete_InAllJournals
 			// 
 			this.mnuDelete_InAllJournals.Name = "mnuDelete_InAllJournals";
-			this.mnuDelete_InAllJournals.Size = new System.Drawing.Size(168, 22);
+			this.mnuDelete_InAllJournals.Size = new System.Drawing.Size(180, 22);
 			this.mnuDelete_InAllJournals.Text = "In All Journals";
+			this.mnuDelete_InAllJournals.Click += new System.EventHandler(this.mnuDelete_Click);
 			// 
 			// mnuFindOrphans
 			// 
 			this.mnuFindOrphans.Name = "mnuFindOrphans";
-			this.mnuFindOrphans.Size = new System.Drawing.Size(145, 22);
+			this.mnuFindOrphans.Size = new System.Drawing.Size(180, 22);
 			this.mnuFindOrphans.Text = "Find &Orphans";
 			this.mnuFindOrphans.Click += new System.EventHandler(this.mnuFindOrphans_Click);
 			// 
