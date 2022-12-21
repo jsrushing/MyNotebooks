@@ -47,7 +47,7 @@ namespace myJournal.subforms
 
 			if (txtName.Text.Contains("|"))
 			{
-				Utilities.ShowMessage("Sorry, for operational reasons Journal names may not contain the '|' symbol.", this);
+				using(frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "Sorry, for operational reasons Journal names may not contain the '|' symbol.", "", this))
 				txtName.Text = txtName.Text.Replace("|", "");
 				txtName.SelectionStart = txtName.Text.Length;
 				txtName.Focus();

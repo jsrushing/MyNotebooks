@@ -38,7 +38,7 @@ namespace myJournal.subforms
 			opType = type;
 			msg = message;
 			this.defaultText = defaultText;
-			if(parent != null) { this.Location = new System.Drawing.Point(parent.Left + 25, parent.Top + 25); }
+			if(parent != null) { this.StartPosition = FormStartPosition.Manual; this.Location = new System.Drawing.Point(parent.Left + 25, parent.Top + 25); }
 		}
 
 		private void frmMessage_Activated(object sender, EventArgs e)
@@ -83,6 +83,7 @@ namespace myJournal.subforms
 					lblMessage.Text = msg;
 					txtInput.Text = defaultText;
 					txtInput.Visible = true;
+					txtInput.Top = 23 * ((int)Math.Ceiling((double)msg.Length / 42));
 					pnlOkCancel.Top = txtInput.Top + txtInput.Height + 15;
 					pnlOkCancel.Visible = true;
 					txtInput.SelectAll();
@@ -114,7 +115,7 @@ namespace myJournal.subforms
 
 		private void btnOk_Click(object sender, EventArgs e)
 		{
-			Result = txtInput.Visible && txtInput.Text.Length == 0 ? ReturnResult.Cancel : ReturnResult.Ok;
+			Result = ReturnResult.Ok;
 			EnteredValue = txtInput.Text;
 			this.Hide();
 		}

@@ -54,24 +54,27 @@ namespace myJournal.subforms
 				truncatedForcedFileName = lstForcedBackups.SelectedItem.ToString();
 				truncatedForcedFileName = truncatedForcedFileName.Substring(0, truncatedForcedFileName.LastIndexOf(" ("));
 				journalsFolderPath = journalsFolder + truncatedForcedFileName;
-				frmMessage frm2 = new frmMessage(frmMessage.OperationType.InputBox, "Enter the PIN for '" + truncatedForcedFileName + "' so orphaned labels can be restored.");
-				Utilities.Showform(frm2, this);
-				Program.PIN = frm2.EnteredValue;
-				frm2.Close();
-				this.Show();
+
+				using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.InputBox, "Enter the PIN for '" + truncatedForcedFileName + "' so orphaned labels can be restored."))
+				{
+					frm2.ShowDialog();
+					Program.PIN = frm2.EnteredValue;
+				}
 			}
 
-			frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Do you want to restore the backup? The existing journal cannot be recovered!", "", this);
-			frm.ShowDialog();
+			using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Do you want to restore the backup? The existing journal cannot be recovered!", "", this)) 
+			{ 
+				frm.ShowDialog(); 
 
-			if(frm.Result == frmMessage.ReturnResult.Yes) 
-			{
-				File.Move(backupFilePath, journalsFolderPath, true);
-				frm = new frmMessage(frmMessage.OperationType.Message, "The backup is restored.");
-				frm.ShowDialog();
-				BackupRestored = true;
-				if (isForcedBackupRestore) { Utilities.Labels_Add(Utilities.Labels_FindOrphansInOneJournal(new Journal(truncatedForcedFileName).Open())); }
+				if(frm.Result == frmMessage.ReturnResult.Yes) 
+				{
+					File.Move(backupFilePath, journalsFolderPath, true);
+					using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.Message, "The backup is restored.")) { frm2.ShowDialog();}	
+					BackupRestored = true;
+					if (isForcedBackupRestore) { Utilities.Labels_Add(Utilities.Labels_FindOrphansInOneJournal(new Journal(truncatedForcedFileName).Open())); }
+				}
 			}
+
 
 			this.Hide();
 		}

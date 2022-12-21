@@ -161,6 +161,8 @@ namespace myJournal.subforms
 			InitializeComponent();
 		}
 
+		private void frmMain_Activated(object sender, EventArgs e) { if (ddlJournals.Items.Count > 0) txtJournalPIN.Focus(); }
+
 		private void frmMain_Load(object sender, EventArgs e)
 		{
 			System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
@@ -168,7 +170,6 @@ namespace myJournal.subforms
 			string version = fvi.FileVersion;
 			this.Text = "myJournal " + version + (fvi.FileName.ToLower().Contains("debug") ? " - DEBUG MODE" : "");
 			LoadJournals();
-			//LoadFonts();
 			ShowHideMenusAndControls(SelectionState.HideAll);
 		}
 
@@ -186,6 +187,7 @@ namespace myJournal.subforms
 			lstEntries.Items.Clear();
 			rtbSelectedEntry.Text = string.Empty;
 			Program.PIN = txtJournalPIN.Text;
+			txtJournalPIN.Text = string.Empty;
 			lblWrongPin.Visible = false;
 
 			try
@@ -239,7 +241,6 @@ namespace myJournal.subforms
 			ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
 			btnLoadJournal.Enabled = true;
 			pnlPin.Visible = ddlJournals.SelectedIndex > -1;
-			txtJournalPIN.Text = string.Empty;
 			txtJournalPIN.Focus();
 			currentEntry = null;
 			currentJournal = null;
@@ -299,13 +300,28 @@ namespace myJournal.subforms
 			else
 			{ foreach (Journal j in Utilities.AllJournals()) { ddlJournals.Items.Add(j.Name); } }
 
-			ddlJournals.Enabled = ddlJournals.Items.Count > 0;
+			if(ddlJournals.Items.Count == 0)
+			{
+				// look for an update
+
+
+
+				string parentDir = Directory.GetParent(Program.AppRoot).FullName;
+				parentDir = Directory.GetParent(parentDir).FullName;
+				//List<string> allDirs = (Directory.GetDirectories(parentDir)).ToList();
+				////var manifests = allDirs.SingleOrDefault(d => d.Contains("manifest"));
+				//allDirs.Remove(allDirs.SingleOrDefault(d => d.Contains("manifests")));
+				this.Text = parentDir;
+			}
+			else
+			{
+			ddlJournals.Enabled = true;
 			pnlPin.Visible = false;
 			ddlJournals.SelectedIndex = ddlJournals.Items.Count == 1 ? 0 : -1;
-			btnLoadJournal.Enabled = ddlJournals.Items.Count == 1;
-			txtJournalPIN.Text = string.Empty;
 			lstEntries.Visible = false;
 			ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
+			txtJournalPIN.Focus();
+			}
 		}
 
 		private void lstEntries_SelectEntry(object sender, EventArgs e)
@@ -359,18 +375,19 @@ namespace myJournal.subforms
 
 		private void mnuEntryDelete_Click(object sender, EventArgs e)
 		{
-			frmMessage frm = new frmMessage(frmMessage.OperationType.DeleteEntry, currentEntry.ClearTitle(), "", this);
-			frm.ShowDialog();
-
-			if(frm.Result == frmMessage.ReturnResult.Yes) 
+			using (frmMessage frm = new frmMessage(frmMessage.OperationType.DeleteEntry, currentEntry.ClearTitle(), "", this))
 			{
-				currentJournal.Entries.Remove(currentEntry);
-				currentJournal.Save();
-				Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text);
-				ShowHideMenusAndControls(SelectionState.JournalLoaded);
+				frm.ShowDialog();
+
+				if(frm.Result == frmMessage.ReturnResult.Yes) 
+				{
+					currentJournal.Entries.Remove(currentEntry);
+					currentJournal.Save();
+					Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text);
+					ShowHideMenusAndControls(SelectionState.JournalLoaded);
+				}
+
 			}
-			frm.Close();
-			//this.Show();
 		}
 
 		private void mnuEntryEdit_Click(object sender, EventArgs e)
@@ -444,11 +461,10 @@ namespace myJournal.subforms
 		{
 			currentJournal.Backup_Forced();
 			string sMsg = currentJournal.BackupCompleted ? "The backup was completed" : "An error occurred. The backup was not completed.";
-			frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The backup is complete.", "", this);
-			frm.ShowDialog();
+			using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "", this)) { frm.ShowDialog(); }	
 		}
 
-		private void mnuJournal_Import_Click(object sender, EventArgs e)    // Need to scan for orphaned labels after an import. Put a new method in Journal.cs - 'AllLabels()'?
+		private void mnuJournal_Import_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
 			ofd.Multiselect = true;
@@ -467,25 +483,29 @@ namespace myJournal.subforms
 
 					if (File.Exists(tgt))
 					{
-						frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, 
-							"The journal '" + jrnlName + "' already exists. Do you want to ovewrwrite the journal?", "", this);
-						frm.ShowDialog();
-						ok2copy = frm.Result == frmMessage.ReturnResult.Yes;
+						using(frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, 
+							"The journal '" + jrnlName + "' already exists. Do you want to ovewrwrite the journal?", "", this))
+						{
+							frm.ShowDialog();
+							ok2copy = frm.Result == frmMessage.ReturnResult.Yes;
+						}
+					}
+
+					using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.InputBox, "Please enter the PIN for '" + jrnlName + "'.", "", this))
+					{
+						frm2.ShowDialog();
+						ok2copy = frm2.Result == frmMessage.ReturnResult.Ok;
+						Program.PIN = ok2copy ? frm2.EnteredValue : Program.PIN;
 					}
 
 					if (ok2copy)
 					{
 						File.Copy(fName, tgt, true);
 						filesCopied = true;
+						Utilities.Labels_FindOrphansInOneJournal(new Journal().Open(jrnlName), true);
 					}
 
 					ok2copy = true;
-					frmMessage frm2 = new frmMessage(frmMessage.OperationType.InputBox, "Please enter the PIN for '" + jrnlName + "'.", "", this);
-					frm2.ShowDialog();
-					var currentPIN = Program.PIN;
-					Program.PIN = frm2.EnteredValue;
-					Utilities.Labels_FindOrphansInOneJournal(new Journal().Open(jrnlName), true);
-					Program.PIN = currentPIN;
 				}
 
 				if (filesCopied) { LoadJournals(); }
@@ -495,15 +515,17 @@ namespace myJournal.subforms
 
 		private void mnuJournal_Rename_Click(object sender, EventArgs e)
 		{
-			frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "Enter the new journal name.", currentJournal.Name, this);	
-			frm.ShowDialog();
-
-			if (frm.Result == frmMessage.ReturnResult.Ok && frm.EnteredValue.Length > 0)
+			using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "Enter the new journal name.", currentJournal.Name, this))
 			{
-				currentJournal.Rename(frm.EnteredValue);
-				LoadJournals();
+				frm.ShowDialog();
+
+				if (frm.Result == frmMessage.ReturnResult.Ok && frm.EnteredValue.Length > 0)
+				{
+					currentJournal.Rename(frm.EnteredValue);
+					LoadJournals();
+				}
+
 			}
-			//this.Show();
 		}
 
 		private void mnuJournal_RestoreBackups_Click(object sender, EventArgs e)
@@ -638,5 +660,6 @@ namespace myJournal.subforms
 				return cp;
 			}
 		}
+
 	}
 }

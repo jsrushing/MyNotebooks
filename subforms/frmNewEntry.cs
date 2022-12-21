@@ -142,11 +142,12 @@ namespace myJournal.subforms
 		{
 			if (isDirty)
 			{
-				frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Do you want to save your changes?", "", this);
-				frm.ShowDialog();
-
-				if(frm.Result == frmMessage.ReturnResult.No) { entry = null; }
-				else if(frm.Result == frmMessage.ReturnResult.Yes)  { Save(); }
+				using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Do you want to save your changes?", "", this)) 
+				{ 
+					frm.ShowDialog(); 
+					if(frm.Result == frmMessage.ReturnResult.No) { entry = null; }
+					else if(frm.Result == frmMessage.ReturnResult.Yes)  { Save(); }				
+				}	
 			}
 			else
 			{
@@ -181,7 +182,7 @@ namespace myJournal.subforms
 			}
 			else
 			{
-				Utilities.ShowMessage("You must enter both a title and text to save an entry.", this);
+				using(frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "You must enter both a title and text to save an entry.", "", this)) { frm.ShowDialog(); }
 			}
 		}
 
