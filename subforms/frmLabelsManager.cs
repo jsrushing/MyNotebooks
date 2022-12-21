@@ -188,7 +188,7 @@ namespace myJournal.subforms
 		{
 			using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Are you sure you want to delete the lables? This action cannot be reversed!", "", this))
 			{
-				frm.ShowDialog();
+				frm.ShowDialog(this);
 
 				if (frm.Result == frmMessage.ReturnResult.Yes)
 				{ foreach (string lbl in lstOrphanedLabels.SelectedItems) { Utilities.Labels_Delete(lbl); } }
@@ -286,11 +286,9 @@ namespace myJournal.subforms
 			Journal j = kvp.Key;
 			JournalEntry je = kvp.Value;
 			SetProgramPINForSelectedJournal(j);
-			frmNewEntry frm = new frmNewEntry(j, je);
-			Utilities.Showform(frm, this);
-			if (frm.saved) { PopulateOccurrences(); }
-			frm.Close();
-			this.Show();
+
+			using (frmNewEntry frm = new frmNewEntry(j, je))
+			{ if (frm.saved) { PopulateOccurrences(); } }
 		}
 
 		private void mnuAdd_Click(object sender, EventArgs e)

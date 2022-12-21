@@ -64,7 +64,7 @@ namespace myJournal.subforms
 
 			using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Do you want to restore the backup? The existing journal cannot be recovered!", "", this)) 
 			{ 
-				frm.ShowDialog(); 
+				frm.ShowDialog(this); 
 
 				if(frm.Result == frmMessage.ReturnResult.Yes) 
 				{

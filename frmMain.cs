@@ -354,30 +354,29 @@ namespace myJournal.subforms
 		private void mnuAboutMyJournal_Click(object sender, EventArgs e)
 		{
 			Form frm = new frmAbout(this);
-			frm.ShowDialog();
+			frm.ShowDialog(this);
 		}
 
 		private void mnuEntryCreate_Click(object sender, EventArgs e)
 		{
-			frmNewEntry frm = new frmNewEntry(currentJournal);
-			frm.Text = "New entry in " + currentJournal.Name;
-			Utilities.Showform(frm, this);
+			using(frmNewEntry frm = new frmNewEntry(currentJournal))
+			{
+				frm.Text = "New entry in " + currentJournal.Name;
+				frm.ShowDialog(this);
 
-			if(frm.saved)
-			{ 
-				Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text);
-				ShowHideMenusAndControls(SelectionState.JournalLoaded);
+				if (frm.saved)
+				{
+					Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text);
+					ShowHideMenusAndControls(SelectionState.JournalLoaded);
+				}
 			}
-
-			frm.Close();
-			this.Show();
 		}
 
 		private void mnuEntryDelete_Click(object sender, EventArgs e)
 		{
 			using (frmMessage frm = new frmMessage(frmMessage.OperationType.DeleteEntry, currentEntry.ClearTitle(), "", this))
 			{
-				frm.ShowDialog();
+				frm.ShowDialog(this);
 
 				if(frm.Result == frmMessage.ReturnResult.Yes) 
 				{
@@ -394,42 +393,39 @@ namespace myJournal.subforms
 		{
 			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
 
-			frmNewEntry frm = new frmNewEntry(currentJournal, currentEntry);
-			frm.Text = "Edit '" + currentEntry.ClearTitle() + "' in '" + currentJournal.Name + "'";
-			frm.preserveOriginalText = mnu.Text.ToLower().StartsWith("preserve");
-			Utilities.Showform(frm, this);
-
-			if (frm.saved)
+			using (frmNewEntry frm = new frmNewEntry(currentJournal, currentEntry))
 			{
-				Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text);
-				ShowHideMenusAndControls(SelectionState.JournalLoaded);
-			}
+				frm.Text = "Edit '" + currentEntry.ClearTitle() + "' in '" + currentJournal.Name + "'";
+				frm.preserveOriginalText = mnu.Text.ToLower().StartsWith("preserve");
+				frm.ShowDialog(this);
 
-			frm.Close();
-			this.Show();
-			this.Height += 1;
+				if (frm.saved)
+				{
+					Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text);
+					ShowHideMenusAndControls(SelectionState.JournalLoaded);
+				}
+			}
 		}
 
 		private void mnuJournal_Create_Click(object sender, EventArgs e)
 		{
-			frmNewJournal frm = new frmNewJournal();
-			Utilities.Showform(frm, this);
+			using (frmNewJournal frm = new frmNewJournal())
+			{
+				frm.ShowDialog(this);
 
-			if (frm.NewJournalName != null){
-				Journal j = new Journal(frm.NewJournalName);
-				j.Create();
-				LoadJournals();
+				if (frm.NewJournalName != null){
+					Journal j = new Journal(frm.NewJournalName);
+					j.Create();
+					LoadJournals();
+				}
 			}
-
-			frm.Close();
-			this.Show();
 		}
 
 		private void mnuJournal_Delete_Click(object sender, EventArgs e)
 		{
 			using (frmMessage frm = new frmMessage(frmMessage.OperationType.DeleteJournal, currentJournal.Name.Replace("\\", ""), "", this))
 			{
-				frm.ShowDialog();
+				frm.ShowDialog(this);
 
 				if (frm.Result == frmMessage.ReturnResult.Yes)
 				{
@@ -461,7 +457,7 @@ namespace myJournal.subforms
 		{
 			currentJournal.Backup_Forced();
 			string sMsg = currentJournal.BackupCompleted ? "The backup was completed" : "An error occurred. The backup was not completed.";
-			using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "", this)) { frm.ShowDialog(); }	
+			using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "", this)) { frm.ShowDialog(this); }	
 		}
 
 		private void mnuJournal_Import_Click(object sender, EventArgs e)
@@ -486,7 +482,7 @@ namespace myJournal.subforms
 						using(frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, 
 							"The journal '" + jrnlName + "' already exists. Do you want to ovewrwrite the journal?", "", this))
 						{
-							frm.ShowDialog();
+							frm.ShowDialog(this);
 							ok2copy = frm.Result == frmMessage.ReturnResult.Yes;
 						}
 					}
@@ -517,7 +513,7 @@ namespace myJournal.subforms
 		{
 			using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "Enter the new journal name.", currentJournal.Name, this))
 			{
-				frm.ShowDialog();
+				frm.ShowDialog(this);
 
 				if (frm.Result == frmMessage.ReturnResult.Ok && frm.EnteredValue.Length > 0)
 				{
@@ -531,35 +527,26 @@ namespace myJournal.subforms
 		private void mnuJournal_RestoreBackups_Click(object sender, EventArgs e)
 		{
 			string sJournalName = ddlJournals.Text;
-			frmBackupManager frm = new frmBackupManager();
-			Utilities.Showform(frm, this);
-			if (frm.BackupRestored) { LoadJournals(); }
-			this.Show();
+			using (frmBackupManager frm = new frmBackupManager()) 
+			{
+				frm.ShowDialog(this);
+				if (frm.BackupRestored) { LoadJournals(); }
+			}
 		}
 
 		private void mnuJournal_Search_Click(object sender, EventArgs e)
 		{
 			Program.PIN = txtJournalPIN.Text;
-			frmSearch frm = new frmSearch(currentJournal);
-			Utilities.Showform(frm, this);
-			this.Show();
+			using (frmSearch frm = new frmSearch(currentJournal)) { frm.ShowDialog(); }
 		}
 
 		private void mnuLabels_Click(object sender, EventArgs e)
 		{
-			frmLabelsManager frm = new frmLabelsManager(this.currentJournal);
-			Utilities.Showform(frm, this);
-			
-			if (frm.ActionTaken)
+			using (frmLabelsManager frm = new frmLabelsManager(this.currentJournal))
 			{
-				//if(currentJournal != null)
-				//{ Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text, cbxDatesTo.Text); }
-				//else { LoadJournals(); }
-				LoadJournals();
+				frm.ShowDialog();
+				if (frm.ActionTaken) { LoadJournals(); }
 			}
-
-			frm.Close();
-			this.Show();
 		}
 
 		private void rtbSelectedEntry_MouseDown(object sender, MouseEventArgs e)

@@ -104,11 +104,8 @@ namespace myJournal.subforms
 
 		private void lblManageLabels_Click(object sender, EventArgs e)
 		{
-			frmLabelsManager frm = new frmLabelsManager(this.currentJournal);
-			Utilities.Showform(frm, this); // ShowDialog() happens here.
-			// labels file is modified as directed on frmManageLabels then flow returns here ...
+			using (frmLabelsManager frm = new frmLabelsManager(this.currentJournal)) { frm.ShowDialog(); }	
 			Utilities.Labels_PopulateLabelsList(clbLabels);
-			this.Show();
 		}
 
 		private void lblSortType_Click(object sender, EventArgs e)
@@ -144,7 +141,7 @@ namespace myJournal.subforms
 			{
 				using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Do you want to save your changes?", "", this)) 
 				{ 
-					frm.ShowDialog(); 
+					frm.ShowDialog(this); 
 					if(frm.Result == frmMessage.ReturnResult.No) { entry = null; }
 					else if(frm.Result == frmMessage.ReturnResult.Yes)  { Save(); }				
 				}	
@@ -182,7 +179,7 @@ namespace myJournal.subforms
 			}
 			else
 			{
-				using(frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "You must enter both a title and text to save an entry.", "", this)) { frm.ShowDialog(); }
+				using(frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "You must enter both a title and text to save an entry.", "", this)) { frm.ShowDialog(this); }
 			}
 		}
 
