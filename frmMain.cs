@@ -156,21 +156,33 @@ namespace myJournal.subforms
 			HideAll
 		}
 
-		public frmMain()
-		{
-			InitializeComponent();
-		}
-
-		private void frmMain_Activated(object sender, EventArgs e) { if (ddlJournals.Items.Count > 0) txtJournalPIN.Focus(); }
+		public frmMain() { InitializeComponent(); }
 
 		private void frmMain_Load(object sender, EventArgs e)
 		{
 			System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
 			System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
-			string version = fvi.FileVersion;
-			this.Text = "myJournal " + version + (fvi.FileName.ToLower().Contains("debug") ? " - DEBUG MODE" : "");
+			this.Text = "myJournal " + Program.AppVersion + (fvi.FileName.ToLower().Contains("debug") ? " - DEBUG MODE" : "");
 			LoadJournals();
 			ShowHideMenusAndControls(SelectionState.HideAll);
+		}
+
+		private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			string parent = Directory.GetParent(Program.AppRoot).FullName;
+			string targetDir = Directory.GetParent(parent).FullName;
+			targetDir = Directory.GetParent(targetDir).FullName + "\\lastjournals";
+
+			if (Directory.Exists(targetDir))
+			{
+				foreach (string file in Directory.GetFiles(targetDir)) { File.Delete(file); }
+			}
+			else { Directory.CreateDirectory(targetDir); }
+
+			foreach (var f in Directory.GetFiles(Program.AppRoot + "journals"))
+			{
+				File.Copy(f, Path.Combine(targetDir, Path.GetFileName(f)));
+			}
 		}
 
 		private void frmMain_Resize(object sender, EventArgs e)
@@ -302,16 +314,22 @@ namespace myJournal.subforms
 
 			if(ddlJournals.Items.Count == 0)
 			{
-				// look for an update
+				var parent = Directory.GetParent(Program.AppRoot).FullName;
+				parent = Directory.GetParent(parent).FullName;
+				parent = Directory.GetParent(parent).FullName;
 
+				var journalsDir = parent + "\\lastjournals";
+				var targetDir = Program.AppRoot + "journals";
 
+				if (Directory.Exists(journalsDir))
+				{
+					foreach(var f in Directory.GetFiles(journalsDir))
+					{
+						File.Copy(f, Path.Combine(targetDir, Path.GetFileName(f)));
+					}
+				}
 
-				string parentDir = Directory.GetParent(Program.AppRoot).FullName;
-				parentDir = Directory.GetParent(parentDir).FullName;
-				//List<string> allDirs = (Directory.GetDirectories(parentDir)).ToList();
-				////var manifests = allDirs.SingleOrDefault(d => d.Contains("manifest"));
-				//allDirs.Remove(allDirs.SingleOrDefault(d => d.Contains("manifests")));
-				this.Text = parentDir;
+				if(Directory.GetFiles(targetDir).Length > 0) { LoadJournals(); }
 			}
 			else
 			{
@@ -359,7 +377,7 @@ namespace myJournal.subforms
 
 		private void mnuEntryCreate_Click(object sender, EventArgs e)
 		{
-			using(frmNewEntry frm = new frmNewEntry(currentJournal))
+			using(frmNewEntry frm = new frmNewEntry(this, currentJournal))
 			{
 				frm.Text = "New entry in " + currentJournal.Name;
 				frm.ShowDialog(this);
@@ -385,7 +403,6 @@ namespace myJournal.subforms
 					Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text);
 					ShowHideMenusAndControls(SelectionState.JournalLoaded);
 				}
-
 			}
 		}
 
@@ -393,7 +410,7 @@ namespace myJournal.subforms
 		{
 			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
 
-			using (frmNewEntry frm = new frmNewEntry(currentJournal, currentEntry))
+			using (frmNewEntry frm = new frmNewEntry(this, currentJournal, currentEntry))
 			{
 				frm.Text = "Edit '" + currentEntry.ClearTitle() + "' in '" + currentJournal.Name + "'";
 				frm.preserveOriginalText = mnu.Text.ToLower().StartsWith("preserve");
@@ -443,10 +460,7 @@ namespace myJournal.subforms
 
 						if(frm2.Result == frmMessage.ReturnResult.Yes)
 						{
-							using (frmLabelsManager frm3 = new frmLabelsManager())
-							{
-								frm3.ShowDialog();
-							}							
+							using (frmLabelsManager frm3 = new frmLabelsManager(this)) { frm3.ShowDialog(); }							
 						}
 					}
 				}
@@ -542,7 +556,7 @@ namespace myJournal.subforms
 
 		private void mnuLabels_Click(object sender, EventArgs e)
 		{
-			using (frmLabelsManager frm = new frmLabelsManager(this.currentJournal))
+			using (frmLabelsManager frm = new frmLabelsManager(this, this.currentJournal))
 			{
 				frm.ShowDialog();
 				if (frm.ActionTaken) { LoadJournals(); }

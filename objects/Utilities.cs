@@ -66,7 +66,7 @@ namespace myJournal.objects
 
 			foreach(JournalEntry je in journal.Entries)
 			{ 
-				foreach(string jeLabel in je.ClearTags().Split(",")) 
+				foreach(string jeLabel in je.ClearLabels().Split(",")) 
 				{ if (jeLabel.Length > 0 && !allLabels.Contains(jeLabel) && !lstReturn.Contains(jeLabel)) 
 					{ lstReturn.Add(jeLabel); } 
 				} 
@@ -127,7 +127,7 @@ namespace myJournal.objects
 
 		public static void Labels_SetCheckedLabels(CheckedListBox clb, JournalEntry entry)
 		{
-			var labels = entry.ClearTags().Split(",");
+			var labels = entry.ClearLabels().Split(",");
 			for (var i = 0; i < clb.Items.Count; i++) { clb.SetItemChecked(i, labels.Contains(clb.Items[i].ToString())); }
 		}
 
@@ -248,7 +248,7 @@ namespace myJournal.objects
 					else
 					{
 						rtb.Text = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
-						, entryRtrn.ClearTitle(), entryRtrn.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), entryRtrn.ClearTags(), entryRtrn.ClearText());
+						, entryRtrn.ClearTitle(), entryRtrn.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), entryRtrn.ClearLabels(), entryRtrn.ClearText());
 					}
 					
 					if (rtb.Text.Length == 0) { lb.TopIndex = lb.Top + lb.Height < rtb.Top ? ctr : lb.TopIndex; }

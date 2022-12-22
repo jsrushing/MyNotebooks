@@ -34,19 +34,20 @@ namespace myJournal.subforms
 
 		private Journal CurrentJournal;
 
-		public frmLabelsManager(Journal _jrnl = null)
+		public frmLabelsManager(Form frmParent, Journal _jrnl = null)
 		{
 			InitializeComponent();
 
 			if(_jrnl != null)
 			{
-				//LabelsManager.Journal = _jrnl;
 				CurrentJournal = _jrnl;
-
 				mnuRename_InCurrentJournal.Text = "In '" + _jrnl.Name + "'";
 				mnuDelete_InCurrentJournal.Text = "In '" + _jrnl.Name + "'";
 			}
 			else { mnuRename_InCurrentJournal.Visible = false; mnuDelete_InCurrentJournal.Visible = false; }
+
+			this.StartPosition = FormStartPosition.Manual;
+			this.Location = new Point(frmParent.Location.X + 25, frmParent.Location.Y + 25);
 		}
 
 		private void frmLabelsManager_FormClosing(object sender, FormClosingEventArgs e) { Program.PIN = OriginalPIN; }
@@ -109,7 +110,7 @@ namespace myJournal.subforms
 
 		private void btnOK_Click(object sender, EventArgs e)
 		{
-			string sOldTagName = lstLabels.SelectedItem != null ? lstLabels.SelectedItem.ToString() : string.Empty;
+			string sOldLabelName = lstLabels.SelectedItem != null ? lstLabels.SelectedItem.ToString() : string.Empty;
 			bool bEdited = true;
 
 			if (Adding) 
@@ -132,13 +133,13 @@ namespace myJournal.subforms
 				{
 					SetProgramPINForSelectedJournal(jrnl);
 
-					List<JournalEntry> lstEntryHasOldLabel = jrnl.Entries.Where(t => ("," + t.ClearTags() + ",").Contains("," + sOldTagName + ",")).ToList();
+					List<JournalEntry> lstEntryHasOldLabel = jrnl.Entries.Where(t => ("," + t.ClearLabels() + ",").Contains("," + sOldLabelName + ",")).ToList();
 
 					if (lstEntryHasOldLabel.Count > 0)
 					{
 						foreach (JournalEntry je in lstEntryHasOldLabel)
 						{
-							bEdited = je.RemoveOrReplaceTag(txtLabelName.Text, sOldTagName, Renaming);
+							bEdited = je.RemoveOrReplaceLabel(txtLabelName.Text, sOldLabelName, Renaming);
 							if (bEdited) { jrnl.Save(); }
 						}
 					}
@@ -218,7 +219,7 @@ namespace myJournal.subforms
 			foreach (Journal jrnl in Utilities.AllJournals())
 			{
 				SetProgramPINForSelectedJournal(jrnl);
-				if(jrnl.Entries.Where(t => ("," + t.ClearTags() + ",").Contains("," + labelName + ",")).ToList().Count > 0)
+				if(jrnl.Entries.Where(t => ("," + t.ClearLabels() + ",").Contains("," + labelName + ",")).ToList().Count > 0)
 				{ return true; }	
 			}
 			return false;
@@ -289,7 +290,7 @@ namespace myJournal.subforms
 			JournalEntry je = kvp.Value;
 			SetProgramPINForSelectedJournal(j);
 
-			using (frmNewEntry frm = new frmNewEntry(j, je))
+			using (frmNewEntry frm = new frmNewEntry(this, j, je))
 			{ frm.ShowDialog(); if (frm.saved) { PopulateOccurrences(); } }
 		}
 
@@ -401,7 +402,7 @@ namespace myJournal.subforms
 				foreach (Journal jrnl in Utilities.AllJournals())
 				{
 					SetProgramPINForSelectedJournal(jrnl);
-					List<JournalEntry> foundLables = jrnl.Entries.Where(t => ("," + t.ClearTags() + ",").Contains("," + labelName + ",")).ToList();
+					List<JournalEntry> foundLables = jrnl.Entries.Where(t => ("," + t.ClearLabels() + ",").Contains("," + labelName + ",")).ToList();
 
 					if (foundLables.Count > 0)
 					{
@@ -465,7 +466,7 @@ namespace myJournal.subforms
 		private void txtLabelName_TextChanged(object sender, EventArgs e)
 		{
 			btnOK.Visible = Deleting ? true : !lstLabels.Items.Contains(txtLabelName.Text.Trim()); 
-			lblTagExists.Visible = !btnOK.Visible; 
+			lblLabelExists.Visible = !btnOK.Visible; 
 		}
 
 		private void txtPIN_KeyUp(object sender, KeyEventArgs e) { if(e.KeyCode == Keys.Enter) { btnAddPIN_Click(null, null); } }

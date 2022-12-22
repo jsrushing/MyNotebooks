@@ -138,10 +138,10 @@ namespace myJournal
 
 				// labels
 
-				string s = je.ClearTags();
+				string s = je.ClearLabels();
 
 				if (labelsArray != null)
-				{ foreach (string group in labelsArray) { if (je.ClearTags().Contains(group)) { foundEntries.Add(je); } } }
+				{ foreach (string group in labelsArray) { if (je.ClearLabels().Contains(group)) { foundEntries.Add(je); } } }
 
 				// title and/or text
 				searchTitle = chkMatchCase.Checked ? searchTitle : searchTitle.ToLower();

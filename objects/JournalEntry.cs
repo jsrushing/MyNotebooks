@@ -41,7 +41,7 @@ namespace myJournal
 		string GetTextDisplayText()
 		{
 			return String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
-				, ClearTitle(), Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), ClearTags().Replace(",", ", "), ClearText());
+				, ClearTitle(), Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), ClearLabels().Replace(",", ", "), ClearText());
 		}
 
 		string[] GetSynopsis()
@@ -52,7 +52,7 @@ namespace myJournal
 			string sEntryText = ClearText();
 			sEntryText = (sEntryText.Length < iTextChunkLength ? sEntryText : sEntryText.Substring(0, iTextChunkLength) + " ...");
 			sRtrn[1] = sEntryText;
-			sRtrn[2] = "labels: " + ClearTags().Replace(",", ", ");
+			sRtrn[2] = "labels: " + ClearLabels().Replace(",", ", ");
 			sRtrn[3] = "---------------------";
 			return sRtrn;
 		}
@@ -64,39 +64,39 @@ namespace myJournal
 			Title = newEntry.Title;
 		}
 
-		public bool RemoveOrReplaceTag(string newTagName, string oldTagName, bool renaming = true)
+		public bool RemoveOrReplaceLabel(string newLabelName, string oldLabelName, bool renaming = true)
 		{
-			string tags = this.ClearTags();
-			bool bTagEdited = false;
+			string labels = this.ClearLabels();
+			bool bLabelEdited = false;
 
-			if (tags.Length > 0)
+			if (labels.Length > 0)
 			{
-				List<string> arrTags = tags.Split(',').ToList();
-				int iTagIndex = arrTags.IndexOf(oldTagName);	// Array.IndexOf(arrTags, oldTagName);
+				List<string> arrLabels = labels.Split(',').ToList();
+				int iLabelIndex = arrLabels.IndexOf(oldLabelName);
 
-				if (iTagIndex > -1)
+				if (iLabelIndex > -1)
 				{
 					if (renaming)
 					{
-						arrTags.RemoveAt(iTagIndex);
-						arrTags.Insert(iTagIndex, newTagName);
+						arrLabels.RemoveAt(iLabelIndex);
+						arrLabels.Insert(iLabelIndex, newLabelName);
 					}
 					else
 					{
-						arrTags.RemoveAt(iTagIndex);
+						arrLabels.RemoveAt(iLabelIndex);
 					}
 
-					string finalTagsString = String.Join(",", arrTags).Trim(',').Replace(",,", "");
-					this.Labels = finalTagsString.Length > 0 ? EncryptDecrypt.Encrypt(finalTagsString) : string.Empty;
-					bTagEdited = true;
+					string finalLabelsString = String.Join(",", arrLabels).Trim(',').Replace(",,", "");
+					this.Labels = finalLabelsString.Length > 0 ? EncryptDecrypt.Encrypt(finalLabelsString) : string.Empty;
+					bLabelEdited = true;
 				}
 			}
-			return bTagEdited;
+			return bLabelEdited;
 		}
 
 		public string ClearText()	{ return EncryptDecrypt.Decrypt(Text); }
 		public string ClearTitle()	{ return EncryptDecrypt.Decrypt(Title); }
 		public string ClearRTF()	{ return EncryptDecrypt.Decrypt(RTF); }
-		public string ClearTags()	{ return Labels == null ? String.Empty : EncryptDecrypt.Decrypt(Labels); }
+		public string ClearLabels()	{ return Labels == null ? String.Empty : EncryptDecrypt.Decrypt(Labels); }
 	}
 }

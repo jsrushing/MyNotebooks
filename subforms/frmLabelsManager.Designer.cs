@@ -32,7 +32,7 @@ namespace myJournal.subforms
 			this.pnlMain = new System.Windows.Forms.Panel();
 			this.pnlNewLabelName = new System.Windows.Forms.Panel();
 			this.btnOK = new System.Windows.Forms.Button();
-			this.lblTagExists = new System.Windows.Forms.Label();
+			this.lblLabelExists = new System.Windows.Forms.Label();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.lblOperation = new System.Windows.Forms.Label();
 			this.txtLabelName = new System.Windows.Forms.TextBox();
@@ -71,6 +71,7 @@ namespace myJournal.subforms
 			this.btnRemoveSelectedOrphans = new System.Windows.Forms.Button();
 			this.lstOrphanedLabels = new System.Windows.Forms.ListBox();
 			this.label4 = new System.Windows.Forms.Label();
+			this.label5 = new System.Windows.Forms.Label();
 			this.pnlMain.SuspendLayout();
 			this.pnlNewLabelName.SuspendLayout();
 			this.mnuMain.SuspendLayout();
@@ -93,20 +94,22 @@ namespace myJournal.subforms
 			// 
 			// pnlNewLabelName
 			// 
+			this.pnlNewLabelName.BackColor = System.Drawing.SystemColors.ActiveCaption;
 			this.pnlNewLabelName.Controls.Add(this.btnOK);
-			this.pnlNewLabelName.Controls.Add(this.lblTagExists);
+			this.pnlNewLabelName.Controls.Add(this.lblLabelExists);
 			this.pnlNewLabelName.Controls.Add(this.btnCancel);
 			this.pnlNewLabelName.Controls.Add(this.lblOperation);
 			this.pnlNewLabelName.Controls.Add(this.txtLabelName);
+			this.pnlNewLabelName.Controls.Add(this.label5);
 			this.pnlNewLabelName.Location = new System.Drawing.Point(18, 56);
 			this.pnlNewLabelName.Name = "pnlNewLabelName";
-			this.pnlNewLabelName.Size = new System.Drawing.Size(296, 94);
+			this.pnlNewLabelName.Size = new System.Drawing.Size(293, 110);
 			this.pnlNewLabelName.TabIndex = 2;
 			this.pnlNewLabelName.Visible = false;
 			// 
 			// btnOK
 			// 
-			this.btnOK.Location = new System.Drawing.Point(72, 59);
+			this.btnOK.Location = new System.Drawing.Point(56, 71);
 			this.btnOK.Name = "btnOK";
 			this.btnOK.Size = new System.Drawing.Size(75, 23);
 			this.btnOK.TabIndex = 2;
@@ -114,20 +117,21 @@ namespace myJournal.subforms
 			this.btnOK.UseVisualStyleBackColor = true;
 			this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
 			// 
-			// lblTagExists
+			// lblLabelExists
 			// 
-			this.lblTagExists.AutoSize = true;
-			this.lblTagExists.ForeColor = System.Drawing.Color.Red;
-			this.lblTagExists.Location = new System.Drawing.Point(56, 63);
-			this.lblTagExists.Name = "lblTagExists";
-			this.lblTagExists.Size = new System.Drawing.Size(111, 15);
-			this.lblTagExists.TabIndex = 4;
-			this.lblTagExists.Text = "Label already exists.";
-			this.lblTagExists.Visible = false;
+			this.lblLabelExists.AutoSize = true;
+			this.lblLabelExists.BackColor = System.Drawing.SystemColors.ButtonFace;
+			this.lblLabelExists.ForeColor = System.Drawing.Color.Red;
+			this.lblLabelExists.Location = new System.Drawing.Point(40, 75);
+			this.lblLabelExists.Name = "lblLabelExists";
+			this.lblLabelExists.Size = new System.Drawing.Size(111, 15);
+			this.lblLabelExists.TabIndex = 4;
+			this.lblLabelExists.Text = "Label already exists.";
+			this.lblLabelExists.Visible = false;
 			// 
 			// btnCancel
 			// 
-			this.btnCancel.Location = new System.Drawing.Point(179, 59);
+			this.btnCancel.Location = new System.Drawing.Point(163, 71);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(75, 23);
 			this.btnCancel.TabIndex = 3;
@@ -138,7 +142,8 @@ namespace myJournal.subforms
 			// lblOperation
 			// 
 			this.lblOperation.AutoSize = true;
-			this.lblOperation.Location = new System.Drawing.Point(56, 6);
+			this.lblOperation.BackColor = System.Drawing.SystemColors.ButtonFace;
+			this.lblOperation.Location = new System.Drawing.Point(26, 15);
 			this.lblOperation.Name = "lblOperation";
 			this.lblOperation.Size = new System.Drawing.Size(100, 15);
 			this.lblOperation.TabIndex = 1;
@@ -147,9 +152,9 @@ namespace myJournal.subforms
 			// 
 			// txtLabelName
 			// 
-			this.txtLabelName.Location = new System.Drawing.Point(67, 24);
+			this.txtLabelName.Location = new System.Drawing.Point(26, 34);
 			this.txtLabelName.Name = "txtLabelName";
-			this.txtLabelName.Size = new System.Drawing.Size(187, 23);
+			this.txtLabelName.Size = new System.Drawing.Size(249, 23);
 			this.txtLabelName.TabIndex = 0;
 			this.txtLabelName.TextChanged += new System.EventHandler(this.txtLabelName_TextChanged);
 			// 
@@ -233,7 +238,7 @@ namespace myJournal.subforms
 			// mnuAdd
 			// 
 			this.mnuAdd.Name = "mnuAdd";
-			this.mnuAdd.Size = new System.Drawing.Size(180, 22);
+			this.mnuAdd.Size = new System.Drawing.Size(145, 22);
 			this.mnuAdd.Text = "&Add";
 			this.mnuAdd.Click += new System.EventHandler(this.mnuAdd_Click);
 			// 
@@ -243,7 +248,7 @@ namespace myJournal.subforms
             this.mnuRename_InCurrentJournal,
             this.mnuRename_InAllJournals});
 			this.mnuRename.Name = "mnuRename";
-			this.mnuRename.Size = new System.Drawing.Size(180, 22);
+			this.mnuRename.Size = new System.Drawing.Size(145, 22);
 			this.mnuRename.Text = "&Rename";
 			this.mnuRename.Click += new System.EventHandler(this.mnuRename_Click);
 			// 
@@ -265,28 +270,28 @@ namespace myJournal.subforms
             this.mnuDelete_InCurrentJournal,
             this.mnuDelete_InAllJournals});
 			this.mnuDelete.Name = "mnuDelete";
-			this.mnuDelete.Size = new System.Drawing.Size(180, 22);
+			this.mnuDelete.Size = new System.Drawing.Size(145, 22);
 			this.mnuDelete.Text = "&Delete";
 			this.mnuDelete.Click += new System.EventHandler(this.mnuDelete_Click);
 			// 
 			// mnuDelete_InCurrentJournal
 			// 
 			this.mnuDelete_InCurrentJournal.Name = "mnuDelete_InCurrentJournal";
-			this.mnuDelete_InCurrentJournal.Size = new System.Drawing.Size(180, 22);
+			this.mnuDelete_InCurrentJournal.Size = new System.Drawing.Size(168, 22);
 			this.mnuDelete_InCurrentJournal.Text = "In Current Journal";
 			this.mnuDelete_InCurrentJournal.Click += new System.EventHandler(this.mnuDelete_Click);
 			// 
 			// mnuDelete_InAllJournals
 			// 
 			this.mnuDelete_InAllJournals.Name = "mnuDelete_InAllJournals";
-			this.mnuDelete_InAllJournals.Size = new System.Drawing.Size(180, 22);
+			this.mnuDelete_InAllJournals.Size = new System.Drawing.Size(168, 22);
 			this.mnuDelete_InAllJournals.Text = "In All Journals";
 			this.mnuDelete_InAllJournals.Click += new System.EventHandler(this.mnuDelete_Click);
 			// 
 			// mnuFindOrphans
 			// 
 			this.mnuFindOrphans.Name = "mnuFindOrphans";
-			this.mnuFindOrphans.Size = new System.Drawing.Size(180, 22);
+			this.mnuFindOrphans.Size = new System.Drawing.Size(145, 22);
 			this.mnuFindOrphans.Text = "Find &Orphans";
 			this.mnuFindOrphans.Click += new System.EventHandler(this.mnuFindOrphans_Click);
 			// 
@@ -492,6 +497,14 @@ namespace myJournal.subforms
 			this.label4.TabIndex = 0;
 			this.label4.Text = "The listed orphaned labels were found:";
 			// 
+			// label5
+			// 
+			this.label5.BackColor = System.Drawing.SystemColors.ButtonFace;
+			this.label5.Location = new System.Drawing.Point(11, 7);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(272, 93);
+			this.label5.TabIndex = 5;
+			// 
 			// frmLabelsManager
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -554,7 +567,7 @@ namespace myJournal.subforms
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.ToolStripMenuItem mnuAssignPINs;
 		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.Label lblTagExists;
+		private System.Windows.Forms.Label lblLabelExists;
 		private System.Windows.Forms.Label lblSortType;
 		private System.Windows.Forms.ListBox lstEntryObjects;
 		private System.Windows.Forms.Label lblShowPIN;
@@ -574,5 +587,6 @@ namespace myJournal.subforms
 		private System.Windows.Forms.ToolStripMenuItem mnuRename_InAllJournals;
 		private System.Windows.Forms.ToolStripMenuItem mnuDelete_InCurrentJournal;
 		private System.Windows.Forms.ToolStripMenuItem mnuDelete_InAllJournals;
+		private System.Windows.Forms.Label label5;
 	}
 }

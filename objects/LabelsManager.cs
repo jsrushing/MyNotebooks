@@ -31,7 +31,7 @@ namespace myJournal.objects
 
 		public List<JournalEntry> JournalHasLabel(Journal journal, string labelName)
 		{
-			return journal.Entries.Where(t => ("," + t.ClearTags() + ",").Contains("," + labelName + ",")).ToList();
+			return journal.Entries.Where(t => ("," + t.ClearLabels() + ",").Contains("," + labelName + ",")).ToList();
 		}
 
 		public bool SaveLabels(List<string> labels)

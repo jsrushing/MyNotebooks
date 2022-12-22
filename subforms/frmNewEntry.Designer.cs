@@ -51,7 +51,6 @@ namespace myJournal.subforms
 			this.txtNewEntryTitle = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
-			this.lblTagManager2 = new System.Windows.Forms.Label();
 			this.lblEntryText_Hidden = new System.Windows.Forms.Label();
 			this.lblEntryTitle_Hidden = new System.Windows.Forms.Label();
 			this.clbLabels = new System.Windows.Forms.CheckedListBox();
@@ -83,7 +82,6 @@ namespace myJournal.subforms
 			this.grpCreateEntry.Controls.Add(this.txtNewEntryTitle);
 			this.grpCreateEntry.Controls.Add(this.label2);
 			this.grpCreateEntry.Controls.Add(this.label4);
-			this.grpCreateEntry.Controls.Add(this.lblTagManager2);
 			this.grpCreateEntry.Controls.Add(this.lblEntryText_Hidden);
 			this.grpCreateEntry.Controls.Add(this.lblEntryTitle_Hidden);
 			this.grpCreateEntry.Controls.Add(this.clbLabels);
@@ -316,19 +314,6 @@ namespace myJournal.subforms
 			this.label4.TabIndex = 38;
 			this.label4.Text = "labels";
 			// 
-			// lblTagManager2
-			// 
-			this.lblTagManager2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.lblTagManager2.AutoSize = true;
-			this.lblTagManager2.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.lblTagManager2.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
-			this.lblTagManager2.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblTagManager2.Location = new System.Drawing.Point(609, 400);
-			this.lblTagManager2.Name = "lblTagManager2";
-			this.lblTagManager2.Size = new System.Drawing.Size(51, 15);
-			this.lblTagManager2.TabIndex = 36;
-			this.lblTagManager2.Text = "Manage";
-			// 
 			// lblEntryText_Hidden
 			// 
 			this.lblEntryText_Hidden.AutoSize = true;
@@ -495,7 +480,6 @@ namespace myJournal.subforms
 		#endregion
 
 		private System.Windows.Forms.GroupBox grpCreateEntry;
-		private System.Windows.Forms.Label lblTagManager2;
 		private System.Windows.Forms.Label lblEntryText_Hidden;
 		private System.Windows.Forms.Label lblEntryTitle_Hidden;
 		private System.Windows.Forms.CheckedListBox clbLabels;

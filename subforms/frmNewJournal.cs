@@ -19,7 +19,10 @@ namespace myJournal.subforms
 			InitializeComponent();
 		}
 
-		private void frmNewJournal_Load(object sender, EventArgs e) { this.Size = this.MinimumSize; }
+		private void frmNewJournal_Load(object sender, EventArgs e) 
+		{ 
+			this.Size = this.MinimumSize; 
+		}
 
 		private void frmNewJournal_Activated(object sender, EventArgs e) { txtName.Focus(); }
 

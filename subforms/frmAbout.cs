@@ -18,15 +18,10 @@ namespace myJournal.subforms
 
 		private void frmAbout_Load(object sender, EventArgs e)
 		{
-			System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
-			System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
-			lblVersion.Text = fvi.FileVersion;
+			lblVersion.Text = Program.AppVersion;
 			txtLocation.Text = Program.AppRoot;
 		}
 
-		private void btnClose_Click(object sender, EventArgs e)
-		{
-			this.Close();
-		}
+		private void btnClose_Click(object sender, EventArgs e) { this.Close(); }
 	}
 }

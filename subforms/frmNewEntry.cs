@@ -16,7 +16,6 @@ namespace myJournal.subforms
 		private bool			isEdit = false;
 		private int				originalEntryLength = -1;
 		private string			originalText_Full;
-		private string			originalText_TextOnly;
 		private bool			isDirty = false;
 		private string			originalTitle;
 		private LabelsSortType	sort = LabelsSortType.None;
@@ -31,12 +30,13 @@ namespace myJournal.subforms
 			None
 		}
 
-		public frmNewEntry(Journal journal, JournalEntry entryToEdit = null)
+		public frmNewEntry(Form parent, Journal journal, JournalEntry entryToEdit = null)
 		{
 			InitializeComponent();
 			entry = entryToEdit;
 			isEdit = entry != null;
 			this.currentJournal = journal;
+			this.StartPosition = FormStartPosition.Manual; this.Location = new System.Drawing.Point(parent.Left + 25, parent.Top + 25);
 		}
 
 		private void ddlFonts_SelectedIndexChanged(object sender, EventArgs e)
@@ -104,7 +104,7 @@ namespace myJournal.subforms
 
 		private void lblManageLabels_Click(object sender, EventArgs e)
 		{
-			using (frmLabelsManager frm = new frmLabelsManager(this.currentJournal)) { frm.ShowDialog(); }	
+			using (frmLabelsManager frm = new frmLabelsManager(this, this.currentJournal)) { frm.ShowDialog(); }	
 			Utilities.Labels_PopulateLabelsList(clbLabels);
 		}
 
@@ -225,7 +225,6 @@ namespace myJournal.subforms
 			{
 				this.Text = dirty ? originalTitle + "*" : originalTitle;
 			}
-
 		}
 
 		private void ToolsMenuClick(object sender, EventArgs e)
