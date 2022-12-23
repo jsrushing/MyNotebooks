@@ -171,18 +171,16 @@ namespace myJournal.subforms
 		{
 			string parent = Directory.GetParent(Program.AppRoot).FullName;
 			string targetDir = Directory.GetParent(parent).FullName;
-			targetDir = Directory.GetParent(targetDir).FullName + "\\lastjournals";
+			string targetDirJournals = Directory.GetParent(targetDir).FullName + "\\lastjournals";
+			string targetDirBackups = Directory.GetParent(targetDir).FullName + "\\lastjournals\\backups";
+			string targetDirForcedBackups = Directory.GetParent(targetDir).FullName + "\\lastjournals\\backups\\forced";
 
-			if (Directory.Exists(targetDir))
-			{
-				foreach (string file in Directory.GetFiles(targetDir)) { File.Delete(file); }
-			}
-			else { Directory.CreateDirectory(targetDir); }
 
-			foreach (var f in Directory.GetFiles(Program.AppRoot + "journals"))
-			{
-				File.Copy(f, Path.Combine(targetDir, Path.GetFileName(f)));
-			}
+			string targetDirSettings = Directory.GetParent(targetDir).FullName + "\\lastsettings";
+			CopyDirectory(new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]), new DirectoryInfo(targetDirJournals), false);
+			CopyDirectory(new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFolder"]), new DirectoryInfo(targetDirSettings), false);
+			CopyDirectory(new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"]), new DirectoryInfo(targetDirBackups), false);
+			CopyDirectory(new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"]), new DirectoryInfo(targetDirForcedBackups), false);
 		}
 
 		private void frmMain_Resize(object sender, EventArgs e)
@@ -318,29 +316,78 @@ namespace myJournal.subforms
 				parent = Directory.GetParent(parent).FullName;
 				parent = Directory.GetParent(parent).FullName;
 
-				var journalsDir = parent + "\\lastjournals";
-				var targetDir = Program.AppRoot + "journals";
+				CopyDirectory(
+					new DirectoryInfo(parent + "\\lastjournals"), new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]), false);
 
-				if (Directory.Exists(journalsDir))
-				{
-					foreach(var f in Directory.GetFiles(journalsDir))
-					{
-						File.Copy(f, Path.Combine(targetDir, Path.GetFileName(f)));
-					}
-				}
+				CopyDirectory(
+					new DirectoryInfo(parent + "\\lastjournals\\backups"), new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"]), false);
 
-				if(Directory.GetFiles(targetDir).Length > 0) { LoadJournals(); }
+				CopyDirectory(
+					new DirectoryInfo(parent + "\\lastjournals\\backups\\forced"), new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"]), false);
+
+				CopyDirectory(
+					new DirectoryInfo(parent + "\\lastsettings"), new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFolder"]), false);
+
+				//var journalsDir = parent + "\\lastjournals";
+				//var targetDir = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"];
+
+				//if (Directory.Exists(journalsDir))
+				//{
+				//	foreach(var f in Directory.GetFiles(journalsDir))
+				//	{
+				//		File.Copy(f, Path.Combine(targetDir, Path.GetFileName(f)));
+				//	}
+				//}
+
+				if(Directory.GetFiles(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]).Length > 0) { LoadJournals(); }
 			}
 			else
 			{
-			ddlJournals.Enabled = true;
-			pnlPin.Visible = false;
-			ddlJournals.SelectedIndex = ddlJournals.Items.Count == 1 ? 0 : -1;
-			lstEntries.Visible = false;
-			ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
-			txtJournalPIN.Focus();
+				ddlJournals.Enabled = true;
+				pnlPin.Visible = false;
+				ddlJournals.SelectedIndex = ddlJournals.Items.Count == 1 ? 0 : -1;
+				lstEntries.Visible = false;
+				ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
+				txtJournalPIN.Focus();
 			}
 		}
+
+		public static void CopyDirectory(DirectoryInfo source, DirectoryInfo target, bool copySubDirectories)
+		{
+			Directory.CreateDirectory(target.FullName);
+
+			// Copy each file into the new directory.
+			foreach (FileInfo fi in source.GetFiles())
+			{
+				Console.WriteLine(@"Copying {0}\{1}", target.FullName, fi.Name);
+				fi.CopyTo(Path.Combine(target.FullName, fi.Name), true);
+			}
+
+			// Copy each subdirectory using recursion.
+			if (copySubDirectories)
+			{
+				foreach (DirectoryInfo sourceSubDir in source.GetDirectories())
+				{
+					DirectoryInfo nextTargetSubDir = target.CreateSubdirectory(source.Name);
+					CopyDirectory(sourceSubDir, nextTargetSubDir, false);
+				}
+			}
+		}
+
+		//private static void CopyFilesRecursively(string sourcePath, string targetPath)
+		//{
+		//	//Now Create all of the directories
+		//	foreach (string dirPath in Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories))
+		//	{
+		//		Directory.CreateDirectory(dirPath.Replace(sourcePath, targetPath));
+		//	}
+
+		//	//Copy all the files & Replaces any files with the same name
+		//	foreach (string newPath in Directory.GetFiles(sourcePath, "*.*", SearchOption.AllDirectories))
+		//	{
+		//		File.Copy(newPath, newPath.Replace(sourcePath, targetPath), true);
+		//	}
+		//}
 
 		private void lstEntries_SelectEntry(object sender, EventArgs e)
 		{
