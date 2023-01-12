@@ -42,4 +42,8 @@
     <Folder Include="oldForms\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MailKit" Version="3.4.3" />
+  </ItemGroup>
+
 </Project>

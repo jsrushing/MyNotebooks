@@ -15,6 +15,7 @@ namespace myJournal
     public class JournalEntry
     {
         public DateTime Date;
+		public DateTime LastEditedOn;
         public string Text;
 		public string[] Synopsis{ get { return GetSynopsis(); } }
 		public string DisplayText { get { return GetTextDisplayText(); } set { DisplayText = value; } }
@@ -38,6 +39,15 @@ namespace myJournal
 			isEdited = _edited;	
 		}
 
+		public string GetFirstOrLastEditDate(bool getFirst)
+		{
+			var sText = this.ClearText();
+			var sTargetText = "> Original Date: ";
+			var iStartDateString = -1;
+			iStartDateString = getFirst ? sText.IndexOf(sTargetText) + sTargetText.Length : sText.LastIndexOf(sTargetText) + sTargetText.Length;
+			return sText.Substring(iStartDateString, 8);
+		}
+
 		string GetTextDisplayText()
 		{
 			return String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
@@ -48,7 +58,8 @@ namespace myJournal
 		{
 			string[] sRtrn = new string[4];
 			int iTextChunkLength = 150;
-			sRtrn[0] = ClearTitle() + " (" + Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")";
+			sRtrn[0] = ClearTitle() + " (" + Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"
+				+ (LastEditedOn < new DateTime(2000, 1, 1) ? "" : " [edited on " + LastEditedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + "]");
 			string sEntryText = ClearText();
 			sEntryText = (sEntryText.Length < iTextChunkLength ? sEntryText : sEntryText.Substring(0, iTextChunkLength) + " ...");
 			sRtrn[1] = sEntryText;

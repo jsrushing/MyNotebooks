@@ -41,7 +41,7 @@ namespace myJournal.objects
 			{
 				StringBuilder sb = new StringBuilder();
 				foreach (string tag in labels) { sb.AppendLine(tag); }
-				File.WriteAllText(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFolder"], sb.ToString());
+				File.WriteAllText(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"], sb.ToString());
 				bRtrn = true;
 			}
 			catch (Exception) { }

@@ -470,6 +470,5 @@ namespace myJournal.subforms
 		}
 
 		private void txtPIN_KeyUp(object sender, KeyEventArgs e) { if(e.KeyCode == Keys.Enter) { btnAddPIN_Click(null, null); } }
-
 	}
 }

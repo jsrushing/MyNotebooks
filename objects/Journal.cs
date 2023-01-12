@@ -105,7 +105,9 @@ namespace myJournal
         public void ReplaceEntry(JournalEntry jeToReplace, JournalEntry jeToInsert)
 		{
 			int idx;
-			for(idx = 0; idx < this.Entries.Count; idx++) { if(this.Entries[idx] == jeToReplace) { break; } }
+			jeToInsert.Date = jeToReplace.Date;
+			jeToInsert.LastEditedOn = DateTime.Now;
+			for(idx = 0; idx < this.Entries.Count; idx++) { if(this.Entries[idx].Id == jeToReplace.Id) { break; } }
 			this.Entries.Remove(jeToReplace);
 			this.Entries.Insert(idx, jeToInsert);
 		}

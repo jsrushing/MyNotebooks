@@ -51,12 +51,12 @@ namespace myJournal.objects
 		public static void Labels_Add(List<string> labelsToAdd)
 		{
 			string[] newLabels = ((labelsToAdd.ToArray()).Except(Labels_GetAll())).ToArray();
-			File.AppendAllLines(AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_LabelsFolder"], newLabels);
+			File.AppendAllLines(AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"], newLabels);
 		}
 
 		public static void Labels_Delete(string labelName)
 		{
-			Labels_Save(File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFolder"]).Where(c => c != labelName).ToArray());
+			Labels_Save(File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Where(c => c != labelName).ToArray());
 		}
 
 		public static List<string> Labels_FindOrphansInOneJournal(Journal journal, bool addFoundOrphansToLabels = false)
@@ -78,7 +78,7 @@ namespace myJournal.objects
 
 		public static string[] Labels_GetAll(LabelsSortType sort = LabelsSortType.None)
 		{
-			string[] labels = File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFolder"]);
+			string[] labels = File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]);
 
 			switch (sort)
 			{
@@ -122,7 +122,7 @@ namespace myJournal.objects
 		{
 			StringBuilder sb = new StringBuilder();
 			foreach (string lbl in arrLabels) { sb.AppendLine(lbl); }
-			File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_LabelsFolder"], sb.ToString());
+			File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"], sb.ToString());
 		}
 
 		public static void Labels_SetCheckedLabels(CheckedListBox clb, JournalEntry entry)

@@ -36,6 +36,7 @@ namespace myJournal.subforms
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.lblOperation = new System.Windows.Forms.Label();
 			this.txtLabelName = new System.Windows.Forms.TextBox();
+			this.label5 = new System.Windows.Forms.Label();
 			this.lblSortType = new System.Windows.Forms.Label();
 			this.lstLabels = new System.Windows.Forms.ListBox();
 			this.label3 = new System.Windows.Forms.Label();
@@ -71,7 +72,6 @@ namespace myJournal.subforms
 			this.btnRemoveSelectedOrphans = new System.Windows.Forms.Button();
 			this.lstOrphanedLabels = new System.Windows.Forms.ListBox();
 			this.label4 = new System.Windows.Forms.Label();
-			this.label5 = new System.Windows.Forms.Label();
 			this.pnlMain.SuspendLayout();
 			this.pnlNewLabelName.SuspendLayout();
 			this.mnuMain.SuspendLayout();
@@ -158,6 +158,14 @@ namespace myJournal.subforms
 			this.txtLabelName.TabIndex = 0;
 			this.txtLabelName.TextChanged += new System.EventHandler(this.txtLabelName_TextChanged);
 			// 
+			// label5
+			// 
+			this.label5.BackColor = System.Drawing.SystemColors.ButtonFace;
+			this.label5.Location = new System.Drawing.Point(11, 7);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(272, 93);
+			this.label5.TabIndex = 5;
+			// 
 			// lblSortType
 			// 
 			this.lblSortType.AutoSize = true;
@@ -238,7 +246,7 @@ namespace myJournal.subforms
 			// mnuAdd
 			// 
 			this.mnuAdd.Name = "mnuAdd";
-			this.mnuAdd.Size = new System.Drawing.Size(145, 22);
+			this.mnuAdd.Size = new System.Drawing.Size(180, 22);
 			this.mnuAdd.Text = "&Add";
 			this.mnuAdd.Click += new System.EventHandler(this.mnuAdd_Click);
 			// 
@@ -248,21 +256,23 @@ namespace myJournal.subforms
             this.mnuRename_InCurrentJournal,
             this.mnuRename_InAllJournals});
 			this.mnuRename.Name = "mnuRename";
-			this.mnuRename.Size = new System.Drawing.Size(145, 22);
+			this.mnuRename.Size = new System.Drawing.Size(180, 22);
 			this.mnuRename.Text = "&Rename";
 			this.mnuRename.Click += new System.EventHandler(this.mnuRename_Click);
 			// 
 			// mnuRename_InCurrentJournal
 			// 
 			this.mnuRename_InCurrentJournal.Name = "mnuRename_InCurrentJournal";
-			this.mnuRename_InCurrentJournal.Size = new System.Drawing.Size(168, 22);
+			this.mnuRename_InCurrentJournal.Size = new System.Drawing.Size(180, 22);
 			this.mnuRename_InCurrentJournal.Text = "In Current Journal";
+			this.mnuRename_InCurrentJournal.Click += new System.EventHandler(this.mnuRename_Click);
 			// 
 			// mnuRename_InAllJournals
 			// 
 			this.mnuRename_InAllJournals.Name = "mnuRename_InAllJournals";
-			this.mnuRename_InAllJournals.Size = new System.Drawing.Size(168, 22);
+			this.mnuRename_InAllJournals.Size = new System.Drawing.Size(180, 22);
 			this.mnuRename_InAllJournals.Text = "In All Journals";
+			this.mnuRename_InAllJournals.Click += new System.EventHandler(this.mnuRename_Click);
 			// 
 			// mnuDelete
 			// 
@@ -270,7 +280,7 @@ namespace myJournal.subforms
             this.mnuDelete_InCurrentJournal,
             this.mnuDelete_InAllJournals});
 			this.mnuDelete.Name = "mnuDelete";
-			this.mnuDelete.Size = new System.Drawing.Size(145, 22);
+			this.mnuDelete.Size = new System.Drawing.Size(180, 22);
 			this.mnuDelete.Text = "&Delete";
 			this.mnuDelete.Click += new System.EventHandler(this.mnuDelete_Click);
 			// 
@@ -291,7 +301,7 @@ namespace myJournal.subforms
 			// mnuFindOrphans
 			// 
 			this.mnuFindOrphans.Name = "mnuFindOrphans";
-			this.mnuFindOrphans.Size = new System.Drawing.Size(145, 22);
+			this.mnuFindOrphans.Size = new System.Drawing.Size(180, 22);
 			this.mnuFindOrphans.Text = "Find &Orphans";
 			this.mnuFindOrphans.Click += new System.EventHandler(this.mnuFindOrphans_Click);
 			// 
@@ -496,14 +506,6 @@ namespace myJournal.subforms
 			this.label4.Size = new System.Drawing.Size(210, 15);
 			this.label4.TabIndex = 0;
 			this.label4.Text = "The listed orphaned labels were found:";
-			// 
-			// label5
-			// 
-			this.label5.BackColor = System.Drawing.SystemColors.ButtonFace;
-			this.label5.Location = new System.Drawing.Point(11, 7);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(272, 93);
-			this.label5.TabIndex = 5;
 			// 
 			// frmLabelsManager
 			// 

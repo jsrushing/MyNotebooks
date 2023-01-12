@@ -21,7 +21,8 @@ namespace myJournal.subforms
 		private LabelsSortType	sort = LabelsSortType.None;
 
 		public bool saved { get; private set; }
-		public bool preserveOriginalText { get; set; }
+		//public bool preserveOriginalText { get; set; }
+		private bool preserveOriginalText;
 
 		private enum LabelsSortType
 		{
@@ -30,11 +31,12 @@ namespace myJournal.subforms
 			None
 		}
 
-		public frmNewEntry(Form parent, Journal journal, JournalEntry entryToEdit = null)
+		public frmNewEntry(Form parent, Journal journal, JournalEntry entryToEdit = null, bool disallowOriginalTextEdit = false)
 		{
 			InitializeComponent();
 			entry = entryToEdit;
 			isEdit = entry != null;
+			preserveOriginalText = disallowOriginalTextEdit;
 			this.currentJournal = journal;
 			this.StartPosition = FormStartPosition.Manual; this.Location = new System.Drawing.Point(parent.Left + 25, parent.Top + 25);
 		}
@@ -52,12 +54,18 @@ namespace myJournal.subforms
 			//ddlFonts.DataSource = Program.lstFonts;
 			//ddlFonts.DisplayMember = "text";
 			sort = LabelsSortType.None;
-			lblSortType_Click(null, null);
+			//lblSortType_Click(null, null);
+			SortLabels();
 
 			if (isEdit)
 			{
 				txtNewEntryTitle.Text = entry.ClearTitle();
+				//DateTime sCreatedOn = entry.Date;
+				lblCreatedOn.Text = entry.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]);
+				lblEditedOn.Text = entry.LastEditedOn < new DateTime(2000, 1, 1) ? "" : entry.LastEditedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]);
 
+				//lblEditedOn.Text = entry.GetFirstOrLastEditDate(true);
+				
 				if (preserveOriginalText)
 				{
 					originalText_Full = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Editing"],
@@ -108,27 +116,7 @@ namespace myJournal.subforms
 			Utilities.Labels_PopulateLabelsList(clbLabels);
 		}
 
-		private void lblSortType_Click(object sender, EventArgs e)
-		{
-			switch (sort)
-			{
-				case LabelsSortType.None:
-					Utilities.Labels_PopulateLabelsList(clbLabels, null, Utilities.LabelsSortType.None);
-					lblSortType.Text = "sort A-Z";
-					sort = LabelsSortType.Ascending;
-					break;
-				case LabelsSortType.Ascending:
-					Utilities.Labels_PopulateLabelsList(clbLabels, null, Utilities.LabelsSortType.Descending);
-					lblSortType.Text = "sort Z-A";
-					sort = LabelsSortType.Descending;
-					break;
-				case LabelsSortType.Descending:
-					Utilities.Labels_PopulateLabelsList(clbLabels, null, Utilities.LabelsSortType.Ascending);
-					lblSortType.Text = "unsorted";
-					sort = LabelsSortType.None;
-					break;
-			}
-		}
+		private void lblSortType_Click(object sender, EventArgs e) { SortLabels(); }
 
 		private void lstLabels_SelectedIndexChanged(object sender, EventArgs e) { SetIsDirty(true); }
 
@@ -227,6 +215,28 @@ namespace myJournal.subforms
 			}
 		}
 
+		private void SortLabels()
+		{
+			switch (sort)
+			{
+				case LabelsSortType.None:
+					Utilities.Labels_PopulateLabelsList(clbLabels, null, Utilities.LabelsSortType.None);
+					lblSortType.Text = "sort A-Z";
+					sort = LabelsSortType.Ascending;
+					break;
+				case LabelsSortType.Ascending:
+					Utilities.Labels_PopulateLabelsList(clbLabels, null, Utilities.LabelsSortType.Descending);
+					lblSortType.Text = "sort Z-A";
+					sort = LabelsSortType.Descending;
+					break;
+				case LabelsSortType.Descending:
+					Utilities.Labels_PopulateLabelsList(clbLabels, null, Utilities.LabelsSortType.Ascending);
+					lblSortType.Text = "unsorted";
+					sort = LabelsSortType.None;
+					break;
+			}
+		}
+
 		private void ToolsMenuClick(object sender, EventArgs e)
 		{
 			string btnName = ((ToolStripButton)sender).Name.ToLower();
@@ -235,6 +245,5 @@ namespace myJournal.subforms
 		}
 
 		private void txtNewEntryTitle_TextChanged(object sender, EventArgs e) { SetIsDirty(true); }
-
 	}
 }

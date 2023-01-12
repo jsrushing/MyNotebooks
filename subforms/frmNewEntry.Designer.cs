@@ -31,6 +31,12 @@ namespace myJournal.subforms
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmNewEntry));
 			this.grpCreateEntry = new System.Windows.Forms.GroupBox();
+			this.pnlEntryDates = new System.Windows.Forms.Panel();
+			this.lblEditedOn = new System.Windows.Forms.Label();
+			this.lblCreatedOn = new System.Windows.Forms.Label();
+			this.label6 = new System.Windows.Forms.Label();
+			this.label8 = new System.Windows.Forms.Label();
+			this.label5 = new System.Windows.Forms.Label();
 			this.lblSortType = new System.Windows.Forms.Label();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.lblSelectedFont = new System.Windows.Forms.Label();
@@ -65,6 +71,7 @@ namespace myJournal.subforms
 			this.txtFind = new System.Windows.Forms.ToolStripTextBox();
 			this.mnuCancelExit = new System.Windows.Forms.ToolStripMenuItem();
 			this.grpCreateEntry.SuspendLayout();
+			this.pnlEntryDates.SuspendLayout();
 			this.panel1.SuspendLayout();
 			this.toolsRTB.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
@@ -75,6 +82,7 @@ namespace myJournal.subforms
 			this.grpCreateEntry.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.grpCreateEntry.Controls.Add(this.pnlEntryDates);
 			this.grpCreateEntry.Controls.Add(this.lblSortType);
 			this.grpCreateEntry.Controls.Add(this.panel1);
 			this.grpCreateEntry.Controls.Add(this.toolsRTB);
@@ -91,9 +99,67 @@ namespace myJournal.subforms
 			this.grpCreateEntry.Controls.Add(this.rtbNewEntry);
 			this.grpCreateEntry.Location = new System.Drawing.Point(10, 25);
 			this.grpCreateEntry.Name = "grpCreateEntry";
-			this.grpCreateEntry.Size = new System.Drawing.Size(580, 459);
+			this.grpCreateEntry.Size = new System.Drawing.Size(569, 484);
 			this.grpCreateEntry.TabIndex = 5;
 			this.grpCreateEntry.TabStop = false;
+			// 
+			// pnlEntryDates
+			// 
+			this.pnlEntryDates.Controls.Add(this.lblEditedOn);
+			this.pnlEntryDates.Controls.Add(this.lblCreatedOn);
+			this.pnlEntryDates.Controls.Add(this.label6);
+			this.pnlEntryDates.Controls.Add(this.label8);
+			this.pnlEntryDates.Controls.Add(this.label5);
+			this.pnlEntryDates.Location = new System.Drawing.Point(46, 46);
+			this.pnlEntryDates.Name = "pnlEntryDates";
+			this.pnlEntryDates.Size = new System.Drawing.Size(317, 23);
+			this.pnlEntryDates.TabIndex = 48;
+			// 
+			// lblEditedOn
+			// 
+			this.lblEditedOn.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+			this.lblEditedOn.Location = new System.Drawing.Point(197, 4);
+			this.lblEditedOn.Name = "lblEditedOn";
+			this.lblEditedOn.Size = new System.Drawing.Size(105, 18);
+			this.lblEditedOn.TabIndex = 47;
+			this.lblEditedOn.Text = "88/88/88 00:00:00";
+			// 
+			// lblCreatedOn
+			// 
+			this.lblCreatedOn.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+			this.lblCreatedOn.Location = new System.Drawing.Point(50, 4);
+			this.lblCreatedOn.Name = "lblCreatedOn";
+			this.lblCreatedOn.Size = new System.Drawing.Size(100, 18);
+			this.lblCreatedOn.TabIndex = 45;
+			this.lblCreatedOn.Text = "88/88/88 00:00:00";
+			// 
+			// label6
+			// 
+			this.label6.AutoSize = true;
+			this.label6.Location = new System.Drawing.Point(312, 5);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(0, 15);
+			this.label6.TabIndex = 45;
+			// 
+			// label8
+			// 
+			this.label8.AutoSize = true;
+			this.label8.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+			this.label8.Location = new System.Drawing.Point(159, 5);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(46, 15);
+			this.label8.TabIndex = 46;
+			this.label8.Text = "edited: ";
+			// 
+			// label5
+			// 
+			this.label5.AutoSize = true;
+			this.label5.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+			this.label5.Location = new System.Drawing.Point(6, 5);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(52, 15);
+			this.label5.TabIndex = 44;
+			this.label5.Text = "created: ";
 			// 
 			// lblSortType
 			// 
@@ -102,7 +168,7 @@ namespace myJournal.subforms
 			this.lblSortType.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.lblSortType.Font = new System.Drawing.Font("Segoe UI", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
 			this.lblSortType.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblSortType.Location = new System.Drawing.Point(153, 299);
+			this.lblSortType.Location = new System.Drawing.Point(153, 324);
 			this.lblSortType.Name = "lblSortType";
 			this.lblSortType.Size = new System.Drawing.Size(59, 17);
 			this.lblSortType.TabIndex = 43;
@@ -119,9 +185,9 @@ namespace myJournal.subforms
 			this.panel1.Controls.Add(this.btnBold);
 			this.panel1.Controls.Add(this.ddlFonts);
 			this.panel1.Controls.Add(this.label1);
-			this.panel1.Location = new System.Drawing.Point(73, 44);
+			this.panel1.Location = new System.Drawing.Point(498, 45);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(494, 23);
+			this.panel1.Size = new System.Drawing.Size(317, 23);
 			this.panel1.TabIndex = 42;
 			this.panel1.Visible = false;
 			// 
@@ -211,7 +277,7 @@ namespace myJournal.subforms
             this.toolsItalic,
             this.toolsFonts,
             this.toolsFontSizes});
-			this.toolsRTB.Location = new System.Drawing.Point(321, 44);
+			this.toolsRTB.Location = new System.Drawing.Point(310, 44);
 			this.toolsRTB.Name = "toolsRTB";
 			this.toolsRTB.Size = new System.Drawing.Size(241, 25);
 			this.toolsRTB.TabIndex = 41;
@@ -272,7 +338,7 @@ namespace myJournal.subforms
 			this.lblManageLabels.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.lblManageLabels.Font = new System.Drawing.Font("Segoe UI", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
 			this.lblManageLabels.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblManageLabels.Location = new System.Drawing.Point(218, 299);
+			this.lblManageLabels.Location = new System.Drawing.Point(218, 324);
 			this.lblManageLabels.Name = "lblManageLabels";
 			this.lblManageLabels.Size = new System.Drawing.Size(97, 17);
 			this.lblManageLabels.TabIndex = 40;
@@ -287,7 +353,7 @@ namespace myJournal.subforms
 			this.txtNewEntryTitle.Location = new System.Drawing.Point(46, 19);
 			this.txtNewEntryTitle.Multiline = true;
 			this.txtNewEntryTitle.Name = "txtNewEntryTitle";
-			this.txtNewEntryTitle.Size = new System.Drawing.Size(521, 23);
+			this.txtNewEntryTitle.Size = new System.Drawing.Size(510, 23);
 			this.txtNewEntryTitle.TabIndex = 1;
 			this.txtNewEntryTitle.TextChanged += new System.EventHandler(this.txtNewEntryTitle_TextChanged);
 			// 
@@ -308,7 +374,7 @@ namespace myJournal.subforms
 			this.label4.AutoSize = true;
 			this.label4.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			this.label4.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.label4.Location = new System.Drawing.Point(13, 299);
+			this.label4.Location = new System.Drawing.Point(13, 324);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(44, 17);
 			this.label4.TabIndex = 38;
@@ -341,9 +407,9 @@ namespace myJournal.subforms
 			this.clbLabels.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.clbLabels.CheckOnClick = true;
 			this.clbLabels.FormattingEnabled = true;
-			this.clbLabels.Location = new System.Drawing.Point(6, 321);
+			this.clbLabels.Location = new System.Drawing.Point(6, 346);
 			this.clbLabels.Name = "clbLabels";
-			this.clbLabels.Size = new System.Drawing.Size(561, 126);
+			this.clbLabels.Size = new System.Drawing.Size(550, 126);
 			this.clbLabels.TabIndex = 27;
 			this.clbLabels.SelectedIndexChanged += new System.EventHandler(this.lstLabels_SelectedIndexChanged);
 			// 
@@ -353,7 +419,7 @@ namespace myJournal.subforms
 			this.label14.AutoSize = true;
 			this.label14.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			this.label14.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.label14.Location = new System.Drawing.Point(6, 756);
+			this.label14.Location = new System.Drawing.Point(6, 781);
 			this.label14.Name = "label14";
 			this.label14.Size = new System.Drawing.Size(34, 17);
 			this.label14.TabIndex = 25;
@@ -366,7 +432,7 @@ namespace myJournal.subforms
 			this.lblFont_NewEntry.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.lblFont_NewEntry.Font = new System.Drawing.Font("Segoe UI", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
 			this.lblFont_NewEntry.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblFont_NewEntry.Location = new System.Drawing.Point(629, 70);
+			this.lblFont_NewEntry.Location = new System.Drawing.Point(618, 70);
 			this.lblFont_NewEntry.Name = "lblFont_NewEntry";
 			this.lblFont_NewEntry.Size = new System.Drawing.Size(31, 15);
 			this.lblFont_NewEntry.TabIndex = 5;
@@ -393,7 +459,7 @@ namespace myJournal.subforms
 			this.rtbNewEntry.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.rtbNewEntry.Location = new System.Drawing.Point(6, 69);
 			this.rtbNewEntry.Name = "rtbNewEntry";
-			this.rtbNewEntry.Size = new System.Drawing.Size(561, 222);
+			this.rtbNewEntry.Size = new System.Drawing.Size(550, 247);
 			this.rtbNewEntry.TabIndex = 2;
 			this.rtbNewEntry.Text = "";
 			this.rtbNewEntry.TextChanged += new System.EventHandler(this.rtbNewEntry_TextChanged);
@@ -409,7 +475,7 @@ namespace myJournal.subforms
             this.mnuCancelExit});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(601, 24);
+			this.menuStrip1.Size = new System.Drawing.Size(590, 24);
 			this.menuStrip1.TabIndex = 6;
 			this.menuStrip1.Text = "Save Entry";
 			// 
@@ -456,7 +522,7 @@ namespace myJournal.subforms
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(601, 492);
+			this.ClientSize = new System.Drawing.Size(590, 517);
 			this.Controls.Add(this.grpCreateEntry);
 			this.Controls.Add(this.menuStrip1);
 			this.MainMenuStrip = this.menuStrip1;
@@ -466,6 +532,8 @@ namespace myJournal.subforms
 			this.Load += new System.EventHandler(this.frmNewEntry_Load);
 			this.grpCreateEntry.ResumeLayout(false);
 			this.grpCreateEntry.PerformLayout();
+			this.pnlEntryDates.ResumeLayout(false);
+			this.pnlEntryDates.PerformLayout();
 			this.panel1.ResumeLayout(false);
 			this.panel1.PerformLayout();
 			this.toolsRTB.ResumeLayout(false);
@@ -513,5 +581,11 @@ namespace myJournal.subforms
 		private System.Windows.Forms.ToolStripTextBox txtFind;
 		private System.Windows.Forms.Label lblSelectedFont;
 		private System.Windows.Forms.Label lblSortType;
+		private System.Windows.Forms.Label lblEditedOn;
+		private System.Windows.Forms.Label label8;
+		private System.Windows.Forms.Label lblCreatedOn;
+		private System.Windows.Forms.Label label5;
+		private System.Windows.Forms.Panel pnlEntryDates;
+		private System.Windows.Forms.Label label6;
 	}
 }
