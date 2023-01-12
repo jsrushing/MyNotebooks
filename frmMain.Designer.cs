@@ -61,9 +61,11 @@ namespace myJournal.subforms
 			this.lblWrongPin = new System.Windows.Forms.Label();
 			this.lblEntries = new System.Windows.Forms.Label();
 			this.lblShowPIN = new System.Windows.Forms.Label();
-			this.cbxDates = new System.Windows.Forms.ComboBox();
+			this.cbxDatesFrom = new System.Windows.Forms.ComboBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.pnlDateFilters = new System.Windows.Forms.Panel();
+			this.cbxSortEntriesBy = new System.Windows.Forms.ComboBox();
+			this.label5 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.cbxDatesTo = new System.Windows.Forms.ComboBox();
 			this.pnlPin = new System.Windows.Forms.Panel();
@@ -211,7 +213,7 @@ namespace myJournal.subforms
 			// mnuJournal_Create
 			// 
 			this.mnuJournal_Create.Name = "mnuJournal_Create";
-			this.mnuJournal_Create.Size = new System.Drawing.Size(180, 22);
+			this.mnuJournal_Create.Size = new System.Drawing.Size(160, 22);
 			this.mnuJournal_Create.Text = "C&reate";
 			this.mnuJournal_Create.Click += new System.EventHandler(this.mnuJournal_Create_Click);
 			// 
@@ -219,7 +221,7 @@ namespace myJournal.subforms
 			// 
 			this.mnuJournal_Delete.Enabled = false;
 			this.mnuJournal_Delete.Name = "mnuJournal_Delete";
-			this.mnuJournal_Delete.Size = new System.Drawing.Size(180, 22);
+			this.mnuJournal_Delete.Size = new System.Drawing.Size(160, 22);
 			this.mnuJournal_Delete.Text = "Delete";
 			this.mnuJournal_Delete.Click += new System.EventHandler(this.mnuJournal_Delete_Click);
 			// 
@@ -227,7 +229,7 @@ namespace myJournal.subforms
 			// 
 			this.mnuJournal_Search.Enabled = false;
 			this.mnuJournal_Search.Name = "mnuJournal_Search";
-			this.mnuJournal_Search.Size = new System.Drawing.Size(180, 22);
+			this.mnuJournal_Search.Size = new System.Drawing.Size(160, 22);
 			this.mnuJournal_Search.Text = "&Search";
 			this.mnuJournal_Search.Click += new System.EventHandler(this.mnuJournal_Search_Click);
 			// 
@@ -235,7 +237,7 @@ namespace myJournal.subforms
 			// 
 			this.mnuJournal_Rename.Enabled = false;
 			this.mnuJournal_Rename.Name = "mnuJournal_Rename";
-			this.mnuJournal_Rename.Size = new System.Drawing.Size(180, 22);
+			this.mnuJournal_Rename.Size = new System.Drawing.Size(160, 22);
 			this.mnuJournal_Rename.Text = "Rename";
 			this.mnuJournal_Rename.Click += new System.EventHandler(this.mnuJournal_Rename_Click);
 			// 
@@ -243,21 +245,21 @@ namespace myJournal.subforms
 			// 
 			this.mnuJournal_ForceBackup.Enabled = false;
 			this.mnuJournal_ForceBackup.Name = "mnuJournal_ForceBackup";
-			this.mnuJournal_ForceBackup.Size = new System.Drawing.Size(180, 22);
+			this.mnuJournal_ForceBackup.Size = new System.Drawing.Size(160, 22);
 			this.mnuJournal_ForceBackup.Text = "Force &Backup";
 			this.mnuJournal_ForceBackup.Click += new System.EventHandler(this.mnuJournal_ForceBackup_Click);
 			// 
 			// mnuJournal_RestoreBackups
 			// 
 			this.mnuJournal_RestoreBackups.Name = "mnuJournal_RestoreBackups";
-			this.mnuJournal_RestoreBackups.Size = new System.Drawing.Size(180, 22);
+			this.mnuJournal_RestoreBackups.Size = new System.Drawing.Size(160, 22);
 			this.mnuJournal_RestoreBackups.Text = "&Restore Backups";
 			this.mnuJournal_RestoreBackups.Click += new System.EventHandler(this.mnuJournal_RestoreBackups_Click);
 			// 
 			// mnuJournal_Import
 			// 
 			this.mnuJournal_Import.Name = "mnuJournal_Import";
-			this.mnuJournal_Import.Size = new System.Drawing.Size(180, 22);
+			this.mnuJournal_Import.Size = new System.Drawing.Size(160, 22);
 			this.mnuJournal_Import.Text = "Import";
 			this.mnuJournal_Import.Click += new System.EventHandler(this.mnuJournal_Import_Click);
 			// 
@@ -265,7 +267,7 @@ namespace myJournal.subforms
 			// 
 			this.mnuJournal_Export.Enabled = false;
 			this.mnuJournal_Export.Name = "mnuJournal_Export";
-			this.mnuJournal_Export.Size = new System.Drawing.Size(180, 22);
+			this.mnuJournal_Export.Size = new System.Drawing.Size(160, 22);
 			this.mnuJournal_Export.Text = "Export";
 			this.mnuJournal_Export.Click += new System.EventHandler(this.mnuJournal_Export_Click);
 			// 
@@ -377,40 +379,65 @@ namespace myJournal.subforms
 			this.lblShowPIN.Visible = false;
 			this.lblShowPIN.Click += new System.EventHandler(this.lblShowPIN_Click);
 			// 
-			// cbxDates
+			// cbxDatesFrom
 			// 
-			this.cbxDates.FormattingEnabled = true;
-			this.cbxDates.Location = new System.Drawing.Point(70, 2);
-			this.cbxDates.Name = "cbxDates";
-			this.cbxDates.Size = new System.Drawing.Size(86, 23);
-			this.cbxDates.TabIndex = 44;
-			this.cbxDates.SelectedIndexChanged += new System.EventHandler(this.cbxDates_SelectedIndexChanged);
+			this.cbxDatesFrom.FormattingEnabled = true;
+			this.cbxDatesFrom.Location = new System.Drawing.Point(39, 2);
+			this.cbxDatesFrom.Name = "cbxDatesFrom";
+			this.cbxDatesFrom.Size = new System.Drawing.Size(86, 23);
+			this.cbxDatesFrom.TabIndex = 44;
+			this.cbxDatesFrom.SelectedIndexChanged += new System.EventHandler(this.cbxDates_SelectedIndexChanged);
 			// 
 			// label2
 			// 
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(1, 8);
+			this.label2.Location = new System.Drawing.Point(1, 7);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(70, 15);
+			this.label2.Size = new System.Drawing.Size(39, 15);
 			this.label2.TabIndex = 41;
-			this.label2.Text = "show from: ";
+			this.label2.Text = "from: ";
 			// 
 			// pnlDateFilters
 			// 
+			this.pnlDateFilters.Controls.Add(this.cbxSortEntriesBy);
+			this.pnlDateFilters.Controls.Add(this.label5);
 			this.pnlDateFilters.Controls.Add(this.label3);
 			this.pnlDateFilters.Controls.Add(this.cbxDatesTo);
-			this.pnlDateFilters.Controls.Add(this.cbxDates);
+			this.pnlDateFilters.Controls.Add(this.cbxDatesFrom);
 			this.pnlDateFilters.Controls.Add(this.label2);
 			this.pnlDateFilters.Location = new System.Drawing.Point(257, 57);
 			this.pnlDateFilters.Name = "pnlDateFilters";
-			this.pnlDateFilters.Size = new System.Drawing.Size(289, 27);
+			this.pnlDateFilters.Size = new System.Drawing.Size(448, 27);
 			this.pnlDateFilters.TabIndex = 49;
 			this.pnlDateFilters.Visible = false;
+			// 
+			// cbxSortEntriesBy
+			// 
+			this.cbxSortEntriesBy.FormattingEnabled = true;
+			this.cbxSortEntriesBy.Items.AddRange(new object[] {
+            "Created On",
+            "Edited On",
+            "Title"});
+			this.cbxSortEntriesBy.Location = new System.Drawing.Point(288, 2);
+			this.cbxSortEntriesBy.Name = "cbxSortEntriesBy";
+			this.cbxSortEntriesBy.Size = new System.Drawing.Size(91, 23);
+			this.cbxSortEntriesBy.TabIndex = 52;
+			this.cbxSortEntriesBy.Text = "Created On";
+			this.cbxSortEntriesBy.SelectedIndexChanged += new System.EventHandler(this.cbxSortEntriesBy_SelectedIndexChanged);
+			// 
+			// label5
+			// 
+			this.label5.AutoSize = true;
+			this.label5.Location = new System.Drawing.Point(242, 7);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(46, 15);
+			this.label5.TabIndex = 51;
+			this.label5.Text = "sort by:";
 			// 
 			// label3
 			// 
 			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(162, 8);
+			this.label3.Location = new System.Drawing.Point(127, 7);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(18, 15);
 			this.label3.TabIndex = 46;
@@ -419,7 +446,7 @@ namespace myJournal.subforms
 			// cbxDatesTo
 			// 
 			this.cbxDatesTo.FormattingEnabled = true;
-			this.cbxDatesTo.Location = new System.Drawing.Point(185, 2);
+			this.cbxDatesTo.Location = new System.Drawing.Point(146, 2);
 			this.cbxDatesTo.Name = "cbxDatesTo";
 			this.cbxDatesTo.Size = new System.Drawing.Size(86, 23);
 			this.cbxDatesTo.TabIndex = 45;
@@ -494,7 +521,7 @@ namespace myJournal.subforms
 		private System.Windows.Forms.Label lblEntries;
 		private System.Windows.Forms.ToolStripMenuItem mnuEntryDelete;
 		private System.Windows.Forms.Label lblShowPIN;
-		private System.Windows.Forms.ComboBox cbxDates;
+		private System.Windows.Forms.ComboBox cbxDatesFrom;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Panel pnlDateFilters;
 		private System.Windows.Forms.ToolStripMenuItem mnuPreserveOriginalText;
@@ -510,5 +537,7 @@ namespace myJournal.subforms
 		private System.Windows.Forms.ToolStripMenuItem mnuAboutMyJournal;
 		private System.Windows.Forms.ToolStripMenuItem mnuJournal_Import;
 		private System.Windows.Forms.ToolStripMenuItem mnuJournal_Export;
+		private System.Windows.Forms.ComboBox cbxSortEntriesBy;
+		private System.Windows.Forms.Label label5;
 	}
 }

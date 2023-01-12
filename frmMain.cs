@@ -146,6 +146,7 @@ namespace myJournal.subforms
 		Journal currentJournal;
 		JournalEntry currentEntry;
 		private bool firstSelection = true;
+		//private bool suppressSortByClick = true;
 		bool suppressDateClick = false;
 
 		private enum SelectionState
@@ -213,7 +214,7 @@ namespace myJournal.subforms
 					}
 					else
 					{
-						Utilities.PopulateEntries(lstEntries, currentJournal.Entries, DateTime.Now.AddDays(-61).ToString());
+						Utilities.PopulateEntries(lstEntries, currentJournal.Entries, DateTime.Now.AddDays(-61).ToString(), DateTime.Now.ToString(), true, 0);
 
 						if(lstEntries.Items.Count == 0) { Utilities.PopulateEntries(lstEntries, currentJournal.Entries); }
 
@@ -222,8 +223,8 @@ namespace myJournal.subforms
 						pnlDateFilters.Visible = true;
 						PopulateShowFromDates();
 
-						for (int i = 0; i < cbxDates.Items.Count; i++)
-						{ if (DateTime.Parse(cbxDates.Items[i].ToString()) <= DateTime.Parse(cbxDatesTo.Text).AddDays(-60) || i == cbxDates.Items.Count - 1) {cbxDates.SelectedIndex = i; break; } }
+						for (int i = 0; i < cbxDatesFrom.Items.Count; i++)
+						{ if (DateTime.Parse(cbxDatesFrom.Items[i].ToString()) <= DateTime.Parse(cbxDatesTo.Text).AddDays(-60) || i == cbxDatesFrom.Items.Count - 1) {cbxDatesFrom.SelectedIndex = i; break; } }
 
 						suppressDateClick = true;
 						cbxDatesTo.SelectedIndex = 0;
@@ -243,6 +244,15 @@ namespace myJournal.subforms
 		private void cbxDates_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!suppressDateClick) { ProcessDateFilters(); }
+		}
+
+		private void cbxSortEntriesBy_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (currentJournal != null)
+			{
+				Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDatesFrom.Text, cbxDatesTo.Text, true, cbxSortEntriesBy.SelectedIndex);
+				lstEntries.Focus();
+			}
 		}
 
 		public static void CopyDirectory(DirectoryInfo source, DirectoryInfo target, bool copySubDirectories, bool clearTargetFolderBeforeCopy)
@@ -281,11 +291,12 @@ namespace myJournal.subforms
 			txtJournalPIN.Focus();
 			currentEntry = null;
 			currentJournal = null;
-			cbxDates.DataSource = null;
+			cbxDatesFrom.DataSource = null;
 			lblWrongPin.Visible = false;
 			pnlDateFilters.Visible = false;
 			lstEntries.Items.Clear();
 			lstEntries.Visible = false;
+			cbxSortEntriesBy.SelectedIndex = 0;
 		}
 
 		private void ddlJournals_Click(object sender, EventArgs e)
@@ -297,7 +308,7 @@ namespace myJournal.subforms
 			{
 				lblSeparator.Top += e.Y;
 				Utilities.ResizeListsAndRTBs(lstEntries, rtbSelectedEntry, lblSeparator, lblSelectionType, this);
-				lstEntries.TopIndex = lstEntries.SelectedIndices[0];
+				lstEntries.TopIndex = lstEntries.SelectedIndices.Count > 0 ? lstEntries.SelectedIndices[0] : 0;
 			}
 		}
 
@@ -413,7 +424,7 @@ namespace myJournal.subforms
 
 				if (frm.saved)
 				{
-					Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text);
+					Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDatesFrom.Text);
 					ShowHideMenusAndControls(SelectionState.JournalLoaded);
 				}
 			}
@@ -429,7 +440,7 @@ namespace myJournal.subforms
 				{
 					currentJournal.Entries.Remove(currentEntry);
 					currentJournal.Save();
-					Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text);
+					Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDatesFrom.Text);
 					ShowHideMenusAndControls(SelectionState.JournalLoaded);
 				}
 			}
@@ -442,12 +453,11 @@ namespace myJournal.subforms
 			using (frmNewEntry frm = new frmNewEntry(this, currentJournal, currentEntry, mnu.Text.ToLower().StartsWith("preserve")))
 			{
 				frm.Text = "Edit '" + currentEntry.ClearTitle() + "' in '" + currentJournal.Name + "'";
-				//frm.preserveOriginalText = mnu.Text.ToLower().StartsWith("preserve");
 				frm.ShowDialog(this);
 
 				if (frm.saved)
 				{
-					Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text);
+					Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDatesFrom.Text);
 					ShowHideMenusAndControls(SelectionState.JournalLoaded);
 				}
 			}
@@ -612,22 +622,22 @@ namespace myJournal.subforms
 		private void PopulateShowFromDates()
 		{
 			suppressDateClick = true;
-			cbxDates.DataSource = null;
+			cbxDatesFrom.DataSource = null;
 			cbxDatesTo.Items.Clear();
 			List<string> l = currentJournal.Entries.Select(e => e.Date.ToShortDateString()).Distinct().ToList();
 			l.Sort((x, y) => -DateTime.Parse(x).CompareTo(DateTime.Parse(y)));
-			cbxDates.DataSource = l;
+			cbxDatesFrom.DataSource = l;
 			//cbxDatesTo.Items.AddRange(cbxDates.Items.Cast<Object>().ToArray());
-			foreach(string s in cbxDates.Items) { cbxDatesTo.Items.Add(s); }
+			foreach(string s in cbxDatesFrom.Items) { cbxDatesTo.Items.Add(s); }
 			cbxDatesTo.SelectedIndex = 0;
 			suppressDateClick = false;
 		}
 
 		private void ProcessDateFilters()
 		{
-			if(cbxDates.Text.Length > 0 && cbxDatesTo.Text.Length > 0)
+			if(cbxDatesFrom.Text.Length > 0 && cbxDatesTo.Text.Length > 0)
 			{
-				Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDates.Text, cbxDatesTo.Text);
+				Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDatesFrom.Text, cbxDatesTo.Text, true, cbxSortEntriesBy.SelectedIndex);
 
 				if (lstEntries.SelectedIndex == -1 && currentJournal.Entries.Contains(currentEntry))
 				{
@@ -695,6 +705,5 @@ namespace myJournal.subforms
 				return cp;
 			}
 		}
-
 	}
 }

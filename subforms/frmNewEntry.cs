@@ -60,12 +60,9 @@ namespace myJournal.subforms
 			if (isEdit)
 			{
 				txtNewEntryTitle.Text = entry.ClearTitle();
-				//DateTime sCreatedOn = entry.Date;
 				lblCreatedOn.Text = entry.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]);
 				lblEditedOn.Text = entry.LastEditedOn < new DateTime(2000, 1, 1) ? "" : entry.LastEditedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]);
 
-				//lblEditedOn.Text = entry.GetFirstOrLastEditDate(true);
-				
 				if (preserveOriginalText)
 				{
 					originalText_Full = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Editing"],

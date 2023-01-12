@@ -131,13 +131,25 @@ namespace myJournal.objects
 			for (var i = 0; i < clb.Items.Count; i++) { clb.SetItemChecked(i, labels.Contains(clb.Items[i].ToString())); }
 		}
 
-		public static void PopulateEntries(ListBox lbxToPopulate, List<JournalEntry> entries, string startDate = "", string endDate = "", bool clearPrevious = true, string journalName = "")
+		public static void PopulateEntries(ListBox lbxToPopulate, List<JournalEntry> entries, string startDate = "", string endDate = "", bool clearPrevious = true, int SortBy = 0)
 		{
 			if(clearPrevious) lbxToPopulate.Items.Clear();
 			List<JournalEntry> tmpEntries = null;
 			tmpEntries = startDate.Length > 0 ? entries.Where(d => DateTime.Parse(d.Date.ToShortDateString()) >= DateTime.Parse(startDate)).ToList() : entries;
 			tmpEntries = endDate.Length > 0 ? tmpEntries.Where(d => DateTime.Parse(d.Date.ToShortDateString()) <= DateTime.Parse(endDate)).ToList() : tmpEntries;
-			tmpEntries.Sort((x, y) => -x.Date.CompareTo(y.Date));
+
+			switch (SortBy)
+			{
+				case 0: 
+					tmpEntries.Sort((x, y) => -x.Date.CompareTo(y.Date));
+					break;
+				case 1:
+					tmpEntries.Sort((x, y) => -x.LastEditedOn.CompareTo(y.LastEditedOn));
+					break;
+				case 2:
+					tmpEntries.Sort((x, y) => x.ClearTitle().CompareTo(y.ClearTitle()));
+					break;
+			}
 
 			foreach (JournalEntry je in tmpEntries)
 			{
