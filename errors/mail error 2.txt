@@ -1,0 +1,69 @@
+myJournalApp2022@gmail.com
+forTesting1!
+okfzkpskarbdrmtq
+
+MailKit.Security.SslHandshakeException
+  HResult=0x80131500
+  Message=An error occurred while attempting to establish an SSL or TLS connection.
+
+The server's SSL certificate could not be validated for the following reasons:
+• The server certificate has the following errors:
+  • The revocation function was unable to check revocation for the certificate.
+
+  Source=MailKit
+  StackTrace:
+   at MailKit.Net.Smtp.SmtpClient.Connect(String host, Int32 port, SecureSocketOptions options, CancellationToken cancellationToken)
+   at MailKit.MailService.Connect(String host, Int32 port, Boolean useSsl, CancellationToken cancellationToken)
+   at myJournal.subforms.frmExportJournals.btnOk_Click(Object sender, EventArgs e) in C:\Users\js_ru\source\repos\myJournal2022\subforms\frmExportJournals.cs:line 52
+   at System.Windows.Forms.Control.OnClick(EventArgs e)
+   at System.Windows.Forms.Button.OnClick(EventArgs e)
+   at System.Windows.Forms.Button.OnMouseUp(MouseEventArgs mevent)
+   at System.Windows.Forms.Control.WmMouseUp(Message& m, MouseButtons button, Int32 clicks)
+   at System.Windows.Forms.Control.WndProc(Message& m)
+   at System.Windows.Forms.ButtonBase.WndProc(Message& m)
+   at System.Windows.Forms.Button.WndProc(Message& m)
+   at System.Windows.Forms.NativeWindow.DebuggableCallback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Forms.UnsafeNativeMethods.DispatchMessageW(MSG& msg)
+   at System.Windows.Forms.Application.ComponentManager.System.Windows.Forms.UnsafeNativeMethods.IMsoComponentManager.FPushMessageLoop(IntPtr dwComponentID, Int32 reason, Int32 pvLoopData)
+   at System.Windows.Forms.Application.ThreadContext.RunMessageLoopInner(Int32 reason, ApplicationContext context)
+   at System.Windows.Forms.Application.ThreadContext.RunMessageLoop(Int32 reason, ApplicationContext context)
+   at System.Windows.Forms.Application.RunDialog(Form form)
+   at System.Windows.Forms.Form.ShowDialog(IWin32Window owner)
+   at System.Windows.Forms.Form.ShowDialog()
+   at myJournal.subforms.frmMain.mnuJournal_Export_Click(Object sender, EventArgs e) in C:\Users\js_ru\source\repos\myJournal2022\frmMain.cs:line 501
+   at System.Windows.Forms.ToolStripItem.RaiseEvent(Object key, EventArgs e)
+   at System.Windows.Forms.ToolStripMenuItem.OnClick(EventArgs e)
+   at System.Windows.Forms.ToolStripItem.HandleClick(EventArgs e)
+   at System.Windows.Forms.ToolStripItem.HandleMouseUp(MouseEventArgs e)
+   at System.Windows.Forms.ToolStripItem.FireEventInteractive(EventArgs e, ToolStripItemEventType met)
+   at System.Windows.Forms.ToolStrip.OnMouseUp(MouseEventArgs mea)
+   at System.Windows.Forms.ToolStripDropDown.OnMouseUp(MouseEventArgs mea)
+   at System.Windows.Forms.Control.WmMouseUp(Message& m, MouseButtons button, Int32 clicks)
+   at System.Windows.Forms.Control.WndProc(Message& m)
+   at System.Windows.Forms.ScrollableControl.WndProc(Message& m)
+   at System.Windows.Forms.ToolStrip.WndProc(Message& m)
+   at System.Windows.Forms.ToolStripDropDown.WndProc(Message& m)
+   at System.Windows.Forms.NativeWindow.DebuggableCallback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Forms.UnsafeNativeMethods.DispatchMessageW(MSG& msg)
+   at System.Windows.Forms.Application.ComponentManager.System.Windows.Forms.UnsafeNativeMethods.IMsoComponentManager.FPushMessageLoop(IntPtr dwComponentID, Int32 reason, Int32 pvLoopData)
+   at System.Windows.Forms.Application.ThreadContext.RunMessageLoopInner(Int32 reason, ApplicationContext context)
+   at System.Windows.Forms.Application.ThreadContext.RunMessageLoop(Int32 reason, ApplicationContext context)
+   at System.Windows.Forms.Application.Run(Form mainForm)
+   at myJournal.Program.Main() in C:\Users\js_ru\source\repos\myJournal2022\Program.cs:line 26
+
+  This exception was originally thrown at this call stack:
+    System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+    System.Net.Security.SslStream.StartSendAuthResetSignal(System.Net.Security.ProtocolToken, System.Net.AsyncProtocolRequest, System.Runtime.ExceptionServices.ExceptionDispatchInfo)
+    System.Net.Security.SslStream.CheckCompletionBeforeNextReceive(System.Net.Security.ProtocolToken, System.Net.AsyncProtocolRequest)
+    System.Net.Security.SslStream.StartSendBlob(byte[], int, System.Net.AsyncProtocolRequest)
+    System.Net.Security.SslStream.ProcessReceivedBlob(byte[], int, System.Net.AsyncProtocolRequest)
+    System.Net.Security.SslStream.StartReadFrame(byte[], int, System.Net.AsyncProtocolRequest)
+    System.Net.Security.SslStream.StartReceiveBlob(byte[], System.Net.AsyncProtocolRequest)
+    System.Net.Security.SslStream.CheckCompletionBeforeNextReceive(System.Net.Security.ProtocolToken, System.Net.AsyncProtocolRequest)
+    System.Net.Security.SslStream.StartSendBlob(byte[], int, System.Net.AsyncProtocolRequest)
+    System.Net.Security.SslStream.ProcessReceivedBlob(byte[], int, System.Net.AsyncProtocolRequest)
+    ...
+    [Call Stack Truncated]
+
+Inner Exception 1:
+AuthenticationException: The remote certificate is invalid according to the validation procedure.

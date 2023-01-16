@@ -1,0 +1,65 @@
+MailKit.Net.Smtp.SmtpCommandException
+  HResult=0x80131500
+  Message=5.7.0 Mail relay denied [2607:fb90:750f:6fc3:d986:9f:5c34:f535]. Invalid
+5.7.0 credentials for relay for one of the domains in:  (as obtained from
+5.7.0 HELO and MAIL FROM).
+5.7.0 Email is being sent from a domain or IP address which isn't registered
+5.7.0 in your G Suite account. Please login to your G Suite account and
+5.7.0 verify that your sending device IP address has been registered within
+5.7.0 the G Suite SMTP Relay Settings. For more information, please visit
+5.7.0  https://support.google.com/a/answer/6140680#maildenied o13-20020a170902d4cd00b00189dfb47e61sm662284plg.75 - gsmtp
+  Source=MailKit
+  StackTrace:
+   at MailKit.Net.Smtp.SmtpClient.Send(FormatOptions options, MimeMessage message, MailboxAddress sender, IList`1 recipients, CancellationToken cancellationToken, ITransferProgress progress)
+   at MailKit.Net.Smtp.SmtpClient.Send(FormatOptions options, MimeMessage message, CancellationToken cancellationToken, ITransferProgress progress)
+   at MailKit.MailTransport.Send(MimeMessage message, CancellationToken cancellationToken, ITransferProgress progress)
+   at myJournal.subforms.frmExportJournals.btnOk_Click(Object sender, EventArgs e) in C:\Users\js_ru\source\repos\myJournal2022\subforms\frmExportJournals.cs:line 55
+   at System.Windows.Forms.Control.OnClick(EventArgs e)
+   at System.Windows.Forms.Button.OnClick(EventArgs e)
+   at System.Windows.Forms.Button.OnMouseUp(MouseEventArgs mevent)
+   at System.Windows.Forms.Control.WmMouseUp(Message& m, MouseButtons button, Int32 clicks)
+   at System.Windows.Forms.Control.WndProc(Message& m)
+   at System.Windows.Forms.ButtonBase.WndProc(Message& m)
+   at System.Windows.Forms.Button.WndProc(Message& m)
+   at System.Windows.Forms.NativeWindow.DebuggableCallback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Forms.UnsafeNativeMethods.DispatchMessageW(MSG& msg)
+   at System.Windows.Forms.Application.ComponentManager.System.Windows.Forms.UnsafeNativeMethods.IMsoComponentManager.FPushMessageLoop(IntPtr dwComponentID, Int32 reason, Int32 pvLoopData)
+   at System.Windows.Forms.Application.ThreadContext.RunMessageLoopInner(Int32 reason, ApplicationContext context)
+   at System.Windows.Forms.Application.ThreadContext.RunMessageLoop(Int32 reason, ApplicationContext context)
+   at System.Windows.Forms.Application.RunDialog(Form form)
+   at System.Windows.Forms.Form.ShowDialog(IWin32Window owner)
+   at System.Windows.Forms.Form.ShowDialog()
+   at myJournal.subforms.frmMain.mnuJournal_Export_Click(Object sender, EventArgs e) in C:\Users\js_ru\source\repos\myJournal2022\frmMain.cs:line 501
+   at System.Windows.Forms.ToolStripItem.RaiseEvent(Object key, EventArgs e)
+   at System.Windows.Forms.ToolStripMenuItem.OnClick(EventArgs e)
+   at System.Windows.Forms.ToolStripItem.HandleClick(EventArgs e)
+   at System.Windows.Forms.ToolStripItem.HandleMouseUp(MouseEventArgs e)
+   at System.Windows.Forms.ToolStripItem.FireEventInteractive(EventArgs e, ToolStripItemEventType met)
+   at System.Windows.Forms.ToolStrip.OnMouseUp(MouseEventArgs mea)
+   at System.Windows.Forms.ToolStripDropDown.OnMouseUp(MouseEventArgs mea)
+   at System.Windows.Forms.Control.WmMouseUp(Message& m, MouseButtons button, Int32 clicks)
+   at System.Windows.Forms.Control.WndProc(Message& m)
+   at System.Windows.Forms.ScrollableControl.WndProc(Message& m)
+   at System.Windows.Forms.ToolStrip.WndProc(Message& m)
+   at System.Windows.Forms.ToolStripDropDown.WndProc(Message& m)
+   at System.Windows.Forms.NativeWindow.DebuggableCallback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Forms.UnsafeNativeMethods.DispatchMessageW(MSG& msg)
+   at System.Windows.Forms.Application.ComponentManager.System.Windows.Forms.UnsafeNativeMethods.IMsoComponentManager.FPushMessageLoop(IntPtr dwComponentID, Int32 reason, Int32 pvLoopData)
+   at System.Windows.Forms.Application.ThreadContext.RunMessageLoopInner(Int32 reason, ApplicationContext context)
+   at System.Windows.Forms.Application.ThreadContext.RunMessageLoop(Int32 reason, ApplicationContext context)
+   at System.Windows.Forms.Application.Run(Form mainForm)
+   at myJournal.Program.Main() in C:\Users\js_ru\source\repos\myJournal2022\Program.cs:line 26
+
+  This exception was originally thrown at this call stack:
+    MailKit.Net.Smtp.SmtpClient.Send(MimeKit.FormatOptions, MimeKit.MimeMessage, MimeKit.MailboxAddress, System.Collections.Generic.IList<MimeKit.MailboxAddress>, System.Threading.CancellationToken, MailKit.ITransferProgress)
+    MailKit.Net.Smtp.SmtpClient.Send(MimeKit.FormatOptions, MimeKit.MimeMessage, System.Threading.CancellationToken, MailKit.ITransferProgress)
+    MailKit.MailTransport.Send(MimeKit.MimeMessage, System.Threading.CancellationToken, MailKit.ITransferProgress)
+    myJournal.subforms.frmExportJournals.btnOk_Click(object, System.EventArgs) in frmExportJournals.cs
+    System.Windows.Forms.Control.OnClick(System.EventArgs)
+    System.Windows.Forms.Button.OnClick(System.EventArgs)
+    System.Windows.Forms.Button.OnMouseUp(System.Windows.Forms.MouseEventArgs)
+    System.Windows.Forms.Control.WmMouseUp(ref System.Windows.Forms.Message, System.Windows.Forms.MouseButtons, int)
+    System.Windows.Forms.Control.WndProc(ref System.Windows.Forms.Message)
+    System.Windows.Forms.ButtonBase.WndProc(ref System.Windows.Forms.Message)
+    ...
+    [Call Stack Truncated]

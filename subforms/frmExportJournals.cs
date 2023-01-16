@@ -9,6 +9,10 @@ using myJournal.objects;
 using MailKit;
 using MailKit.Net.Smtp;
 using MimeKit;
+using Azure;
+using Azure.Storage.Files;
+using Azure.Storage.Blobs;
+using Azure.Storage.Files.Shares;
 
 namespace myJournal.subforms
 {
@@ -23,41 +27,47 @@ namespace myJournal.subforms
 
 		private void btnOk_Click(object sender, EventArgs e)
 		{
-			var message = new MimeMessage();
-			string[] to = new string[2];
-
-			message.From.Add(new MailboxAddress("MyJournal", "myJournalApp2022@gmail.com"));
-
-			foreach (string toAddy in lstRecipients.Items)
-			{
-				to = toAddy.Split(" : ");
-				message.To.Add(new MailboxAddress(to[0], to[1]));
-			}
-			message.Subject = "These Journals are attached.";
-
-			var builder = new BodyBuilder();
-			builder.TextBody = "Please detach these journals then use Journal > Import to add them.";
-
-			foreach (string jrnl in lstJournalsToExport.SelectedItems)
-			{
-				builder.Attachments.Add(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + jrnl);
-			}
-
-			message.Body = builder.ToMessageBody();
-
-			//message.Body = new TextPart("plain") { Text = "Please detach these journals then use Journal > Import to add them."};
+			AzureFileClient fileClient = new AzureFileClient();
+			fileClient.UploadFile("C:\\inetpub\\testfile.txt");
 			
-			using (var client = new SmtpClient())
-			{
-				client.CheckCertificateRevocation = false;
-				client.Connect("smtp-relay.gmail.com", 25, false );
-				client.Authenticate("myJournalApp2022", "okfzkpskarbdrmtq");
-				client.Send(message);
-				client.Disconnect(true);
-			}
+			
+			//ShareFileClient sfc = new ShareFileClient("DefaultEndpointsProtocol=https;AccountName=container1a;AccountKey=KfY2L4E7YVqhMPszJXxz0u3PDNdYkr+ha+vD1IUw8vWzr9HuFAGvtQUXQhAxtjlHKL+km1Ep+RzV+AStSFcPJQ==;EndpointSuffix=core.windows.net", 
+
+			//var message = new MimeMessage();
+			//string[] to = new string[2];
+
+			//message.From.Add(new MailboxAddress("MyJournal", "myJournalApp2022@gmail.com"));
+
+			//foreach (string toAddy in lstRecipients.Items)
+			//{
+			//	to = toAddy.Split(" : ");
+			//	message.To.Add(new MailboxAddress(to[0], to[1]));
+			//}
+			//message.Subject = "These Journals are attached.";
+
+			//var builder = new BodyBuilder();
+			//builder.TextBody = "Please detach these journals then use Journal > Import to add them.";
+
+			//foreach (string jrnl in lstJournalsToExport.SelectedItems)
+			//{
+			//	builder.Attachments.Add(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + jrnl);
+			//}
+
+			//message.Body = builder.ToMessageBody();
+
+			////message.Body = new TextPart("plain") { Text = "Please detach these journals then use Journal > Import to add them."};
+
+			//using (var client = new SmtpClient())
+			//{
+			//	client.CheckCertificateRevocation = false;
+			//	client.Connect("smtp-relay.gmail.com", 25, false );
+			//	client.Authenticate("myJournalApp2022", "okfzkpskarbdrmtq");
+			//	client.Send(message);
+			//	client.Disconnect(true);
+			//}
 
 			//MAPI mapi = new MAPI();
-			
+
 			//foreach(string sJournalName in lstJournalsToExport.SelectedItems)
 			//{
 			//	mapi.AddAttachment(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + sJournalName);
