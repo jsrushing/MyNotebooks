@@ -28,7 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.lstJournalsToExport = new System.Windows.Forms.ListBox();
+			this.lstJournalsToSynch = new System.Windows.Forms.ListBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.btnOk = new System.Windows.Forms.Button();
@@ -48,29 +48,29 @@
 			this.pnlMain.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// lstJournalsToExport
+			// lstJournalsToSynch
 			// 
-			this.lstJournalsToExport.FormattingEnabled = true;
-			this.lstJournalsToExport.ItemHeight = 15;
-			this.lstJournalsToExport.Location = new System.Drawing.Point(7, 25);
-			this.lstJournalsToExport.Name = "lstJournalsToExport";
-			this.lstJournalsToExport.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.lstJournalsToExport.Size = new System.Drawing.Size(304, 94);
-			this.lstJournalsToExport.TabIndex = 0;
+			this.lstJournalsToSynch.FormattingEnabled = true;
+			this.lstJournalsToSynch.ItemHeight = 15;
+			this.lstJournalsToSynch.Location = new System.Drawing.Point(7, 25);
+			this.lstJournalsToSynch.Name = "lstJournalsToSynch";
+			this.lstJournalsToSynch.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.lstJournalsToSynch.Size = new System.Drawing.Size(304, 169);
+			this.lstJournalsToSynch.TabIndex = 0;
 			// 
 			// label1
 			// 
 			this.label1.AutoSize = true;
 			this.label1.Location = new System.Drawing.Point(7, 7);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(138, 15);
+			this.label1.Size = new System.Drawing.Size(135, 15);
 			this.label1.TabIndex = 1;
-			this.label1.Text = "Select Journals to Export:";
+			this.label1.Text = "Select Journals to synch:";
 			// 
 			// label2
 			// 
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(7, 130);
+			this.label2.Location = new System.Drawing.Point(485, 199);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(61, 15);
 			this.label2.TabIndex = 2;
@@ -178,12 +178,9 @@
 			// 
 			// pnlMain
 			// 
-			this.pnlMain.Controls.Add(this.lstRecipients);
-			this.pnlMain.Controls.Add(this.btnAddRecipient);
-			this.pnlMain.Controls.Add(this.lstJournalsToExport);
+			this.pnlMain.Controls.Add(this.lstJournalsToSynch);
 			this.pnlMain.Controls.Add(this.label1);
 			this.pnlMain.Controls.Add(this.btnCancel);
-			this.pnlMain.Controls.Add(this.label2);
 			this.pnlMain.Controls.Add(this.btnOk);
 			this.pnlMain.Location = new System.Drawing.Point(9, 6);
 			this.pnlMain.Name = "pnlMain";
@@ -194,14 +191,14 @@
 			// 
 			this.lstRecipients.FormattingEnabled = true;
 			this.lstRecipients.ItemHeight = 15;
-			this.lstRecipients.Location = new System.Drawing.Point(10, 148);
+			this.lstRecipients.Location = new System.Drawing.Point(488, 217);
 			this.lstRecipients.Name = "lstRecipients";
 			this.lstRecipients.Size = new System.Drawing.Size(297, 64);
 			this.lstRecipients.TabIndex = 7;
 			// 
 			// btnAddRecipient
 			// 
-			this.btnAddRecipient.Location = new System.Drawing.Point(72, 124);
+			this.btnAddRecipient.Location = new System.Drawing.Point(550, 193);
 			this.btnAddRecipient.Name = "btnAddRecipient";
 			this.btnAddRecipient.Size = new System.Drawing.Size(39, 23);
 			this.btnAddRecipient.TabIndex = 6;
@@ -214,26 +211,30 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(658, 268);
+			this.Controls.Add(this.lstRecipients);
 			this.Controls.Add(this.pnlAddRecipient);
+			this.Controls.Add(this.btnAddRecipient);
 			this.Controls.Add(this.pnlMain);
+			this.Controls.Add(this.label2);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "frmExportJournals";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-			this.Text = "Export Journals";
+			this.Text = "Synch Journals";
 			this.Load += new System.EventHandler(this.frmExportJournals_Load);
 			this.pnlAddRecipient.ResumeLayout(false);
 			this.pnlAddRecipient.PerformLayout();
 			this.pnlMain.ResumeLayout(false);
 			this.pnlMain.PerformLayout();
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
 		#endregion
 
-		private System.Windows.Forms.ListBox lstJournalsToExport;
+		private System.Windows.Forms.ListBox lstJournalsToSynch;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Button btnOk;

@@ -22,17 +22,19 @@ namespace myJournal.subforms
 		{
 			InitializeComponent();
 			this.Location = new System.Drawing.Point(parent.Location.X + 25, parent.Location.Y + 25);
-			lstJournalsToExport.DataSource = Utilities.AllJournalNames();
+			lstJournalsToSynch.DataSource = Utilities.AllJournalNames();
 		}
 
 		private void btnOk_Click(object sender, EventArgs e)
 		{
-			AzureFileClient fileClient = new AzureFileClient();
-			fileClient.UploadFile("C:\\inetpub\\testfile.txt");
-			
-			
-			//ShareFileClient sfc = new ShareFileClient("DefaultEndpointsProtocol=https;AccountName=container1a;AccountKey=KfY2L4E7YVqhMPszJXxz0u3PDNdYkr+ha+vD1IUw8vWzr9HuFAGvtQUXQhAxtjlHKL+km1Ep+RzV+AStSFcPJQ==;EndpointSuffix=core.windows.net", 
 
+
+
+			AzureFileClient fileClient = new AzureFileClient();
+			fileClient.UploadFile("C:\\inetpub\\testfile4.txt");
+			this.Close();
+			
+			// email methods tried
 			//var message = new MimeMessage();
 			//string[] to = new string[2];
 

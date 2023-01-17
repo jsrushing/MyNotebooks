@@ -11,21 +11,19 @@ namespace myJournal.objects
 	{
 		public AzureFileClient() { }
 
-		public void UploadFile(string fileName1)
+		public void UploadFile(string localFileName)
 		{
-			var connString = "DefaultEndpointsProtocol=https;AccountName=container1a;AccountKey=KfY2L4E7YVqhMPszJXxz0u3PDNdYkr+ha+vD1IUw8vWzr9HuFAGvtQUXQhAxtjlHKL+km1Ep+RzV+AStSFcPJQ==;EndpointSuffix=core.windows.net";
+			var connString = "DefaultEndpointsProtocol=https;AccountName=container1a;AccountKey=4YNQFl9klH9bp8ieKKfhwiVgiKlZKWieBlyzvu8zlm2hyL0HaR/x3XpbpFYjJ5VF4YgtaAR9sN4F+ASttv59jA==;EndpointSuffix=core.windows.net";
 			var fileShareName = "journals";
-			var folderName = "container1";
-			var fileName = "testfile.txt";
-			var localFilePath = fileName;
+			var fileName = localFileName.Substring(localFileName.LastIndexOf("\\") + 1);
 
 			ShareClient share = new ShareClient(connString, fileShareName);
 
-			var directory = share.GetDirectoryClient(folderName);
+			ShareDirectoryClient directory = share.GetDirectoryClient("");
 
-			var myFile = directory.GetFileClient(fileName);
+			ShareFileClient myFile = directory.GetFileClient(fileName);
 
-			using FileStream stream = File.OpenRead(localFilePath);
+			using FileStream stream = File.OpenRead(localFileName);
 
 			myFile.Create(stream.Length);
 
