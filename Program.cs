@@ -2,6 +2,7 @@ using System;
 using System.Windows.Forms;
 using myJournal.subforms;
 using System.Collections.Generic;
+using myJournal.objects;
 
 namespace myJournal
 {

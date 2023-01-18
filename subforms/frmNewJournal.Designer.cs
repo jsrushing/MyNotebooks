@@ -38,6 +38,7 @@ namespace myJournal.subforms
 			this.grp1 = new System.Windows.Forms.Panel();
 			this.lblNameExists = new System.Windows.Forms.Label();
 			this.lblShowPIN = new System.Windows.Forms.Label();
+			this.chkAllowWebBackup = new System.Windows.Forms.CheckBox();
 			this.grp1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -78,7 +79,7 @@ namespace myJournal.subforms
 			// 
 			// btnCancel
 			// 
-			this.btnCancel.Location = new System.Drawing.Point(77, 128);
+			this.btnCancel.Location = new System.Drawing.Point(77, 160);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(75, 23);
 			this.btnCancel.TabIndex = 5;
@@ -89,7 +90,7 @@ namespace myJournal.subforms
 			// btnOk
 			// 
 			this.btnOk.Enabled = false;
-			this.btnOk.Location = new System.Drawing.Point(77, 99);
+			this.btnOk.Location = new System.Drawing.Point(77, 131);
 			this.btnOk.Name = "btnOk";
 			this.btnOk.Size = new System.Drawing.Size(75, 23);
 			this.btnOk.TabIndex = 4;
@@ -99,6 +100,7 @@ namespace myJournal.subforms
 			// 
 			// grp1
 			// 
+			this.grp1.Controls.Add(this.chkAllowWebBackup);
 			this.grp1.Controls.Add(this.lblNameExists);
 			this.grp1.Controls.Add(this.lblShowPIN);
 			this.grp1.Controls.Add(this.txtPIN);
@@ -109,7 +111,7 @@ namespace myJournal.subforms
 			this.grp1.Controls.Add(this.label2);
 			this.grp1.Location = new System.Drawing.Point(12, -1);
 			this.grp1.Name = "grp1";
-			this.grp1.Size = new System.Drawing.Size(230, 158);
+			this.grp1.Size = new System.Drawing.Size(230, 195);
 			this.grp1.TabIndex = 6;
 			// 
 			// lblNameExists
@@ -135,17 +137,27 @@ namespace myJournal.subforms
 			this.lblShowPIN.Visible = false;
 			this.lblShowPIN.Click += new System.EventHandler(this.lblShowPIN_Click);
 			// 
+			// chkAllowWebBackup
+			// 
+			this.chkAllowWebBackup.AutoSize = true;
+			this.chkAllowWebBackup.Location = new System.Drawing.Point(91, 99);
+			this.chkAllowWebBackup.Name = "chkAllowWebBackup";
+			this.chkAllowWebBackup.Size = new System.Drawing.Size(121, 19);
+			this.chkAllowWebBackup.TabIndex = 43;
+			this.chkAllowWebBackup.Text = "allow web backup";
+			this.chkAllowWebBackup.UseVisualStyleBackColor = true;
+			// 
 			// frmNewJournal
 			// 
 			this.AcceptButton = this.btnOk;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.btnCancel;
-			this.ClientSize = new System.Drawing.Size(255, 171);
+			this.ClientSize = new System.Drawing.Size(255, 211);
 			this.Controls.Add(this.grp1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(271, 210);
+			this.MinimumSize = new System.Drawing.Size(271, 250);
 			this.Name = "frmNewJournal";
 			this.Text = "New Journal";
 			this.Activated += new System.EventHandler(this.frmNewJournal_Activated);
@@ -167,5 +179,6 @@ namespace myJournal.subforms
 		private System.Windows.Forms.Panel grp1;
 		private System.Windows.Forms.Label lblShowPIN;
 		private System.Windows.Forms.Label lblNameExists;
+		private System.Windows.Forms.CheckBox chkAllowWebBackup;
 	}
 }

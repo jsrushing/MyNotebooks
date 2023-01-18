@@ -159,7 +159,7 @@ namespace myJournal.subforms
 
 		public frmMain() { InitializeComponent(); }
 
-		private async void frmMain_Load(object sender, EventArgs e)
+		private void frmMain_Load(object sender, EventArgs e)
 		{
 			System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
 			System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
@@ -356,28 +356,28 @@ namespace myJournal.subforms
 
 			foreach (Journal j in Utilities.AllJournals()) { ddlJournals.Items.Add(j.Name); }
 
-			if(ddlJournals.Items.Count == 0)	// There will be no journals after an update so use the folders created in Form_Closing the last time the app was run.
-			{
-				var parent = Directory.GetParent(Program.AppRoot).FullName;
-				parent = Directory.GetParent(parent).FullName;
-				parent = Directory.GetParent(parent).FullName;
-
-				if(Directory.Exists(parent + "\\lastjournals"))
+				if(ddlJournals.Items.Count == 0)	// There will be no journals after an update so use the folders created in Form_Closing the last time the app was run.
 				{
-					CopyDirectory(
-						new DirectoryInfo(parent + "\\lastjournals"), new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]), false, false);
+					var parent = Directory.GetParent(Program.AppRoot).FullName;
+					parent = Directory.GetParent(parent).FullName;
+					parent = Directory.GetParent(parent).FullName;
 
-					CopyDirectory(
-						new DirectoryInfo(parent + "\\lastjournals\\backups"), new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"]), false, false);
+					if(Directory.Exists(parent + "\\lastjournals"))
+					{
+						CopyDirectory(
+							new DirectoryInfo(parent + "\\lastjournals"), new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]), false, false);
 
-					CopyDirectory(
-						new DirectoryInfo(parent + "\\lastjournals\\backups\\forced"), new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"]), false, false);
+						CopyDirectory(
+							new DirectoryInfo(parent + "\\lastjournals\\backups"), new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"]), false, false);
 
-					CopyDirectory(
-						new DirectoryInfo(parent + "\\lastsettings"), new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFolder"]), false, false);
+						CopyDirectory(
+							new DirectoryInfo(parent + "\\lastjournals\\backups\\forced"), new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"]), false, false);
 
-					if(Directory.GetFiles(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]).Length > 0) { LoadJournals(); }
-				}
+						CopyDirectory(
+							new DirectoryInfo(parent + "\\lastsettings"), new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFolder"]), false, false);
+
+						if(Directory.GetFiles(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]).Length > 0) { LoadJournals(); }
+					}
 			}
 			else
 			{
@@ -480,8 +480,10 @@ namespace myJournal.subforms
 				if (frm.NewJournalName != null){
 					Journal j = new Journal(frm.NewJournalName);
 					j.Create();
+					j.AllowCloud = frm.AllowWeb;
 					LoadJournals();
 				}
+				frm.Close();
 			}
 		}
 
@@ -675,6 +677,7 @@ namespace myJournal.subforms
 				mnuJournal_Rename.Enabled = false;
 				mnuJournal_Search.Enabled = false;
 				mnuJournal_ForceBackup.Enabled = false;
+				mnuJournal_Export.Enabled = false;	
 			}
 			else if(st == SelectionState.JournalLoaded)
 			{
@@ -690,6 +693,7 @@ namespace myJournal.subforms
 				mnuJournal_Rename.Enabled = true;
 				mnuJournal_Search.Enabled = true;
 				mnuJournal_ForceBackup.Enabled = true;
+				mnuJournal_Export.Enabled = currentJournal.AllowCloud;
 
 				pnlDateFilters.Visible = true;
 			}

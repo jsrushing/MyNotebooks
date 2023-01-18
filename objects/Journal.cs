@@ -24,6 +24,8 @@ namespace myJournal
         string FileName { get; set; }
         public List<JournalEntry> Entries = new List<JournalEntry>();
         string root = "journals\\";
+		public bool AllowCloud;
+
 		public bool BackupCompleted { get; private set; }
 
         public Journal(string _name = null) 

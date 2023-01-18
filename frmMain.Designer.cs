@@ -267,7 +267,7 @@ namespace myJournal.subforms
 			// 
 			this.mnuJournal_Export.Name = "mnuJournal_Export";
 			this.mnuJournal_Export.Size = new System.Drawing.Size(180, 22);
-			this.mnuJournal_Export.Text = "Export";
+			this.mnuJournal_Export.Text = "Synch";
 			this.mnuJournal_Export.Click += new System.EventHandler(this.mnuJournal_Export_Click);
 			// 
 			// mnuEntryTop
@@ -538,5 +538,6 @@ namespace myJournal.subforms
 		private System.Windows.Forms.ToolStripMenuItem mnuJournal_Export;
 		private System.Windows.Forms.ComboBox cbxSortEntriesBy;
 		private System.Windows.Forms.Label label5;
+		private System.Windows.Forms.ToolStripMenuItem falseToolStripMenuItem;
 	}
 }

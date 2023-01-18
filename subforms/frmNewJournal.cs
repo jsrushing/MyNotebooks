@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Windows.Forms;
 using myJournal.objects;
 
@@ -13,6 +14,7 @@ namespace myJournal.subforms
 	{
 		private List<string> lstAllJournalNames = Utilities.AllJournalNames();
 		public string NewJournalName { get; private set; }
+		public bool AllowWeb { get { return chkAllowWebBackup.Checked; } set { AllowWeb = value; } }
 
 		public frmNewJournal()
 		{ 
