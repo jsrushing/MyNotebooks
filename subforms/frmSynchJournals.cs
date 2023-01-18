@@ -13,6 +13,8 @@ namespace myJournal.subforms
 			this.Location = new System.Drawing.Point(parent.Location.X + 25, parent.Location.Y + 25);
 			this.Size = new System.Drawing.Size(364, 313);
 			lstJournalsToSynch.DataSource = Utilities.AllJournalNames();
+			lstJournalsToSynch.SelectedItems.Clear();
+			btnCancel.Focus();
 		}
 
 		private void frmSynchJournals_Load(object sender, EventArgs e)
@@ -22,14 +24,18 @@ namespace myJournal.subforms
 
 		private void btnOk_Click(object sender, EventArgs e)
 		{
-			foreach(string s in lstJournalsToSynch.SelectedItems)
-			{
-				AzureFileClient fileClient = new AzureFileClient();
-				fileClient.UploadFile(Program.AppRoot +  ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + s);
-				//this.Close();
-			}
+			this.Cursor = Cursors.WaitCursor;
+			AzureFileClient fileClient = new AzureFileClient();
+
+			fileClient.DownloadFile(ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"], "testfile.txt");
 
 
+			//foreach(string journalName in lstJournalsToSynch.SelectedItems)
+			//{
+			//	fileClient.UploadFile(Program.AppRoot +  ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + journalName);
+			//}
+
+			//this.Close();
 		}
 
 		private void chkSelectAll_CheckedChanged(object sender, EventArgs e)

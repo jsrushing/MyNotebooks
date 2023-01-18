@@ -11,6 +11,7 @@ namespace myJournal
 		public static List<ListViewItem> lstFonts = new List<ListViewItem>();
 		public static string AppRoot = AppDomain.CurrentDomain.BaseDirectory;
 		public static string AppVersion = string.Empty;
+		public static string DeviceId = string.Empty;
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
@@ -24,6 +25,7 @@ namespace myJournal
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 			Application.Run(new frmMain());
+
 		}
     }
 }

@@ -8,7 +8,8 @@
 	  <Version>1.0</Version>	  
     <UseWindowsForms>true</UseWindowsForms>	  
     <StartupObject>myJournal.Program</StartupObject>	  
-    <SignAssembly>False</SignAssembly>
+    <SignAssembly>False</SignAssembly>	  
+    <UserSecretsId>dfb5f457-7b97-42bf-a325-9fb644e0cb5b</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -45,7 +46,11 @@
   <ItemGroup>
     <PackageReference Include="Azure.Storage.Blobs" Version="12.14.1" />
     <PackageReference Include="Azure.Storage.Files.Shares" Version="12.12.1" />
+    <PackageReference Include="Azure.Storage.Queues" Version="12.2.0" />
     <PackageReference Include="MailKit" Version="3.4.3" />
+    <PackageReference Include="Microsoft.Extensions.Azure" Version="1.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="3.1.13" />
+    <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
   </ItemGroup>
 
 </Project>

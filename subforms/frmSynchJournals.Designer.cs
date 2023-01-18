@@ -29,11 +29,11 @@
 		private void InitializeComponent()
 		{
 			this.pnlMain = new System.Windows.Forms.Panel();
+			this.chkSelectAll = new System.Windows.Forms.CheckBox();
 			this.lstJournalsToSynch = new System.Windows.Forms.ListBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.btnOk = new System.Windows.Forms.Button();
-			this.chkSelectAll = new System.Windows.Forms.CheckBox();
 			this.pnlMain.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -48,6 +48,17 @@
 			this.pnlMain.Name = "pnlMain";
 			this.pnlMain.Size = new System.Drawing.Size(322, 255);
 			this.pnlMain.TabIndex = 9;
+			// 
+			// chkSelectAll
+			// 
+			this.chkSelectAll.AutoSize = true;
+			this.chkSelectAll.Location = new System.Drawing.Point(205, 6);
+			this.chkSelectAll.Name = "chkSelectAll";
+			this.chkSelectAll.Size = new System.Drawing.Size(71, 19);
+			this.chkSelectAll.TabIndex = 6;
+			this.chkSelectAll.Text = "select all";
+			this.chkSelectAll.UseVisualStyleBackColor = true;
+			this.chkSelectAll.CheckedChanged += new System.EventHandler(this.chkSelectAll_CheckedChanged);
 			// 
 			// lstJournalsToSynch
 			// 
@@ -88,17 +99,6 @@
 			this.btnOk.UseVisualStyleBackColor = true;
 			this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
 			// 
-			// chkSelectAll
-			// 
-			this.chkSelectAll.AutoSize = true;
-			this.chkSelectAll.Location = new System.Drawing.Point(205, 6);
-			this.chkSelectAll.Name = "chkSelectAll";
-			this.chkSelectAll.Size = new System.Drawing.Size(71, 19);
-			this.chkSelectAll.TabIndex = 6;
-			this.chkSelectAll.Text = "select all";
-			this.chkSelectAll.UseVisualStyleBackColor = true;
-			this.chkSelectAll.CheckedChanged += new System.EventHandler(this.chkSelectAll_CheckedChanged);
-			// 
 			// frmSynchJournals
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -109,7 +109,7 @@
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "frmSynchJournals";
-			this.Text = "frmSynchJournals";
+			this.Text = "Synch Journals";
 			this.Load += new System.EventHandler(this.frmSynchJournals_Load);
 			this.pnlMain.ResumeLayout(false);
 			this.pnlMain.PerformLayout();

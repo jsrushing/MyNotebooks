@@ -159,11 +159,29 @@ namespace myJournal.subforms
 
 		public frmMain() { InitializeComponent(); }
 
-		private void frmMain_Load(object sender, EventArgs e)
+		private async void frmMain_Load(object sender, EventArgs e)
 		{
 			System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
 			System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
 			this.Text = "myJournal " + Program.AppVersion + (fvi.FileName.ToLower().Contains("debug") ? " - DEBUG MODE" : "");
+
+			if (!Directory.Exists(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]))    // create system directories and files
+			{
+				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]);
+				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"]);
+				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"]);
+				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFolder"]);
+				File.Create(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFile"]).Close();
+				File.Create(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Close();
+			}
+
+			if (!File.Exists(Program.AppRoot + "\\deviceId"))   // get or create the device id
+			{	
+				Program.DeviceId = Guid.NewGuid().ToString();
+				File.WriteAllText(Program.AppRoot + "\\deviceId", Program.DeviceId); 
+			}
+			else { Program.DeviceId = File.ReadAllText(Program.AppRoot + "\\deviceId");}
+
 			LoadJournals();
 			ShowHideMenusAndControls(SelectionState.HideAll);
 		}
@@ -336,17 +354,7 @@ namespace myJournal.subforms
 			ddlJournals.Items.Clear();
 			ddlJournals.Text = string.Empty;
 
-			if (!Directory.Exists(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]))
-			{
-				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]);
-				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"]);
-				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"]);
-				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFolder"]);
-				File.Create(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFile"]).Close();
-				File.Create(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Close();
-			}
-			else
-			{ foreach (Journal j in Utilities.AllJournals()) { ddlJournals.Items.Add(j.Name); } }
+			foreach (Journal j in Utilities.AllJournals()) { ddlJournals.Items.Add(j.Name); }
 
 			if(ddlJournals.Items.Count == 0)	// There will be no journals after an update so use the folders created in Form_Closing the last time the app was run.
 			{
