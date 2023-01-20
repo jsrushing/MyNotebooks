@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Windows.Forms;
 using myJournal.objects;
 using System.IO;
+using System.Collections.Generic;
 
 namespace myJournal.subforms
 {
@@ -22,6 +23,7 @@ namespace myJournal.subforms
 			lstJournalsToSynch.SelectedItems.Clear();
 			lstJournalsToSynch.DisplayMember= "Name";
 			btnCancel.Focus();
+			pnlResults.Location = pnlMain.Location;
 		}
 
 		private void frmSynchJournals_Load(object sender, EventArgs e)
@@ -29,56 +31,57 @@ namespace myJournal.subforms
 
 		}
 
-		private void btnOk_Click(object sender, EventArgs e)
+		private async void btnOk_Click(object sender, EventArgs e)
 		{
 			this.Cursor = Cursors.WaitCursor;
 			AzureFileClient fileClient = new AzureFileClient();
-			FileInfo fiRemoteFile = null;
+			FileInfo downloadedAzureJournal = null;
 			Journal j = null;
+			List<string> itemsSynchd = new List<string>();
+			List<string> itemsSkipped = new List<string>();
+			string error = string.Empty;
 
-			// see if the selected journal to synch is newer than the existing file (if it exists).
-			//foreach(Journal j in lstJournalsToSynch.SelectedItems)
-			for(int i = 0; i < lstJournalsToSynch.SelectedItems.Count; i++)
+			for (int i = 0; i < lstJournalsToSynch.SelectedItems.Count; i++)
 			{
 				j = (Journal)lstJournalsToSynch.SelectedItems[i];
 
 				if (j.AllowCloud)
 				{
-					// get the remote file, if it exists
 					try
 					{
-						fileClient.DownloadFile(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"], j.Name);	
-						fiRemoteFile = new FileInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"] + j.Name);
+						await fileClient.DownloadFile(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"], j.Name);
+						downloadedAzureJournal = new FileInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"] + j.Name);
 					}
-					catch(Exception) { }
+					catch (Exception ex) { error = ex.Message; }
 
-					if(fiRemoteFile != null)
+					if (error.Length == 0 && downloadedAzureJournal != null)
 					{
-						FileInfo fiLocalFile = new FileInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + j.Name);
+						FileInfo localJournal = new FileInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + j.Name);
 
-						if (fiLocalFile.Length != fiRemoteFile.Length) // the local file is younger - synch the file
+						if(localJournal.Length != downloadedAzureJournal.Length)
 						{
-							fileClient.UploadFile(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"] + j.Name);
+							fileClient.UploadFile(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + j.Name);
+							itemsSynchd.Add(j.Name + (" Azure size:" + downloadedAzureJournal.Length.ToString() + " local size: " + localJournal.Length.ToString()));
 						}
+						else { itemsSkipped.Add(j.Name + " (files match)"); }
 					}
-					else { fileClient.UploadFile(ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"] + j.Name); }
+					else
+					{
+						// perform local backup
+						// ...
+
+						itemsSkipped.Add(j.Name + " (" + error + ")");
+					}
+					this.Cursor = Cursors.Default;
 				}
-				else
-				{
-					// perform local backup
-				}
-				this.Cursor=Cursors.Default;
+				else { itemsSkipped.Add(j.Name + " (cloud not allowed)"); }
+				File.Delete(downloadedAzureJournal.FullName);
 			}
 
+			lstSyncdJournals.DataSource = itemsSynchd;
+			lstUnSyncdJournals.DataSource = itemsSkipped;
+			pnlResults.Visible = true;
 
-
-
-			//foreach(string journalName in lstJournalsToSynch.SelectedItems)
-			//{
-			//	fileClient.UploadFile(Program.AppRoot +  ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + journalName);
-			//}
-
-			//this.Close();
 		}
 
 		private void chkSelectAll_CheckedChanged(object sender, EventArgs e)

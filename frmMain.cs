@@ -383,7 +383,12 @@ namespace myJournal.subforms
 			{
 				ddlJournals.Enabled = true;
 				pnlPin.Visible = false;
-				ddlJournals.SelectedIndex = ddlJournals.Items.Count == 1 ? 0 : -1;
+				if(ddlJournals.Items.Count == 1)
+				{
+					ddlJournals.SelectedIndex = 0;
+					txtJournalPIN.Focus();
+				}
+				//ddlJournals.SelectedIndex = ddlJournals.Items.Count == 1 ? 0 : -1;
 				lstEntries.Visible = false;
 				ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
 				txtJournalPIN.Focus();
@@ -677,7 +682,7 @@ namespace myJournal.subforms
 				mnuJournal_Rename.Enabled = false;
 				mnuJournal_Search.Enabled = false;
 				mnuJournal_ForceBackup.Enabled = false;
-				mnuJournal_Export.Enabled = false;	
+				mnuJournal_Export.Enabled = true;	
 			}
 			else if(st == SelectionState.JournalLoaded)
 			{

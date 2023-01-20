@@ -34,7 +34,15 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.btnOk = new System.Windows.Forms.Button();
+			this.pnlResults = new System.Windows.Forms.Panel();
+			this.lstSyncdJournals = new System.Windows.Forms.ListBox();
+			this.label2 = new System.Windows.Forms.Label();
+			this.button1 = new System.Windows.Forms.Button();
+			this.button2 = new System.Windows.Forms.Button();
+			this.lstUnSyncdJournals = new System.Windows.Forms.ListBox();
+			this.label3 = new System.Windows.Forms.Label();
 			this.pnlMain.SuspendLayout();
+			this.pnlResults.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// pnlMain
@@ -99,11 +107,82 @@
 			this.btnOk.UseVisualStyleBackColor = true;
 			this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
 			// 
+			// pnlResults
+			// 
+			this.pnlResults.Controls.Add(this.label3);
+			this.pnlResults.Controls.Add(this.lstUnSyncdJournals);
+			this.pnlResults.Controls.Add(this.lstSyncdJournals);
+			this.pnlResults.Controls.Add(this.label2);
+			this.pnlResults.Controls.Add(this.button1);
+			this.pnlResults.Controls.Add(this.button2);
+			this.pnlResults.Location = new System.Drawing.Point(360, 12);
+			this.pnlResults.Name = "pnlResults";
+			this.pnlResults.Size = new System.Drawing.Size(322, 255);
+			this.pnlResults.TabIndex = 10;
+			this.pnlResults.Visible = false;
+			// 
+			// lstSyncdJournals
+			// 
+			this.lstSyncdJournals.FormattingEnabled = true;
+			this.lstSyncdJournals.ItemHeight = 15;
+			this.lstSyncdJournals.Location = new System.Drawing.Point(7, 25);
+			this.lstSyncdJournals.Name = "lstSyncdJournals";
+			this.lstSyncdJournals.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.lstSyncdJournals.Size = new System.Drawing.Size(304, 64);
+			this.lstSyncdJournals.TabIndex = 0;
+			// 
+			// label2
+			// 
+			this.label2.AutoSize = true;
+			this.label2.Location = new System.Drawing.Point(7, 7);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(95, 15);
+			this.label2.TabIndex = 1;
+			this.label2.Text = "Synch\'d Journals";
+			// 
+			// button1
+			// 
+			this.button1.Location = new System.Drawing.Point(213, 220);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(75, 23);
+			this.button1.TabIndex = 5;
+			this.button1.Text = "&Cancel";
+			this.button1.UseVisualStyleBackColor = true;
+			// 
+			// button2
+			// 
+			this.button2.Location = new System.Drawing.Point(24, 220);
+			this.button2.Name = "button2";
+			this.button2.Size = new System.Drawing.Size(75, 23);
+			this.button2.TabIndex = 4;
+			this.button2.Text = "&Ok";
+			this.button2.UseVisualStyleBackColor = true;
+			// 
+			// lstUnSyncdJournals
+			// 
+			this.lstUnSyncdJournals.FormattingEnabled = true;
+			this.lstUnSyncdJournals.ItemHeight = 15;
+			this.lstUnSyncdJournals.Location = new System.Drawing.Point(7, 119);
+			this.lstUnSyncdJournals.Name = "lstUnSyncdJournals";
+			this.lstUnSyncdJournals.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.lstUnSyncdJournals.Size = new System.Drawing.Size(304, 64);
+			this.lstUnSyncdJournals.TabIndex = 7;
+			// 
+			// label3
+			// 
+			this.label3.AutoSize = true;
+			this.label3.Location = new System.Drawing.Point(7, 101);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(115, 15);
+			this.label3.TabIndex = 8;
+			this.label3.Text = "Journals not synch\'d";
+			// 
 			// frmSynchJournals
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(348, 274);
+			this.ClientSize = new System.Drawing.Size(913, 557);
+			this.Controls.Add(this.pnlResults);
 			this.Controls.Add(this.pnlMain);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
@@ -113,6 +192,8 @@
 			this.Load += new System.EventHandler(this.frmSynchJournals_Load);
 			this.pnlMain.ResumeLayout(false);
 			this.pnlMain.PerformLayout();
+			this.pnlResults.ResumeLayout(false);
+			this.pnlResults.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -125,5 +206,12 @@
 		private System.Windows.Forms.Button btnCancel;
 		private System.Windows.Forms.Button btnOk;
 		private System.Windows.Forms.CheckBox chkSelectAll;
+		private System.Windows.Forms.Panel pnlResults;
+		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.ListBox lstUnSyncdJournals;
+		private System.Windows.Forms.ListBox lstSyncdJournals;
+		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.Button button1;
+		private System.Windows.Forms.Button button2;
 	}
 }
