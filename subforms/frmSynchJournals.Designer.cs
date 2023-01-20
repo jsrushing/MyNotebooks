@@ -35,12 +35,12 @@
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.btnOk = new System.Windows.Forms.Button();
 			this.pnlResults = new System.Windows.Forms.Panel();
+			this.label3 = new System.Windows.Forms.Label();
+			this.lstUnSyncdJournals = new System.Windows.Forms.ListBox();
 			this.lstSyncdJournals = new System.Windows.Forms.ListBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.button1 = new System.Windows.Forms.Button();
 			this.button2 = new System.Windows.Forms.Button();
-			this.lstUnSyncdJournals = new System.Windows.Forms.ListBox();
-			this.label3 = new System.Windows.Forms.Label();
 			this.pnlMain.SuspendLayout();
 			this.pnlResults.SuspendLayout();
 			this.SuspendLayout();
@@ -54,7 +54,7 @@
 			this.pnlMain.Controls.Add(this.btnOk);
 			this.pnlMain.Location = new System.Drawing.Point(12, 12);
 			this.pnlMain.Name = "pnlMain";
-			this.pnlMain.Size = new System.Drawing.Size(322, 255);
+			this.pnlMain.Size = new System.Drawing.Size(567, 255);
 			this.pnlMain.TabIndex = 9;
 			// 
 			// chkSelectAll
@@ -115,11 +115,30 @@
 			this.pnlResults.Controls.Add(this.label2);
 			this.pnlResults.Controls.Add(this.button1);
 			this.pnlResults.Controls.Add(this.button2);
-			this.pnlResults.Location = new System.Drawing.Point(360, 12);
+			this.pnlResults.Location = new System.Drawing.Point(19, 290);
 			this.pnlResults.Name = "pnlResults";
-			this.pnlResults.Size = new System.Drawing.Size(322, 255);
+			this.pnlResults.Size = new System.Drawing.Size(560, 255);
 			this.pnlResults.TabIndex = 10;
 			this.pnlResults.Visible = false;
+			// 
+			// label3
+			// 
+			this.label3.AutoSize = true;
+			this.label3.Location = new System.Drawing.Point(7, 101);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(115, 15);
+			this.label3.TabIndex = 8;
+			this.label3.Text = "Journals not synch\'d";
+			// 
+			// lstUnSyncdJournals
+			// 
+			this.lstUnSyncdJournals.FormattingEnabled = true;
+			this.lstUnSyncdJournals.ItemHeight = 15;
+			this.lstUnSyncdJournals.Location = new System.Drawing.Point(7, 119);
+			this.lstUnSyncdJournals.Name = "lstUnSyncdJournals";
+			this.lstUnSyncdJournals.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.lstUnSyncdJournals.Size = new System.Drawing.Size(550, 64);
+			this.lstUnSyncdJournals.TabIndex = 7;
 			// 
 			// lstSyncdJournals
 			// 
@@ -128,7 +147,7 @@
 			this.lstSyncdJournals.Location = new System.Drawing.Point(7, 25);
 			this.lstSyncdJournals.Name = "lstSyncdJournals";
 			this.lstSyncdJournals.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.lstSyncdJournals.Size = new System.Drawing.Size(304, 64);
+			this.lstSyncdJournals.Size = new System.Drawing.Size(550, 64);
 			this.lstSyncdJournals.TabIndex = 0;
 			// 
 			// label2
@@ -158,30 +177,11 @@
 			this.button2.Text = "&Ok";
 			this.button2.UseVisualStyleBackColor = true;
 			// 
-			// lstUnSyncdJournals
-			// 
-			this.lstUnSyncdJournals.FormattingEnabled = true;
-			this.lstUnSyncdJournals.ItemHeight = 15;
-			this.lstUnSyncdJournals.Location = new System.Drawing.Point(7, 119);
-			this.lstUnSyncdJournals.Name = "lstUnSyncdJournals";
-			this.lstUnSyncdJournals.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.lstUnSyncdJournals.Size = new System.Drawing.Size(304, 64);
-			this.lstUnSyncdJournals.TabIndex = 7;
-			// 
-			// label3
-			// 
-			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(7, 101);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(115, 15);
-			this.label3.TabIndex = 8;
-			this.label3.Text = "Journals not synch\'d";
-			// 
 			// frmSynchJournals
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(913, 557);
+			this.ClientSize = new System.Drawing.Size(599, 557);
 			this.Controls.Add(this.pnlResults);
 			this.Controls.Add(this.pnlMain);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;

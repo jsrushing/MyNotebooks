@@ -220,7 +220,8 @@ namespace myJournal.subforms
 
 			try
 			{
-				currentJournal = new Journal(ddlJournals.Text).Open(ddlJournals.Text);
+				string fullJournalName = Program.DeviceId + "_" + ddlJournals.Text;
+				currentJournal = new Journal(fullJournalName).Open(fullJournalName);
 
 				if (currentJournal != null)
 				{
@@ -354,7 +355,7 @@ namespace myJournal.subforms
 			ddlJournals.Items.Clear();
 			ddlJournals.Text = string.Empty;
 
-			foreach (Journal j in Utilities.AllJournals()) { ddlJournals.Items.Add(j.Name); }
+			foreach (Journal j in Utilities.AllJournals()) { ddlJournals.Items.Add(j.Name.Remove(0, Program.DeviceId.Length + 1)); }
 
 				if(ddlJournals.Items.Count == 0)	// There will be no journals after an update so use the folders created in Form_Closing the last time the app was run.
 				{
@@ -388,7 +389,6 @@ namespace myJournal.subforms
 					ddlJournals.SelectedIndex = 0;
 					txtJournalPIN.Focus();
 				}
-				//ddlJournals.SelectedIndex = ddlJournals.Items.Count == 1 ? 0 : -1;
 				lstEntries.Visible = false;
 				ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
 				txtJournalPIN.Focus();

@@ -13,15 +13,16 @@ namespace myJournal.subforms
 		{
 			InitializeComponent();
 			this.Location = new System.Drawing.Point(parent.Location.X + 25, parent.Location.Y + 25);
-			this.Size = new System.Drawing.Size(364, 313);
+			//this.Size = new System.Drawing.Size(364, 313);
+
 			foreach(Journal j in Utilities.AllJournals())
 			{
-				lstJournalsToSynch.Items.Add(j);
-				//lstJournalsToSynch.Items.Add(j.Name + "(" + j.AllowCloud.ToString() + ")");
+				//lstJournalsToSynch.Items.Add(j);
+				lstJournalsToSynch.Items.Add(j.Name.Remove(0, Program.DeviceId.Length + 1));
 			}
 			//lstJournalsToSynch.DataSource = Utilities.AllJournalNames(); 
 			lstJournalsToSynch.SelectedItems.Clear();
-			lstJournalsToSynch.DisplayMember= "Name";
+			//lstJournalsToSynch.DisplayMember= "Name".Remove(0, Program.DeviceId.Length + 1);
 			btnCancel.Focus();
 			pnlResults.Location = pnlMain.Location;
 		}
@@ -43,7 +44,9 @@ namespace myJournal.subforms
 
 			for (int i = 0; i < lstJournalsToSynch.SelectedItems.Count; i++)
 			{
-				j = (Journal)lstJournalsToSynch.SelectedItems[i];
+				string fullJournalName = Program.DeviceId + "_" + lstJournalsToSynch.SelectedItems[i].ToString();
+
+				j = new Journal(fullJournalName).Open(fullJournalName);	// (Journal)lstJournalsToSynch.SelectedItems[i];
 
 				if (j.AllowCloud)
 				{
@@ -54,24 +57,28 @@ namespace myJournal.subforms
 					}
 					catch (Exception ex) { error = ex.Message; }
 
-					if (error.Length == 0 && downloadedAzureJournal != null)
+					if(downloadedAzureJournal.Length == 0)	// the Azure file didn't exist so upload it
 					{
-						FileInfo localJournal = new FileInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + j.Name);
-
-						if(localJournal.Length != downloadedAzureJournal.Length)
-						{
-							fileClient.UploadFile(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + j.Name);
-							itemsSynchd.Add(j.Name + (" Azure size:" + downloadedAzureJournal.Length.ToString() + " local size: " + localJournal.Length.ToString()));
-						}
-						else { itemsSkipped.Add(j.Name + " (files match)"); }
+						fileClient.UploadFile(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + j.Name);
+						itemsSynchd.Add(j.Name + " (created in cloud)");
 					}
 					else
 					{
-						// perform local backup
-						// ...
+						if(error.Length == 0) 
+						{ 
+							FileInfo localJournal = new FileInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + j.Name);
 
-						itemsSkipped.Add(j.Name + " (" + error + ")");
+							if(localJournal.Length != downloadedAzureJournal.Length)
+							{
+								fileClient.UploadFile(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + j.Name);
+								itemsSynchd.Add(j.Name + (" Azure size:" + downloadedAzureJournal.Length.ToString() + " local size: " + localJournal.Length.ToString()));
+							}
+							else { itemsSkipped.Add(j.Name + " (files match)"); }							
+						}
+						else 
+						{ itemsSkipped.Add(j.Name + " error:" + error); }
 					}
+
 					this.Cursor = Cursors.Default;
 				}
 				else { itemsSkipped.Add(j.Name + " (cloud not allowed)"); }

@@ -48,6 +48,8 @@ namespace myJournal.objects
 			return jrnlReturn;
 		}
 
+
+
 		public static void Labels_Add(List<string> labelsToAdd)
 		{
 			string[] newLabels = ((labelsToAdd.ToArray()).Except(Labels_GetAll())).ToArray();
