@@ -116,7 +116,7 @@ namespace myJournal
 
         public void Save()
         {
-            using (Stream stream = File.Open(Program.DeviceId + "_" + this.FileName, FileMode.Create))
+            using (Stream stream = File.Open(this.FileName, FileMode.Create))
             {
                 BinaryFormatter formatter = new BinaryFormatter();
                 formatter.Serialize(stream, this);

@@ -46,7 +46,7 @@ namespace myJournal.subforms
 			{
 				string fullJournalName = Program.DeviceId + "_" + lstJournalsToSynch.SelectedItems[i].ToString();
 
-				j = new Journal(fullJournalName).Open(fullJournalName);	// (Journal)lstJournalsToSynch.SelectedItems[i];
+				j = new Journal(fullJournalName).Open(fullJournalName);
 
 				if (j.AllowCloud)
 				{
@@ -68,12 +68,17 @@ namespace myJournal.subforms
 						{ 
 							FileInfo localJournal = new FileInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + j.Name);
 
-							if(localJournal.Length != downloadedAzureJournal.Length)
+							if(localJournal.Length > downloadedAzureJournal.Length)			// local file has been updated
 							{
 								fileClient.UploadFile(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + j.Name);
-								itemsSynchd.Add(j.Name + (" Azure size:" + downloadedAzureJournal.Length.ToString() + " local size: " + localJournal.Length.ToString()));
+								itemsSynchd.Add(j.Name + (" (syncd to Azure)"));
 							}
-							else { itemsSkipped.Add(j.Name + " (files match)"); }							
+							else if(downloadedAzureJournal.Length > localJournal.Length)	// Azure file has been updated
+							{
+								await fileClient.DownloadFile(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"], j.Name);
+								itemsSynchd.Add(j.Name + (" (syncd from Azure)"));
+							}
+							else { itemsSkipped.Add(j.Name + " (files match)"); }			// files match				
 						}
 						else 
 						{ itemsSkipped.Add(j.Name + " error:" + error); }
