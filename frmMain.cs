@@ -178,7 +178,7 @@ namespace myJournal.subforms
 
 			if (!File.Exists(Program.AppRoot + "\\deviceId"))   // get or create the device id
 			{	
-				Program.DeviceId = Guid.NewGuid().ToString();
+				Program.DeviceId = Guid.NewGuid().ToString() + "_";
 				File.WriteAllText(Program.AppRoot + "\\deviceId", Program.DeviceId); 
 			}
 			else { Program.DeviceId = File.ReadAllText(Program.AppRoot + "\\deviceId");}
@@ -221,7 +221,7 @@ namespace myJournal.subforms
 
 			try
 			{
-				string fullJournalName = Program.DeviceId + "_" + ddlJournals.Text;
+				string fullJournalName = ddlJournals.Text;
 				currentJournal = new Journal(fullJournalName).Open();
 
 				if (currentJournal != null)
@@ -485,8 +485,8 @@ namespace myJournal.subforms
 
 				if (frm.NewJournalName != null){
 					Journal j = new Journal(frm.NewJournalName);
+					j.AllowCloud = frm.AllowCloud;
 					j.Create();
-					j.AllowCloud = frm.AllowWeb;
 					LoadJournals();
 				}
 				frm.Close();
@@ -570,7 +570,7 @@ namespace myJournal.subforms
 					{
 						File.Copy(fName, tgt, true);
 						filesCopied = true;
-						Utilities.Labels_FindOrphansInOneJournal(new Journal().Open(jrnlName), true);
+						Utilities.Labels_FindOrphansInOneJournal(new Journal(jrnlName).Open(), true);
 					}
 
 					ok2copy = true;

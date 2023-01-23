@@ -51,7 +51,7 @@
 			this.pnlMain.Controls.Add(this.btnOk);
 			this.pnlMain.Location = new System.Drawing.Point(12, 12);
 			this.pnlMain.Name = "pnlMain";
-			this.pnlMain.Size = new System.Drawing.Size(567, 255);
+			this.pnlMain.Size = new System.Drawing.Size(313, 255);
 			this.pnlMain.TabIndex = 9;
 			// 
 			// chkSelectAll
@@ -72,7 +72,7 @@
 			this.lstJournalsToSynch.Location = new System.Drawing.Point(7, 25);
 			this.lstJournalsToSynch.Name = "lstJournalsToSynch";
 			this.lstJournalsToSynch.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.lstJournalsToSynch.Size = new System.Drawing.Size(304, 184);
+			this.lstJournalsToSynch.Size = new System.Drawing.Size(289, 184);
 			this.lstJournalsToSynch.TabIndex = 0;
 			// 
 			// label1
@@ -86,7 +86,7 @@
 			// 
 			// btnOk
 			// 
-			this.btnOk.Location = new System.Drawing.Point(24, 220);
+			this.btnOk.Location = new System.Drawing.Point(24, 223);
 			this.btnOk.Name = "btnOk";
 			this.btnOk.Size = new System.Drawing.Size(75, 23);
 			this.btnOk.TabIndex = 4;
@@ -103,14 +103,14 @@
 			this.pnlResults.Controls.Add(this.btnClose);
 			this.pnlResults.Location = new System.Drawing.Point(19, 290);
 			this.pnlResults.Name = "pnlResults";
-			this.pnlResults.Size = new System.Drawing.Size(560, 255);
+			this.pnlResults.Size = new System.Drawing.Size(313, 255);
 			this.pnlResults.TabIndex = 10;
 			this.pnlResults.Visible = false;
 			// 
 			// label3
 			// 
 			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(7, 101);
+			this.label3.Location = new System.Drawing.Point(7, 117);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(115, 15);
 			this.label3.TabIndex = 8;
@@ -120,20 +120,20 @@
 			// 
 			this.lstUnSyncdJournals.FormattingEnabled = true;
 			this.lstUnSyncdJournals.ItemHeight = 15;
-			this.lstUnSyncdJournals.Location = new System.Drawing.Point(7, 119);
+			this.lstUnSyncdJournals.Location = new System.Drawing.Point(7, 135);
 			this.lstUnSyncdJournals.Name = "lstUnSyncdJournals";
 			this.lstUnSyncdJournals.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.lstUnSyncdJournals.Size = new System.Drawing.Size(550, 64);
+			this.lstUnSyncdJournals.Size = new System.Drawing.Size(282, 94);
 			this.lstUnSyncdJournals.TabIndex = 7;
 			// 
 			// lstSyncdJournals
 			// 
 			this.lstSyncdJournals.FormattingEnabled = true;
 			this.lstSyncdJournals.ItemHeight = 15;
-			this.lstSyncdJournals.Location = new System.Drawing.Point(7, 25);
+			this.lstSyncdJournals.Location = new System.Drawing.Point(7, 22);
 			this.lstSyncdJournals.Name = "lstSyncdJournals";
 			this.lstSyncdJournals.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.lstSyncdJournals.Size = new System.Drawing.Size(550, 64);
+			this.lstSyncdJournals.Size = new System.Drawing.Size(282, 94);
 			this.lstSyncdJournals.TabIndex = 0;
 			// 
 			// label2
@@ -147,7 +147,7 @@
 			// 
 			// btnClose
 			// 
-			this.btnClose.Location = new System.Drawing.Point(17, 207);
+			this.btnClose.Location = new System.Drawing.Point(17, 231);
 			this.btnClose.Name = "btnClose";
 			this.btnClose.Size = new System.Drawing.Size(75, 23);
 			this.btnClose.TabIndex = 5;
@@ -158,7 +158,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(599, 276);
+			this.ClientSize = new System.Drawing.Size(334, 279);
 			this.Controls.Add(this.pnlResults);
 			this.Controls.Add(this.pnlMain);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;

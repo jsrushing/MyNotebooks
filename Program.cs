@@ -13,10 +13,11 @@ namespace myJournal
 		public static string AppRoot = AppDomain.CurrentDomain.BaseDirectory;
 		public static string AppVersion = string.Empty;
 		public static string DeviceId = string.Empty;
-        /// <summary>
-        ///  The main entry point for the application.
-        /// </summary>
-        [STAThread]
+		public static string AzureConnString = "DefaultEndpointsProtocol=https;AccountName=container1a;AccountKey=4YNQFl9klH9bp8ieKKfhwiVgiKlZKWieBlyzvu8zlm2hyL0HaR/x3XpbpFYjJ5VF4YgtaAR9sN4F+ASttv59jA==;EndpointSuffix=core.windows.net";
+		/// <summary>
+		///  The main entry point for the application.
+		/// </summary>
+		[STAThread]
         static void Main()
         {
 			System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();

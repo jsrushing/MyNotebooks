@@ -14,7 +14,7 @@ namespace myJournal.subforms
 	{
 		private List<string> lstAllJournalNames = Utilities.AllJournalNames();
 		public string NewJournalName { get; private set; }
-		public bool AllowWeb { get { return chkAllowWebBackup.Checked; } set { AllowWeb = value; } }
+		public bool AllowCloud { get { return chkAllowWebBackup.Checked; } set { AllowCloud = value; } }
 
 		public frmNewJournal(Form parent)
 		{ 

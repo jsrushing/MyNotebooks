@@ -42,7 +42,7 @@ namespace myJournal.objects
 			foreach (string s in Directory.GetFiles(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]))
 			{
 				sJrnlDiskName = s.Replace(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"], "");
-				jrnlReturn.Add(new Journal(sJrnlDiskName).Open(sJrnlDiskName));
+				jrnlReturn.Add(new Journal(sJrnlDiskName).Open());
 			}
 
 			return jrnlReturn;

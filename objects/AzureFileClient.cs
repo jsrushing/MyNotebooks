@@ -25,12 +25,10 @@ namespace myJournal.objects
 
 		public void UploadFile(string localFileName)
 		{
-			var connString					= "DefaultEndpointsProtocol=https;AccountName=container1a;AccountKey=4YNQFl9klH9bp8ieKKfhwiVgiKlZKWieBlyzvu8zlm2hyL0HaR/x3XpbpFYjJ5VF4YgtaAR9sN4F+ASttv59jA==;EndpointSuffix=core.windows.net";
-			var fileShareName				= "journals";
 			var fileName					= localFileName.Substring(localFileName.LastIndexOf("\\") + 1);
-			ShareClient share				= new ShareClient(connString, fileShareName);
+			ShareClient share				= new ShareClient(Program.AzureConnString, "journals");
 			ShareDirectoryClient directory	= share.GetDirectoryClient("");
-			ShareFileClient myFile			= share.GetDirectoryClient("").GetFileClient(Program.DeviceId + fileName);
+			ShareFileClient myFile			= directory.GetFileClient(Program.DeviceId + fileName);
 
 			if (File.Exists(localFileName))
 			{
@@ -42,24 +40,19 @@ namespace myJournal.objects
 
 		public async Task DownloadFile(string localFileName, string AzFileName)
 		{
-
-			var connString = "DefaultEndpointsProtocol=https;AccountName=container1a;" +
-					"AccountKey=4YNQFl9klH9bp8ieKKfhwiVgiKlZKWieBlyzvu8zlm2hyL0HaR/x3XpbpFYjJ5VF4YgtaAR9sN4F+ASttv59jA==;" +
-					"EndpointSuffix=core.windows.net";
-
 			using (var fileStream = new FileStream(localFileName + "\\" + AzFileName, FileMode.Create))
 			{
 				try
 				{
-					CloudStorageAccount storageAccount	= CloudStorageAccount.Parse(connString);
+					CloudStorageAccount storageAccount	= CloudStorageAccount.Parse(Program.AzureConnString);
 					CloudFileClient fileClient			= storageAccount.CreateCloudFileClient();
 					CloudFileShare share				= fileClient.GetShareReference("journals");
-					CloudFile myFile					= share.GetRootDirectoryReference().GetFileReference(AzFileName);
+					CloudFileDirectory directory		= share.GetRootDirectoryReference();
+					CloudFile myFile					= directory.GetFileReference(Program.DeviceId + AzFileName);
 					await myFile.DownloadToStreamAsync(fileStream);
 				}
 				catch(Exception ex) { }
 			}	
 		}
-
 	}
 }

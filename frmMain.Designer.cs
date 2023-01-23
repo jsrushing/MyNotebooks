@@ -214,7 +214,7 @@ namespace myJournal.subforms
 			// 
 			this.mnuJournal_Create.Name = "mnuJournal_Create";
 			this.mnuJournal_Create.Size = new System.Drawing.Size(180, 22);
-			this.mnuJournal_Create.Text = "C&reate";
+			this.mnuJournal_Create.Text = "&New Journal";
 			this.mnuJournal_Create.Click += new System.EventHandler(this.mnuJournal_Create_Click);
 			// 
 			// mnuJournal_Delete
@@ -284,8 +284,8 @@ namespace myJournal.subforms
 			// mnuEntryCreate
 			// 
 			this.mnuEntryCreate.Name = "mnuEntryCreate";
-			this.mnuEntryCreate.Size = new System.Drawing.Size(108, 22);
-			this.mnuEntryCreate.Text = "&Create";
+			this.mnuEntryCreate.Size = new System.Drawing.Size(128, 22);
+			this.mnuEntryCreate.Text = "&New Entry";
 			this.mnuEntryCreate.Click += new System.EventHandler(this.mnuEntryCreate_Click);
 			// 
 			// mnuEntryEdit
@@ -295,7 +295,7 @@ namespace myJournal.subforms
             this.mnuDiscardOriginalText});
 			this.mnuEntryEdit.Enabled = false;
 			this.mnuEntryEdit.Name = "mnuEntryEdit";
-			this.mnuEntryEdit.Size = new System.Drawing.Size(108, 22);
+			this.mnuEntryEdit.Size = new System.Drawing.Size(128, 22);
 			this.mnuEntryEdit.Text = "E&dit";
 			this.mnuEntryEdit.Click += new System.EventHandler(this.mnuEntryEdit_Click);
 			// 
@@ -317,7 +317,7 @@ namespace myJournal.subforms
 			// 
 			this.mnuEntryDelete.Enabled = false;
 			this.mnuEntryDelete.Name = "mnuEntryDelete";
-			this.mnuEntryDelete.Size = new System.Drawing.Size(108, 22);
+			this.mnuEntryDelete.Size = new System.Drawing.Size(128, 22);
 			this.mnuEntryDelete.Text = "Delete";
 			this.mnuEntryDelete.Click += new System.EventHandler(this.mnuEntryDelete_Click);
 			// 
