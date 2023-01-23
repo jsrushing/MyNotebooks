@@ -12,18 +12,16 @@ namespace myJournal.subforms
 		public frmSynchJournals(Form parent)
 		{
 			InitializeComponent();
-			this.Location = new System.Drawing.Point(parent.Location.X + 25, parent.Location.Y + 25);
-			//this.Size = new System.Drawing.Size(364, 313);
+			Utilities.SetStartPosition(this, parent);
 
 			foreach(Journal j in Utilities.AllJournals())
 			{
-				//lstJournalsToSynch.Items.Add(j);
 				lstJournalsToSynch.Items.Add(j.Name.Remove(0, Program.DeviceId.Length + 1));
 			}
 			//lstJournalsToSynch.DataSource = Utilities.AllJournalNames(); 
 			lstJournalsToSynch.SelectedItems.Clear();
 			//lstJournalsToSynch.DisplayMember= "Name".Remove(0, Program.DeviceId.Length + 1);
-			btnCancel.Focus();
+			btnOk.Focus();
 			pnlResults.Location = pnlMain.Location;
 		}
 
@@ -35,21 +33,22 @@ namespace myJournal.subforms
 		private async void btnOk_Click(object sender, EventArgs e)
 		{
 			this.Cursor = Cursors.WaitCursor;
-			AzureFileClient fileClient = new AzureFileClient();
-			FileInfo downloadedAzureJournal = null;
+			string fullJournalName = string.Empty;
 			Journal j = null;
-			List<string> itemsSynchd = new List<string>();
 			List<string> itemsSkipped = new List<string>();
-			string error = string.Empty;
+			List<string> itemsSynchd = new List<string>();
 
 			for (int i = 0; i < lstJournalsToSynch.SelectedItems.Count; i++)
 			{
-				string fullJournalName = Program.DeviceId + "_" + lstJournalsToSynch.SelectedItems[i].ToString();
-
+				fullJournalName = Program.DeviceId + "_" + lstJournalsToSynch.SelectedItems[i].ToString();
 				j = new Journal(fullJournalName).Open(fullJournalName);
 
 				if (j.AllowCloud)
 				{
+					AzureFileClient fileClient = new AzureFileClient();
+					FileInfo downloadedAzureJournal = null;
+					var error = string.Empty;
+
 					try
 					{
 						await fileClient.DownloadFile(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"], j.Name);
@@ -60,7 +59,7 @@ namespace myJournal.subforms
 					if(downloadedAzureJournal.Length == 0)	// the Azure file didn't exist so upload it
 					{
 						fileClient.UploadFile(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + j.Name);
-						itemsSynchd.Add(j.Name + " (created in cloud)");
+						itemsSynchd.Add(j.Name.Remove(0, Program.DeviceId.Length + 1) + " (created in cloud)");
 					}
 					else
 					{
@@ -71,29 +70,28 @@ namespace myJournal.subforms
 							if(localJournal.Length > downloadedAzureJournal.Length)			// local file has been updated
 							{
 								fileClient.UploadFile(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + j.Name);
-								itemsSynchd.Add(j.Name + (" (syncd to Azure)"));
+								itemsSynchd.Add(j.Name.Remove(0, Program.DeviceId.Length + 1) + (" (syncd to Azure)"));
 							}
 							else if(downloadedAzureJournal.Length > localJournal.Length)	// Azure file has been updated
 							{
 								await fileClient.DownloadFile(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"], j.Name);
-								itemsSynchd.Add(j.Name + (" (syncd from Azure)"));
+								itemsSynchd.Add(j.Name.Remove(0, Program.DeviceId.Length + 1) + (" (syncd from Azure)"));
 							}
-							else { itemsSkipped.Add(j.Name + " (files match)"); }			// files match				
+							else { itemsSkipped.Add(j.Name.Remove(0, Program.DeviceId.Length + 1) + " (files match)"); }			// files match				
 						}
 						else 
-						{ itemsSkipped.Add(j.Name + " error:" + error); }
+						{ itemsSkipped.Add(j.Name.Remove(0, Program.DeviceId.Length + 1) + " error:" + error); }
+						
+						File.Delete(downloadedAzureJournal.FullName);
 					}
-
-					this.Cursor = Cursors.Default;
 				}
-				else { itemsSkipped.Add(j.Name + " (cloud not allowed)"); }
-				File.Delete(downloadedAzureJournal.FullName);
+				else { itemsSkipped.Add(j.Name.Remove(0, Program.DeviceId.Length + 1) + " (cloud not allowed)"); }
 			}
 
 			lstSyncdJournals.DataSource = itemsSynchd;
 			lstUnSyncdJournals.DataSource = itemsSkipped;
 			pnlResults.Visible = true;
-
+			this.Cursor = Cursors.Default;
 		}
 
 		private void chkSelectAll_CheckedChanged(object sender, EventArgs e)
@@ -110,9 +108,6 @@ namespace myJournal.subforms
 
 		}
 
-		private void btnCancel_Click(object sender, EventArgs e)
-		{
-			this.Close();
-		}
+		private void btnCancel_Click(object sender, EventArgs e) { this.Close(); }
 	}
 }

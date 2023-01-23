@@ -21,15 +21,12 @@ namespace myJournal.subforms
 		public frmExportJournals(Form parent)
 		{
 			InitializeComponent();
-			this.Location = new System.Drawing.Point(parent.Location.X + 25, parent.Location.Y + 25);
+			Utilities.SetStartPosition(this, parent);
 			lstJournalsToSynch.DataSource = Utilities.AllJournalNames();
 		}
 
 		private void btnOk_Click(object sender, EventArgs e)
 		{
-
-
-
 			AzureFileClient fileClient = new AzureFileClient();
 			fileClient.UploadFile("C:\\inetpub\\testfile4.txt");
 			this.Close();

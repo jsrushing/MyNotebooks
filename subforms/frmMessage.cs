@@ -3,6 +3,7 @@
  */
 using System;
 using System.Windows.Forms;
+using myJournal.objects;
 
 namespace myJournal.subforms
 {
@@ -38,7 +39,7 @@ namespace myJournal.subforms
 			opType = type;
 			msg = message;
 			this.defaultText = defaultText;
-			if(parent != null) { this.StartPosition = FormStartPosition.Manual; this.Location = new System.Drawing.Point(parent.Left + 25, parent.Top + 25); }
+			if(parent != null) { Utilities.SetStartPosition(this, parent); }
 		}
 
 		private void frmMessage_Activated(object sender, EventArgs e)

@@ -478,7 +478,7 @@ namespace myJournal.subforms
 
 		private void mnuJournal_Create_Click(object sender, EventArgs e)
 		{
-			using (frmNewJournal frm = new frmNewJournal())
+			using (frmNewJournal frm = new frmNewJournal(this))
 			{
 				frm.ShowDialog(this);
 
@@ -522,9 +522,7 @@ namespace myJournal.subforms
 		}
 
 		private void mnuJournal_Export_Click(object sender, EventArgs e)
-		{
-			using(frmSynchJournals frm = new frmSynchJournals(this)) { frm.ShowDialog(); }
-		}
+		{ using(frmSynchJournals frm = new frmSynchJournals(this)) { frm.ShowDialog(); } }
 
 		private void mnuJournal_ForceBackup_Click(object sender, EventArgs e)
 		{
@@ -600,7 +598,7 @@ namespace myJournal.subforms
 		private void mnuJournal_RestoreBackups_Click(object sender, EventArgs e)
 		{
 			string sJournalName = ddlJournals.Text;
-			using (frmBackupManager frm = new frmBackupManager()) 
+			using (frmBackupManager frm = new frmBackupManager(this)) 
 			{
 				frm.ShowDialog(this);
 				if (frm.BackupRestored) { LoadJournals(); }
@@ -610,7 +608,7 @@ namespace myJournal.subforms
 		private void mnuJournal_Search_Click(object sender, EventArgs e)
 		{
 			Program.PIN = txtJournalPIN.Text;
-			using (frmSearch frm = new frmSearch(currentJournal)) { frm.ShowDialog(); }
+			using (frmSearch frm = new frmSearch(currentJournal, this)) { frm.ShowDialog(); }
 		}
 
 		private void mnuLabels_Click(object sender, EventArgs e)

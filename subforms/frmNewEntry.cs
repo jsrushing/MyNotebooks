@@ -38,7 +38,7 @@ namespace myJournal.subforms
 			isEdit = entry != null;
 			preserveOriginalText = disallowOriginalTextEdit;
 			this.currentJournal = journal;
-			this.StartPosition = FormStartPosition.Manual; this.Location = new System.Drawing.Point(parent.Left + 25, parent.Top + 25);
+			Utilities.SetStartPosition(this, parent);
 		}
 
 		private void ddlFonts_SelectedIndexChanged(object sender, EventArgs e)

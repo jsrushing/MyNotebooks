@@ -220,7 +220,6 @@
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "frmExportJournals";
-			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
 			this.Text = "Synch Journals";
 			this.Load += new System.EventHandler(this.frmExportJournals_Load);
 			this.pnlAddRecipient.ResumeLayout(false);

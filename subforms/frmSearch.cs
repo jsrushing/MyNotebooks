@@ -14,11 +14,12 @@ namespace myJournal.subforms
 		private bool firstSelection = true;
 		private List<Journal> journalsToSearch = new List<Journal>();
 
-		public frmSearch(Journal jrnl)
+		public frmSearch(Journal jrnl, Form parent)
 		{
 			InitializeComponent();
 			journalsToSearch.Add(jrnl);
 			Utilities.Labels_PopulateLabelsList(lstLabelsForSearch);
+			Utilities.SetStartPosition(this, parent);
 		}
 
 		private void chkUseDateRange_CheckedChanged(object sender, EventArgs e)

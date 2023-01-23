@@ -32,15 +32,13 @@
 			this.chkSelectAll = new System.Windows.Forms.CheckBox();
 			this.lstJournalsToSynch = new System.Windows.Forms.ListBox();
 			this.label1 = new System.Windows.Forms.Label();
-			this.btnCancel = new System.Windows.Forms.Button();
 			this.btnOk = new System.Windows.Forms.Button();
 			this.pnlResults = new System.Windows.Forms.Panel();
 			this.label3 = new System.Windows.Forms.Label();
 			this.lstUnSyncdJournals = new System.Windows.Forms.ListBox();
 			this.lstSyncdJournals = new System.Windows.Forms.ListBox();
 			this.label2 = new System.Windows.Forms.Label();
-			this.button1 = new System.Windows.Forms.Button();
-			this.button2 = new System.Windows.Forms.Button();
+			this.btnClose = new System.Windows.Forms.Button();
 			this.pnlMain.SuspendLayout();
 			this.pnlResults.SuspendLayout();
 			this.SuspendLayout();
@@ -50,7 +48,6 @@
 			this.pnlMain.Controls.Add(this.chkSelectAll);
 			this.pnlMain.Controls.Add(this.lstJournalsToSynch);
 			this.pnlMain.Controls.Add(this.label1);
-			this.pnlMain.Controls.Add(this.btnCancel);
 			this.pnlMain.Controls.Add(this.btnOk);
 			this.pnlMain.Location = new System.Drawing.Point(12, 12);
 			this.pnlMain.Name = "pnlMain";
@@ -75,7 +72,7 @@
 			this.lstJournalsToSynch.Location = new System.Drawing.Point(7, 25);
 			this.lstJournalsToSynch.Name = "lstJournalsToSynch";
 			this.lstJournalsToSynch.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.lstJournalsToSynch.Size = new System.Drawing.Size(304, 169);
+			this.lstJournalsToSynch.Size = new System.Drawing.Size(304, 184);
 			this.lstJournalsToSynch.TabIndex = 0;
 			// 
 			// label1
@@ -87,23 +84,13 @@
 			this.label1.TabIndex = 1;
 			this.label1.Text = "Select Journals to synch:";
 			// 
-			// btnCancel
-			// 
-			this.btnCancel.Location = new System.Drawing.Point(213, 220);
-			this.btnCancel.Name = "btnCancel";
-			this.btnCancel.Size = new System.Drawing.Size(75, 23);
-			this.btnCancel.TabIndex = 5;
-			this.btnCancel.Text = "&Cancel";
-			this.btnCancel.UseVisualStyleBackColor = true;
-			this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
-			// 
 			// btnOk
 			// 
 			this.btnOk.Location = new System.Drawing.Point(24, 220);
 			this.btnOk.Name = "btnOk";
 			this.btnOk.Size = new System.Drawing.Size(75, 23);
 			this.btnOk.TabIndex = 4;
-			this.btnOk.Text = "&Ok";
+			this.btnOk.Text = "&Synch";
 			this.btnOk.UseVisualStyleBackColor = true;
 			this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
 			// 
@@ -113,8 +100,7 @@
 			this.pnlResults.Controls.Add(this.lstUnSyncdJournals);
 			this.pnlResults.Controls.Add(this.lstSyncdJournals);
 			this.pnlResults.Controls.Add(this.label2);
-			this.pnlResults.Controls.Add(this.button1);
-			this.pnlResults.Controls.Add(this.button2);
+			this.pnlResults.Controls.Add(this.btnClose);
 			this.pnlResults.Location = new System.Drawing.Point(19, 290);
 			this.pnlResults.Name = "pnlResults";
 			this.pnlResults.Size = new System.Drawing.Size(560, 255);
@@ -159,29 +145,20 @@
 			this.label2.TabIndex = 1;
 			this.label2.Text = "Synch\'d Journals";
 			// 
-			// button1
+			// btnClose
 			// 
-			this.button1.Location = new System.Drawing.Point(213, 220);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(75, 23);
-			this.button1.TabIndex = 5;
-			this.button1.Text = "&Cancel";
-			this.button1.UseVisualStyleBackColor = true;
-			// 
-			// button2
-			// 
-			this.button2.Location = new System.Drawing.Point(24, 220);
-			this.button2.Name = "button2";
-			this.button2.Size = new System.Drawing.Size(75, 23);
-			this.button2.TabIndex = 4;
-			this.button2.Text = "&Ok";
-			this.button2.UseVisualStyleBackColor = true;
+			this.btnClose.Location = new System.Drawing.Point(17, 207);
+			this.btnClose.Name = "btnClose";
+			this.btnClose.Size = new System.Drawing.Size(75, 23);
+			this.btnClose.TabIndex = 5;
+			this.btnClose.Text = "&Close";
+			this.btnClose.UseVisualStyleBackColor = true;
 			// 
 			// frmSynchJournals
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(599, 557);
+			this.ClientSize = new System.Drawing.Size(599, 276);
 			this.Controls.Add(this.pnlResults);
 			this.Controls.Add(this.pnlMain);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -203,7 +180,6 @@
 		private System.Windows.Forms.Panel pnlMain;
 		private System.Windows.Forms.ListBox lstJournalsToSynch;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.Button btnCancel;
 		private System.Windows.Forms.Button btnOk;
 		private System.Windows.Forms.CheckBox chkSelectAll;
 		private System.Windows.Forms.Panel pnlResults;
@@ -211,7 +187,6 @@
 		private System.Windows.Forms.ListBox lstUnSyncdJournals;
 		private System.Windows.Forms.ListBox lstSyncdJournals;
 		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.Button button1;
-		private System.Windows.Forms.Button button2;
+		private System.Windows.Forms.Button btnClose;
 	}
 }

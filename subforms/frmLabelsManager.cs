@@ -34,7 +34,7 @@ namespace myJournal.subforms
 
 		private Journal CurrentJournal;
 
-		public frmLabelsManager(Form frmParent, Journal _jrnl = null)
+		public frmLabelsManager(Form parent, Journal _jrnl = null)
 		{
 			InitializeComponent();
 
@@ -46,8 +46,7 @@ namespace myJournal.subforms
 			}
 			else { mnuRename_InCurrentJournal.Visible = false; mnuDelete_InCurrentJournal.Visible = false; }
 
-			this.StartPosition = FormStartPosition.Manual;
-			this.Location = new Point(frmParent.Location.X + 25, frmParent.Location.Y + 25);
+			Utilities.SetStartPosition(this, parent);
 		}
 
 		private void frmLabelsManager_FormClosing(object sender, FormClosingEventArgs e) { Program.PIN = OriginalPIN; }

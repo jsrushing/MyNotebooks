@@ -24,9 +24,10 @@ namespace myJournal.subforms
 		string backupFolder_Incremental = AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"];
 		public bool BackupRestored { get; private set; }
 
-		public frmBackupManager()
+		public frmBackupManager(Form parent)
 		{
 			InitializeComponent();
+			Utilities.SetStartPosition(this, parent);
 		}
 
 		private void frmBackupManager_Load(object sender, EventArgs e)
@@ -42,9 +43,9 @@ namespace myJournal.subforms
 
 		private void btnRestore_Click(object sender, EventArgs e)
 		{
-			var backupFilePath = lstIncrementalBackups.SelectedIndices.Count > 0 ? backupFolder_Incremental + lstIncrementalBackups.SelectedItem.ToString() : string.Empty;
-			var journalsFolderPath = lstIncrementalBackups.SelectedIndices.Count > 0 ? journalsFolder + lstIncrementalBackups.SelectedItem.ToString() : string.Empty;
-			var isForcedBackupRestore = lstForcedBackups.SelectedIndices.Count > 0;
+			var backupFilePath			= lstIncrementalBackups.SelectedIndices.Count > 0 ? backupFolder_Incremental + lstIncrementalBackups.SelectedItem.ToString() : string.Empty;
+			var journalsFolderPath		= lstIncrementalBackups.SelectedIndices.Count > 0 ? journalsFolder + lstIncrementalBackups.SelectedItem.ToString() : string.Empty;
+			var isForcedBackupRestore	= lstForcedBackups.SelectedIndices.Count > 0;
 			var truncatedForcedFileName = string.Empty;
 
 			if (isForcedBackupRestore)

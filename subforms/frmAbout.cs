@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using myJournal.objects;
 
 namespace myJournal.subforms
 {
@@ -13,7 +14,7 @@ namespace myJournal.subforms
 		public frmAbout(Form parent)
 		{
 			InitializeComponent();
-			this.Location = new System.Drawing.Point(parent.Left + 25, parent.Top + 25);
+			Utilities.SetStartPosition(this, parent);
 		}
 
 		private void frmAbout_Load(object sender, EventArgs e)

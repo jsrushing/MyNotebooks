@@ -48,8 +48,6 @@ namespace myJournal.objects
 			return jrnlReturn;
 		}
 
-
-
 		public static void Labels_Add(List<string> labelsToAdd)
 		{
 			string[] newLabels = ((labelsToAdd.ToArray()).Except(Labels_GetAll())).ToArray();
@@ -281,5 +279,10 @@ namespace myJournal.objects
 			return entryRtrn;
 		}
 
+		public static void SetStartPosition(Form formToInitialize, Form parentForm)
+		{ 
+			formToInitialize.StartPosition = FormStartPosition.Manual;	
+			formToInitialize.Location = new System.Drawing.Point(parentForm.Location.X + 25, parentForm.Location.Y + 25); 
+		}
 	}
 }

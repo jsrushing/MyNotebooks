@@ -16,9 +16,10 @@ namespace myJournal.subforms
 		public string NewJournalName { get; private set; }
 		public bool AllowWeb { get { return chkAllowWebBackup.Checked; } set { AllowWeb = value; } }
 
-		public frmNewJournal()
+		public frmNewJournal(Form parent)
 		{ 
 			InitializeComponent();
+			Utilities.SetStartPosition(this, parent);
 		}
 
 		private void frmNewJournal_Load(object sender, EventArgs e) 
