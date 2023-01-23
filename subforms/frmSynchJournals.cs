@@ -16,7 +16,7 @@ namespace myJournal.subforms
 
 			foreach(Journal j in Utilities.AllJournals())
 			{
-				lstJournalsToSynch.Items.Add(j.Name.Remove(0, Program.DeviceId.Length + 1));
+				lstJournalsToSynch.Items.Add(j.Name);
 			}
 			//lstJournalsToSynch.DataSource = Utilities.AllJournalNames(); 
 			lstJournalsToSynch.SelectedItems.Clear();
@@ -33,15 +33,14 @@ namespace myJournal.subforms
 		private async void btnOk_Click(object sender, EventArgs e)
 		{
 			this.Cursor = Cursors.WaitCursor;
-			string fullJournalName = string.Empty;
-			Journal j = null;
+			Journal j;
 			List<string> itemsSkipped = new List<string>();
 			List<string> itemsSynchd = new List<string>();
+			var journalsFolder = ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"];
 
 			for (int i = 0; i < lstJournalsToSynch.SelectedItems.Count; i++)
 			{
-				fullJournalName = Program.DeviceId + "_" + lstJournalsToSynch.SelectedItems[i].ToString();
-				j = new Journal(fullJournalName).Open(fullJournalName);
+				j = new Journal(lstJournalsToSynch.SelectedItems[i].ToString()).Open(lstJournalsToSynch.SelectedItems[i].ToString());
 
 				if (j.AllowCloud)
 				{
@@ -51,36 +50,36 @@ namespace myJournal.subforms
 
 					try
 					{
-						await fileClient.DownloadFile(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"], j.Name);
-						downloadedAzureJournal = new FileInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"] + j.Name);
+						await fileClient.DownloadFile(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"], Program.DeviceId + j.Name);
+						downloadedAzureJournal = new FileInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + j.Name);
 					}
 					catch (Exception ex) { error = ex.Message; }
 
 					if(downloadedAzureJournal.Length == 0)	// the Azure file didn't exist so upload it
 					{
-						fileClient.UploadFile(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + j.Name);
-						itemsSynchd.Add(j.Name.Remove(0, Program.DeviceId.Length + 1) + " (created in cloud)");
+						fileClient.UploadFile(Program.AppRoot + journalsFolder + j.Name);
+						itemsSynchd.Add(j.Name + " (created in cloud)");
 					}
 					else
 					{
 						if(error.Length == 0) 
 						{ 
-							FileInfo localJournal = new FileInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + j.Name);
+							FileInfo localJournal = new FileInfo(Program.AppRoot + journalsFolder + j.Name);
 
 							if(localJournal.Length > downloadedAzureJournal.Length)			// local file has been updated
 							{
-								fileClient.UploadFile(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + j.Name);
-								itemsSynchd.Add(j.Name.Remove(0, Program.DeviceId.Length + 1) + (" (syncd to Azure)"));
+								fileClient.UploadFile(Program.AppRoot + journalsFolder + j.Name);
+								itemsSynchd.Add(j.Name + (" (syncd to Azure)"));
 							}
 							else if(downloadedAzureJournal.Length > localJournal.Length)	// Azure file has been updated
 							{
-								await fileClient.DownloadFile(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"], j.Name);
-								itemsSynchd.Add(j.Name.Remove(0, Program.DeviceId.Length + 1) + (" (syncd from Azure)"));
+								await fileClient.DownloadFile(Program.AppRoot + journalsFolder, Program.DeviceId + j.Name);
+								itemsSynchd.Add(j.Name + (" (syncd from Azure)"));
 							}
 							else { itemsSkipped.Add(j.Name.Remove(0, Program.DeviceId.Length + 1) + " (files match)"); }			// files match				
 						}
 						else 
-						{ itemsSkipped.Add(j.Name.Remove(0, Program.DeviceId.Length + 1) + " error:" + error); }
+						{ itemsSkipped.Add(j.Name + " error:" + error); }
 						
 						File.Delete(downloadedAzureJournal.FullName);
 					}

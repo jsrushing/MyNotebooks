@@ -36,9 +36,9 @@ namespace myJournal.subforms
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.btnOk = new System.Windows.Forms.Button();
 			this.grp1 = new System.Windows.Forms.Panel();
+			this.chkAllowWebBackup = new System.Windows.Forms.CheckBox();
 			this.lblNameExists = new System.Windows.Forms.Label();
 			this.lblShowPIN = new System.Windows.Forms.Label();
-			this.chkAllowWebBackup = new System.Windows.Forms.CheckBox();
 			this.grp1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -74,7 +74,7 @@ namespace myJournal.subforms
 			this.txtPIN.Name = "txtPIN";
 			this.txtPIN.PasswordChar = '*';
 			this.txtPIN.Size = new System.Drawing.Size(128, 23);
-			this.txtPIN.TabIndex = 3;
+			this.txtPIN.TabIndex = 1;
 			this.txtPIN.TextChanged += new System.EventHandler(this.txtPIN_TextChanged);
 			// 
 			// btnCancel
@@ -114,6 +114,16 @@ namespace myJournal.subforms
 			this.grp1.Size = new System.Drawing.Size(230, 195);
 			this.grp1.TabIndex = 6;
 			// 
+			// chkAllowWebBackup
+			// 
+			this.chkAllowWebBackup.AutoSize = true;
+			this.chkAllowWebBackup.Location = new System.Drawing.Point(91, 99);
+			this.chkAllowWebBackup.Name = "chkAllowWebBackup";
+			this.chkAllowWebBackup.Size = new System.Drawing.Size(129, 19);
+			this.chkAllowWebBackup.TabIndex = 3;
+			this.chkAllowWebBackup.Text = "allow cloud backup";
+			this.chkAllowWebBackup.UseVisualStyleBackColor = true;
+			// 
 			// lblNameExists
 			// 
 			this.lblNameExists.AutoSize = true;
@@ -131,21 +141,11 @@ namespace myJournal.subforms
 			this.lblShowPIN.Location = new System.Drawing.Point(184, 80);
 			this.lblShowPIN.Name = "lblShowPIN";
 			this.lblShowPIN.Size = new System.Drawing.Size(35, 13);
-			this.lblShowPIN.TabIndex = 41;
+			this.lblShowPIN.TabIndex = 2;
 			this.lblShowPIN.Text = "show";
 			this.lblShowPIN.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.lblShowPIN.Visible = false;
 			this.lblShowPIN.Click += new System.EventHandler(this.lblShowPIN_Click);
-			// 
-			// chkAllowWebBackup
-			// 
-			this.chkAllowWebBackup.AutoSize = true;
-			this.chkAllowWebBackup.Location = new System.Drawing.Point(91, 99);
-			this.chkAllowWebBackup.Name = "chkAllowWebBackup";
-			this.chkAllowWebBackup.Size = new System.Drawing.Size(121, 19);
-			this.chkAllowWebBackup.TabIndex = 43;
-			this.chkAllowWebBackup.Text = "allow web backup";
-			this.chkAllowWebBackup.UseVisualStyleBackColor = true;
 			// 
 			// frmNewJournal
 			// 

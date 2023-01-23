@@ -30,7 +30,7 @@ namespace myJournal.objects
 			var fileName					= localFileName.Substring(localFileName.LastIndexOf("\\") + 1);
 			ShareClient share				= new ShareClient(connString, fileShareName);
 			ShareDirectoryClient directory	= share.GetDirectoryClient("");
-			ShareFileClient myFile			= share.GetDirectoryClient("").GetFileClient(fileName);
+			ShareFileClient myFile			= share.GetDirectoryClient("").GetFileClient(Program.DeviceId + fileName);
 
 			if (File.Exists(localFileName))
 			{

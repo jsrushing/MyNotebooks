@@ -79,11 +79,12 @@ namespace myJournal
             return je;
         }
 
-        public Journal Open(string journalToOpen = "")
+        public Journal Open()
         {
             Journal jRtrn = null;
+			var journalToOpen = this.Name;
 
-            try
+			try
             {
                 using(Stream stream = File.Open(journalToOpen.Length > 0 ? AppDomain.CurrentDomain.BaseDirectory + this.root + journalToOpen : this.FileName, FileMode.Open))
                 {
@@ -94,6 +95,7 @@ namespace myJournal
 				}
             }
             catch(Exception) { }
+
             return jRtrn;
         }
 

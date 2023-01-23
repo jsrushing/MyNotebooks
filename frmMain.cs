@@ -171,6 +171,7 @@ namespace myJournal.subforms
 				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"]);
 				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"]);
 				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFolder"]);
+				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"]);
 				File.Create(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFile"]).Close();
 				File.Create(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Close();
 			}
@@ -221,7 +222,7 @@ namespace myJournal.subforms
 			try
 			{
 				string fullJournalName = Program.DeviceId + "_" + ddlJournals.Text;
-				currentJournal = new Journal(fullJournalName).Open(fullJournalName);
+				currentJournal = new Journal(fullJournalName).Open();
 
 				if (currentJournal != null)
 				{
@@ -355,7 +356,7 @@ namespace myJournal.subforms
 			ddlJournals.Items.Clear();
 			ddlJournals.Text = string.Empty;
 
-			foreach (Journal j in Utilities.AllJournals()) { ddlJournals.Items.Add(j.Name.Remove(0, Program.DeviceId.Length + 1)); }
+			foreach (Journal j in Utilities.AllJournals()) { ddlJournals.Items.Add(j.Name); }
 
 				if(ddlJournals.Items.Count == 0)	// There will be no journals after an update so use the folders created in Form_Closing the last time the app was run.
 				{
