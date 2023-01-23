@@ -69,7 +69,12 @@ namespace myJournal
 			this.Save();
         }
 
-        public void Delete() { File.Delete(this.FileName); }
+        public async void Delete() 
+		{ 
+			File.Delete(this.FileName); 
+			AzureFileClient afc = new AzureFileClient();
+			await afc.DownloadOrDeleteFile(this.FileName, Program.AzurePassword + this.Name, true);
+		}
 
         public JournalEntry GetEntry(string _title, string _date)
         {
@@ -161,6 +166,15 @@ namespace myJournal
 				{ if (searchText.Length > 0 && entryText.Contains(searchText) ) { foundEntries.Add(je); }}
 			}
 			return foundEntries;
+		}
+
+		public bool SynchToAzure()
+		{
+			bool synchd = false;
+
+
+
+			return synchd;
 		}
     }
 }

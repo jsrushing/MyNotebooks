@@ -176,15 +176,11 @@ namespace myJournal.subforms
 				File.Create(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Close();
 			}
 
-			if (!File.Exists(Program.AppRoot + "\\deviceId"))   // get or create the device id
-			{	
-				Program.DeviceId = Guid.NewGuid().ToString() + "_";
-				File.WriteAllText(Program.AppRoot + "\\deviceId", Program.DeviceId); 
-			}
-			else { Program.DeviceId = File.ReadAllText(Program.AppRoot + "\\deviceId");}
-
 			LoadJournals();
 			ShowHideMenusAndControls(SelectionState.HideAll);
+
+			try { mnuJournal_Export.Enabled = Utilities.AllJournals().First(j => j.AllowCloud) != null; }
+			catch(InvalidOperationException) { mnuJournal_Export.Enabled = false; }
 		}
 
 		private void frmMain_FormClosing(object sender, FormClosingEventArgs e)

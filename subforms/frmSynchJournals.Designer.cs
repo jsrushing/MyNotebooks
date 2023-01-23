@@ -49,9 +49,9 @@
 			this.pnlMain.Controls.Add(this.lstJournalsToSynch);
 			this.pnlMain.Controls.Add(this.label1);
 			this.pnlMain.Controls.Add(this.btnOk);
-			this.pnlMain.Location = new System.Drawing.Point(12, 12);
+			this.pnlMain.Location = new System.Drawing.Point(12, 1);
 			this.pnlMain.Name = "pnlMain";
-			this.pnlMain.Size = new System.Drawing.Size(313, 255);
+			this.pnlMain.Size = new System.Drawing.Size(313, 263);
 			this.pnlMain.TabIndex = 9;
 			// 
 			// chkSelectAll
@@ -72,7 +72,7 @@
 			this.lstJournalsToSynch.Location = new System.Drawing.Point(7, 25);
 			this.lstJournalsToSynch.Name = "lstJournalsToSynch";
 			this.lstJournalsToSynch.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.lstJournalsToSynch.Size = new System.Drawing.Size(289, 184);
+			this.lstJournalsToSynch.Size = new System.Drawing.Size(289, 199);
 			this.lstJournalsToSynch.TabIndex = 0;
 			// 
 			// label1
@@ -86,7 +86,7 @@
 			// 
 			// btnOk
 			// 
-			this.btnOk.Location = new System.Drawing.Point(24, 223);
+			this.btnOk.Location = new System.Drawing.Point(24, 237);
 			this.btnOk.Name = "btnOk";
 			this.btnOk.Size = new System.Drawing.Size(75, 23);
 			this.btnOk.TabIndex = 4;
@@ -103,7 +103,7 @@
 			this.pnlResults.Controls.Add(this.btnClose);
 			this.pnlResults.Location = new System.Drawing.Point(19, 290);
 			this.pnlResults.Name = "pnlResults";
-			this.pnlResults.Size = new System.Drawing.Size(313, 255);
+			this.pnlResults.Size = new System.Drawing.Size(313, 264);
 			this.pnlResults.TabIndex = 10;
 			this.pnlResults.Visible = false;
 			// 
@@ -147,18 +147,19 @@
 			// 
 			// btnClose
 			// 
-			this.btnClose.Location = new System.Drawing.Point(17, 231);
+			this.btnClose.Location = new System.Drawing.Point(7, 241);
 			this.btnClose.Name = "btnClose";
 			this.btnClose.Size = new System.Drawing.Size(75, 23);
 			this.btnClose.TabIndex = 5;
 			this.btnClose.Text = "&Close";
 			this.btnClose.UseVisualStyleBackColor = true;
+			this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
 			// 
 			// frmSynchJournals
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(334, 279);
+			this.ClientSize = new System.Drawing.Size(334, 277);
 			this.Controls.Add(this.pnlResults);
 			this.Controls.Add(this.pnlMain);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -166,6 +167,7 @@
 			this.MinimizeBox = false;
 			this.Name = "frmSynchJournals";
 			this.Text = "Synch Journals";
+			this.Activated += new System.EventHandler(this.frmSynchJournals_Activated);
 			this.Load += new System.EventHandler(this.frmSynchJournals_Load);
 			this.pnlMain.ResumeLayout(false);
 			this.pnlMain.PerformLayout();

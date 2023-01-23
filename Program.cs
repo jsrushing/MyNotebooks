@@ -10,10 +10,12 @@ namespace myJournal
     {
 		public static string PIN = string.Empty;
 		public static List<ListViewItem> lstFonts = new List<ListViewItem>();
-		public static string AppRoot = AppDomain.CurrentDomain.BaseDirectory;
-		public static string AppVersion = string.Empty;
-		public static string DeviceId = string.Empty;
-		public static string AzureConnString = "DefaultEndpointsProtocol=https;AccountName=container1a;AccountKey=4YNQFl9klH9bp8ieKKfhwiVgiKlZKWieBlyzvu8zlm2hyL0HaR/x3XpbpFYjJ5VF4YgtaAR9sN4F+ASttv59jA==;EndpointSuffix=core.windows.net";
+		public static string AppRoot			= AppDomain.CurrentDomain.BaseDirectory;
+		public static string AppVersion			= string.Empty;
+		public static string AzurePassword		= string.Empty;
+		public static bool AzureFileExists		= false;
+		public static string AzureConnString	= "DefaultEndpointsProtocol=https;AccountName=container1a;AccountKey=4YNQFl9klH9bp8ieKKfhwiVgiKlZKWieBlyzvu8zlm2hyL0HaR/x3XpbpFYjJ5VF4YgtaAR9sN4F+ASttv59jA==;EndpointSuffix=core.windows.net";
+
 		/// <summary>
 		///  The main entry point for the application.
 		/// </summary>
