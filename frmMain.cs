@@ -146,7 +146,6 @@ namespace myJournal.subforms
 		Journal currentJournal;
 		JournalEntry currentEntry;
 		private bool firstSelection = true;
-		//private bool suppressSortByClick = true;
 		bool suppressDateClick = false;
 
 		private enum SelectionState
@@ -159,7 +158,7 @@ namespace myJournal.subforms
 
 		public frmMain() { InitializeComponent(); }
 
-		private void frmMain_Load(object sender, EventArgs e)
+		private async void frmMain_Load(object sender, EventArgs e)
 		{
 			System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
 			System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
@@ -174,6 +173,18 @@ namespace myJournal.subforms
 				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"]);
 				File.Create(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFile"]).Close();
 				File.Create(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Close();
+			}
+
+			frmAzurePwd frm = new frmAzurePwd(this);
+			frm.ShowDialog();
+			if(Program.AzurePassword.Length > 0) 
+			{ 
+				CloudSynchronizer cs = new CloudSynchronizer();
+				await cs.SynchWithCloud();
+				string title = cs.JournalsSynchd > 0 ? " synchd:" + cs.JournalsSynchd.ToString(): "";
+				title += cs.JournalsSkipped > 0 ? " skipped: " + cs.JournalsSkipped.ToString() : title;
+				title += cs.JournalsDownloaded > 0 ? " downloaded:" + cs.JournalsDownloaded.ToString() : title;
+				this.Text += title;
 			}
 
 			LoadJournals();
