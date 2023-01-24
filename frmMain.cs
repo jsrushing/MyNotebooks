@@ -519,7 +519,11 @@ namespace myJournal.subforms
 		}
 
 		private void mnuJournal_Export_Click(object sender, EventArgs e)
-		{ using(frmSynchJournals frm = new frmSynchJournals(this)) { frm.ShowDialog(); } }
+		{ using(frmSynchJournals frm = new frmSynchJournals(this))
+			{
+				frm.ShowDialog();
+				LoadJournals();
+			} }
 
 		private void mnuJournal_ForceBackup_Click(object sender, EventArgs e)
 		{

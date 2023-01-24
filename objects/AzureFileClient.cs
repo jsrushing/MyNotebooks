@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -8,26 +8,23 @@ using Azure;
 using Azure.Storage.Files.Shares;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.File;
+using myJournal.subforms;
 
 namespace myJournal.objects
 {
 	internal class AzureFileClient
 	{
+
 		public AzureFileClient() { }
 		
 
-		public async void UploadFile(string localFileName)
+		public void UploadFile(string localFileName)
 		{
 			var fileName					= localFileName.Substring(localFileName.LastIndexOf("\\") + 1);
-			ShareClient share = new ShareClient(Program.AzureConnString, "journals");
-			ShareDirectoryClient directory = share.GetDirectoryClient("");
-			ShareFileClient myFile = directory.GetFileClient(fileName);
-
-			//CloudStorageAccount storageAccount = CloudStorageAccount.Parse(Program.AzureConnString);
-			//CloudFileClient fileClient = storageAccount.CreateCloudFileClient();
-			//CloudFileShare share = fileClient.GetShareReference("journals");
-			//CloudFileDirectory directory = share.GetRootDirectoryReference();
-			//CloudFile myFile = directory.GetFileReference(Program.AzurePassword + fileName);
+			if(!fileName.StartsWith(Program.AzurePassword)) { fileName = Program.AzurePassword + fileName; }
+			ShareClient share				= new ShareClient(Program.AzureConnString, "journals");
+			ShareDirectoryClient directory	= share.GetDirectoryClient("");
+			ShareFileClient myFile			= directory.GetFileClient(fileName);
 
 
 			if (File.Exists(localFileName))
@@ -40,12 +37,13 @@ namespace myJournal.objects
 
 		public async Task DownloadOrDeleteFile(string localFileName, string AzFileName, bool deleteFile = false)
 		{
-			AzFileName = Program.AzurePassword + AzFileName;
+			//AzFileName = Program.AzurePassword + AzFileName;
 
-			using (var fileStream = new FileStream(localFileName + "\\" + AzFileName, FileMode.Create))
+			using (var fileStream = new FileStream(localFileName, FileMode.Create))
 			{
 				try
 				{
+					Program.AzureFileExists = false;
 					CloudStorageAccount storageAccount	= CloudStorageAccount.Parse(Program.AzureConnString);
 					CloudFileClient fileClient			= storageAccount.CreateCloudFileClient();
 					CloudFileShare share				= fileClient.GetShareReference("journals");
@@ -58,7 +56,7 @@ namespace myJournal.objects
 					
 					Program.AzureFileExists = true;
 				}
-				catch(Exception ex) { Program.AzureFileExists = false; }
+				catch(Exception) { }
 			}	
 		}
 
@@ -78,6 +76,21 @@ namespace myJournal.objects
 
 			if(resultSegment.Results.Count() > 0)
 			{ Program.AzurePassword = pwd + "_"; }
+		}
+
+		public async Task GetAzureFiles(string pwd)
+		{
+			CloudStorageAccount storageAccount = CloudStorageAccount.Parse(Program.AzureConnString);
+			CloudFileClient fileClient = storageAccount.CreateCloudFileClient();
+			CloudFileShare share = fileClient.GetShareReference("journals");
+			CloudFileDirectory root = share.GetRootDirectoryReference();
+			CloudFileDirectory myDirectory = root.GetDirectoryReference("journals");
+
+			FileRequestOptions options = new FileRequestOptions();
+			FileContinuationToken token = null;
+			FileResultSegment resultSegment = await root.ListFilesAndDirectoriesSegmentedAsync(pwd, null, token, options, null);
+
+			foreach(CloudFile file in resultSegment.Results) { Program.AzureFiles.Add(file.Name); }
 		}
 	}
 }

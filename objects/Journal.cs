@@ -1,8 +1,6 @@
 ﻿/* Journal object
- * 8/1//21
- *  * enhancements:
- *	08/09/22 001 Convert search function to LINQ.
- *	
+ * Created on: 8/1//21
+ * Created by: S. Rushing
  */
 using System;
 using System.Collections.Generic;
@@ -69,11 +67,13 @@ namespace myJournal
 			this.Save();
         }
 
-        public async void Delete() 
-		{ 
-			File.Delete(this.FileName); 
+		public async void Delete()
+		{
+			File.Delete(this.FileName);
 			AzureFileClient afc = new AzureFileClient();
-			await afc.DownloadOrDeleteFile(this.FileName, Program.AzurePassword + this.Name, true);
+			if (this.AllowCloud) { await afc.DownloadOrDeleteFile(this.FileName, Program.AzurePassword + this.Name, true); }
+			File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"] + this.Name);
+			File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"] + this.Name);
 		}
 
         public JournalEntry GetEntry(string _title, string _date)

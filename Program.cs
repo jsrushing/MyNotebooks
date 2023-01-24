@@ -15,6 +15,7 @@ namespace myJournal
 		public static string AzurePassword		= string.Empty;
 		public static bool AzureFileExists		= false;
 		public static string AzureConnString	= "DefaultEndpointsProtocol=https;AccountName=container1a;AccountKey=4YNQFl9klH9bp8ieKKfhwiVgiKlZKWieBlyzvu8zlm2hyL0HaR/x3XpbpFYjJ5VF4YgtaAR9sN4F+ASttv59jA==;EndpointSuffix=core.windows.net";
+		public static List<string> AzureFiles	= new List<string>();
 
 		/// <summary>
 		///  The main entry point for the application.

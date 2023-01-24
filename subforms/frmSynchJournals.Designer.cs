@@ -167,7 +167,6 @@
 			this.MinimizeBox = false;
 			this.Name = "frmSynchJournals";
 			this.Text = "Synch Journals";
-			this.Activated += new System.EventHandler(this.frmSynchJournals_Activated);
 			this.Load += new System.EventHandler(this.frmSynchJournals_Load);
 			this.pnlMain.ResumeLayout(false);
 			this.pnlMain.PerformLayout();
