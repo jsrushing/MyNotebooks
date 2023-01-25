@@ -69,9 +69,17 @@ namespace myJournal
 
 		public async void Delete()
 		{
+			if (this.AllowCloud) 
+			{ 
+				await AzureFileClient.DownloadOrDeleteFile(this.FileName, Program.AzurePassword + this.Name, true); 
+			}
+
+			DeleteBackups();
 			File.Delete(this.FileName);
-			AzureFileClient afc = new AzureFileClient();
-			if (this.AllowCloud) { await afc.DownloadOrDeleteFile(this.FileName, Program.AzurePassword + this.Name, true); }
+		}
+
+		private void DeleteBackups()
+		{
 			File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"] + this.Name);
 			File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"] + this.Name);
 		}
@@ -106,9 +114,12 @@ namespace myJournal
 
 		public void Rename(string newName)
 		{
+			DeleteBackups();
 			this.Name = newName;
+			this.FileName = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"] + this.Name;
 			this.Save();
 			File.Move(this.FileName, this.FileName.Substring(0, this.FileName.LastIndexOf("\\")) + "\\" + newName);
+			Backup();
 		}
 
         public void ReplaceEntry(JournalEntry jeToReplace, JournalEntry jeToInsert)
@@ -128,6 +139,7 @@ namespace myJournal
                 BinaryFormatter formatter = new BinaryFormatter();
                 formatter.Serialize(stream, this);
             }
+
 			Backup();
         }
 

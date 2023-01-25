@@ -88,7 +88,7 @@
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "frmAzurePwd";
-			this.Text = "Azure Password";
+			this.Text = "Create Azure Password";
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

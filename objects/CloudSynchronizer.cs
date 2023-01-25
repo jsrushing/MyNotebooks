@@ -14,18 +14,22 @@ namespace myJournal.objects
 		public int JournalsSynchd { get { return ItemsSynchd.Count; } }
 		public int JournalsSkipped { get { return ItemsSkipped.Count; } }
 		public int JournalsDownloaded { get { return ItemsDownloaded.Count; } }
+		public int JournalsBackedUp { get { return ItemsBackedUp.Count; } }
 
 		private List<string> ItemsSynchd = new List<string>();
 		private List<string> ItemsSkipped = new List<string>();
 		private List<string> ItemsDownloaded = new List<string>();
+		private List<string> ItemsBackedUp = new List<string>();
 
 		public CloudSynchronizer() { }
 
 		public async Task SynchWithCloud()
 		{
+			if(Program.AzurePassword.Length == 0) { return; }
+
 			var journalsFolder = ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"];
 			Journal j;
-			AzureFileClient client = new AzureFileClient();
+			//AzureFileClient client = new AzureFileClient();
 			List<Journal> allJournals = Utilities.AllJournals();
 
 			for (int i = 0; i < allJournals.Count; i++)
@@ -40,7 +44,7 @@ namespace myJournal.objects
 					// synch local to azure
 					try
 					{
-						await client.DownloadOrDeleteFile(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + j.Name, Program.AzurePassword + j.Name);
+						await AzureFileClient.DownloadOrDeleteFile(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + j.Name, Program.AzurePassword + j.Name);
 						downloadedAzureJournal = Program.AzureFileExists ? new FileInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + j.Name) : null;
 					}
 					catch (Exception ex) { error = ex.Message; }
@@ -49,7 +53,7 @@ namespace myJournal.objects
 					{
 						File.Create(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + Program.AzurePassword + j.Name).Close();
 						File.Copy(Program.AppRoot + journalsFolder + j.Name, Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + Program.AzurePassword + j.Name, true);
-						client.UploadFile(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + Program.AzurePassword + j.Name);
+						AzureFileClient.UploadFile(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + Program.AzurePassword + j.Name);
 						File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + Program.AzurePassword + j.Name);
 						ItemsSynchd.Add(j.Name + " (created in cloud)");
 					}
@@ -60,12 +64,12 @@ namespace myJournal.objects
 
 						if (localJournal.Length > downloadedAzureJournal.Length)  // local file has been updated
 						{
-							client.UploadFile(Program.AppRoot + journalsFolder + j.Name);
+							AzureFileClient.UploadFile(Program.AppRoot + journalsFolder + j.Name);
 							ItemsSynchd.Add(j.Name + (" (syncd to cloud)"));
 						}
 						else if (downloadedAzureJournal.Length > localJournal.Length)   // Azure file has been updated
 						{
-							await client.DownloadOrDeleteFile(Program.AppRoot + journalsFolder, j.Name);
+							await AzureFileClient.DownloadOrDeleteFile(Program.AppRoot + journalsFolder, j.Name);
 							ItemsDownloaded.Add(j.Name + (" (syncd from cloud)"));
 						}
 						else { ItemsSkipped.Add(j.Name + " (files match)"); }           // files match				
@@ -76,12 +80,12 @@ namespace myJournal.objects
 				else
 				{
 					j.Backup();
-					ItemsSkipped.Add(j.Name + " (backed up locally)");
+					ItemsBackedUp.Add(j.Name + " (backed up locally)");
 				}
 			}
 
 			// Synch from Azure ...
-			await client.GetAzureFiles(Program.AzurePassword);
+			await AzureFileClient.GetAzureFiles(Program.AzurePassword);
 			List<string> localFiles = Utilities.AllJournalNames();
 			//var remoteJournalsToSynch = new List<string>();
 
@@ -92,7 +96,7 @@ namespace myJournal.objects
 				if (!localFiles.Contains(localFName))
 				{
 					//remoteJournalsToSynch.Add(s);
-					await client.DownloadOrDeleteFile(Program.AppRoot + journalsFolder + localFName, s);
+					await AzureFileClient.DownloadOrDeleteFile(Program.AppRoot + journalsFolder + localFName, s);
 					ItemsSynchd.Add(localFName + " (added from cloud)");
 				}
 			}

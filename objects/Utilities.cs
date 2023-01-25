@@ -25,12 +25,7 @@ namespace myJournal.objects
 		public static List<string> AllJournalNames()
 		{
 			List<string> lstRtrn = new List<string>();
-
-			foreach(Journal j in AllJournals())
-			{
-				lstRtrn.Add(j.Name);
-			}
-
+			foreach(Journal j in AllJournals()) { lstRtrn.Add(j.Name); }
 			return lstRtrn;
 		}
 

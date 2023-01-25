@@ -6,15 +6,27 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using myJournal.objects;
+using System.IO;
+using encrypt_decrypt_string;
 
 namespace myJournal.subforms
 {
 	public partial class frmAzurePwd : Form
 	{
+		private bool CreatingNewPwd = false;
+
 		public frmAzurePwd(Form parent)
 		{
 			InitializeComponent();
-			Utilities.SetStartPosition(this, parent);
+			CreatingNewPwd = !File.Exists(Program.AppRoot + "ap");
+
+			if (!CreatingNewPwd)
+			{
+				Program.AzurePassword = EncryptDecrypt.Decrypt(File.ReadAllText(Program.AppRoot + "ap"));
+				Program.AzurePassword = EncryptDecrypt.Decrypt(File.ReadAllText(Program.AppRoot + "ap"));
+				this.Hide();
+			}
+			else { Utilities.SetStartPosition(this, parent); btnContinue.Text = "Create"; }
 		}
 
 		private void btnCancel_Click(object sender, EventArgs e)
@@ -32,20 +44,24 @@ namespace myJournal.subforms
 			}
 			else
 			{
-				AzureFileClient azureFileClient = new AzureFileClient();
-				await azureFileClient.CheckAzurePassword(txtPwd.Text);
+				//AzureFileClient azureFileClient = new AzureFileClient();
+				await AzureFileClient.CheckAzurePassword(txtPwd.Text);
+
+				if(Program.AzurePassword.Length == 0)
+				{
+					File.WriteAllText(Program.AppRoot + "ap", EncryptDecrypt.Encrypt(txtPwd.Text + "_"));
+					Program.AzurePassword = txtPwd.Text + "_";
+				}
 
 				if (Program.AzurePassword.Length > 0)
 				{
-					Close();
+					this.Close();
 				}
 				else
 				{
-					lblError.Text = "Password not found";
+					lblError.Text = "Password is already used";
 					lblError.Visible = true;
 				}
-				
-
 			}
 		}
 

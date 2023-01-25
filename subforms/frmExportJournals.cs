@@ -27,8 +27,8 @@ namespace myJournal.subforms
 
 		private void btnOk_Click(object sender, EventArgs e)
 		{
-			AzureFileClient fileClient = new AzureFileClient();
-			fileClient.UploadFile("C:\\inetpub\\testfile4.txt");
+			//AzureFileClient fileClient = new AzureFileClient();
+			AzureFileClient.UploadFile("C:\\inetpub\\testfile4.txt");
 			this.Close();
 			
 			// email methods tried

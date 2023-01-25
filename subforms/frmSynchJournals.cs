@@ -46,7 +46,7 @@ namespace myJournal.subforms
 			List<string> itemsSynchd	= new List<string>();
 			var journalsFolder			= ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"];
 			Journal j;
-			AzureFileClient client = new AzureFileClient();
+			//AzureFileClient client = new AzureFileClient();
 
 			// Synch to Azure
 			for (int i = 0; i < lstJournalsToSynch.SelectedItems.Count; i++)
@@ -61,7 +61,7 @@ namespace myJournal.subforms
 					// synch local to azure
 					try
 					{
-						await client.DownloadOrDeleteFile(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + j.Name, Program.AzurePassword + j.Name);
+						await AzureFileClient.DownloadOrDeleteFile(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + j.Name, Program.AzurePassword + j.Name);
 						downloadedAzureJournal = Program.AzureFileExists ? new FileInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + j.Name) : null;
 					}
 					catch (Exception ex) { error = ex.Message; }
@@ -70,7 +70,7 @@ namespace myJournal.subforms
 					{
 						File.Create(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + Program.AzurePassword + j.Name).Close();
 						File.Copy(Program.AppRoot + journalsFolder + j.Name, Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + Program.AzurePassword + j.Name, true);
-						client.UploadFile(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + Program.AzurePassword + j.Name);
+						AzureFileClient.UploadFile(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + Program.AzurePassword + j.Name);
 						File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + Program.AzurePassword + j.Name);
 						itemsSynchd.Add(j.Name + " (created in cloud)");
 					}
@@ -81,12 +81,12 @@ namespace myJournal.subforms
 
 						if (localJournal.Length > downloadedAzureJournal.Length)  // local file has been updated
 						{
-							client.UploadFile(Program.AppRoot + journalsFolder + j.Name);
+							AzureFileClient.UploadFile(Program.AppRoot + journalsFolder + j.Name);
 							itemsSynchd.Add(j.Name + (" (syncd to cloud)"));
 						}
 						else if (downloadedAzureJournal.Length > localJournal.Length)   // Azure file has been updated
 						{
-							await client.DownloadOrDeleteFile(Program.AppRoot + journalsFolder, j.Name);
+							await AzureFileClient.DownloadOrDeleteFile(Program.AppRoot + journalsFolder, j.Name);
 							itemsSynchd.Add(j.Name + (" (syncd from cloud)"));
 						}
 						else { itemsSkipped.Add(j.Name + " (files match)"); }           // files match				
@@ -102,9 +102,8 @@ namespace myJournal.subforms
 			}
 
 			// Synch from Azure ...
-			await client.GetAzureFiles(Program.AzurePassword);
+			await AzureFileClient.GetAzureFiles(Program.AzurePassword);
 			List<string> localFiles = Utilities.AllJournalNames();
-			//var remoteJournalsToSynch = new List<string>();
 
 			foreach (string s in Program.AzureFiles)
 			{
@@ -112,8 +111,7 @@ namespace myJournal.subforms
 
 				if (!localFiles.Contains(localFName))
 				{
-					//remoteJournalsToSynch.Add(s);
-					await client.DownloadOrDeleteFile(Program.AppRoot + journalsFolder + localFName, s);
+					await AzureFileClient.DownloadOrDeleteFile(Program.AppRoot + journalsFolder + localFName, s);
 					itemsSynchd.Add(localFName + " (added from cloud)");
 				}
 			}

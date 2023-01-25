@@ -175,15 +175,19 @@ namespace myJournal.subforms
 				File.Create(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Close();
 			}
 
+			// synch
 			frmAzurePwd frm = new frmAzurePwd(this);
-			frm.ShowDialog();
+			//frm.ShowDialog();			
+
 			if(Program.AzurePassword.Length > 0) 
 			{ 
+				frm.Close();
 				CloudSynchronizer cs = new CloudSynchronizer();
 				await cs.SynchWithCloud();
-				string title = cs.JournalsSynchd > 0 ? " synchd:" + cs.JournalsSynchd.ToString(): "";
-				title += cs.JournalsSkipped > 0 ? " skipped: " + cs.JournalsSkipped.ToString() : title;
-				title += cs.JournalsDownloaded > 0 ? " downloaded:" + cs.JournalsDownloaded.ToString() : title;
+				string title = " synchd:" + cs.JournalsSynchd.ToString();
+				title += cs.JournalsSkipped > 0 ? " skipped: " + cs.JournalsSkipped.ToString() : "";
+				title += cs.JournalsDownloaded > 0 ? " downloaded:" + cs.JournalsDownloaded.ToString() : "";
+				title += cs.JournalsBackedUp > 0 ? " backed up:" + cs.JournalsBackedUp.ToString() : "";
 				this.Text += title;
 			}
 
