@@ -1,0 +1,15 @@
+first run (no local key file)
+	ask if user has a key
+		if yes, 
+			Get user input.
+			if you can find the key in the cloud, 
+				create the local file
+				set Program.AzurePassword
+			if not display 'key not found'
+		if no,
+			ask for user input to create new key
+				if key exists,
+					display 'key already in use'
+				if not exists,			
+					create key (encrypted from user input) in cloud
+					set Program.AzurePassword

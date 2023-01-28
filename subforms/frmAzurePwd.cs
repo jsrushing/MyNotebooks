@@ -22,8 +22,8 @@ namespace myJournal.subforms
 
 			if (!CreatingNewPwd)
 			{
-				Program.AzurePassword = EncryptDecrypt.Decrypt(File.ReadAllText(Program.AppRoot + "ap"));
-				Program.AzurePassword = EncryptDecrypt.Decrypt(File.ReadAllText(Program.AppRoot + "ap"));
+				Program.AzurePassword = File.ReadAllText(Program.AppRoot + "ap");
+				Program.AzurePassword = File.ReadAllText(Program.AppRoot + "ap");
 				this.Hide();
 			}
 			else { Utilities.SetStartPosition(this, parent); btnContinue.Text = "Create"; }

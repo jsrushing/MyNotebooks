@@ -45,21 +45,21 @@ namespace myJournal.objects
 					try
 					{
 						await AzureFileClient.DownloadOrDeleteFile(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + j.Name, Program.AzurePassword + j.Name);
-						downloadedAzureJournal = Program.AzureFileExists ? new FileInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + j.Name) : null;
+						if (Program.AzureFileExists)
+						{ downloadedAzureJournal = Program.AzureFileExists ? new FileInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + "_" + j.Name) : null; }
 					}
 					catch (Exception ex) { error = ex.Message; }
 
 					if (!Program.AzureFileExists) // the Azure file didn't exist so upload it
 					{
-						File.Create(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + Program.AzurePassword + j.Name).Close();
-						File.Copy(Program.AppRoot + journalsFolder + j.Name, Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + Program.AzurePassword + j.Name, true);
-						AzureFileClient.UploadFile(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + Program.AzurePassword + j.Name);
-						File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + Program.AzurePassword + j.Name);
+						//File.Create(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + Program.AzurePassword + "_" + j.Name).Close();
+						File.Copy(Program.AppRoot + journalsFolder + j.Name, Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + Program.AzurePassword + "_" + j.Name, true);
+						AzureFileClient.UploadFile(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + Program.AzurePassword + "_" + j.Name);
+						File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + Program.AzurePassword + "_" + j.Name);
 						ItemsSynchd.Add(j.Name + " (created in cloud)");
 					}
 					else
 					{
-
 						FileInfo localJournal = new FileInfo(Program.AppRoot + journalsFolder + j.Name);
 
 						if (localJournal.Length > downloadedAzureJournal.Length)  // local file has been updated
@@ -87,11 +87,10 @@ namespace myJournal.objects
 			// Synch from Azure ...
 			await AzureFileClient.GetAzureFiles(Program.AzurePassword);
 			List<string> localFiles = Utilities.AllJournalNames();
-			//var remoteJournalsToSynch = new List<string>();
 
 			foreach (string s in Program.AzureFiles)
 			{
-				var localFName = s.Remove(0, Program.AzurePassword.Length);
+				var localFName = s.Remove(0, Program.AzurePassword.Length + 1);
 
 				if (!localFiles.Contains(localFName))
 				{

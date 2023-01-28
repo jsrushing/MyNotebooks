@@ -60,6 +60,8 @@ namespace myJournal.objects
 				}
 				catch(Exception) { }
 			}	
+			
+			File.Delete(localFileName);
 		}
 
 		public static async Task CheckAzurePassword(string pwd)
