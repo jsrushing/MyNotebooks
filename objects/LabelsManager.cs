@@ -13,10 +13,6 @@ namespace myJournal.objects
 {
 	public class LabelsManager
 	{
-		private bool Renaming = false;
-		private bool Adding = false;
-		private bool Deleting = false;
-		private bool EditingAllJournals;
 		public bool ActionTaken { get; private set; }
 		public Journal Journal { private get; set; }
 
