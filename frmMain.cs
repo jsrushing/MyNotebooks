@@ -177,17 +177,16 @@ namespace myJournal.subforms
 
 			// synch
 			frmAzurePwd frm = new frmAzurePwd(this);
-			//frm.ShowDialog();			
 
-			if(Program.AzurePassword.Length > 0) 
-			{ 
+			if (Program.AzurePassword.Length > 0)
+			{
 				frm.Close();
 				CloudSynchronizer cs = new CloudSynchronizer();
 				await cs.SynchWithCloud();
 				string title = " synchd:" + cs.JournalsSynchd.ToString();
-				title += cs.JournalsSkipped > 0 ? " skipped: " + cs.JournalsSkipped.ToString() : "";
-				title += cs.JournalsDownloaded > 0 ? " downloaded:" + cs.JournalsDownloaded.ToString() : "";
-				title += cs.JournalsBackedUp > 0 ? " backed up:" + cs.JournalsBackedUp.ToString() : "";
+				title += " skipped: " + cs.JournalsSkipped.ToString();
+				title += " downloaded:" + cs.JournalsDownloaded.ToString();
+				title += " backed up:" + cs.JournalsBackedUp.ToString();
 				this.Text += title;
 			}
 
@@ -198,7 +197,7 @@ namespace myJournal.subforms
 			catch(InvalidOperationException) { mnuJournal_Export.Enabled = false; }
 		}
 
-		private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
+		private async void frmMain_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			string parent = Directory.GetParent(Program.AppRoot).FullName;
 			string targetDir = Directory.GetParent(parent).FullName;
@@ -211,6 +210,19 @@ namespace myJournal.subforms
 			CopyDirectory(new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFolder"]), new DirectoryInfo(targetDirSettings), false, true);
 			CopyDirectory(new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"]), new DirectoryInfo(targetDirBackups), false, true);
 			CopyDirectory(new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"]), new DirectoryInfo(targetDirForcedBackups), false, true);
+
+			if (Program.AzurePassword.Length > 0)
+			{
+				CloudSynchronizer cs = new CloudSynchronizer();
+				await cs.SynchWithCloud();
+
+				DirectoryInfo di = new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"]);
+
+				foreach (FileInfo file in di.GetFiles())
+				{
+					file.Delete();
+				}
+			}
 		}
 
 		private void frmMain_Resize(object sender, EventArgs e)
@@ -533,12 +545,20 @@ namespace myJournal.subforms
 			}
 		}
 
-		private void mnuJournal_Export_Click(object sender, EventArgs e)
-		{ using(frmSynchJournals frm = new frmSynchJournals(this))
+		private async void mnuJournal_Export_Click(object sender, EventArgs e)
+		{
+			//using (frmSynchJournals frm = new frmSynchJournals(this))
+			//{
+			//	frm.ShowDialog();
+			//	LoadJournals();
+			//}
+
+			if (Program.AzurePassword.Length > 0)
 			{
-				frm.ShowDialog();
-				LoadJournals();
-			} }
+				CloudSynchronizer cs = new CloudSynchronizer();
+				await cs.SynchWithCloud();
+			}
+		}
 
 		private void mnuJournal_ForceBackup_Click(object sender, EventArgs e)
 		{

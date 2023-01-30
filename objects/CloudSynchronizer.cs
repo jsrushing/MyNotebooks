@@ -25,8 +25,6 @@ namespace myJournal.objects
 
 		public async Task SynchWithCloud()
 		{
-			if(Program.AzurePassword.Length == 0) { return; }
-
 			var journalsFolder = ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"];
 			Journal j;
 			//AzureFileClient client = new AzureFileClient();
@@ -44,21 +42,13 @@ namespace myJournal.objects
 					// synch local to azure
 					try
 					{
-						await AzureFileClient.DownloadOrDeleteFile(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + j.Name, Program.AzurePassword + j.Name);
+						await AzureFileClient.DownloadOrDeleteFile(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + "_" + j.Name, Program.AzurePassword + "_" + j.Name);
 						if (Program.AzureFileExists)
 						{ downloadedAzureJournal = Program.AzureFileExists ? new FileInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + "_" + j.Name) : null; }
 					}
 					catch (Exception ex) { error = ex.Message; }
 
-					if (!Program.AzureFileExists) // the Azure file didn't exist so upload it
-					{
-						//File.Create(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + Program.AzurePassword + "_" + j.Name).Close();
-						File.Copy(Program.AppRoot + journalsFolder + j.Name, Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + Program.AzurePassword + "_" + j.Name, true);
-						AzureFileClient.UploadFile(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + Program.AzurePassword + "_" + j.Name);
-						File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + Program.AzurePassword + "_" + j.Name);
-						ItemsSynchd.Add(j.Name + " (created in cloud)");
-					}
-					else
+					if (Program.AzureFileExists)
 					{
 						FileInfo localJournal = new FileInfo(Program.AppRoot + journalsFolder + j.Name);
 
@@ -74,7 +64,14 @@ namespace myJournal.objects
 						}
 						else { ItemsSkipped.Add(j.Name + " (files match)"); }           // files match				
 
+						File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + "_" + j.Name);
+					}
+					else
+					{
+						File.Copy(Program.AppRoot + journalsFolder + j.Name, Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + j.Name, true);
+						AzureFileClient.UploadFile(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + j.Name);
 						File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + j.Name);
+						ItemsSynchd.Add(j.Name + " (created in cloud)");
 					}
 				}
 				else
@@ -82,6 +79,8 @@ namespace myJournal.objects
 					j.Backup();
 					ItemsBackedUp.Add(j.Name + " (backed up locally)");
 				}
+
+				File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + "_" + j.Name);
 			}
 
 			// Synch from Azure ...
