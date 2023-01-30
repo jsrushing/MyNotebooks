@@ -61,14 +61,10 @@ namespace myJournal.objects
 
 					if (deleteFile)
 					{ await myFile.DeleteAsync(); }
-					else { await myFile.DownloadToStreamAsync(stream); }
-	
-					//File.Delete(stream.Name);
-					Program.AzureFileExists = true;
+					else { await myFile.DownloadToStreamAsync(stream); Program.AzureFileExists = true;}	
 				}
 				catch(Exception) { }
 			}
-
 		}
 
 		public static async Task CheckNewAzurePassword(string key, bool creatingKey)

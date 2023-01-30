@@ -98,11 +98,11 @@ namespace myJournal.subforms
 
 		private void txtPwd_TextChanged(object sender, EventArgs e)
 		{
-			lblError_EnterKey.Visible = false;
 			TextBox tbx = (TextBox)sender;
-			if (tbx.TextLength > 7)
-			{ btnEnterKey.Enabled = true; btnCreateKey.Enabled = true; }
-			else { lblError_CreateKey.Visible = false; lblError_EnterKey.Visible = false; }
+			lblError_EnterKey.Visible = false;
+			lblError_CreateKey.Visible = false;
+			btnEnterKey.Enabled = tbx.TextLength > 7;
+			btnCreateKey.Enabled = tbx.TextLength > 7;
 		}
 	}
 }

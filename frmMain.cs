@@ -183,11 +183,11 @@ namespace myJournal.subforms
 				frm.Close();
 				CloudSynchronizer cs = new CloudSynchronizer();
 				await cs.SynchWithCloud();
-				string title = " synchd:" + cs.JournalsSynchd.ToString();
-				title += " skipped: " + cs.JournalsSkipped.ToString();
-				title += " downloaded:" + cs.JournalsDownloaded.ToString();
-				title += " backed up:" + cs.JournalsBackedUp.ToString();
-				this.Text += title;
+				string title = " synchd:"		+ cs.JournalsSynchd.ToString();
+				title		+= " skipped: "		+ cs.JournalsSkipped.ToString();
+				title		+= " downloaded:"	+ cs.JournalsDownloaded.ToString();
+				title		+= " backed up:"	+ cs.JournalsBackedUp.ToString();
+				this.Text	+= title;
 			}
 
 			LoadJournals();
@@ -197,32 +197,19 @@ namespace myJournal.subforms
 			catch(InvalidOperationException) { mnuJournal_Export.Enabled = false; }
 		}
 
-		private async void frmMain_FormClosing(object sender, FormClosingEventArgs e)
+		private void frmMain_FormClosing(object sender, FormClosingEventArgs e) 
 		{
-			string parent = Directory.GetParent(Program.AppRoot).FullName;
-			string targetDir = Directory.GetParent(parent).FullName;
-			string targetDirJournals = Directory.GetParent(targetDir).FullName + "\\lastjournals";
-			string targetDirBackups = Directory.GetParent(targetDir).FullName + "\\lastjournals\\backups";
-			string targetDirForcedBackups = Directory.GetParent(targetDir).FullName + "\\lastjournals\\backups\\forced";
-			string targetDirSettings = Directory.GetParent(targetDir).FullName + "\\lastsettings";
+			string parent					= Directory.GetParent(Program.AppRoot).FullName;
+			string targetDir				= Directory.GetParent(parent).FullName;
+			string targetDirJournals		= Directory.GetParent(targetDir).FullName + "\\lastjournals";
+			string targetDirBackups			= Directory.GetParent(targetDir).FullName + "\\lastjournals\\backups";
+			string targetDirForcedBackups	= Directory.GetParent(targetDir).FullName + "\\lastjournals\\backups\\forced";
+			string targetDirSettings		= Directory.GetParent(targetDir).FullName + "\\lastsettings";
 
 			CopyDirectory(new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]), new DirectoryInfo(targetDirJournals), false, true);
 			CopyDirectory(new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFolder"]), new DirectoryInfo(targetDirSettings), false, true);
 			CopyDirectory(new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"]), new DirectoryInfo(targetDirBackups), false, true);
 			CopyDirectory(new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"]), new DirectoryInfo(targetDirForcedBackups), false, true);
-
-			if (Program.AzurePassword.Length > 0)
-			{
-				CloudSynchronizer cs = new CloudSynchronizer();
-				await cs.SynchWithCloud();
-
-				DirectoryInfo di = new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"]);
-
-				foreach (FileInfo file in di.GetFiles())
-				{
-					file.Delete();
-				}
-			}
 		}
 
 		private void frmMain_Resize(object sender, EventArgs e)

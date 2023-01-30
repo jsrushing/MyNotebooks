@@ -132,13 +132,16 @@ namespace myJournal
 			this.Entries.Insert(idx, jeToInsert);
 		}
 
-        public void Save()
+        public async void Save()
         {
             using (Stream stream = File.Open(this.FileName, FileMode.Create))
             {
                 BinaryFormatter formatter = new BinaryFormatter();
                 formatter.Serialize(stream, this);
             }
+
+			CloudSynchronizer cs = new CloudSynchronizer();
+			await cs.SynchWithCloud(this);
 
 			Backup();
         }

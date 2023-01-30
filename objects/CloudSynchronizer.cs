@@ -23,12 +23,13 @@ namespace myJournal.objects
 
 		public CloudSynchronizer() { }
 
-		public async Task SynchWithCloud()
+		public async Task SynchWithCloud(Journal journal = null)
 		{
 			var journalsFolder = ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"];
 			Journal j;
 			//AzureFileClient client = new AzureFileClient();
-			List<Journal> allJournals = Utilities.AllJournals();
+			List<Journal> allJournals = new List<Journal>();
+			if (journal == null) { allJournals = Utilities.AllJournals(); } else { allJournals.Add(journal); }
 
 			for (int i = 0; i < allJournals.Count; i++)
 			{
@@ -93,7 +94,6 @@ namespace myJournal.objects
 
 				if (!localFiles.Contains(localFName))
 				{
-					//remoteJournalsToSynch.Add(s);
 					await AzureFileClient.DownloadOrDeleteFile(Program.AppRoot + journalsFolder + localFName, s);
 					ItemsSynchd.Add(localFName + " (added from cloud)");
 				}
