@@ -1,26 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
+﻿/* Sync with cloud.
+ * 1/21/23
+ */
+using System;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Azure;
 using Azure.Storage.Files.Shares;
 using encrypt_decrypt_string;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.File;
-using myJournal.subforms;
 
 namespace myJournal.objects
 {
 	internal static class AzureFileClient
 	{
-		//CloudStorageAccount storageAccount;
-		//CloudFileClient fileClient;
-		//CloudFileShare share;
-		//CloudFileDirectory root;
-		////CloudFileDirectory myDirectory;
+		public enum CompareResult
+		{
+			
+		}
 
 		public static void UploadFile(string localFileName, string shareName = "journals")
 		{
@@ -46,16 +44,18 @@ namespace myJournal.objects
 			}
 		}
 
-		public static async Task DownloadOrDeleteFile(string localFileName, string AzFileName, bool deleteFile = false)
+		public static async Task DownloadOrDeleteFile(string localFileName, string AzFileName, FileMode mode = FileMode.Create, bool deleteFile = false, string shareName = "journals")
 		{
-			using (var stream = new FileStream(localFileName, FileMode.Create))
+			Program.AzureFileExists = false;
+
+			using (var stream = new FileStream(localFileName, mode))
 			{
 				try
 				{
 					Program.AzureFileExists				= false;
 					CloudStorageAccount storageAccount	= CloudStorageAccount.Parse(Program.AzureConnString);
 					CloudFileClient fileClient			= storageAccount.CreateCloudFileClient();
-					CloudFileShare share				= fileClient.GetShareReference("journals");
+					CloudFileShare share				= fileClient.GetShareReference(shareName);
 					CloudFileDirectory root				= share.GetRootDirectoryReference();
 					CloudFile myFile					= root.GetFileReference(AzFileName);
 

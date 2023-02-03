@@ -44,7 +44,11 @@ namespace myJournal.subforms
 				mnuRename_InCurrentJournal.Text = "In '" + _jrnl.Name + "'";
 				mnuDelete_InCurrentJournal.Text = "In '" + _jrnl.Name + "'";
 			}
-			else { mnuRename_InCurrentJournal.Visible = false; mnuDelete_InCurrentJournal.Visible = false; }
+			else 
+			{ 
+				mnuRename_InCurrentJournal.Visible = false; 
+				mnuDelete_InCurrentJournal.Visible = false; 
+			}
 
 			Utilities.SetStartPosition(this, parent);
 		}
@@ -55,8 +59,7 @@ namespace myJournal.subforms
 		{
 			this.Size = this.MinimumSize;
 
-			foreach(Control c in this.Controls)
-			{ if (c.GetType() == typeof(Panel)) { c.Location = new Point(0,0); } }
+			foreach(Control c in this.Controls) if (c.GetType() == typeof(Panel)) c.Location = new Point(0,0);
 
 			ShowPanel(pnlJournalPINs);
 			ShowHideOccurrences();
@@ -116,6 +119,9 @@ namespace myJournal.subforms
 			{ 
 				AddLabelToUIListbox();
 				SaveLabels(); 
+				
+				// add sync to cloud - labels and settings
+
 				pnlNewLabelName.Visible = false;
 				Utilities.Labels_PopulateLabelsList(null, lstLabels);
 				lstOccurrences.Items.Clear();

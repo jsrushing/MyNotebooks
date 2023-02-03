@@ -113,11 +113,14 @@ namespace myJournal.objects
 			}
 		}
 
-		public static void Labels_Save(string[] arrLabels)
+		public async static void Labels_Save(string[] arrLabels)
 		{
 			StringBuilder sb = new StringBuilder();
 			foreach (string lbl in arrLabels) { sb.AppendLine(lbl); }
 			File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"], sb.ToString());
+
+			CloudSynchronizer cs = new CloudSynchronizer();
+			await cs.SyncLabelsAndSettings();
 		}
 
 		public static void Labels_SetCheckedLabels(CheckedListBox clb, JournalEntry entry)

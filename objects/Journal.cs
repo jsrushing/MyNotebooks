@@ -70,9 +70,7 @@ namespace myJournal
 		public async void Delete()
 		{
 			if (this.AllowCloud) 
-			{ 
-				await AzureFileClient.DownloadOrDeleteFile(this.FileName, Program.AzurePassword + this.Name, true); 
-			}
+			{ await AzureFileClient.DownloadOrDeleteFile(this.FileName, Program.AzurePassword + this.Name, FileMode.Create, true);  }
 
 			DeleteBackups();
 			File.Delete(this.FileName);
