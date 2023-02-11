@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.Extensions.FileProviders;
 using static myJournal.objects.Utilities;
+using System.CodeDom;
 
 namespace myJournal.objects
 {
@@ -72,19 +73,18 @@ namespace myJournal.objects
 							File.Move(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + "_" + j.Name, 
 								Program.AppRoot + journalsFolder + j.Name, true);
 
-							//await AzureFileClient.DownloadOrDeleteFile(Program.AppRoot + journalsFolder, j.Name);
-
 							ItemsDownloaded.Add(j.Name + (" (syncd from cloud)"));
 						}
 						else { ItemsSkipped.Add(j.Name + " (files match)"); }           // files match				
 
-						//File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + "_" + j.Name);
 					}
 					else
 					{
 						AzureFileClient.UploadFile(Program.AppRoot + journalsFolder + j.Name);
 						ItemsSynchd.Add(j.Name + " (created in cloud)");
 					}
+
+					File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + "_" + j.Name);
 				}
 				else
 				{
@@ -92,7 +92,7 @@ namespace myJournal.objects
 					ItemsBackedUp.Add(j.Name + " (backed up locally)");
 				}
 
-				File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + "_" + j.Name);
+				//File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + "_" + j.Name);
 			}
 
 			// Synch from Azure ...
@@ -142,9 +142,9 @@ namespace myJournal.objects
 			{	
 				if(localLabels.CreationTime < downloadedAzureLabels.CreationTime) 
 				{ 
-					AzureFileClient.UploadFile(sLocalSettingsFile, "labelsandsettings"); 
+					AzureFileClient.UploadFile(sLocalLabelsFile, "labelsandsettings");	
 				}
-				if(localLabels.CreationTime > downloadedAzureLabels.CreationTime) 
+				else if(localLabels.CreationTime > downloadedAzureLabels.CreationTime) 
 				{
 					File.Move(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + "_labels", sLocalLabelsFile, true);
 				}
@@ -154,33 +154,37 @@ namespace myJournal.objects
 				AzureFileClient.UploadFile(sLocalLabelsFile);
 			}
 
-			if (localSettings.Length > 0)
+			try
 			{
-				try
+				if (localSettings.Length > 0)
 				{
-					await AzureFileClient.DownloadOrDeleteFile(sLocalSettingsFile, Program.AzurePassword + "_settings", FileMode.Open, false, "labelsandsettings");
-					downloadedAzureSettings = Program.AzureFileExists ? new FileInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + "_settings") : null;
-				}
-				catch(Exception ex ) { Err = ex.Message;}
-			}
+					try
+					{
+						await AzureFileClient.DownloadOrDeleteFile(sLocalSettingsFile, Program.AzurePassword + "_settings", FileMode.Open, false, "labelsandsettings");
+						downloadedAzureSettings = Program.AzureFileExists ? new FileInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + "_settings") : null;
+					}
+					catch(Exception ex ) { Err = ex.Message;}
 
-			if (downloadedAzureSettings != null)
-			{
-				if (localSettings.CreationTime > downloadedAzureSettings.CreationTime) 
-				{ 
-					AzureFileClient.UploadFile(sLocalSettingsFile, "labelsandsettings"); 
+					if (downloadedAzureSettings != null)
+					{
+						if (localSettings.CreationTime > downloadedAzureSettings.CreationTime) 
+						{ 
+							AzureFileClient.UploadFile(sLocalSettingsFile, "labelsandsettings");
+						}
+						if (downloadedAzureSettings.CreationTime > localLabels.CreationTime) 
+						{
+							File.Move(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + "_labels", sLocalSettingsFile, true);
+						}
+					}
 				}
-				if (downloadedAzureSettings.CreationTime > localLabels.CreationTime) 
+				else
 				{
-					// move temp
-					File.Move(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + "_labels", sLocalSettingsFile, true);
-					//await AzureFileClient.DownloadOrDeleteFile(sLocalSettingsFile, "settings", FileMode.Open, false, "labelsandsettings"); 
+					AzureFileClient.UploadFile(sLocalSettingsFile);
 				}
 			}
-			else
-			{
-				AzureFileClient.UploadFile(sLocalSettingsFile);
-			}
+			catch (Exception ex) { Err = ex.Message; }
+
+			File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + "_settings");
 		}
 	}
 }
