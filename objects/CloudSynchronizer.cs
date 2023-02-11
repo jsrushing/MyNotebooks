@@ -62,12 +62,12 @@ namespace myJournal.objects
 
 					if (downloadedAzureJournal != null)
 					{
-						if (localJournal.LastWriteTime < downloadedAzureJournal.LastWriteTime)  // local file has been updated
+						if (localJournal.LastWriteTime > downloadedAzureJournal.LastWriteTime)  // local file has been updated
 						{
 							AzureFileClient.UploadFile(Program.AppRoot + journalsFolder + j.Name);
 							ItemsSynchd.Add(j.Name + (" (syncd to cloud)"));
 						}
-						else if (downloadedAzureJournal.LastWriteTime < localJournal.LastWriteTime)   // Azure file has been updated
+						else if (localJournal.LastWriteTime < downloadedAzureJournal.LastWriteTime)   // Azure file has been updated
 						{
 							File.Move(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + "_" + j.Name, 
 								Program.AppRoot + journalsFolder + j.Name, true);
@@ -78,7 +78,7 @@ namespace myJournal.objects
 						}
 						else { ItemsSkipped.Add(j.Name + " (files match)"); }           // files match				
 
-						File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + "_" + j.Name);
+						//File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + "_" + j.Name);
 					}
 					else
 					{
