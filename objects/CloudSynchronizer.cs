@@ -47,7 +47,7 @@ namespace myJournal.objects
 			j2.FileName = fileinfo2.FullName;
 			j2 = j2.Open(true);
 
-			return j1.LastSaved < j2.LastSaved ? ComparisonResult.FirstNewer : j1.LastSaved > j2.LastSaved ? ComparisonResult.SecondNewer : ComparisonResult.Same;
+			return j1.LastSaved > j2.LastSaved ? ComparisonResult.FirstNewer : j1.LastSaved < j2.LastSaved ? ComparisonResult.SecondNewer : ComparisonResult.Same;
 		}
 
 		public async Task SynchWithCloud(bool SynchSettings = false, Journal journal = null)
@@ -107,8 +107,6 @@ namespace myJournal.objects
 					j.Backup();
 					ItemsBackedUp.Add(j.Name + " (backed up locally)");
 				}
-
-				//File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + "_" + j.Name);
 			}
 
 			// Synch from Azure ...
