@@ -181,7 +181,7 @@ namespace myJournal.subforms
 			{
 				frm.Close();
 				CloudSynchronizer cs = new CloudSynchronizer();
-				await cs.SynchWithCloud();
+				await cs.SynchWithCloud(true);
 				string title = " synchd:"		+ cs.JournalsSynchd.ToString();
 				title		+= " skipped: "		+ cs.JournalsSkipped.ToString();
 				title		+= " downloaded:"	+ cs.JournalsDownloaded.ToString();
@@ -510,6 +510,7 @@ namespace myJournal.subforms
 				if (frm.NewJournalName != null){
 					Journal j = new Journal(frm.NewJournalName);
 					j.AllowCloud = frm.AllowCloud;
+					j.LastSaved = DateTime.Now;
 					j.Create();
 					LoadJournals();
 				}
@@ -554,11 +555,11 @@ namespace myJournal.subforms
 			//	LoadJournals();
 			//}
 
-			if (Program.AzurePassword.Length > 0)
-			{
-				CloudSynchronizer cs = new CloudSynchronizer();
-				await cs.SynchWithCloud();
-			}
+			//if (Program.AzurePassword.Length > 0)
+			//{
+			//	CloudSynchronizer cs = new CloudSynchronizer();
+			//	await cs.SynchWithCloud();
+			//}
 		}
 
 		private void mnuJournal_ForceBackup_Click(object sender, EventArgs e)

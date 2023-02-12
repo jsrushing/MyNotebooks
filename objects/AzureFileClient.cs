@@ -88,10 +88,9 @@ namespace myJournal.objects
 			CloudFileShare share				= fileClient.GetShareReference("journals");
 			CloudFileDirectory root				= share.GetRootDirectoryReference();
 			CloudFileDirectory myDirectory		= root.GetDirectoryReference("journals");
-
-			FileRequestOptions options = new FileRequestOptions();
-			FileContinuationToken token = null;
-			FileResultSegment resultSegment = await root.ListFilesAndDirectoriesSegmentedAsync(pwd, null, token, options, null);
+			FileRequestOptions options			= new FileRequestOptions();
+			FileContinuationToken token			= null;
+			FileResultSegment resultSegment		= await root.ListFilesAndDirectoriesSegmentedAsync(pwd, null, token, options, null);
 
 			foreach(CloudFile file in resultSegment.Results) { Program.AzureFiles.Add(file.Name); }
 		}

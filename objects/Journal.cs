@@ -12,6 +12,7 @@ using System.Text;
 using myJournal.subforms;
 using myJournal.objects;
 using System.Windows.Forms;
+using Org.BouncyCastle.Crypto.Agreement.JPake;
 
 namespace myJournal
 {
@@ -19,7 +20,8 @@ namespace myJournal
     public class Journal
     {
 		public string Name { get; set; }
-        string FileName { get; set; }
+		public DateTime LastSaved { get; set; }
+        public string FileName { get; set; }
         public List<JournalEntry> Entries = new List<JournalEntry>();
         string root = "journals\\";
 		public bool AllowCloud;
@@ -31,7 +33,7 @@ namespace myJournal
             if(_name != null)
             {
                 this.Name = _name;
-                this.FileName = AppDomain.CurrentDomain.BaseDirectory + this.root + this.Name;
+                this.FileName = Program.AppRoot + this.root + this.Name;
 			}
         }
 
@@ -82,28 +84,32 @@ namespace myJournal
 			File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"] + this.Name);
 		}
 
-        public JournalEntry GetEntry(string _title, string _date)
+        public JournalEntry GetEntry(string Title, string Date)
         {
             JournalEntry je = null;
-			try { je = this.Entries.First(a => a.ClearTitle() + a.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) == _title + _date); }
+			try { je = this.Entries.First(a => a.ClearTitle() + a.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) == Title + Date); }
             catch(Exception ex) { Console.Write(ex.Message); }
             return je;
         }
 
-        public Journal Open()
+        public Journal Open(bool useFileName = false)
         {
             Journal jRtrn = null;
-			var journalToOpen = this.Name;
+			var journalToOpen = Program.AppRoot + this.root;
+			journalToOpen = useFileName ? this.FileName : journalToOpen + this.Name;
 
 			try
             {
-                using(Stream stream = File.Open(journalToOpen.Length > 0 ? AppDomain.CurrentDomain.BaseDirectory + this.root + journalToOpen : this.FileName, FileMode.Open))
-                {
-                    BinaryFormatter formatter = new BinaryFormatter();
-                    jRtrn = (Journal)formatter.Deserialize(stream);
-					jRtrn.FileName = AppDomain.CurrentDomain.BaseDirectory + this.root + journalToOpen;
-					jRtrn.Name = journalToOpen;
-				}
+				if(journalToOpen.Length > 0)
+				{
+					using(Stream stream = File.Open(journalToOpen, FileMode.Open))
+					{
+						BinaryFormatter formatter = new BinaryFormatter();
+						jRtrn = (Journal)formatter.Deserialize(stream);
+						jRtrn.FileName = journalToOpen;
+						jRtrn.Name = journalToOpen.Substring(journalToOpen.LastIndexOf("\\") + 1);
+					}
+				}	
             }
             catch(Exception) { }
 
@@ -132,6 +138,8 @@ namespace myJournal
 
         public async void Save()
         {
+			this.LastSaved = DateTime.Now;
+
             using (Stream stream = File.Open(this.FileName, FileMode.Create))
             {
                 BinaryFormatter formatter = new BinaryFormatter();
@@ -139,7 +147,7 @@ namespace myJournal
             }
 
 			CloudSynchronizer cs = new CloudSynchronizer();
-			await cs.SynchWithCloud(this);
+			await cs.SynchWithCloud(false, this);
 
 			Backup();
         }
@@ -179,15 +187,6 @@ namespace myJournal
 				{ if (searchText.Length > 0 && entryText.Contains(searchText) ) { foundEntries.Add(je); }}
 			}
 			return foundEntries;
-		}
-
-		public bool SynchToAzure()
-		{
-			bool synchd = false;
-
-
-
-			return synchd;
 		}
     }
 }
