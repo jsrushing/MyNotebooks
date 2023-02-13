@@ -117,7 +117,10 @@ namespace myJournal.objects
 		{
 			StringBuilder sb = new StringBuilder();
 			foreach (string lbl in arrLabels) { sb.AppendLine(lbl); }
-			File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"], sb.ToString());
+			//File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]);
+			//string d = "-" + DateTime.Now.ToString("MMddyy_HHmmss");
+			//File.WriteAllText(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"] + "-" + DateTime.Now.ToString("MMddyy_HHmmss"), sb.ToString());
+			File.WriteAllText(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"], sb.ToString());
 
 			CloudSynchronizer cs = new CloudSynchronizer();
 			await cs.SyncLabelsAndSettings();
