@@ -22,15 +22,16 @@ namespace myJournal.subforms
 		private LabelsSortType sort = LabelsSortType.None;
 		private string OriginalPIN = Program.PIN;
 		private Dictionary<string, string> DictJournals = new Dictionary<string, string>();
+		private LabelsManager lm = new LabelsManager();
 
 		public bool ActionTaken { get; private set; }
 
-		private enum LabelsSortType
-		{
-			Ascending,
-			Descending,
-			None
-		}
+		//private enum LabelsSortType
+		//{
+		//	Ascending,
+		//	Descending,
+		//	None
+		//}
 
 		private Journal CurrentJournal;
 
@@ -114,6 +115,7 @@ namespace myJournal.subforms
 		{
 			string sOldLabelName = lstLabels.SelectedItem != null ? lstLabels.SelectedItem.ToString() : string.Empty;
 			bool bEdited = true;
+			this.Cursor = Cursors.WaitCursor;
 
 			if (Adding) 
 			{ 
@@ -166,7 +168,7 @@ namespace myJournal.subforms
 					}
 					else    // It was a delete. If label exists in any journal, leave in list, otherwise remove from list.
 					{
-						if (!LabelExistsInAnyJournal(txtLabelName.Text)) 
+						if (lm.JournalsContainingLabel(txtLabelName.Text).Count == 0) 
 						{ 
 							lstLabels.Items.RemoveAt(lstLabels.SelectedIndex);
 							lstOccurrences.Items.Clear();
@@ -185,6 +187,7 @@ namespace myJournal.subforms
 				txtLabelName.Text = string.Empty;
 				pnlNewLabelName.Visible = false;
 				PopulateOccurrences();
+				this.Cursor = Cursors.Default;
 			}
 		}
 
@@ -197,7 +200,7 @@ namespace myJournal.subforms
 				frm.ShowDialog(this);
 
 				if (frm.Result == frmMessage.ReturnResult.Yes)
-				{ foreach (string lbl in lstOrphanedLabels.SelectedItems) { Utilities.Labels_Delete(lbl); } }
+				{ foreach (string lbl in lstOrphanedLabels.SelectedItems) { lm.Delete(lbl); } }
 
 				if (lstOrphanedLabels.SelectedItems.Count > 0)
 				{
@@ -219,23 +222,14 @@ namespace myJournal.subforms
 			else { lstOrphanedLabels.SelectedItems.Clear(); }
 		}
 
-		private bool LabelExistsInAnyJournal(string labelName)
-		{
-			foreach (Journal jrnl in Utilities.AllJournals())
-			{
-				SetProgramPINForSelectedJournal(jrnl);
-				if(jrnl.Entries.Where(t => ("," + t.ClearLabels() + ",").Contains("," + labelName + ",")).ToList().Count > 0)
-				{ return true; }	
-			}
-			return false;
-		}
-
 		private void lblSortType_Click(object sender, EventArgs e)
 		{
+			LabelsManager lm = new LabelsManager();	
+			
 			switch (sort)
 			{
 				case LabelsSortType.None:
-					Utilities.Labels_PopulateLabelsList(null, lstLabels, Utilities.LabelsSortType.None);
+					Utilities.Labels_PopulateLabelsList(null, lstLabels, 
 					lblSortType.Text = "sort A-Z";
 					sort = LabelsSortType.Ascending;
 					break;
@@ -342,7 +336,7 @@ namespace myJournal.subforms
 			List<string> lstOrphans = new List<string>();
 			lstOrphanedLabels.Items.Clear();
 
-			foreach(string label in Utilities.Labels_GetAll())
+			foreach(string label in lm.AllLables)
 			{
 				PopulateOccurrences(label);
 				if(lstOccurrences.Items.Count == 1) { lstOrphans.Add(label); }
@@ -403,25 +397,29 @@ namespace myJournal.subforms
 				this.Cursor = Cursors.WaitCursor;
 				lstOccurrences.Items.Clear();
 				var currentPIN = Program.PIN;
+				List<Journal> journalsWithLabel = lm.JournalsContainingLabel(labelName);
 
-				foreach (Journal jrnl in Utilities.AllJournals())
+				if (journalsWithLabel.Count > 0)
 				{
-					SetProgramPINForSelectedJournal(jrnl);
-					List<JournalEntry> foundLables = jrnl.Entries.Where(t => ("," + t.ClearLabels() + ",").Contains("," + labelName + ",")).ToList();
-
-					if (foundLables.Count > 0)
+					foreach (Journal jrnl in journalsWithLabel)
 					{
-						lstOccurrences.Items.Add("in '" + jrnl.Name + "'");
-						lstEntryObjects.Items.Add("");
+						SetProgramPINForSelectedJournal(jrnl);
+						List<JournalEntry> foundLables = jrnl.Entries.Where(t => ("," + t.ClearLabels() + ",").Contains("," + labelName + ",")).ToList();
 
-						foreach (JournalEntry je in foundLables) 
+						if (foundLables.Count > 0)
 						{
-							lstOccurrences.Items.Add("   > " + je.ClearTitle());
-							lstEntryObjects.Items.Add(new KeyValuePair<Journal, JournalEntry>(jrnl, je));
-						}
+							lstOccurrences.Items.Add("in '" + jrnl.Name + "'");
+							lstEntryObjects.Items.Add("");
+
+							foreach (JournalEntry je in foundLables) 
+							{
+								lstOccurrences.Items.Add("   > " + je.ClearTitle());
+								lstEntryObjects.Items.Add(new KeyValuePair<Journal, JournalEntry>(jrnl, je));
+							}
 							
-						lstOccurrences.Items.Add("-----------------------");
-						lstEntryObjects.Items.Add("");
+							lstOccurrences.Items.Add("-----------------------");
+							lstEntryObjects.Items.Add("");
+						}
 					}
 				}
 

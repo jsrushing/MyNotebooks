@@ -607,7 +607,9 @@ namespace myJournal.subforms
 					{
 						File.Copy(fName, tgt, true);
 						filesCopied = true;
-						Utilities.Labels_FindOrphansInOneJournal(new Journal(jrnlName).Open(), true);
+						LabelsManager lm = new LabelsManager();
+						if(lm.FindOrphansInAJournal(new Journal(jrnlName).Open(), true).Count > 0) { } // code for orphans being found
+						//Utilities.Labels_FindOrphansInOneJournal(new Journal(jrnlName).Open(), true);
 					}
 
 					ok2copy = true;

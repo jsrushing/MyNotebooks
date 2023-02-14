@@ -20,8 +20,8 @@ namespace myJournal.objects
 		public enum ComparisonResult
 		{
 			Same,
-			LocalNewer,
-			CloudNewer
+			KeepLocal,
+			KeepCloud
 		}
 
 		public int JournalsSynchd { get { return ItemsSynchd.Count; } }
@@ -50,21 +50,37 @@ namespace myJournal.objects
 			if(fileinfo1.Length == fileinfo2.Length) { return ComparisonResult.Same; }
 			else
 			{
-				return j1.LastSaved > j2.LastSaved ? ComparisonResult.LocalNewer : j1.LastSaved < j2.LastSaved ? ComparisonResult.CloudNewer : ComparisonResult.Same;
+				return j1.LastSaved > j2.LastSaved ? ComparisonResult.KeepLocal : j1.LastSaved < j2.LastSaved ? ComparisonResult.KeepCloud : ComparisonResult.Same;
 			}
+		}
+
+		private ComparisonResult CompareLabelsAndSettings(string[] localLables , string[] cloudLabels) 
+		{ 
+			LabelsManager lm = new LabelsManager();
+			DateTime localLabelsFileDate = lm.GetLabelsFileDate(localLables);
+			DateTime cloudLabelsFileDate = lm.GetLabelsFileDate(cloudLabels);
+			return localLabelsFileDate > cloudLabelsFileDate ? ComparisonResult.KeepLocal : localLabelsFileDate < cloudLabelsFileDate ? ComparisonResult.KeepCloud : ComparisonResult.Same;
 		}
 
 		private ComparisonResult CompareLabelsAndSettings(FileInfo fileinfo1, FileInfo fileinfo2)
 		{
-			DateTime dt1 = fileinfo1.CreationTime;
-			DateTime dt2 = fileinfo2.CreationTime;
+			string[] localLabels = Directory.GetFiles(fileinfo1.FullName);
+			string[] cloudLabels = Directory.GetFiles(fileinfo2.FullName);
+			LabelsManager lm = new LabelsManager();
+			DateTime localLabelsFileDate = lm.GetLabelsFileDate(localLabels);
+			DateTime cloudLabelsFileDate = lm.GetLabelsFileDate(cloudLabels);
+			return localLabelsFileDate > cloudLabelsFileDate ? ComparisonResult.KeepLocal : localLabelsFileDate < cloudLabelsFileDate ? ComparisonResult.KeepCloud : ComparisonResult.Same;
 
-			if (fileinfo1.Length == fileinfo2.Length) { return ComparisonResult.Same; }
-			else
-			{
-				return dt1 > dt2 ? ComparisonResult.LocalNewer : dt1 < dt2 ? ComparisonResult.CloudNewer : ComparisonResult.Same;
-			}
-//			return fileinfo1.CreationTime > fileinfo2.CreationTime ? ComparisonResult.LocalNewer : fileinfo1.CreationTime < fileinfo2.CreationTime ? ComparisonResult.CloudNewer : ComparisonResult.Same;	
+
+			//DateTime dt1 = fileinfo1.LastWriteTime;
+			//DateTime dt2 = fileinfo2.LastWriteTime;
+
+			//if (fileinfo1.Length == fileinfo2.Length) { return ComparisonResult.Same; }
+			//else
+			//{
+			//return dt1 < dt2 ? ComparisonResult.KeepLocal : dt1 > dt2 ? ComparisonResult.KeepCloud : ComparisonResult.Same;
+			//}
+			//return d1.LastWriteTime > d1.LastWriteTime ? ComparisonResult.LocalNewer : d1.LastWriteTime < d2.LastWriteTime ? ComparisonResult.CloudNewer : ComparisonResult.Same;	
 		}
 
 		public async Task SynchWithCloud(bool SynchSettings = false, Journal journal = null)
@@ -99,11 +115,11 @@ namespace myJournal.objects
 							case ComparisonResult.Same:
 								ItemsSkipped.Add(j.Name + " (files match)");
 								break;
-							case ComparisonResult.LocalNewer:
+							case ComparisonResult.KeepLocal:
 								AzureFileClient.UploadFile(journalsFolder + j.Name);
 								ItemsSynchd.Add(j.Name + (" (syncd to cloud)"));
 								break;
-							case ComparisonResult.CloudNewer:
+							case ComparisonResult.KeepCloud:
 								File.Move(tempFolder + "_" + j.Name, journalsFolder + j.Name, true);
 								ItemsDownloaded.Add(j.Name + (" (syncd from cloud)"));
 								break;
@@ -166,14 +182,15 @@ namespace myJournal.objects
 
 					if (downloadedAzureLabels != null)
 					{
+						
 						switch(CompareLabelsAndSettings(localLabels, downloadedAzureLabels))
 						{
 							case ComparisonResult.Same:
 								break;
-							case ComparisonResult.LocalNewer:
+							case ComparisonResult.KeepLocal:
 								AzureFileClient.UploadFile(sLocalLabelsFile, "labelsandsettings");
 								break;
-							case ComparisonResult.CloudNewer:
+							case ComparisonResult.KeepCloud:
 								File.Move(tempFolder, sLocalLabelsFile, true);
 								break;	
 						}
@@ -206,10 +223,10 @@ namespace myJournal.objects
 						{
 							case ComparisonResult.Same:
 								break;
-							case ComparisonResult.LocalNewer:
+							case ComparisonResult.KeepLocal:
 								AzureFileClient.UploadFile(sLocalSettingsFile, "labelsandsettings");
 								break;
-							case ComparisonResult.CloudNewer:
+							case ComparisonResult.KeepCloud:
 								File.Move(tempFolder, sLocalSettingsFile, true);
 								break;
 						}

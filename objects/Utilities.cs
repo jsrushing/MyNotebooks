@@ -15,12 +15,12 @@ namespace myJournal.objects
 {
 	public static class Utilities
 	{
-		public enum LabelsSortType
-		{
-			Ascending,
-			Descending,
-			None
-		}
+		//public enum LabelsSortType
+		//{
+		//	Ascending,
+		//	Descending,
+		//	None
+		//}
 
 		public static List<string> AllJournalNames()
 		{
@@ -43,50 +43,49 @@ namespace myJournal.objects
 			return jrnlReturn;
 		}
 
-		public static void Labels_Add(List<string> labelsToAdd)
-		{
-			string[] newLabels = ((labelsToAdd.ToArray()).Except(Labels_GetAll())).ToArray();
-			File.AppendAllLines(AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"], newLabels);
-		}
+		//public static void Labels_Add(List<string> labelsToAdd)
+		//{
+		//	string[] newLabels = ((labelsToAdd.ToArray()).Except(Labels_GetAll())).ToArray();
+		//	File.AppendAllLines(AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"], newLabels);
+		//}
 
-		public static void Labels_Delete(string labelName)
-		{
-			Labels_Save(File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Where(c => c != labelName).ToArray());
-		}
+		//public static void Labels_Delete(string labelName)
+		//{
+		//	Labels_Save(File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Where(c => c != labelName).ToArray());
+		//}
 
-		public static List<string> Labels_FindOrphansInOneJournal(Journal journal, bool addFoundOrphansToLabels = false)
-		{
-			List<string> lstReturn = new List<string>();
-			string[] allLabels = Labels_GetAll();
+		//public static List<string> Labels_FindOrphansInOneJournal(Journal journal, bool addFoundOrphansToLabels = false)
+		//{
+		//	List<string> lstReturn = new List<string>();
+		//	string[] allLabels = Labels_GetAll();
 
-			foreach(JournalEntry je in journal.Entries)
-			{ 
-				foreach(string jeLabel in je.ClearLabels().Split(",")) 
-				{ if (jeLabel.Length > 0 && !allLabels.Contains(jeLabel) && !lstReturn.Contains(jeLabel)) 
-					{ lstReturn.Add(jeLabel); } 
-				} 
-			}
+		//	foreach(JournalEntry je in journal.Entries)
+		//	{ 
+		//		foreach(string jeLabel in je.ClearLabels().Split(",")) 
+		//		{ if (jeLabel.Length > 0 && !allLabels.Contains(jeLabel) && !lstReturn.Contains(jeLabel)) 
+		//			{ lstReturn.Add(jeLabel); } 
+		//		} 
+		//	}
 
-			if (addFoundOrphansToLabels) { Labels_Add(lstReturn); }
-			return lstReturn;
-		}
+		//	if (addFoundOrphansToLabels) { Labels_Add(lstReturn); }
+		//	return lstReturn;
+		//}
 
-		public static string[] Labels_GetAll(LabelsSortType sort = LabelsSortType.None)
-		{
-			string[] labels = File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]);
+		//public static string[] Labels_GetAll(LabelsSortType sort = LabelsSortType.None)
+		//{
+		//	string[] labels = File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]);
+		//	//labels = labels.Take(labels.Count() - 1).ToArray();
+		//	Array.Sort(labels);
 
-			switch (sort)
-			{
-				case LabelsSortType.Descending:
-					Array.Sort(labels);
-					break;
-				case LabelsSortType.Ascending:
-					Array.Sort(labels);
-					Array.Reverse(labels);
-					break;
-			}
-			return labels;
-		}
+		//	switch (sort)
+		//	{
+		//		case LabelsSortType.Ascending:
+		//			Array.Reverse(labels);
+		//			break;
+		//	}
+
+		//	return labels;
+		//}
 
 		public static string Labels_GetCheckedLabels(CheckedListBox cbx)
 		{
@@ -103,8 +102,9 @@ namespace myJournal.objects
 		{
 			if (clb != null) { clb.Items.Clear(); }
 			if (lb != null) { lb.Items.Clear(); }
+			LabelsManager lm = new LabelsManager();	
 
-			foreach (string label in Labels_GetAll(sort))
+			foreach (string label in lm.GetAllLabels_ExcludeDate(sort))
 			{
 				if (lb != null)
 				{ lb.Items.Add(label); }
@@ -113,18 +113,15 @@ namespace myJournal.objects
 			}
 		}
 
-		public async static void Labels_Save(string[] arrLabels)
-		{
-			StringBuilder sb = new StringBuilder();
-			foreach (string lbl in arrLabels) { sb.AppendLine(lbl); }
-			//File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]);
-			//string d = "-" + DateTime.Now.ToString("MMddyy_HHmmss");
-			//File.WriteAllText(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"] + "-" + DateTime.Now.ToString("MMddyy_HHmmss"), sb.ToString());
-			File.WriteAllText(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"], sb.ToString());
+		//public async static void Labels_Save(string[] arrLabels)
+		//{
+		//	StringBuilder sb = new StringBuilder();
+		//	foreach (string lbl in arrLabels) { sb.AppendLine(lbl); }
+		//	File.WriteAllText(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"], sb.ToString());
 
-			CloudSynchronizer cs = new CloudSynchronizer();
-			await cs.SyncLabelsAndSettings();
-		}
+		//	CloudSynchronizer cs = new CloudSynchronizer();
+		//	await cs.SyncLabelsAndSettings();
+		//}
 
 		public static void Labels_SetCheckedLabels(CheckedListBox clb, JournalEntry entry)
 		{
