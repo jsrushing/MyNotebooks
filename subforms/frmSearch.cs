@@ -18,7 +18,8 @@ namespace myJournal.subforms
 		{
 			InitializeComponent();
 			journalsToSearch.Add(jrnl);
-			Utilities.Labels_PopulateLabelsList(lstLabelsForSearch);
+			LabelsManager.PopulateLabelsList(lstLabelsForSearch);
+			//Utilities.Labels_PopulateLabelsList(lstLabelsForSearch);
 			Utilities.SetStartPosition(this, parent);
 		}
 

@@ -56,9 +56,9 @@ namespace myJournal.objects
 
 		private ComparisonResult CompareLabelsAndSettings(string[] localLables , string[] cloudLabels) 
 		{ 
-			LabelsManager lm = new LabelsManager();
-			DateTime localLabelsFileDate = lm.GetLabelsFileDate(localLables);
-			DateTime cloudLabelsFileDate = lm.GetLabelsFileDate(cloudLabels);
+			//LabelsManager lm = new LabelsManager();
+			DateTime localLabelsFileDate = LabelsManager.GetLabelsFileDate(localLables);
+			DateTime cloudLabelsFileDate = LabelsManager.GetLabelsFileDate(cloudLabels);
 			return localLabelsFileDate > cloudLabelsFileDate ? ComparisonResult.KeepLocal : localLabelsFileDate < cloudLabelsFileDate ? ComparisonResult.KeepCloud : ComparisonResult.Same;
 		}
 
@@ -66,9 +66,9 @@ namespace myJournal.objects
 		{
 			string[] localLabels = Directory.GetFiles(fileinfo1.FullName);
 			string[] cloudLabels = Directory.GetFiles(fileinfo2.FullName);
-			LabelsManager lm = new LabelsManager();
-			DateTime localLabelsFileDate = lm.GetLabelsFileDate(localLabels);
-			DateTime cloudLabelsFileDate = lm.GetLabelsFileDate(cloudLabels);
+			//LabelsManager lm = new LabelsManager();
+			DateTime localLabelsFileDate = LabelsManager.GetLabelsFileDate(localLabels);
+			DateTime cloudLabelsFileDate = LabelsManager.GetLabelsFileDate(cloudLabels);
 			return localLabelsFileDate > cloudLabelsFileDate ? ComparisonResult.KeepLocal : localLabelsFileDate < cloudLabelsFileDate ? ComparisonResult.KeepCloud : ComparisonResult.Same;
 
 

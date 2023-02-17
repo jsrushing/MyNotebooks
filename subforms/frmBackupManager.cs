@@ -72,7 +72,7 @@ namespace myJournal.subforms
 					File.Move(backupFilePath, journalsFolderPath, true);
 					using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.Message, "The backup is restored.")) { frm2.ShowDialog();}	
 					BackupRestored = true;
-					if (isForcedBackupRestore) { Utilities.Labels_Add(Utilities.Labels_FindOrphansInOneJournal(new Journal(truncatedForcedFileName).Open())); }
+					//if (isForcedBackupRestore) { LabelsManager.Add(LabelsManager.FindOrphansInOneJournal(new Journal(truncatedForcedFileName).Open()); }
 				}
 			}
 

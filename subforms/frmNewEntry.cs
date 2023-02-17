@@ -6,6 +6,7 @@ using System.Configuration;
 using System.Drawing;
 using System.Windows.Forms;
 using myJournal.objects;
+using Org.BouncyCastle.Asn1.Sec;
 
 namespace myJournal.subforms
 {
@@ -18,18 +19,18 @@ namespace myJournal.subforms
 		private string			originalText_Full;
 		private bool			isDirty = false;
 		private string			originalTitle;
-		private LabelsSortType	sort = LabelsSortType.None;
+		private LabelsManager.LabelsSortType sort = LabelsManager.LabelsSortType.None;
 
 		public bool saved { get; private set; }
 		//public bool preserveOriginalText { get; set; }
 		private bool preserveOriginalText;
 
-		private enum LabelsSortType
-		{
-			Ascending,
-			Descending,
-			None
-		}
+		//private enum LabelsSortType
+		//{
+		//	Ascending,
+		//	Descending,
+		//	None
+		//}
 
 		public frmNewEntry(Form parent, Journal journal, JournalEntry entryToEdit = null, bool disallowOriginalTextEdit = false)
 		{
@@ -53,7 +54,7 @@ namespace myJournal.subforms
 			originalTitle = this.Text;
 			//ddlFonts.DataSource = Program.lstFonts;
 			//ddlFonts.DisplayMember = "text";
-			sort = LabelsSortType.None;
+			sort = LabelsManager.LabelsSortType.None;
 			//lblSortType_Click(null, null);
 			SortLabels();
 
@@ -78,7 +79,8 @@ namespace myJournal.subforms
 					rtbNewEntry.Text = entry.ClearText();
 				}
 
-				Utilities.Labels_SetCheckedLabels(clbLabels, entry);
+				LabelsManager.CheckedLabels_Set(clbLabels, entry);
+				//Utilities.Labels_SetCheckedLabels(clbLabels, entry);
 				rtbNewEntry.Focus();
 				rtbNewEntry.SelectionStart = 0;
 			}
@@ -110,7 +112,7 @@ namespace myJournal.subforms
 		private void lblManageLabels_Click(object sender, EventArgs e)
 		{
 			using (frmLabelsManager frm = new frmLabelsManager(this, this.currentJournal)) { frm.ShowDialog(); }	
-			Utilities.Labels_PopulateLabelsList(clbLabels);
+			LabelsManager.PopulateLabelsList(clbLabels);
 		}
 
 		private void lblSortType_Click(object sender, EventArgs e) { SortLabels(); }
@@ -176,7 +178,7 @@ namespace myJournal.subforms
 
 		private void Save()
 		{
-			JournalEntry newEntry = new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, rtbNewEntry.Rtf, Utilities.Labels_GetCheckedLabels(clbLabels), false);
+			JournalEntry newEntry = new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, rtbNewEntry.Rtf, LabelsManager.CheckedLabels_Get(clbLabels), false);
 
 			if(entry == null)
 			{
@@ -216,20 +218,20 @@ namespace myJournal.subforms
 		{
 			switch (sort)
 			{
-				case LabelsSortType.None:
-					Utilities.Labels_PopulateLabelsList(clbLabels, null, Utilities.LabelsSortType.None);
+				case LabelsManager. LabelsSortType.None:
+					LabelsManager.PopulateLabelsList(clbLabels, null, LabelsManager.LabelsSortType.None);
 					lblSortType.Text = "sort A-Z";
-					sort = LabelsSortType.Ascending;
+					sort = LabelsManager.LabelsSortType.Ascending;
 					break;
-				case LabelsSortType.Ascending:
-					Utilities.Labels_PopulateLabelsList(clbLabels, null, Utilities.LabelsSortType.Descending);
+				case LabelsManager.LabelsSortType.Ascending:
+					LabelsManager.PopulateLabelsList(clbLabels, null, LabelsManager.LabelsSortType.Descending);
 					lblSortType.Text = "sort Z-A";
-					sort = LabelsSortType.Descending;
+					sort = LabelsManager.LabelsSortType.Descending;
 					break;
-				case LabelsSortType.Descending:
-					Utilities.Labels_PopulateLabelsList(clbLabels, null, Utilities.LabelsSortType.Ascending);
+				case LabelsManager.LabelsSortType.Descending:
+					LabelsManager.PopulateLabelsList(clbLabels, null, LabelsManager.LabelsSortType.Ascending);
 					lblSortType.Text = "unsorted";
-					sort = LabelsSortType.None;
+					sort = LabelsManager.LabelsSortType.None;
 					break;
 			}
 		}

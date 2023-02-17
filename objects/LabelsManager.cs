@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.IO;
 using static myJournal.objects.Utilities;
 using System.Runtime.CompilerServices;
+using System.Windows.Forms;
 
 namespace myJournal.objects
 {
@@ -30,13 +31,13 @@ namespace myJournal.objects
 			//_currentJournal = journal == null ? null : journal;
 		}
 
-		public void Add(string[] lables)
+		public static void Add(string[] lables)
 		{
-				string[] newLabels = ((lables).Except(GetAllLabels_ExcludeDate())).ToArray();
+				string[] newLabels = ((lables).Except(GetLabels_NotFileDate())).ToArray();
 				File.AppendAllLines(AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"], newLabels);
 		}
 
-		public void Delete(string labelName)
+		public static void Delete(string labelName)
 		{
 			Save(File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Where(c => c != labelName).ToList());
 		}
@@ -44,7 +45,7 @@ namespace myJournal.objects
 		public List<string> FindOrphansInAJournal(Journal journal, bool addFoundOrphansToLabels = false)
 		{
 			List<string> lstReturn = new List<string>();
-			string[] allLabels = GetAllLabels_ExcludeDate();
+			string[] allLabels = GetLabels_NotFileDate();
 
 			foreach (JournalEntry je in journal.Entries)
 			{
@@ -59,7 +60,7 @@ namespace myJournal.objects
 			return lstReturn;
 		}
 
-		public string[] GetAllLabels_ExcludeDate(LabelsSortType sort = LabelsSortType.None)
+		public static string[] GetLabels_NotFileDate(LabelsSortType sort = LabelsSortType.None)
 		{
 			string[] labels = File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]);
 			labels = labels.Take(labels.Count() - 1).ToArray();
@@ -68,10 +69,42 @@ namespace myJournal.objects
 			return labels;	
 		}
 
-		public DateTime GetLabelsFileDate(string[] labels)
-		{ return DateTime.Parse(labels.Last()); }
+		public static string CheckedLabels_Get(CheckedListBox cbx)
+		{
+			string labels = string.Empty;
+			for (int i = 0; i < cbx.CheckedItems.Count; i++)
+			{
+				labels += cbx.CheckedItems[i].ToString() + ",";
+			}
+			labels = labels.Length > 0 ? labels.Substring(0, labels.Length - 1) : string.Empty;
+			return labels;
+		}
 
-		public List<Journal> JournalsContainingLabel(string labelName)
+		public static void CheckedLabels_Set(CheckedListBox clb, JournalEntry entry)
+		{
+			var labels = entry.ClearLabels().Split(",");
+			for (var i = 0; i < clb.Items.Count; i++) { clb.SetItemChecked(i, labels.Contains(clb.Items[i].ToString())); }
+		}
+
+		public static List<string> FindOrphansInOneJournal(Journal journal, bool addFoundOrphansToLabels = false)
+		{
+			List<string> lstReturn = new List<string>();
+			string[] allLabels = GetLabels_NotFileDate();
+
+			foreach (JournalEntry je in journal.Entries)
+			{
+				foreach (string jeLabel in je.ClearLabels().Split(","))
+				{
+					if (jeLabel.Length > 0 && !allLabels.Contains(jeLabel) && !lstReturn.Contains(jeLabel))
+					{ lstReturn.Add(jeLabel); }
+				}
+			}
+			return lstReturn;
+		}
+
+		public static DateTime GetLabelsFileDate(string[] labels) { return DateTime.Parse(labels[^1]); }
+
+		public static List<Journal> JournalsContainingLabel(string labelName)
 		{
 			LabelsManager lm = new LabelsManager();	
 			List<Journal> lstRtrn = new List<Journal>();
@@ -86,7 +119,23 @@ namespace myJournal.objects
 			return lstRtrn;
 		}
 
-		public bool Save(List<string> labels)
+		public static void PopulateLabelsList(CheckedListBox clb = null, ListBox lb = null, LabelsSortType sort = LabelsSortType.None)
+		{
+			if (clb != null) { clb.Items.Clear(); }
+			if (lb != null) { lb.Items.Clear(); }
+			//LabelsManager lm = new LabelsManager();
+
+			foreach (string label in LabelsManager.GetLabels_NotFileDate(sort))
+			{
+				if (lb != null)
+				{ lb.Items.Add(label); }
+				else
+				{ clb.Items.Add(label); }
+			}
+		}
+
+
+		public static bool Save(List<string> labels)
 		{
 			bool bRtrn = false;
 			try

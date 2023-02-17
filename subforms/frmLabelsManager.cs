@@ -15,14 +15,15 @@ namespace myJournal.subforms
 {
 	public partial class frmLabelsManager : Form
 	{
-		private bool Renaming = false;
-		private bool Adding = false;
-		private bool Deleting = false;
-		private bool EditingAllJournals;
-		private LabelsSortType sort = LabelsSortType.None;
-		private string OriginalPIN = Program.PIN;
+		private bool Renaming	= false;
+		private bool Adding		= false;
+		private bool Deleting	= false;
+
+		private LabelsManager.LabelsSortType sort	= LabelsManager.LabelsSortType.None;
+		private string OriginalPIN					= Program.PIN;
 		private Dictionary<string, string> DictJournals = new Dictionary<string, string>();
-		private LabelsManager lm = new LabelsManager();
+		private bool EditingAllJournals;
+		//private LabelsManager lm = new LabelsManager();
 
 		public bool ActionTaken { get; private set; }
 
@@ -71,7 +72,7 @@ namespace myJournal.subforms
 				lstJournalPINs.Items.Add(j.Name); 
 			}
 
-			sort = LabelsSortType.None;
+			sort = LabelsManager.LabelsSortType.None;
 			lblSortType_Click(null, null);
 		}
 
@@ -125,7 +126,8 @@ namespace myJournal.subforms
 				// add sync to cloud - labels and settings
 
 				pnlNewLabelName.Visible = false;
-				Utilities.Labels_PopulateLabelsList(null, lstLabels);
+				LabelsManager.PopulateLabelsList(null, lstLabels);
+				//Utilities.Labels_PopulateLabelsList(null, lstLabels);
 				lstOccurrences.Items.Clear();
 				ShowHideOccurrences();
 			}
@@ -168,7 +170,7 @@ namespace myJournal.subforms
 					}
 					else    // It was a delete. If label exists in any journal, leave in list, otherwise remove from list.
 					{
-						if (lm.JournalsContainingLabel(txtLabelName.Text).Count == 0) 
+						if (LabelsManager.JournalsContainingLabel(txtLabelName.Text).Count == 0) 
 						{ 
 							lstLabels.Items.RemoveAt(lstLabels.SelectedIndex);
 							lstOccurrences.Items.Clear();
@@ -200,11 +202,11 @@ namespace myJournal.subforms
 				frm.ShowDialog(this);
 
 				if (frm.Result == frmMessage.ReturnResult.Yes)
-				{ foreach (string lbl in lstOrphanedLabels.SelectedItems) { lm.Delete(lbl); } }
+				{ foreach (string lbl in lstOrphanedLabels.SelectedItems) { LabelsManager.Delete(lbl); } }
 
 				if (lstOrphanedLabels.SelectedItems.Count > 0)
 				{
-					Utilities.Labels_PopulateLabelsList(null, lstLabels);
+					LabelsManager.PopulateLabelsList(null, lstLabels);
 					ShowHideOccurrences();
 				}
 				lstLabels.SelectedItems.Clear();
@@ -224,24 +226,25 @@ namespace myJournal.subforms
 
 		private void lblSortType_Click(object sender, EventArgs e)
 		{
-			LabelsManager lm = new LabelsManager();	
+			//LabelsManager lm = new LabelsManager();	
 			
 			switch (sort)
 			{
-				case LabelsSortType.None:
-					Utilities.Labels_PopulateLabelsList(null, lstLabels, 
+				case LabelsManager.LabelsSortType.None:
+					LabelsManager.PopulateLabelsList(null, lstLabels);
+					//Utilities.Labels_PopulateLabelsList(null, lstLabels,
 					lblSortType.Text = "sort A-Z";
-					sort = LabelsSortType.Ascending;
+					sort = LabelsManager.LabelsSortType.Ascending;
 					break;
-				case LabelsSortType.Ascending:
-					Utilities.Labels_PopulateLabelsList(null, lstLabels, Utilities.LabelsSortType.Descending);
+				case LabelsManager.LabelsSortType.Ascending:
+					LabelsManager.PopulateLabelsList(null, lstLabels, LabelsManager.LabelsSortType.Descending);
 					lblSortType.Text = "sort Z-A";
-					sort = LabelsSortType.Descending;
+					sort = LabelsManager.LabelsSortType.Descending;
 					break;
-				case LabelsSortType.Descending:
-					Utilities.Labels_PopulateLabelsList(null, lstLabels, Utilities.LabelsSortType.Ascending);
+				case LabelsManager.LabelsSortType.Descending:
+					LabelsManager.PopulateLabelsList(null, lstLabels, LabelsManager.LabelsSortType.Ascending);
 					lblSortType.Text = "unsorted";
-					sort = LabelsSortType.None;
+					sort = LabelsManager.LabelsSortType.None;
 					break;
 			}
 		}
@@ -336,7 +339,7 @@ namespace myJournal.subforms
 			List<string> lstOrphans = new List<string>();
 			lstOrphanedLabels.Items.Clear();
 
-			foreach(string label in lm.AllLables)
+			foreach(string label in LabelsManager.GetLabels_NotFileDate())
 			{
 				PopulateOccurrences(label);
 				if(lstOccurrences.Items.Count == 1) { lstOrphans.Add(label); }
@@ -397,7 +400,7 @@ namespace myJournal.subforms
 				this.Cursor = Cursors.WaitCursor;
 				lstOccurrences.Items.Clear();
 				var currentPIN = Program.PIN;
-				List<Journal> journalsWithLabel = lm.JournalsContainingLabel(labelName);
+				List<Journal> journalsWithLabel = LabelsManager.JournalsContainingLabel(labelName);	// lm.JournalsContainingLabel(labelName);
 
 				if (journalsWithLabel.Count > 0)
 				{
@@ -434,7 +437,7 @@ namespace myJournal.subforms
 			this.Cursor = Cursors.Default;
 		}
 
-		private void SaveLabels() { Utilities.Labels_Save(lstLabels.Items.OfType<string>().ToArray()); }
+		private void SaveLabels() { LabelsManager.Save(lstLabels.Items.OfType<string>().ToList()); }
 
 		private void SetProgramPINForSelectedJournal(Journal journal) { Program.PIN = DictJournals[journal.Name]; }
 

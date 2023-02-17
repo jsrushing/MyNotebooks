@@ -87,31 +87,31 @@ namespace myJournal.objects
 		//	return labels;
 		//}
 
-		public static string Labels_GetCheckedLabels(CheckedListBox cbx)
-		{
-			string labels = string.Empty;
-			for (int i = 0; i < cbx.CheckedItems.Count; i++)
-			{
-				labels += cbx.CheckedItems[i].ToString() + ",";
-			}
-			labels = labels.Length > 0 ? labels.Substring(0, labels.Length - 1) : string.Empty;
-			return labels;
-		}
+		//public static string Labels_GetCheckedLabels(CheckedListBox cbx)
+		//{
+		//	string labels = string.Empty;
+		//	for (int i = 0; i < cbx.CheckedItems.Count; i++)
+		//	{
+		//		labels += cbx.CheckedItems[i].ToString() + ",";
+		//	}
+		//	labels = labels.Length > 0 ? labels.Substring(0, labels.Length - 1) : string.Empty;
+		//	return labels;
+		//}
 
-		public static void Labels_PopulateLabelsList(CheckedListBox clb = null, ListBox lb = null, LabelsSortType sort = LabelsSortType.None)
-		{
-			if (clb != null) { clb.Items.Clear(); }
-			if (lb != null) { lb.Items.Clear(); }
-			LabelsManager lm = new LabelsManager();	
+		//public static void Labels_PopulateLabelsList(CheckedListBox clb = null, ListBox lb = null, LabelsSortType sort = LabelsSortType.None)
+		//{
+		//	if (clb != null) { clb.Items.Clear(); }
+		//	if (lb != null) { lb.Items.Clear(); }
+		//	LabelsManager lm = new LabelsManager();	
 
-			foreach (string label in lm.GetAllLabels_ExcludeDate(sort))
-			{
-				if (lb != null)
-				{ lb.Items.Add(label); }
-				else
-				{ clb.Items.Add(label); }
-			}
-		}
+		//	foreach (string label in lm.GetAllLabels_ExcludeDate(sort))
+		//	{
+		//		if (lb != null)
+		//		{ lb.Items.Add(label); }
+		//		else
+		//		{ clb.Items.Add(label); }
+		//	}
+		//}
 
 		//public async static void Labels_Save(string[] arrLabels)
 		//{
@@ -123,11 +123,11 @@ namespace myJournal.objects
 		//	await cs.SyncLabelsAndSettings();
 		//}
 
-		public static void Labels_SetCheckedLabels(CheckedListBox clb, JournalEntry entry)
-		{
-			var labels = entry.ClearLabels().Split(",");
-			for (var i = 0; i < clb.Items.Count; i++) { clb.SetItemChecked(i, labels.Contains(clb.Items[i].ToString())); }
-		}
+		//public static void Labels_SetCheckedLabels(CheckedListBox clb, JournalEntry entry)
+		//{
+		//	var labels = entry.ClearLabels().Split(",");
+		//	for (var i = 0; i < clb.Items.Count; i++) { clb.SetItemChecked(i, labels.Contains(clb.Items[i].ToString())); }
+		//}
 
 		public static void PopulateEntries(ListBox lbxToPopulate, List<JournalEntry> entries, string startDate = "", string endDate = "", bool clearPrevious = true, int SortBy = 0)
 		{
