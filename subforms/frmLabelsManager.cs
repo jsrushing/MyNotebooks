@@ -339,7 +339,7 @@ namespace myJournal.subforms
 			List<string> lstOrphans = new List<string>();
 			lstOrphanedLabels.Items.Clear();
 
-			foreach(string label in LabelsManager.GetLabels_NotFileDate())
+			foreach(string label in LabelsManager.GetLabels_NoFileDate())
 			{
 				PopulateOccurrences(label);
 				if(lstOccurrences.Items.Count == 1) { lstOrphans.Add(label); }

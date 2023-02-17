@@ -428,7 +428,8 @@ namespace myJournal.subforms
 			if(lb.SelectedIndex > -1)
 			{
 				lb.SelectedIndexChanged -= new System.EventHandler(this.lstEntries_SelectEntry);
-				currentEntry = Utilities.SelectEntry(rtb, lb, currentJournal, firstSelection);
+				currentEntry = JournalEntry.Select(rtb, lb, currentJournal, firstSelection);
+
 				if(currentEntry != null)
 				{
 					firstSelection = false;
@@ -694,7 +695,7 @@ namespace myJournal.subforms
 
 				if (lstEntries.SelectedIndex == -1 && currentJournal.Entries.Contains(currentEntry))
 				{
-					Utilities.SelectEntry(rtbSelectedEntry, lstEntries, null, true, currentEntry);
+					JournalEntry.Select(rtbSelectedEntry, lstEntries, null, true, currentEntry);
 				}
 			}
 		}

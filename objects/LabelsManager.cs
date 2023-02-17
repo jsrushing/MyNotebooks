@@ -33,7 +33,7 @@ namespace myJournal.objects
 
 		public static void Add(string[] lables)
 		{
-				string[] newLabels = ((lables).Except(GetLabels_NotFileDate())).ToArray();
+				string[] newLabels = ((lables).Except(GetLabels_NoFileDate())).ToArray();
 				File.AppendAllLines(AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"], newLabels);
 		}
 
@@ -45,7 +45,7 @@ namespace myJournal.objects
 		public List<string> FindOrphansInAJournal(Journal journal, bool addFoundOrphansToLabels = false)
 		{
 			List<string> lstReturn = new List<string>();
-			string[] allLabels = GetLabels_NotFileDate();
+			string[] allLabels = GetLabels_NoFileDate();
 
 			foreach (JournalEntry je in journal.Entries)
 			{
@@ -60,7 +60,9 @@ namespace myJournal.objects
 			return lstReturn;
 		}
 
-		public static string[] GetLabels_NotFileDate(LabelsSortType sort = LabelsSortType.None)
+		public static DateTime GetLabelsFileDate(string[] labels) { return DateTime.Parse(labels[^1]); }
+
+		public static string[] GetLabels_NoFileDate(LabelsSortType sort = LabelsSortType.None)
 		{
 			string[] labels = File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]);
 			labels = labels.Take(labels.Count() - 1).ToArray();
@@ -89,7 +91,7 @@ namespace myJournal.objects
 		public static List<string> FindOrphansInOneJournal(Journal journal, bool addFoundOrphansToLabels = false)
 		{
 			List<string> lstReturn = new List<string>();
-			string[] allLabels = GetLabels_NotFileDate();
+			string[] allLabels = GetLabels_NoFileDate();
 
 			foreach (JournalEntry je in journal.Entries)
 			{
@@ -101,8 +103,6 @@ namespace myJournal.objects
 			}
 			return lstReturn;
 		}
-
-		public static DateTime GetLabelsFileDate(string[] labels) { return DateTime.Parse(labels[^1]); }
 
 		public static List<Journal> JournalsContainingLabel(string labelName)
 		{
@@ -125,7 +125,7 @@ namespace myJournal.objects
 			if (lb != null) { lb.Items.Clear(); }
 			//LabelsManager lm = new LabelsManager();
 
-			foreach (string label in LabelsManager.GetLabels_NotFileDate(sort))
+			foreach (string label in LabelsManager.GetLabels_NoFileDate(sort))
 			{
 				if (lb != null)
 				{ lb.Items.Add(label); }

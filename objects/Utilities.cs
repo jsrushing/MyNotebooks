@@ -37,7 +37,11 @@ namespace myJournal.objects
 			foreach (string s in Directory.GetFiles(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]))
 			{
 				sJrnlDiskName = s.Replace(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"], "");
-				jrnlReturn.Add(new Journal(sJrnlDiskName).Open());
+				try { jrnlReturn.Add(new Journal(sJrnlDiskName).Open());}
+				catch (Exception ex) { frmMessage frm = new frmMessage(frmMessage.OperationType.Message, 
+					"A problem occurred whilc processing the journal name '" + sJrnlDiskName + "'. Message:" + ex.Message);
+					frm.ShowDialog();
+				}	
 			}
 
 			return jrnlReturn;
@@ -171,111 +175,111 @@ namespace myJournal.objects
 			entryRTB.Height = callingForm.Height - entryRTB.Top - 50;
 		}
 
-		public static JournalEntry SelectEntry(RichTextBox rtb, ListBox lb, Journal currentJournal, bool FirstSelection, JournalEntry je = null)
-		{
-			rtb.Clear();
-			List<int> targets = new List<int>();
-			JournalEntry entryRtrn = null;
+		//public static JournalEntry SelectEntry(RichTextBox rtb, ListBox lb, Journal currentJournal, bool FirstSelection, JournalEntry je = null)
+		//{
+		//	rtb.Clear();
+		//	List<int> targets = new List<int>();
+		//	JournalEntry entryRtrn = null;
 			
-			if(je != null)
-			{
-				entryRtrn = je;
+		//	if(je != null)
+		//	{
+		//		entryRtrn = je;
 
-				for (int i = 0; i < lb.Items.Count; i++)
-				{
-					if (lb.Items[i].ToString().StartsWith(je.Synopsis[0].ToString()))
-					{
-						lb.SelectedIndices.Add(i);
-						lb.SelectedIndices.Add(i + 1); 
-						lb.SelectedIndices.Add(i + 2);
-						rtb.Text = je.DisplayText;
-						break;
-					}
-				}
-			}
-			else 
-			{
-				try
-				{
-					if (lb.SelectedIndices.Count > 1)
-					{
-						for (int i = 0; i < lb.SelectedIndices.Count - 1; i++)
-						{
-							if (lb.SelectedIndices[i] == lb.SelectedIndices[i + 1] - 1)
-							{
-								targets.Add(lb.SelectedIndices[i]);
-								targets.Add(lb.SelectedIndices[i + 1]);
-								targets.Add(lb.SelectedIndices[i + 2]);
-								break;
-							}
-						}
-					}
-				}
-				catch (Exception) { }
+		//		for (int i = 0; i < lb.Items.Count; i++)
+		//		{
+		//			if (lb.Items[i].ToString().StartsWith(je.Synopsis[0].ToString()))
+		//			{
+		//				lb.SelectedIndices.Add(i);
+		//				lb.SelectedIndices.Add(i + 1); 
+		//				lb.SelectedIndices.Add(i + 2);
+		//				rtb.Text = je.DisplayText;
+		//				break;
+		//			}
+		//		}
+		//	}
+		//	else 
+		//	{
+		//		try
+		//		{
+		//			if (lb.SelectedIndices.Count > 1)
+		//			{
+		//				for (int i = 0; i < lb.SelectedIndices.Count - 1; i++)
+		//				{
+		//					if (lb.SelectedIndices[i] == lb.SelectedIndices[i + 1] - 1)
+		//					{
+		//						targets.Add(lb.SelectedIndices[i]);
+		//						targets.Add(lb.SelectedIndices[i + 1]);
+		//						targets.Add(lb.SelectedIndices[i + 2]);
+		//						break;
+		//					}
+		//				}
+		//			}
+		//		}
+		//		catch (Exception) { }
 
-				if (targets.Count == 3)
-				{
-					foreach (int i in targets)
-					{
-						lb.SelectedIndices.Remove(i);
-					}
-				}
+		//		if (targets.Count == 3)
+		//		{
+		//			foreach (int i in targets)
+		//			{
+		//				lb.SelectedIndices.Remove(i);
+		//			}
+		//		}
 
-				int ctr = lb.SelectedIndex;
+		//		int ctr = lb.SelectedIndex;
 
-				if (lb.Items[ctr].ToString().StartsWith("--")) ctr--;
+		//		if (lb.Items[ctr].ToString().StartsWith("--")) ctr--;
 
-				while (!lb.Items[ctr].ToString().StartsWith("--") & ctr > 0)
-				{
-					ctr--;
-					if (ctr < 0) break;
-				}
+		//		while (!lb.Items[ctr].ToString().StartsWith("--") & ctr > 0)
+		//		{
+		//			ctr--;
+		//			if (ctr < 0) break;
+		//		}
 
-				if (ctr > 0) { ctr += 1; }
-				lb.SelectedIndices.Clear();                             // Select the whole short entry ...
-				lb.SelectedIndices.Add(ctr);
-				lb.SelectedIndices.Add(ctr + 1);
-				lb.SelectedIndices.Add(ctr + 2);                        //
+		//		if (ctr > 0) { ctr += 1; }
+		//		lb.SelectedIndices.Clear();                             // Select the whole short entry ...
+		//		lb.SelectedIndices.Add(ctr);
+		//		lb.SelectedIndices.Add(ctr + 1);
+		//		lb.SelectedIndices.Add(ctr + 2);                        //
 
-				string sTitleAndDate = lb.Items[ctr].ToString().Replace(" - EDITED", "");        // Use the title and date of the entry to create a JournalEntry object whose .ClearText will populate the display ...
-				string sTitle = sTitleAndDate.Substring(0, sTitleAndDate.LastIndexOf('(') - 1);
-				string sDate = sTitleAndDate.Substring(sTitleAndDate.LastIndexOf('(') + 1, sTitleAndDate.LastIndexOf(')') - sTitleAndDate.LastIndexOf('(') - 1);
+		//		string sTitleAndDate = lb.Items[ctr].ToString().Replace(" - EDITED", "");        // Use the title and date of the entry to create a JournalEntry object whose .ClearText will populate the display ...
+		//		string sTitle = sTitleAndDate.Substring(0, sTitleAndDate.LastIndexOf('(') - 1);
+		//		string sDate = sTitleAndDate.Substring(sTitleAndDate.LastIndexOf('(') + 1, sTitleAndDate.LastIndexOf(')') - sTitleAndDate.LastIndexOf('(') - 1);
 				
-				entryRtrn = currentJournal.GetEntry(sTitle, sDate);
+		//		entryRtrn = currentJournal.GetEntry(sTitle, sDate);
 
-				if(sTitle == "created")
-				{
-					lb.SelectedIndices.Clear();
-					entryRtrn = null;
-				}
+		//		if(sTitle == "created")
+		//		{
+		//			lb.SelectedIndices.Clear();
+		//			entryRtrn = null;
+		//		}
 
-				if (entryRtrn != null)
-				{
-					if(entryRtrn.DisplayText != null)    // entries prior to 1.0.0.1 will not have .DisplayText
-					{
-						rtb.Text = entryRtrn.DisplayText;
-					}
-					else
-					{
-						rtb.Text = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
-						, entryRtrn.ClearTitle(), entryRtrn.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), entryRtrn.ClearLabels(), entryRtrn.ClearText());
-					}
+		//		if (entryRtrn != null)
+		//		{
+		//			if(entryRtrn.DisplayText != null)    // entries prior to 1.0.0.1 will not have .DisplayText
+		//			{
+		//				rtb.Text = entryRtrn.DisplayText;
+		//			}
+		//			else
+		//			{
+		//				rtb.Text = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
+		//				, entryRtrn.ClearTitle(), entryRtrn.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), entryRtrn.ClearLabels(), entryRtrn.ClearText());
+		//			}
 					
-					if (rtb.Text.Length == 0) { lb.TopIndex = lb.Top + lb.Height < rtb.Top ? ctr : lb.TopIndex; }
+		//			if (rtb.Text.Length == 0) { lb.TopIndex = lb.Top + lb.Height < rtb.Top ? ctr : lb.TopIndex; }
 
-					lb.Height = rtb.Text.Length > 0 ? rtb.Top - 132 : 100;
+		//			lb.Height = rtb.Text.Length > 0 ? rtb.Top - 132 : 100;
 
-					if (FirstSelection)
-					{
-						lb.TopIndex = lb.Top + lb.Height < rtb.Top ? ctr : lb.TopIndex;
-					}
-				}
+		//			if (FirstSelection)
+		//			{
+		//				lb.TopIndex = lb.Top + lb.Height < rtb.Top ? ctr : lb.TopIndex;
+		//			}
+		//		}
 
-				rtb.Visible = rtb.Text.Length > 0;
-			}
+		//		rtb.Visible = rtb.Text.Length > 0;
+		//	}
 
-			return entryRtrn;
-		}
+		//	return entryRtrn;
+		//}
 
 		public static void SetStartPosition(Form formToInitialize, Form parentForm)
 		{ 
