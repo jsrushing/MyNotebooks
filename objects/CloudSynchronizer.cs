@@ -54,41 +54,39 @@ namespace myJournal.objects
 			}
 		}
 
-		private ComparisonResult CompareLabelsAndSettings(string[] localLables , string[] cloudLabels) 
-		{ 
-			//LabelsManager lm = new LabelsManager();
-			DateTime localLabelsFileDate = LabelsManager.GetLabelsFileDate(localLables);
-			DateTime cloudLabelsFileDate = LabelsManager.GetLabelsFileDate(cloudLabels);
-			return localLabelsFileDate > cloudLabelsFileDate ? ComparisonResult.KeepLocal : localLabelsFileDate < cloudLabelsFileDate ? ComparisonResult.KeepCloud : ComparisonResult.Same;
-		}
-
 		private ComparisonResult CompareLabelsAndSettings(FileInfo fileinfo1, FileInfo fileinfo2)
 		{
-			string[] localLabels = Directory.GetFiles(fileinfo1.FullName);
-			string[] cloudLabels = Directory.GetFiles(fileinfo2.FullName);
-			//LabelsManager lm = new LabelsManager();
+			string[] localLabels = GetLabelsAsArray(fileinfo1);	//  Directory.GetFiles(fileinfo1.FullName, "");
+			string[] cloudLabels = GetLabelsAsArray(fileinfo2); // Directory.GetFiles(fileinfo2.FullName);
 			DateTime localLabelsFileDate = LabelsManager.GetLabelsFileDate(localLabels);
 			DateTime cloudLabelsFileDate = LabelsManager.GetLabelsFileDate(cloudLabels);
 			return localLabelsFileDate > cloudLabelsFileDate ? ComparisonResult.KeepLocal : localLabelsFileDate < cloudLabelsFileDate ? ComparisonResult.KeepCloud : ComparisonResult.Same;
-
-
-			//DateTime dt1 = fileinfo1.LastWriteTime;
-			//DateTime dt2 = fileinfo2.LastWriteTime;
-
-			//if (fileinfo1.Length == fileinfo2.Length) { return ComparisonResult.Same; }
-			//else
-			//{
-			//return dt1 < dt2 ? ComparisonResult.KeepLocal : dt1 > dt2 ? ComparisonResult.KeepCloud : ComparisonResult.Same;
-			//}
-			//return d1.LastWriteTime > d1.LastWriteTime ? ComparisonResult.LocalNewer : d1.LastWriteTime < d2.LastWriteTime ? ComparisonResult.CloudNewer : ComparisonResult.Same;	
 		}
 
-		public async Task SynchWithCloud(bool SynchSettings = false, Journal journal = null)
+		private string[] GetLabelsAsArray(FileInfo file)
 		{
-			var journalsFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"];
-			var tempFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"];
+			List<string> labels = new List<string>();
+			string s = string.Empty;
+
+			using (FileStream fs = File.OpenRead(file.FullName))
+			{
+				byte[] b = new byte[1024];
+				UTF8Encoding temp = new UTF8Encoding(true);
+
+				while (fs.Read(b, 0, b.Length) > 0)
+				{ s = temp.GetString(b); }
+			}
+
+			return s.Substring(0, s.LastIndexOf("\r\n")).Split("\r\n");
+		}
+
+		public async Task SynchWithCloud(bool alsoSynchSettings = false, Journal journal = null)
+		{
+			var journalsFolder			= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"];
+			var tempFolder				= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"];
+			List<Journal> allJournals	= new List<Journal>();
 			Journal j;
-			List<Journal> allJournals = new List<Journal>();
+
 			if (journal == null) { allJournals = Utilities.AllJournals(); } else { allJournals.Add(journal); }
 
 			for (var i = 0; i < allJournals.Count; i++)
@@ -142,13 +140,12 @@ namespace myJournal.objects
 
 			// Synch from Azure ...
 			await AzureFileClient.GetAzureFiles(Program.AzurePassword);
-			List<string> localFiles = Utilities.AllJournalNames();
 
 			foreach (string s in Program.AzureFiles)
 			{
 				var localFName = s.Remove(0, Program.AzurePassword.Length + 1);
 
-				if (!localFiles.Contains(localFName))
+				if (!Utilities.AllJournalNames().Contains(localFName))
 				{
 					await AzureFileClient.DownloadOrDeleteFile(journalsFolder + localFName, s);
 					ItemsSynchd.Add(localFName + " (added from cloud)");
@@ -156,7 +153,7 @@ namespace myJournal.objects
 			}
 
 			// sync labels and settings
-			if(SynchSettings) await SyncLabelsAndSettings();
+			if(alsoSynchSettings) await SyncLabelsAndSettings();
 		}
 
 		public async Task SyncLabelsAndSettings()

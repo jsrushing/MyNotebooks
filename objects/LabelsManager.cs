@@ -60,7 +60,14 @@ namespace myJournal.objects
 			return lstReturn;
 		}
 
-		public static DateTime GetLabelsFileDate(string[] labels) { return DateTime.Parse(labels[^1]); }
+		public static DateTime GetLabelsFileDate(string[] labels) 
+		{ 
+			DateTime dt = DateTime.MinValue;
+			string lastLabel = labels.Last();
+			try { dt = DateTime.ParseExact(lastLabel, "dd/MM/yy_HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture); }
+			catch { }	// lastLabel isn't a DateTime.
+			return dt;
+		}
 
 		public static string[] GetLabels_NoFileDate(LabelsSortType sort = LabelsSortType.None)
 		{
@@ -135,15 +142,18 @@ namespace myJournal.objects
 		}
 
 
-		public static bool Save(List<string> labels)
+		public static bool Save(List<string> labels = null)
 		{
-			bool bRtrn = false;
+			var bRtrn = false;
+
 			try
 			{
 				StringBuilder sb = new StringBuilder();
+				CloudSynchronizer cs = new CloudSynchronizer();
 				foreach (string tag in labels) { sb.AppendLine(tag); }
-				sb.AppendLine(DateTime.Now.ToString("dd/MM/yy_HH/mm/ss"));
+				sb.AppendLine (DateTime.Now.ToString("dd/MM/yy_HH:mm:ss"));
 				File.WriteAllText(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"], sb.ToString());
+				cs.SyncLabelsAndSettings();
 				bRtrn = true;
 			}
 			catch (Exception) { }

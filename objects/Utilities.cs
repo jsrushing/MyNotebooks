@@ -37,6 +37,7 @@ namespace myJournal.objects
 			foreach (string s in Directory.GetFiles(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]))
 			{
 				sJrnlDiskName = s.Replace(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"], "");
+
 				try { jrnlReturn.Add(new Journal(sJrnlDiskName).Open());}
 				catch (Exception ex) { frmMessage frm = new frmMessage(frmMessage.OperationType.Message, 
 					"A problem occurred whilc processing the journal name '" + sJrnlDiskName + "'. Message:" + ex.Message);

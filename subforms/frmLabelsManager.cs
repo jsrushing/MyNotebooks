@@ -121,13 +121,12 @@ namespace myJournal.subforms
 			if (Adding) 
 			{ 
 				AddLabelToUIListbox();
-				SaveLabels(); 
+				LabelsManager.Save(lstLabels.Items.Cast<String>().ToList());
 				
 				// add sync to cloud - labels and settings
 
 				pnlNewLabelName.Visible = false;
 				LabelsManager.PopulateLabelsList(null, lstLabels);
-				//Utilities.Labels_PopulateLabelsList(null, lstLabels);
 				lstOccurrences.Items.Clear();
 				ShowHideOccurrences();
 			}

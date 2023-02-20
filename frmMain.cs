@@ -172,6 +172,13 @@ namespace myJournal.subforms
 				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"]);
 				File.Create(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFile"]).Close();
 				File.Create(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Close();
+
+				using (StreamWriter sw = File.AppendText(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]))
+				{ sw.WriteLine(DateTime.MinValue.ToString("dd/MM/yyyy_HH:mm:ss")); }
+
+				using (StreamWriter sw = File.AppendText(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFile"]))
+				{ sw.WriteLine(DateTime.MinValue.ToString("dd/MM/yyyy_HH:mm:ss")); }
+
 			}
 
 			// synch
