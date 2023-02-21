@@ -122,9 +122,6 @@ namespace myJournal.subforms
 			{ 
 				AddLabelToUIListbox();
 				LabelsManager.Save(lstLabels.Items.Cast<String>().ToList());
-				
-				// add sync to cloud - labels and settings
-
 				pnlNewLabelName.Visible = false;
 				LabelsManager.PopulateLabelsList(null, lstLabels);
 				lstOccurrences.Items.Clear();
@@ -178,8 +175,10 @@ namespace myJournal.subforms
 					}
 
 					SaveLabels();
+					this.Cursor = Cursors.Default;
 				}
 
+				this.Cursor = Cursors.Default;
 				ActionTaken = bEdited;
 				Adding = false;
 				Deleting = false;
@@ -188,7 +187,6 @@ namespace myJournal.subforms
 				txtLabelName.Text = string.Empty;
 				pnlNewLabelName.Visible = false;
 				PopulateOccurrences();
-				this.Cursor = Cursors.Default;
 			}
 		}
 

@@ -142,10 +142,10 @@ namespace myJournal.subforms
 {
 	public partial class frmMain : Form
 	{
-		Journal currentJournal;
-		JournalEntry currentEntry;
-		private bool firstSelection = true;
-		bool suppressDateClick = false;
+		Journal			currentJournal;
+		JournalEntry	currentEntry;
+		private bool	firstSelection = true;
+		bool			suppressDateClick = false;
 
 		private enum SelectionState
 		{
@@ -184,7 +184,7 @@ namespace myJournal.subforms
 			// synch
 			frmAzurePwd frm = new frmAzurePwd(this);
 
-			if (Program.AzurePassword.Length > 0)
+			if (Program.AzurePassword.Length > 0 && this.Text.ToLower().Contains("debug"))
 			{
 				frm.Close();
 				CloudSynchronizer cs = new CloudSynchronizer();

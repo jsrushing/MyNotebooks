@@ -64,7 +64,7 @@ namespace myJournal.objects
 		{ 
 			DateTime dt = DateTime.MinValue;
 			string lastLabel = labels.Last();
-			try { dt = DateTime.ParseExact(lastLabel, "dd/MM/yy_HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture); }
+			try { dt = DateTime.ParseExact(lastLabel.Replace("_", " "), "dd/MM/yyyy HH:mm:ss", null); }
 			catch { }	// lastLabel isn't a DateTime.
 			return dt;
 		}
@@ -151,7 +151,7 @@ namespace myJournal.objects
 				StringBuilder sb = new StringBuilder();
 				CloudSynchronizer cs = new CloudSynchronizer();
 				foreach (string tag in labels) { sb.AppendLine(tag); }
-				sb.AppendLine (DateTime.Now.ToString("dd/MM/yy_HH:mm:ss"));
+				sb.AppendLine (DateTime.Now.ToString("dd/MM/yyyy_HH:mm:ss"));
 				File.WriteAllText(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"], sb.ToString());
 				cs.SyncLabelsAndSettings();
 				bRtrn = true;
