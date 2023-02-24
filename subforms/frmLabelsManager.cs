@@ -126,6 +126,7 @@ namespace myJournal.subforms
 				LabelsManager.PopulateLabelsList(null, lstLabels);
 				lstOccurrences.Items.Clear();
 				ShowHideOccurrences();
+				this.Cursor = Cursors.Default; 
 			}
 
 			if (Renaming | Deleting)

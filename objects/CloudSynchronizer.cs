@@ -24,16 +24,17 @@ namespace myJournal.objects
 			CloudNewer
 		}
 
-		public int JournalsSynchd { get { return ItemsSynchd.Count; } }
-		public int JournalsSkipped { get { return ItemsSkipped.Count; } }
-		public int JournalsDownloaded { get { return ItemsDownloaded.Count; } }
-		public int JournalsBackedUp { get { return ItemsBackedUp.Count; } }
+		public int JournalsSynchd		{ get { return ItemsSynchd.Count; } }
+		public int JournalsSkipped		{ get { return ItemsSkipped.Count; } }
+		public int JournalsDownloaded	{ get { return ItemsDownloaded.Count; } }
+		public int JournalsBackedUp		{ get { return ItemsBackedUp.Count; } }
+
 		public string Err = string.Empty; 
 
-		private List<string> ItemsSynchd = new List<string>();
-		private List<string> ItemsSkipped = new List<string>();
-		private List<string> ItemsDownloaded = new List<string>();
-		private List<string> ItemsBackedUp = new List<string>();
+		private List<string> ItemsSynchd		= new List<string>();
+		private List<string> ItemsSkipped		= new List<string>();
+		private List<string> ItemsDownloaded	= new List<string>();
+		private List<string> ItemsBackedUp		= new List<string>();
 
 		public CloudSynchronizer() { }
 
@@ -47,20 +48,13 @@ namespace myJournal.objects
 			j2.FileName = fileinfo2.FullName;
 			j2 = j2.Open(true);
 
-			if(fileinfo1.Length == fileinfo2.Length) { return ComparisonResult.Same; }
-			else
-			{
-				return j1.LastSaved > j2.LastSaved ? ComparisonResult.LocalNewer : j1.LastSaved < j2.LastSaved ? ComparisonResult.CloudNewer : ComparisonResult.Same;
-			}
+			return j1.LastSaved > j2.LastSaved ? ComparisonResult.LocalNewer : j1.LastSaved < j2.LastSaved ? ComparisonResult.CloudNewer : ComparisonResult.Same;
 		}
 
 		private ComparisonResult CompareLabelsAndSettings(FileInfo fileinfo1, FileInfo fileinfo2)
 		{
-			string[] localLabels = GetLabelsAsArray(fileinfo1);	//  Directory.GetFiles(fileinfo1.FullName, "");
-			string[] cloudLabels = GetLabelsAsArray(fileinfo2); // Directory.GetFiles(fileinfo2.FullName);
-			DateTime localLabelsFileDate = LabelsManager.GetLabelsFileDate(localLabels);
-			DateTime cloudLabelsFileDate = LabelsManager.GetLabelsFileDate(cloudLabels);
-			ComparisonResult text = localLabelsFileDate > cloudLabelsFileDate ? ComparisonResult.LocalNewer : localLabelsFileDate < cloudLabelsFileDate ? ComparisonResult.CloudNewer : ComparisonResult.Same;
+			DateTime localLabelsFileDate = LabelsManager.GetLabelsFileDate(GetLabelsAsArray(fileinfo1));
+			DateTime cloudLabelsFileDate = LabelsManager.GetLabelsFileDate(GetLabelsAsArray(fileinfo2));
 			return localLabelsFileDate > cloudLabelsFileDate ? ComparisonResult.LocalNewer : localLabelsFileDate < cloudLabelsFileDate ? ComparisonResult.CloudNewer : ComparisonResult.Same;
 		}
 
@@ -172,7 +166,7 @@ namespace myJournal.objects
 					{
 						try
 						{
-							await AzureFileClient.DownloadOrDeleteFile(tempFolder, Program.AzurePassword + "_labels", FileMode.Create, false, "LabelsAndSettings");
+							await AzureFileClient.DownloadOrDeleteFile(tempFolder, Program.AzurePassword + "_labels", FileMode.Create, false, "labelsandsettings");
 							downloadedAzureLabels = Program.AzureFileExists ? new FileInfo(tempFolder) : null; 
 						}
 						catch(Exception ex) { Err = ex.Message; }
@@ -186,7 +180,7 @@ namespace myJournal.objects
 							case ComparisonResult.Same:
 								break;
 							case ComparisonResult.LocalNewer:
-								AzureFileClient.UploadFile(sLocalLabelsFile, "LabelsAndSettings");
+								AzureFileClient.UploadFile(sLocalLabelsFile, "labelsandsettings");
 								break;
 							case ComparisonResult.CloudNewer:
 								File.Move(tempFolder, sLocalLabelsFile, true);
@@ -195,7 +189,7 @@ namespace myJournal.objects
 					}
 				else
 				{
-					if (new FileInfo(sLocalLabelsFile).Length > 0) AzureFileClient.UploadFile(sLocalLabelsFile, "LabelsAndSettings");
+					if (new FileInfo(sLocalLabelsFile).Length > 0) AzureFileClient.UploadFile(sLocalLabelsFile, "labelsandsettings");
 				}
 
 				File.Delete(tempFolder);			
@@ -210,7 +204,7 @@ namespace myJournal.objects
 
 					try
 					{
-						await AzureFileClient.DownloadOrDeleteFile(sLocalSettingsFile, Program.AzurePassword + "_settings", FileMode.Open, false, "LabelsAndSettings");
+						await AzureFileClient.DownloadOrDeleteFile(sLocalSettingsFile, Program.AzurePassword + "_settings", FileMode.Open, false, "labelsandsettings");
 						downloadedAzureSettings = Program.AzureFileExists ? new FileInfo(tempFolder) : null;
 					}
 					catch (Exception ex) { Err = ex.Message; }
@@ -222,7 +216,7 @@ namespace myJournal.objects
 							case ComparisonResult.Same:
 								break;
 							case ComparisonResult.LocalNewer:
-								AzureFileClient.UploadFile(sLocalSettingsFile, "LabelsAndSettings");
+								AzureFileClient.UploadFile(sLocalSettingsFile, "labelsandsettings");
 								break;
 							case ComparisonResult.CloudNewer:
 								File.Move(tempFolder, sLocalSettingsFile, true);

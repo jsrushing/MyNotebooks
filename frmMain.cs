@@ -107,6 +107,9 @@
 		12/7/22
 			003 checkbox lists
 
+		02/02/23
+			004 Write 'change Azure PWD'
+
 	enhancements:
 		07/14/22 001x Add date selection for shown entries (e.g. last <x> days)
 			07/15/22 0230 Is working with user specified number of weeks.
@@ -159,8 +162,8 @@ namespace myJournal.subforms
 
 		private async void frmMain_Load(object sender, EventArgs e)
 		{
-			System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
-			System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
+			System.Reflection.Assembly assembly		= System.Reflection.Assembly.GetExecutingAssembly();
+			System.Diagnostics.FileVersionInfo fvi	= System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
 			this.Text = "myJournal " + Program.AppVersion + (fvi.FileName.ToLower().Contains("debug") ? " - DEBUG MODE" : "");
 
 			if (!Directory.Exists(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]))    // create system directories and files
@@ -178,13 +181,12 @@ namespace myJournal.subforms
 
 				using (StreamWriter sw = File.AppendText(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFile"]))
 				{ sw.WriteLine(DateTime.MinValue.ToString("dd/MM/yyyy_HH:mm:ss")); }
-
 			}
 
 			// synch
 			frmAzurePwd frm = new frmAzurePwd(this);
 
-			if (Program.AzurePassword.Length > 0 && this.Text.ToLower().Contains("debug"))
+			if (Program.AzurePassword.Length > 0)
 			{
 				frm.Close();
 				CloudSynchronizer cs = new CloudSynchronizer();

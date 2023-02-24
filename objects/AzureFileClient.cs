@@ -15,49 +15,37 @@ namespace myJournal.objects
 {
 	internal static class AzureFileClient
 	{
-		public enum CompareResult
-		{
-			
-		}
+		public enum CompareResult { }
 
 		public static void UploadFile(string localFileName, string shareName = "journals")
 		{
-			var fileName					= localFileName.Substring(localFileName.LastIndexOf("\\") + 1);
-			ShareClient share				= new ShareClient(Program.AzureConnString, shareName);
-			ShareDirectoryClient directory	= share.GetDirectoryClient("");
-			ShareFileClient myFile			= directory.GetFileClient(Program.AzurePassword + "_" + fileName);
+			var						fileName	= localFileName.Substring(localFileName.LastIndexOf("\\") + 1);
+			ShareClient				share		= new ShareClient(Program.AzureConnString, shareName);
+			ShareDirectoryClient	directory	= share.GetDirectoryClient("");
+			ShareFileClient			myFile		= directory.GetFileClient(Program.AzurePassword + "_" + fileName);
 
 			if (File.Exists(localFileName))
 			{
 				using FileStream stream = new FileStream(localFileName, 
 					FileMode.Open, FileAccess.Read, FileShare.Read, 64*1024, 
-					(FileOptions)0x20000000 | FileOptions.WriteThrough & FileOptions.SequentialScan);   // File.OpenRead(localFileName);
-
-				//string contents;
-				//using (StreamReader sr = new StreamReader(stream))
-				//{
-				//	contents = sr.ReadToEnd();
-				//}
-
-				myFile.Create(stream.Length);
-				myFile.UploadRange(new HttpRange(0, stream.Length), stream);	
+						(FileOptions)0x20000000 | FileOptions.WriteThrough & FileOptions.SequentialScan);
+					myFile.Create(stream.Length);
+					myFile.UploadRange(new HttpRange(0, stream.Length), stream);
 			}
 		}
 
 		public static async Task DownloadOrDeleteFile(string localFileName, string AzFileName, FileMode mode = FileMode.Create, bool deleteFile = false, string shareName = "journals")
 		{
-			Program.AzureFileExists = false;
-
 			using (var stream = new FileStream(localFileName, mode))
 			{
 				try
 				{
 					Program.AzureFileExists				= false;
 					CloudStorageAccount storageAccount	= CloudStorageAccount.Parse(Program.AzureConnString);
-					CloudFileClient fileClient			= storageAccount.CreateCloudFileClient();
-					CloudFileShare share				= fileClient.GetShareReference(shareName);
-					CloudFileDirectory root				= share.GetRootDirectoryReference();
-					CloudFile myFile					= root.GetFileReference(AzFileName);
+					CloudFileClient		fileClient		= storageAccount.CreateCloudFileClient();
+					CloudFileShare		share			= fileClient.GetShareReference(shareName);
+					CloudFileDirectory	root			= share.GetRootDirectoryReference();
+					CloudFile			myFile			= root.GetFileReference(AzFileName);
 
 					if (deleteFile)
 					{ await myFile.DeleteAsync(); }
@@ -84,15 +72,15 @@ namespace myJournal.objects
 		public static async Task GetAzureFiles(string pwd)
 		{
 			CloudStorageAccount storageAccount	= CloudStorageAccount.Parse(Program.AzureConnString);
-			CloudFileClient fileClient			= storageAccount.CreateCloudFileClient();
-			CloudFileShare share				= fileClient.GetShareReference("journals");
-			CloudFileDirectory root				= share.GetRootDirectoryReference();
-			CloudFileDirectory myDirectory		= root.GetDirectoryReference("journals");
-			FileRequestOptions options			= new FileRequestOptions();
+			CloudFileClient		fileClient		= storageAccount.CreateCloudFileClient();
+			CloudFileShare		share			= fileClient.GetShareReference("journals");
+			CloudFileDirectory	root			= share.GetRootDirectoryReference();
+			CloudFileDirectory	myDirectory		= root.GetDirectoryReference("journals");
+			FileRequestOptions	options			= new FileRequestOptions();
 			FileContinuationToken token			= null;
-			FileResultSegment resultSegment		= await root.ListFilesAndDirectoriesSegmentedAsync(pwd, null, token, options, null);
+			FileResultSegment	rsltSgmnt		= await root.ListFilesAndDirectoriesSegmentedAsync(pwd, null, token, options, null);
 
-			foreach(CloudFile file in resultSegment.Results) { Program.AzureFiles.Add(file.Name); }
+			foreach(CloudFile file in rsltSgmnt.Results) { Program.AzureFiles.Add(file.Name); }
 		}
 	}
 }
