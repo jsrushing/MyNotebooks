@@ -141,7 +141,6 @@ namespace myJournal.objects
 			}
 		}
 
-
 		public static bool Save(List<string> labels = null)
 		{
 			var bRtrn = false;
@@ -151,7 +150,7 @@ namespace myJournal.objects
 				StringBuilder sb = new StringBuilder();
 				CloudSynchronizer cs = new CloudSynchronizer();
 				foreach (string tag in labels) { sb.AppendLine(tag); }
-				sb.AppendLine (DateTime.Now.ToString("dd/MM/yyyy_HH:mm:ss"));
+				sb.AppendLine (DateTime.Now.ToString(ConfigurationManager.AppSettings["FileDate"]));
 				File.WriteAllText(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"], sb.ToString());
 				cs.SyncLabelsAndSettings();
 				bRtrn = true;
@@ -160,8 +159,5 @@ namespace myJournal.objects
 
 			return bRtrn;
 		}
-
-
-
 	}
 }

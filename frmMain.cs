@@ -64,7 +64,7 @@
 				Added a class variable to frmLabelsManager storing the Program.PIN when launched. Reset Program.PIN to that variable value on Form_Closing(...).
 			Tested OK 11/27/22
 			
-		004 11/27/22
+		004x 11/27/22
 			Replicate sequence:
 				> Open a journal
 				> Select an entry
@@ -73,10 +73,10 @@
 						because no entry is selected.
 			Fix:
 				Switch to JournalSelected mode when returning from Entry > Create.
-			Tested OK 11/27/22. The mode switch was already programmed for Entry delete and Entry edit modes - just wasn't doing that for Create.
+				Tested OK 11/27/22. The mode switch was already programmed for Entry delete and Entry edit modes - just wasn't doing that for Create.
 
 		toDo:
-		07/23/22 001 Related to bug 001.
+		07/23/22 001x Related to bug 001.
 					WHEN CLICKING 'week' OR 'month' FILTER ...
 						1) IF an entry is clicked, remember it.
 						2) Clear currentEntry + rtb
@@ -86,7 +86,7 @@
 			12/13/22 Update. As of v1.5 date filters are working. 'week' and 'month' buttons are deprecated/removed.
 
 		12/1/22 
-			002 ClickOnce install
+			002x ClickOnce install
 				Got CO working w/ setup.exe on my desktop. Installed on laptop.
 					> Don't have app updates working yet. Thinking I need it to install from the web before I do that.
 					> Need to have it installing from web. GoDaddy is f'ng me w/ 'IP Address has changed' so I can't get to File Manager :(
@@ -103,13 +103,12 @@
 						On update of ClickOnce deployment (which does work) there needs to be a mechanism to import Journals from 
 							previous (published) version.
 						Need to scan for orphaned labels after an import. Put a new method in Journal.cs - 'AllLabels()'?
+					> 02/24/23 All is working, clickonce + cloud sync. Marked complete.
 
-		12/7/22
+		12/07/22
 			003 checkbox lists
 
-		02/02/23
-			004 Write 'change Azure PWD'
-
+	***************************************************************************************************************************************
 	enhancements:
 		07/14/22 001x Add date selection for shown entries (e.g. last <x> days)
 			07/15/22 0230 Is working with user specified number of weeks.
@@ -118,19 +117,24 @@
 		07/27/22 002a For edit entry, edit original text, only show previous entry's .ClearText().
 						Done.
 
-		08/09/22 003 See frmSearch & Journal
+		08/09/22 003x See frmSearch & Journal
 
 		09/12/22 004 Add formatting to RTB's
-					> frmNewEntry
-					> frmMain (displaying full entry w/ richtext).
+			> frmNewEntry
+			> frmMain (displaying full entry w/ richtext).
 
+		10/15/22
+			005x Fix search error when clicking found entry.
+			006x Change frmNewEntry.Text after saving from 'new entry in <jrnl>' to 'editing <entry name>'.
+				done
+			007x Journal rename?
+				did it
+		02/02/23
+			008 Write 'change Azure PWD'
 
-	10/15/22
-		Fix search error when clicking found entry.
-		Change frmNewEntry.Text after saving from 'new entry in <jrnl>' to 'editing <entry name>'.
-			done
-		Journal rename?
-			did it
+		02/24/23	
+			009 Write mnuJournal_Export_Click (as plain text?, as Journal file (encrypted)?)
+
  */
 using System;
 using System.Drawing;
@@ -173,17 +177,16 @@ namespace myJournal.subforms
 				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"]);
 				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFolder"]);
 				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"]);
-				File.Create(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFile"]).Close();
-				File.Create(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Close();
+				File.Create				 (Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFile"]).Close();
+				File.Create				 (Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Close();
 
 				using (StreamWriter sw = File.AppendText(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]))
-				{ sw.WriteLine(DateTime.MinValue.ToString("dd/MM/yyyy_HH:mm:ss")); }
+				{ sw.WriteLine(DateTime.MinValue.ToString(ConfigurationManager.AppSettings["FileDate"])); }
 
 				using (StreamWriter sw = File.AppendText(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFile"]))
-				{ sw.WriteLine(DateTime.MinValue.ToString("dd/MM/yyyy_HH:mm:ss")); }
+				{ sw.WriteLine(DateTime.MinValue.ToString(ConfigurationManager.AppSettings["FileDate"])); }
 			}
 
-			// synch
 			frmAzurePwd frm = new frmAzurePwd(this);
 
 			if (Program.AzurePassword.Length > 0)
@@ -191,11 +194,14 @@ namespace myJournal.subforms
 				frm.Close();
 				CloudSynchronizer cs = new CloudSynchronizer();
 				await cs.SynchWithCloud(true);
-				string title = " synchd:"		+ cs.JournalsSynchd.ToString();
-				title		+= " skipped: "		+ cs.JournalsSkipped.ToString();
-				title		+= " downloaded:"	+ cs.JournalsDownloaded.ToString();
-				title		+= " backed up:"	+ cs.JournalsBackedUp.ToString();
-				this.Text	+= title;
+				if (this.Text.ToLower().Contains("debug"))
+				{
+					string title = " synchd:"		+ cs.JournalsSynchd.ToString();
+					title		+= " skipped: "		+ cs.JournalsSkipped.ToString();
+					title		+= " downloaded:"	+ cs.JournalsDownloaded.ToString();
+					title		+= " backed up:"	+ cs.JournalsBackedUp.ToString();
+					this.Text	+= title;
+				}
 			}
 
 			LoadJournals();
@@ -203,21 +209,6 @@ namespace myJournal.subforms
 
 			try { mnuJournal_Export.Enabled = Utilities.AllJournals().First(j => j.AllowCloud) != null; }
 			catch(InvalidOperationException) { mnuJournal_Export.Enabled = false; }
-		}
-
-		private void frmMain_FormClosing(object sender, FormClosingEventArgs e) 
-		{
-			//string parent					= Directory.GetParent(Program.AppRoot).FullName;
-			//string targetDir				= Directory.GetParent(parent).FullName;
-			//string targetDirJournals		= Directory.GetParent(targetDir).FullName + "\\lastjournals";
-			//string targetDirBackups			= Directory.GetParent(targetDir).FullName + "\\lastjournals\\backups";
-			//string targetDirForcedBackups	= Directory.GetParent(targetDir).FullName + "\\lastjournals\\backups\\forced";
-			//string targetDirSettings		= Directory.GetParent(targetDir).FullName + "\\lastsettings";
-
-			//CopyDirectory(new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]), new DirectoryInfo(targetDirJournals), false, true);
-			//CopyDirectory(new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFolder"]), new DirectoryInfo(targetDirSettings), false, true);
-			//CopyDirectory(new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"]), new DirectoryInfo(targetDirBackups), false, true);
-			//CopyDirectory(new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"]), new DirectoryInfo(targetDirForcedBackups), false, true);
 		}
 
 		private void frmMain_Resize(object sender, EventArgs e)

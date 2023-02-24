@@ -484,7 +484,6 @@ namespace myJournal.subforms
 			this.MainMenuStrip = this.menuStrip1;
 			this.Name = "frmMain";
 			this.Text = "MyJournal";
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
 			this.Load += new System.EventHandler(this.frmMain_Load);
 			this.Resize += new System.EventHandler(this.frmMain_Resize);
 			this.menuStrip1.ResumeLayout(false);
@@ -538,6 +537,5 @@ namespace myJournal.subforms
 		private System.Windows.Forms.ToolStripMenuItem mnuJournal_Export;
 		private System.Windows.Forms.ComboBox cbxSortEntriesBy;
 		private System.Windows.Forms.Label label5;
-		private System.Windows.Forms.ToolStripMenuItem falseToolStripMenuItem;
 	}
 }

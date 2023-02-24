@@ -23,16 +23,8 @@ namespace myJournal.subforms
 		private string OriginalPIN					= Program.PIN;
 		private Dictionary<string, string> DictJournals = new Dictionary<string, string>();
 		private bool EditingAllJournals;
-		//private LabelsManager lm = new LabelsManager();
 
 		public bool ActionTaken { get; private set; }
-
-		//private enum LabelsSortType
-		//{
-		//	Ascending,
-		//	Descending,
-		//	None
-		//}
 
 		private Journal CurrentJournal;
 

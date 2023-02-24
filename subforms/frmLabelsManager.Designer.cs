@@ -545,9 +545,6 @@ namespace myJournal.subforms
 
 		private System.Windows.Forms.Panel pnlMain;
 		private System.Windows.Forms.MenuStrip mnuMain;
-		private System.Windows.Forms.ToolStripMenuItem mnuAdda;
-		private System.Windows.Forms.ToolStripMenuItem mnuRenamea;
-		private System.Windows.Forms.ToolStripMenuItem mnuDeletea;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.ListBox lstLabels;
 		private System.Windows.Forms.ToolStripMenuItem mnuMoveUp;
@@ -559,7 +556,6 @@ namespace myJournal.subforms
 		private System.Windows.Forms.Label lblOperation;
 		private System.Windows.Forms.TextBox txtLabelName;
 		private System.Windows.Forms.ListBox lstOccurrences;
-		private System.Windows.Forms.ToolStripMenuItem mnuFindAlla;
 		private System.Windows.Forms.Panel pnlJournalPINs;
 		private System.Windows.Forms.Button btnAddPIN;
 		private System.Windows.Forms.TextBox txtPIN;

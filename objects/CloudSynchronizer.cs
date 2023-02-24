@@ -60,8 +60,7 @@ namespace myJournal.objects
 
 		private string[] GetLabelsAsArray(FileInfo file)
 		{
-			List<string> labels = new List<string>();
-			string s = string.Empty;
+			string sRtrn = string.Empty;
 
 			using (FileStream fs = File.OpenRead(file.FullName))
 			{
@@ -69,10 +68,10 @@ namespace myJournal.objects
 				UTF8Encoding temp = new UTF8Encoding(true);
 
 				while (fs.Read(b, 0, b.Length) > 0)
-				{ s = temp.GetString(b); }
+				{ sRtrn = temp.GetString(b); }
 			}
 
-			return s.Substring(0, s.LastIndexOf("\r\n")).Split("\r\n");
+			return sRtrn.Substring(0, sRtrn.LastIndexOf("\r\n")).Split("\r\n");
 		}
 
 		public async Task SynchWithCloud(bool alsoSynchSettings = false, Journal journal = null)
