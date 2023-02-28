@@ -18,7 +18,7 @@ namespace myJournal.subforms
 
 		private void frmSynchJournals_Load(object sender, EventArgs e)
 		{
-			Form frm = new frmAzurePwd(this);
+			Form frm = new frmAzurePwd(this, frmAzurePwd.Mode.AskingForKey);
 
 			if (Program.AzurePassword.Length == 0)
 			{ frm.ShowDialog(this); }

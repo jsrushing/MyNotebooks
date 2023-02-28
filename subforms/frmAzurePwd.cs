@@ -16,27 +16,71 @@ namespace myJournal.subforms
 {
 	public partial class frmAzurePwd : Form
 	{
+		public bool KeyChanged { get; set; }
 
-		public frmAzurePwd(Form parent)
+		public enum Mode
 		{
+			AskingForKey,
+			EnteringKey,
+			CreatingKey,
+			ChangingKey
+		}
+
+		List<Panel> panels = new List<Panel>();
+		List<TextBox> entries = new List<TextBox>();	
+		Form parentForm = null;
+
+		public frmAzurePwd(Form parent, Mode mode)
+		{
+			parentForm = parent;
 			InitializeComponent();
 
-			if (File.Exists(Program.AppRoot + "ap"))
+			if (mode != Mode.ChangingKey && File.Exists(Program.AppRoot + "ap"))
 			{
 				Program.AzurePassword = File.ReadAllText(Program.AppRoot + "ap");
 				this.Hide();
 			}
 			else
 			{
+				Panel panel = new Panel();
+
 				this.Size = new System.Drawing.Size(223, 120);
 				Utilities.SetStartPosition(this, parent);
-				pnlCreateKey.Top = pnlHaveKey.Top;
-				pnlEnterKey.Top = pnlHaveKey.Top;
+
+				foreach (Control c in this.Controls)
+				{ 
+					if (c.GetType() == typeof(Panel))
+					{ 
+						panel = (Panel)c;
+						panel.Location = pnlHaveKey.Location;
+						panels.Add(panel);
+					}
+					else if (c.GetType() == typeof(TextBox)) { entries.Add((TextBox)c); }
+				}
+
+				SetUpUI(mode);
 				this.ShowDialog();
 			}
 		}
 
-		private void btnCancel_Click(object sender, EventArgs e) { Close(); }
+		private void btnCancel_Click(object sender, EventArgs e) 
+		{ 
+			ClearAllText(); 
+			SetUpUI(Mode.AskingForKey); 
+		}
+		private void btnCancelChange_Click(object sender, EventArgs e) { Close(); }
+
+		private void btnChangeKey_Click(object sender, EventArgs e)
+		{
+			// recreate ap file
+			string key = EncryptDecrypt.Encrypt(txtChangeKey.Text);
+			File.WriteAllText(Program.AppRoot + "ap", key);
+			Program.AzurePassword = key;
+			// synch the new key to file share "keys"
+
+			KeyChanged = true;
+			this.Hide();
+		}
 
 		private async void btnCreateKey_Click(object sender, EventArgs e)
 		{
@@ -50,7 +94,7 @@ namespace myJournal.subforms
 			}
 			else
 			{
-				StoreAzureKey(Program.AzurePassword);
+				this.StoreAzureKey(Program.AzurePassword);
 			}
 		}
 
@@ -58,7 +102,7 @@ namespace myJournal.subforms
 		{
 			await AzureFileClient.CheckNewAzurePassword(txtEnterKey.Text, false);
 
-			if(Program.AzurePassword.Length == 0)
+			if (Program.AzurePassword.Length == 0)
 			{
 				string key = EncryptDecrypt.Encrypt(txtEnterKey.Text);
 				File.WriteAllText(Program.AppRoot + "ap", key);
@@ -71,25 +115,45 @@ namespace myJournal.subforms
 			}
 			else
 			{
-				lblError_EnterKey.Text = "Password is already used";
+				lblError_EnterKey.Text = "Password is in use";
 				lblError_EnterKey.Visible = true;
 			}
 		}
 
-		private void btnHaveKeyNo_Click(object sender, EventArgs e)
-		{
-			pnlHaveKey.Visible = false;
-			this.Text = "Create Azure Key";
-			pnlCreateKey.Visible = true;
-			txtCreateKey.Focus();
-		}
+		private void btnHaveKeyNo_Click(object sender, EventArgs e) { SetUpUI(Mode.CreatingKey); }
 
-		private void btnHaveKeyYes_Click(object sender, EventArgs e)
+		private void btnHaveKeyYes_Click(object sender, EventArgs e) { SetUpUI(Mode.EnteringKey); }
+
+		private void ClearAllText() { foreach (TextBox tb in entries) { tb.Text = string.Empty; } }
+		
+		private void HideAllPanels() { foreach (Panel p in panels) { p.Visible = false; } }
+
+		private void SetUpUI(Mode mode)
 		{
-			pnlHaveKey.Visible = false;
-			this.Text = "Enter Azure Key";
-			pnlEnterKey.Visible = true;
-			txtEnterKey.Focus();
+			HideAllPanels();
+
+			switch(mode)
+			{
+				case Mode.AskingForKey:
+					this.Text = "Do you have an Azure key?";
+					pnlHaveKey.Visible = true;
+					break;
+				case Mode.EnteringKey: 
+					this.Text = "Enter Azure Key";
+					pnlEnterKey.Visible = true;
+					txtEnterKey.Focus();
+					break;
+				case Mode.CreatingKey: 
+					this.Text = "Create Azure Key";
+					pnlCreateKey.Visible = true;
+					txtCreateKey.Focus();
+					break;
+				case Mode.ChangingKey:
+					this.Text = "Change Azure Key";
+					pnlChangeKey.Visible = true;
+					txtChangeKey.Focus();
+					break;
+			}
 		}
 
 		private void StoreAzureKey(string key)
@@ -106,6 +170,7 @@ namespace myJournal.subforms
 			lblError_CreateKey.Visible = false;
 			btnEnterKey.Enabled = tbx.TextLength > 7;
 			btnCreateKey.Enabled = tbx.TextLength > 7;
+			btnChangeKey.Enabled = tbx.TextLength > 7;
 		}
 	}
 }

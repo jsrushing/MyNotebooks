@@ -65,8 +65,8 @@ namespace myJournal.objects
 			CloudFileDirectory myDirectory		= root.GetDirectoryReference("keys");
 			FileResultSegment resultSegment		= await root.ListFilesAndDirectoriesSegmentedAsync(key, 1, null, new FileRequestOptions(), null);
 
-			if (creatingKey) { Program.AzurePassword = resultSegment.Results.Count() == 1 ? string.Empty : key; }
-			else { Program.AzurePassword = resultSegment.Results.Count() == 1 ? key : string.Empty; }
+			if (creatingKey)	{ Program.AzurePassword = resultSegment.Results.Count() == 1 ? string.Empty : key; }
+			else				{ Program.AzurePassword = resultSegment.Results.Count() == 1 ? key : string.Empty; }
 		}
 
 		public static async Task GetAzureFiles(string pwd)

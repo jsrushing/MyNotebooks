@@ -69,6 +69,7 @@ namespace myJournal.subforms
 			this.label3 = new System.Windows.Forms.Label();
 			this.cbxDatesTo = new System.Windows.Forms.ComboBox();
 			this.pnlPin = new System.Windows.Forms.Panel();
+			this.mnuSwitchAccount = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.pnlDateFilters.SuspendLayout();
 			this.pnlPin.SuspendLayout();
@@ -188,7 +189,8 @@ namespace myJournal.subforms
             this.mnuJournal,
             this.mnuEntryTop,
             this.mnuLabels,
-            this.helpToolStripMenuItem});
+            this.helpToolStripMenuItem,
+            this.mnuSwitchAccount});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
 			this.menuStrip1.Size = new System.Drawing.Size(1012, 24);
@@ -213,7 +215,7 @@ namespace myJournal.subforms
 			// mnuJournal_Create
 			// 
 			this.mnuJournal_Create.Name = "mnuJournal_Create";
-			this.mnuJournal_Create.Size = new System.Drawing.Size(160, 22);
+			this.mnuJournal_Create.Size = new System.Drawing.Size(180, 22);
 			this.mnuJournal_Create.Text = "&New Journal";
 			this.mnuJournal_Create.Click += new System.EventHandler(this.mnuJournal_Create_Click);
 			// 
@@ -221,7 +223,7 @@ namespace myJournal.subforms
 			// 
 			this.mnuJournal_Delete.Enabled = false;
 			this.mnuJournal_Delete.Name = "mnuJournal_Delete";
-			this.mnuJournal_Delete.Size = new System.Drawing.Size(160, 22);
+			this.mnuJournal_Delete.Size = new System.Drawing.Size(180, 22);
 			this.mnuJournal_Delete.Text = "Delete";
 			this.mnuJournal_Delete.Click += new System.EventHandler(this.mnuJournal_Delete_Click);
 			// 
@@ -229,7 +231,7 @@ namespace myJournal.subforms
 			// 
 			this.mnuJournal_Search.Enabled = false;
 			this.mnuJournal_Search.Name = "mnuJournal_Search";
-			this.mnuJournal_Search.Size = new System.Drawing.Size(160, 22);
+			this.mnuJournal_Search.Size = new System.Drawing.Size(180, 22);
 			this.mnuJournal_Search.Text = "&Search";
 			this.mnuJournal_Search.Click += new System.EventHandler(this.mnuJournal_Search_Click);
 			// 
@@ -237,7 +239,7 @@ namespace myJournal.subforms
 			// 
 			this.mnuJournal_Rename.Enabled = false;
 			this.mnuJournal_Rename.Name = "mnuJournal_Rename";
-			this.mnuJournal_Rename.Size = new System.Drawing.Size(160, 22);
+			this.mnuJournal_Rename.Size = new System.Drawing.Size(180, 22);
 			this.mnuJournal_Rename.Text = "Rename";
 			this.mnuJournal_Rename.Click += new System.EventHandler(this.mnuJournal_Rename_Click);
 			// 
@@ -245,28 +247,28 @@ namespace myJournal.subforms
 			// 
 			this.mnuJournal_ForceBackup.Enabled = false;
 			this.mnuJournal_ForceBackup.Name = "mnuJournal_ForceBackup";
-			this.mnuJournal_ForceBackup.Size = new System.Drawing.Size(160, 22);
+			this.mnuJournal_ForceBackup.Size = new System.Drawing.Size(180, 22);
 			this.mnuJournal_ForceBackup.Text = "Force &Backup";
 			this.mnuJournal_ForceBackup.Click += new System.EventHandler(this.mnuJournal_ForceBackup_Click);
 			// 
 			// mnuJournal_RestoreBackups
 			// 
 			this.mnuJournal_RestoreBackups.Name = "mnuJournal_RestoreBackups";
-			this.mnuJournal_RestoreBackups.Size = new System.Drawing.Size(160, 22);
+			this.mnuJournal_RestoreBackups.Size = new System.Drawing.Size(180, 22);
 			this.mnuJournal_RestoreBackups.Text = "&Restore Backups";
 			this.mnuJournal_RestoreBackups.Click += new System.EventHandler(this.mnuJournal_RestoreBackups_Click);
 			// 
 			// mnuJournal_Import
 			// 
 			this.mnuJournal_Import.Name = "mnuJournal_Import";
-			this.mnuJournal_Import.Size = new System.Drawing.Size(160, 22);
+			this.mnuJournal_Import.Size = new System.Drawing.Size(180, 22);
 			this.mnuJournal_Import.Text = "Import";
 			this.mnuJournal_Import.Click += new System.EventHandler(this.mnuJournal_Import_Click);
 			// 
 			// mnuJournal_Export
 			// 
 			this.mnuJournal_Export.Name = "mnuJournal_Export";
-			this.mnuJournal_Export.Size = new System.Drawing.Size(160, 22);
+			this.mnuJournal_Export.Size = new System.Drawing.Size(180, 22);
 			this.mnuJournal_Export.Text = "Synch";
 			this.mnuJournal_Export.Click += new System.EventHandler(this.mnuJournal_Export_Click);
 			// 
@@ -462,6 +464,13 @@ namespace myJournal.subforms
 			this.pnlPin.TabIndex = 50;
 			this.pnlPin.Visible = false;
 			// 
+			// mnuSwitchAccount
+			// 
+			this.mnuSwitchAccount.Name = "mnuSwitchAccount";
+			this.mnuSwitchAccount.Size = new System.Drawing.Size(102, 20);
+			this.mnuSwitchAccount.Text = "Switch Account";
+			this.mnuSwitchAccount.Click += new System.EventHandler(this.mnuSwitchAccount_Click);
+			// 
 			// frmMain
 			// 
 			this.AcceptButton = this.btnLoadJournal;
@@ -537,5 +546,6 @@ namespace myJournal.subforms
 		private System.Windows.Forms.ToolStripMenuItem mnuJournal_Export;
 		private System.Windows.Forms.ComboBox cbxSortEntriesBy;
 		private System.Windows.Forms.Label label5;
+		private System.Windows.Forms.ToolStripMenuItem mnuSwitchAccount;
 	}
 }

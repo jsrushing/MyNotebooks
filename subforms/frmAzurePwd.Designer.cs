@@ -41,9 +41,14 @@
 			this.btnCancel2 = new System.Windows.Forms.Button();
 			this.btnCreateKey = new System.Windows.Forms.Button();
 			this.lblError_CreateKey = new System.Windows.Forms.Label();
+			this.pnlChangeKey = new System.Windows.Forms.Panel();
+			this.txtChangeKey = new System.Windows.Forms.TextBox();
+			this.btnCancelChange = new System.Windows.Forms.Button();
+			this.btnChangeKey = new System.Windows.Forms.Button();
 			this.pnlEnterKey.SuspendLayout();
 			this.pnlHaveKey.SuspendLayout();
 			this.pnlCreateKey.SuspendLayout();
+			this.pnlChangeKey.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// btnEnterKey
@@ -107,6 +112,7 @@
 			this.pnlHaveKey.Name = "pnlHaveKey";
 			this.pnlHaveKey.Size = new System.Drawing.Size(164, 76);
 			this.pnlHaveKey.TabIndex = 10;
+			this.pnlHaveKey.Visible = false;
 			// 
 			// btnHaveKeyNo
 			// 
@@ -181,12 +187,53 @@
 			this.lblError_CreateKey.Text = "Key is in use";
 			this.lblError_CreateKey.Visible = false;
 			// 
+			// pnlChangeKey
+			// 
+			this.pnlChangeKey.Controls.Add(this.txtChangeKey);
+			this.pnlChangeKey.Controls.Add(this.btnCancelChange);
+			this.pnlChangeKey.Controls.Add(this.btnChangeKey);
+			this.pnlChangeKey.Location = new System.Drawing.Point(22, 295);
+			this.pnlChangeKey.Name = "pnlChangeKey";
+			this.pnlChangeKey.Size = new System.Drawing.Size(164, 76);
+			this.pnlChangeKey.TabIndex = 11;
+			this.pnlChangeKey.Visible = false;
+			// 
+			// txtChangeKey
+			// 
+			this.txtChangeKey.Location = new System.Drawing.Point(5, 5);
+			this.txtChangeKey.Name = "txtChangeKey";
+			this.txtChangeKey.Size = new System.Drawing.Size(155, 23);
+			this.txtChangeKey.TabIndex = 5;
+			this.txtChangeKey.TextChanged += new System.EventHandler(this.txtPwd_TextChanged);
+			// 
+			// btnCancelChange
+			// 
+			this.btnCancelChange.Location = new System.Drawing.Point(85, 34);
+			this.btnCancelChange.Name = "btnCancelChange";
+			this.btnCancelChange.Size = new System.Drawing.Size(75, 23);
+			this.btnCancelChange.TabIndex = 7;
+			this.btnCancelChange.Text = "&Cancel";
+			this.btnCancelChange.UseVisualStyleBackColor = true;
+			this.btnCancelChange.Click += new System.EventHandler(this.btnCancelChange_Click);
+			// 
+			// btnChangeKey
+			// 
+			this.btnChangeKey.Enabled = false;
+			this.btnChangeKey.Location = new System.Drawing.Point(5, 34);
+			this.btnChangeKey.Name = "btnChangeKey";
+			this.btnChangeKey.Size = new System.Drawing.Size(75, 23);
+			this.btnChangeKey.TabIndex = 6;
+			this.btnChangeKey.Text = "&Change Key";
+			this.btnChangeKey.UseVisualStyleBackColor = true;
+			this.btnChangeKey.Click += new System.EventHandler(this.btnChangeKey_Click);
+			// 
 			// frmAzurePwd
 			// 
 			this.AcceptButton = this.btnEnterKey;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(210, 283);
+			this.ClientSize = new System.Drawing.Size(653, 670);
+			this.Controls.Add(this.pnlChangeKey);
 			this.Controls.Add(this.pnlHaveKey);
 			this.Controls.Add(this.pnlCreateKey);
 			this.Controls.Add(this.pnlEnterKey);
@@ -200,6 +247,8 @@
 			this.pnlHaveKey.ResumeLayout(false);
 			this.pnlCreateKey.ResumeLayout(false);
 			this.pnlCreateKey.PerformLayout();
+			this.pnlChangeKey.ResumeLayout(false);
+			this.pnlChangeKey.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -219,5 +268,9 @@
 		private System.Windows.Forms.Label lblError_CreateKey;
 		private System.Windows.Forms.Button btnHaveKeyYes;
 		private System.Windows.Forms.Button btnHaveKeyNo;
+		private System.Windows.Forms.Panel pnlChangeKey;
+		private System.Windows.Forms.TextBox txtChangeKey;
+		private System.Windows.Forms.Button btnCancelChange;
+		private System.Windows.Forms.Button btnChangeKey;
 	}
 }
