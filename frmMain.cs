@@ -171,24 +171,6 @@ namespace myJournal.subforms
 			this.Text = "myJournal " + Program.AppVersion + (fvi.FileName.ToLower().Contains("debug") ? " - DEBUG MODE" : "");
 
 			CheckForSystemDirectories();
-
-			//if (!Directory.Exists(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]))    // create system directories and files
-			//{
-			//	Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]);
-			//	Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"]);
-			//	Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"]);
-			//	Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFolder"]);
-			//	Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"]);
-			//	File.Create				 (Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFile"]).Close();
-			//	File.Create				 (Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Close();
-
-			//	using (StreamWriter sw = File.AppendText(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]))
-			//	{ sw.WriteLine(DateTime.MinValue.ToString(ConfigurationManager.AppSettings["FileDate"])); }
-
-			//	using (StreamWriter sw = File.AppendText(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFile"]))
-			//	{ sw.WriteLine(DateTime.MinValue.ToString(ConfigurationManager.AppSettings["FileDate"])); }
-			//}
-
 			frmAzurePwd frm = new frmAzurePwd(this, frmAzurePwd.Mode.AskingForKey);
 
 			if (Program.AzurePassword.Length > 0)
@@ -198,11 +180,11 @@ namespace myJournal.subforms
 				await cs.SynchWithCloud(true);
 				if (this.Text.ToLower().Contains("debug"))
 				{
-					string title = " synchd:"		+ cs.JournalsSynchd.ToString();
-					title		+= " skipped: "		+ cs.JournalsSkipped.ToString();
-					title		+= " downloaded:"	+ cs.JournalsDownloaded.ToString();
-					title		+= " backed up:"	+ cs.JournalsBackedUp.ToString();
-					this.Text	+= title;
+					string title = " synchd:" + cs.JournalsSynchd.ToString();
+					title += " skipped: " + cs.JournalsSkipped.ToString();
+					title += " downloaded:" + cs.JournalsDownloaded.ToString();
+					title += " backed up:" + cs.JournalsBackedUp.ToString();
+					this.Text += title;
 				}
 			}
 

@@ -73,11 +73,12 @@ namespace myJournal.subforms
 		private void btnChangeKey_Click(object sender, EventArgs e)
 		{
 			// recreate ap file
-			string key = EncryptDecrypt.Encrypt(txtChangeKey.Text);
-			File.WriteAllText(Program.AppRoot + "ap", key);
-			Program.AzurePassword = key;
-			// synch the new key to file share "keys"
-
+			//string key = EncryptDecrypt.Encrypt(txtChangeKey.Text);
+			//File.WriteAllText(Program.AppRoot + "ap", key);
+			//Program.AzurePassword = key;
+			//// synch the new key to file share "keys"
+			//AzureFileClient.UploadFile(Program.AppRoot + "ap");
+			StoreAzureKey(EncryptDecrypt.Encrypt(txtChangeKey.Text));
 			KeyChanged = true;
 			this.Hide();
 		}
@@ -105,18 +106,20 @@ namespace myJournal.subforms
 			if (Program.AzurePassword.Length == 0)
 			{
 				string key = EncryptDecrypt.Encrypt(txtEnterKey.Text);
-				File.WriteAllText(Program.AppRoot + "ap", key);
+				StoreAzureKey(key);
 				Program.AzurePassword = key;
-			}
-
-			if (Program.AzurePassword.Length > 0)
-			{
-				StoreAzureKey(Program.AzurePassword);
 			}
 			else
 			{
-				lblError_EnterKey.Text = "Password is in use";
-				lblError_EnterKey.Visible = true;
+				if (Program.AzurePassword.Length > 0)
+				{
+					StoreAzureKey(Program.AzurePassword);
+				}
+				else
+				{
+					lblError_EnterKey.Text = "Password is in use";
+					lblError_EnterKey.Visible = true;
+				}
 			}
 		}
 

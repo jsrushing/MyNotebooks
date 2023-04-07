@@ -41,7 +41,6 @@ namespace myJournal.objects
 			return jrnlReturn;
 		}
 
-
 		public static void PopulateEntries(ListBox lbxToPopulate, List<JournalEntry> entries, string startDate = "", string endDate = "", bool clearPrevious = true, int SortBy = 0)
 		{
 			if(clearPrevious) lbxToPopulate.Items.Clear();

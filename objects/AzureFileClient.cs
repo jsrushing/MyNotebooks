@@ -26,11 +26,15 @@ namespace myJournal.objects
 
 			if (File.Exists(localFileName))
 			{
-				using FileStream stream = new FileStream(localFileName, 
-					FileMode.Open, FileAccess.Read, FileShare.Read, 64*1024, 
-						(FileOptions)0x20000000 | FileOptions.WriteThrough & FileOptions.SequentialScan);
+				using FileStream stream = new FileStream(localFileName, FileMode.Create, FileAccess.Write);
 					myFile.Create(stream.Length);
 					myFile.UploadRange(new HttpRange(0, stream.Length), stream);
+
+				//using FileStream stream = new FileStream(localFileName, 
+				//	FileMode.Open, FileAccess.Read, FileShare.Read, 64*1024, 
+				//		(FileOptions)0x20000000 | FileOptions.WriteThrough & FileOptions.SequentialScan);
+				//	myFile.Create(stream.Length);
+				//	myFile.UploadRange(new HttpRange(0, stream.Length), stream);
 			}
 		}
 
