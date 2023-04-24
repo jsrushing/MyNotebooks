@@ -30,399 +30,390 @@ namespace myJournal.subforms
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSearch));
-			this.grpFindEntry = new System.Windows.Forms.GroupBox();
-			this.label2 = new System.Windows.Forms.Label();
-			this.chkMatchWholeWord = new System.Windows.Forms.CheckBox();
-			this.comboBox1 = new System.Windows.Forms.ComboBox();
-			this.label1 = new System.Windows.Forms.Label();
-			this.chkMatchCase = new System.Windows.Forms.CheckBox();
-			this.lblSeparator = new System.Windows.Forms.Label();
-			this.radBtnAnd = new System.Windows.Forms.RadioButton();
-			this.radBtnOr = new System.Windows.Forms.RadioButton();
-			this.lstFoundEntries = new System.Windows.Forms.ListBox();
-			this.chkUseDateRange = new System.Windows.Forms.CheckBox();
-			this.chkUseDate = new System.Windows.Forms.CheckBox();
-			this.lstLabelsForSearch = new System.Windows.Forms.CheckedListBox();
-			this.label17 = new System.Windows.Forms.Label();
-			this.dtFindDate = new System.Windows.Forms.DateTimePicker();
-			this.txtSearchText = new System.Windows.Forms.TextBox();
-			this.txtSearchTitle = new System.Windows.Forms.TextBox();
-			this.dtFindDate_To = new System.Windows.Forms.DateTimePicker();
-			this.label12 = new System.Windows.Forms.Label();
-			this.dtFindDate_From = new System.Windows.Forms.DateTimePicker();
-			this.rtbSelectedEntry_Found = new System.Windows.Forms.RichTextBox();
-			this.label9 = new System.Windows.Forms.Label();
-			this.lblSelectionType = new System.Windows.Forms.Label();
-			this.label8 = new System.Windows.Forms.Label();
-			this.lblFoundEntries = new System.Windows.Forms.Label();
-			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-			this.mnuSearch = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuSelectJournals = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuClearFields = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuExit = new System.Windows.Forms.ToolStripMenuItem();
-			this.grpFindEntry.SuspendLayout();
-			this.menuStrip1.SuspendLayout();
+			grpFindEntry = new System.Windows.Forms.GroupBox();
+			btnSearch = new System.Windows.Forms.Button();
+			label2 = new System.Windows.Forms.Label();
+			chkMatchWholeWord = new System.Windows.Forms.CheckBox();
+			comboBox1 = new System.Windows.Forms.ComboBox();
+			label1 = new System.Windows.Forms.Label();
+			chkMatchCase = new System.Windows.Forms.CheckBox();
+			lblSeparator = new System.Windows.Forms.Label();
+			radBtnAnd = new System.Windows.Forms.RadioButton();
+			radBtnOr = new System.Windows.Forms.RadioButton();
+			lstFoundEntries = new System.Windows.Forms.ListBox();
+			chkUseDateRange = new System.Windows.Forms.CheckBox();
+			chkUseDate = new System.Windows.Forms.CheckBox();
+			lstLabelsForSearch = new System.Windows.Forms.CheckedListBox();
+			label17 = new System.Windows.Forms.Label();
+			dtFindDate = new System.Windows.Forms.DateTimePicker();
+			txtSearchText = new System.Windows.Forms.TextBox();
+			txtSearchTitle = new System.Windows.Forms.TextBox();
+			dtFindDate_To = new System.Windows.Forms.DateTimePicker();
+			label12 = new System.Windows.Forms.Label();
+			dtFindDate_From = new System.Windows.Forms.DateTimePicker();
+			rtbSelectedEntry_Found = new System.Windows.Forms.RichTextBox();
+			label9 = new System.Windows.Forms.Label();
+			lblSelectionType = new System.Windows.Forms.Label();
+			label8 = new System.Windows.Forms.Label();
+			lblFoundEntries = new System.Windows.Forms.Label();
+			menuStrip1 = new System.Windows.Forms.MenuStrip();
+			mnuSelectJournals = new System.Windows.Forms.ToolStripMenuItem();
+			mnuClearFields = new System.Windows.Forms.ToolStripMenuItem();
+			mnuExit = new System.Windows.Forms.ToolStripMenuItem();
+			grpFindEntry.SuspendLayout();
+			menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// grpFindEntry
 			// 
-			this.grpFindEntry.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.grpFindEntry.Controls.Add(this.label2);
-			this.grpFindEntry.Controls.Add(this.chkMatchWholeWord);
-			this.grpFindEntry.Controls.Add(this.comboBox1);
-			this.grpFindEntry.Controls.Add(this.label1);
-			this.grpFindEntry.Controls.Add(this.chkMatchCase);
-			this.grpFindEntry.Controls.Add(this.lblSeparator);
-			this.grpFindEntry.Controls.Add(this.radBtnAnd);
-			this.grpFindEntry.Controls.Add(this.radBtnOr);
-			this.grpFindEntry.Controls.Add(this.lstFoundEntries);
-			this.grpFindEntry.Controls.Add(this.chkUseDateRange);
-			this.grpFindEntry.Controls.Add(this.chkUseDate);
-			this.grpFindEntry.Controls.Add(this.lstLabelsForSearch);
-			this.grpFindEntry.Controls.Add(this.label17);
-			this.grpFindEntry.Controls.Add(this.dtFindDate);
-			this.grpFindEntry.Controls.Add(this.txtSearchText);
-			this.grpFindEntry.Controls.Add(this.txtSearchTitle);
-			this.grpFindEntry.Controls.Add(this.dtFindDate_To);
-			this.grpFindEntry.Controls.Add(this.label12);
-			this.grpFindEntry.Controls.Add(this.dtFindDate_From);
-			this.grpFindEntry.Controls.Add(this.rtbSelectedEntry_Found);
-			this.grpFindEntry.Controls.Add(this.label9);
-			this.grpFindEntry.Controls.Add(this.lblSelectionType);
-			this.grpFindEntry.Controls.Add(this.label8);
-			this.grpFindEntry.Controls.Add(this.lblFoundEntries);
-			this.grpFindEntry.Location = new System.Drawing.Point(16, 22);
-			this.grpFindEntry.Name = "grpFindEntry";
-			this.grpFindEntry.Size = new System.Drawing.Size(465, 439);
-			this.grpFindEntry.TabIndex = 7;
-			this.grpFindEntry.TabStop = false;
+			grpFindEntry.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+			grpFindEntry.Controls.Add(btnSearch);
+			grpFindEntry.Controls.Add(label2);
+			grpFindEntry.Controls.Add(chkMatchWholeWord);
+			grpFindEntry.Controls.Add(comboBox1);
+			grpFindEntry.Controls.Add(label1);
+			grpFindEntry.Controls.Add(chkMatchCase);
+			grpFindEntry.Controls.Add(lblSeparator);
+			grpFindEntry.Controls.Add(radBtnAnd);
+			grpFindEntry.Controls.Add(radBtnOr);
+			grpFindEntry.Controls.Add(lstFoundEntries);
+			grpFindEntry.Controls.Add(chkUseDateRange);
+			grpFindEntry.Controls.Add(chkUseDate);
+			grpFindEntry.Controls.Add(lstLabelsForSearch);
+			grpFindEntry.Controls.Add(label17);
+			grpFindEntry.Controls.Add(dtFindDate);
+			grpFindEntry.Controls.Add(txtSearchText);
+			grpFindEntry.Controls.Add(txtSearchTitle);
+			grpFindEntry.Controls.Add(dtFindDate_To);
+			grpFindEntry.Controls.Add(label12);
+			grpFindEntry.Controls.Add(dtFindDate_From);
+			grpFindEntry.Controls.Add(rtbSelectedEntry_Found);
+			grpFindEntry.Controls.Add(label9);
+			grpFindEntry.Controls.Add(lblSelectionType);
+			grpFindEntry.Controls.Add(label8);
+			grpFindEntry.Controls.Add(lblFoundEntries);
+			grpFindEntry.Location = new System.Drawing.Point(16, 22);
+			grpFindEntry.Name = "grpFindEntry";
+			grpFindEntry.Size = new System.Drawing.Size(465, 439);
+			grpFindEntry.TabIndex = 7;
+			grpFindEntry.TabStop = false;
+			// 
+			// btnSearch
+			// 
+			btnSearch.Location = new System.Drawing.Point(338, 106);
+			btnSearch.Name = "btnSearch";
+			btnSearch.Size = new System.Drawing.Size(75, 23);
+			btnSearch.TabIndex = 43;
+			btnSearch.Text = "&Search";
+			btnSearch.UseVisualStyleBackColor = true;
+			btnSearch.Click += this.btnSearch_Click;
 			// 
 			// label2
 			// 
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(278, 62);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(47, 15);
-			this.label2.TabIndex = 42;
-			this.label2.Text = "match: ";
+			label2.AutoSize = true;
+			label2.Location = new System.Drawing.Point(278, 62);
+			label2.Name = "label2";
+			label2.Size = new System.Drawing.Size(47, 15);
+			label2.TabIndex = 42;
+			label2.Text = "match: ";
 			// 
 			// chkMatchWholeWord
 			// 
-			this.chkMatchWholeWord.AutoSize = true;
-			this.chkMatchWholeWord.Location = new System.Drawing.Point(372, 61);
-			this.chkMatchWholeWord.Name = "chkMatchWholeWord";
-			this.chkMatchWholeWord.Size = new System.Drawing.Size(88, 19);
-			this.chkMatchWholeWord.TabIndex = 41;
-			this.chkMatchWholeWord.Text = "whole word";
-			this.chkMatchWholeWord.UseVisualStyleBackColor = true;
+			chkMatchWholeWord.AutoSize = true;
+			chkMatchWholeWord.Location = new System.Drawing.Point(372, 61);
+			chkMatchWholeWord.Name = "chkMatchWholeWord";
+			chkMatchWholeWord.Size = new System.Drawing.Size(88, 19);
+			chkMatchWholeWord.TabIndex = 41;
+			chkMatchWholeWord.Text = "whole word";
+			chkMatchWholeWord.UseVisualStyleBackColor = true;
 			// 
 			// comboBox1
 			// 
-			this.comboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.comboBox1.FormattingEnabled = true;
-			this.comboBox1.Location = new System.Drawing.Point(256, 12);
-			this.comboBox1.Name = "comboBox1";
-			this.comboBox1.Size = new System.Drawing.Size(197, 23);
-			this.comboBox1.TabIndex = 40;
+			comboBox1.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+			comboBox1.FormattingEnabled = true;
+			comboBox1.Location = new System.Drawing.Point(256, 12);
+			comboBox1.Name = "comboBox1";
+			comboBox1.Size = new System.Drawing.Size(197, 23);
+			comboBox1.TabIndex = 40;
 			// 
 			// label1
 			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(149, 16);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(105, 15);
-			this.label1.TabIndex = 39;
-			this.label1.Text = "Journals to Search:";
+			label1.AutoSize = true;
+			label1.Location = new System.Drawing.Point(149, 16);
+			label1.Name = "label1";
+			label1.Size = new System.Drawing.Size(105, 15);
+			label1.TabIndex = 39;
+			label1.Text = "Journals to Search:";
 			// 
 			// chkMatchCase
 			// 
-			this.chkMatchCase.AutoSize = true;
-			this.chkMatchCase.Location = new System.Drawing.Point(325, 61);
-			this.chkMatchCase.Name = "chkMatchCase";
-			this.chkMatchCase.Size = new System.Drawing.Size(49, 19);
-			this.chkMatchCase.TabIndex = 38;
-			this.chkMatchCase.Text = "case";
-			this.chkMatchCase.UseVisualStyleBackColor = true;
+			chkMatchCase.AutoSize = true;
+			chkMatchCase.Location = new System.Drawing.Point(325, 61);
+			chkMatchCase.Name = "chkMatchCase";
+			chkMatchCase.Size = new System.Drawing.Size(49, 19);
+			chkMatchCase.TabIndex = 38;
+			chkMatchCase.Text = "case";
+			chkMatchCase.UseVisualStyleBackColor = true;
 			// 
 			// lblSeparator
 			// 
-			this.lblSeparator.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.lblSeparator.Cursor = System.Windows.Forms.Cursors.HSplit;
-			this.lblSeparator.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-			this.lblSeparator.ForeColor = System.Drawing.Color.Red;
-			this.lblSeparator.Location = new System.Drawing.Point(105, 270);
-			this.lblSeparator.Name = "lblSeparator";
-			this.lblSeparator.Size = new System.Drawing.Size(348, 19);
-			this.lblSeparator.TabIndex = 37;
-			this.lblSeparator.Text = resources.GetString("lblSeparator.Text");
-			this.lblSeparator.Visible = false;
-			this.lblSeparator.MouseMove += new System.Windows.Forms.MouseEventHandler(this.lblSeparator_MouseMove);
+			lblSeparator.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+			lblSeparator.Cursor = System.Windows.Forms.Cursors.HSplit;
+			lblSeparator.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			lblSeparator.ForeColor = System.Drawing.Color.Red;
+			lblSeparator.Location = new System.Drawing.Point(105, 270);
+			lblSeparator.Name = "lblSeparator";
+			lblSeparator.Size = new System.Drawing.Size(348, 19);
+			lblSeparator.TabIndex = 37;
+			lblSeparator.Text = resources.GetString("lblSeparator.Text");
+			lblSeparator.Visible = false;
+			lblSeparator.MouseMove += this.lblSeparator_MouseMove;
 			// 
 			// radBtnAnd
 			// 
-			this.radBtnAnd.AutoSize = true;
-			this.radBtnAnd.Location = new System.Drawing.Point(216, 60);
-			this.radBtnAnd.Name = "radBtnAnd";
-			this.radBtnAnd.Size = new System.Drawing.Size(45, 19);
-			this.radBtnAnd.TabIndex = 36;
-			this.radBtnAnd.TabStop = true;
-			this.radBtnAnd.Text = "and";
-			this.radBtnAnd.UseVisualStyleBackColor = true;
+			radBtnAnd.AutoSize = true;
+			radBtnAnd.Location = new System.Drawing.Point(216, 60);
+			radBtnAnd.Name = "radBtnAnd";
+			radBtnAnd.Size = new System.Drawing.Size(45, 19);
+			radBtnAnd.TabIndex = 36;
+			radBtnAnd.TabStop = true;
+			radBtnAnd.Text = "and";
+			radBtnAnd.UseVisualStyleBackColor = true;
 			// 
 			// radBtnOr
 			// 
-			this.radBtnOr.AutoSize = true;
-			this.radBtnOr.Checked = true;
-			this.radBtnOr.Location = new System.Drawing.Point(181, 60);
-			this.radBtnOr.Name = "radBtnOr";
-			this.radBtnOr.Size = new System.Drawing.Size(36, 19);
-			this.radBtnOr.TabIndex = 35;
-			this.radBtnOr.TabStop = true;
-			this.radBtnOr.Text = "or";
-			this.radBtnOr.UseVisualStyleBackColor = true;
+			radBtnOr.AutoSize = true;
+			radBtnOr.Checked = true;
+			radBtnOr.Location = new System.Drawing.Point(181, 60);
+			radBtnOr.Name = "radBtnOr";
+			radBtnOr.Size = new System.Drawing.Size(36, 19);
+			radBtnOr.TabIndex = 35;
+			radBtnOr.TabStop = true;
+			radBtnOr.Text = "or";
+			radBtnOr.UseVisualStyleBackColor = true;
 			// 
 			// lstFoundEntries
 			// 
-			this.lstFoundEntries.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.lstFoundEntries.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.lstFoundEntries.FormattingEnabled = true;
-			this.lstFoundEntries.ItemHeight = 15;
-			this.lstFoundEntries.Location = new System.Drawing.Point(6, 165);
-			this.lstFoundEntries.Name = "lstFoundEntries";
-			this.lstFoundEntries.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
-			this.lstFoundEntries.Size = new System.Drawing.Size(453, 105);
-			this.lstFoundEntries.TabIndex = 14;
-			this.lstFoundEntries.SelectedIndexChanged += new System.EventHandler(this.lstFoundEntries_SelectedIndexChanged);
+			lstFoundEntries.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+			lstFoundEntries.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			lstFoundEntries.FormattingEnabled = true;
+			lstFoundEntries.ItemHeight = 15;
+			lstFoundEntries.Location = new System.Drawing.Point(6, 165);
+			lstFoundEntries.Name = "lstFoundEntries";
+			lstFoundEntries.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
+			lstFoundEntries.Size = new System.Drawing.Size(453, 105);
+			lstFoundEntries.TabIndex = 14;
+			lstFoundEntries.SelectedIndexChanged += this.lstFoundEntries_SelectedIndexChanged;
 			// 
 			// chkUseDateRange
 			// 
-			this.chkUseDateRange.AutoSize = true;
-			this.chkUseDateRange.Location = new System.Drawing.Point(169, 138);
-			this.chkUseDateRange.Name = "chkUseDateRange";
-			this.chkUseDateRange.Size = new System.Drawing.Size(82, 19);
-			this.chkUseDateRange.TabIndex = 34;
-			this.chkUseDateRange.Text = "date range";
-			this.chkUseDateRange.UseVisualStyleBackColor = true;
-			this.chkUseDateRange.CheckedChanged += new System.EventHandler(this.chkUseDateRange_CheckedChanged);
+			chkUseDateRange.AutoSize = true;
+			chkUseDateRange.Location = new System.Drawing.Point(169, 138);
+			chkUseDateRange.Name = "chkUseDateRange";
+			chkUseDateRange.Size = new System.Drawing.Size(82, 19);
+			chkUseDateRange.TabIndex = 34;
+			chkUseDateRange.Text = "date range";
+			chkUseDateRange.UseVisualStyleBackColor = true;
+			chkUseDateRange.CheckedChanged += this.chkUseDateRange_CheckedChanged;
 			// 
 			// chkUseDate
 			// 
-			this.chkUseDate.AutoSize = true;
-			this.chkUseDate.Location = new System.Drawing.Point(169, 108);
-			this.chkUseDate.Name = "chkUseDate";
-			this.chkUseDate.Size = new System.Drawing.Size(49, 19);
-			this.chkUseDate.TabIndex = 33;
-			this.chkUseDate.Text = "date";
-			this.chkUseDate.UseVisualStyleBackColor = true;
-			this.chkUseDate.CheckedChanged += new System.EventHandler(this.chkUseDate_CheckedChanged);
+			chkUseDate.AutoSize = true;
+			chkUseDate.Location = new System.Drawing.Point(169, 108);
+			chkUseDate.Name = "chkUseDate";
+			chkUseDate.Size = new System.Drawing.Size(49, 19);
+			chkUseDate.TabIndex = 33;
+			chkUseDate.Text = "date";
+			chkUseDate.UseVisualStyleBackColor = true;
+			chkUseDate.CheckedChanged += this.chkUseDate_CheckedChanged;
 			// 
 			// lstLabelsForSearch
 			// 
-			this.lstLabelsForSearch.CheckOnClick = true;
-			this.lstLabelsForSearch.FormattingEnabled = true;
-			this.lstLabelsForSearch.Location = new System.Drawing.Point(6, 30);
-			this.lstLabelsForSearch.Name = "lstLabelsForSearch";
-			this.lstLabelsForSearch.Size = new System.Drawing.Size(137, 112);
-			this.lstLabelsForSearch.TabIndex = 29;
+			lstLabelsForSearch.CheckOnClick = true;
+			lstLabelsForSearch.FormattingEnabled = true;
+			lstLabelsForSearch.Location = new System.Drawing.Point(6, 30);
+			lstLabelsForSearch.Name = "lstLabelsForSearch";
+			lstLabelsForSearch.Size = new System.Drawing.Size(137, 112);
+			lstLabelsForSearch.TabIndex = 29;
 			// 
 			// label17
 			// 
-			this.label17.AutoSize = true;
-			this.label17.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-			this.label17.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.label17.Location = new System.Drawing.Point(3, 10);
-			this.label17.Name = "label17";
-			this.label17.Size = new System.Drawing.Size(51, 17);
-			this.label17.TabIndex = 26;
-			this.label17.Text = "Labels:";
+			label17.AutoSize = true;
+			label17.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			label17.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			label17.Location = new System.Drawing.Point(3, 10);
+			label17.Name = "label17";
+			label17.Size = new System.Drawing.Size(51, 17);
+			label17.TabIndex = 26;
+			label17.Text = "Labels:";
 			// 
 			// dtFindDate
 			// 
-			this.dtFindDate.CustomFormat = "M/d/yyyy";
-			this.dtFindDate.Enabled = false;
-			this.dtFindDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-			this.dtFindDate.Location = new System.Drawing.Point(220, 106);
-			this.dtFindDate.Name = "dtFindDate";
-			this.dtFindDate.ShowUpDown = true;
-			this.dtFindDate.Size = new System.Drawing.Size(79, 23);
-			this.dtFindDate.TabIndex = 17;
-			this.dtFindDate.Value = new System.DateTime(2021, 12, 23, 18, 55, 40, 0);
+			dtFindDate.CustomFormat = "M/d/yyyy";
+			dtFindDate.Enabled = false;
+			dtFindDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+			dtFindDate.Location = new System.Drawing.Point(220, 106);
+			dtFindDate.Name = "dtFindDate";
+			dtFindDate.ShowUpDown = true;
+			dtFindDate.Size = new System.Drawing.Size(79, 23);
+			dtFindDate.TabIndex = 17;
+			dtFindDate.Value = new System.DateTime(2021, 12, 23, 18, 55, 40, 0);
 			// 
 			// txtSearchText
 			// 
-			this.txtSearchText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtSearchText.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.txtSearchText.Location = new System.Drawing.Point(196, 81);
-			this.txtSearchText.Name = "txtSearchText";
-			this.txtSearchText.Size = new System.Drawing.Size(257, 16);
-			this.txtSearchText.TabIndex = 22;
+			txtSearchText.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+			txtSearchText.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			txtSearchText.Location = new System.Drawing.Point(196, 81);
+			txtSearchText.Name = "txtSearchText";
+			txtSearchText.Size = new System.Drawing.Size(257, 16);
+			txtSearchText.TabIndex = 22;
 			// 
 			// txtSearchTitle
 			// 
-			this.txtSearchTitle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtSearchTitle.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.txtSearchTitle.Location = new System.Drawing.Point(192, 43);
-			this.txtSearchTitle.Name = "txtSearchTitle";
-			this.txtSearchTitle.Size = new System.Drawing.Size(261, 16);
-			this.txtSearchTitle.TabIndex = 21;
+			txtSearchTitle.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+			txtSearchTitle.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			txtSearchTitle.Location = new System.Drawing.Point(192, 43);
+			txtSearchTitle.Name = "txtSearchTitle";
+			txtSearchTitle.Size = new System.Drawing.Size(261, 16);
+			txtSearchTitle.TabIndex = 21;
 			// 
 			// dtFindDate_To
 			// 
-			this.dtFindDate_To.CustomFormat = "M/d/yyyy";
-			this.dtFindDate_To.Enabled = false;
-			this.dtFindDate_To.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-			this.dtFindDate_To.Location = new System.Drawing.Point(360, 136);
-			this.dtFindDate_To.Name = "dtFindDate_To";
-			this.dtFindDate_To.ShowUpDown = true;
-			this.dtFindDate_To.Size = new System.Drawing.Size(79, 23);
-			this.dtFindDate_To.TabIndex = 20;
-			this.dtFindDate_To.Value = new System.DateTime(2021, 12, 23, 18, 55, 40, 0);
+			dtFindDate_To.CustomFormat = "M/d/yyyy";
+			dtFindDate_To.Enabled = false;
+			dtFindDate_To.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+			dtFindDate_To.Location = new System.Drawing.Point(360, 136);
+			dtFindDate_To.Name = "dtFindDate_To";
+			dtFindDate_To.ShowUpDown = true;
+			dtFindDate_To.Size = new System.Drawing.Size(79, 23);
+			dtFindDate_To.TabIndex = 20;
+			dtFindDate_To.Value = new System.DateTime(2021, 12, 23, 18, 55, 40, 0);
 			// 
 			// label12
 			// 
-			this.label12.AutoSize = true;
-			this.label12.Location = new System.Drawing.Point(337, 140);
-			this.label12.Name = "label12";
-			this.label12.Size = new System.Drawing.Size(18, 15);
-			this.label12.TabIndex = 19;
-			this.label12.Text = "to";
+			label12.AutoSize = true;
+			label12.Location = new System.Drawing.Point(337, 140);
+			label12.Name = "label12";
+			label12.Size = new System.Drawing.Size(18, 15);
+			label12.TabIndex = 19;
+			label12.Text = "to";
 			// 
 			// dtFindDate_From
 			// 
-			this.dtFindDate_From.CustomFormat = "M/d/yyyy";
-			this.dtFindDate_From.Enabled = false;
-			this.dtFindDate_From.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-			this.dtFindDate_From.Location = new System.Drawing.Point(254, 136);
-			this.dtFindDate_From.Name = "dtFindDate_From";
-			this.dtFindDate_From.ShowUpDown = true;
-			this.dtFindDate_From.Size = new System.Drawing.Size(79, 23);
-			this.dtFindDate_From.TabIndex = 18;
-			this.dtFindDate_From.Value = new System.DateTime(2021, 12, 23, 18, 55, 40, 0);
+			dtFindDate_From.CustomFormat = "M/d/yyyy";
+			dtFindDate_From.Enabled = false;
+			dtFindDate_From.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+			dtFindDate_From.Location = new System.Drawing.Point(254, 136);
+			dtFindDate_From.Name = "dtFindDate_From";
+			dtFindDate_From.ShowUpDown = true;
+			dtFindDate_From.Size = new System.Drawing.Size(79, 23);
+			dtFindDate_From.TabIndex = 18;
+			dtFindDate_From.Value = new System.DateTime(2021, 12, 23, 18, 55, 40, 0);
 			// 
 			// rtbSelectedEntry_Found
 			// 
-			this.rtbSelectedEntry_Found.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.rtbSelectedEntry_Found.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.rtbSelectedEntry_Found.Location = new System.Drawing.Point(6, 294);
-			this.rtbSelectedEntry_Found.Name = "rtbSelectedEntry_Found";
-			this.rtbSelectedEntry_Found.Size = new System.Drawing.Size(453, 139);
-			this.rtbSelectedEntry_Found.TabIndex = 12;
-			this.rtbSelectedEntry_Found.Text = "";
+			rtbSelectedEntry_Found.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+			rtbSelectedEntry_Found.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			rtbSelectedEntry_Found.Location = new System.Drawing.Point(6, 294);
+			rtbSelectedEntry_Found.Name = "rtbSelectedEntry_Found";
+			rtbSelectedEntry_Found.Size = new System.Drawing.Size(453, 139);
+			rtbSelectedEntry_Found.TabIndex = 12;
+			rtbSelectedEntry_Found.Text = "";
 			// 
 			// label9
 			// 
-			this.label9.AutoSize = true;
-			this.label9.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-			this.label9.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.label9.Location = new System.Drawing.Point(148, 79);
-			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(45, 17);
-			this.label9.TabIndex = 3;
-			this.label9.Text = "Entry:";
+			label9.AutoSize = true;
+			label9.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			label9.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			label9.Location = new System.Drawing.Point(148, 79);
+			label9.Name = "label9";
+			label9.Size = new System.Drawing.Size(45, 17);
+			label9.TabIndex = 3;
+			label9.Text = "Entry:";
 			// 
 			// lblSelectionType
 			// 
-			this.lblSelectionType.AutoSize = true;
-			this.lblSelectionType.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-			this.lblSelectionType.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblSelectionType.Location = new System.Drawing.Point(3, 273);
-			this.lblSelectionType.Name = "lblSelectionType";
-			this.lblSelectionType.Size = new System.Drawing.Size(96, 17);
-			this.lblSelectionType.TabIndex = 15;
-			this.lblSelectionType.Text = "Selected Entry";
+			lblSelectionType.AutoSize = true;
+			lblSelectionType.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			lblSelectionType.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			lblSelectionType.Location = new System.Drawing.Point(3, 273);
+			lblSelectionType.Name = "lblSelectionType";
+			lblSelectionType.Size = new System.Drawing.Size(96, 17);
+			lblSelectionType.TabIndex = 15;
+			lblSelectionType.Text = "Selected Entry";
 			// 
 			// label8
 			// 
-			this.label8.AutoSize = true;
-			this.label8.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-			this.label8.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.label8.Location = new System.Drawing.Point(149, 43);
-			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(40, 17);
-			this.label8.TabIndex = 2;
-			this.label8.Text = "Title:";
+			label8.AutoSize = true;
+			label8.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			label8.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			label8.Location = new System.Drawing.Point(149, 43);
+			label8.Name = "label8";
+			label8.Size = new System.Drawing.Size(40, 17);
+			label8.TabIndex = 2;
+			label8.Text = "Title:";
 			// 
 			// lblFoundEntries
 			// 
-			this.lblFoundEntries.AutoSize = true;
-			this.lblFoundEntries.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-			this.lblFoundEntries.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblFoundEntries.Location = new System.Drawing.Point(3, 144);
-			this.lblFoundEntries.Name = "lblFoundEntries";
-			this.lblFoundEntries.Size = new System.Drawing.Size(93, 17);
-			this.lblFoundEntries.TabIndex = 13;
-			this.lblFoundEntries.Text = "Found Entries";
-			this.lblFoundEntries.Visible = false;
+			lblFoundEntries.AutoSize = true;
+			lblFoundEntries.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			lblFoundEntries.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			lblFoundEntries.Location = new System.Drawing.Point(3, 144);
+			lblFoundEntries.Name = "lblFoundEntries";
+			lblFoundEntries.Size = new System.Drawing.Size(93, 17);
+			lblFoundEntries.TabIndex = 13;
+			lblFoundEntries.Text = "Found Entries";
+			lblFoundEntries.Visible = false;
 			// 
 			// menuStrip1
 			// 
-			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuSearch,
-            this.mnuSelectJournals,
-            this.mnuClearFields,
-            this.mnuExit});
-			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(493, 24);
-			this.menuStrip1.TabIndex = 8;
-			this.menuStrip1.Text = "menuStrip1";
-			// 
-			// mnuSearch
-			// 
-			this.mnuSearch.Name = "mnuSearch";
-			this.mnuSearch.Size = new System.Drawing.Size(54, 20);
-			this.mnuSearch.Text = "&Search";
-			this.mnuSearch.Click += new System.EventHandler(this.mnuSearch_Click);
+			menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuSelectJournals, mnuClearFields, mnuExit });
+			menuStrip1.Location = new System.Drawing.Point(0, 0);
+			menuStrip1.Name = "menuStrip1";
+			menuStrip1.Size = new System.Drawing.Size(493, 24);
+			menuStrip1.TabIndex = 8;
+			menuStrip1.Text = "menuStrip1";
 			// 
 			// mnuSelectJournals
 			// 
-			this.mnuSelectJournals.Name = "mnuSelectJournals";
-			this.mnuSelectJournals.Size = new System.Drawing.Size(96, 20);
-			this.mnuSelectJournals.Text = "Select &Journals";
-			this.mnuSelectJournals.Visible = false;
-			this.mnuSelectJournals.Click += new System.EventHandler(this.mnuSelectJournals_Click);
+			mnuSelectJournals.Name = "mnuSelectJournals";
+			mnuSelectJournals.Size = new System.Drawing.Size(96, 20);
+			mnuSelectJournals.Text = "Select &Journals";
+			mnuSelectJournals.Visible = false;
+			mnuSelectJournals.Click += this.mnuSelectJournals_Click;
 			// 
 			// mnuClearFields
 			// 
-			this.mnuClearFields.Name = "mnuClearFields";
-			this.mnuClearFields.Size = new System.Drawing.Size(79, 20);
-			this.mnuClearFields.Text = "&Clear Fields";
-			this.mnuClearFields.Click += new System.EventHandler(this.mnuClearFields_Click);
+			mnuClearFields.Name = "mnuClearFields";
+			mnuClearFields.Size = new System.Drawing.Size(79, 20);
+			mnuClearFields.Text = "&Clear Fields";
+			mnuClearFields.Click += this.mnuClearFields_Click;
 			// 
 			// mnuExit
 			// 
-			this.mnuExit.Name = "mnuExit";
-			this.mnuExit.Size = new System.Drawing.Size(38, 20);
-			this.mnuExit.Text = "E&xit";
-			this.mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
+			mnuExit.Name = "mnuExit";
+			mnuExit.Size = new System.Drawing.Size(38, 20);
+			mnuExit.Text = "E&xit";
+			mnuExit.Click += this.mnuExit_Click;
 			// 
 			// frmSearch
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(493, 473);
-			this.Controls.Add(this.grpFindEntry);
-			this.Controls.Add(this.menuStrip1);
-			this.MainMenuStrip = this.menuStrip1;
-			this.MinimumSize = new System.Drawing.Size(509, 512);
-			this.Name = "frmSearch";
-			this.Text = "Search";
-			this.grpFindEntry.ResumeLayout(false);
-			this.grpFindEntry.PerformLayout();
-			this.menuStrip1.ResumeLayout(false);
-			this.menuStrip1.PerformLayout();
+			AcceptButton = btnSearch;
+			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			ClientSize = new System.Drawing.Size(493, 473);
+			Controls.Add(grpFindEntry);
+			Controls.Add(menuStrip1);
+			MainMenuStrip = menuStrip1;
+			MinimumSize = new System.Drawing.Size(509, 512);
+			Name = "frmSearch";
+			Text = "Search";
+			grpFindEntry.ResumeLayout(false);
+			grpFindEntry.PerformLayout();
+			menuStrip1.ResumeLayout(false);
+			menuStrip1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
-
 		}
 
 		#endregion
@@ -445,7 +436,6 @@ namespace myJournal.subforms
 		private System.Windows.Forms.Label label8;
 		private System.Windows.Forms.Label lblFoundEntries;
 		private System.Windows.Forms.MenuStrip menuStrip1;
-		private System.Windows.Forms.ToolStripMenuItem mnuSearch;
 		private System.Windows.Forms.ToolStripMenuItem mnuClearFields;
 		private System.Windows.Forms.RadioButton radBtnAnd;
 		private System.Windows.Forms.RadioButton radBtnOr;
@@ -457,5 +447,6 @@ namespace myJournal.subforms
 		private System.Windows.Forms.ToolStripMenuItem mnuSelectJournals;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.CheckBox chkMatchWholeWord;
+		private System.Windows.Forms.Button btnSearch;
 	}
 }

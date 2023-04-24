@@ -26,19 +26,20 @@ namespace myJournal.objects
 
 			if (File.Exists(localFileName))
 			{
-				using FileStream stream = new FileStream(localFileName, FileMode.Create, FileAccess.Write);
-					myFile.Create(stream.Length);
-					myFile.UploadRange(new HttpRange(0, stream.Length), stream);
+				using FileStream stream = new FileStream(localFileName, FileMode.Open, FileAccess.Read);
+				myFile.Create(stream.Length);
+				myFile.UploadRange(new HttpRange(0, stream.Length), stream);
 
-				//using FileStream stream = new FileStream(localFileName, 
-				//	FileMode.Open, FileAccess.Read, FileShare.Read, 64*1024, 
+				//using FileStream stream = new FileStream(localFileName,
+				//	FileMode.Open, FileAccess.Read, FileShare.Read, 64 * 1024,
 				//		(FileOptions)0x20000000 | FileOptions.WriteThrough & FileOptions.SequentialScan);
-				//	myFile.Create(stream.Length);
-				//	myFile.UploadRange(new HttpRange(0, stream.Length), stream);
+				//myFile.Create(stream.Length);
+				//myFile.UploadRange(new HttpRange(0, stream.Length), stream);
 			}
 		}
 
-		public static async Task DownloadOrDeleteFile(string localFileName, string AzFileName, FileMode mode = FileMode.Create, bool deleteFile = false, string shareName = "journals")
+		public static async Task DownloadOrDeleteFile(string localFileName, string AzFileName, 
+			FileMode mode = FileMode.Create, bool deleteFile = false, string shareName = "journals")
 		{
 			using (var stream = new FileStream(localFileName, mode))
 			{

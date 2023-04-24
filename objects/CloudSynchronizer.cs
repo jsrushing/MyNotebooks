@@ -100,7 +100,7 @@ namespace myJournal.objects
 					}
 					catch (Exception ex) { Err = ex.Message; }
 
-					if (downloadedAzureJournal != null)
+					if (downloadedAzureJournal != null && downloadedAzureJournal.Length > 0)
 					{
 						switch(CompareJournals(localJournal, downloadedAzureJournal))
 						{
@@ -151,6 +151,7 @@ namespace myJournal.objects
 
 		public async Task SyncLabelsAndSettings()
 		{
+			//return;
 			FileInfo downloadedAzureLabels		= null;
 			FileInfo downloadedAzureSettings	= null;
 			FileInfo localLabels				= new FileInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]);

@@ -32,27 +32,6 @@ namespace myJournal.subforms
 		private void chkUseDate_CheckedChanged(object sender, EventArgs e)
 		{ dtFindDate.Enabled = chkUseDate.Enabled; }
 
-		private void mnuSearch_Click(object sender, EventArgs e)
-		{
-			string labels = string.Empty;
-			string[] labelsArray = null;
-
-			lstFoundEntries.Items.Clear();
-
-			for (int i = 0; i < lstLabelsForSearch.CheckedItems.Count; i++) { labels += lstLabelsForSearch.CheckedItems[i].ToString() + ","; } 
-
-			labels = labels.Length > 0 ? labels.Substring(0, labels.Length - 1) : string.Empty;
-			labelsArray = labels.Length > 0 ? labels.Split(',') : null;
-
-			foreach(Journal j in journalsToSearch)
-			{
-				List<JournalEntry> foundEntries = j.Search(chkUseDate, chkUseDateRange, chkMatchCase, dtFindDate, dtFindDate_From, dtFindDate_To, radBtnAnd, txtSearchTitle.Text, txtSearchText.Text, labelsArray);
-				Utilities.PopulateEntries(lstFoundEntries, foundEntries, "", "", false);
-			}
-
-			if(lstFoundEntries.Items.Count == 0) { lstFoundEntries.Items.Add("no matches found"); }
-		}
-
 		private void lblSeparator_MouseMove(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left)
@@ -115,6 +94,29 @@ namespace myJournal.subforms
 			while (!lstFoundEntries.Items[i2].ToString().ToLower().StartsWith("journal") & i2 != -1) { i2--; }
 			sRtrn = i2 > -1 ? lstFoundEntries.Items[i2].ToString() : "";
 			return sRtrn;
+		}
+
+		private void btnSearch_Click(object sender, EventArgs e)
+		{
+			string labels = string.Empty;
+			string[] labelsArray = null;
+
+			lstFoundEntries.Items.Clear();
+
+			for (int i = 0; i < lstLabelsForSearch.CheckedItems.Count; i++) { labels += lstLabelsForSearch.CheckedItems[i].ToString() + ","; }
+
+			labels = labels.Length > 0 ? labels.Substring(0, labels.Length - 1) : string.Empty;
+			labelsArray = labels.Length > 0 ? labels.Split(',') : null;
+
+			foreach (Journal j in journalsToSearch)
+			{
+				SearchObject so = new SearchObject(chkUseDate, chkUseDateRange, chkMatchCase, dtFindDate, 
+					dtFindDate_From, dtFindDate_To, radBtnAnd, txtSearchTitle.Text, txtSearchText.Text, labelsArray);
+				List<JournalEntry> foundEntries = j.Search(so);
+				Utilities.PopulateEntries(lstFoundEntries, foundEntries, "", "", false);
+			}
+
+			if (lstFoundEntries.Items.Count == 0) { lstFoundEntries.Items.Add("no matches found"); }
 		}
 	}
 }

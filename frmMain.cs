@@ -173,6 +173,8 @@ namespace myJournal.subforms
 			CheckForSystemDirectories();
 			frmAzurePwd frm = new frmAzurePwd(this, frmAzurePwd.Mode.AskingForKey);
 
+			//Program.AzurePassword = string.Empty;
+
 			if (Program.AzurePassword.Length > 0)
 			{
 				frm.Close();
@@ -209,7 +211,6 @@ namespace myJournal.subforms
 			lstEntries.Items.Clear();
 			rtbSelectedEntry.Text = string.Empty;
 			Program.PIN = txtJournalPIN.Text;
-			txtJournalPIN.Text = string.Empty;
 			lblWrongPin.Visible = false;
 
 			try
@@ -237,12 +238,16 @@ namespace myJournal.subforms
 						PopulateShowFromDates();
 
 						for (int i = 0; i < cbxDatesFrom.Items.Count; i++)
-						{ if (DateTime.Parse(cbxDatesFrom.Items[i].ToString()) <= DateTime.Parse(cbxDatesTo.Text).AddDays(-60) || i == cbxDatesFrom.Items.Count - 1) {cbxDatesFrom.SelectedIndex = i; break; } }
+						{ if (DateTime.Parse(cbxDatesFrom.Items[i].ToString()) <= DateTime.Parse(cbxDatesTo.Text).AddDays(-60) || i == cbxDatesFrom.Items.Count - 1) 
+							{
+								cbxDatesFrom.SelectedIndex = i; 
+								break; 
+							} 
+						}
 
 						suppressDateClick = true;
 						cbxDatesTo.SelectedIndex = 0;
 						suppressDateClick = false;
-						btnLoadJournal.Enabled = false;
 						ShowHideMenusAndControls(SelectionState.JournalLoaded);
 					}
 				}
@@ -700,9 +705,12 @@ namespace myJournal.subforms
 
 		private void txtJournalPIN_TextChanged(object sender, EventArgs e)
 		{
-			btnLoadJournal.Enabled = true;
-			lblShowPIN.Visible = txtJournalPIN.Text.Length > 0;
-			lblWrongPin.Visible = false;
+			if(txtJournalPIN.Text.Length > 0)
+			{
+				btnLoadJournal.Enabled = true;
+				lblShowPIN.Visible = true;
+				lblWrongPin.Visible = false;
+			}
 		}
 
 		private void PopulateShowFromDates()
@@ -753,7 +761,9 @@ namespace myJournal.subforms
 				mnuJournal_Rename.Enabled = false;
 				mnuJournal_Search.Enabled = false;
 				mnuJournal_ForceBackup.Enabled = false;
-				mnuJournal_Export.Enabled = true;	
+				mnuJournal_Export.Enabled = true;
+				txtJournalPIN.Enabled = true;
+				btnLoadJournal.Enabled = true;
 			}
 			else if(st == SelectionState.JournalLoaded)
 			{
@@ -769,9 +779,12 @@ namespace myJournal.subforms
 				mnuJournal_Rename.Enabled = true;
 				mnuJournal_Search.Enabled = true;
 				mnuJournal_ForceBackup.Enabled = true;
+				btnLoadJournal.Enabled = false;
 				mnuJournal_Export.Enabled = currentJournal.AllowCloud;
 
 				pnlDateFilters.Visible = true;
+				txtJournalPIN.Text = string.Empty;
+				txtJournalPIN.Enabled = false;
 			}
 			else if(st == SelectionState.EntrySelected)
 			{

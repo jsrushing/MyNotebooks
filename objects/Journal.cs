@@ -152,8 +152,7 @@ namespace myJournal
 			Backup();
         }
 
-		public List<JournalEntry> Search(CheckBox chkUseDate, CheckBox chkUseDateRange, CheckBox chkMatchCase, DateTimePicker dtFindDate, DateTimePicker dtFindDate_From, 
-			DateTimePicker dtFindDate_To , RadioButton radBtnAnd, string searchTitle, string searchText, string[] labelsArray)
+		public List<JournalEntry> Search(SearchObject So)
 		{
 			List<JournalEntry> foundEntries = new List<JournalEntry>();
 			string entryText = string.Empty;
@@ -162,29 +161,29 @@ namespace myJournal
 			foreach (JournalEntry je in this.Entries)
 			{
 				// date
-				if (chkUseDate.Checked)
-				{ if (je.Date.ToShortDateString() == dtFindDate.Value.ToShortDateString()) { foundEntries.Add(je); } }
+				if (So.chkUseDate.Checked)
+				{ if (je.Date.ToShortDateString() == So.dtFindDate.Value.ToShortDateString()) { foundEntries.Add(je); } }
 
-				if (chkUseDateRange.Checked)
-				{ if (je.Date >= dtFindDate_From.Value && je.Date <= dtFindDate_To.Value) { foundEntries.Add(je); } }
+				if (So.chkUseDateRange.Checked)
+				{ if (je.Date >= So.dtFindDate_From.Value && je.Date <= So.dtFindDate_To.Value) { foundEntries.Add(je); } }
 
 				// labels
 
 				string s = je.ClearLabels();
 
-				if (labelsArray != null)
-				{ foreach (string group in labelsArray) { if (je.ClearLabels().Contains(group)) { foundEntries.Add(je); } } }
+				if (So.labelsArray != null)
+				{ foreach (string group in So.labelsArray) { if (je.ClearLabels().Contains(group)) { foundEntries.Add(je); } } }
 
 				// title and/or text
-				searchTitle = chkMatchCase.Checked ? searchTitle : searchTitle.ToLower();
-				searchText	= chkMatchCase.Checked ? searchText : searchText.ToLower();
-				entryText	= chkMatchCase.Checked ? je.ClearText() : je.ClearText().ToLower();
-				entryTitle	= chkMatchCase.Checked ? je.ClearTitle() : je.ClearTitle().ToLower();
+				So.searchTitle	= So.chkMatchCase.Checked ? So.searchTitle	: So.searchTitle.ToLower();
+				So.searchText	= So.chkMatchCase.Checked ? So.searchText	: So.searchText.ToLower();
+				entryText		= So.chkMatchCase.Checked ? je.ClearText()	: je.ClearText().ToLower();
+				entryTitle		= So.chkMatchCase.Checked ? je.ClearTitle() : je.ClearTitle().ToLower();
 
-				if (radBtnAnd.Checked)
-				{ if (entryText.Contains(searchText) & entryTitle.Contains(searchTitle)) { foundEntries.Add(je); }}
+				if (So.radBtnAnd.Checked)
+				{ if (entryText.Contains(So.searchText) & entryTitle.Contains(So.searchTitle)) { foundEntries.Add(je); }}
 				else
-				{ if (searchText.Length > 0 && entryText.Contains(searchText) ) { foundEntries.Add(je); }}
+				{ if (So.searchText.Length > 0 && entryText.Contains(So.searchText) ) { foundEntries.Add(je); }}
 			}
 			return foundEntries;
 		}
