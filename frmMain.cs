@@ -149,37 +149,39 @@ namespace myJournal.subforms
 {
 	public partial class frmMain : Form
 	{
-		Journal			currentJournal;
-		JournalEntry	currentEntry;
-		private bool	firstSelection = true;
-		bool			suppressDateClick = false;
+		Journal currentJournal;
+		JournalEntry currentEntry;
+		private bool firstSelection = true;
+		bool suppressDateClick = false;
 
 		private enum SelectionState
 		{
 			JournalSelectedNotLoaded,
 			JournalLoaded,
 			EntrySelected,
-			HideAll
+			HideAll,
+			JournalNotSelected
 		}
 
 		public frmMain() { InitializeComponent(); }
 
 		private async void frmMain_Load(object sender, EventArgs e)
 		{
-			System.Reflection.Assembly assembly		= System.Reflection.Assembly.GetExecutingAssembly();
-			System.Diagnostics.FileVersionInfo fvi	= System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
+			System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+			System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
 			this.Text = "myJournal " + Program.AppVersion + (fvi.FileName.ToLower().Contains("debug") ? " - DEBUG MODE" : "");
 
 			CheckForSystemDirectories();
 			frmAzurePwd frm = new frmAzurePwd(this, frmAzurePwd.Mode.AskingForKey);
 
-			//Program.AzurePassword = string.Empty;
+			//Program.AzurePassword = string.Empty;	// kills the Azure synch process.
 
 			if (Program.AzurePassword.Length > 0)
 			{
 				frm.Close();
 				CloudSynchronizer cs = new CloudSynchronizer();
 				await cs.SynchWithCloud(true);
+
 				if (this.Text.ToLower().Contains("debug"))
 				{
 					string title = " synchd:" + cs.JournalsSynchd.ToString();
@@ -190,11 +192,12 @@ namespace myJournal.subforms
 				}
 			}
 
+			pnlDateFilters.Left = pnlPin.Left - 11;
 			LoadJournals();
 			ShowHideMenusAndControls(SelectionState.HideAll);
 
 			try { mnuJournal_Export.Enabled = Utilities.AllJournals().First(j => j.AllowCloud) != null; }
-			catch(InvalidOperationException) { mnuJournal_Export.Enabled = false; }
+			catch (InvalidOperationException) { mnuJournal_Export.Enabled = false; }
 		}
 
 		private void frmMain_Resize(object sender, EventArgs e)
@@ -220,7 +223,7 @@ namespace myJournal.subforms
 
 				if (currentJournal != null)
 				{
-					if(currentJournal.Entries[0].ClearText().Length == 0)	// the PIN is wrong
+					if (currentJournal.Entries[0].ClearText().Length == 0)  // the PIN is wrong
 					{
 						lblWrongPin.Visible = true;
 						txtJournalPIN.Focus();
@@ -230,7 +233,7 @@ namespace myJournal.subforms
 					{
 						Utilities.PopulateEntries(lstEntries, currentJournal.Entries, DateTime.Now.AddDays(-61).ToString(), DateTime.Now.ToString(), true, 0);
 
-						if(lstEntries.Items.Count == 0) { Utilities.PopulateEntries(lstEntries, currentJournal.Entries); }
+						if (lstEntries.Items.Count == 0) { Utilities.PopulateEntries(lstEntries, currentJournal.Entries); }
 
 						lstEntries.Height = this.Height - lstEntries.Top - 50;
 						lstEntries.Visible = true;
@@ -238,11 +241,12 @@ namespace myJournal.subforms
 						PopulateShowFromDates();
 
 						for (int i = 0; i < cbxDatesFrom.Items.Count; i++)
-						{ if (DateTime.Parse(cbxDatesFrom.Items[i].ToString()) <= DateTime.Parse(cbxDatesTo.Text).AddDays(-60) || i == cbxDatesFrom.Items.Count - 1) 
+						{
+							if (DateTime.Parse(cbxDatesFrom.Items[i].ToString()) <= DateTime.Parse(cbxDatesTo.Text).AddDays(-60) || i == cbxDatesFrom.Items.Count - 1)
 							{
-								cbxDatesFrom.SelectedIndex = i; 
-								break; 
-							} 
+								cbxDatesFrom.SelectedIndex = i;
+								break;
+							}
 						}
 
 						suppressDateClick = true;
@@ -279,7 +283,7 @@ namespace myJournal.subforms
 
 			if (clearTargetFolderBeforeCopy)
 			{
-				foreach(FileInfo fi in target.GetFiles())
+				foreach (FileInfo fi in target.GetFiles())
 				{ fi.Delete(); }
 			}
 
@@ -390,28 +394,28 @@ namespace myJournal.subforms
 
 			foreach (Journal j in Utilities.AllJournals()) { ddlJournals.Items.Add(j.Name); }
 
-				//if(ddlJournals.Items.Count == 0)	// There will be no journals after an update so use the folders created in Form_Closing the last time the app was run.
-				//{
-					//var parent = Directory.GetParent(Program.AppRoot).FullName;
-					//parent = Directory.GetParent(parent).FullName;
-					//parent = Directory.GetParent(parent).FullName;
+			//if(ddlJournals.Items.Count == 0)	// There will be no journals after an update so use the folders created in Form_Closing the last time the app was run.
+			//{
+			//var parent = Directory.GetParent(Program.AppRoot).FullName;
+			//parent = Directory.GetParent(parent).FullName;
+			//parent = Directory.GetParent(parent).FullName;
 
-					//if(Directory.Exists(parent + "\\lastjournals"))
-					//{
-					//	CopyDirectory(
-					//		new DirectoryInfo(parent + "\\lastjournals"), new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]), false, false);
+			//if(Directory.Exists(parent + "\\lastjournals"))
+			//{
+			//	CopyDirectory(
+			//		new DirectoryInfo(parent + "\\lastjournals"), new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]), false, false);
 
-					//	CopyDirectory(
-					//		new DirectoryInfo(parent + "\\lastjournals\\backups"), new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"]), false, false);
+			//	CopyDirectory(
+			//		new DirectoryInfo(parent + "\\lastjournals\\backups"), new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"]), false, false);
 
-					//	CopyDirectory(
-					//		new DirectoryInfo(parent + "\\lastjournals\\backups\\forced"), new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"]), false, false);
+			//	CopyDirectory(
+			//		new DirectoryInfo(parent + "\\lastjournals\\backups\\forced"), new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"]), false, false);
 
-					//	CopyDirectory(
-					//		new DirectoryInfo(parent + "\\lastsettings"), new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFolder"]), false, false);
+			//	CopyDirectory(
+			//		new DirectoryInfo(parent + "\\lastsettings"), new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFolder"]), false, false);
 
-					//	if(Directory.GetFiles(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]).Length > 0) { LoadJournals(); }
-					//}
+			//	if(Directory.GetFiles(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]).Length > 0) { LoadJournals(); }
+			//}
 			//}
 			//else
 			//{
@@ -427,7 +431,7 @@ namespace myJournal.subforms
 			//	txtJournalPIN.Focus();
 			//}
 
-			if(ddlJournals.Items.Count > 0)
+			if (ddlJournals.Items.Count > 0)
 			{
 				ddlJournals.Enabled = true;
 				pnlPin.Visible = false;
@@ -437,7 +441,7 @@ namespace myJournal.subforms
 					txtJournalPIN.Focus();
 				}
 				lstEntries.Visible = false;
-				ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
+				ShowHideMenusAndControls(SelectionState.JournalNotSelected);
 				txtJournalPIN.Focus();
 			}
 
@@ -448,12 +452,12 @@ namespace myJournal.subforms
 			ListBox lb = (ListBox)sender;
 			RichTextBox rtb = rtbSelectedEntry;
 
-			if(lb.SelectedIndex > -1)
+			if (lb.SelectedIndex > -1)
 			{
 				lb.SelectedIndexChanged -= new System.EventHandler(this.lstEntries_SelectEntry);
 				currentEntry = JournalEntry.Select(rtb, lb, currentJournal, firstSelection);
 
-				if(currentEntry != null)
+				if (currentEntry != null)
 				{
 					firstSelection = false;
 					lblSelectionType.Visible = rtb.Text.Length > 0;
@@ -479,7 +483,7 @@ namespace myJournal.subforms
 
 		private void mnuEntryCreate_Click(object sender, EventArgs e)
 		{
-			using(frmNewEntry frm = new frmNewEntry(this, currentJournal))
+			using (frmNewEntry frm = new frmNewEntry(this, currentJournal))
 			{
 				frm.Text = "New entry in " + currentJournal.Name;
 				frm.ShowDialog(this);
@@ -498,7 +502,7 @@ namespace myJournal.subforms
 			{
 				frm.ShowDialog(this);
 
-				if(frm.Result == frmMessage.ReturnResult.Yes) 
+				if (frm.Result == frmMessage.ReturnResult.Yes)
 				{
 					currentJournal.Entries.Remove(currentEntry);
 					currentJournal.Save();
@@ -531,7 +535,8 @@ namespace myJournal.subforms
 			{
 				frm.ShowDialog(this);
 
-				if (frm.NewJournalName != null){
+				if (frm.NewJournalName != null)
+				{
 					Journal j = new Journal(frm.NewJournalName);
 					j.AllowCloud = frm.AllowCloud;
 					j.LastSaved = DateTime.Now;
@@ -557,14 +562,14 @@ namespace myJournal.subforms
 					ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
 					pnlDateFilters.Visible = false;
 
-					using(frmMessage frm2 = new frmMessage(frmMessage.OperationType.YesNoQuestion, "The Joural was deleted. " +
-						"You should check for orpahned labels using the Labels Manager. Would you like to do that now?","", this))
+					using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.YesNoQuestion, "The Joural was deleted. " +
+						"You should check for orpahned labels using the Labels Manager. Would you like to do that now?", "", this))
 					{
 						frm2.ShowDialog();
 
-						if(frm2.Result == frmMessage.ReturnResult.Yes)
+						if (frm2.Result == frmMessage.ReturnResult.Yes)
 						{
-							using (frmLabelsManager frm3 = new frmLabelsManager(this)) { frm3.ShowDialog(); }							
+							using (frmLabelsManager frm3 = new frmLabelsManager(this)) { frm3.ShowDialog(); }
 						}
 					}
 				}
@@ -592,14 +597,14 @@ namespace myJournal.subforms
 		{
 			currentJournal.Backup_Forced();
 			string sMsg = currentJournal.BackupCompleted ? "The backup was completed" : "An error occurred. The backup was not completed.";
-			using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "", this)) { frm.ShowDialog(this); }	
+			using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "", this)) { frm.ShowDialog(this); }
 		}
 
 		private void mnuJournal_Import_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
 			ofd.Multiselect = true;
-			
+
 			if (ofd.ShowDialog() == DialogResult.OK)
 			{
 				string tgt = String.Empty;
@@ -607,14 +612,14 @@ namespace myJournal.subforms
 				bool ok2copy = true;
 				bool filesCopied = false;
 
-				foreach(string fName in ofd.FileNames)
+				foreach (string fName in ofd.FileNames)
 				{
 					tgt = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + fName.Substring(fName.LastIndexOf("\\") + 1);
 					jrnlName = fName.Substring(fName.LastIndexOf("\\") + 1);
 
 					if (File.Exists(tgt))
 					{
-						using(frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, 
+						using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion,
 							"The journal '" + jrnlName + "' already exists. Do you want to ovewrwrite the journal?", "", this))
 						{
 							frm.ShowDialog(this);
@@ -634,8 +639,8 @@ namespace myJournal.subforms
 						File.Copy(fName, tgt, true);
 						filesCopied = true;
 						LabelsManager lm = new LabelsManager();
-						if(lm.FindOrphansInAJournal(new Journal(jrnlName).Open(), true).Count > 0) { } // code for orphans being found
-						//Utilities.Labels_FindOrphansInOneJournal(new Journal(jrnlName).Open(), true);
+						if (lm.FindOrphansInAJournal(new Journal(jrnlName).Open(), true).Count > 0) { } // code for orphans being found
+																										//Utilities.Labels_FindOrphansInOneJournal(new Journal(jrnlName).Open(), true);
 					}
 
 					ok2copy = true;
@@ -664,7 +669,7 @@ namespace myJournal.subforms
 		private void mnuJournal_RestoreBackups_Click(object sender, EventArgs e)
 		{
 			string sJournalName = ddlJournals.Text;
-			using (frmBackupManager frm = new frmBackupManager(this)) 
+			using (frmBackupManager frm = new frmBackupManager(this))
 			{
 				frm.ShowDialog(this);
 				if (frm.BackupRestored) { LoadJournals(); }
@@ -698,14 +703,18 @@ namespace myJournal.subforms
 			if (ap.KeyChanged)
 			{
 				CheckForSystemDirectories(true);
-				CloudSynchronizer cs = new CloudSynchronizer();
-				await cs.SynchWithCloud();
+
+				if (Program.AzurePassword.Length > 0)
+				{
+					CloudSynchronizer cs = new CloudSynchronizer();
+					await cs.SynchWithCloud();
+				}
 			}
 		}
 
 		private void txtJournalPIN_TextChanged(object sender, EventArgs e)
 		{
-			if(txtJournalPIN.Text.Length > 0)
+			if (txtJournalPIN.Text.Length > 0)
 			{
 				btnLoadJournal.Enabled = true;
 				lblShowPIN.Visible = true;
@@ -722,14 +731,14 @@ namespace myJournal.subforms
 			l.Sort((x, y) => -DateTime.Parse(x).CompareTo(DateTime.Parse(y)));
 			cbxDatesFrom.DataSource = l;
 			//cbxDatesTo.Items.AddRange(cbxDates.Items.Cast<Object>().ToArray());
-			foreach(string s in cbxDatesFrom.Items) { cbxDatesTo.Items.Add(s); }
+			foreach (string s in cbxDatesFrom.Items) { cbxDatesTo.Items.Add(s); }
 			cbxDatesTo.SelectedIndex = 0;
 			suppressDateClick = false;
 		}
 
 		private void ProcessDateFilters()
 		{
-			if(cbxDatesFrom.Text.Length > 0 && cbxDatesTo.Text.Length > 0)
+			if (cbxDatesFrom.Text.Length > 0 && cbxDatesTo.Text.Length > 0)
 			{
 				Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDatesFrom.Text, cbxDatesTo.Text, true, cbxSortEntriesBy.SelectedIndex);
 
@@ -742,7 +751,7 @@ namespace myJournal.subforms
 
 		private void ShowHideMenusAndControls(SelectionState st)
 		{
-			if(st == SelectionState.JournalSelectedNotLoaded)
+			if (st == SelectionState.JournalSelectedNotLoaded)
 			{
 				rtbSelectedEntry.Text = string.Empty;
 				rtbSelectedEntry.Visible = false;
@@ -762,10 +771,9 @@ namespace myJournal.subforms
 				mnuJournal_Search.Enabled = false;
 				mnuJournal_ForceBackup.Enabled = false;
 				mnuJournal_Export.Enabled = true;
-				txtJournalPIN.Enabled = true;
-				btnLoadJournal.Enabled = true;
+				pnlPin.Visible = true;
 			}
-			else if(st == SelectionState.JournalLoaded)
+			else if (st == SelectionState.JournalLoaded)
 			{
 				ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
 
@@ -784,9 +792,10 @@ namespace myJournal.subforms
 
 				pnlDateFilters.Visible = true;
 				txtJournalPIN.Text = string.Empty;
-				txtJournalPIN.Enabled = false;
+				pnlPin.Visible = false;
+
 			}
-			else if(st == SelectionState.EntrySelected)
+			else if (st == SelectionState.EntrySelected)
 			{
 				rtbSelectedEntry.Visible = true;
 
@@ -797,10 +806,17 @@ namespace myJournal.subforms
 				lblSelectionType.Visible = true;
 				lblEntries.Visible = true;
 			}
+			else if (st == SelectionState.JournalNotSelected)
+			{
+				pnlPin.Visible = false;
+				pnlDateFilters.Visible = false;
+			}
 		}
 
-		protected override CreateParams CreateParams {
-			get {
+		protected override CreateParams CreateParams
+		{
+			get
+			{
 				CreateParams cp = base.CreateParams;
 				cp.ExStyle |= 0x02000000;  // Turn on WS_EX_COMPOSITED
 				return cp;

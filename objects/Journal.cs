@@ -146,8 +146,11 @@ namespace myJournal
                 formatter.Serialize(stream, this);
             }
 
-			CloudSynchronizer cs = new CloudSynchronizer();
-			await cs.SynchWithCloud(false, this);
+			if(Program.AzurePassword.Length > 0)
+			{
+				CloudSynchronizer cs = new CloudSynchronizer();
+				await cs.SynchWithCloud(false, this);
+			}
 
 			Backup();
         }
