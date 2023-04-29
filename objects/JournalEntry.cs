@@ -106,7 +106,6 @@ namespace myJournal
 			return bLabelEdited;
 		}
 
-
 		public static JournalEntry Select(RichTextBox rtb, ListBox lb, Journal currentJournal, bool FirstSelection, JournalEntry je = null)
 		{
 			rtb.Clear();

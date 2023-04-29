@@ -188,6 +188,7 @@ namespace myJournal.subforms
 					title += " skipped: " + cs.JournalsSkipped.ToString();
 					title += " downloaded:" + cs.JournalsDownloaded.ToString();
 					title += " backed up:" + cs.JournalsBackedUp.ToString();
+					title += " deleted:" + cs.JournalsDeleted.ToString();
 					this.Text += title;
 				}
 			}

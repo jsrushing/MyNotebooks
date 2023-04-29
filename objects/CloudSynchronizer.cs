@@ -28,6 +28,7 @@ namespace myJournal.objects
 		public int JournalsSkipped		{ get { return ItemsSkipped.Count; } }
 		public int JournalsDownloaded	{ get { return ItemsDownloaded.Count; } }
 		public int JournalsBackedUp		{ get { return ItemsBackedUp.Count; } }
+		public int JournalsDeleted		{ get { return ItemsDeleted.Count; } }
 
 		public string Err = string.Empty; 
 
@@ -35,6 +36,7 @@ namespace myJournal.objects
 		private List<string> ItemsSkipped		= new List<string>();
 		private List<string> ItemsDownloaded	= new List<string>();
 		private List<string> ItemsBackedUp		= new List<string>();
+		private List<string> ItemsDeleted		= new List<string>();
 
 		public CloudSynchronizer() { }
 
@@ -132,19 +134,18 @@ namespace myJournal.objects
 				}
 			}
 
-			// Synch from Azure ...
 			await AzureFileClient.GetAzureFiles(Program.AzurePassword);
 
 			foreach (string s in Program.AzureFiles)
 			{
+				// If an Azure journal is not found locally, download the Azure journal.
 				var localFName = s.Remove(0, Program.AzurePassword.Length + 1);
-
-				if (!Utilities.AllJournalNames().Contains(localFName))
-				{
-					await AzureFileClient.DownloadOrDeleteFile(journalsFolder + localFName, s);
-					ItemsSynchd.Add(localFName + " (added from cloud)");
-				}
+				if (!Utilities.AllJournalNames().Contains(localFName))	{ await AzureFileClient.DownloadOrDeleteFile(journalsFolder + localFName, s); ItemsDownloaded.Add(s); }
 			}
+
+			// If a local journal is not found on Azure, delete the local journal.
+			foreach (var s in Utilities.AllJournalNames())	
+			{ if (!Program.AzureFiles.Contains(s)) { File.Delete(journalsFolder + s); ItemsDeleted.Add(s); } }
 
 			if(alsoSynchSettings) await SyncLabelsAndSettings();
 		}

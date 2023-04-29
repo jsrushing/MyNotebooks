@@ -19,7 +19,6 @@ namespace myJournal.subforms
 			InitializeComponent();
 			journalsToSearch.Add(jrnl);
 			LabelsManager.PopulateLabelsList(lstLabelsForSearch);
-			//Utilities.Labels_PopulateLabelsList(lstLabelsForSearch);
 			Utilities.SetStartPosition(this, parent);
 		}
 
@@ -98,8 +97,8 @@ namespace myJournal.subforms
 
 		private void btnSearch_Click(object sender, EventArgs e)
 		{
-			string labels = string.Empty;
-			string[] labelsArray = null;
+			var labels = string.Empty;
+			string[] labelsArray;
 
 			lstFoundEntries.Items.Clear();
 
@@ -112,6 +111,7 @@ namespace myJournal.subforms
 			{
 				SearchObject so = new SearchObject(chkUseDate, chkUseDateRange, chkMatchCase, dtFindDate, 
 					dtFindDate_From, dtFindDate_To, radBtnAnd, txtSearchTitle.Text, txtSearchText.Text, labelsArray);
+
 				List<JournalEntry> foundEntries = j.Search(so);
 				Utilities.PopulateEntries(lstFoundEntries, foundEntries, "", "", false);
 			}

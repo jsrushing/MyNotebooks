@@ -68,6 +68,7 @@ namespace myJournal.subforms
 			ClearAllText(); 
 			SetUpUI(Mode.AskingForKey); 
 		}
+
 		private void btnCancelChange_Click(object sender, EventArgs e) { Close(); }
 
 		private void btnChangeKey_Click(object sender, EventArgs e)
