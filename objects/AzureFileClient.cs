@@ -39,22 +39,24 @@ namespace myJournal.objects
 		public static async Task DownloadOrDeleteFile(string localFileName, string AzFileName, 
 			FileMode mode = FileMode.Create, bool deleteFile = false, string shareName = "journals")
 		{
-			using (var stream = new FileStream(localFileName, mode))
-			{
-				try
-				{
-					Program.AzureFileExists				= false;
-					CloudStorageAccount storageAccount	= CloudStorageAccount.Parse(Program.AzureConnString);
-					CloudFileClient		fileClient		= storageAccount.CreateCloudFileClient();
-					CloudFileShare		share			= fileClient.GetShareReference(shareName);
-					CloudFileDirectory	root			= share.GetRootDirectoryReference();
-					CloudFile			myFile			= root.GetFileReference(AzFileName);
+			Program.AzureFileExists				= false;
+			CloudStorageAccount storageAccount	= CloudStorageAccount.Parse(Program.AzureConnString);
+			CloudFileClient		fileClient		= storageAccount.CreateCloudFileClient();
+			CloudFileShare		share			= fileClient.GetShareReference(shareName);
+			CloudFileDirectory	root			= share.GetRootDirectoryReference();
+			CloudFile			myFile			= root.GetFileReference(AzFileName);
 
-					if (deleteFile)
-					{ await myFile.DeleteAsync(); }
-					else { await myFile.DownloadToStreamAsync(stream); Program.AzureFileExists = true;}	
+			if (deleteFile)
+			{
+				await myFile.DeleteAsync();
+			}
+			else
+			{
+				using (FileStream stream = new FileStream(localFileName, mode))
+				{
+					await myFile.DownloadToStreamAsync(stream); Program.AzureFileExists = true;					
 				}
-				catch(Exception) { }
+
 			}
 		}
 
@@ -67,9 +69,10 @@ namespace myJournal.objects
 			CloudFileDirectory root				= share.GetRootDirectoryReference();
 			CloudFileDirectory myDirectory		= root.GetDirectoryReference("keys");
 			FileResultSegment resultSegment		= await root.ListFilesAndDirectoriesSegmentedAsync(key, 1, null, new FileRequestOptions(), null);
+			Program.AzurePassword				= resultSegment.Results.Count() == 1 ? creatingKey ? string.Empty : key : string.Empty;
 
-			if (creatingKey)	{ Program.AzurePassword = resultSegment.Results.Count() == 1 ? string.Empty : key; }
-			else				{ Program.AzurePassword = resultSegment.Results.Count() == 1 ? key : string.Empty; }
+			//if (creatingKey)	{ Program.AzurePassword = resultSegment.Results.Count() == 1 ? string.Empty : key; }
+			//else				{ Program.AzurePassword = resultSegment.Results.Count() == 1 ? key : string.Empty; }
 		}
 
 		public static async Task GetAzureFiles(string pwd)

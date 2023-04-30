@@ -559,7 +559,6 @@ namespace myJournal.subforms
 					currentJournal.Delete();
 					ddlJournals.Text = string.Empty;
 					lstEntries.Items.Clear();
-					LoadJournals();
 					ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
 					pnlDateFilters.Visible = false;
 
@@ -573,6 +572,8 @@ namespace myJournal.subforms
 							using (frmLabelsManager frm3 = new frmLabelsManager(this)) { frm3.ShowDialog(); }
 						}
 					}
+
+					LoadJournals();	
 				}
 			}
 		}

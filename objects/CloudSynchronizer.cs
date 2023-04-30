@@ -121,8 +121,10 @@ namespace myJournal.objects
 					}
 					else
 					{
-						AzureFileClient.UploadFile(journalsFolder + j.Name);
-						ItemsSynchd.Add(j.Name + " (created in cloud)");
+						File.Delete(journalsFolder + j.Name);
+						ItemsDeleted.Add(j.Name);
+						//AzureFileClient.UploadFile(journalsFolder + j.Name);
+						//ItemsSynchd.Add(j.Name + " (created in cloud)");
 					}
 
 					File.Delete(tempFolder + "_" + j.Name);
@@ -133,19 +135,6 @@ namespace myJournal.objects
 					ItemsBackedUp.Add(j.Name + " (backed up locally)");
 				}
 			}
-
-			await AzureFileClient.GetAzureFiles(Program.AzurePassword);
-
-			foreach (string s in Program.AzureFiles)
-			{
-				// If an Azure journal is not found locally, download the Azure journal.
-				var localFName = s.Remove(0, Program.AzurePassword.Length + 1);
-				if (!Utilities.AllJournalNames().Contains(localFName))	{ await AzureFileClient.DownloadOrDeleteFile(journalsFolder + localFName, s); ItemsDownloaded.Add(s); }
-			}
-
-			// If a local journal is not found on Azure, delete the local journal.
-			foreach (var s in Utilities.AllJournalNames())	
-			{ if (!Program.AzureFiles.Contains(s)) { File.Delete(journalsFolder + s); ItemsDeleted.Add(s); } }
 
 			if(alsoSynchSettings) await SyncLabelsAndSettings();
 		}
