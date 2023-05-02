@@ -573,7 +573,7 @@ namespace myJournal.subforms
 						}
 					}
 
-					LoadJournals();	
+					LoadJournals();
 				}
 			}
 		}

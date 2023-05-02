@@ -197,15 +197,15 @@ namespace myJournal.subforms
 			// mnuJournal_Create
 			// 
 			mnuJournal_Create.Name = "mnuJournal_Create";
-			mnuJournal_Create.Size = new System.Drawing.Size(160, 22);
-			mnuJournal_Create.Text = "&New Journal";
+			mnuJournal_Create.Size = new System.Drawing.Size(180, 22);
+			mnuJournal_Create.Text = "&Create";
 			mnuJournal_Create.Click += this.mnuJournal_Create_Click;
 			// 
 			// mnuJournal_Delete
 			// 
 			mnuJournal_Delete.Enabled = false;
 			mnuJournal_Delete.Name = "mnuJournal_Delete";
-			mnuJournal_Delete.Size = new System.Drawing.Size(160, 22);
+			mnuJournal_Delete.Size = new System.Drawing.Size(180, 22);
 			mnuJournal_Delete.Text = "Delete";
 			mnuJournal_Delete.Click += this.mnuJournal_Delete_Click;
 			// 
@@ -213,7 +213,7 @@ namespace myJournal.subforms
 			// 
 			mnuJournal_Search.Enabled = false;
 			mnuJournal_Search.Name = "mnuJournal_Search";
-			mnuJournal_Search.Size = new System.Drawing.Size(160, 22);
+			mnuJournal_Search.Size = new System.Drawing.Size(180, 22);
 			mnuJournal_Search.Text = "&Search";
 			mnuJournal_Search.Click += this.mnuJournal_Search_Click;
 			// 
@@ -221,7 +221,7 @@ namespace myJournal.subforms
 			// 
 			mnuJournal_Rename.Enabled = false;
 			mnuJournal_Rename.Name = "mnuJournal_Rename";
-			mnuJournal_Rename.Size = new System.Drawing.Size(160, 22);
+			mnuJournal_Rename.Size = new System.Drawing.Size(180, 22);
 			mnuJournal_Rename.Text = "Rename";
 			mnuJournal_Rename.Click += this.mnuJournal_Rename_Click;
 			// 
@@ -229,28 +229,28 @@ namespace myJournal.subforms
 			// 
 			mnuJournal_ForceBackup.Enabled = false;
 			mnuJournal_ForceBackup.Name = "mnuJournal_ForceBackup";
-			mnuJournal_ForceBackup.Size = new System.Drawing.Size(160, 22);
+			mnuJournal_ForceBackup.Size = new System.Drawing.Size(180, 22);
 			mnuJournal_ForceBackup.Text = "Force &Backup";
 			mnuJournal_ForceBackup.Click += this.mnuJournal_ForceBackup_Click;
 			// 
 			// mnuJournal_RestoreBackups
 			// 
 			mnuJournal_RestoreBackups.Name = "mnuJournal_RestoreBackups";
-			mnuJournal_RestoreBackups.Size = new System.Drawing.Size(160, 22);
+			mnuJournal_RestoreBackups.Size = new System.Drawing.Size(180, 22);
 			mnuJournal_RestoreBackups.Text = "&Restore Backups";
 			mnuJournal_RestoreBackups.Click += this.mnuJournal_RestoreBackups_Click;
 			// 
 			// mnuJournal_Import
 			// 
 			mnuJournal_Import.Name = "mnuJournal_Import";
-			mnuJournal_Import.Size = new System.Drawing.Size(160, 22);
+			mnuJournal_Import.Size = new System.Drawing.Size(180, 22);
 			mnuJournal_Import.Text = "Import";
 			mnuJournal_Import.Click += this.mnuJournal_Import_Click;
 			// 
 			// mnuJournal_Export
 			// 
 			mnuJournal_Export.Name = "mnuJournal_Export";
-			mnuJournal_Export.Size = new System.Drawing.Size(160, 22);
+			mnuJournal_Export.Size = new System.Drawing.Size(180, 22);
 			mnuJournal_Export.Text = "Synch";
 			mnuJournal_Export.Click += this.mnuJournal_Export_Click;
 			// 

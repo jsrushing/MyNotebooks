@@ -32,7 +32,7 @@ namespace myJournal
         {
             if(_name != null)
             {
-                this.Name = _name;
+				this.Name = _name;	// + " (local)";
                 this.FileName = Program.AppRoot + this.root + this.Name;
 			}
         }
@@ -65,6 +65,7 @@ namespace myJournal
 
 		public void Create()
         {
+			this.FileName += " (local)";
 			Entries.Add(new JournalEntry("created", "-", "-", ""));
 			this.Save();
         }
@@ -144,9 +145,10 @@ namespace myJournal
             {
                 BinaryFormatter formatter = new BinaryFormatter();
                 formatter.Serialize(stream, this);
+				stream.Close();
             }
 
-			if(Program.AzurePassword.Length > 0)
+			if(Program.AzurePassword.Length > 0 && this.AllowCloud)
 			{
 				CloudSynchronizer cs = new CloudSynchronizer();
 				await cs.SynchWithCloud(false, this);

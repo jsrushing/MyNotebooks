@@ -56,7 +56,6 @@ namespace myJournal.objects
 				{
 					await myFile.DownloadToStreamAsync(stream); Program.AzureFileExists = true;					
 				}
-
 			}
 		}
 
@@ -70,12 +69,9 @@ namespace myJournal.objects
 			CloudFileDirectory myDirectory		= root.GetDirectoryReference("keys");
 			FileResultSegment resultSegment		= await root.ListFilesAndDirectoriesSegmentedAsync(key, 1, null, new FileRequestOptions(), null);
 			Program.AzurePassword				= resultSegment.Results.Count() == 1 ? creatingKey ? string.Empty : key : string.Empty;
-
-			//if (creatingKey)	{ Program.AzurePassword = resultSegment.Results.Count() == 1 ? string.Empty : key; }
-			//else				{ Program.AzurePassword = resultSegment.Results.Count() == 1 ? key : string.Empty; }
 		}
 
-		public static async Task GetAzureFiles(string pwd)
+		public static async Task GetAzureFiles(string pwd, bool scrubAzPwd = false)
 		{
 			CloudStorageAccount storageAccount	= CloudStorageAccount.Parse(Program.AzureConnString);
 			CloudFileClient		fileClient		= storageAccount.CreateCloudFileClient();
@@ -86,7 +82,7 @@ namespace myJournal.objects
 			FileContinuationToken token			= null;
 			FileResultSegment	rsltSgmnt		= await root.ListFilesAndDirectoriesSegmentedAsync(pwd, null, token, options, null);
 
-			foreach(CloudFile file in rsltSgmnt.Results) { Program.AzureFiles.Add(file.Name); }
+			foreach(CloudFile file in rsltSgmnt.Results) { Program.AzureFiles.Add(scrubAzPwd ? file.Name.Replace(Program.AzurePassword + "_", "") : file.Name); }
 		}
 	}
 }
