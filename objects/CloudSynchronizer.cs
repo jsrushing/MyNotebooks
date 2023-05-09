@@ -12,6 +12,8 @@ using System.Linq;
 using Microsoft.Extensions.FileProviders;
 using static myJournal.objects.Utilities;
 using System.CodeDom;
+using myJournal.subforms;
+using Microsoft.Identity.Client;
 
 namespace myJournal.objects
 {
@@ -37,23 +39,40 @@ namespace myJournal.objects
 		private List<string> ItemsDownloaded	= new List<string>();
 		private List<string> ItemsBackedUp		= new List<string>();
 		private List<string> ItemsDeleted		= new List<string>();
+		private ComparisonResult MainResult			{ get; set; }
 
 		public CloudSynchronizer() { }
 
-		private ComparisonResult CompareJournals(FileInfo fileinfo1, FileInfo fileinfo2)
+		private void CompareJournals(Journal localJournal, Journal cloudJournal)
 		{
-			ComparisonResult result;
+			//ComparisonResult _result = ComparisonResult.Same;
 
-			Journal j1 = new Journal("j1");
-			j1.FileName = fileinfo1.FullName;
-			j1 = j1.Open(true);
+			if(!Program.SkipFileSizeComparison)
+			{
+				this.MainResult = localJournal.LastSaved > cloudJournal.LastSaved ? ComparisonResult.LocalNewer : cloudJournal.LastSaved > localJournal.LastSaved ? ComparisonResult.CloudNewer : ComparisonResult.Same;
+			}
+			else { Program.SkipFileSizeComparison = false; }
+			
+			//if (_result != ComparisonResult.Same)
+			//{
+			//	//if (!Program.SkipFileSizeComparison)
+			//	//{
+			//	//	//if (_result == ComparisonResult.LocalNewer)
+			//	//	//{
+			//	//	//	AzureFileClient.UploadFile(localJournal.FileName);
+			//	//	//	ItemsSynchd.Add(localJournal.FileName + "up'd (newer)");
+			//	//	//}
+			//	//	//else
+			//	//	//{
+			//	//	//	//File.Move(cloudJournal.FileName, localJournal.FileName);
+			//	//	//	//await AzureFileClient.DownloadOrDeleteFile(localJournal.FileName, localJournal.Name);
+			//	//	//	//ItemsDownloaded.Add(localJournal.Name + " dl'd (newer)");
+			//	//	//}
+			//	//}
+			//	//else { _result = ComparisonResult.LocalNewer; }
+			//}
 
-			Journal j2 = new Journal("j2");
-			j2.FileName = fileinfo2.FullName;
-			j2 = j2.Open(true);
-
-			result = j1.LastSaved > j2.LastSaved ? ComparisonResult.LocalNewer : j1.LastSaved < j2.LastSaved ? ComparisonResult.CloudNewer : ComparisonResult.Same;
-			return result;
+			//this.MainResult = _result;	
 		}
 
 		private ComparisonResult CompareLabelsAndSettings(FileInfo fileinfo1, FileInfo fileinfo2)
@@ -86,18 +105,17 @@ namespace myJournal.objects
 			List<Journal> allJournals	= new List<Journal>();
 			Journal j					= new Journal();
 
-			// handle journal being named with '(local)'.
-			if (journal == null) 
+			if (journal == null)	// If no journal is passed then 'allJournals' will contain all local journals. If one is passed (from Journal.Save()) it will only contain one.
 			{ 
 				allJournals = Utilities.AllJournals(); } 
 			else 
 			{ 	
+				// handle journal being named with '(local)' which means it's newly created and has never been uploaded.
 				if (journal.AllowCloud && journal.FileName.EndsWith(" (local)"))
 				{
-					string sOldName = journal.FileName;
-					string sNewName = journal.FileName.Substring(0, journal.FileName.LastIndexOf("\\") + 1) + journal.Name;
-
-					journal.FileName = sNewName;
+					var sOldName		= journal.FileName;
+					var sNewName		= journal.FileName.Substring(0, journal.FileName.LastIndexOf("\\") + 1) + journal.Name;
+					journal.FileName	= sNewName;
 					File.Copy(sOldName, sNewName, true);
 					File.Delete(sOldName);
 					AzureFileClient.UploadFile(journalsFolder + journal.Name);
@@ -107,38 +125,38 @@ namespace myJournal.objects
 				allJournals.Add(journal); 
 			}
 
-			// Compare all journals found both locally and on Azure.
 			for (var i = 0; i < allJournals.Count; i++)
 			{
 				j = new Journal(allJournals[i].Name).Open();
 
-				if(j == null)
+				if(j != null)
 				{
 					if (j.AllowCloud)
 					{
-						FileInfo azureJournal = null;
-						FileInfo localJournal = new FileInfo(journalsFolder + j.Name);
+						Journal cloudJournal;
 
 						try
 						{
 							await AzureFileClient.DownloadOrDeleteFile(tempFolder + "_" + j.Name, Program.AzurePassword + "_" + j.Name);
-							azureJournal = Program.AzureFileExists ? new FileInfo(tempFolder + "_" + j.Name) : null;
+							cloudJournal = File.Exists(tempFolder + "_" + j.Name) ? new Journal(j.Name, tempFolder + "_" + j.Name).Open(true) : null;
 						}
-						catch (Exception ex) { Err = ex.Message; }
+						catch (Exception ex) { Err = ex.Message; break; }
 
-						if (azureJournal != null && azureJournal.Length > 0)
+						if (cloudJournal != null)
 						{
-							switch (CompareJournals(localJournal, azureJournal))
+							this.CompareJournals(j, cloudJournal);
+
+							switch (MainResult)
 							{
 								case ComparisonResult.Same:
 									ItemsSkipped.Add(j.Name + " (files match)");
 									break;
 								case ComparisonResult.LocalNewer:
-									AzureFileClient.UploadFile(journalsFolder + j.Name);
-									ItemsSynchd.Add(j.Name + (" (syncd to cloud)"));
+									AzureFileClient.UploadFile(j.FileName);
+									ItemsSynchd.Add(j.FileName + "up'd (newer)");
 									break;
 								case ComparisonResult.CloudNewer:
-									File.Move(tempFolder + "_" + j.Name, journalsFolder + j.Name, true);
+									File.Move(cloudJournal.FileName, j.FileName, true);
 									ItemsDownloaded.Add(j.Name + " (syncd from cloud)");
 									break;
 							}
@@ -148,6 +166,13 @@ namespace myJournal.objects
 					{
 						j.Backup();
 						ItemsBackedUp.Add(j.Name + " (backed up locally)");
+					}
+				}
+				else
+				{
+					if (j.AllowCloud)
+					{
+						AzureFileClient.UploadFile(journalsFolder + j.Name);
 					}
 				}
 
@@ -277,3 +302,40 @@ namespace myJournal.objects
 		}
 	}
 }
+
+
+//result = fileinfo1.LastWriteTimeUtc < fileinfo2.LastWriteTimeUtc ?
+//	ComparisonResult.LocalNewer
+//	: fileinfo1.LastWriteTimeUtc > fileinfo2.LastWriteTimeUtc ? ComparisonResult.CloudNewer
+//	: ComparisonResult.Same;
+
+//var sMsg = "The journal '" + fileinfo1.Name + (localNewer ? "' on your device " : "' in your cloud ") +
+//	"is newer than the journal found " + (localNewer ? "in your cloud." : "on your device.");
+//sMsg += Environment.NewLine + Environment.NewLine + "Press 'Yes' to " + (localNewer ? "upload " : "download ") + "the newer journal" +
+//	(localNewer ? " from your device to your cloud." : " to your device from your cloud.") +
+//	Environment.NewLine + "'No' to " + (localNewer ? "download " : "upload ") + "the older journal " + (!localNewer ? " from your device to your cloud." : " to your device from your cloud.") +
+//	Environment.NewLine + "or 'Cancel' to make no changes.";
+
+//var sMsg = "The journal '" + fileinfo1.Name + (LocalNewer ? "' on your device " : "' in your cloud ") +
+//	"is larger than the journal found " + (LocalNewer ? "in your cloud." : "on your device.");
+//sMsg += Environment.NewLine + Environment.NewLine + "Press 'Yes' to " + (LocalNewer ? "upload " : "download ") + "the larger journal, " +
+//	Environment.NewLine + "'No' to " + (LocalNewer ? "download " : "upload ") + "the smaller journal, " +
+//	Environment.NewLine + "or 'Cancel' to make no changes.";
+
+//var sMsg = "The journal '" + fileinfo1.Name + (localNewer ? "' on your device " : "' in your cloud ") +
+//	"is newer than the journal found " + (localNewer ? "in your cloud." : "on your device.");
+//sMsg += Environment.NewLine + Environment.NewLine + "Press 'Yes' to " + (localNewer ? "upload " : "download ") + "the newer journal, " +
+//	Environment.NewLine + "'No' to " + (localNewer ? "download " : "upload ") + "the older journal, " +
+//	Environment.NewLine + "or 'Cancel' to make no changes.";
+
+//frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, sMsg, "Journal (" + fileinfo1.Name + ") Size Mismatch Found");
+//frm.ShowDialog();
+
+//if(frm.Result == frmMessage.ReturnResult.Yes)
+//{
+//	result = fileinfo1.LastWriteTimeUtc < fileinfo2.LastWriteTimeUtc ? ComparisonResult.LocalNewer : ComparisonResult.CloudNewer;
+//}
+//else if(frm.Result == frmMessage.ReturnResult.No)
+//{
+//	result = fileinfo1.LastWriteTimeUtc < fileinfo2.LastWriteTimeUtc ? ComparisonResult.CloudNewer : ComparisonResult.LocalNewer;
+//}

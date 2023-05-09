@@ -39,7 +39,7 @@ namespace myJournal.subforms
 			opType = type;
 			msg = message;
 			this.defaultText = defaultText;
-			if(parent != null) { Utilities.SetStartPosition(this, parent); }
+			if (parent != null) { Utilities.SetStartPosition(this, parent); }
 		}
 
 		private void frmMessage_Activated(object sender, EventArgs e)
@@ -49,9 +49,9 @@ namespace myJournal.subforms
 		{
 			Panel shownPanel = null;
 
-			foreach(Control c in this.Controls)
+			foreach (Control c in this.Controls)
 			{
-				if(c.GetType() == typeof(Panel)) { c.Top = 28; }
+				if (c.GetType() == typeof(Panel)) { c.Top = 28; }
 			}
 
 			lblMessage.Text = msg;
@@ -93,7 +93,9 @@ namespace myJournal.subforms
 					this.Text = "Enter New Value";
 					break;
 			}
-			if(shownPanel != null) { this.Height = shownPanel.Height + shownPanel.Top + 50; }
+
+			lblMessage.Height = lblMessage.Text.Length > 0 ? lblMessage.Text.Length / 25 * 15 : 0;
+			if (shownPanel != null) { this.Height = shownPanel.Height + shownPanel.Top + 50; }
 		}
 
 		private void btnYes_Click(object sender, EventArgs e)

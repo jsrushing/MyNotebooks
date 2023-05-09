@@ -20,7 +20,7 @@ namespace myJournal.objects
 			List<string> lstRtrn = new List<string>();
 			foreach(Journal j in AllJournals()) { lstRtrn.Add(j.Name); }
 			return lstRtrn;
-		}
+		} 
 
 		public static List<Journal> AllJournals()
 		{

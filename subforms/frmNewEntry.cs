@@ -12,25 +12,18 @@ namespace myJournal.subforms
 {
 	public partial class frmNewEntry : Form
 	{
-		private JournalEntry	entry = null;
-		private Journal			currentJournal = null;
-		private bool			isEdit = false;
-		private int				originalEntryLength = -1;
-		private string			originalText_Full;
-		private bool			isDirty = false;
-		private string			originalTitle;
+		private JournalEntry entry = null;
+		private Journal currentJournal = null;
+		private bool isEdit = false;
+		private int originalEntryLength = -1;
+		private string originalText_Full;
+		private bool isDirty = false;
+		private string originalTitle;
 		private LabelsManager.LabelsSortType sort = LabelsManager.LabelsSortType.None;
 
 		public bool saved { get; private set; }
 		//public bool preserveOriginalText { get; set; }
 		private bool preserveOriginalText;
-
-		//private enum LabelsSortType
-		//{
-		//	Ascending,
-		//	Descending,
-		//	None
-		//}
 
 		public frmNewEntry(Form parent, Journal journal, JournalEntry entryToEdit = null, bool disallowOriginalTextEdit = false)
 		{
@@ -57,17 +50,20 @@ namespace myJournal.subforms
 			sort = LabelsManager.LabelsSortType.None;
 			//lblSortType_Click(null, null);
 			SortLabels();
+			lblCreatedOn.Visible = false;
+			lblEditedOn.Visible = false;
 
 			if (isEdit)
 			{
 				txtNewEntryTitle.Text = entry.ClearTitle();
-				lblCreatedOn.Text = entry.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]);
-				lblEditedOn.Text = entry.LastEditedOn < new DateTime(2000, 1, 1) ? "" : entry.LastEditedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]);
+
+				lblCreatedOn.Text = this.entry.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]);
+				lblEditedOn.Text = this.entry.LastEditedOn < new DateTime(2000, 1, 1) ? "" : this.entry.LastEditedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]);
 
 				if (preserveOriginalText)
 				{
 					originalText_Full = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Editing"],
-						entry.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), entry.ClearTitle(), entry.ClearText());
+						this.entry.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), this.entry.ClearTitle(), this.entry.ClearText());
 
 					originalEntryLength = originalText_Full.Length - 1;
 					originalText_Full = originalText_Full.Substring(originalText_Full.Length - originalEntryLength + 1);
@@ -88,6 +84,12 @@ namespace myJournal.subforms
 			SetIsDirty(false);
 		}
 
+		private void frmNewEntry_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			e.Cancel = true;
+			mnuCancelExit_Click(null, null);
+		}
+
 		private void GrayOriginalText()
 		{
 			rtbNewEntry.SelectionStart = 1;
@@ -105,13 +107,13 @@ namespace myJournal.subforms
 				positionToCheck += rtbNewEntry.SelectionLength;
 				bool inNoType = positionToCheck >= rtbNewEntry.Text.Length - originalEntryLength;
 				rtbNewEntry.SelectionStart = inNoType ? rtbNewEntry.Text.Length - originalEntryLength + 4 : rtbNewEntry.SelectionStart;
-				if (inNoType & rtbNewEntry.SelectionLength > 0) { rtbNewEntry.SelectionLength = 0; InNoTypeArea(); } 
+				if (inNoType & rtbNewEntry.SelectionLength > 0) { rtbNewEntry.SelectionLength = 0; InNoTypeArea(); }
 			}
 		}
 
 		private void lblManageLabels_Click(object sender, EventArgs e)
 		{
-			using (frmLabelsManager frm = new frmLabelsManager(this, this.currentJournal)) { frm.ShowDialog(); }	
+			using (frmLabelsManager frm = new frmLabelsManager(this, this.currentJournal)) { frm.ShowDialog(); }
 			LabelsManager.PopulateLabelsList(clbLabels);
 		}
 
@@ -126,12 +128,12 @@ namespace myJournal.subforms
 		{
 			if (isDirty)
 			{
-				using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Do you want to save your changes?", "", this)) 
-				{ 
-					frm.ShowDialog(this); 
-					if(frm.Result == frmMessage.ReturnResult.No) { entry = null; }
-					else if(frm.Result == frmMessage.ReturnResult.Yes)  { Save(); }				
-				}	
+				using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Do you want to save your changes?", "", this))
+				{
+					frm.ShowDialog(this);
+					if (frm.Result == frmMessage.ReturnResult.No) { entry = null; }
+					else if (frm.Result == frmMessage.ReturnResult.Yes) { Save(); }
+				}
 			}
 			else
 			{
@@ -166,11 +168,11 @@ namespace myJournal.subforms
 			}
 			else
 			{
-				using(frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "You must enter both a title and text to save an entry.", "", this)) { frm.ShowDialog(this); }
+				using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "You must enter both a title and text to save an entry.", "", this)) { frm.ShowDialog(this); }
 			}
 		}
 
-		private void rtbNewEntry_KeyDown(object sender, KeyEventArgs e) { if (e.KeyCode == Keys.Right || e.KeyCode == Keys.Down) { InNoTypeArea(); }}
+		private void rtbNewEntry_KeyDown(object sender, KeyEventArgs e) { if (e.KeyCode == Keys.Right || e.KeyCode == Keys.Down) { InNoTypeArea(); } }
 
 		private void rtbNewEntry_MouseUp(object sender, MouseEventArgs e) { InNoTypeArea(); }
 
@@ -180,7 +182,7 @@ namespace myJournal.subforms
 		{
 			JournalEntry newEntry = new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, rtbNewEntry.Rtf, LabelsManager.CheckedLabels_Get(clbLabels), false);
 
-			if(entry == null)
+			if (entry == null)
 			{
 				currentJournal.AddEntry(newEntry);
 			}
@@ -197,14 +199,14 @@ namespace myJournal.subforms
 
 		private void SetIsDirty(bool dirty)
 		{
-			if(txtNewEntryTitle.Text.Length > 0 & rtbNewEntry.Text.Length > 0)
+			if (txtNewEntryTitle.Text.Length > 0 & rtbNewEntry.Text.Length > 0)
 			{
 				isDirty = dirty;
 				mnuSaveEntry.Enabled = isDirty;
 				mnuSaveAndExit.Enabled = isDirty;
 			}
 
-			if(this.entry != null)
+			if (this.entry != null)
 			{
 				this.Text = "editing '" + entry.ClearTitle() + "' in '" + currentJournal.Name + "'";
 			}
@@ -218,7 +220,7 @@ namespace myJournal.subforms
 		{
 			switch (sort)
 			{
-				case LabelsManager. LabelsSortType.None:
+				case LabelsManager.LabelsSortType.None:
 					LabelsManager.PopulateLabelsList(clbLabels, null, LabelsManager.LabelsSortType.None);
 					lblSortType.Text = "sort A-Z";
 					sort = LabelsManager.LabelsSortType.Ascending;

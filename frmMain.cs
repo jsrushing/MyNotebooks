@@ -484,6 +484,8 @@ namespace myJournal.subforms
 
 		private void mnuEntryCreate_Click(object sender, EventArgs e)
 		{
+			this.Cursor = Cursors.WaitCursor;
+
 			using (frmNewEntry frm = new frmNewEntry(this, currentJournal))
 			{
 				frm.Text = "New entry in " + currentJournal.Name;
@@ -495,6 +497,8 @@ namespace myJournal.subforms
 					ShowHideMenusAndControls(SelectionState.JournalLoaded);
 				}
 			}
+
+			this.Cursor = Cursors.Default;
 		}
 
 		private void mnuEntryDelete_Click(object sender, EventArgs e)

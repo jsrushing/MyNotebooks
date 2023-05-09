@@ -28,12 +28,13 @@ namespace myJournal
 
 		public bool BackupCompleted { get; private set; }
 
-        public Journal(string _name = null) 
+        public Journal(string _name = null, string _fileName = null) 
         {
             if(_name != null)
             {
-				this.Name = _name;	// + " (local)";
-                this.FileName = Program.AppRoot + this.root + this.Name;
+				this.Name = _name;
+				if (_fileName != null) { this.FileName = _fileName; } 
+				else { this.FileName = Program.AppRoot + this.root + this.Name; }
 			}
         }
 
@@ -96,8 +97,7 @@ namespace myJournal
         public Journal Open(bool useFileName = false)
         {
             Journal jRtrn = null;
-			var journalToOpen = Program.AppRoot + this.root;
-			journalToOpen = useFileName ? this.FileName : journalToOpen + this.Name;
+			var journalToOpen = useFileName ? this.FileName : Program.AppRoot + this.root + this.Name;
 
 			try
             {
@@ -147,6 +147,8 @@ namespace myJournal
                 formatter.Serialize(stream, this);
 				stream.Close();
             }
+
+			//Program.SkipFileSizeComparison = true;
 
 			if(Program.AzurePassword.Length > 0 && this.AllowCloud)
 			{
