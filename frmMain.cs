@@ -144,6 +144,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Windows.Forms;
 using myJournal.objects;
+using System.Text;
 
 namespace myJournal.subforms
 {
@@ -184,12 +185,13 @@ namespace myJournal.subforms
 
 				if (this.Text.ToLower().Contains("debug"))
 				{
-					string title = " synchd:" + cs.JournalsSynchd.ToString();
-					title += " skipped: " + cs.JournalsSkipped.ToString();
-					title += " downloaded:" + cs.JournalsDownloaded.ToString();
-					title += " backed up:" + cs.JournalsBackedUp.ToString();
-					title += " deleted:" + cs.JournalsDeleted.ToString();
-					this.Text += title;
+					StringBuilder title = new StringBuilder();
+					title.Append(" synchd:" + cs.JournalsSynchd.ToString()));
+					title.Append(" skipped: " + cs.JournalsSkipped.ToString());
+					title.Append(" downloaded:" + cs.JournalsDownloaded.ToString());
+					title.Append(" backed up:" + cs.JournalsBackedUp.ToString());
+					title.Append(" deleted:" + cs.JournalsDeleted.ToString());
+					this.Text += title.ToString();
 				}
 			}
 

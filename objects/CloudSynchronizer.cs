@@ -39,9 +39,9 @@ namespace myJournal.objects
 		private List<string> ItemsDownloaded	= new List<string>();
 		private List<string> ItemsBackedUp		= new List<string>();
 		private List<string> ItemsDeleted		= new List<string>();
-		private ComparisonResult MainResult			{ get; set; }
+		private ComparisonResult journalComparisonResult { get; set; }
 
-		public CloudSynchronizer() { }
+		public CloudSynchronizer() { journalComparisonResult = ComparisonResult.Same; }
 
 		private void CompareJournals(Journal localJournal, Journal cloudJournal)
 		{
@@ -49,9 +49,8 @@ namespace myJournal.objects
 
 			if(!Program.SkipFileSizeComparison)
 			{
-				this.MainResult = localJournal.LastSaved > cloudJournal.LastSaved ? ComparisonResult.LocalNewer : cloudJournal.LastSaved > localJournal.LastSaved ? ComparisonResult.CloudNewer : ComparisonResult.Same;
+				this.journalComparisonResult = localJournal.LastSaved > cloudJournal.LastSaved ? (ComparisonResult.LocalNewer) : cloudJournal.LastSaved > localJournal.LastSaved ? (ComparisonResult.CloudNewer) : (ComparisonResult.Same);
 			}
-			else { Program.SkipFileSizeComparison = false; }
 			
 			//if (_result != ComparisonResult.Same)
 			//{
@@ -101,7 +100,7 @@ namespace myJournal.objects
 		public async Task SynchWithCloud(bool alsoSynchSettings = false, Journal journal = null)
 		{
 			var journalsFolder			= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"];
-			var tempFolder				= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"];
+			var tempFolder				= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + "_";
 			List<Journal> allJournals	= new List<Journal>();
 			Journal j					= new Journal();
 
@@ -137,8 +136,8 @@ namespace myJournal.objects
 
 						try
 						{
-							await AzureFileClient.DownloadOrDeleteFile(tempFolder + "_" + j.Name, Program.AzurePassword + "_" + j.Name);
-							cloudJournal = File.Exists(tempFolder + "_" + j.Name) ? new Journal(j.Name, tempFolder + "_" + j.Name).Open(true) : null;
+							await AzureFileClient.DownloadOrDeleteFile(tempFolder + j.Name, Program.AzurePassword + "_" + j.Name);
+							cloudJournal = File.Exists(tempFolder + j.Name) ? new Journal(j.Name, tempFolder + j.Name).Open(true) : null;
 						}
 						catch (Exception ex) { Err = ex.Message; break; }
 
@@ -146,7 +145,7 @@ namespace myJournal.objects
 						{
 							this.CompareJournals(j, cloudJournal);
 
-							switch (MainResult)
+							switch (journalComparisonResult)
 							{
 								case ComparisonResult.Same:
 									ItemsSkipped.Add(j.Name + " (files match)");
@@ -176,7 +175,7 @@ namespace myJournal.objects
 					}
 				}
 
-				File.Delete(tempFolder + "_" + j.Name);
+				File.Delete(tempFolder + j.Name);
 			}
 
 

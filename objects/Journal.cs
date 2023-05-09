@@ -68,8 +68,10 @@ namespace myJournal
         {
 			this.FileName += " (local)";
 			Entries.Add(new JournalEntry("created", "-", "-", ""));
+			Program.SkipFileSizeComparison = true;
 			this.Save();
-        }
+			Program.SkipFileSizeComparison = false;
+		}
 
 		public async void Delete()
 		{
@@ -147,8 +149,6 @@ namespace myJournal
                 formatter.Serialize(stream, this);
 				stream.Close();
             }
-
-			//Program.SkipFileSizeComparison = true;
 
 			if(Program.AzurePassword.Length > 0 && this.AllowCloud)
 			{
