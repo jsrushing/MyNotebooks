@@ -116,7 +116,7 @@ namespace myJournal.objects
 			LabelsManager lm = new LabelsManager();	
 			List<Journal> lstRtrn = new List<Journal>();
 
-			foreach (Journal journal in Utilities.AllJournals())
+			foreach (Journal journal in Program.AllJournals)
 			{
 				//SetProgramPINForSelectedJournal(jrnl);
 

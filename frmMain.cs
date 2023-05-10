@@ -186,21 +186,22 @@ namespace myJournal.subforms
 				if (this.Text.ToLower().Contains("debug"))
 				{
 					StringBuilder title = new StringBuilder();
-					title.Append(" synchd: "		+ cs.JournalsSynchd.ToString());
-					title.Append(" skipped: "		+ cs.JournalsSkipped.ToString());
-					title.Append(" downloaded:"		+ cs.JournalsDownloaded.ToString());
-					title.Append(" backed up:"		+ cs.JournalsBackedUp.ToString());
-					title.Append(" deleted:"		+ cs.JournalsDeleted.ToString());
+					title.Append(" synchd: " + cs.JournalsSynchd.ToString());
+					title.Append(" skipped: " + cs.JournalsSkipped.ToString());
+					title.Append(" downloaded:" + cs.JournalsDownloaded.ToString());
+					title.Append(" backed up:" + cs.JournalsBackedUp.ToString());
+					title.Append(" deleted:" + cs.JournalsDeleted.ToString());
 					this.Text += title.ToString();
 				}
 			}
 
 			pnlDateFilters.Left = pnlPin.Left - 11;
+			Program.AllJournals = Utilities.AllJournals();
 			LoadJournals();
 			ShowHideMenusAndControls(SelectionState.HideAll);
 
-			try { mnuJournal_Export.Enabled = Utilities.AllJournals().First(j => j.AllowCloud) != null; }
-			catch (InvalidOperationException) { mnuJournal_Export.Enabled = false; }
+			//try { mnuJournal_Export.Enabled = Program.AllJournls.First(j => j.AllowCloud) != null; }
+			//catch (InvalidOperationException) { mnuJournal_Export.Enabled = false; }
 		}
 
 		private void frmMain_Resize(object sender, EventArgs e)
@@ -394,8 +395,7 @@ namespace myJournal.subforms
 		{
 			ddlJournals.Items.Clear();
 			ddlJournals.Text = string.Empty;
-
-			foreach (Journal j in Utilities.AllJournals()) { ddlJournals.Items.Add(j.Name); }
+			foreach (Journal j in Program.AllJournals) { ddlJournals.Items.Add(j.Name); }
 
 			//if(ddlJournals.Items.Count == 0)	// There will be no journals after an update so use the folders created in Form_Closing the last time the app was run.
 			//{
@@ -779,6 +779,7 @@ namespace myJournal.subforms
 				mnuJournal_Search.Enabled = false;
 				mnuJournal_ForceBackup.Enabled = false;
 				mnuJournal_Export.Enabled = true;
+				mnuSettings.Enabled = false;
 				pnlPin.Visible = true;
 			}
 			else if (st == SelectionState.JournalLoaded)
@@ -795,8 +796,9 @@ namespace myJournal.subforms
 				mnuJournal_Rename.Enabled = true;
 				mnuJournal_Search.Enabled = true;
 				mnuJournal_ForceBackup.Enabled = true;
-				btnLoadJournal.Enabled = false;
 				mnuJournal_Export.Enabled = currentJournal.AllowCloud;
+				mnuSettings.Enabled = true;
+				btnLoadJournal.Enabled = false;
 
 				pnlDateFilters.Visible = true;
 				txtJournalPIN.Text = string.Empty;
@@ -819,6 +821,17 @@ namespace myJournal.subforms
 				pnlPin.Visible = false;
 				pnlDateFilters.Visible = false;
 			}
+		}
+
+		private void mnuSettings_Click(object sender, EventArgs e)
+		{
+			frmJournalSettings frm = new frmJournalSettings(currentJournal, this);
+			frm.ShowDialog();
+			if (frm.isDirty)
+			{
+				currentJournal.Save();
+			}
+			frm.Close();
 		}
 
 		protected override CreateParams CreateParams

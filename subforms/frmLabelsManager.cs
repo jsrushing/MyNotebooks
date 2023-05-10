@@ -58,7 +58,7 @@ namespace myJournal.subforms
 			ShowPanel(pnlJournalPINs);
 			ShowHideOccurrences();
 
-			foreach (Journal j in Utilities.AllJournals()) 
+			foreach (Journal j in Program.AllJournals) 
 			{
 				DictJournals.Add(j.Name, "");
 				lstJournalPINs.Items.Add(j.Name); 
@@ -123,7 +123,7 @@ namespace myJournal.subforms
 
 			if (Renaming | Deleting)
 			{
-				List<Journal> journalsToEdit = EditingAllJournals ? Utilities.AllJournals() : new List<Journal>();
+				List<Journal> journalsToEdit = EditingAllJournals ? Program.AllJournals : new List<Journal>();
 
 				if (journalsToEdit.Count == 0) { journalsToEdit.Add(CurrentJournal); } // would be at least 1 if 'All Journals' was clicked
 
@@ -302,7 +302,7 @@ namespace myJournal.subforms
 			pnlJournalPINs.Visible = true;
 
 			if(lstJournalPINs.Items.Count == 0)
-			{ foreach(Journal j in Utilities.AllJournals()) { lstJournalPINs.Items.Add(j.Name); } }
+			{ foreach(Journal j in Program.AllJournals) { lstJournalPINs.Items.Add(j.Name); } }
 
 			this.Size = this.MinimumSize;
 		}

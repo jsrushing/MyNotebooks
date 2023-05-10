@@ -106,7 +106,7 @@ namespace myJournal.objects
 
 			if (journal == null)	// If no journal is passed then 'allJournals' will contain all local journals. If one is passed (from Journal.Save()) it will only contain one.
 			{ 
-				allJournals = Utilities.AllJournals(); } 
+				allJournals = Program.AllJournals; } 
 			else 
 			{ 	
 				// handle journal being named with '(local)' which means it's newly created and has never been uploaded.

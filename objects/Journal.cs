@@ -24,8 +24,9 @@ namespace myJournal
         public string FileName { get; set; }
         public List<JournalEntry> Entries = new List<JournalEntry>();
         string root = "journals\\";
-		public bool AllowCloud;
-
+		public bool AllowCloud { get; set; }
+		public bool UploadIfNotFoundInCloud { get; set; }
+		public bool DownloadIfNotFoundLocally { get; set; }
 		public bool BackupCompleted { get; private set; }
 
         public Journal(string _name = null, string _fileName = null) 
@@ -157,7 +158,8 @@ namespace myJournal
 			}
 
 			Backup();
-        }
+			Program.AllJournals = Utilities.AllJournals();
+		}
 
 		public List<JournalEntry> Search(SearchObject So)
 		{

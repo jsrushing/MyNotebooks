@@ -94,7 +94,7 @@ namespace myJournal.subforms
 					break;
 			}
 
-			lblMessage.Height = lblMessage.Text.Length > 0 ? lblMessage.Text.Length / 25 * 15 : 28;
+			lblMessage.Height = lblMessage.Text.Length > 0 ? (Convert.ToInt16(lblMessage.Text.Length / 25) > 0 ? Convert.ToInt16(lblMessage.Text.Length / 25) : 1) * 28 : 28;
 			if (shownPanel != null) { this.Height = shownPanel.Height + shownPanel.Top + 50; }
 		}
 

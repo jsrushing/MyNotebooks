@@ -18,24 +18,27 @@ namespace myJournal.objects
 		public static List<string> AllJournalNames()
 		{
 			List<string> lstRtrn = new List<string>();
-			foreach(Journal j in AllJournals()) { lstRtrn.Add(j.Name); }
+			foreach(Journal j in Program.AllJournals) { lstRtrn.Add(j.Name); }
 			return lstRtrn;
 		} 
 
 		public static List<Journal> AllJournals()
 		{
 			List<Journal> jrnlReturn = new List<Journal>();
-			string sJrnlDiskName;
+			//string sJrnlDiskName;
+			//Journal j;
+			string sJrnlFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"];
 
-			foreach (string s in Directory.GetFiles(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]))
+			foreach (string s in Directory.GetFiles(sJrnlFolder))
 			{
-				sJrnlDiskName = s.Replace(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"], "");
-
-				try { jrnlReturn.Add(new Journal(sJrnlDiskName).Open());}
-				catch (Exception ex) { frmMessage frm = new frmMessage(frmMessage.OperationType.Message, 
-					"A problem occurred whilc processing the journal name '" + sJrnlDiskName + "'. Message:" + ex.Message);
-					frm.ShowDialog();
-				}	
+				//sJrnlDiskName = s.Replace(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"], "");
+				//j = new Journal(sJrnlDiskName).Open();
+				//j.AllowCloud = true;
+				//j.DownloadIfNotFoundLocally = true;
+				//j.UploadIfNotFoundInCloud = false;
+				//j.Save();
+				//jrnlReturn.Add(j);
+				jrnlReturn.Add(new Journal(s.Replace(sJrnlFolder, "")).Open());
 			}
 
 			return jrnlReturn;

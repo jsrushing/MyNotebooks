@@ -49,6 +49,7 @@ namespace myJournal.subforms
 			mnuJournal_RestoreBackups = new System.Windows.Forms.ToolStripMenuItem();
 			mnuJournal_Import = new System.Windows.Forms.ToolStripMenuItem();
 			mnuJournal_Export = new System.Windows.Forms.ToolStripMenuItem();
+			mnuSettings = new System.Windows.Forms.ToolStripMenuItem();
 			mnuEntryTop = new System.Windows.Forms.ToolStripMenuItem();
 			mnuEntryCreate = new System.Windows.Forms.ToolStripMenuItem();
 			mnuEntryEdit = new System.Windows.Forms.ToolStripMenuItem();
@@ -189,7 +190,7 @@ namespace myJournal.subforms
 			// 
 			// mnuJournal
 			// 
-			mnuJournal.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuJournal_Create, mnuJournal_Delete, mnuJournal_Search, mnuJournal_Rename, mnuJournal_ForceBackup, mnuJournal_RestoreBackups, mnuJournal_Import, mnuJournal_Export });
+			mnuJournal.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuJournal_Create, mnuJournal_Delete, mnuJournal_Search, mnuJournal_Rename, mnuJournal_ForceBackup, mnuJournal_RestoreBackups, mnuJournal_Import, mnuJournal_Export, mnuSettings });
 			mnuJournal.Name = "mnuJournal";
 			mnuJournal.Size = new System.Drawing.Size(57, 20);
 			mnuJournal.Text = "&Journal";
@@ -231,6 +232,7 @@ namespace myJournal.subforms
 			mnuJournal_ForceBackup.Name = "mnuJournal_ForceBackup";
 			mnuJournal_ForceBackup.Size = new System.Drawing.Size(180, 22);
 			mnuJournal_ForceBackup.Text = "Force &Backup";
+			mnuJournal_ForceBackup.Visible = false;
 			mnuJournal_ForceBackup.Click += this.mnuJournal_ForceBackup_Click;
 			// 
 			// mnuJournal_RestoreBackups
@@ -238,6 +240,7 @@ namespace myJournal.subforms
 			mnuJournal_RestoreBackups.Name = "mnuJournal_RestoreBackups";
 			mnuJournal_RestoreBackups.Size = new System.Drawing.Size(180, 22);
 			mnuJournal_RestoreBackups.Text = "&Restore Backups";
+			mnuJournal_RestoreBackups.Visible = false;
 			mnuJournal_RestoreBackups.Click += this.mnuJournal_RestoreBackups_Click;
 			// 
 			// mnuJournal_Import
@@ -245,6 +248,7 @@ namespace myJournal.subforms
 			mnuJournal_Import.Name = "mnuJournal_Import";
 			mnuJournal_Import.Size = new System.Drawing.Size(180, 22);
 			mnuJournal_Import.Text = "Import";
+			mnuJournal_Import.Visible = false;
 			mnuJournal_Import.Click += this.mnuJournal_Import_Click;
 			// 
 			// mnuJournal_Export
@@ -252,7 +256,16 @@ namespace myJournal.subforms
 			mnuJournal_Export.Name = "mnuJournal_Export";
 			mnuJournal_Export.Size = new System.Drawing.Size(180, 22);
 			mnuJournal_Export.Text = "Synch";
+			mnuJournal_Export.Visible = false;
 			mnuJournal_Export.Click += this.mnuJournal_Export_Click;
+			// 
+			// mnuSettings
+			// 
+			mnuSettings.Enabled = false;
+			mnuSettings.Name = "mnuSettings";
+			mnuSettings.Size = new System.Drawing.Size(180, 22);
+			mnuSettings.Text = "Settings";
+			mnuSettings.Click += this.mnuSettings_Click;
 			// 
 			// mnuEntryTop
 			// 
@@ -519,5 +532,6 @@ namespace myJournal.subforms
 		private System.Windows.Forms.ComboBox cbxSortEntriesBy;
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.ToolStripMenuItem mnuSwitchAccount;
+		private System.Windows.Forms.ToolStripMenuItem mnuSettings;
 	}
 }
