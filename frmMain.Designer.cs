@@ -49,7 +49,7 @@ namespace myJournal.subforms
 			mnuJournal_RestoreBackups = new System.Windows.Forms.ToolStripMenuItem();
 			mnuJournal_Import = new System.Windows.Forms.ToolStripMenuItem();
 			mnuJournal_Export = new System.Windows.Forms.ToolStripMenuItem();
-			mnuSettings = new System.Windows.Forms.ToolStripMenuItem();
+			mnuJournal_Settings = new System.Windows.Forms.ToolStripMenuItem();
 			mnuEntryTop = new System.Windows.Forms.ToolStripMenuItem();
 			mnuEntryCreate = new System.Windows.Forms.ToolStripMenuItem();
 			mnuEntryEdit = new System.Windows.Forms.ToolStripMenuItem();
@@ -190,7 +190,7 @@ namespace myJournal.subforms
 			// 
 			// mnuJournal
 			// 
-			mnuJournal.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuJournal_Create, mnuJournal_Delete, mnuJournal_Search, mnuJournal_Rename, mnuJournal_ForceBackup, mnuJournal_RestoreBackups, mnuJournal_Import, mnuJournal_Export, mnuSettings });
+			mnuJournal.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuJournal_Create, mnuJournal_Delete, mnuJournal_Search, mnuJournal_Rename, mnuJournal_ForceBackup, mnuJournal_RestoreBackups, mnuJournal_Import, mnuJournal_Export, mnuJournal_Settings });
 			mnuJournal.Name = "mnuJournal";
 			mnuJournal.Size = new System.Drawing.Size(57, 20);
 			mnuJournal.Text = "&Journal";
@@ -259,13 +259,13 @@ namespace myJournal.subforms
 			mnuJournal_Export.Visible = false;
 			mnuJournal_Export.Click += this.mnuJournal_Export_Click;
 			// 
-			// mnuSettings
+			// mnuJournal_Settings
 			// 
-			mnuSettings.Enabled = false;
-			mnuSettings.Name = "mnuSettings";
-			mnuSettings.Size = new System.Drawing.Size(180, 22);
-			mnuSettings.Text = "Settings";
-			mnuSettings.Click += this.mnuSettings_Click;
+			mnuJournal_Settings.Enabled = false;
+			mnuJournal_Settings.Name = "mnuJournal_Settings";
+			mnuJournal_Settings.Size = new System.Drawing.Size(180, 22);
+			mnuJournal_Settings.Text = "Settings";
+			mnuJournal_Settings.Click += this.mnuJournal_Settings_Click;
 			// 
 			// mnuEntryTop
 			// 
@@ -532,6 +532,6 @@ namespace myJournal.subforms
 		private System.Windows.Forms.ComboBox cbxSortEntriesBy;
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.ToolStripMenuItem mnuSwitchAccount;
-		private System.Windows.Forms.ToolStripMenuItem mnuSettings;
+		private System.Windows.Forms.ToolStripMenuItem mnuJournal_Settings;
 	}
 }

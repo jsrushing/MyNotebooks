@@ -31,12 +31,13 @@
 			chkAllowCloud = new System.Windows.Forms.CheckBox();
 			textBox1 = new System.Windows.Forms.TextBox();
 			label1 = new System.Windows.Forms.Label();
-			radLocalNotCloud_DeleteLocal = new System.Windows.Forms.RadioButton();
+			radLocalNotCloud_DisallowLocalCloud = new System.Windows.Forms.RadioButton();
 			radLocalNotCloud_UploadToCloud = new System.Windows.Forms.RadioButton();
 			radCloudNotLocal_DownloadCloud = new System.Windows.Forms.RadioButton();
 			radCloudNotLocal_DeleteCloud = new System.Windows.Forms.RadioButton();
 			label2 = new System.Windows.Forms.Label();
 			pnlLocalNotCloud = new System.Windows.Forms.Panel();
+			radLocalNotCloud_DeleteLocal = new System.Windows.Forms.RadioButton();
 			pnlCloudNotLocal = new System.Windows.Forms.Panel();
 			btnSaveChanges = new System.Windows.Forms.Button();
 			pnlCloudOptions = new System.Windows.Forms.Panel();
@@ -71,31 +72,31 @@
 			label1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point);
 			label1.Location = new System.Drawing.Point(3, 0);
 			label1.Name = "label1";
-			label1.Size = new System.Drawing.Size(238, 15);
+			label1.Size = new System.Drawing.Size(229, 15);
 			label1.TabIndex = 2;
-			label1.Text = "If journal exists locally but not in the cloud ...";
+			label1.Text = "If journal exists locally but not in the cloud;";
 			// 
-			// radLocalNotCloud_DeleteLocal
+			// radLocalNotCloud_DisallowLocalCloud
 			// 
-			radLocalNotCloud_DeleteLocal.AutoSize = true;
-			radLocalNotCloud_DeleteLocal.Location = new System.Drawing.Point(3, 3);
-			radLocalNotCloud_DeleteLocal.Name = "radLocalNotCloud_DeleteLocal";
-			radLocalNotCloud_DeleteLocal.Size = new System.Drawing.Size(145, 19);
-			radLocalNotCloud_DeleteLocal.TabIndex = 3;
-			radLocalNotCloud_DeleteLocal.TabStop = true;
-			radLocalNotCloud_DeleteLocal.Text = "delete the local journal";
-			radLocalNotCloud_DeleteLocal.UseVisualStyleBackColor = true;
-			radLocalNotCloud_DeleteLocal.CheckedChanged += this.ValueChanged;
+			radLocalNotCloud_DisallowLocalCloud.AutoSize = true;
+			radLocalNotCloud_DisallowLocalCloud.Location = new System.Drawing.Point(3, 3);
+			radLocalNotCloud_DisallowLocalCloud.Name = "radLocalNotCloud_DisallowLocalCloud";
+			radLocalNotCloud_DisallowLocalCloud.Size = new System.Drawing.Size(182, 19);
+			radLocalNotCloud_DisallowLocalCloud.TabIndex = 3;
+			radLocalNotCloud_DisallowLocalCloud.TabStop = true;
+			radLocalNotCloud_DisallowLocalCloud.Text = "disallow cloud in local journal";
+			radLocalNotCloud_DisallowLocalCloud.UseVisualStyleBackColor = true;
+			radLocalNotCloud_DisallowLocalCloud.CheckedChanged += this.ValueChanged;
 			// 
 			// radLocalNotCloud_UploadToCloud
 			// 
 			radLocalNotCloud_UploadToCloud.AutoSize = true;
 			radLocalNotCloud_UploadToCloud.Location = new System.Drawing.Point(3, 24);
 			radLocalNotCloud_UploadToCloud.Name = "radLocalNotCloud_UploadToCloud";
-			radLocalNotCloud_UploadToCloud.Size = new System.Drawing.Size(217, 19);
+			radLocalNotCloud_UploadToCloud.Size = new System.Drawing.Size(197, 19);
 			radLocalNotCloud_UploadToCloud.TabIndex = 4;
 			radLocalNotCloud_UploadToCloud.TabStop = true;
-			radLocalNotCloud_UploadToCloud.Text = "upload the local journal to the cloud";
+			radLocalNotCloud_UploadToCloud.Text = "upload local journal to the cloud";
 			radLocalNotCloud_UploadToCloud.UseVisualStyleBackColor = true;
 			radLocalNotCloud_UploadToCloud.CheckedChanged += this.ValueChanged;
 			// 
@@ -127,33 +128,45 @@
 			// 
 			label2.AutoSize = true;
 			label2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point);
-			label2.Location = new System.Drawing.Point(3, 72);
+			label2.Location = new System.Drawing.Point(3, 91);
 			label2.Name = "label2";
-			label2.Size = new System.Drawing.Size(238, 15);
+			label2.Size = new System.Drawing.Size(229, 15);
 			label2.TabIndex = 5;
-			label2.Text = "If journal exists in the cloud but not locally ...";
+			label2.Text = "If journal exists in the cloud but not locally;";
 			// 
 			// pnlLocalNotCloud
 			// 
 			pnlLocalNotCloud.Controls.Add(radLocalNotCloud_DeleteLocal);
+			pnlLocalNotCloud.Controls.Add(radLocalNotCloud_DisallowLocalCloud);
 			pnlLocalNotCloud.Controls.Add(radLocalNotCloud_UploadToCloud);
 			pnlLocalNotCloud.Location = new System.Drawing.Point(12, 15);
 			pnlLocalNotCloud.Name = "pnlLocalNotCloud";
-			pnlLocalNotCloud.Size = new System.Drawing.Size(223, 50);
+			pnlLocalNotCloud.Size = new System.Drawing.Size(231, 68);
 			pnlLocalNotCloud.TabIndex = 51;
+			// 
+			// radLocalNotCloud_DeleteLocal
+			// 
+			radLocalNotCloud_DeleteLocal.AutoSize = true;
+			radLocalNotCloud_DeleteLocal.Location = new System.Drawing.Point(3, 46);
+			radLocalNotCloud_DeleteLocal.Name = "radLocalNotCloud_DeleteLocal";
+			radLocalNotCloud_DeleteLocal.Size = new System.Drawing.Size(125, 19);
+			radLocalNotCloud_DeleteLocal.TabIndex = 5;
+			radLocalNotCloud_DeleteLocal.TabStop = true;
+			radLocalNotCloud_DeleteLocal.Text = "delete local journal";
+			radLocalNotCloud_DeleteLocal.UseVisualStyleBackColor = true;
 			// 
 			// pnlCloudNotLocal
 			// 
 			pnlCloudNotLocal.Controls.Add(radCloudNotLocal_DeleteCloud);
 			pnlCloudNotLocal.Controls.Add(radCloudNotLocal_DownloadCloud);
-			pnlCloudNotLocal.Location = new System.Drawing.Point(12, 87);
+			pnlCloudNotLocal.Location = new System.Drawing.Point(12, 107);
 			pnlCloudNotLocal.Name = "pnlCloudNotLocal";
 			pnlCloudNotLocal.Size = new System.Drawing.Size(218, 46);
 			pnlCloudNotLocal.TabIndex = 52;
 			// 
 			// btnSaveChanges
 			// 
-			btnSaveChanges.Location = new System.Drawing.Point(96, 190);
+			btnSaveChanges.Location = new System.Drawing.Point(92, 211);
 			btnSaveChanges.Name = "btnSaveChanges";
 			btnSaveChanges.Size = new System.Drawing.Size(75, 23);
 			btnSaveChanges.TabIndex = 53;
@@ -170,14 +183,14 @@
 			pnlCloudOptions.Enabled = false;
 			pnlCloudOptions.Location = new System.Drawing.Point(1, 44);
 			pnlCloudOptions.Name = "pnlCloudOptions";
-			pnlCloudOptions.Size = new System.Drawing.Size(246, 137);
+			pnlCloudOptions.Size = new System.Drawing.Size(246, 156);
 			pnlCloudOptions.TabIndex = 54;
 			// 
 			// frmJournalSettings
 			// 
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			ClientSize = new System.Drawing.Size(257, 221);
+			ClientSize = new System.Drawing.Size(257, 240);
 			Controls.Add(pnlCloudOptions);
 			Controls.Add(btnSaveChanges);
 			Controls.Add(textBox1);
@@ -203,7 +216,7 @@
 		private System.Windows.Forms.CheckBox chkAllowCloud;
 		private System.Windows.Forms.TextBox textBox1;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.RadioButton radLocalNotCloud_DeleteLocal;
+		private System.Windows.Forms.RadioButton radLocalNotCloud_DisallowLocalCloud;
 		private System.Windows.Forms.RadioButton radLocalNotCloud_UploadToCloud;
 		private System.Windows.Forms.RadioButton radCloudNotLocal_DownloadCloud;
 		private System.Windows.Forms.RadioButton radCloudNotLocal_DeleteCloud;
@@ -212,5 +225,6 @@
 		private System.Windows.Forms.Panel pnlCloudNotLocal;
 		private System.Windows.Forms.Button btnSaveChanges;
 		private System.Windows.Forms.Panel pnlCloudOptions;
+		private System.Windows.Forms.RadioButton radLocalNotCloud_DeleteLocal;
 	}
 }

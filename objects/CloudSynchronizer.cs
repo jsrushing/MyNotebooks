@@ -110,7 +110,7 @@ namespace myJournal.objects
 			else 
 			{ 	
 				// handle journal being named with '(local)' which means it's newly created and has never been uploaded.
-				if (journal.AllowCloud && journal.FileName.EndsWith(" (local)"))
+				if (journal.Settings.AllowCloud && journal.FileName.EndsWith(" (local)"))
 				{
 					var sOldName		= journal.FileName;
 					var sNewName		= journal.FileName.Substring(0, journal.FileName.LastIndexOf("\\") + 1) + journal.Name;
@@ -126,11 +126,11 @@ namespace myJournal.objects
 
 			for (var i = 0; i < allJournals.Count; i++)
 			{
-				j = new Journal(allJournals[i].Name).Open();
+				j = allJournals[i];
 
 				if(j != null)
 				{
-					if (j.AllowCloud)
+					if (j.Settings.AllowCloud)
 					{
 						Journal cloudJournal;
 
@@ -169,7 +169,7 @@ namespace myJournal.objects
 				}
 				else
 				{
-					if (j.AllowCloud)
+					if (j.Settings.AllowCloud)
 					{
 						AzureFileClient.UploadFile(journalsFolder + j.Name);
 					}
@@ -179,37 +179,40 @@ namespace myJournal.objects
 			}
 
 
-			await AzureFileClient.GetAzureFiles(Program.AzurePassword, true);
+			await AzureFileClient.GetAzureJournalNames(Program.AzurePassword, true);
 
-			foreach(string sJrnlName in Program.AzureFiles.Except(Utilities.AllJournalNames()))		// any journal on Azure not found locally
+			foreach(var sJrnlName in Program.AzureJournalNames.Except(Utilities.AllJournalNames()))		// any journal on Azure not found locally
 			{
-
-					await AzureFileClient.DownloadOrDeleteFile(journalsFolder + sJrnlName, Program.AzurePassword + "_" + sJrnlName);
-					ItemsDownloaded.Add(sJrnlName + " dl'd from cloud");
+				await AzureFileClient.DownloadOrDeleteFile(journalsFolder + sJrnlName, Program.AzurePassword + "_" + sJrnlName);
+				ItemsDownloaded.Add(sJrnlName + " dl'd from cloud");
 			}
 				
-			foreach(string sLocalFile in Utilities.AllJournalNames().Except(Program.AzureFiles))	// any journal found locally but not on Azure
+			foreach(var sLocalFile in Utilities.AllJournalNames().Except(Program.AzureJournalNames))	// any journal found locally but not on Azure
 			{
+				Journal j2 = new Journal(sLocalFile).Open();
+				j2.Settings.AllowCloud = false;
+				j2.Save();
+
 				// Either download the journal found on Azure or delete the file - business rule <<				
-				j = new Journal(sLocalFile).Open(true);
+				//j = new Journal(sLocalFile).Open(true);
 
-				if (j.AllowCloud)
-				{
-					// Add an item to Settings - DeleteLocalIfNotOnAzure
-					// If(!Settings.DeleteLocalIfNotFoundOnAzure)
-					// {
-					//		File.Delete(journalsFolder + sLocalFile);
-					//		ItemsDeleted.Add(sLocalFile);
-					// }
-					// else
-					// {
-					//		await AzureFileClient.DownloadOrDeleteFile(journalsFolder + sLocalFile, Program.AzurePassword + "_" + sLocalFile);
-					//		ItemsDownloaded.Add(sLocalFile + " dl'd from cloud");
-					// }
+				//if (j.Settings.AllowCloud)
+				//{
+				//	// Add an item to Settings - DeleteLocalIfNotOnAzure
+				//	// If(!Settings.DeleteLocalIfNotFoundOnAzure)
+				//	// {
+				//	//		File.Delete(journalsFolder + sLocalFile);
+				//	//		ItemsDeleted.Add(sLocalFile);
+				//	// }
+				//	// else
+				//	// {
+				//	//		await AzureFileClient.DownloadOrDeleteFile(journalsFolder + sLocalFile, Program.AzurePassword + "_" + sLocalFile);
+				//	//		ItemsDownloaded.Add(sLocalFile + " dl'd from cloud");
+				//	// }
 
-					File.Delete(journalsFolder + sLocalFile);
-					ItemsDeleted.Add(sLocalFile);
-				}
+				//	//File.Delete(journalsFolder + sLocalFile);
+				//	//ItemsDeleted.Add(sLocalFile);
+				//}
 			}				
 
 			if(alsoSynchSettings) await SyncLabelsAndSettings();

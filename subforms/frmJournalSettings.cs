@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Security.Policy;
 using System.Text;
 using System.Windows.Forms;
 using myJournal.objects;
@@ -12,10 +13,14 @@ namespace myJournal.subforms
 {
 	public partial class frmJournalSettings : Form
 	{
-		Journal workingJournal = new Journal();
+		Journal workingJournal;
 		public bool isDirty = false;
 		bool allowValueChange = false;
-		//public Journal GetModifiedJournal { get { return isDirty ? workingJournal : null; } }
+		bool s_AllowCloud;
+		bool s_CloudOnly_Download;
+		bool s_LocalOnly_Upload;
+		bool s_LocalOnly_Delete;
+		bool s_LocalOnly_DisallowCloud;
 
 		public frmJournalSettings(Journal journalToEdit, Form parent)
 		{
@@ -32,22 +37,38 @@ namespace myJournal.subforms
 
 		private void frmJournalSettings_Load(object sender, EventArgs e)
 		{
-			var allowCloud	= workingJournal.AllowCloud;
-			var dl			= workingJournal.DownloadIfNotFoundLocally;
-			var ul			= workingJournal.UploadIfNotFoundInCloud;
+			s_AllowCloud			= workingJournal.Settings.AllowCloud;
+			s_CloudOnly_Download	= workingJournal.Settings.CloudOnly_Download;
+			s_LocalOnly_Upload		= workingJournal.Settings.LocalOnly_Upload;
+			s_LocalOnly_Delete		= workingJournal.Settings.LocalOnly_Delete;
+			s_LocalOnly_DisallowCloud = workingJournal.Settings.LocalOnly_DisallowCloud;
 
 			allowValueChange = false;
-			chkAllowCloud.Checked					= allowCloud;
-			radCloudNotLocal_DownloadCloud.Checked	= dl;
-			radLocalNotCloud_UploadToCloud.Checked	= ul;
-			radCloudNotLocal_DeleteCloud.Checked	= !radCloudNotLocal_DownloadCloud.Checked;
-			radLocalNotCloud_DeleteLocal.Checked	= !radLocalNotCloud_UploadToCloud.Checked;
-			pnlCloudOptions.Enabled					= chkAllowCloud.Checked;
+			chkAllowCloud.Checked						= s_AllowCloud;
+			radCloudNotLocal_DownloadCloud.Checked		= s_CloudOnly_Download;
+			radLocalNotCloud_DisallowLocalCloud.Checked = s_LocalOnly_DisallowCloud;
+			radLocalNotCloud_DeleteLocal.Checked		= s_LocalOnly_Delete;
+			radLocalNotCloud_UploadToCloud.Checked		= s_LocalOnly_Upload;
+
+			radCloudNotLocal_DeleteCloud.Checked = !radCloudNotLocal_DownloadCloud.Checked;
+
+			pnlCloudOptions.Enabled = chkAllowCloud.Checked;
 			allowValueChange = true;
+		}
+
+		private void ApplySettings()
+		{
+			workingJournal.Settings.AllowCloud				= s_AllowCloud;
+			workingJournal.Settings.LocalOnly_Upload		= s_LocalOnly_Upload;
+			workingJournal.Settings.LocalOnly_Delete		= s_LocalOnly_Delete;
+			workingJournal.Settings.LocalOnly_DisallowCloud	= s_LocalOnly_DisallowCloud;
+			workingJournal.Settings.CloudOnly_Download		= s_CloudOnly_Download;
+			workingJournal.Save();
 		}
 
 		private void btnSaveChanges_Click(object sender, EventArgs e)
 		{
+			if (this.isDirty) { ApplySettings(); }
 			this.Hide();
 		}
 
@@ -59,12 +80,14 @@ namespace myJournal.subforms
 
 		private void ValueChanged(object sender, EventArgs e)
 		{
-			if(allowValueChange)
+			if (allowValueChange)
 			{
-				workingJournal.AllowCloud = chkAllowCloud.Checked;
-				workingJournal.UploadIfNotFoundInCloud = radLocalNotCloud_UploadToCloud.Checked;
-				workingJournal.DownloadIfNotFoundLocally = radCloudNotLocal_DownloadCloud.Checked;
-				isDirty = true;
+				s_AllowCloud				= chkAllowCloud.Checked;
+				s_LocalOnly_Upload			= radLocalNotCloud_UploadToCloud.Checked;
+				s_LocalOnly_DisallowCloud	= radLocalNotCloud_DisallowLocalCloud.Checked;
+				s_LocalOnly_Delete			= radLocalNotCloud_DeleteLocal.Checked;
+				s_CloudOnly_Download		= radCloudNotLocal_DownloadCloud.Checked;
+				isDirty						= true;
 			}
 		}
 	}

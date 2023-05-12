@@ -13,20 +13,20 @@ using myJournal.subforms;
 using myJournal.objects;
 using System.Windows.Forms;
 using Org.BouncyCastle.Crypto.Agreement.JPake;
+using myJournal.Properties;
 
 namespace myJournal
 {
 	[Serializable]
-    public class Journal
-    {
+	public class Journal
+	{
 		public string Name { get; set; }
 		public DateTime LastSaved { get; set; }
-        public string FileName { get; set; }
-        public List<JournalEntry> Entries = new List<JournalEntry>();
-        string root = "journals\\";
-		public bool AllowCloud { get; set; }
-		public bool UploadIfNotFoundInCloud { get; set; }
-		public bool DownloadIfNotFoundLocally { get; set; }
+		public string FileName { get; set; }
+		public List<JournalEntry> Entries = new List<JournalEntry>();
+		string root = "journals\\";
+		public JournalSettings Settings;
+
 		public bool BackupCompleted { get; private set; }
 
         public Journal(string _name = null, string _fileName = null) 
@@ -37,7 +37,17 @@ namespace myJournal
 				if (_fileName != null) { this.FileName = _fileName; } 
 				else { this.FileName = Program.AppRoot + this.root + this.Name; }
 			}
-        }
+
+			//if (this.Entries.Count > 0 && this.Settings == null )
+			//{
+			//	this.Settings = new JournalSettings();
+			//	Settings.LocalOnly_DisallowCloud = true;
+			//	Settings.LocalOnly_Delete = false;
+			//	Settings.LocalOnly_Upload = false;
+			//	Settings.CloudOnly_Download = true;
+			//	//this.Save();
+			//}
+		}
 
         public void AddEntry(JournalEntry entryToAdd) { Entries.Add(entryToAdd); }
 
@@ -76,7 +86,7 @@ namespace myJournal
 
 		public async void Delete()
 		{
-			if (this.AllowCloud) 
+			if (this.Settings.AllowCloud) 
 			{ await AzureFileClient.DownloadOrDeleteFile(this.FileName, Program.AzurePassword + "_" + this.Name, FileMode.Create, true);  }
 
 			DeleteBackups();
@@ -140,22 +150,39 @@ namespace myJournal
 			this.Entries.Insert(idx, jeToInsert);
 		}
 
-        public async void Save()
-        {
+		public async void Save()
+		{
 			this.LastSaved = DateTime.Now;
 
-            using (Stream stream = File.Open(this.FileName, FileMode.Create))
-            {
-                BinaryFormatter formatter = new BinaryFormatter();
-                formatter.Serialize(stream, this);
+			using (Stream stream = File.Open(this.FileName, FileMode.Create))
+			{
+				BinaryFormatter formatter = new BinaryFormatter();
+				formatter.Serialize(stream, this);
 				stream.Close();
-            }
+			}
 
-			if(Program.AzurePassword.Length > 0 && this.AllowCloud)
+			if (Program.AzurePassword.Length > 0 && this.Settings.AllowCloud)
 			{
 				CloudSynchronizer cs = new CloudSynchronizer();
 				await cs.SynchWithCloud(false, this);
 			}
+
+			//if (!this.Settings.AllowCloud)
+			//{
+			//	if (Program.AzureJournals.Contains(this.Name))
+			//	{
+			//		// Make the Azure journal an empty placeholder to indicate Settings.AllowCloud = false.
+			//		// It will be deleted when found on next start (by any device).
+			//		Journal j = new Journal(this.Name, this.FileName).Open();
+			//		j.Entries.Clear();
+			//		j.Name += ConfigurationManager.AppSettings["DisallowCloudPlaceholder"];
+			//		j.FileName = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + j.Name;
+			//		this.Settings.AllowCloud = true;
+			//		j.Save();
+			//		await AzureFileClient.DownloadOrDeleteFile(this.FileName, this.FileName, FileMode.Open, true);
+
+			//	}
+			//}
 
 			Backup();
 			Program.AllJournals = Utilities.AllJournals();

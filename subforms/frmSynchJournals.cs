@@ -53,7 +53,7 @@ namespace myJournal.subforms
 			{
 				j = new Journal(lstJournalsToSynch.SelectedItems[i].ToString()).Open();
 
-				if (j.AllowCloud)
+				if (j.Settings.AllowCloud)
 				{
 					FileInfo downloadedAzureJournal = null;
 					var error = string.Empty;
@@ -105,10 +105,10 @@ namespace myJournal.subforms
 			}
 
 			// Synch from Azure ...
-			await AzureFileClient.GetAzureFiles(Program.AzurePassword);
+			await AzureFileClient.GetAzureJournalNames(Program.AzurePassword);
 			List<string> localFiles = Utilities.AllJournalNames();
 
-			foreach (string s in Program.AzureFiles)
+			foreach (string s in Program.AzureJournalNames)
 			{
 				var localFName = s.Remove(0, Program.AzurePassword.Length);
 

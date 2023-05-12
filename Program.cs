@@ -8,6 +8,9 @@ namespace myJournal
 {
 	static class Program
     {
+		/// <summary>
+		///  The main entry point for the application.
+		/// </summary>
 		public static string PIN = string.Empty;
 		public static List<ListViewItem> lstFonts = new List<ListViewItem>();
 		public static string	AppRoot					= AppDomain.CurrentDomain.BaseDirectory;
@@ -16,11 +19,9 @@ namespace myJournal
 		public static bool		AzureFileExists			= false;
 		public static string	AzureConnString			= "DefaultEndpointsProtocol=https;AccountName=container1a;AccountKey=4YNQFl9klH9bp8ieKKfhwiVgiKlZKWieBlyzvu8zlm2hyL0HaR/x3XpbpFYjJ5VF4YgtaAR9sN4F+ASttv59jA==;EndpointSuffix=core.windows.net";
 		public static bool		SkipFileSizeComparison	= false;
-		public static List<string> AzureFiles			= new List<string>();
+		public static List<string> AzureJournalNames	= new List<string>();
 		public static List<Journal> AllJournals			= new List<Journal>();
-		/// <summary>
-		///  The main entry point for the application.
-		/// </summary>
+
 		[STAThread]
         static void Main()
         {
@@ -31,7 +32,6 @@ namespace myJournal
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 			Application.Run(new frmMain());
-
 		}
     }
 }

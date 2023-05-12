@@ -10,6 +10,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Linq;
 using myJournal.subforms;
+using myJournal.Properties;
 
 namespace myJournal.objects
 {
@@ -25,20 +26,20 @@ namespace myJournal.objects
 		public static List<Journal> AllJournals()
 		{
 			List<Journal> jrnlReturn = new List<Journal>();
-			//string sJrnlDiskName;
-			//Journal j;
 			string sJrnlFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"];
 
 			foreach (string s in Directory.GetFiles(sJrnlFolder))
-			{
-				//sJrnlDiskName = s.Replace(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"], "");
-				//j = new Journal(sJrnlDiskName).Open();
-				//j.AllowCloud = true;
-				//j.DownloadIfNotFoundLocally = true;
-				//j.UploadIfNotFoundInCloud = false;
+			{ 
+				Journal j = new Journal(s.Replace(sJrnlFolder, "")).Open();
+				//j.Settings = new JournalSettings();
+				//j.Settings.AllowCloud = true;
+				//j.Settings.LocalOnly_DisallowCloud = true;
+				//j.Settings.LocalOnly_Delete = false;
+				//j.Settings.LocalOnly_Upload = false;
+				//j.Settings.CloudOnly_Download = true;
+				//jrnlReturn.Add(new Journal(s.Replace(sJrnlFolder, "")).Open()); }
 				//j.Save();
-				//jrnlReturn.Add(j);
-				jrnlReturn.Add(new Journal(s.Replace(sJrnlFolder, "")).Open());
+				jrnlReturn.Add(j);
 			}
 
 			return jrnlReturn;

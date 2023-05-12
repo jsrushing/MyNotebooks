@@ -29,143 +29,256 @@ namespace myJournal.subforms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.txtName = new System.Windows.Forms.TextBox();
-			this.label1 = new System.Windows.Forms.Label();
-			this.label2 = new System.Windows.Forms.Label();
-			this.txtPIN = new System.Windows.Forms.TextBox();
-			this.btnCancel = new System.Windows.Forms.Button();
-			this.btnOk = new System.Windows.Forms.Button();
-			this.grp1 = new System.Windows.Forms.Panel();
-			this.chkAllowWebBackup = new System.Windows.Forms.CheckBox();
-			this.lblNameExists = new System.Windows.Forms.Label();
-			this.lblShowPIN = new System.Windows.Forms.Label();
-			this.grp1.SuspendLayout();
+			txtName = new System.Windows.Forms.TextBox();
+			label1 = new System.Windows.Forms.Label();
+			label2 = new System.Windows.Forms.Label();
+			txtPIN = new System.Windows.Forms.TextBox();
+			btnCancel = new System.Windows.Forms.Button();
+			btnOk = new System.Windows.Forms.Button();
+			grp1 = new System.Windows.Forms.Panel();
+			pnlCloudOptions = new System.Windows.Forms.Panel();
+			label3 = new System.Windows.Forms.Label();
+			label4 = new System.Windows.Forms.Label();
+			pnlCloudNotLocal = new System.Windows.Forms.Panel();
+			radCloudNotLocal_DeleteCloud = new System.Windows.Forms.RadioButton();
+			radCloudNotLocal_DownloadCloud = new System.Windows.Forms.RadioButton();
+			pnlLocalNotCloud = new System.Windows.Forms.Panel();
+			radLocalNotCloud_DeleteLocal = new System.Windows.Forms.RadioButton();
+			radLocalNotCloud_UploadToCloud = new System.Windows.Forms.RadioButton();
+			chkAllowWebBackup = new System.Windows.Forms.CheckBox();
+			lblNameExists = new System.Windows.Forms.Label();
+			lblShowPIN = new System.Windows.Forms.Label();
+			grp1.SuspendLayout();
+			pnlCloudOptions.SuspendLayout();
+			pnlCloudNotLocal.SuspendLayout();
+			pnlLocalNotCloud.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// txtName
 			// 
-			this.txtName.Location = new System.Drawing.Point(91, 25);
-			this.txtName.Name = "txtName";
-			this.txtName.Size = new System.Drawing.Size(128, 23);
-			this.txtName.TabIndex = 0;
-			this.txtName.TextChanged += new System.EventHandler(this.txtName_TextChanged);
+			txtName.Location = new System.Drawing.Point(91, 25);
+			txtName.Name = "txtName";
+			txtName.Size = new System.Drawing.Size(153, 23);
+			txtName.TabIndex = 0;
+			txtName.TextChanged += this.txtName_TextChanged;
 			// 
 			// label1
 			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(2, 28);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(83, 15);
-			this.label1.TabIndex = 1;
-			this.label1.Text = "Journal Name:";
+			label1.AutoSize = true;
+			label1.Location = new System.Drawing.Point(2, 28);
+			label1.Name = "label1";
+			label1.Size = new System.Drawing.Size(83, 15);
+			label1.TabIndex = 1;
+			label1.Text = "Journal Name:";
 			// 
 			// label2
 			// 
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(15, 60);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(70, 15);
-			this.label2.TabIndex = 2;
-			this.label2.Text = "Journal PIN:";
+			label2.AutoSize = true;
+			label2.Location = new System.Drawing.Point(15, 60);
+			label2.Name = "label2";
+			label2.Size = new System.Drawing.Size(70, 15);
+			label2.TabIndex = 2;
+			label2.Text = "Journal PIN:";
 			// 
 			// txtPIN
 			// 
-			this.txtPIN.Location = new System.Drawing.Point(91, 57);
-			this.txtPIN.Name = "txtPIN";
-			this.txtPIN.PasswordChar = '*';
-			this.txtPIN.Size = new System.Drawing.Size(128, 23);
-			this.txtPIN.TabIndex = 1;
-			this.txtPIN.TextChanged += new System.EventHandler(this.txtPIN_TextChanged);
+			txtPIN.Location = new System.Drawing.Point(91, 57);
+			txtPIN.Name = "txtPIN";
+			txtPIN.PasswordChar = '*';
+			txtPIN.Size = new System.Drawing.Size(153, 23);
+			txtPIN.TabIndex = 1;
+			txtPIN.TextChanged += this.txtPIN_TextChanged;
 			// 
 			// btnCancel
 			// 
-			this.btnCancel.Location = new System.Drawing.Point(77, 160);
-			this.btnCancel.Name = "btnCancel";
-			this.btnCancel.Size = new System.Drawing.Size(75, 23);
-			this.btnCancel.TabIndex = 5;
-			this.btnCancel.Text = "&Cancel";
-			this.btnCancel.UseVisualStyleBackColor = true;
-			this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+			btnCancel.Location = new System.Drawing.Point(160, 273);
+			btnCancel.Name = "btnCancel";
+			btnCancel.Size = new System.Drawing.Size(75, 23);
+			btnCancel.TabIndex = 5;
+			btnCancel.Text = "&Cancel";
+			btnCancel.UseVisualStyleBackColor = true;
+			btnCancel.Click += this.btnCancel_Click;
 			// 
 			// btnOk
 			// 
-			this.btnOk.Enabled = false;
-			this.btnOk.Location = new System.Drawing.Point(77, 131);
-			this.btnOk.Name = "btnOk";
-			this.btnOk.Size = new System.Drawing.Size(75, 23);
-			this.btnOk.TabIndex = 4;
-			this.btnOk.Text = "&OK";
-			this.btnOk.UseVisualStyleBackColor = true;
-			this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
+			btnOk.Enabled = false;
+			btnOk.Location = new System.Drawing.Point(17, 273);
+			btnOk.Name = "btnOk";
+			btnOk.Size = new System.Drawing.Size(75, 23);
+			btnOk.TabIndex = 4;
+			btnOk.Text = "&OK";
+			btnOk.UseVisualStyleBackColor = true;
+			btnOk.Click += this.btnOk_Click;
 			// 
 			// grp1
 			// 
-			this.grp1.Controls.Add(this.chkAllowWebBackup);
-			this.grp1.Controls.Add(this.lblNameExists);
-			this.grp1.Controls.Add(this.lblShowPIN);
-			this.grp1.Controls.Add(this.txtPIN);
-			this.grp1.Controls.Add(this.btnCancel);
-			this.grp1.Controls.Add(this.txtName);
-			this.grp1.Controls.Add(this.btnOk);
-			this.grp1.Controls.Add(this.label1);
-			this.grp1.Controls.Add(this.label2);
-			this.grp1.Location = new System.Drawing.Point(12, -1);
-			this.grp1.Name = "grp1";
-			this.grp1.Size = new System.Drawing.Size(230, 195);
-			this.grp1.TabIndex = 6;
+			grp1.Controls.Add(pnlCloudOptions);
+			grp1.Controls.Add(chkAllowWebBackup);
+			grp1.Controls.Add(lblNameExists);
+			grp1.Controls.Add(lblShowPIN);
+			grp1.Controls.Add(txtPIN);
+			grp1.Controls.Add(btnCancel);
+			grp1.Controls.Add(txtName);
+			grp1.Controls.Add(btnOk);
+			grp1.Controls.Add(label1);
+			grp1.Controls.Add(label2);
+			grp1.Location = new System.Drawing.Point(12, -1);
+			grp1.Name = "grp1";
+			grp1.Size = new System.Drawing.Size(257, 312);
+			grp1.TabIndex = 6;
+			// 
+			// pnlCloudOptions
+			// 
+			pnlCloudOptions.Controls.Add(label3);
+			pnlCloudOptions.Controls.Add(label4);
+			pnlCloudOptions.Controls.Add(pnlCloudNotLocal);
+			pnlCloudOptions.Controls.Add(pnlLocalNotCloud);
+			pnlCloudOptions.Enabled = false;
+			pnlCloudOptions.Location = new System.Drawing.Point(5, 124);
+			pnlCloudOptions.Name = "pnlCloudOptions";
+			pnlCloudOptions.Size = new System.Drawing.Size(246, 137);
+			pnlCloudOptions.TabIndex = 55;
+			// 
+			// label3
+			// 
+			label3.AutoSize = true;
+			label3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point);
+			label3.Location = new System.Drawing.Point(3, 0);
+			label3.Name = "label3";
+			label3.Size = new System.Drawing.Size(238, 15);
+			label3.TabIndex = 2;
+			label3.Text = "If journal exists locally but not in the cloud ...";
+			// 
+			// label4
+			// 
+			label4.AutoSize = true;
+			label4.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point);
+			label4.Location = new System.Drawing.Point(3, 72);
+			label4.Name = "label4";
+			label4.Size = new System.Drawing.Size(238, 15);
+			label4.TabIndex = 5;
+			label4.Text = "If journal exists in the cloud but not locally ...";
+			// 
+			// pnlCloudNotLocal
+			// 
+			pnlCloudNotLocal.Controls.Add(radCloudNotLocal_DeleteCloud);
+			pnlCloudNotLocal.Controls.Add(radCloudNotLocal_DownloadCloud);
+			pnlCloudNotLocal.Location = new System.Drawing.Point(12, 87);
+			pnlCloudNotLocal.Name = "pnlCloudNotLocal";
+			pnlCloudNotLocal.Size = new System.Drawing.Size(218, 46);
+			pnlCloudNotLocal.TabIndex = 52;
+			// 
+			// radCloudNotLocal_DeleteCloud
+			// 
+			radCloudNotLocal_DeleteCloud.AutoSize = true;
+			radCloudNotLocal_DeleteCloud.Location = new System.Drawing.Point(3, 3);
+			radCloudNotLocal_DeleteCloud.Name = "radCloudNotLocal_DeleteCloud";
+			radCloudNotLocal_DeleteCloud.Size = new System.Drawing.Size(150, 19);
+			radCloudNotLocal_DeleteCloud.TabIndex = 6;
+			radCloudNotLocal_DeleteCloud.TabStop = true;
+			radCloudNotLocal_DeleteCloud.Text = "delete the cloud journal";
+			radCloudNotLocal_DeleteCloud.UseVisualStyleBackColor = true;
+			// 
+			// radCloudNotLocal_DownloadCloud
+			// 
+			radCloudNotLocal_DownloadCloud.AutoSize = true;
+			radCloudNotLocal_DownloadCloud.Location = new System.Drawing.Point(3, 24);
+			radCloudNotLocal_DownloadCloud.Name = "radCloudNotLocal_DownloadCloud";
+			radCloudNotLocal_DownloadCloud.Size = new System.Drawing.Size(171, 19);
+			radCloudNotLocal_DownloadCloud.TabIndex = 7;
+			radCloudNotLocal_DownloadCloud.TabStop = true;
+			radCloudNotLocal_DownloadCloud.Text = "download the cloud journal";
+			radCloudNotLocal_DownloadCloud.UseVisualStyleBackColor = true;
+			// 
+			// pnlLocalNotCloud
+			// 
+			pnlLocalNotCloud.Controls.Add(radLocalNotCloud_DeleteLocal);
+			pnlLocalNotCloud.Controls.Add(radLocalNotCloud_UploadToCloud);
+			pnlLocalNotCloud.Location = new System.Drawing.Point(12, 15);
+			pnlLocalNotCloud.Name = "pnlLocalNotCloud";
+			pnlLocalNotCloud.Size = new System.Drawing.Size(223, 50);
+			pnlLocalNotCloud.TabIndex = 51;
+			// 
+			// radLocalNotCloud_DeleteLocal
+			// 
+			radLocalNotCloud_DeleteLocal.AutoSize = true;
+			radLocalNotCloud_DeleteLocal.Location = new System.Drawing.Point(3, 3);
+			radLocalNotCloud_DeleteLocal.Name = "radLocalNotCloud_DeleteLocal";
+			radLocalNotCloud_DeleteLocal.Size = new System.Drawing.Size(145, 19);
+			radLocalNotCloud_DeleteLocal.TabIndex = 3;
+			radLocalNotCloud_DeleteLocal.TabStop = true;
+			radLocalNotCloud_DeleteLocal.Text = "delete the local journal";
+			radLocalNotCloud_DeleteLocal.UseVisualStyleBackColor = true;
+			// 
+			// radLocalNotCloud_UploadToCloud
+			// 
+			radLocalNotCloud_UploadToCloud.AutoSize = true;
+			radLocalNotCloud_UploadToCloud.Location = new System.Drawing.Point(3, 24);
+			radLocalNotCloud_UploadToCloud.Name = "radLocalNotCloud_UploadToCloud";
+			radLocalNotCloud_UploadToCloud.Size = new System.Drawing.Size(217, 19);
+			radLocalNotCloud_UploadToCloud.TabIndex = 4;
+			radLocalNotCloud_UploadToCloud.TabStop = true;
+			radLocalNotCloud_UploadToCloud.Text = "upload the local journal to the cloud";
+			radLocalNotCloud_UploadToCloud.UseVisualStyleBackColor = true;
 			// 
 			// chkAllowWebBackup
 			// 
-			this.chkAllowWebBackup.AutoSize = true;
-			this.chkAllowWebBackup.Location = new System.Drawing.Point(91, 99);
-			this.chkAllowWebBackup.Name = "chkAllowWebBackup";
-			this.chkAllowWebBackup.Size = new System.Drawing.Size(129, 19);
-			this.chkAllowWebBackup.TabIndex = 3;
-			this.chkAllowWebBackup.Text = "allow cloud backup";
-			this.chkAllowWebBackup.UseVisualStyleBackColor = true;
+			chkAllowWebBackup.AutoSize = true;
+			chkAllowWebBackup.Location = new System.Drawing.Point(8, 99);
+			chkAllowWebBackup.Name = "chkAllowWebBackup";
+			chkAllowWebBackup.Size = new System.Drawing.Size(129, 19);
+			chkAllowWebBackup.TabIndex = 3;
+			chkAllowWebBackup.Text = "allow cloud backup";
+			chkAllowWebBackup.UseVisualStyleBackColor = true;
+			chkAllowWebBackup.CheckedChanged += this.chkAllowWebBackup_CheckedChanged;
 			// 
 			// lblNameExists
 			// 
-			this.lblNameExists.AutoSize = true;
-			this.lblNameExists.ForeColor = System.Drawing.Color.Red;
-			this.lblNameExists.Location = new System.Drawing.Point(8, 6);
-			this.lblNameExists.Name = "lblNameExists";
-			this.lblNameExists.Size = new System.Drawing.Size(212, 15);
-			this.lblNameExists.TabIndex = 42;
-			this.lblNameExists.Text = "A journal with this name already exists.";
-			this.lblNameExists.Visible = false;
+			lblNameExists.AutoSize = true;
+			lblNameExists.ForeColor = System.Drawing.Color.Red;
+			lblNameExists.Location = new System.Drawing.Point(8, 6);
+			lblNameExists.Name = "lblNameExists";
+			lblNameExists.Size = new System.Drawing.Size(212, 15);
+			lblNameExists.TabIndex = 42;
+			lblNameExists.Text = "A journal with this name already exists.";
+			lblNameExists.Visible = false;
 			// 
 			// lblShowPIN
 			// 
-			this.lblShowPIN.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
-			this.lblShowPIN.Location = new System.Drawing.Point(184, 80);
-			this.lblShowPIN.Name = "lblShowPIN";
-			this.lblShowPIN.Size = new System.Drawing.Size(35, 13);
-			this.lblShowPIN.TabIndex = 2;
-			this.lblShowPIN.Text = "show";
-			this.lblShowPIN.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			this.lblShowPIN.Visible = false;
-			this.lblShowPIN.Click += new System.EventHandler(this.lblShowPIN_Click);
+			lblShowPIN.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+			lblShowPIN.Location = new System.Drawing.Point(184, 80);
+			lblShowPIN.Name = "lblShowPIN";
+			lblShowPIN.Size = new System.Drawing.Size(35, 13);
+			lblShowPIN.TabIndex = 2;
+			lblShowPIN.Text = "show";
+			lblShowPIN.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			lblShowPIN.Visible = false;
+			lblShowPIN.Click += this.lblShowPIN_Click;
 			// 
 			// frmNewJournal
 			// 
-			this.AcceptButton = this.btnOk;
-			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.CancelButton = this.btnCancel;
-			this.ClientSize = new System.Drawing.Size(255, 211);
-			this.Controls.Add(this.grp1);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-			this.MaximizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(271, 250);
-			this.Name = "frmNewJournal";
-			this.Text = "New Journal";
-			this.Activated += new System.EventHandler(this.frmNewJournal_Activated);
-			this.Load += new System.EventHandler(this.frmNewJournal_Load);
-			this.grp1.ResumeLayout(false);
-			this.grp1.PerformLayout();
+			AcceptButton = btnOk;
+			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			CancelButton = btnCancel;
+			ClientSize = new System.Drawing.Size(281, 318);
+			Controls.Add(grp1);
+			FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			MaximizeBox = false;
+			MinimumSize = new System.Drawing.Size(271, 250);
+			Name = "frmNewJournal";
+			Text = "New Journal";
+			Activated += this.frmNewJournal_Activated;
+			Load += this.frmNewJournal_Load;
+			grp1.ResumeLayout(false);
+			grp1.PerformLayout();
+			pnlCloudOptions.ResumeLayout(false);
+			pnlCloudOptions.PerformLayout();
+			pnlCloudNotLocal.ResumeLayout(false);
+			pnlCloudNotLocal.PerformLayout();
+			pnlLocalNotCloud.ResumeLayout(false);
+			pnlLocalNotCloud.PerformLayout();
 			this.ResumeLayout(false);
-
 		}
 
 		#endregion
@@ -180,5 +293,14 @@ namespace myJournal.subforms
 		private System.Windows.Forms.Label lblShowPIN;
 		private System.Windows.Forms.Label lblNameExists;
 		private System.Windows.Forms.CheckBox chkAllowWebBackup;
+		private System.Windows.Forms.Panel pnlCloudOptions;
+		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.Panel pnlCloudNotLocal;
+		private System.Windows.Forms.RadioButton radCloudNotLocal_DeleteCloud;
+		private System.Windows.Forms.RadioButton radCloudNotLocal_DownloadCloud;
+		private System.Windows.Forms.Panel pnlLocalNotCloud;
+		private System.Windows.Forms.RadioButton radLocalNotCloud_DeleteLocal;
+		private System.Windows.Forms.RadioButton radLocalNotCloud_UploadToCloud;
 	}
 }

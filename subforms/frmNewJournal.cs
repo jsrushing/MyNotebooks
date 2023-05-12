@@ -14,17 +14,19 @@ namespace myJournal.subforms
 	{
 		private List<string> lstAllJournalNames = Utilities.AllJournalNames();
 		public string NewJournalName { get; private set; }
-		public bool AllowCloud { get { return chkAllowWebBackup.Checked; } set { AllowCloud = value; } }
+		public bool AllowCloud { get { return chkAllowWebBackup.Checked; } }
+		public bool DownloadFromCloudIfNotLocal { get { return radCloudNotLocal_DownloadCloud.Checked; } }
+		public bool UploadToCloudIfOnlyLocal { get { return radLocalNotCloud_UploadToCloud.Checked; } }
 
 		public frmNewJournal(Form parent)
-		{ 
+		{
 			InitializeComponent();
 			Utilities.SetStartPosition(this, parent);
 		}
 
-		private void frmNewJournal_Load(object sender, EventArgs e) 
-		{ 
-			this.Size = this.MinimumSize; 
+		private void frmNewJournal_Load(object sender, EventArgs e)
+		{
+			this.Size = this.MinimumSize;
 		}
 
 		private void frmNewJournal_Activated(object sender, EventArgs e) { txtName.Focus(); }
@@ -53,12 +55,14 @@ namespace myJournal.subforms
 
 			if (txtName.Text.Contains("|"))
 			{
-				using(frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "Sorry, for operational reasons Journal names may not contain the '|' symbol.", "", this))
-				txtName.Text = txtName.Text.Replace("|", "");
+				using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "Sorry, for operational reasons Journal names may not contain the '|' symbol.", "", this))
+					txtName.Text = txtName.Text.Replace("|", "");
 				txtName.SelectionStart = txtName.Text.Length;
 				txtName.Focus();
 			}
 
 		}
+
+		private void chkAllowWebBackup_CheckedChanged(object sender, EventArgs e) { pnlCloudOptions.Enabled = chkAllowWebBackup.Checked; }
 	}
 }

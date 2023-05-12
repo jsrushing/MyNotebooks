@@ -2,6 +2,7 @@
  * 1/21/23
  */
 using System;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -34,6 +35,13 @@ namespace myJournal.objects
 				myFile.Create(stream.Length);
 				myFile.UploadRange(new HttpRange(0, stream.Length), stream);
 			}
+		}
+
+		public static void UploadRawJournal(Journal journal)
+		{
+			journal.FileName = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + journal.Name;
+			journal.Settings.AllowCloud = false;
+			journal.Save();	
 		}
 
 		public static async Task DownloadOrDeleteFile(string localFileName, string AzFileName, 
@@ -71,7 +79,7 @@ namespace myJournal.objects
 			Program.AzurePassword				= resultSegment.Results.Count() == 1 ? creatingKey ? string.Empty : key : string.Empty;
 		}
 
-		public static async Task GetAzureFiles(string pwd, bool scrubAzPwd = false)
+		public static async Task GetAzureJournalNames(string pwd, bool scrubAzPwd = false)
 		{
 			CloudStorageAccount storageAccount	= CloudStorageAccount.Parse(Program.AzureConnString);
 			CloudFileClient		fileClient		= storageAccount.CreateCloudFileClient();
@@ -82,7 +90,7 @@ namespace myJournal.objects
 			FileContinuationToken token			= null;
 			FileResultSegment	rsltSgmnt		= await root.ListFilesAndDirectoriesSegmentedAsync(pwd, null, token, options, null);
 
-			foreach(CloudFile file in rsltSgmnt.Results) { Program.AzureFiles.Add(scrubAzPwd ? file.Name.Replace(Program.AzurePassword + "_", "") : file.Name); }
+			foreach(CloudFile file in rsltSgmnt.Results) { Program.AzureJournalNames.Add(scrubAzPwd ? file.Name.Replace(Program.AzurePassword + "_", "") : file.Name); }
 		}
 	}
 }
