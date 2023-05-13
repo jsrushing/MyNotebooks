@@ -15,8 +15,11 @@ namespace myJournal.subforms
 		private List<string> lstAllJournalNames = Utilities.AllJournalNames();
 		public string NewJournalName { get; private set; }
 		public bool AllowCloud { get { return chkAllowWebBackup.Checked; } }
-		public bool DownloadFromCloudIfNotLocal { get { return radCloudNotLocal_DownloadCloud.Checked; } }
-		public bool UploadToCloudIfOnlyLocal { get { return radLocalNotCloud_UploadToCloud.Checked; } }
+		public bool IfCloudOnly_Download { get { return radCloudNotLocal_DownloadCloud.Checked; } }
+		public bool IfCloudOnly_Delete { get { return radCloudNotLocal_DeleteCloud.Checked; } }
+		public bool IfLocalOnly_Upload { get { return radLocalNotCloud_UploadToCloud.Checked; } }
+		public bool IfLocalOnly_Delete { get { return radLocalNotCloud_DeleteLocal.Checked; } }
+		public bool IfLocalOnly_DisallowCloud { get { return radLocalNotCloud_DisallowLocalCloud.Checked; } }
 
 		public frmNewJournal(Form parent)
 		{

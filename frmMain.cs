@@ -197,14 +197,6 @@ namespace myJournal.subforms
 
 			pnlDateFilters.Left = pnlPin.Left - 11;
 			Program.AllJournals = Utilities.AllJournals();
-
-			//foreach(Journal j in Program.AllJournals)
-			//{
-			//	j.Save();
-			//}
-
-			//Program.AllJournals = Utilities.AllJournals();
-
 			LoadJournals();
 			ShowHideMenusAndControls(SelectionState.HideAll);
 		}
@@ -402,43 +394,6 @@ namespace myJournal.subforms
 			ddlJournals.Text = string.Empty;
 			foreach (Journal j in Program.AllJournals) { ddlJournals.Items.Add(j.Name); }
 
-			//if(ddlJournals.Items.Count == 0)	// There will be no journals after an update so use the folders created in Form_Closing the last time the app was run.
-			//{
-			//var parent = Directory.GetParent(Program.AppRoot).FullName;
-			//parent = Directory.GetParent(parent).FullName;
-			//parent = Directory.GetParent(parent).FullName;
-
-			//if(Directory.Exists(parent + "\\lastjournals"))
-			//{
-			//	CopyDirectory(
-			//		new DirectoryInfo(parent + "\\lastjournals"), new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]), false, false);
-
-			//	CopyDirectory(
-			//		new DirectoryInfo(parent + "\\lastjournals\\backups"), new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"]), false, false);
-
-			//	CopyDirectory(
-			//		new DirectoryInfo(parent + "\\lastjournals\\backups\\forced"), new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"]), false, false);
-
-			//	CopyDirectory(
-			//		new DirectoryInfo(parent + "\\lastsettings"), new DirectoryInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFolder"]), false, false);
-
-			//	if(Directory.GetFiles(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]).Length > 0) { LoadJournals(); }
-			//}
-			//}
-			//else
-			//{
-			//	ddlJournals.Enabled = true;
-			//	pnlPin.Visible = false;
-			//	if(ddlJournals.Items.Count == 1)
-			//	{
-			//		ddlJournals.SelectedIndex = 0;
-			//		txtJournalPIN.Focus();
-			//	}
-			//	lstEntries.Visible = false;
-			//	ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
-			//	txtJournalPIN.Focus();
-			//}
-
 			if (ddlJournals.Items.Count > 0)
 			{
 				ddlJournals.Enabled = true;
@@ -550,9 +505,15 @@ namespace myJournal.subforms
 				if (frm.NewJournalName != null)
 				{
 					Journal j = new Journal(frm.NewJournalName);
-					j.Settings.AllowCloud = frm.AllowCloud;
-					j.Settings.LocalOnly_Upload = frm.UploadToCloudIfOnlyLocal;
-					j.Settings.CloudOnly_Download = frm.DownloadFromCloudIfNotLocal;
+					j.Settings = new JournalSettings();
+					// set up settings from choices on frmNewJournal .........................
+					j.Settings.AllowCloud			= frm.AllowCloud;
+					j.Settings.IfCloudOnly_Delete	= frm.IfCloudOnly_Delete;
+					j.Settings.IfCloudOnly_Download = frm.IfCloudOnly_Download;
+					j.Settings.IfLocalOnly_Upload	= frm.IfLocalOnly_Upload;
+					j.Settings.IfLocalOnly_Delete	= frm.IfLocalOnly_Delete;
+					j.Settings.IfLocalOnly_DisallowCloud = frm.IfLocalOnly_DisallowCloud;
+					// ........................................................................
 					j.LastSaved = DateTime.Now;
 					j.Create();
 					Program.AllJournals = Utilities.AllJournals();

@@ -37,16 +37,6 @@ namespace myJournal
 				if (_fileName != null) { this.FileName = _fileName; } 
 				else { this.FileName = Program.AppRoot + this.root + this.Name; }
 			}
-
-			//if (this.Entries.Count > 0 && this.Settings == null )
-			//{
-			//	this.Settings = new JournalSettings();
-			//	Settings.LocalOnly_DisallowCloud = true;
-			//	Settings.LocalOnly_Delete = false;
-			//	Settings.LocalOnly_Upload = false;
-			//	Settings.CloudOnly_Download = true;
-			//	//this.Save();
-			//}
 		}
 
         public void AddEntry(JournalEntry entryToAdd) { Entries.Add(entryToAdd); }
@@ -166,23 +156,6 @@ namespace myJournal
 				CloudSynchronizer cs = new CloudSynchronizer();
 				await cs.SynchWithCloud(false, this);
 			}
-
-			//if (!this.Settings.AllowCloud)
-			//{
-			//	if (Program.AzureJournals.Contains(this.Name))
-			//	{
-			//		// Make the Azure journal an empty placeholder to indicate Settings.AllowCloud = false.
-			//		// It will be deleted when found on next start (by any device).
-			//		Journal j = new Journal(this.Name, this.FileName).Open();
-			//		j.Entries.Clear();
-			//		j.Name += ConfigurationManager.AppSettings["DisallowCloudPlaceholder"];
-			//		j.FileName = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + j.Name;
-			//		this.Settings.AllowCloud = true;
-			//		j.Save();
-			//		await AzureFileClient.DownloadOrDeleteFile(this.FileName, this.FileName, FileMode.Open, true);
-
-			//	}
-			//}
 
 			Backup();
 			Program.AllJournals = Utilities.AllJournals();

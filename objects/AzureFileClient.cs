@@ -20,10 +20,10 @@ namespace myJournal.objects
 
 		public static void UploadFile(string localFileName, string shareName = "journals")
 		{
-			var						fileName	= localFileName.Substring(localFileName.LastIndexOf("\\") + 1);
-			ShareClient				share		= new ShareClient(Program.AzureConnString, shareName);
-			ShareDirectoryClient	directory	= share.GetDirectoryClient("");
-			ShareFileClient			myFile		= directory.GetFileClient(Program.AzurePassword + "_" + fileName);
+			var fileName = localFileName.Substring(localFileName.LastIndexOf("\\") + 1);
+			ShareClient share = new ShareClient(Program.AzureConnString, shareName);
+			ShareDirectoryClient directory = share.GetDirectoryClient("");
+			ShareFileClient myFile = directory.GetFileClient(Program.AzurePassword + "_" + fileName);
 
 			if (File.Exists(localFileName))
 			{
@@ -41,18 +41,18 @@ namespace myJournal.objects
 		{
 			journal.FileName = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + journal.Name;
 			journal.Settings.AllowCloud = false;
-			journal.Save();	
+			journal.Save();
 		}
 
-		public static async Task DownloadOrDeleteFile(string localFileName, string AzFileName, 
+		public static async Task DownloadOrDeleteFile(string localFileName, string AzFileName,
 			FileMode mode = FileMode.Create, bool deleteFile = false, string shareName = "journals")
 		{
-			Program.AzureFileExists				= false;
-			CloudStorageAccount storageAccount	= CloudStorageAccount.Parse(Program.AzureConnString);
-			CloudFileClient		fileClient		= storageAccount.CreateCloudFileClient();
-			CloudFileShare		share			= fileClient.GetShareReference(shareName);
-			CloudFileDirectory	root			= share.GetRootDirectoryReference();
-			CloudFile			myFile			= root.GetFileReference(AzFileName);
+			Program.AzureFileExists = false;
+			CloudStorageAccount storageAccount = CloudStorageAccount.Parse(Program.AzureConnString);
+			CloudFileClient fileClient = storageAccount.CreateCloudFileClient();
+			CloudFileShare share = fileClient.GetShareReference(shareName);
+			CloudFileDirectory root = share.GetRootDirectoryReference();
+			CloudFile myFile = root.GetFileReference(AzFileName);
 
 			if (deleteFile)
 			{
@@ -62,9 +62,24 @@ namespace myJournal.objects
 			{
 				using (FileStream stream = new FileStream(localFileName, mode))
 				{
-					await myFile.DownloadToStreamAsync(stream); Program.AzureFileExists = true;					
+					await myFile.DownloadToStreamAsync(stream); Program.AzureFileExists = true;
 				}
 			}
+		}
+
+		public static async Task CheckForCloudJournalAndRemoveEntries(Journal j)
+		{
+			var tmpFolder = ConfigurationManager.AppSettings["FolderStructure_Temp"];
+			var tmpFileName = Program.AppRoot + tmpFolder + j.Name;
+			try 
+			{ 
+				await DownloadOrDeleteFile(tmpFileName, Program.AzurePassword + "_" + j.Name);
+				Journal j2 = new Journal(j.Name, j.FileName).Open(true);
+				File.Delete(tmpFileName);
+				j2.Entries.Clear();
+				AzureFileClient.UploadFile(tmpFileName);
+			}
+			catch (Exception) { }
 		}
 
 		public static async Task CheckNewAzurePassword(string key, bool creatingKey)

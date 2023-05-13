@@ -8,10 +8,11 @@ namespace myJournal.objects
 	public class JournalSettings
 	{
 		public bool AllowCloud { get; set; }
-		public bool CloudOnly_Download { get; set; }
-		public bool LocalOnly_Upload { get; set; }
-		public bool LocalOnly_Delete { get; set; }
-		public bool LocalOnly_DisallowCloud { get; set; }
+		public bool IfCloudOnly_Download { get; set; }
+		public bool IfCloudOnly_Delete { get; set; }
+		public bool IfLocalOnly_Upload { get; set; }
+		public bool IfLocalOnly_Delete { get; set; }
+		public bool IfLocalOnly_DisallowCloud { get; set; }
 
 		public JournalSettings() { }
 

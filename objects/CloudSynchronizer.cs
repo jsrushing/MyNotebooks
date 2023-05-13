@@ -102,7 +102,10 @@ namespace myJournal.objects
 			var journalsFolder			= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"];
 			var tempFolder				= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + "_";
 			List<Journal> allJournals	= new List<Journal>();
-			Journal j					= new Journal();
+			Journal j;
+			Journal cloudJournal;
+
+			if(Program.AllJournals.Count == 0) { Program.AllJournals = Utilities.AllJournals(); }
 
 			if (journal == null)	// If no journal is passed then 'allJournals' will contain all local journals. If one is passed (from Journal.Save()) it will only contain one.
 			{ 
@@ -132,8 +135,6 @@ namespace myJournal.objects
 				{
 					if (j.Settings.AllowCloud)
 					{
-						Journal cloudJournal;
-
 						try
 						{
 							await AzureFileClient.DownloadOrDeleteFile(tempFolder + j.Name, Program.AzurePassword + "_" + j.Name);
@@ -143,22 +144,30 @@ namespace myJournal.objects
 
 						if (cloudJournal != null)
 						{
-							this.CompareJournals(j, cloudJournal);
-
-							switch (journalComparisonResult)
+							if(cloudJournal.Entries.Count > 0)
 							{
-								case ComparisonResult.Same:
-									ItemsSkipped.Add(j.Name + " (files match)");
-									break;
-								case ComparisonResult.LocalNewer:
-									AzureFileClient.UploadFile(j.FileName);
-									ItemsSynchd.Add(j.FileName + "up'd (newer)");
-									break;
-								case ComparisonResult.CloudNewer:
-									File.Move(cloudJournal.FileName, j.FileName, true);
-									ItemsDownloaded.Add(j.Name + " (syncd from cloud)");
-									break;
+								this.CompareJournals(j, cloudJournal);
+
+								switch (journalComparisonResult)
+								{
+									case ComparisonResult.Same:
+										ItemsSkipped.Add(j.Name + " (files match)");
+										break;
+									case ComparisonResult.LocalNewer:
+										AzureFileClient.UploadFile(j.FileName);
+										ItemsSynchd.Add(j.FileName + "up'd (newer)");
+										break;
+									case ComparisonResult.CloudNewer:
+										File.Move(cloudJournal.FileName, j.FileName, true);
+										ItemsDownloaded.Add(j.Name + " (syncd from cloud)");
+										break;
+								}
 							}
+							else
+							{
+								j.Settings.AllowCloud = false;
+							}
+
 						}
 					}
 					else
@@ -178,41 +187,37 @@ namespace myJournal.objects
 				File.Delete(tempFolder + j.Name);
 			}
 
-
 			await AzureFileClient.GetAzureJournalNames(Program.AzurePassword, true);
-
+			if (Program.AllJournals.Count == 0) { Program.AllJournals = Utilities.AllJournals(); }
+			  
 			foreach(var sJrnlName in Program.AzureJournalNames.Except(Utilities.AllJournalNames()))		// any journal on Azure not found locally
 			{
-				await AzureFileClient.DownloadOrDeleteFile(journalsFolder + sJrnlName, Program.AzurePassword + "_" + sJrnlName);
-				ItemsDownloaded.Add(sJrnlName + " dl'd from cloud");
+				await AzureFileClient.DownloadOrDeleteFile(tempFolder + sJrnlName, Program.AzurePassword + "_" + sJrnlName);
+				Journal j3 = new Journal(tempFolder + sJrnlName, tempFolder + sJrnlName).Open(true);
+
+				if(j3.Settings.IfCloudOnly_Download)
+				{
+					await AzureFileClient.DownloadOrDeleteFile(journalsFolder + sJrnlName, Program.AzurePassword + "_" + sJrnlName);
+					ItemsDownloaded.Add(sJrnlName + " dl'd from cloud");
+				}
+				else if(j3.Settings.IfCloudOnly_Delete)
+				{
+					await AzureFileClient.DownloadOrDeleteFile(tempFolder + j3.Name, Program.AzurePassword + "_" + j3.Name, FileMode.Open, true);
+				}
+
+				File.Delete(tempFolder + sJrnlName);
 			}
 				
 			foreach(var sLocalFile in Utilities.AllJournalNames().Except(Program.AzureJournalNames))	// any journal found locally but not on Azure
 			{
 				Journal j2 = new Journal(sLocalFile).Open();
-				j2.Settings.AllowCloud = false;
-				j2.Save();
-
-				// Either download the journal found on Azure or delete the file - business rule <<				
-				//j = new Journal(sLocalFile).Open(true);
-
-				//if (j.Settings.AllowCloud)
-				//{
-				//	// Add an item to Settings - DeleteLocalIfNotOnAzure
-				//	// If(!Settings.DeleteLocalIfNotFoundOnAzure)
-				//	// {
-				//	//		File.Delete(journalsFolder + sLocalFile);
-				//	//		ItemsDeleted.Add(sLocalFile);
-				//	// }
-				//	// else
-				//	// {
-				//	//		await AzureFileClient.DownloadOrDeleteFile(journalsFolder + sLocalFile, Program.AzurePassword + "_" + sLocalFile);
-				//	//		ItemsDownloaded.Add(sLocalFile + " dl'd from cloud");
-				//	// }
-
-				//	//File.Delete(journalsFolder + sLocalFile);
-				//	//ItemsDeleted.Add(sLocalFile);
-				//}
+				if(j2.Settings.AllowCloud)
+				{
+					if (j2.Settings.IfLocalOnly_DisallowCloud)	{ j2.Settings.AllowCloud = false; }
+					else if(j2.Settings.IfLocalOnly_Delete)		{ j2.Delete(); }
+					else if(j2.Settings.IfLocalOnly_Upload)		{ AzureFileClient.UploadRawJournal(j2); }
+					j2.Save();
+				}
 			}				
 
 			if(alsoSynchSettings) await SyncLabelsAndSettings();

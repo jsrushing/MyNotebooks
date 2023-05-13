@@ -19,7 +19,7 @@ namespace myJournal.objects
 		public static List<string> AllJournalNames()
 		{
 			List<string> lstRtrn = new List<string>();
-			foreach(Journal j in Program.AllJournals) { lstRtrn.Add(j.Name); }
+			foreach (Journal j in Program.AllJournals) lstRtrn.Add(j.Name);
 			return lstRtrn;
 		} 
 
@@ -30,16 +30,16 @@ namespace myJournal.objects
 
 			foreach (string s in Directory.GetFiles(sJrnlFolder))
 			{ 
-				Journal j = new Journal(s.Replace(sJrnlFolder, "")).Open();
+				//Journal j = new Journal(s.Replace(sJrnlFolder, "")).Open();
 				//j.Settings = new JournalSettings();
 				//j.Settings.AllowCloud = true;
 				//j.Settings.LocalOnly_DisallowCloud = true;
 				//j.Settings.LocalOnly_Delete = false;
 				//j.Settings.LocalOnly_Upload = false;
 				//j.Settings.CloudOnly_Download = true;
-				//jrnlReturn.Add(new Journal(s.Replace(sJrnlFolder, "")).Open()); }
 				//j.Save();
-				jrnlReturn.Add(j);
+				//jrnlReturn.Add(j);
+				jrnlReturn.Add(new Journal(s.Replace(sJrnlFolder, "")).Open());
 			}
 
 			return jrnlReturn;

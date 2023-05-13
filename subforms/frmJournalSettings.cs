@@ -16,11 +16,12 @@ namespace myJournal.subforms
 		Journal workingJournal;
 		public bool isDirty = false;
 		bool allowValueChange = false;
-		bool s_AllowCloud;
-		bool s_CloudOnly_Download;
-		bool s_LocalOnly_Upload;
-		bool s_LocalOnly_Delete;
-		bool s_LocalOnly_DisallowCloud;
+		bool b_AllowCloud;
+		bool b_IfCloudOnly_Download;
+		bool b_IfCloudOnly_Delete;
+		bool b_IfLocalOnly_Upload;
+		bool b_IfLocalOnly_Delete;
+		bool b_IfLocalOnly_DisallowCloud;
 
 		public frmJournalSettings(Journal journalToEdit, Form parent)
 		{
@@ -37,18 +38,20 @@ namespace myJournal.subforms
 
 		private void frmJournalSettings_Load(object sender, EventArgs e)
 		{
-			s_AllowCloud			= workingJournal.Settings.AllowCloud;
-			s_CloudOnly_Download	= workingJournal.Settings.CloudOnly_Download;
-			s_LocalOnly_Upload		= workingJournal.Settings.LocalOnly_Upload;
-			s_LocalOnly_Delete		= workingJournal.Settings.LocalOnly_Delete;
-			s_LocalOnly_DisallowCloud = workingJournal.Settings.LocalOnly_DisallowCloud;
+			b_AllowCloud				= workingJournal.Settings.AllowCloud;
+			b_IfCloudOnly_Download		= workingJournal.Settings.IfCloudOnly_Download;
+			b_IfCloudOnly_Delete		= workingJournal.Settings.IfCloudOnly_Delete;
+			b_IfLocalOnly_Upload		= workingJournal.Settings.IfLocalOnly_Upload;
+			b_IfLocalOnly_Delete		= workingJournal.Settings.IfLocalOnly_Delete;
+			b_IfLocalOnly_DisallowCloud = workingJournal.Settings.IfLocalOnly_DisallowCloud;
 
 			allowValueChange = false;
-			chkAllowCloud.Checked						= s_AllowCloud;
-			radCloudNotLocal_DownloadCloud.Checked		= s_CloudOnly_Download;
-			radLocalNotCloud_DisallowLocalCloud.Checked = s_LocalOnly_DisallowCloud;
-			radLocalNotCloud_DeleteLocal.Checked		= s_LocalOnly_Delete;
-			radLocalNotCloud_UploadToCloud.Checked		= s_LocalOnly_Upload;
+			chkAllowCloud.Checked						= b_AllowCloud;
+			radCloudNotLocal_DownloadCloud.Checked		= b_IfCloudOnly_Download;
+			radLocalNotCloud_DisallowLocalCloud.Checked = b_IfLocalOnly_DisallowCloud;
+			radLocalNotCloud_DeleteLocal.Checked		= b_IfLocalOnly_Delete;
+			radLocalNotCloud_UploadToCloud.Checked		= b_IfLocalOnly_Upload;
+			radCloudNotLocal_DeleteCloud.Checked		= b_IfCloudOnly_Delete;
 
 			radCloudNotLocal_DeleteCloud.Checked = !radCloudNotLocal_DownloadCloud.Checked;
 
@@ -56,14 +59,20 @@ namespace myJournal.subforms
 			allowValueChange = true;
 		}
 
-		private void ApplySettings()
+		private async void ApplySettings()
 		{
-			workingJournal.Settings.AllowCloud				= s_AllowCloud;
-			workingJournal.Settings.LocalOnly_Upload		= s_LocalOnly_Upload;
-			workingJournal.Settings.LocalOnly_Delete		= s_LocalOnly_Delete;
-			workingJournal.Settings.LocalOnly_DisallowCloud	= s_LocalOnly_DisallowCloud;
-			workingJournal.Settings.CloudOnly_Download		= s_CloudOnly_Download;
+			workingJournal.Settings.AllowCloud				= b_AllowCloud;
+			workingJournal.Settings.IfLocalOnly_Upload		= b_IfLocalOnly_Upload;
+			workingJournal.Settings.IfLocalOnly_Delete		= b_IfLocalOnly_Delete;
+			workingJournal.Settings.IfLocalOnly_DisallowCloud = b_IfLocalOnly_DisallowCloud;
+			workingJournal.Settings.IfCloudOnly_Download	= b_IfCloudOnly_Download;
+			workingJournal.Settings.IfCloudOnly_Delete		= b_IfCloudOnly_Delete;
 			workingJournal.Save();
+
+			if(!workingJournal.Settings.AllowCloud)
+			{
+				await AzureFileClient.CheckForCloudJournalAndRemoveEntries(workingJournal);
+			}
 		}
 
 		private void btnSaveChanges_Click(object sender, EventArgs e)
@@ -82,11 +91,12 @@ namespace myJournal.subforms
 		{
 			if (allowValueChange)
 			{
-				s_AllowCloud				= chkAllowCloud.Checked;
-				s_LocalOnly_Upload			= radLocalNotCloud_UploadToCloud.Checked;
-				s_LocalOnly_DisallowCloud	= radLocalNotCloud_DisallowLocalCloud.Checked;
-				s_LocalOnly_Delete			= radLocalNotCloud_DeleteLocal.Checked;
-				s_CloudOnly_Download		= radCloudNotLocal_DownloadCloud.Checked;
+				b_AllowCloud				= chkAllowCloud.Checked;
+				b_IfLocalOnly_Upload			= radLocalNotCloud_UploadToCloud.Checked;
+				b_IfLocalOnly_DisallowCloud	= radLocalNotCloud_DisallowLocalCloud.Checked;
+				b_IfLocalOnly_Delete			= radLocalNotCloud_DeleteLocal.Checked;
+				b_IfCloudOnly_Download		= radCloudNotLocal_DownloadCloud.Checked;
+				b_IfCloudOnly_Delete			= radCloudNotLocal_DeleteCloud.Checked;
 				isDirty						= true;
 			}
 		}
