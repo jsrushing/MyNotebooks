@@ -37,32 +37,29 @@ namespace myJournal.objects
 			}
 		}
 
-		public static void UploadRawJournal(Journal journal)
-		{
-			journal.FileName = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + journal.Name;
-			journal.Settings.AllowCloud = false;
-			journal.Save();
-		}
-
 		public static async Task DownloadOrDeleteFile(string localFileName, string AzFileName,
 			FileMode mode = FileMode.Create, bool deleteFile = false, string shareName = "journals")
 		{
-			Program.AzureFileExists = false;
-			CloudStorageAccount storageAccount = CloudStorageAccount.Parse(Program.AzureConnString);
-			CloudFileClient fileClient = storageAccount.CreateCloudFileClient();
-			CloudFileShare share = fileClient.GetShareReference(shareName);
-			CloudFileDirectory root = share.GetRootDirectoryReference();
-			CloudFile myFile = root.GetFileReference(AzFileName);
+			Program.AzureFileExists				= false;
+			CloudStorageAccount storageAccount	= CloudStorageAccount.Parse(Program.AzureConnString);
+			CloudFileClient		fileClient		= storageAccount.CreateCloudFileClient();
+			CloudFileShare		share			= fileClient.GetShareReference(shareName);
+			CloudFileDirectory	root			= share.GetRootDirectoryReference();
+			CloudFile			myFile			= root.GetFileReference(AzFileName);
 
-			if (deleteFile)
+			if(await myFile.ExistsAsync())
 			{
-				await myFile.DeleteAsync();
-			}
-			else
-			{
-				using (FileStream stream = new FileStream(localFileName, mode))
+				if (deleteFile)
 				{
-					await myFile.DownloadToStreamAsync(stream); Program.AzureFileExists = true;
+					await myFile.DeleteAsync();
+				}
+				else
+				{
+					using (FileStream stream = new FileStream(localFileName, mode))
+					{
+						await myFile.DownloadToStreamAsync(stream); 
+						Program.AzureFileExists = true;
+					}
 				}
 			}
 		}
@@ -74,10 +71,12 @@ namespace myJournal.objects
 			try 
 			{ 
 				await DownloadOrDeleteFile(tmpFileName, Program.AzurePassword + "_" + j.Name);
-				Journal j2 = new Journal(j.Name, j.FileName).Open(true);
-				File.Delete(tmpFileName);
+				Journal j2 = new Journal(j.Name, tmpFileName).Open(true);
+				j2.Settings.AllowCloud = false;
 				j2.Entries.Clear();
+				j2.Save();
 				AzureFileClient.UploadFile(tmpFileName);
+				File.Delete(tmpFileName);
 			}
 			catch (Exception) { }
 		}

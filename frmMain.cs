@@ -506,7 +506,7 @@ namespace myJournal.subforms
 				{
 					Journal j = new Journal(frm.NewJournalName);
 					j.Settings = new JournalSettings();
-					// set up settings from choices on frmNewJournal .........................
+					// Apply settings from choices on frmNewJournal (add to this section as new settings are added) .....
 					j.Settings.AllowCloud			= frm.AllowCloud;
 					j.Settings.IfCloudOnly_Delete	= frm.IfCloudOnly_Delete;
 					j.Settings.IfCloudOnly_Download = frm.IfCloudOnly_Download;
