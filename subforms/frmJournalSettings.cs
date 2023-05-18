@@ -16,6 +16,7 @@ namespace myJournal.subforms
 		Journal workingJournal;
 		public bool isDirty = false;
 		bool allowValueChange = false;
+		bool originalAllowCloud = false;
 		#region Settings
 		bool b_AllowCloud;
 		bool b_IfCloudOnly_Download;
@@ -41,36 +42,69 @@ namespace myJournal.subforms
 
 		private void frmJournalSettings_Load(object sender, EventArgs e)
 		{
-			b_AllowCloud			= workingJournal.Settings.AllowCloud;
-			b_IfCloudOnly_Download	= workingJournal.Settings.IfCloudOnly_Download;
-			b_IfCloudOnly_Delete	= workingJournal.Settings.IfCloudOnly_Delete;
-			b_IfLocalOnly_Upload	= workingJournal.Settings.IfLocalOnly_Upload;
-			b_IfLocalOnly_Delete	= workingJournal.Settings.IfLocalOnly_Delete;
+			b_AllowCloud = workingJournal.Settings.AllowCloud;
+			b_IfCloudOnly_Download = workingJournal.Settings.IfCloudOnly_Download;
+			b_IfCloudOnly_Delete = workingJournal.Settings.IfCloudOnly_Delete;
+			b_IfLocalOnly_Upload = workingJournal.Settings.IfLocalOnly_Upload;
+			b_IfLocalOnly_Delete = workingJournal.Settings.IfLocalOnly_Delete;
 			b_IfLocalOnly_DisallowCloud = workingJournal.Settings.IfLocalOnly_DisallowCloud;
 
 			allowValueChange = false;
-			chkAllowCloud.Checked					= b_AllowCloud;
-			pnlCloudOptions.Enabled					= chkAllowCloud.Checked;
-			radCloudNotLocal_DeleteCloud.Checked	= b_IfCloudOnly_Delete;
-			radCloudNotLocal_DownloadCloud.Checked	= b_IfCloudOnly_Download;
-			radLocalNotCloud_DeleteLocal.Checked	= b_IfLocalOnly_Delete;
-			radLocalNotCloud_UploadToCloud.Checked	= b_IfLocalOnly_Upload;
+			chkAllowCloud.Checked = b_AllowCloud;
+			pnlCloudOptions.Enabled = chkAllowCloud.Checked;
+			radCloudNotLocal_DeleteCloud.Checked = b_IfCloudOnly_Delete;
+			radCloudNotLocal_DownloadCloud.Checked = b_IfCloudOnly_Download;
+			radLocalNotCloud_DeleteLocal.Checked = b_IfLocalOnly_Delete;
+			radLocalNotCloud_UploadToCloud.Checked = b_IfLocalOnly_Upload;
 			radLocalNotCloud_DisallowLocalCloud.Checked = b_IfLocalOnly_DisallowCloud;
 			allowValueChange = true;
+			originalAllowCloud = b_AllowCloud;
 		}
 
 		private async void ApplySettings()
 		{
-			workingJournal.Settings.AllowCloud				= b_AllowCloud;
-			workingJournal.Settings.IfCloudOnly_Download	= b_IfCloudOnly_Download;
-			workingJournal.Settings.IfCloudOnly_Delete		= b_IfCloudOnly_Delete;
-			workingJournal.Settings.IfLocalOnly_Upload		= b_IfLocalOnly_Upload;
-			workingJournal.Settings.IfLocalOnly_Delete		= b_IfLocalOnly_Delete;
+			workingJournal.Settings.AllowCloud = b_AllowCloud;
+			workingJournal.Settings.IfCloudOnly_Download = b_IfCloudOnly_Download;
+			workingJournal.Settings.IfCloudOnly_Delete = b_IfCloudOnly_Delete;
+			workingJournal.Settings.IfLocalOnly_Upload = b_IfLocalOnly_Upload;
+			workingJournal.Settings.IfLocalOnly_Delete = b_IfLocalOnly_Delete;
 			workingJournal.Settings.IfLocalOnly_DisallowCloud = b_IfLocalOnly_DisallowCloud;
+
+			if (b_AllowCloud & !originalAllowCloud)
+			{
+				AzureFileClient.UploadFile(workingJournal.FileName);
+			}
+
+			if (!b_AllowCloud & originalAllowCloud)
+			{
+				await AzureFileClient.CheckForCloudJournalAndRemoveEntries(workingJournal);
+			}
+
 			workingJournal.Save();
 
-			if (!workingJournal.Settings.AllowCloud)
-			{ await AzureFileClient.CheckForCloudJournalAndRemoveEntries(workingJournal); }
+
+			//if (!b_AllowCloud)	// AllowCloud is set to OFF
+			//{
+			//	if (originalAllowCloud) // AllowCloud has been switched ON, so upload the journal stripped of .Entries
+			//	{
+			//		await AzureFileClient.CheckForCloudJournalAndRemoveEntries(workingJournal);
+			//	}
+			//	//else // AllowCloud hasn't been switched
+			//	//{
+			//	//	AzureFileClient.UploadFile(workingJournal.FileName);
+			//	//}
+			//}
+			//else	// AllowCloud is set to ON
+			//{
+			//	if(!originalAllowCloud)		// AllowCloud has been switched 
+			//	{
+			//		AzureFileClient.UploadFile(workingJournal.FileName);
+			//	}
+			//	else
+			//	{
+
+			//	}
+			//}
 		}
 
 		private void btnSaveChanges_Click(object sender, EventArgs e)
@@ -89,11 +123,11 @@ namespace myJournal.subforms
 		{
 			if (allowValueChange)
 			{
-				b_AllowCloud			= chkAllowCloud.Checked;
-				b_IfCloudOnly_Download	= radCloudNotLocal_DownloadCloud.Checked;
-				b_IfCloudOnly_Delete	= radCloudNotLocal_DeleteCloud.Checked;
-				b_IfLocalOnly_Upload	= radLocalNotCloud_UploadToCloud.Checked;
-				b_IfLocalOnly_Delete	= radLocalNotCloud_DeleteLocal.Checked;
+				b_AllowCloud = chkAllowCloud.Checked;
+				b_IfCloudOnly_Download = radCloudNotLocal_DownloadCloud.Checked;
+				b_IfCloudOnly_Delete = radCloudNotLocal_DeleteCloud.Checked;
+				b_IfLocalOnly_Upload = radLocalNotCloud_UploadToCloud.Checked;
+				b_IfLocalOnly_Delete = radLocalNotCloud_DeleteLocal.Checked;
 				b_IfLocalOnly_DisallowCloud = radLocalNotCloud_DisallowLocalCloud.Checked;
 				isDirty = true;
 			}

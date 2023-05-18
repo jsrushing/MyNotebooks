@@ -5,15 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
-using System.Text;
-using System.Windows.Forms;
-using System.Threading.Tasks;
 using System.Linq;
-using Microsoft.Extensions.FileProviders;
-using static myJournal.objects.Utilities;
-using System.CodeDom;
-using myJournal.subforms;
-using Microsoft.Identity.Client;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace myJournal.objects
 {
@@ -129,12 +123,12 @@ namespace myJournal.objects
 						catch (Exception) { }
 
 						if (cloudJournal != null)
-						{
+						{                                                                           
 							if (cloudJournal.Entries.Count > 0)
 							{
 								this.CompareJournals(j, cloudJournal);
 
-								switch (journalComparisonResult)
+								switch (journalComparisonResult)                                                                                                  
 								{
 									case ComparisonResult.Same:
 										ItemsSkipped.Add(j.Name + " (files match)");
@@ -154,7 +148,6 @@ namespace myJournal.objects
 								j.Settings.AllowCloud = false;
 								j.Save();
 							}
-
 						}
 					}
 					else
@@ -163,10 +156,10 @@ namespace myJournal.objects
 						ItemsBackedUp.Add(j.Name + " (backed up locally)");
 					}
 				}
-				//else
-				//{
-				//	if (j.Settings.AllowCloud) { AzureFileClient.UploadFile(journalsFolder + j.Name); }
-				//}
+				else
+				{
+					if (j.Settings.AllowCloud) { AzureFileClient.UploadFile(journalsFolder + j.Name); }
+				}
 
 				File.Delete(tempFolder + j.Name);
 			}

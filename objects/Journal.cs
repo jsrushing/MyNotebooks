@@ -8,12 +8,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using myJournal.subforms;
 using myJournal.objects;
-using System.Windows.Forms;
-using Org.BouncyCastle.Crypto.Agreement.JPake;
-using myJournal.Properties;
 
 namespace myJournal
 {
@@ -157,7 +152,7 @@ namespace myJournal
 				await cs.SynchWithCloud(false, this);
 			}
 
-			Backup();
+			//Backup();
 			Program.AllJournals = Utilities.AllJournals();
 		}
 

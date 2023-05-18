@@ -66,17 +66,17 @@ namespace myJournal.objects
 
 		public static async Task CheckForCloudJournalAndRemoveEntries(Journal j)
 		{
-			var tmpFolder = ConfigurationManager.AppSettings["FolderStructure_Temp"];
-			var tmpFileName = Program.AppRoot + tmpFolder + j.Name;
+			var tempFolder = ConfigurationManager.AppSettings["FolderStructure_Temp"];
+			var tempFileName = Program.AppRoot + tempFolder + j.Name;
+
 			try 
 			{ 
-				await DownloadOrDeleteFile(tmpFileName, Program.AzurePassword + "_" + j.Name);
-				Journal j2 = new Journal(j.Name, tmpFileName).Open(true);
-				j2.Settings.AllowCloud = false;
+				await DownloadOrDeleteFile(tempFileName, Program.AzurePassword + "_" + j.Name);
+				Journal j2 = new Journal(j.Name, tempFileName).Open(true);
 				j2.Entries.Clear();
 				j2.Save();
-				AzureFileClient.UploadFile(tmpFileName);
-				File.Delete(tmpFileName);
+				AzureFileClient.UploadFile(tempFileName);
+				File.Delete(tempFileName);
 			}
 			catch (Exception) { }
 		}

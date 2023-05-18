@@ -41,6 +41,7 @@
 			pnlCloudNotLocal = new System.Windows.Forms.Panel();
 			btnSaveChanges = new System.Windows.Forms.Button();
 			pnlCloudOptions = new System.Windows.Forms.Panel();
+			textBox2 = new System.Windows.Forms.TextBox();
 			pnlLocalNotCloud.SuspendLayout();
 			pnlCloudNotLocal.SuspendLayout();
 			pnlCloudOptions.SuspendLayout();
@@ -70,7 +71,7 @@
 			// 
 			label1.AutoSize = true;
 			label1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point);
-			label1.Location = new System.Drawing.Point(3, 0);
+			label1.Location = new System.Drawing.Point(3, -2);
 			label1.Name = "label1";
 			label1.Size = new System.Drawing.Size(229, 15);
 			label1.TabIndex = 2;
@@ -128,7 +129,7 @@
 			// 
 			label2.AutoSize = true;
 			label2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point);
-			label2.Location = new System.Drawing.Point(3, 92);
+			label2.Location = new System.Drawing.Point(3, 97);
 			label2.Name = "label2";
 			label2.Size = new System.Drawing.Size(229, 15);
 			label2.TabIndex = 5;
@@ -159,14 +160,14 @@
 			// 
 			pnlCloudNotLocal.Controls.Add(radCloudNotLocal_DeleteCloud);
 			pnlCloudNotLocal.Controls.Add(radCloudNotLocal_DownloadCloud);
-			pnlCloudNotLocal.Location = new System.Drawing.Point(12, 107);
+			pnlCloudNotLocal.Location = new System.Drawing.Point(12, 115);
 			pnlCloudNotLocal.Name = "pnlCloudNotLocal";
 			pnlCloudNotLocal.Size = new System.Drawing.Size(218, 46);
 			pnlCloudNotLocal.TabIndex = 52;
 			// 
 			// btnSaveChanges
 			// 
-			btnSaveChanges.Location = new System.Drawing.Point(92, 211);
+			btnSaveChanges.Location = new System.Drawing.Point(88, 218);
 			btnSaveChanges.Name = "btnSaveChanges";
 			btnSaveChanges.Size = new System.Drawing.Size(75, 23);
 			btnSaveChanges.TabIndex = 53;
@@ -176,6 +177,7 @@
 			// 
 			// pnlCloudOptions
 			// 
+			pnlCloudOptions.Controls.Add(textBox2);
 			pnlCloudOptions.Controls.Add(label1);
 			pnlCloudOptions.Controls.Add(label2);
 			pnlCloudOptions.Controls.Add(pnlCloudNotLocal);
@@ -183,14 +185,23 @@
 			pnlCloudOptions.Enabled = false;
 			pnlCloudOptions.Location = new System.Drawing.Point(1, 44);
 			pnlCloudOptions.Name = "pnlCloudOptions";
-			pnlCloudOptions.Size = new System.Drawing.Size(246, 156);
+			pnlCloudOptions.Size = new System.Drawing.Size(246, 170);
 			pnlCloudOptions.TabIndex = 54;
+			// 
+			// textBox2
+			// 
+			textBox2.BackColor = System.Drawing.SystemColors.WindowFrame;
+			textBox2.Location = new System.Drawing.Point(7, 91);
+			textBox2.Multiline = true;
+			textBox2.Name = "textBox2";
+			textBox2.Size = new System.Drawing.Size(240, 1);
+			textBox2.TabIndex = 55;
 			// 
 			// frmJournalSettings
 			// 
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			ClientSize = new System.Drawing.Size(257, 240);
+			ClientSize = new System.Drawing.Size(249, 248);
 			Controls.Add(pnlCloudOptions);
 			Controls.Add(btnSaveChanges);
 			Controls.Add(textBox1);
@@ -199,6 +210,7 @@
 			MaximizeBox = false;
 			MinimizeBox = false;
 			Name = "frmJournalSettings";
+			ShowInTaskbar = false;
 			Text = "Journal Settings";
 			Load += this.frmJournalSettings_Load;
 			pnlLocalNotCloud.ResumeLayout(false);
@@ -226,5 +238,6 @@
 		private System.Windows.Forms.Button btnSaveChanges;
 		private System.Windows.Forms.Panel pnlCloudOptions;
 		private System.Windows.Forms.RadioButton radLocalNotCloud_DeleteLocal;
+		private System.Windows.Forms.TextBox textBox2;
 	}
 }

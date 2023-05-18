@@ -43,12 +43,12 @@ namespace myJournal.subforms
 			radCloudNotLocal_DeleteCloud = new System.Windows.Forms.RadioButton();
 			radCloudNotLocal_DownloadCloud = new System.Windows.Forms.RadioButton();
 			pnlLocalNotCloud = new System.Windows.Forms.Panel();
+			radLocalNotCloud_DisallowLocalCloud = new System.Windows.Forms.RadioButton();
 			radLocalNotCloud_DeleteLocal = new System.Windows.Forms.RadioButton();
 			radLocalNotCloud_UploadToCloud = new System.Windows.Forms.RadioButton();
 			chkAllowWebBackup = new System.Windows.Forms.CheckBox();
 			lblNameExists = new System.Windows.Forms.Label();
 			lblShowPIN = new System.Windows.Forms.Label();
-			radLocalNotCloud_DisallowLocalCloud = new System.Windows.Forms.RadioButton();
 			grp1.SuspendLayout();
 			pnlCloudOptions.SuspendLayout();
 			pnlCloudNotLocal.SuspendLayout();
@@ -144,7 +144,7 @@ namespace myJournal.subforms
 			// 
 			label3.AutoSize = true;
 			label3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point);
-			label3.Location = new System.Drawing.Point(3, -2);
+			label3.Location = new System.Drawing.Point(3, -3);
 			label3.Name = "label3";
 			label3.Size = new System.Drawing.Size(238, 15);
 			label3.TabIndex = 2;
@@ -154,7 +154,7 @@ namespace myJournal.subforms
 			// 
 			label4.AutoSize = true;
 			label4.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point);
-			label4.Location = new System.Drawing.Point(3, 90);
+			label4.Location = new System.Drawing.Point(3, 89);
 			label4.Name = "label4";
 			label4.Size = new System.Drawing.Size(238, 15);
 			label4.TabIndex = 5;
@@ -172,7 +172,7 @@ namespace myJournal.subforms
 			// radCloudNotLocal_DeleteCloud
 			// 
 			radCloudNotLocal_DeleteCloud.AutoSize = true;
-			radCloudNotLocal_DeleteCloud.Location = new System.Drawing.Point(3, -1);
+			radCloudNotLocal_DeleteCloud.Location = new System.Drawing.Point(3, 1);
 			radCloudNotLocal_DeleteCloud.Name = "radCloudNotLocal_DeleteCloud";
 			radCloudNotLocal_DeleteCloud.Size = new System.Drawing.Size(150, 19);
 			radCloudNotLocal_DeleteCloud.TabIndex = 6;
@@ -201,10 +201,21 @@ namespace myJournal.subforms
 			pnlLocalNotCloud.Size = new System.Drawing.Size(223, 68);
 			pnlLocalNotCloud.TabIndex = 51;
 			// 
+			// radLocalNotCloud_DisallowLocalCloud
+			// 
+			radLocalNotCloud_DisallowLocalCloud.AutoSize = true;
+			radLocalNotCloud_DisallowLocalCloud.Location = new System.Drawing.Point(3, 1);
+			radLocalNotCloud_DisallowLocalCloud.Name = "radLocalNotCloud_DisallowLocalCloud";
+			radLocalNotCloud_DisallowLocalCloud.Size = new System.Drawing.Size(202, 19);
+			radLocalNotCloud_DisallowLocalCloud.TabIndex = 5;
+			radLocalNotCloud_DisallowLocalCloud.TabStop = true;
+			radLocalNotCloud_DisallowLocalCloud.Text = "disallow cloud in the local journal";
+			radLocalNotCloud_DisallowLocalCloud.UseVisualStyleBackColor = true;
+			// 
 			// radLocalNotCloud_DeleteLocal
 			// 
 			radLocalNotCloud_DeleteLocal.AutoSize = true;
-			radLocalNotCloud_DeleteLocal.Location = new System.Drawing.Point(3, 23);
+			radLocalNotCloud_DeleteLocal.Location = new System.Drawing.Point(3, 24);
 			radLocalNotCloud_DeleteLocal.Name = "radLocalNotCloud_DeleteLocal";
 			radLocalNotCloud_DeleteLocal.Size = new System.Drawing.Size(145, 19);
 			radLocalNotCloud_DeleteLocal.TabIndex = 3;
@@ -215,7 +226,7 @@ namespace myJournal.subforms
 			// radLocalNotCloud_UploadToCloud
 			// 
 			radLocalNotCloud_UploadToCloud.AutoSize = true;
-			radLocalNotCloud_UploadToCloud.Location = new System.Drawing.Point(3, 46);
+			radLocalNotCloud_UploadToCloud.Location = new System.Drawing.Point(3, 47);
 			radLocalNotCloud_UploadToCloud.Name = "radLocalNotCloud_UploadToCloud";
 			radLocalNotCloud_UploadToCloud.Size = new System.Drawing.Size(217, 19);
 			radLocalNotCloud_UploadToCloud.TabIndex = 4;
@@ -256,17 +267,6 @@ namespace myJournal.subforms
 			lblShowPIN.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			lblShowPIN.Visible = false;
 			lblShowPIN.Click += this.lblShowPIN_Click;
-			// 
-			// radLocalNotCloud_DisallowLocalCloud
-			// 
-			radLocalNotCloud_DisallowLocalCloud.AutoSize = true;
-			radLocalNotCloud_DisallowLocalCloud.Location = new System.Drawing.Point(3, 0);
-			radLocalNotCloud_DisallowLocalCloud.Name = "radLocalNotCloud_DisallowLocalCloud";
-			radLocalNotCloud_DisallowLocalCloud.Size = new System.Drawing.Size(182, 19);
-			radLocalNotCloud_DisallowLocalCloud.TabIndex = 5;
-			radLocalNotCloud_DisallowLocalCloud.TabStop = true;
-			radLocalNotCloud_DisallowLocalCloud.Text = "disallow cloud in local journal";
-			radLocalNotCloud_DisallowLocalCloud.UseVisualStyleBackColor = true;
 			// 
 			// frmNewJournal
 			// 

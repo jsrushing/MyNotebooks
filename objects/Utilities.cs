@@ -4,13 +4,9 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Drawing;
 using System.IO;
-using System.Text;
-using System.Windows.Forms;
 using System.Linq;
-using myJournal.subforms;
-using myJournal.Properties;
+using System.Windows.Forms;
 
 namespace myJournal.objects
 {
