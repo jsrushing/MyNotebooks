@@ -63,11 +63,9 @@ namespace myJournal.objects
 				Journal j2 = new Journal(sLocalFile).Open();
 				if (j2.Settings.AllowCloud)
 				{
-					if (j2.Settings.IfLocalOnly_DisallowCloud) { j2.Settings.AllowCloud = false; }
-					else if (j2.Settings.IfLocalOnly_Delete) { j2.Delete(); }
+					if (j2.Settings.IfLocalOnly_Delete) { j2.Delete(); }
 					else if (j2.Settings.IfLocalOnly_Upload) { AzureFileClient.UploadFile(j2.FileName); }
-
-					if (j2.Settings.IfLocalOnly_DisallowCloud) { j2.Save(); }
+					else if (j2.Settings.IfLocalOnly_DisallowCloud) { j2.Settings.AllowCloud = false; j2.Save(); }
 				}
 			}
 		}
@@ -178,14 +176,14 @@ namespace myJournal.objects
 			else 
 			{
 				// Handle newly created, nevewr uploaded journal (title ends with '(local)').
-				if (journal.Settings.AllowCloud && journal.FileName.EndsWith(" (local)"))
+				if (journal.FileName.EndsWith(" (local)"))
 				{
 					var sOldName		= journal.FileName;
 					var sNewName		= journal.FileName.Substring(0, journal.FileName.LastIndexOf("\\") + 1) + journal.Name;
 					journal.FileName	= sNewName;
 					File.Copy(sOldName, sNewName, true);
 					File.Delete(sOldName);
-					AzureFileClient.UploadFile(journalsFolder + journal.Name);
+					if (journal.Settings.AllowCloud) { AzureFileClient.UploadFile(journalsFolder + journal.Name); }
 					return;
 				}
 

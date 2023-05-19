@@ -66,6 +66,23 @@ namespace myJournal.subforms
 
 		}
 
-		private void chkAllowWebBackup_CheckedChanged(object sender, EventArgs e) { pnlCloudOptions.Enabled = chkAllowWebBackup.Checked; }
+		private void chkAllowWebBackup_CheckedChanged(object sender, EventArgs e) 
+		{ 
+			pnlCloudOptions.Enabled = chkAllowWebBackup.Checked; 
+
+			if(!chkAllowWebBackup.Checked)
+			{
+				radCloudNotLocal_DeleteCloud.Checked = false;
+				radCloudNotLocal_DownloadCloud.Checked = false;
+				radLocalNotCloud_DeleteLocal.Checked = false;
+				radLocalNotCloud_DisallowLocalCloud.Checked = false;
+				radLocalNotCloud_UploadToCloud.Checked = false;
+			}
+			else
+			{
+				radLocalNotCloud_DeleteLocal.Checked = true;
+				radCloudNotLocal_DownloadCloud.Checked = true;
+			}
+		}
 	}
 }

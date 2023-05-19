@@ -669,6 +669,7 @@ namespace myJournal.subforms
 				if (frm.isDirty) { currentJournal.Save(); }
 				//frm.Close();
 			}
+			SetDisplayText();
 		}
 
 		private void mnuLabels_Click(object sender, EventArgs e)
@@ -738,6 +739,12 @@ namespace myJournal.subforms
 			}
 		}
 
+		private void SetDisplayText()
+		{
+			this.Text = this.Text.EndsWith(" (local)") ? this.Text.Replace(" (local)", "") : this.Text;
+			this.Text = currentJournal != null ? currentJournal.Settings.AllowCloud ? this.Text : this.Text + " (local)" : this.Text;
+		}
+
 		private void ShowHideMenusAndControls(SelectionState st)
 		{
 			if (st == SelectionState.JournalSelectedNotLoaded)
@@ -762,6 +769,7 @@ namespace myJournal.subforms
 				mnuJournal_Export.Enabled = true;
 				mnuJournal_Settings.Enabled = false;
 				pnlPin.Visible = true;
+				SetDisplayText();
 			}
 			else if (st == SelectionState.JournalLoaded)
 			{
@@ -784,6 +792,7 @@ namespace myJournal.subforms
 
 				txtJournalPIN.Text = string.Empty;
 				pnlDateFilters.Visible = true;
+				SetDisplayText();
 			}
 			else if (st == SelectionState.EntrySelected)
 			{

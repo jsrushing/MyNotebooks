@@ -92,7 +92,7 @@
 			// radLocalNotCloud_UploadToCloud
 			// 
 			radLocalNotCloud_UploadToCloud.AutoSize = true;
-			radLocalNotCloud_UploadToCloud.Location = new System.Drawing.Point(3, 24);
+			radLocalNotCloud_UploadToCloud.Location = new System.Drawing.Point(3, 46);
 			radLocalNotCloud_UploadToCloud.Name = "radLocalNotCloud_UploadToCloud";
 			radLocalNotCloud_UploadToCloud.Size = new System.Drawing.Size(197, 19);
 			radLocalNotCloud_UploadToCloud.TabIndex = 4;
@@ -148,7 +148,7 @@
 			// radLocalNotCloud_DeleteLocal
 			// 
 			radLocalNotCloud_DeleteLocal.AutoSize = true;
-			radLocalNotCloud_DeleteLocal.Location = new System.Drawing.Point(3, 46);
+			radLocalNotCloud_DeleteLocal.Location = new System.Drawing.Point(3, 25);
 			radLocalNotCloud_DeleteLocal.Name = "radLocalNotCloud_DeleteLocal";
 			radLocalNotCloud_DeleteLocal.Size = new System.Drawing.Size(125, 19);
 			radLocalNotCloud_DeleteLocal.TabIndex = 5;

@@ -69,42 +69,19 @@ namespace myJournal.subforms
 			workingJournal.Settings.IfLocalOnly_Upload = b_IfLocalOnly_Upload;
 			workingJournal.Settings.IfLocalOnly_Delete = b_IfLocalOnly_Delete;
 			workingJournal.Settings.IfLocalOnly_DisallowCloud = b_IfLocalOnly_DisallowCloud;
+			workingJournal.Save();
 
 			if (b_AllowCloud & !originalAllowCloud)
 			{
-				AzureFileClient.UploadFile(workingJournal.FileName);
+				CloudSynchronizer cs = new CloudSynchronizer();
+				await cs.SynchWithCloud(false, workingJournal);
+
 			}
 
 			if (!b_AllowCloud & originalAllowCloud)
 			{
 				await AzureFileClient.CheckForCloudJournalAndRemoveEntries(workingJournal);
 			}
-
-			workingJournal.Save();
-
-
-			//if (!b_AllowCloud)	// AllowCloud is set to OFF
-			//{
-			//	if (originalAllowCloud) // AllowCloud has been switched ON, so upload the journal stripped of .Entries
-			//	{
-			//		await AzureFileClient.CheckForCloudJournalAndRemoveEntries(workingJournal);
-			//	}
-			//	//else // AllowCloud hasn't been switched
-			//	//{
-			//	//	AzureFileClient.UploadFile(workingJournal.FileName);
-			//	//}
-			//}
-			//else	// AllowCloud is set to ON
-			//{
-			//	if(!originalAllowCloud)		// AllowCloud has been switched 
-			//	{
-			//		AzureFileClient.UploadFile(workingJournal.FileName);
-			//	}
-			//	else
-			//	{
-
-			//	}
-			//}
 		}
 
 		private void btnSaveChanges_Click(object sender, EventArgs e)
@@ -116,6 +93,19 @@ namespace myJournal.subforms
 		private void chkAllowCloud_CheckedChanged(object sender, EventArgs e)
 		{
 			pnlCloudOptions.Enabled = chkAllowCloud.Checked;
+			if (!chkAllowCloud.Checked)
+			{
+				radCloudNotLocal_DeleteCloud.Checked = false;
+				radCloudNotLocal_DownloadCloud.Checked = false;
+				radLocalNotCloud_DeleteLocal.Checked = false;
+				radLocalNotCloud_DisallowLocalCloud.Checked = false;
+				radLocalNotCloud_UploadToCloud.Checked = false;
+			}
+			else
+			{
+				radLocalNotCloud_UploadToCloud.Checked = true;
+				radCloudNotLocal_DownloadCloud.Checked = true;
+			}
 			ValueChanged(sender, e);
 		}
 
