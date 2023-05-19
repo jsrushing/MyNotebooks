@@ -66,6 +66,8 @@ namespace myJournal.subforms
 			cbxDatesFrom = new System.Windows.Forms.ComboBox();
 			label2 = new System.Windows.Forms.Label();
 			pnlDateFilters = new System.Windows.Forms.Panel();
+			label6 = new System.Windows.Forms.Label();
+			lblEntriesCount = new System.Windows.Forms.Label();
 			cbxSortEntriesBy = new System.Windows.Forms.ComboBox();
 			label5 = new System.Windows.Forms.Label();
 			label3 = new System.Windows.Forms.Label();
@@ -198,7 +200,7 @@ namespace myJournal.subforms
 			// mnuJournal_Create
 			// 
 			mnuJournal_Create.Name = "mnuJournal_Create";
-			mnuJournal_Create.Size = new System.Drawing.Size(180, 22);
+			mnuJournal_Create.Size = new System.Drawing.Size(160, 22);
 			mnuJournal_Create.Text = "&Create";
 			mnuJournal_Create.Click += this.mnuJournal_Create_Click;
 			// 
@@ -206,7 +208,7 @@ namespace myJournal.subforms
 			// 
 			mnuJournal_Delete.Enabled = false;
 			mnuJournal_Delete.Name = "mnuJournal_Delete";
-			mnuJournal_Delete.Size = new System.Drawing.Size(180, 22);
+			mnuJournal_Delete.Size = new System.Drawing.Size(160, 22);
 			mnuJournal_Delete.Text = "Delete";
 			mnuJournal_Delete.Click += this.mnuJournal_Delete_Click;
 			// 
@@ -214,7 +216,7 @@ namespace myJournal.subforms
 			// 
 			mnuJournal_Search.Enabled = false;
 			mnuJournal_Search.Name = "mnuJournal_Search";
-			mnuJournal_Search.Size = new System.Drawing.Size(180, 22);
+			mnuJournal_Search.Size = new System.Drawing.Size(160, 22);
 			mnuJournal_Search.Text = "&Search";
 			mnuJournal_Search.Click += this.mnuJournal_Search_Click;
 			// 
@@ -222,7 +224,7 @@ namespace myJournal.subforms
 			// 
 			mnuJournal_Rename.Enabled = false;
 			mnuJournal_Rename.Name = "mnuJournal_Rename";
-			mnuJournal_Rename.Size = new System.Drawing.Size(180, 22);
+			mnuJournal_Rename.Size = new System.Drawing.Size(160, 22);
 			mnuJournal_Rename.Text = "Rename";
 			mnuJournal_Rename.Click += this.mnuJournal_Rename_Click;
 			// 
@@ -230,7 +232,7 @@ namespace myJournal.subforms
 			// 
 			mnuJournal_ForceBackup.Enabled = false;
 			mnuJournal_ForceBackup.Name = "mnuJournal_ForceBackup";
-			mnuJournal_ForceBackup.Size = new System.Drawing.Size(180, 22);
+			mnuJournal_ForceBackup.Size = new System.Drawing.Size(160, 22);
 			mnuJournal_ForceBackup.Text = "Force &Backup";
 			mnuJournal_ForceBackup.Visible = false;
 			mnuJournal_ForceBackup.Click += this.mnuJournal_ForceBackup_Click;
@@ -238,7 +240,7 @@ namespace myJournal.subforms
 			// mnuJournal_RestoreBackups
 			// 
 			mnuJournal_RestoreBackups.Name = "mnuJournal_RestoreBackups";
-			mnuJournal_RestoreBackups.Size = new System.Drawing.Size(180, 22);
+			mnuJournal_RestoreBackups.Size = new System.Drawing.Size(160, 22);
 			mnuJournal_RestoreBackups.Text = "&Restore Backups";
 			mnuJournal_RestoreBackups.Visible = false;
 			mnuJournal_RestoreBackups.Click += this.mnuJournal_RestoreBackups_Click;
@@ -246,7 +248,7 @@ namespace myJournal.subforms
 			// mnuJournal_Import
 			// 
 			mnuJournal_Import.Name = "mnuJournal_Import";
-			mnuJournal_Import.Size = new System.Drawing.Size(180, 22);
+			mnuJournal_Import.Size = new System.Drawing.Size(160, 22);
 			mnuJournal_Import.Text = "Import";
 			mnuJournal_Import.Visible = false;
 			mnuJournal_Import.Click += this.mnuJournal_Import_Click;
@@ -254,7 +256,7 @@ namespace myJournal.subforms
 			// mnuJournal_Export
 			// 
 			mnuJournal_Export.Name = "mnuJournal_Export";
-			mnuJournal_Export.Size = new System.Drawing.Size(180, 22);
+			mnuJournal_Export.Size = new System.Drawing.Size(160, 22);
 			mnuJournal_Export.Text = "Synch";
 			mnuJournal_Export.Visible = false;
 			mnuJournal_Export.Click += this.mnuJournal_Export_Click;
@@ -263,7 +265,7 @@ namespace myJournal.subforms
 			// 
 			mnuJournal_Settings.Enabled = false;
 			mnuJournal_Settings.Name = "mnuJournal_Settings";
-			mnuJournal_Settings.Size = new System.Drawing.Size(180, 22);
+			mnuJournal_Settings.Size = new System.Drawing.Size(160, 22);
 			mnuJournal_Settings.Text = "Settings";
 			mnuJournal_Settings.Click += this.mnuJournal_Settings_Click;
 			// 
@@ -396,6 +398,8 @@ namespace myJournal.subforms
 			// 
 			// pnlDateFilters
 			// 
+			pnlDateFilters.Controls.Add(label6);
+			pnlDateFilters.Controls.Add(lblEntriesCount);
 			pnlDateFilters.Controls.Add(cbxSortEntriesBy);
 			pnlDateFilters.Controls.Add(label5);
 			pnlDateFilters.Controls.Add(label3);
@@ -404,9 +408,27 @@ namespace myJournal.subforms
 			pnlDateFilters.Controls.Add(label2);
 			pnlDateFilters.Location = new System.Drawing.Point(260, 58);
 			pnlDateFilters.Name = "pnlDateFilters";
-			pnlDateFilters.Size = new System.Drawing.Size(383, 27);
+			pnlDateFilters.Size = new System.Drawing.Size(489, 27);
 			pnlDateFilters.TabIndex = 49;
 			pnlDateFilters.Visible = false;
+			// 
+			// label6
+			// 
+			label6.AutoSize = true;
+			label6.Location = new System.Drawing.Point(407, 5);
+			label6.Name = "label6";
+			label6.Size = new System.Drawing.Size(77, 15);
+			label6.TabIndex = 53;
+			label6.Text = "entries found";
+			// 
+			// lblEntriesCount
+			// 
+			lblEntriesCount.Location = new System.Drawing.Point(385, 6);
+			lblEntriesCount.Name = "lblEntriesCount";
+			lblEntriesCount.Size = new System.Drawing.Size(25, 15);
+			lblEntriesCount.TabIndex = 41;
+			lblEntriesCount.Text = "0";
+			lblEntriesCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// cbxSortEntriesBy
 			// 
@@ -533,5 +555,7 @@ namespace myJournal.subforms
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.ToolStripMenuItem mnuSwitchAccount;
 		private System.Windows.Forms.ToolStripMenuItem mnuJournal_Settings;
+		private System.Windows.Forms.Label label6;
+		private System.Windows.Forms.Label lblEntriesCount;
 	}
 }

@@ -176,7 +176,7 @@ namespace myJournal
 				string s = je.ClearLabels();
 
 				if (So.labelsArray != null)
-				{ foreach (string group in So.labelsArray) { if (je.ClearLabels().Contains(group)) { foundEntries.Add(je); } } }
+				{ foreach (string label in So.labelsArray) { if (je.ClearLabels().Contains(label)) { foundEntries.Add(je); } } }
 
 				// title and/or text
 				So.searchTitle	= So.chkMatchCase.Checked ? So.searchTitle	: So.searchTitle.ToLower();

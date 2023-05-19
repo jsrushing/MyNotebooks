@@ -20,6 +20,11 @@ namespace myJournal.subforms
 			journalsToSearch.Add(jrnl);
 			LabelsManager.PopulateLabelsList(lstLabelsForSearch);
 			Utilities.SetStartPosition(this, parent);
+			foreach (string jrnlName in Utilities.AllJournalNames())
+			{
+				lstJournalsToSearch.Items.Add(jrnlName);
+				if (jrnlName == jrnl.Name) { lstJournalsToSearch.SetItemChecked(lstJournalsToSearch.Items.Count - 1, true); cbxJournalsToSearch.Text = jrnl.Name; }
+			}
 		}
 
 		private void chkUseDateRange_CheckedChanged(object sender, EventArgs e)
@@ -97,6 +102,7 @@ namespace myJournal.subforms
 
 		private void btnSearch_Click(object sender, EventArgs e)
 		{
+			this.Cursor = Cursors.WaitCursor;
 			var labels = string.Empty;
 			string[] labelsArray;
 
@@ -106,17 +112,50 @@ namespace myJournal.subforms
 
 			labels = labels.Length > 0 ? labels.Substring(0, labels.Length - 1) : string.Empty;
 			labelsArray = labels.Length > 0 ? labels.Split(',') : null;
-
-			foreach (Journal j in journalsToSearch)
+			List<JournalEntry> foundEntries = new List<JournalEntry>();
+			
+			foreach (var s in lstJournalsToSearch.CheckedItems)
 			{
-				SearchObject so = new SearchObject(chkUseDate, chkUseDateRange, chkMatchCase, dtFindDate, 
+				SearchObject so = new SearchObject(chkUseDate, chkUseDateRange, chkMatchCase, dtFindDate,
 					dtFindDate_From, dtFindDate_To, radBtnAnd, txtSearchTitle.Text, txtSearchText.Text, labelsArray);
 
-				List<JournalEntry> foundEntries = j.Search(so);
-				Utilities.PopulateEntries(lstFoundEntries, foundEntries, "", "", false);
+				foundEntries.AddRange(new Journal(s.ToString()).Open().Search(so));
 			}
 
+			Utilities.PopulateEntries(lstFoundEntries, foundEntries, "", "", false);
+
 			if (lstFoundEntries.Items.Count == 0) { lstFoundEntries.Items.Add("no matches found"); }
+			this.Cursor = Cursors.Default;
 		}
+
+		private void cbxJournalsToSearch_Click(object sender, EventArgs e)
+		{
+			if (lstJournalsToSearch.Height == 25)
+			{
+				lstJournalsToSearch.Visible = true;
+				for (int i = 0; i < 110; i++)
+				{
+					lstJournalsToSearch.Height = i;
+				}
+			}
+			else
+			{
+				for (int i = 110; i > 24; i--)
+				{
+					lstJournalsToSearch.Height = i;
+				}
+				lstJournalsToSearch.Visible = false;
+			}
+			txtSearchText.Focus();
+		}
+
+		private void lstJournalsToSearch_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			bool b = !lstJournalsToSearch.CheckedItems.Contains(lstJournalsToSearch.SelectedItem);
+			lstJournalsToSearch.SetItemChecked(lstJournalsToSearch.SelectedIndex, b);
+			cbxJournalsToSearch.Text = lstJournalsToSearch.CheckedItems.Count > 1 ? "(multiple items)" : lstJournalsToSearch.CheckedItems[0].ToString();
+		}
+
+		private void cbxJournalsToSearch_DropDown(object sender, EventArgs e) { cbxJournalsToSearch.DroppedDown = false; }
 	}
 }

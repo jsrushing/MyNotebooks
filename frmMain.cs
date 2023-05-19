@@ -150,10 +150,10 @@ namespace myJournal.subforms
 {
 	public partial class frmMain : Form
 	{
-		Journal			currentJournal;
-		JournalEntry	currentEntry;
-		private bool	firstSelection = true;
-		bool			suppressDateClick = false;
+		Journal currentJournal;
+		JournalEntry currentEntry;
+		private bool firstSelection = true;
+		bool suppressDateClick = false;
 
 		private enum SelectionState
 		{
@@ -186,12 +186,12 @@ namespace myJournal.subforms
 				if (this.Text.ToLower().Contains("debug"))
 				{
 					StringBuilder title = new StringBuilder();
-					title.Append(" synchd: "	+ cs.JournalsSynchd.ToString());
-					title.Append(" skipped: "	+ cs.JournalsSkipped.ToString());
+					title.Append(" synchd: " + cs.JournalsSynchd.ToString());
+					title.Append(" skipped: " + cs.JournalsSkipped.ToString());
 					title.Append(" downloaded:" + cs.JournalsDownloaded.ToString());
-					title.Append(" backed up:"	+ cs.JournalsBackedUp.ToString());
-					title.Append(" deleted:"	+ cs.JournalsDeleted.ToString());
-					this.Text					+= title.ToString();
+					title.Append(" backed up:" + cs.JournalsBackedUp.ToString());
+					title.Append(" deleted:" + cs.JournalsDeleted.ToString());
+					this.Text += title.ToString();
 				}
 			}
 
@@ -507,11 +507,11 @@ namespace myJournal.subforms
 					Journal j = new Journal(frm.NewJournalName);
 					j.Settings = new JournalSettings();
 					// Apply settings from choices on frmNewJournal (add to this section as new settings are added) ...
-					j.Settings.AllowCloud			= frm.AllowCloud;
-					j.Settings.IfCloudOnly_Delete	= frm.IfCloudOnly_Delete;
+					j.Settings.AllowCloud = frm.AllowCloud;
+					j.Settings.IfCloudOnly_Delete = frm.IfCloudOnly_Delete;
 					j.Settings.IfCloudOnly_Download = frm.IfCloudOnly_Download;
-					j.Settings.IfLocalOnly_Upload	= frm.IfLocalOnly_Upload;
-					j.Settings.IfLocalOnly_Delete	= frm.IfLocalOnly_Delete;
+					j.Settings.IfLocalOnly_Upload = frm.IfLocalOnly_Upload;
+					j.Settings.IfLocalOnly_Delete = frm.IfLocalOnly_Delete;
 					j.Settings.IfLocalOnly_DisallowCloud = frm.IfLocalOnly_DisallowCloud;
 					// ........................................................................
 					j.LastSaved = DateTime.Now;
@@ -736,6 +736,7 @@ namespace myJournal.subforms
 				{
 					JournalEntry.Select(rtbSelectedEntry, lstEntries, null, true, currentEntry);
 				}
+				lblEntriesCount.Text = (lstEntries.Items.Count / 4).ToString();
 			}
 		}
 
@@ -793,6 +794,7 @@ namespace myJournal.subforms
 				txtJournalPIN.Text = string.Empty;
 				pnlDateFilters.Visible = true;
 				SetDisplayText();
+				//lblEntriesCount.Text = lstEntries.Items.Count.ToString();
 			}
 			else if (st == SelectionState.EntrySelected)
 			{
