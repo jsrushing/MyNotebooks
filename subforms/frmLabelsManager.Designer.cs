@@ -29,516 +29,499 @@ namespace myJournal.subforms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.pnlMain = new System.Windows.Forms.Panel();
-			this.pnlNewLabelName = new System.Windows.Forms.Panel();
-			this.btnOK = new System.Windows.Forms.Button();
-			this.lblLabelExists = new System.Windows.Forms.Label();
-			this.btnCancel = new System.Windows.Forms.Button();
-			this.lblOperation = new System.Windows.Forms.Label();
-			this.txtLabelName = new System.Windows.Forms.TextBox();
-			this.label5 = new System.Windows.Forms.Label();
-			this.lblSortType = new System.Windows.Forms.Label();
-			this.lstLabels = new System.Windows.Forms.ListBox();
-			this.label3 = new System.Windows.Forms.Label();
-			this.lstOccurrences = new System.Windows.Forms.ListBox();
-			this.label1 = new System.Windows.Forms.Label();
-			this.mnuMain = new System.Windows.Forms.MenuStrip();
-			this.mnuLabelsOperations = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuAdd = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuRename = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuRename_InCurrentJournal = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuRename_InAllJournals = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuDelete = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuDelete_InCurrentJournal = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuDelete_InAllJournals = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuFindOrphans = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuMoveTop = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuMoveUp = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuMoveDown = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuAssignPINs = new System.Windows.Forms.ToolStripMenuItem();
-			this.mnuExit = new System.Windows.Forms.ToolStripMenuItem();
-			this.pnlJournalPINs = new System.Windows.Forms.Panel();
-			this.lblShowPIN = new System.Windows.Forms.Label();
-			this.label2 = new System.Windows.Forms.Label();
-			this.btnPINsOK = new System.Windows.Forms.Button();
-			this.btnAddPIN = new System.Windows.Forms.Button();
-			this.txtPIN = new System.Windows.Forms.TextBox();
-			this.lblEnterPIN = new System.Windows.Forms.Label();
-			this.lstJournalPINs = new System.Windows.Forms.ListBox();
-			this.lstEntryObjects = new System.Windows.Forms.ListBox();
-			this.pnlOrphanedLabels = new System.Windows.Forms.Panel();
-			this.btnExitOrphans = new System.Windows.Forms.Button();
-			this.chkSelectAllOrphans = new System.Windows.Forms.CheckBox();
-			this.btnRemoveSelectedOrphans = new System.Windows.Forms.Button();
-			this.lstOrphanedLabels = new System.Windows.Forms.ListBox();
-			this.label4 = new System.Windows.Forms.Label();
-			this.pnlMain.SuspendLayout();
-			this.pnlNewLabelName.SuspendLayout();
-			this.mnuMain.SuspendLayout();
-			this.pnlJournalPINs.SuspendLayout();
-			this.pnlOrphanedLabels.SuspendLayout();
+			pnlMain = new System.Windows.Forms.Panel();
+			pnlNewLabelName = new System.Windows.Forms.Panel();
+			btnOK = new System.Windows.Forms.Button();
+			lblLabelExists = new System.Windows.Forms.Label();
+			btnCancel = new System.Windows.Forms.Button();
+			lblOperation = new System.Windows.Forms.Label();
+			txtLabelName = new System.Windows.Forms.TextBox();
+			label5 = new System.Windows.Forms.Label();
+			lblSortType = new System.Windows.Forms.Label();
+			lstLabels = new System.Windows.Forms.ListBox();
+			label3 = new System.Windows.Forms.Label();
+			lstOccurrences = new System.Windows.Forms.ListBox();
+			label1 = new System.Windows.Forms.Label();
+			mnuMain = new System.Windows.Forms.MenuStrip();
+			mnuLabelsOperations = new System.Windows.Forms.ToolStripMenuItem();
+			mnuAdd = new System.Windows.Forms.ToolStripMenuItem();
+			mnuRename = new System.Windows.Forms.ToolStripMenuItem();
+			mnuRename_InCurrentJournal = new System.Windows.Forms.ToolStripMenuItem();
+			mnuRename_InAllJournals = new System.Windows.Forms.ToolStripMenuItem();
+			mnuDelete = new System.Windows.Forms.ToolStripMenuItem();
+			mnuDelete_InCurrentJournal = new System.Windows.Forms.ToolStripMenuItem();
+			mnuDelete_InAllJournals = new System.Windows.Forms.ToolStripMenuItem();
+			mnuFindOrphans = new System.Windows.Forms.ToolStripMenuItem();
+			mnuMoveTop = new System.Windows.Forms.ToolStripMenuItem();
+			mnuMoveUp = new System.Windows.Forms.ToolStripMenuItem();
+			mnuMoveDown = new System.Windows.Forms.ToolStripMenuItem();
+			mnuAssignPINs = new System.Windows.Forms.ToolStripMenuItem();
+			mnuExit = new System.Windows.Forms.ToolStripMenuItem();
+			pnlJournalPINs = new System.Windows.Forms.Panel();
+			lblShowPIN = new System.Windows.Forms.Label();
+			label2 = new System.Windows.Forms.Label();
+			btnPINsOK = new System.Windows.Forms.Button();
+			btnAddPIN = new System.Windows.Forms.Button();
+			txtPIN = new System.Windows.Forms.TextBox();
+			lblEnterPIN = new System.Windows.Forms.Label();
+			lstJournalPINs = new System.Windows.Forms.ListBox();
+			lstEntryObjects = new System.Windows.Forms.ListBox();
+			pnlOrphanedLabels = new System.Windows.Forms.Panel();
+			btnExitOrphans = new System.Windows.Forms.Button();
+			chkSelectAllOrphans = new System.Windows.Forms.CheckBox();
+			btnRemoveSelectedOrphans = new System.Windows.Forms.Button();
+			lstOrphanedLabels = new System.Windows.Forms.ListBox();
+			label4 = new System.Windows.Forms.Label();
+			pnlMain.SuspendLayout();
+			pnlNewLabelName.SuspendLayout();
+			mnuMain.SuspendLayout();
+			pnlJournalPINs.SuspendLayout();
+			pnlOrphanedLabels.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// pnlMain
 			// 
-			this.pnlMain.Controls.Add(this.pnlNewLabelName);
-			this.pnlMain.Controls.Add(this.lblSortType);
-			this.pnlMain.Controls.Add(this.lstLabels);
-			this.pnlMain.Controls.Add(this.label3);
-			this.pnlMain.Controls.Add(this.lstOccurrences);
-			this.pnlMain.Controls.Add(this.label1);
-			this.pnlMain.Location = new System.Drawing.Point(16, 25);
-			this.pnlMain.Name = "pnlMain";
-			this.pnlMain.Size = new System.Drawing.Size(382, 518);
-			this.pnlMain.TabIndex = 0;
+			pnlMain.Controls.Add(pnlNewLabelName);
+			pnlMain.Controls.Add(lblSortType);
+			pnlMain.Controls.Add(lstLabels);
+			pnlMain.Controls.Add(label3);
+			pnlMain.Controls.Add(lstOccurrences);
+			pnlMain.Controls.Add(label1);
+			pnlMain.Location = new System.Drawing.Point(16, 25);
+			pnlMain.Name = "pnlMain";
+			pnlMain.Size = new System.Drawing.Size(382, 518);
+			pnlMain.TabIndex = 0;
 			// 
 			// pnlNewLabelName
 			// 
-			this.pnlNewLabelName.BackColor = System.Drawing.SystemColors.ActiveCaption;
-			this.pnlNewLabelName.Controls.Add(this.btnOK);
-			this.pnlNewLabelName.Controls.Add(this.lblLabelExists);
-			this.pnlNewLabelName.Controls.Add(this.btnCancel);
-			this.pnlNewLabelName.Controls.Add(this.lblOperation);
-			this.pnlNewLabelName.Controls.Add(this.txtLabelName);
-			this.pnlNewLabelName.Controls.Add(this.label5);
-			this.pnlNewLabelName.Location = new System.Drawing.Point(18, 56);
-			this.pnlNewLabelName.Name = "pnlNewLabelName";
-			this.pnlNewLabelName.Size = new System.Drawing.Size(293, 110);
-			this.pnlNewLabelName.TabIndex = 2;
-			this.pnlNewLabelName.Visible = false;
+			pnlNewLabelName.BackColor = System.Drawing.SystemColors.ActiveCaption;
+			pnlNewLabelName.Controls.Add(btnOK);
+			pnlNewLabelName.Controls.Add(lblLabelExists);
+			pnlNewLabelName.Controls.Add(btnCancel);
+			pnlNewLabelName.Controls.Add(lblOperation);
+			pnlNewLabelName.Controls.Add(txtLabelName);
+			pnlNewLabelName.Controls.Add(label5);
+			pnlNewLabelName.Location = new System.Drawing.Point(18, 56);
+			pnlNewLabelName.Name = "pnlNewLabelName";
+			pnlNewLabelName.Size = new System.Drawing.Size(293, 110);
+			pnlNewLabelName.TabIndex = 2;
+			pnlNewLabelName.Visible = false;
 			// 
 			// btnOK
 			// 
-			this.btnOK.Location = new System.Drawing.Point(56, 71);
-			this.btnOK.Name = "btnOK";
-			this.btnOK.Size = new System.Drawing.Size(75, 23);
-			this.btnOK.TabIndex = 2;
-			this.btnOK.Text = "&Ok";
-			this.btnOK.UseVisualStyleBackColor = true;
-			this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
+			btnOK.Location = new System.Drawing.Point(56, 71);
+			btnOK.Name = "btnOK";
+			btnOK.Size = new System.Drawing.Size(75, 23);
+			btnOK.TabIndex = 2;
+			btnOK.Text = "&Ok";
+			btnOK.UseVisualStyleBackColor = true;
+			btnOK.Click += this.btnOK_Click;
 			// 
 			// lblLabelExists
 			// 
-			this.lblLabelExists.AutoSize = true;
-			this.lblLabelExists.BackColor = System.Drawing.SystemColors.ButtonFace;
-			this.lblLabelExists.ForeColor = System.Drawing.Color.Red;
-			this.lblLabelExists.Location = new System.Drawing.Point(40, 75);
-			this.lblLabelExists.Name = "lblLabelExists";
-			this.lblLabelExists.Size = new System.Drawing.Size(111, 15);
-			this.lblLabelExists.TabIndex = 4;
-			this.lblLabelExists.Text = "Label already exists.";
-			this.lblLabelExists.Visible = false;
+			lblLabelExists.AutoSize = true;
+			lblLabelExists.BackColor = System.Drawing.SystemColors.ButtonFace;
+			lblLabelExists.ForeColor = System.Drawing.Color.Red;
+			lblLabelExists.Location = new System.Drawing.Point(40, 75);
+			lblLabelExists.Name = "lblLabelExists";
+			lblLabelExists.Size = new System.Drawing.Size(111, 15);
+			lblLabelExists.TabIndex = 4;
+			lblLabelExists.Text = "Label already exists.";
+			lblLabelExists.Visible = false;
 			// 
 			// btnCancel
 			// 
-			this.btnCancel.Location = new System.Drawing.Point(163, 71);
-			this.btnCancel.Name = "btnCancel";
-			this.btnCancel.Size = new System.Drawing.Size(75, 23);
-			this.btnCancel.TabIndex = 3;
-			this.btnCancel.Text = "&Cancel";
-			this.btnCancel.UseVisualStyleBackColor = true;
-			this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+			btnCancel.Location = new System.Drawing.Point(163, 71);
+			btnCancel.Name = "btnCancel";
+			btnCancel.Size = new System.Drawing.Size(75, 23);
+			btnCancel.TabIndex = 3;
+			btnCancel.Text = "&Cancel";
+			btnCancel.UseVisualStyleBackColor = true;
+			btnCancel.Click += this.btnCancel_Click;
 			// 
 			// lblOperation
 			// 
-			this.lblOperation.AutoSize = true;
-			this.lblOperation.BackColor = System.Drawing.SystemColors.ButtonFace;
-			this.lblOperation.Location = new System.Drawing.Point(26, 15);
-			this.lblOperation.Name = "lblOperation";
-			this.lblOperation.Size = new System.Drawing.Size(100, 15);
-			this.lblOperation.TabIndex = 1;
-			this.lblOperation.Text = "New Label Name:";
-			this.lblOperation.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			lblOperation.AutoSize = true;
+			lblOperation.BackColor = System.Drawing.SystemColors.ButtonFace;
+			lblOperation.Location = new System.Drawing.Point(26, 15);
+			lblOperation.Name = "lblOperation";
+			lblOperation.Size = new System.Drawing.Size(100, 15);
+			lblOperation.TabIndex = 1;
+			lblOperation.Text = "New Label Name:";
+			lblOperation.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// txtLabelName
 			// 
-			this.txtLabelName.Location = new System.Drawing.Point(26, 34);
-			this.txtLabelName.Name = "txtLabelName";
-			this.txtLabelName.Size = new System.Drawing.Size(249, 23);
-			this.txtLabelName.TabIndex = 0;
-			this.txtLabelName.TextChanged += new System.EventHandler(this.txtLabelName_TextChanged);
+			txtLabelName.Location = new System.Drawing.Point(26, 34);
+			txtLabelName.Name = "txtLabelName";
+			txtLabelName.Size = new System.Drawing.Size(249, 23);
+			txtLabelName.TabIndex = 0;
+			txtLabelName.TextChanged += this.txtLabelName_TextChanged;
 			// 
 			// label5
 			// 
-			this.label5.BackColor = System.Drawing.SystemColors.ButtonFace;
-			this.label5.Location = new System.Drawing.Point(11, 7);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(272, 93);
-			this.label5.TabIndex = 5;
+			label5.BackColor = System.Drawing.SystemColors.ButtonFace;
+			label5.Location = new System.Drawing.Point(11, 7);
+			label5.Name = "label5";
+			label5.Size = new System.Drawing.Size(272, 93);
+			label5.TabIndex = 5;
 			// 
 			// lblSortType
 			// 
-			this.lblSortType.AutoSize = true;
-			this.lblSortType.Cursor = System.Windows.Forms.Cursors.Hand;
-			this.lblSortType.Font = new System.Drawing.Font("Segoe UI", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point);
-			this.lblSortType.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			this.lblSortType.Location = new System.Drawing.Point(234, 4);
-			this.lblSortType.Name = "lblSortType";
-			this.lblSortType.Size = new System.Drawing.Size(59, 17);
-			this.lblSortType.TabIndex = 5;
-			this.lblSortType.Text = "Sort A-Z";
-			this.lblSortType.Click += new System.EventHandler(this.lblSortType_Click);
+			lblSortType.AutoSize = true;
+			lblSortType.Cursor = System.Windows.Forms.Cursors.Hand;
+			lblSortType.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+			lblSortType.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			lblSortType.Location = new System.Drawing.Point(234, 4);
+			lblSortType.Name = "lblSortType";
+			lblSortType.Size = new System.Drawing.Size(59, 17);
+			lblSortType.TabIndex = 5;
+			lblSortType.Text = "Sort A-Z";
+			lblSortType.Click += this.lblSortType_Click;
 			// 
 			// lstLabels
 			// 
-			this.lstLabels.FormattingEnabled = true;
-			this.lstLabels.IntegralHeight = false;
-			this.lstLabels.ItemHeight = 15;
-			this.lstLabels.Location = new System.Drawing.Point(9, 23);
-			this.lstLabels.Name = "lstLabels";
-			this.lstLabels.Size = new System.Drawing.Size(348, 184);
-			this.lstLabels.TabIndex = 0;
-			this.lstLabels.SelectedIndexChanged += new System.EventHandler(this.lstLabels_SelectedIndexChanged);
+			lstLabels.FormattingEnabled = true;
+			lstLabels.IntegralHeight = false;
+			lstLabels.ItemHeight = 15;
+			lstLabels.Location = new System.Drawing.Point(9, 23);
+			lstLabels.Name = "lstLabels";
+			lstLabels.Size = new System.Drawing.Size(348, 184);
+			lstLabels.TabIndex = 0;
+			lstLabels.SelectedIndexChanged += this.lstLabels_SelectedIndexChanged;
 			// 
 			// label3
 			// 
-			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(9, 210);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(173, 15);
-			this.label3.TabIndex = 4;
-			this.label3.Text = "Found Entries (dbl-click to edit)";
+			label3.AutoSize = true;
+			label3.Location = new System.Drawing.Point(9, 210);
+			label3.Name = "label3";
+			label3.Size = new System.Drawing.Size(173, 15);
+			label3.TabIndex = 4;
+			label3.Text = "Found Entries (dbl-click to edit)";
 			// 
 			// lstOccurrences
 			// 
-			this.lstOccurrences.FormattingEnabled = true;
-			this.lstOccurrences.IntegralHeight = false;
-			this.lstOccurrences.ItemHeight = 15;
-			this.lstOccurrences.Location = new System.Drawing.Point(9, 227);
-			this.lstOccurrences.Name = "lstOccurrences";
-			this.lstOccurrences.Size = new System.Drawing.Size(348, 266);
-			this.lstOccurrences.TabIndex = 3;
-			this.lstOccurrences.DoubleClick += new System.EventHandler(this.lstOccurrences_DoubleClick);
+			lstOccurrences.FormattingEnabled = true;
+			lstOccurrences.IntegralHeight = false;
+			lstOccurrences.ItemHeight = 15;
+			lstOccurrences.Location = new System.Drawing.Point(9, 227);
+			lstOccurrences.Name = "lstOccurrences";
+			lstOccurrences.Size = new System.Drawing.Size(348, 266);
+			lstOccurrences.TabIndex = 3;
+			lstOccurrences.DoubleClick += this.lstOccurrences_DoubleClick;
 			// 
 			// label1
 			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(4, 6);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(176, 15);
-			this.label1.TabIndex = 1;
-			this.label1.Text = "Labels (click to see occurrences)";
+			label1.AutoSize = true;
+			label1.Location = new System.Drawing.Point(4, 6);
+			label1.Name = "label1";
+			label1.Size = new System.Drawing.Size(176, 15);
+			label1.TabIndex = 1;
+			label1.Text = "Labels (click to see occurrences)";
 			// 
 			// mnuMain
 			// 
-			this.mnuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuLabelsOperations,
-            this.mnuMoveTop,
-            this.mnuAssignPINs,
-            this.mnuExit});
-			this.mnuMain.Location = new System.Drawing.Point(0, 0);
-			this.mnuMain.Name = "mnuMain";
-			this.mnuMain.Size = new System.Drawing.Size(1314, 24);
-			this.mnuMain.TabIndex = 1;
-			this.mnuMain.Text = "menuStrip1";
+			mnuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuLabelsOperations, mnuMoveTop, mnuAssignPINs, mnuExit });
+			mnuMain.Location = new System.Drawing.Point(0, 0);
+			mnuMain.Name = "mnuMain";
+			mnuMain.Size = new System.Drawing.Size(1314, 24);
+			mnuMain.TabIndex = 1;
+			mnuMain.Text = "menuStrip1";
 			// 
 			// mnuLabelsOperations
 			// 
-			this.mnuLabelsOperations.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuAdd,
-            this.mnuRename,
-            this.mnuDelete,
-            this.mnuFindOrphans});
-			this.mnuLabelsOperations.Name = "mnuLabelsOperations";
-			this.mnuLabelsOperations.Size = new System.Drawing.Size(52, 20);
-			this.mnuLabelsOperations.Text = "Labels";
+			mnuLabelsOperations.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuAdd, mnuRename, mnuDelete, mnuFindOrphans });
+			mnuLabelsOperations.Name = "mnuLabelsOperations";
+			mnuLabelsOperations.Size = new System.Drawing.Size(52, 20);
+			mnuLabelsOperations.Text = "Labels";
 			// 
 			// mnuAdd
 			// 
-			this.mnuAdd.Name = "mnuAdd";
-			this.mnuAdd.Size = new System.Drawing.Size(180, 22);
-			this.mnuAdd.Text = "&Add";
-			this.mnuAdd.Click += new System.EventHandler(this.mnuAdd_Click);
+			mnuAdd.Name = "mnuAdd";
+			mnuAdd.Size = new System.Drawing.Size(145, 22);
+			mnuAdd.Text = "&Add";
+			mnuAdd.Click += this.mnuAdd_Click;
 			// 
 			// mnuRename
 			// 
-			this.mnuRename.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuRename_InCurrentJournal,
-            this.mnuRename_InAllJournals});
-			this.mnuRename.Name = "mnuRename";
-			this.mnuRename.Size = new System.Drawing.Size(180, 22);
-			this.mnuRename.Text = "&Rename";
-			this.mnuRename.Click += new System.EventHandler(this.mnuRename_Click);
+			mnuRename.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuRename_InCurrentJournal, mnuRename_InAllJournals });
+			mnuRename.Name = "mnuRename";
+			mnuRename.Size = new System.Drawing.Size(145, 22);
+			mnuRename.Text = "&Rename";
+			mnuRename.Click += this.mnuRename_Click;
 			// 
 			// mnuRename_InCurrentJournal
 			// 
-			this.mnuRename_InCurrentJournal.Name = "mnuRename_InCurrentJournal";
-			this.mnuRename_InCurrentJournal.Size = new System.Drawing.Size(180, 22);
-			this.mnuRename_InCurrentJournal.Text = "In Current Journal";
-			this.mnuRename_InCurrentJournal.Click += new System.EventHandler(this.mnuRename_Click);
+			mnuRename_InCurrentJournal.Name = "mnuRename_InCurrentJournal";
+			mnuRename_InCurrentJournal.Size = new System.Drawing.Size(168, 22);
+			mnuRename_InCurrentJournal.Text = "In Current Journal";
+			mnuRename_InCurrentJournal.Click += this.mnuRename_Click;
 			// 
 			// mnuRename_InAllJournals
 			// 
-			this.mnuRename_InAllJournals.Name = "mnuRename_InAllJournals";
-			this.mnuRename_InAllJournals.Size = new System.Drawing.Size(180, 22);
-			this.mnuRename_InAllJournals.Text = "In All Journals";
-			this.mnuRename_InAllJournals.Click += new System.EventHandler(this.mnuRename_Click);
+			mnuRename_InAllJournals.Name = "mnuRename_InAllJournals";
+			mnuRename_InAllJournals.Size = new System.Drawing.Size(168, 22);
+			mnuRename_InAllJournals.Text = "In All Journals";
+			mnuRename_InAllJournals.Click += this.mnuRename_Click;
 			// 
 			// mnuDelete
 			// 
-			this.mnuDelete.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuDelete_InCurrentJournal,
-            this.mnuDelete_InAllJournals});
-			this.mnuDelete.Name = "mnuDelete";
-			this.mnuDelete.Size = new System.Drawing.Size(180, 22);
-			this.mnuDelete.Text = "&Delete";
-			this.mnuDelete.Click += new System.EventHandler(this.mnuDelete_Click);
+			mnuDelete.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuDelete_InCurrentJournal, mnuDelete_InAllJournals });
+			mnuDelete.Name = "mnuDelete";
+			mnuDelete.Size = new System.Drawing.Size(145, 22);
+			mnuDelete.Text = "&Delete";
+			mnuDelete.Click += this.mnuDelete_Click;
 			// 
 			// mnuDelete_InCurrentJournal
 			// 
-			this.mnuDelete_InCurrentJournal.Name = "mnuDelete_InCurrentJournal";
-			this.mnuDelete_InCurrentJournal.Size = new System.Drawing.Size(168, 22);
-			this.mnuDelete_InCurrentJournal.Text = "In Current Journal";
-			this.mnuDelete_InCurrentJournal.Click += new System.EventHandler(this.mnuDelete_Click);
+			mnuDelete_InCurrentJournal.Name = "mnuDelete_InCurrentJournal";
+			mnuDelete_InCurrentJournal.Size = new System.Drawing.Size(168, 22);
+			mnuDelete_InCurrentJournal.Text = "In Current Journal";
+			mnuDelete_InCurrentJournal.Click += this.mnuDelete_Click;
 			// 
 			// mnuDelete_InAllJournals
 			// 
-			this.mnuDelete_InAllJournals.Name = "mnuDelete_InAllJournals";
-			this.mnuDelete_InAllJournals.Size = new System.Drawing.Size(168, 22);
-			this.mnuDelete_InAllJournals.Text = "In All Journals";
-			this.mnuDelete_InAllJournals.Click += new System.EventHandler(this.mnuDelete_Click);
+			mnuDelete_InAllJournals.Name = "mnuDelete_InAllJournals";
+			mnuDelete_InAllJournals.Size = new System.Drawing.Size(168, 22);
+			mnuDelete_InAllJournals.Text = "In All Journals";
+			mnuDelete_InAllJournals.Click += this.mnuDelete_Click;
 			// 
 			// mnuFindOrphans
 			// 
-			this.mnuFindOrphans.Name = "mnuFindOrphans";
-			this.mnuFindOrphans.Size = new System.Drawing.Size(180, 22);
-			this.mnuFindOrphans.Text = "Find &Orphans";
-			this.mnuFindOrphans.Click += new System.EventHandler(this.mnuFindOrphans_Click);
+			mnuFindOrphans.Name = "mnuFindOrphans";
+			mnuFindOrphans.Size = new System.Drawing.Size(145, 22);
+			mnuFindOrphans.Text = "Find &Orphans";
+			mnuFindOrphans.Click += this.mnuFindOrphans_Click;
 			// 
 			// mnuMoveTop
 			// 
-			this.mnuMoveTop.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuMoveUp,
-            this.mnuMoveDown});
-			this.mnuMoveTop.Enabled = false;
-			this.mnuMoveTop.Name = "mnuMoveTop";
-			this.mnuMoveTop.Size = new System.Drawing.Size(49, 20);
-			this.mnuMoveTop.Text = "&Move";
+			mnuMoveTop.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuMoveUp, mnuMoveDown });
+			mnuMoveTop.Enabled = false;
+			mnuMoveTop.Name = "mnuMoveTop";
+			mnuMoveTop.Size = new System.Drawing.Size(49, 20);
+			mnuMoveTop.Text = "&Move";
 			// 
 			// mnuMoveUp
 			// 
-			this.mnuMoveUp.Name = "mnuMoveUp";
-			this.mnuMoveUp.Size = new System.Drawing.Size(105, 22);
-			this.mnuMoveUp.Text = "&Up";
-			this.mnuMoveUp.Click += new System.EventHandler(this.mnuMoveUp_Click);
+			mnuMoveUp.Name = "mnuMoveUp";
+			mnuMoveUp.Size = new System.Drawing.Size(105, 22);
+			mnuMoveUp.Text = "&Up";
+			mnuMoveUp.Click += this.mnuMoveUp_Click;
 			// 
 			// mnuMoveDown
 			// 
-			this.mnuMoveDown.Name = "mnuMoveDown";
-			this.mnuMoveDown.Size = new System.Drawing.Size(105, 22);
-			this.mnuMoveDown.Text = "D&own";
-			this.mnuMoveDown.Click += new System.EventHandler(this.mnuMoveDown_Click);
+			mnuMoveDown.Name = "mnuMoveDown";
+			mnuMoveDown.Size = new System.Drawing.Size(105, 22);
+			mnuMoveDown.Text = "D&own";
+			mnuMoveDown.Click += this.mnuMoveDown_Click;
 			// 
 			// mnuAssignPINs
 			// 
-			this.mnuAssignPINs.Name = "mnuAssignPINs";
-			this.mnuAssignPINs.Size = new System.Drawing.Size(43, 20);
-			this.mnuAssignPINs.Text = "PINs";
-			this.mnuAssignPINs.Click += new System.EventHandler(this.mnuAssignPINs_Click);
+			mnuAssignPINs.Name = "mnuAssignPINs";
+			mnuAssignPINs.Size = new System.Drawing.Size(43, 20);
+			mnuAssignPINs.Text = "PINs";
+			mnuAssignPINs.Click += this.mnuAssignPINs_Click;
 			// 
 			// mnuExit
 			// 
-			this.mnuExit.Name = "mnuExit";
-			this.mnuExit.Size = new System.Drawing.Size(38, 20);
-			this.mnuExit.Text = "E&xit";
-			this.mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
+			mnuExit.Name = "mnuExit";
+			mnuExit.Size = new System.Drawing.Size(38, 20);
+			mnuExit.Text = "E&xit";
+			mnuExit.Click += this.mnuExit_Click;
 			// 
 			// pnlJournalPINs
 			// 
-			this.pnlJournalPINs.Controls.Add(this.lblShowPIN);
-			this.pnlJournalPINs.Controls.Add(this.label2);
-			this.pnlJournalPINs.Controls.Add(this.btnPINsOK);
-			this.pnlJournalPINs.Controls.Add(this.btnAddPIN);
-			this.pnlJournalPINs.Controls.Add(this.txtPIN);
-			this.pnlJournalPINs.Controls.Add(this.lblEnterPIN);
-			this.pnlJournalPINs.Controls.Add(this.lstJournalPINs);
-			this.pnlJournalPINs.Location = new System.Drawing.Point(413, 0);
-			this.pnlJournalPINs.Name = "pnlJournalPINs";
-			this.pnlJournalPINs.Size = new System.Drawing.Size(382, 518);
-			this.pnlJournalPINs.TabIndex = 2;
-			this.pnlJournalPINs.Visible = false;
+			pnlJournalPINs.Controls.Add(lblShowPIN);
+			pnlJournalPINs.Controls.Add(label2);
+			pnlJournalPINs.Controls.Add(btnPINsOK);
+			pnlJournalPINs.Controls.Add(btnAddPIN);
+			pnlJournalPINs.Controls.Add(txtPIN);
+			pnlJournalPINs.Controls.Add(lblEnterPIN);
+			pnlJournalPINs.Controls.Add(lstJournalPINs);
+			pnlJournalPINs.Location = new System.Drawing.Point(413, 0);
+			pnlJournalPINs.Name = "pnlJournalPINs";
+			pnlJournalPINs.Size = new System.Drawing.Size(382, 518);
+			pnlJournalPINs.TabIndex = 2;
+			pnlJournalPINs.Visible = false;
 			// 
 			// lblShowPIN
 			// 
-			this.lblShowPIN.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
-			this.lblShowPIN.Location = new System.Drawing.Point(168, 50);
-			this.lblShowPIN.Name = "lblShowPIN";
-			this.lblShowPIN.Size = new System.Drawing.Size(35, 13);
-			this.lblShowPIN.TabIndex = 41;
-			this.lblShowPIN.Text = "show";
-			this.lblShowPIN.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			this.lblShowPIN.Visible = false;
-			this.lblShowPIN.Click += new System.EventHandler(this.lblShowPIN_Click);
+			lblShowPIN.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+			lblShowPIN.Location = new System.Drawing.Point(168, 50);
+			lblShowPIN.Name = "lblShowPIN";
+			lblShowPIN.Size = new System.Drawing.Size(35, 13);
+			lblShowPIN.TabIndex = 41;
+			lblShowPIN.Text = "show";
+			lblShowPIN.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			lblShowPIN.Visible = false;
+			lblShowPIN.Click += this.lblShowPIN_Click;
 			// 
 			// label2
 			// 
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(72, 31);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(26, 15);
-			this.label2.TabIndex = 6;
-			this.label2.Text = "PIN";
+			label2.AutoSize = true;
+			label2.Location = new System.Drawing.Point(72, 31);
+			label2.Name = "label2";
+			label2.Size = new System.Drawing.Size(26, 15);
+			label2.TabIndex = 6;
+			label2.Text = "PIN";
 			// 
 			// btnPINsOK
 			// 
-			this.btnPINsOK.Location = new System.Drawing.Point(132, 447);
-			this.btnPINsOK.Name = "btnPINsOK";
-			this.btnPINsOK.Size = new System.Drawing.Size(120, 23);
-			this.btnPINsOK.TabIndex = 5;
-			this.btnPINsOK.Text = "Done";
-			this.btnPINsOK.UseVisualStyleBackColor = true;
-			this.btnPINsOK.Click += new System.EventHandler(this.btnPINsOK_Click);
+			btnPINsOK.Location = new System.Drawing.Point(132, 447);
+			btnPINsOK.Name = "btnPINsOK";
+			btnPINsOK.Size = new System.Drawing.Size(120, 23);
+			btnPINsOK.TabIndex = 5;
+			btnPINsOK.Text = "Done";
+			btnPINsOK.UseVisualStyleBackColor = true;
+			btnPINsOK.Click += this.btnPINsOK_Click;
 			// 
 			// btnAddPIN
 			// 
-			this.btnAddPIN.Enabled = false;
-			this.btnAddPIN.Location = new System.Drawing.Point(210, 26);
-			this.btnAddPIN.Name = "btnAddPIN";
-			this.btnAddPIN.Size = new System.Drawing.Size(66, 23);
-			this.btnAddPIN.TabIndex = 4;
-			this.btnAddPIN.Text = "Add PIN";
-			this.btnAddPIN.UseVisualStyleBackColor = true;
-			this.btnAddPIN.Click += new System.EventHandler(this.btnAddPIN_Click);
+			btnAddPIN.Enabled = false;
+			btnAddPIN.Location = new System.Drawing.Point(210, 26);
+			btnAddPIN.Name = "btnAddPIN";
+			btnAddPIN.Size = new System.Drawing.Size(66, 23);
+			btnAddPIN.TabIndex = 4;
+			btnAddPIN.Text = "Add PIN";
+			btnAddPIN.UseVisualStyleBackColor = true;
+			btnAddPIN.Click += this.btnAddPIN_Click;
 			// 
 			// txtPIN
 			// 
-			this.txtPIN.Enabled = false;
-			this.txtPIN.Location = new System.Drawing.Point(103, 26);
-			this.txtPIN.Name = "txtPIN";
-			this.txtPIN.Size = new System.Drawing.Size(100, 23);
-			this.txtPIN.TabIndex = 3;
-			this.txtPIN.Text = "(select a Journal)";
-			this.txtPIN.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtPIN_KeyUp);
+			txtPIN.Enabled = false;
+			txtPIN.Location = new System.Drawing.Point(103, 26);
+			txtPIN.Name = "txtPIN";
+			txtPIN.Size = new System.Drawing.Size(100, 23);
+			txtPIN.TabIndex = 3;
+			txtPIN.Text = "(select a Journal)";
+			txtPIN.KeyUp += this.txtPIN_KeyUp;
 			// 
 			// lblEnterPIN
 			// 
-			this.lblEnterPIN.Location = new System.Drawing.Point(2, 2);
-			this.lblEnterPIN.Name = "lblEnterPIN";
-			this.lblEnterPIN.Size = new System.Drawing.Size(331, 16);
-			this.lblEnterPIN.TabIndex = 2;
-			this.lblEnterPIN.Text = "Specify a PIN for all protected Journals you wish to work with.";
-			this.lblEnterPIN.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			lblEnterPIN.Location = new System.Drawing.Point(2, 2);
+			lblEnterPIN.Name = "lblEnterPIN";
+			lblEnterPIN.Size = new System.Drawing.Size(331, 16);
+			lblEnterPIN.TabIndex = 2;
+			lblEnterPIN.Text = "Specify a PIN for all protected Journals you wish to work with.";
+			lblEnterPIN.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// lstJournalPINs
 			// 
-			this.lstJournalPINs.FormattingEnabled = true;
-			this.lstJournalPINs.ItemHeight = 15;
-			this.lstJournalPINs.Location = new System.Drawing.Point(10, 68);
-			this.lstJournalPINs.Name = "lstJournalPINs";
-			this.lstJournalPINs.Size = new System.Drawing.Size(350, 364);
-			this.lstJournalPINs.TabIndex = 1;
-			this.lstJournalPINs.SelectedIndexChanged += new System.EventHandler(this.lstJournalPINs_SelectedIndexChanged);
+			lstJournalPINs.FormattingEnabled = true;
+			lstJournalPINs.ItemHeight = 15;
+			lstJournalPINs.Location = new System.Drawing.Point(10, 68);
+			lstJournalPINs.Name = "lstJournalPINs";
+			lstJournalPINs.Size = new System.Drawing.Size(350, 364);
+			lstJournalPINs.TabIndex = 1;
+			lstJournalPINs.SelectedIndexChanged += this.lstJournalPINs_SelectedIndexChanged;
 			// 
 			// lstEntryObjects
 			// 
-			this.lstEntryObjects.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-			this.lstEntryObjects.FormattingEnabled = true;
-			this.lstEntryObjects.IntegralHeight = false;
-			this.lstEntryObjects.ItemHeight = 15;
-			this.lstEntryObjects.Location = new System.Drawing.Point(1146, 8);
-			this.lstEntryObjects.Name = "lstEntryObjects";
-			this.lstEntryObjects.Size = new System.Drawing.Size(203, 200);
-			this.lstEntryObjects.TabIndex = 4;
-			this.lstEntryObjects.Visible = false;
+			lstEntryObjects.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+			lstEntryObjects.FormattingEnabled = true;
+			lstEntryObjects.IntegralHeight = false;
+			lstEntryObjects.ItemHeight = 15;
+			lstEntryObjects.Location = new System.Drawing.Point(1146, 8);
+			lstEntryObjects.Name = "lstEntryObjects";
+			lstEntryObjects.Size = new System.Drawing.Size(203, 200);
+			lstEntryObjects.TabIndex = 4;
+			lstEntryObjects.Visible = false;
 			// 
 			// pnlOrphanedLabels
 			// 
-			this.pnlOrphanedLabels.Controls.Add(this.btnExitOrphans);
-			this.pnlOrphanedLabels.Controls.Add(this.chkSelectAllOrphans);
-			this.pnlOrphanedLabels.Controls.Add(this.btnRemoveSelectedOrphans);
-			this.pnlOrphanedLabels.Controls.Add(this.lstOrphanedLabels);
-			this.pnlOrphanedLabels.Controls.Add(this.label4);
-			this.pnlOrphanedLabels.Location = new System.Drawing.Point(804, 0);
-			this.pnlOrphanedLabels.Name = "pnlOrphanedLabels";
-			this.pnlOrphanedLabels.Size = new System.Drawing.Size(382, 518);
-			this.pnlOrphanedLabels.TabIndex = 5;
-			this.pnlOrphanedLabels.Visible = false;
+			pnlOrphanedLabels.Controls.Add(btnExitOrphans);
+			pnlOrphanedLabels.Controls.Add(chkSelectAllOrphans);
+			pnlOrphanedLabels.Controls.Add(btnRemoveSelectedOrphans);
+			pnlOrphanedLabels.Controls.Add(lstOrphanedLabels);
+			pnlOrphanedLabels.Controls.Add(label4);
+			pnlOrphanedLabels.Location = new System.Drawing.Point(804, 0);
+			pnlOrphanedLabels.Name = "pnlOrphanedLabels";
+			pnlOrphanedLabels.Size = new System.Drawing.Size(382, 518);
+			pnlOrphanedLabels.TabIndex = 5;
+			pnlOrphanedLabels.Visible = false;
 			// 
 			// btnExitOrphans
 			// 
-			this.btnExitOrphans.Location = new System.Drawing.Point(217, 176);
-			this.btnExitOrphans.Name = "btnExitOrphans";
-			this.btnExitOrphans.Size = new System.Drawing.Size(75, 23);
-			this.btnExitOrphans.TabIndex = 5;
-			this.btnExitOrphans.Text = "&Exit";
-			this.btnExitOrphans.UseVisualStyleBackColor = true;
-			this.btnExitOrphans.Click += new System.EventHandler(this.btnExitOrphans_Click);
+			btnExitOrphans.Location = new System.Drawing.Point(217, 176);
+			btnExitOrphans.Name = "btnExitOrphans";
+			btnExitOrphans.Size = new System.Drawing.Size(75, 23);
+			btnExitOrphans.TabIndex = 5;
+			btnExitOrphans.Text = "&Exit";
+			btnExitOrphans.UseVisualStyleBackColor = true;
+			btnExitOrphans.Click += this.btnExitOrphans_Click;
 			// 
 			// chkSelectAllOrphans
 			// 
-			this.chkSelectAllOrphans.AutoSize = true;
-			this.chkSelectAllOrphans.Location = new System.Drawing.Point(232, 11);
-			this.chkSelectAllOrphans.Name = "chkSelectAllOrphans";
-			this.chkSelectAllOrphans.Size = new System.Drawing.Size(71, 19);
-			this.chkSelectAllOrphans.TabIndex = 4;
-			this.chkSelectAllOrphans.Text = "select all";
-			this.chkSelectAllOrphans.UseVisualStyleBackColor = true;
-			this.chkSelectAllOrphans.CheckedChanged += new System.EventHandler(this.chkSelectAllOrphans_CheckedChanged);
+			chkSelectAllOrphans.AutoSize = true;
+			chkSelectAllOrphans.Location = new System.Drawing.Point(232, 11);
+			chkSelectAllOrphans.Name = "chkSelectAllOrphans";
+			chkSelectAllOrphans.Size = new System.Drawing.Size(71, 19);
+			chkSelectAllOrphans.TabIndex = 4;
+			chkSelectAllOrphans.Text = "select all";
+			chkSelectAllOrphans.UseVisualStyleBackColor = true;
+			chkSelectAllOrphans.CheckedChanged += this.chkSelectAllOrphans_CheckedChanged;
 			// 
 			// btnRemoveSelectedOrphans
 			// 
-			this.btnRemoveSelectedOrphans.Location = new System.Drawing.Point(70, 176);
-			this.btnRemoveSelectedOrphans.Name = "btnRemoveSelectedOrphans";
-			this.btnRemoveSelectedOrphans.Size = new System.Drawing.Size(111, 23);
-			this.btnRemoveSelectedOrphans.TabIndex = 3;
-			this.btnRemoveSelectedOrphans.Text = "&Remove Selected";
-			this.btnRemoveSelectedOrphans.UseVisualStyleBackColor = true;
-			this.btnRemoveSelectedOrphans.Click += new System.EventHandler(this.btnRemoveSelectedOrphans_Click);
+			btnRemoveSelectedOrphans.Location = new System.Drawing.Point(70, 176);
+			btnRemoveSelectedOrphans.Name = "btnRemoveSelectedOrphans";
+			btnRemoveSelectedOrphans.Size = new System.Drawing.Size(111, 23);
+			btnRemoveSelectedOrphans.TabIndex = 3;
+			btnRemoveSelectedOrphans.Text = "&Remove Selected";
+			btnRemoveSelectedOrphans.UseVisualStyleBackColor = true;
+			btnRemoveSelectedOrphans.Click += this.btnRemoveSelectedOrphans_Click;
 			// 
 			// lstOrphanedLabels
 			// 
-			this.lstOrphanedLabels.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.lstOrphanedLabels.FormattingEnabled = true;
-			this.lstOrphanedLabels.ItemHeight = 15;
-			this.lstOrphanedLabels.Location = new System.Drawing.Point(7, 31);
-			this.lstOrphanedLabels.Name = "lstOrphanedLabels";
-			this.lstOrphanedLabels.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.lstOrphanedLabels.Size = new System.Drawing.Size(353, 139);
-			this.lstOrphanedLabels.TabIndex = 2;
+			lstOrphanedLabels.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+			lstOrphanedLabels.FormattingEnabled = true;
+			lstOrphanedLabels.ItemHeight = 15;
+			lstOrphanedLabels.Location = new System.Drawing.Point(7, 31);
+			lstOrphanedLabels.Name = "lstOrphanedLabels";
+			lstOrphanedLabels.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			lstOrphanedLabels.Size = new System.Drawing.Size(353, 139);
+			lstOrphanedLabels.TabIndex = 2;
 			// 
 			// label4
 			// 
-			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(9, 10);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(210, 15);
-			this.label4.TabIndex = 0;
-			this.label4.Text = "The listed orphaned labels were found:";
+			label4.AutoSize = true;
+			label4.Location = new System.Drawing.Point(9, 10);
+			label4.Name = "label4";
+			label4.Size = new System.Drawing.Size(210, 15);
+			label4.TabIndex = 0;
+			label4.Text = "The listed orphaned labels were found:";
 			// 
 			// frmLabelsManager
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(1314, 642);
-			this.Controls.Add(this.pnlOrphanedLabels);
-			this.Controls.Add(this.lstEntryObjects);
-			this.Controls.Add(this.pnlJournalPINs);
-			this.Controls.Add(this.pnlMain);
-			this.Controls.Add(this.mnuMain);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-			this.MainMenuStrip = this.mnuMain;
-			this.MaximizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(382, 518);
-			this.Name = "frmLabelsManager";
-			this.Text = "Manage Labels";
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmLabelsManager_FormClosing);
-			this.Load += new System.EventHandler(this.frmLabelsManager_Load);
-			this.Resize += new System.EventHandler(this.frmLabelsManager_Resize);
-			this.pnlMain.ResumeLayout(false);
-			this.pnlMain.PerformLayout();
-			this.pnlNewLabelName.ResumeLayout(false);
-			this.pnlNewLabelName.PerformLayout();
-			this.mnuMain.ResumeLayout(false);
-			this.mnuMain.PerformLayout();
-			this.pnlJournalPINs.ResumeLayout(false);
-			this.pnlJournalPINs.PerformLayout();
-			this.pnlOrphanedLabels.ResumeLayout(false);
-			this.pnlOrphanedLabels.PerformLayout();
+			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			ClientSize = new System.Drawing.Size(1314, 642);
+			Controls.Add(pnlOrphanedLabels);
+			Controls.Add(lstEntryObjects);
+			Controls.Add(pnlJournalPINs);
+			Controls.Add(pnlMain);
+			Controls.Add(mnuMain);
+			FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			MainMenuStrip = mnuMain;
+			MaximizeBox = false;
+			MinimumSize = new System.Drawing.Size(382, 518);
+			Name = "frmLabelsManager";
+			Text = "Manage Labels";
+			FormClosing += this.frmLabelsManager_FormClosing;
+			Load += this.frmLabelsManager_Load;
+			Resize += this.frmLabelsManager_Resize;
+			pnlMain.ResumeLayout(false);
+			pnlMain.PerformLayout();
+			pnlNewLabelName.ResumeLayout(false);
+			pnlNewLabelName.PerformLayout();
+			mnuMain.ResumeLayout(false);
+			mnuMain.PerformLayout();
+			pnlJournalPINs.ResumeLayout(false);
+			pnlJournalPINs.PerformLayout();
+			pnlOrphanedLabels.ResumeLayout(false);
+			pnlOrphanedLabels.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
-
 		}
 
 		#endregion

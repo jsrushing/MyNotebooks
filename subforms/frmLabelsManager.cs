@@ -15,12 +15,12 @@ namespace myJournal.subforms
 {
 	public partial class frmLabelsManager : Form
 	{
-		private bool Renaming	= false;
-		private bool Adding		= false;
-		private bool Deleting	= false;
+		private bool Renaming = false;
+		private bool Adding = false;
+		private bool Deleting = false;
 
-		private LabelsManager.LabelsSortType sort	= LabelsManager.LabelsSortType.None;
-		private string OriginalPIN					= Program.PIN;
+		private LabelsManager.LabelsSortType sort = LabelsManager.LabelsSortType.None;
+		private string OriginalPIN = Program.PIN;
 		private Dictionary<string, string> DictJournals = new Dictionary<string, string>();
 		private bool EditingAllJournals;
 
@@ -32,16 +32,16 @@ namespace myJournal.subforms
 		{
 			InitializeComponent();
 
-			if(_jrnl != null)
+			if (_jrnl != null)
 			{
 				CurrentJournal = _jrnl;
 				mnuRename_InCurrentJournal.Text = "In '" + _jrnl.Name + "'";
 				mnuDelete_InCurrentJournal.Text = "In '" + _jrnl.Name + "'";
 			}
-			else 
-			{ 
-				mnuRename_InCurrentJournal.Visible = false; 
-				mnuDelete_InCurrentJournal.Visible = false; 
+			else
+			{
+				mnuRename_InCurrentJournal.Visible = false;
+				mnuDelete_InCurrentJournal.Visible = false;
 			}
 
 			Utilities.SetStartPosition(this, parent);
@@ -53,15 +53,15 @@ namespace myJournal.subforms
 		{
 			this.Size = this.MinimumSize;
 
-			foreach(Control c in this.Controls) if (c.GetType() == typeof(Panel)) c.Location = new Point(0,0);
+			foreach (Control c in this.Controls) if (c.GetType() == typeof(Panel)) c.Location = new Point(0, 0);
 
 			ShowPanel(pnlJournalPINs);
 			ShowHideOccurrences();
 
-			foreach (Journal j in Program.AllJournals) 
+			foreach (Journal j in Program.AllJournals)
 			{
 				DictJournals.Add(j.Name, "");
-				lstJournalPINs.Items.Add(j.Name); 
+				lstJournalPINs.Items.Add(j.Name);
 			}
 
 			sort = LabelsManager.LabelsSortType.None;
@@ -69,9 +69,9 @@ namespace myJournal.subforms
 		}
 
 		private void frmLabelsManager_Resize(object sender, EventArgs e)
-		{ 
+		{
 			if (this.Width > this.MinimumSize.Width) { this.Width = this.MinimumSize.Width; };
-			ShowHideOccurrences();		
+			ShowHideOccurrences();
 		}
 
 		private void AddLabelToUIListbox()
@@ -110,15 +110,15 @@ namespace myJournal.subforms
 			bool bEdited = true;
 			this.Cursor = Cursors.WaitCursor;
 
-			if (Adding) 
-			{ 
+			if (Adding)
+			{
 				AddLabelToUIListbox();
 				LabelsManager.Save(lstLabels.Items.Cast<String>().ToList());
 				pnlNewLabelName.Visible = false;
 				LabelsManager.PopulateLabelsList(null, lstLabels);
 				lstOccurrences.Items.Clear();
 				ShowHideOccurrences();
-				this.Cursor = Cursors.Default; 
+				this.Cursor = Cursors.Default;
 			}
 
 			if (Renaming | Deleting)
@@ -150,8 +150,8 @@ namespace myJournal.subforms
 						if (EditingAllJournals) // it was a global change - the old label doesn't exist in any entry in any journal so remove it from the Labels file
 						{
 							if (!lstLabels.Items.Contains(txtLabelName.Text))
-							{ 
-								lstLabels.Items.Insert(lstLabels.SelectedIndex, txtLabelName.Text); 
+							{
+								lstLabels.Items.Insert(lstLabels.SelectedIndex, txtLabelName.Text);
 								lstLabels.Items.RemoveAt(lstLabels.SelectedIndex);
 							}
 						}
@@ -159,8 +159,8 @@ namespace myJournal.subforms
 					}
 					else    // It was a delete. If label exists in any journal, leave in list, otherwise remove from list.
 					{
-						if (LabelsManager.JournalsContainingLabel(txtLabelName.Text).Count == 0) 
-						{ 
+						if (LabelsManager.JournalsContainingLabel(txtLabelName.Text).Count == 0)
+						{
 							lstLabels.Items.RemoveAt(lstLabels.SelectedIndex);
 							lstOccurrences.Items.Clear();
 							ShowHideOccurrences();
@@ -217,7 +217,7 @@ namespace myJournal.subforms
 		private void lblSortType_Click(object sender, EventArgs e)
 		{
 			//LabelsManager lm = new LabelsManager();	
-			
+
 			switch (sort)
 			{
 				case LabelsManager.LabelsSortType.None:
@@ -241,7 +241,7 @@ namespace myJournal.subforms
 
 		private void lstJournalPINs_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if(lstJournalPINs.SelectedIndex > -1)
+			if (lstJournalPINs.SelectedIndex > -1)
 			{
 				txtPIN.PasswordChar = '*';
 				txtPIN.Text = DictJournals[lstJournalPINs.Text.Replace(" (****)", "")];
@@ -254,7 +254,7 @@ namespace myJournal.subforms
 
 		private void lstLabels_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if(lstLabels.SelectedIndex > -1)
+			if (lstLabels.SelectedIndex > -1)
 			{
 				mnuRename.Enabled = true;
 				mnuDelete.Enabled = true;
@@ -301,8 +301,8 @@ namespace myJournal.subforms
 			pnlMain.Visible = false;
 			pnlJournalPINs.Visible = true;
 
-			if(lstJournalPINs.Items.Count == 0)
-			{ foreach(Journal j in Program.AllJournals) { lstJournalPINs.Items.Add(j.Name); } }
+			if (lstJournalPINs.Items.Count == 0)
+			{ foreach (Journal j in Program.AllJournals) { lstJournalPINs.Items.Add(j.Name); } }
 
 			this.Size = this.MinimumSize;
 		}
@@ -329,13 +329,13 @@ namespace myJournal.subforms
 			List<string> lstOrphans = new List<string>();
 			lstOrphanedLabels.Items.Clear();
 
-			foreach(string label in LabelsManager.GetLabels_NoFileDate())
+			foreach (string label in LabelsManager.GetLabels_NoFileDate())
 			{
 				PopulateOccurrences(label);
-				if(lstOccurrences.Items.Count == 1) { lstOrphans.Add(label); }
+				if (lstOccurrences.Items.Count == 1) { lstOrphans.Add(label); }
 			}
 
-			if(lstOrphans.Count > 0)
+			if (lstOrphans.Count > 0)
 			{
 				foreach (string lbl in lstOrphans) { lstOrphanedLabels.Items.Add(lbl); }
 			}
@@ -385,12 +385,12 @@ namespace myJournal.subforms
 				else { labelName = string.Empty; }
 			}
 
-			if(labelName.Length > 0)
+			if (labelName.Length > 0)
 			{
 				this.Cursor = Cursors.WaitCursor;
 				lstOccurrences.Items.Clear();
 				var currentPIN = Program.PIN;
-				List<Journal> journalsWithLabel = LabelsManager.JournalsContainingLabel(labelName);	// lm.JournalsContainingLabel(labelName);
+				List<Journal> journalsWithLabel = LabelsManager.JournalsContainingLabel(labelName);
 
 				if (journalsWithLabel.Count > 0)
 				{
@@ -404,12 +404,12 @@ namespace myJournal.subforms
 							lstOccurrences.Items.Add("in '" + jrnl.Name + "'");
 							lstEntryObjects.Items.Add("");
 
-							foreach (JournalEntry je in foundLables) 
+							foreach (JournalEntry je in foundLables)
 							{
 								lstOccurrences.Items.Add("   > " + je.ClearTitle());
 								lstEntryObjects.Items.Add(new KeyValuePair<Journal, JournalEntry>(jrnl, je));
 							}
-							
+
 							lstOccurrences.Items.Add("-----------------------");
 							lstEntryObjects.Items.Add("");
 						}
@@ -435,7 +435,7 @@ namespace myJournal.subforms
 		{
 			foreach (Control c in this.Controls) { if (c.GetType() == typeof(Panel)) { c.Visible = false; } }
 
-			if(panelToShow == pnlMain)
+			if (panelToShow == pnlMain)
 			{
 				panelToShow.Top = 25;
 				mnuMain.Visible = true;
@@ -461,10 +461,10 @@ namespace myJournal.subforms
 
 		private void txtLabelName_TextChanged(object sender, EventArgs e)
 		{
-			btnOK.Visible = Deleting ? true : !lstLabels.Items.Contains(txtLabelName.Text.Trim()); 
-			lblLabelExists.Visible = !btnOK.Visible; 
+			btnOK.Visible = Deleting ? true : !lstLabels.Items.Contains(txtLabelName.Text.Trim());
+			lblLabelExists.Visible = !btnOK.Visible;
 		}
 
-		private void txtPIN_KeyUp(object sender, KeyEventArgs e) { if(e.KeyCode == Keys.Enter) { btnAddPIN_Click(null, null); } }
+		private void txtPIN_KeyUp(object sender, KeyEventArgs e) { if (e.KeyCode == Keys.Enter) { btnAddPIN_Click(null, null); } }
 	}
 }
