@@ -214,7 +214,7 @@ namespace myJournal.subforms
 			// 
 			// mnuJournal_Search
 			// 
-			mnuJournal_Search.Enabled = false;
+			mnuJournal_Search.Enabled = true;
 			mnuJournal_Search.Name = "mnuJournal_Search";
 			mnuJournal_Search.Size = new System.Drawing.Size(160, 22);
 			mnuJournal_Search.Text = "&Search";

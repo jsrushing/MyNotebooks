@@ -765,7 +765,7 @@ namespace myJournal.subforms
 
 				mnuJournal_Delete.Enabled = false;
 				mnuJournal_Rename.Enabled = false;
-				mnuJournal_Search.Enabled = false;
+				//mnuJournal_Search.Enabled = false;
 				mnuJournal_ForceBackup.Enabled = false;
 				mnuJournal_Export.Enabled = true;
 				mnuJournal_Settings.Enabled = false;
@@ -785,7 +785,7 @@ namespace myJournal.subforms
 
 				mnuJournal_Delete.Enabled = true;
 				mnuJournal_Rename.Enabled = true;
-				mnuJournal_Search.Enabled = true;
+				//mnuJournal_Search.Enabled = true;
 				mnuJournal_ForceBackup.Enabled = true;
 				//mnuJournal_Export.Enabled = currentJournal.Settings.AllowCloud;
 				mnuJournal_Settings.Enabled = true;

@@ -32,7 +32,7 @@ namespace myJournal.subforms
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSearch));
 			grpFindEntry = new System.Windows.Forms.GroupBox();
 			lblJournalsToSearch = new System.Windows.Forms.Label();
-			btnSelectJournalsAddPINs = new System.Windows.Forms.Button();
+			btnSelectJournals = new System.Windows.Forms.Button();
 			btnSearch = new System.Windows.Forms.Button();
 			label2 = new System.Windows.Forms.Label();
 			chkMatchWholeWord = new System.Windows.Forms.CheckBox();
@@ -68,7 +68,7 @@ namespace myJournal.subforms
 			// 
 			grpFindEntry.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
 			grpFindEntry.Controls.Add(lblJournalsToSearch);
-			grpFindEntry.Controls.Add(btnSelectJournalsAddPINs);
+			grpFindEntry.Controls.Add(btnSelectJournals);
 			grpFindEntry.Controls.Add(btnSearch);
 			grpFindEntry.Controls.Add(label2);
 			grpFindEntry.Controls.Add(chkMatchWholeWord);
@@ -103,19 +103,19 @@ namespace myJournal.subforms
 			lblJournalsToSearch.AutoSize = true;
 			lblJournalsToSearch.Location = new System.Drawing.Point(258, 16);
 			lblJournalsToSearch.Name = "lblJournalsToSearch";
-			lblJournalsToSearch.Size = new System.Drawing.Size(38, 15);
+			lblJournalsToSearch.Size = new System.Drawing.Size(120, 15);
 			lblJournalsToSearch.TabIndex = 46;
-			lblJournalsToSearch.Text = "label1";
+			lblJournalsToSearch.Text = "(no journals selected)";
 			// 
-			// btnSelectJournalsAddPINs
+			// btnSelectJournals
 			// 
-			btnSelectJournalsAddPINs.Location = new System.Drawing.Point(152, 11);
-			btnSelectJournalsAddPINs.Name = "btnSelectJournalsAddPINs";
-			btnSelectJournalsAddPINs.Size = new System.Drawing.Size(101, 23);
-			btnSelectJournalsAddPINs.TabIndex = 45;
-			btnSelectJournalsAddPINs.Text = "select Journals";
-			btnSelectJournalsAddPINs.UseVisualStyleBackColor = true;
-			btnSelectJournalsAddPINs.Click += this.btnSelectJournalsAddPINs_Click;
+			btnSelectJournals.Location = new System.Drawing.Point(152, 11);
+			btnSelectJournals.Name = "btnSelectJournals";
+			btnSelectJournals.Size = new System.Drawing.Size(101, 23);
+			btnSelectJournals.TabIndex = 45;
+			btnSelectJournals.Text = "select Journals";
+			btnSelectJournals.UseVisualStyleBackColor = true;
+			btnSelectJournals.Click += this.btnSelectJournals_Click;
 			// 
 			// btnSearch
 			// 
@@ -177,7 +177,6 @@ namespace myJournal.subforms
 			radBtnAnd.Name = "radBtnAnd";
 			radBtnAnd.Size = new System.Drawing.Size(45, 19);
 			radBtnAnd.TabIndex = 36;
-			radBtnAnd.TabStop = true;
 			radBtnAnd.Text = "and";
 			radBtnAnd.UseVisualStyleBackColor = true;
 			// 
@@ -447,7 +446,7 @@ namespace myJournal.subforms
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.CheckBox chkMatchWholeWord;
 		private System.Windows.Forms.Button btnSearch;
-		private System.Windows.Forms.Button btnSelectJournalsAddPINs;
+		private System.Windows.Forms.Button btnSelectJournals;
 		private System.Windows.Forms.Label lblJournalsToSearch;
 	}
 }

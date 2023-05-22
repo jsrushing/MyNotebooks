@@ -61,13 +61,14 @@ namespace myJournal.subforms
 			// lblShowPIN
 			// 
 			lblShowPIN.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
-			lblShowPIN.Location = new System.Drawing.Point(148, 59);
+			lblShowPIN.Location = new System.Drawing.Point(148, 56);
 			lblShowPIN.Name = "lblShowPIN";
 			lblShowPIN.Size = new System.Drawing.Size(35, 13);
 			lblShowPIN.TabIndex = 46;
 			lblShowPIN.Text = "show";
 			lblShowPIN.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			lblShowPIN.Visible = false;
+			lblShowPIN.Click += this.lblShowPIN_Click;
 			// 
 			// label1
 			// 
@@ -98,6 +99,7 @@ namespace myJournal.subforms
 			// 
 			// lstJournalPINs
 			// 
+			lstJournalPINs.CheckOnClick = true;
 			lstJournalPINs.FormattingEnabled = true;
 			lstJournalPINs.Location = new System.Drawing.Point(12, 78);
 			lstJournalPINs.Name = "lstJournalPINs";
@@ -107,6 +109,7 @@ namespace myJournal.subforms
 			// 
 			// frmSelectJournalsToSearch
 			// 
+			AcceptButton = btnAddPIN;
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			ClientSize = new System.Drawing.Size(376, 483);

@@ -4,6 +4,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Windows.Forms;
 using myJournal.objects;
 
@@ -18,13 +19,76 @@ namespace myJournal.subforms
 		public frmSearch(Journal jrnl, Form parent)
 		{
 			InitializeComponent();
-			journalsToSearch.Add(jrnl);
+			if (jrnl != null)
+			{
+				journalsToSearch.Add(jrnl);
+				JournalsWithPINs.Add(jrnl.Name, Program.PIN);
+				lblJournalsToSearch.Text = jrnl.Name;
+			}
+
 			LabelsManager.PopulateLabelsList(lstLabelsForSearch);
 			Utilities.SetStartPosition(this, parent);
 			dtFindDate.Value = DateTime.Now;
 			dtFindDate_From.Value = DateTime.Now.AddDays(-30);
 			dtFindDate_To.Value = DateTime.Now;
-			lblJournalsToSearch.Text = jrnl.Name;
+		}
+
+		private void btnSearch_Click(object sender, EventArgs e)
+		{
+			this.Cursor = Cursors.WaitCursor;
+			var labels = string.Empty;
+			string[] labelsArray;
+			var journalName = string.Empty;
+			var journalPIN = string.Empty;
+			var originalPIN = Program.PIN;
+
+			lstFoundEntries.Items.Clear();
+
+			for (int i = 0; i < lstLabelsForSearch.CheckedItems.Count; i++) { labels += lstLabelsForSearch.CheckedItems[i].ToString() + ","; }
+
+			labels = labels.Length > 0 ? labels.Substring(0, labels.Length - 1) : string.Empty;
+			labelsArray = labels.Length > 0 ? labels.Split(',') : null;
+			List<JournalEntry> foundEntries = new List<JournalEntry>();
+
+			foreach (KeyValuePair<string, string> kvp in this.JournalsWithPINs)
+			{
+				Program.PIN = kvp.Value;
+
+				SearchObject so = new SearchObject(chkUseDate, chkUseDateRange, chkMatchCase, dtFindDate,
+					dtFindDate_From, dtFindDate_To, radBtnAnd, txtSearchTitle.Text, txtSearchText.Text, labelsArray);
+
+				foundEntries.AddRange(new Journal(kvp.Key).Open().Search(so));
+
+			}
+
+			Utilities.PopulateEntries(lstFoundEntries, foundEntries);
+			if (lstFoundEntries.Items.Count == 0) { lstFoundEntries.Items.Add("no matches found"); }
+			this.Cursor = Cursors.Default;
+		}
+
+		private void btnSelectJournals_Click(object sender, EventArgs e)
+		{
+			frmSelectJournalsToSearch frm = new frmSelectJournalsToSearch(this, this.JournalsWithPINs);
+			frm.ShowDialog();
+			StringBuilder sb = new StringBuilder();
+			this.JournalsWithPINs = frm.DictJournals;
+			frm.Close();
+
+			if (JournalsWithPINs.Count > 0)
+			{
+				var displayWidth = this.Width - lblFoundEntries.Left - 25;
+				var sectionWidth = displayWidth / JournalsWithPINs.Count;
+				var itemToAppend = string.Empty;
+
+				foreach (KeyValuePair<string, string> kvp in JournalsWithPINs)
+				{
+					itemToAppend = kvp.Key.Length > sectionWidth ? kvp.Key.Substring(0, sectionWidth - 3) + "..., " : kvp.Key + ", ";
+					sb.Append(itemToAppend);
+				}
+
+			}
+
+			lblJournalsToSearch.Text = sb.ToString();
 		}
 
 		private void chkUseDateRange_CheckedChanged(object sender, EventArgs e)
@@ -85,10 +149,11 @@ namespace myJournal.subforms
 
 		private Journal GetEntryJournal()
 		{
-			Journal jrnlRtrn = new Journal(journalsToSearch[0].Name);
-			if (journalsToSearch.Count == 1) { jrnlRtrn = jrnlRtrn.Open(); }
-			else { jrnlRtrn = new Journal(GetJournalNameFromDisplay()); }
-			return jrnlRtrn;
+			//Journal jrnlRtrn = new Journal(JournalsWithPINs[].Name);
+			//if (journalsToSearch.Count == 1) { jrnlRtrn = jrnlRtrn.Open(); }
+			//else { jrnlRtrn = new Journal(GetJournalNameFromDisplay()); }
+			//return jrnlRtrn;
+			return new Journal();
 		}
 
 		private string GetJournalNameFromDisplay()
@@ -98,63 +163,6 @@ namespace myJournal.subforms
 			while (!lstFoundEntries.Items[i2].ToString().ToLower().StartsWith("journal") & i2 != -1) { i2--; }
 			sRtrn = i2 > -1 ? lstFoundEntries.Items[i2].ToString() : "";
 			return sRtrn;
-		}
-
-		private void btnSearch_Click(object sender, EventArgs e)
-		{
-			this.Cursor = Cursors.WaitCursor;
-			var labels = string.Empty;
-			string[] labelsArray;
-			var journalName = string.Empty;
-			var journalPIN = string.Empty;
-			var originalPIN = Program.PIN;
-
-			lstFoundEntries.Items.Clear();
-
-			for (int i = 0; i < lstLabelsForSearch.CheckedItems.Count; i++) { labels += lstLabelsForSearch.CheckedItems[i].ToString() + ","; }
-
-			labels = labels.Length > 0 ? labels.Substring(0, labels.Length - 1) : string.Empty;
-			labelsArray = labels.Length > 0 ? labels.Split(',') : null;
-			List<JournalEntry> foundEntries = new List<JournalEntry>();
-
-			foreach (KeyValuePair<string, string> kvp in this.JournalsWithPINs)
-			{
-				journalName = kvp.Key;
-				journalPIN = kvp.Value;
-
-				if (journalPIN != string.Empty)
-				{
-					Program.PIN = journalPIN;
-				}
-
-				SearchObject so = new SearchObject(chkUseDate, chkUseDateRange, chkMatchCase, dtFindDate,
-					dtFindDate_From, dtFindDate_To, radBtnAnd, txtSearchTitle.Text, txtSearchText.Text, labelsArray);
-
-				foundEntries.AddRange(new Journal(journalName).Open().Search(so));
-
-				Program.PIN = originalPIN;
-			}
-
-			//foreach (var s in lstJournalsToSearch.CheckedItems)
-			//{
-			//	SearchObject so = new SearchObject(chkUseDate, chkUseDateRange, chkMatchCase, dtFindDate,
-			//		dtFindDate_From, dtFindDate_To, radBtnAnd, txtSearchTitle.Text, txtSearchText.Text, labelsArray);
-
-			//	foundEntries.AddRange(new Journal(s.ToString()).Open().Search(so));
-			//}
-
-			Utilities.PopulateEntries(lstFoundEntries, foundEntries);
-			if (lstFoundEntries.Items.Count == 0) { lstFoundEntries.Items.Add("no matches found"); }
-			this.Cursor = Cursors.Default;
-		}
-
-		private void btnSelectJournalsAddPINs_Click(object sender, EventArgs e)
-		{
-			frmSelectJournalsToSearch frm = new frmSelectJournalsToSearch(this);
-			frm.ShowDialog();
-			this.JournalsWithPINs = frm.DictJournals;
-			frm.Close();
-
 		}
 	}
 }

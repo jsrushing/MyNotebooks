@@ -179,15 +179,25 @@ namespace myJournal
 				{ foreach (string label in So.labelsArray) { if (je.ClearLabels().Contains(label)) { foundEntries.Add(je); } } }
 
 				// title and/or text
-				So.searchTitle	= So.chkMatchCase.Checked ? So.searchTitle	: So.searchTitle.ToLower();
-				So.searchText	= So.chkMatchCase.Checked ? So.searchText	: So.searchText.ToLower();
-				entryText		= So.chkMatchCase.Checked ? je.ClearText()	: je.ClearText().ToLower();
-				entryTitle		= So.chkMatchCase.Checked ? je.ClearTitle() : je.ClearTitle().ToLower();
+				So.searchTitle = So.chkMatchCase.Checked ? So.searchTitle : So.searchTitle.ToLower();
+				So.searchText = So.chkMatchCase.Checked ? So.searchText : So.searchText.ToLower();
+				entryText = So.chkMatchCase.Checked ? je.ClearText() : je.ClearText().ToLower();
+				entryTitle = So.chkMatchCase.Checked ? je.ClearTitle() : je.ClearTitle().ToLower();
 
-				if (So.radBtnAnd.Checked)
-				{ if (entryText.Contains(So.searchText) & entryTitle.Contains(So.searchTitle)) { foundEntries.Add(je); }}
-				else
-				{ if (So.searchText.Length > 0 && entryText.Contains(So.searchText) ) { foundEntries.Add(je); }}
+				if (So.searchTitle.Length > 0 && So.searchText.Length > 0)
+				{
+					if (So.radBtnAnd.Checked)
+					{ if (entryText.Contains(So.searchText) & entryTitle.Contains(So.searchTitle)) { foundEntries.Add(je); } }
+					else
+					{ if (So.searchText.Length > 0 | entryText.Contains(So.searchText)) { foundEntries.Add(je); } }
+				}
+				else if (So.searchText.Length > 0)
+				{
+					if (entryText.Contains(So.searchText)) { foundEntries.Add(je); }
+				}
+				else if (So.searchTitle.Length > 0)
+				{
+					if (entryTitle.Contains(So.searchTitle)) { foundEntries.Add(je); } }
 			}
 			return foundEntries;
 		}
