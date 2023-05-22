@@ -22,22 +22,8 @@ namespace myJournal.objects
 		public static List<Journal> AllJournals()
 		{
 			List<Journal> jrnlReturn = new List<Journal>();
-			string sJrnlFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"];
-
-			foreach (string s in Directory.GetFiles(sJrnlFolder))
-			{ 
-				//Journal j = new Journal(s.Replace(sJrnlFolder, "")).Open();
-				//j.Settings = new JournalSettings();
-				//j.Settings.AllowCloud = true;
-				//j.Settings.LocalOnly_DisallowCloud = true;
-				//j.Settings.LocalOnly_Delete = false;
-				//j.Settings.LocalOnly_Upload = false;
-				//j.Settings.CloudOnly_Download = true;
-				//j.Save();
-				//jrnlReturn.Add(j);
-				jrnlReturn.Add(new Journal(s.Replace(sJrnlFolder, "")).Open());
-			}
-
+			var sJrnlFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"];
+			foreach (var s in Directory.GetFiles(sJrnlFolder)) { jrnlReturn.Add(new Journal(s.Replace(sJrnlFolder, "")).Open()); }
 			return jrnlReturn;
 		}
 
