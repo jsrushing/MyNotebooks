@@ -41,7 +41,7 @@ namespace myJournal.objects
 			return jrnlReturn;
 		}
 
-		public static void PopulateEntries(ListBox lbxToPopulate, List<JournalEntry> entries, string startDate = "", string endDate = "", bool clearPrevious = true, int SortBy = 0)
+		public static void PopulateEntries(ListBox lbxToPopulate, List<JournalEntry> entries, string journalName = "", string startDate = "", string endDate = "", bool clearPrevious = true, int SortBy = 0)
 		{
 			if(clearPrevious) lbxToPopulate.Items.Clear();
 			List<JournalEntry> tmpEntries = null;
@@ -65,7 +65,7 @@ namespace myJournal.objects
 			{
 				for(int i = 0; i < je.Synopsis.Length; i++) 
 				{ 
-					lbxToPopulate.Items.Add(je.Synopsis[i]);
+					lbxToPopulate.Items.Add(je.Synopsis[i]);    //i == 0 ? "journal: " + journalName + ", title: " + je.Synopsis[i] :
 				} 
 			}
 		}

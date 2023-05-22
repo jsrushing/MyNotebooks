@@ -232,7 +232,7 @@ namespace myJournal.subforms
 					}
 					else
 					{
-						Utilities.PopulateEntries(lstEntries, currentJournal.Entries, DateTime.Now.AddDays(-61).ToString(), DateTime.Now.ToString(), true, 0);
+						Utilities.PopulateEntries(lstEntries, currentJournal.Entries, currentJournal.Name, DateTime.Now.AddDays(-61).ToString(), DateTime.Now.ToString(), true, 0) ;
 
 						if (lstEntries.Items.Count == 0) { Utilities.PopulateEntries(lstEntries, currentJournal.Entries); }
 
@@ -273,7 +273,7 @@ namespace myJournal.subforms
 		{
 			if (currentJournal != null)
 			{
-				Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDatesFrom.Text, cbxDatesTo.Text, true, cbxSortEntriesBy.SelectedIndex);
+				Utilities.PopulateEntries(lstEntries, currentJournal.Entries, currentJournal.Name, cbxDatesFrom.Text, cbxDatesTo.Text, true, cbxSortEntriesBy.SelectedIndex);
 				lstEntries.Focus();
 			}
 		}
@@ -730,7 +730,7 @@ namespace myJournal.subforms
 		{
 			if (cbxDatesFrom.Text.Length > 0 && cbxDatesTo.Text.Length > 0)
 			{
-				Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDatesFrom.Text, cbxDatesTo.Text, true, cbxSortEntriesBy.SelectedIndex);
+				Utilities.PopulateEntries(lstEntries, currentJournal.Entries, currentJournal.Name, cbxDatesFrom.Text, cbxDatesTo.Text, true, cbxSortEntriesBy.SelectedIndex);
 
 				if (lstEntries.SelectedIndex == -1 && currentJournal.Entries.Contains(currentEntry))
 				{

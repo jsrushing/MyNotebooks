@@ -41,6 +41,7 @@ namespace myJournal.subforms
 			var journalName = string.Empty;
 			var journalPIN = string.Empty;
 			var originalPIN = Program.PIN;
+			List<JournalEntry> foundEntries = new List<JournalEntry>();
 
 			lstFoundEntries.Items.Clear();
 
@@ -48,17 +49,14 @@ namespace myJournal.subforms
 
 			labels = labels.Length > 0 ? labels.Substring(0, labels.Length - 1) : string.Empty;
 			labelsArray = labels.Length > 0 ? labels.Split(',') : null;
-			List<JournalEntry> foundEntries = new List<JournalEntry>();
+
+			SearchObject so = new SearchObject(chkUseDate, chkUseDateRange, chkMatchCase, dtFindDate,
+					dtFindDate_From, dtFindDate_To, radBtnAnd, txtSearchTitle.Text, txtSearchText.Text, labelsArray); ;
 
 			foreach (KeyValuePair<string, string> kvp in this.JournalsWithPINs)
 			{
 				Program.PIN = kvp.Value;
-
-				SearchObject so = new SearchObject(chkUseDate, chkUseDateRange, chkMatchCase, dtFindDate,
-					dtFindDate_From, dtFindDate_To, radBtnAnd, txtSearchTitle.Text, txtSearchText.Text, labelsArray);
-
 				foundEntries.AddRange(new Journal(kvp.Key).Open().Search(so));
-
 			}
 
 			Utilities.PopulateEntries(lstFoundEntries, foundEntries);
@@ -68,11 +66,13 @@ namespace myJournal.subforms
 
 		private void btnSelectJournals_Click(object sender, EventArgs e)
 		{
-			frmSelectJournalsToSearch frm = new frmSelectJournalsToSearch(this, this.JournalsWithPINs);
-			frm.ShowDialog();
 			StringBuilder sb = new StringBuilder();
-			this.JournalsWithPINs = frm.DictJournals;
-			frm.Close();
+
+			using (frmSelectJournalsToSearch frm = new frmSelectJournalsToSearch(this, this.JournalsWithPINs))
+			{
+				frm.ShowDialog();
+				this.JournalsWithPINs = frm.DictJournals;
+			}
 
 			if (JournalsWithPINs.Count > 0)
 			{
@@ -88,7 +88,9 @@ namespace myJournal.subforms
 
 			}
 
-			lblJournalsToSearch.Text = sb.ToString();
+			if (sb.ToString().Length > 2) { lblJournalsToSearch.Text = sb.ToString().Substring(0, sb.ToString().Length - 2); }
+			else { lblJournalsToSearch.Text = "(no journals selected"; }
+
 		}
 
 		private void chkUseDateRange_CheckedChanged(object sender, EventArgs e)
@@ -149,18 +151,14 @@ namespace myJournal.subforms
 
 		private Journal GetEntryJournal()
 		{
-			//Journal jrnlRtrn = new Journal(JournalsWithPINs[].Name);
-			//if (journalsToSearch.Count == 1) { jrnlRtrn = jrnlRtrn.Open(); }
-			//else { jrnlRtrn = new Journal(GetJournalNameFromDisplay()); }
-			//return jrnlRtrn;
-			return new Journal();
+			return new Journal(GetJournalNameFromDisplay());
 		}
 
 		private string GetJournalNameFromDisplay()
 		{
 			string sRtrn = string.Empty;
 			int i2 = lstFoundEntries.SelectedIndex;
-			while (!lstFoundEntries.Items[i2].ToString().ToLower().StartsWith("journal") & i2 != -1) { i2--; }
+			while(i2 % 4 != 0) { i2--; }
 			sRtrn = i2 > -1 ? lstFoundEntries.Items[i2].ToString() : "";
 			return sRtrn;
 		}
