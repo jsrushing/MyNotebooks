@@ -4,6 +4,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using myJournal.objects;
@@ -15,6 +16,7 @@ namespace myJournal.subforms
 		private bool firstSelection = true;
 		private List<Journal> journalsToSearch = new List<Journal>();
 		private Dictionary<string, string> JournalsWithPINs = new Dictionary<string, string>();
+		private Dictionary<string, int> journalBoundaries = new Dictionary<string, int>();
 
 		public frmSearch(Journal jrnl, Form parent)
 		{
@@ -36,12 +38,15 @@ namespace myJournal.subforms
 		private void btnSearch_Click(object sender, EventArgs e)
 		{
 			this.Cursor = Cursors.WaitCursor;
+			journalBoundaries.Clear();
 			var labels = string.Empty;
 			string[] labelsArray;
 			var journalName = string.Empty;
 			var journalPIN = string.Empty;
 			var originalPIN = Program.PIN;
 			List<JournalEntry> foundEntries = new List<JournalEntry>();
+			var iIndexCtr = 0;
+			List<JournalEntry> jeFound;
 
 			lstFoundEntries.Items.Clear();
 
@@ -56,7 +61,10 @@ namespace myJournal.subforms
 			foreach (KeyValuePair<string, string> kvp in this.JournalsWithPINs)
 			{
 				Program.PIN = kvp.Value;
-				foundEntries.AddRange(new Journal(kvp.Key).Open().Search(so));
+				jeFound = new Journal(kvp.Key).Open().Search(so);
+				foundEntries.AddRange(jeFound);
+				iIndexCtr = iIndexCtr + foundEntries.Count * 3;
+				journalBoundaries.Add(kvp.Key, iIndexCtr);
 			}
 
 			Utilities.PopulateEntries(lstFoundEntries, foundEntries);
@@ -149,18 +157,10 @@ namespace myJournal.subforms
 			// code to select journals to search - enhancement
 		}
 
-		private Journal GetEntryJournal()
+		private Journal GetEntryJournal() 
 		{
-			return new Journal(GetJournalNameFromDisplay());
-		}
-
-		private string GetJournalNameFromDisplay()
-		{
-			string sRtrn = string.Empty;
-			int i2 = lstFoundEntries.SelectedIndex;
-			while(i2 % 4 != 0) { i2--; }
-			sRtrn = i2 > -1 ? lstFoundEntries.Items[i2].ToString() : "";
-			return sRtrn;
+			var v2 = journalBoundaries.Where(p => p.Value > lstFoundEntries.SelectedIndex).ToList();
+			return v2.Count > 0 ? new Journal(v2[0].Key).Open() : null;
 		}
 	}
 }

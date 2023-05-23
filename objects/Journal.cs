@@ -87,7 +87,10 @@ namespace myJournal
         public JournalEntry GetEntry(string Title, string Date)
         {
             JournalEntry je = null;
-			try { je = this.Entries.First(a => a.ClearTitle() + a.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) == Title + Date); }
+
+			//var test = a.ClearTitle() + a.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"];
+
+			try { je = Entries.First(a => a.ClearTitle() + a.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) == Title + Date); }
             catch(Exception ex) { Console.Write(ex.Message); }
             return je;
         }

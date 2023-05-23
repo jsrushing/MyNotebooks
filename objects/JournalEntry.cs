@@ -116,7 +116,7 @@ namespace myJournal
 			{
 				entryRtrn = je;
 
-				for (int i = 0; i < lb.Items.Count; i++)
+				for (var i = 0; i < lb.Items.Count; i++)
 				{
 					if (lb.Items[i].ToString().StartsWith(je.Synopsis[0].ToString()))
 					{
@@ -156,7 +156,7 @@ namespace myJournal
 					}
 				}
 
-				int ctr = lb.SelectedIndex;
+				var ctr = lb.SelectedIndex;
 
 				if (lb.Items[ctr].ToString().StartsWith("--")) ctr--;
 
@@ -172,9 +172,9 @@ namespace myJournal
 				lb.SelectedIndices.Add(ctr + 1);
 				lb.SelectedIndices.Add(ctr + 2);                        //
 
-				string sTitleAndDate = lb.Items[ctr].ToString().Replace(" - EDITED", "");        // Use the title and date of the entry to create a JournalEntry object whose .ClearText will populate the display ...
-				string sTitle = sTitleAndDate.Substring(0, sTitleAndDate.LastIndexOf('(') - 1);
-				string sDate = sTitleAndDate.Substring(sTitleAndDate.LastIndexOf('(') + 1, sTitleAndDate.LastIndexOf(')') - sTitleAndDate.LastIndexOf('(') - 1);
+				var sTitleAndDate = lb.Items[ctr].ToString().Replace(" - EDITED", "");        // Use the title and date of the entry to create a JournalEntry object whose .ClearText will populate the display ...
+				var sTitle = sTitleAndDate.Substring(0, sTitleAndDate.LastIndexOf('(') - 1);
+				var sDate = sTitleAndDate.Substring(sTitleAndDate.LastIndexOf('(') + 1, sTitleAndDate.LastIndexOf(')') - sTitleAndDate.LastIndexOf('(') - 1);
 
 				entryRtrn = currentJournal.GetEntry(sTitle, sDate);
 
