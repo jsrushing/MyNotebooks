@@ -268,6 +268,7 @@ namespace myJournal.subforms
 			txtSearchText.Name = "txtSearchText";
 			txtSearchText.Size = new System.Drawing.Size(449, 23);
 			txtSearchText.TabIndex = 22;
+			txtSearchText.Text = "bike";
 			// 
 			// txtSearchTitle
 			// 

@@ -17,27 +17,30 @@ namespace myJournal
     {
         public DateTime Date;
 		public DateTime LastEditedOn;
-        public string Text;
-		public string[] Synopsis{ get { return GetSynopsis(); } }
-		public string DisplayText { get { return GetTextDisplayText(); } set { DisplayText = value; } }
+        public string	Text;
+		public string[] Synopsis{ get { synopsis = GetSynopsis(); return synopsis; } set { synopsis = value; } }
+		public string	DisplayText { get { return GetTextDisplayText(); } set { DisplayText = value; } }
+		public string		JournalName { get; set; }
 
-		private string RTF;
-        private string Labels;
-		public string Title;
-		public bool isEdited = false;
-        public string Id;
+		private string[]	synopsis;
+		private string		RTF;
+        private string		Labels;
+		public string		Title;
+		public bool			isEdited = false;
+        public string		Id;
 
 		public JournalEntry() { }
 
-		public JournalEntry(string _title, string _text, string _RTF, string _labels, bool _edited = false)
+		public JournalEntry(string _title, string _text, string _RTF, string _labels, string _journalName = "", bool _edited = false)
         {
-			Date	= DateTime.Now;
-			Text	= EncryptDecrypt.Encrypt(_text);
-            Title	= EncryptDecrypt.Encrypt(_title);
-			RTF		= EncryptDecrypt.Encrypt(_RTF);
-            Labels	= EncryptDecrypt.Encrypt(_labels);
-            Id		= Guid.NewGuid().ToString();
-			isEdited = _edited;	
+			Date		= DateTime.Now;
+			Text		= EncryptDecrypt.Encrypt(_text);
+            Title		= EncryptDecrypt.Encrypt(_title);
+			RTF			= EncryptDecrypt.Encrypt(_RTF);
+            Labels		= EncryptDecrypt.Encrypt(_labels);
+            Id			= Guid.NewGuid().ToString();
+			JournalName = _journalName;
+			isEdited	= _edited;	
 		}
 
 		public string GetFirstOrLastEditDate(bool getFirst)
@@ -59,8 +62,10 @@ namespace myJournal
 		{
 			string[] sRtrn = new string[4];
 			int iTextChunkLength = 150;
-			sRtrn[0] = ClearTitle() + " (" + Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"
+			string sTitle = ClearTitle() + " (" + Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"
 				+ (LastEditedOn < new DateTime(2000, 1, 1) ? "" : " [edited on " + LastEditedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + "]");
+			sTitle += this.JournalName == null ? "" : " [in " + JournalName + "]";
+			sRtrn[0] = sTitle;
 			string sEntryText = ClearText();
 			sEntryText = (sEntryText.Length < iTextChunkLength ? sEntryText : sEntryText.Substring(0, iTextChunkLength) + " ...");
 			sRtrn[1] = sEntryText;

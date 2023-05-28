@@ -54,12 +54,12 @@ namespace myJournal.subforms
 			journalBoundaries.Clear();
 			var labels = string.Empty;
 			string[] labelsArray;
-			var journalName = string.Empty;
-			var journalPIN = string.Empty;
-			var originalPIN = Program.PIN;
+			//var journalName = string.Empty;
+			//var journalPIN = string.Empty;
+			//var originalPIN = Program.PIN;
 			List<JournalEntry> foundEntries = new List<JournalEntry>();
-			//var iIndexCtr = 0;
 			List<JournalEntry> jeFound = null;
+			string sSynopsis0 = string.Empty;
 
 			lstFoundEntries.Items.Clear();
 
@@ -74,29 +74,33 @@ namespace myJournal.subforms
 			foreach (KeyValuePair<string, string> kvp in this.JournalsWithPINs)
 			{
 				Program.PIN = kvp.Value;
-				//var v = kvp.Value;
-
 				jeFound = new Journal(kvp.Key).Open().Search(so);
 				foundEntries.AddRange(jeFound);
+				string[] synopsis = new string[4];
+				JournalEntry jeTemp = null;
 
-				//foreach (JournalEntry jeEntry in foundEntries)
-				//{
-				//	var title = jeEntry.Synopsis[0] + " in " + kvp.Key;
-				//	jeEntry.Synopsis[0] = title;
-				//}
+				foreach (JournalEntry jeEntry in foundEntries)
+				{
+					jeTemp = new JournalEntry(jeEntry.Synopsis[0], jeEntry.Synopsis[1], "", labels, kvp.Key);
+					jeEntry.Replace(jeTemp);
+
+					//synopsis[0] = jeEntry.Synopsis[0] + " in " + kvp.Key;
+					//synopsis[1] = jeEntry.Synopsis[1];
+					//synopsis[2] = jeEntry.Synopsis[2];
+					//synopsis[3] = jeEntry.Synopsis[3];
+
+					//jeEntry.Synopsis = synopsis;
+
+					//var title = jeEntry.Synopsis[0] + " in " + kvp.Key;
+					//jeEntry.Synopsis[0] = title;
+				}
 
 				Utilities.PopulateEntries(lstFoundEntries, foundEntries, "", "", "", false);
 				journalBoundaries.Add(kvp.Key, lstFoundEntries.Items.Count);
-
-				//this.SetProps(foundEntries, kvp.Key);
-
 				foundEntries.Clear();
 			}
 
-			if (lstFoundEntries.Items.Count == 0)
-			{ lstFoundEntries.Items.Add("no matches found"); }
-			//else { GetCurrentSelections(); }
-
+			if (lstFoundEntries.Items.Count == 0) { lstFoundEntries.Items.Add("no matches found"); }
 			this.Cursor = Cursors.Default;
 		}
 
@@ -159,7 +163,6 @@ namespace myJournal.subforms
 			if (lb.SelectedIndex > -1)
 			{
 				lb.SelectedIndexChanged -= new System.EventHandler(this.lstFoundEntries_SelectedIndexChanged);
-				//selections = (List<int>)lb.SelectedIndices;
 				Journal j = GetEntryJournal();
 				Program.PIN = JournalsWithPINs.FirstOrDefault(p => p.Key == j.Name).Value;
 				JournalEntry currentEntry = JournalEntry.Select(rtb, lb, j);
@@ -204,33 +207,16 @@ namespace myJournal.subforms
 		private void GetCurrentSelections()
 		{
 			threeSelections.Clear();
-
-			foreach (int i in lstFoundEntries.SelectedIndices)
-			{
-				threeSelections.Add(i);
-			}
+			foreach (int i in lstFoundEntries.SelectedIndices) { threeSelections.Add(i); }
 		}
 
 		private Journal GetEntryJournal()
 		{
 			List<int> selected = new List<int>();
-			foreach (int i in lstFoundEntries.SelectedIndices) { selected.Add(i); }
 			KeyValuePair<string, int> kvp = new KeyValuePair<string, int>();
-
-			if (selected.Count() > 1)
-			{	// strip out threeSelections
-				selected = selected.Except(threeSelections).ToList();
-			}
-
+			foreach (int i in lstFoundEntries.SelectedIndices) { selected.Add(i); }
+			if (selected.Count() > 1) { selected = selected.Except(threeSelections).ToList(); }
 			kvp = journalBoundaries.FirstOrDefault(p => p.Value > selected[0]);
-			//KeyValuePair<string, int> v2 = journalBoundaries.FirstOrDefault(p => p.Value > 0); ;
-
-			//KeyValuePair<string, int> v2 = journalBoundaries.FirstOrDefault(p => p.Value > currentSelections[0]);
-
-			//if (lstFoundEntries.SelectedIndices.Count == 4)
-			//{ v2 = journalBoundaries.FirstOrDefault(p => p.Value > lstFoundEntries.SelectedIndices[3]); }
-			//else if(lstFoundEntries.SelectedIndices.Count > 0) { v2 = journalBoundaries.FirstOrDefault(p => p.Value > lstFoundEntries.SelectedIndex); }
-
 			return kvp.Key == "" ? null : new Journal(kvp.Key).Open();
 		}
 	}
