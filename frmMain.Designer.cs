@@ -151,6 +151,7 @@ namespace myJournal.subforms
 			lstEntries.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
 			lstEntries.Size = new System.Drawing.Size(988, 123);
 			lstEntries.TabIndex = 8;
+			lstEntries.UseTabStops = false;
 			lstEntries.Visible = false;
 			lstEntries.SelectedIndexChanged += this.lstEntries_SelectEntry;
 			// 
@@ -214,7 +215,6 @@ namespace myJournal.subforms
 			// 
 			// mnuJournal_Search
 			// 
-			mnuJournal_Search.Enabled = true;
 			mnuJournal_Search.Name = "mnuJournal_Search";
 			mnuJournal_Search.Size = new System.Drawing.Size(160, 22);
 			mnuJournal_Search.Text = "&Search";

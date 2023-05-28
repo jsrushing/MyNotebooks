@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using encrypt_decrypt_string;
 using myJournal.objects;
 
 namespace myJournal.subforms
@@ -17,6 +18,18 @@ namespace myJournal.subforms
 		private List<Journal> journalsToSearch = new List<Journal>();
 		private Dictionary<string, string> JournalsWithPINs = new Dictionary<string, string>();
 		private Dictionary<string, int> journalBoundaries = new Dictionary<string, int>();
+		private List<int> threeSelections = new List<int>();
+
+		struct EntryProperties
+		{
+			public string title;
+			public string text;
+			public string displayText;
+			public string parentJournalName;
+			public string[] synopsis;
+		}
+
+		List<EntryProperties> entryProperties = new List<EntryProperties>();
 
 		public frmSearch(Journal jrnl, Form parent)
 		{
@@ -45,8 +58,8 @@ namespace myJournal.subforms
 			var journalPIN = string.Empty;
 			var originalPIN = Program.PIN;
 			List<JournalEntry> foundEntries = new List<JournalEntry>();
-			var iIndexCtr = 0;
-			List<JournalEntry> jeFound;
+			//var iIndexCtr = 0;
+			List<JournalEntry> jeFound = null;
 
 			lstFoundEntries.Items.Clear();
 
@@ -56,19 +69,34 @@ namespace myJournal.subforms
 			labelsArray = labels.Length > 0 ? labels.Split(',') : null;
 
 			SearchObject so = new SearchObject(chkUseDate, chkUseDateRange, chkMatchCase, dtFindDate,
-					dtFindDate_From, dtFindDate_To, radBtnAnd, txtSearchTitle.Text, txtSearchText.Text, labelsArray); ;
+					dtFindDate_From, dtFindDate_To, radBtnAnd, txtSearchTitle.Text, txtSearchText.Text, labelsArray);
 
 			foreach (KeyValuePair<string, string> kvp in this.JournalsWithPINs)
 			{
 				Program.PIN = kvp.Value;
+				//var v = kvp.Value;
+
 				jeFound = new Journal(kvp.Key).Open().Search(so);
 				foundEntries.AddRange(jeFound);
-				iIndexCtr = iIndexCtr + foundEntries.Count * 3;
-				journalBoundaries.Add(kvp.Key, iIndexCtr);
+
+				//foreach (JournalEntry jeEntry in foundEntries)
+				//{
+				//	var title = jeEntry.Synopsis[0] + " in " + kvp.Key;
+				//	jeEntry.Synopsis[0] = title;
+				//}
+
+				Utilities.PopulateEntries(lstFoundEntries, foundEntries, "", "", "", false);
+				journalBoundaries.Add(kvp.Key, lstFoundEntries.Items.Count);
+
+				//this.SetProps(foundEntries, kvp.Key);
+
+				foundEntries.Clear();
 			}
 
-			Utilities.PopulateEntries(lstFoundEntries, foundEntries);
-			if (lstFoundEntries.Items.Count == 0) { lstFoundEntries.Items.Add("no matches found"); }
+			if (lstFoundEntries.Items.Count == 0)
+			{ lstFoundEntries.Items.Add("no matches found"); }
+			//else { GetCurrentSelections(); }
+
 			this.Cursor = Cursors.Default;
 		}
 
@@ -116,7 +144,10 @@ namespace myJournal.subforms
 			{
 				lblSeparator.Top += e.Y;
 				Utilities.ResizeListsAndRTBs(lstFoundEntries, rtbSelectedEntry_Found, lblSeparator, lblSelectionType, this);
-				lstFoundEntries.TopIndex = lstFoundEntries.SelectedIndices[0];
+				if (lstFoundEntries.SelectedIndices.Count > 0)
+				{
+					lstFoundEntries.TopIndex = lstFoundEntries.SelectedIndices[0];
+				}
 			}
 		}
 
@@ -124,12 +155,25 @@ namespace myJournal.subforms
 		{
 			ListBox lb = (ListBox)sender;
 			RichTextBox rtb = rtbSelectedEntry_Found;
-			lb.SelectedIndexChanged -= new System.EventHandler(this.lstFoundEntries_SelectedIndexChanged);
-			JournalEntry currentEntry = JournalEntry.Select(rtb, lb, GetEntryJournal(), firstSelection);
-			firstSelection = false;
-			lblSelectionType.Visible = rtb.Text.Length > 0;
-			lblSeparator.Visible = rtb.Text.Length > 0;
-			Utilities.ResizeListsAndRTBs(lb, rtb, lblSeparator, lblSelectionType, this);
+
+			if (lb.SelectedIndex > -1)
+			{
+				lb.SelectedIndexChanged -= new System.EventHandler(this.lstFoundEntries_SelectedIndexChanged);
+				//selections = (List<int>)lb.SelectedIndices;
+				Journal j = GetEntryJournal();
+				Program.PIN = JournalsWithPINs.FirstOrDefault(p => p.Key == j.Name).Value;
+				JournalEntry currentEntry = JournalEntry.Select(rtb, lb, j);
+				GetCurrentSelections();
+
+				if (currentEntry != null)
+				{
+					lblSelectionType.Visible = rtb.Text.Length > 0;
+					lblSeparator.Visible = rtb.Text.Length > 0;
+					Utilities.ResizeListsAndRTBs(lb, rtb, lblSeparator, lblSelectionType, this);
+				}
+				else { lstFoundEntries.SelectedIndices.Clear(); }
+			}
+
 			lb.SelectedIndexChanged += new System.EventHandler(this.lstFoundEntries_SelectedIndexChanged);
 		}
 
@@ -157,10 +201,37 @@ namespace myJournal.subforms
 			// code to select journals to search - enhancement
 		}
 
-		private Journal GetEntryJournal() 
+		private void GetCurrentSelections()
 		{
-			var v2 = journalBoundaries.Where(p => p.Value > lstFoundEntries.SelectedIndex).ToList();
-			return v2.Count > 0 ? new Journal(v2[0].Key).Open() : null;
+			threeSelections.Clear();
+
+			foreach (int i in lstFoundEntries.SelectedIndices)
+			{
+				threeSelections.Add(i);
+			}
+		}
+
+		private Journal GetEntryJournal()
+		{
+			List<int> selected = new List<int>();
+			foreach (int i in lstFoundEntries.SelectedIndices) { selected.Add(i); }
+			KeyValuePair<string, int> kvp = new KeyValuePair<string, int>();
+
+			if (selected.Count() > 1)
+			{	// strip out threeSelections
+				selected = selected.Except(threeSelections).ToList();
+			}
+
+			kvp = journalBoundaries.FirstOrDefault(p => p.Value > selected[0]);
+			//KeyValuePair<string, int> v2 = journalBoundaries.FirstOrDefault(p => p.Value > 0); ;
+
+			//KeyValuePair<string, int> v2 = journalBoundaries.FirstOrDefault(p => p.Value > currentSelections[0]);
+
+			//if (lstFoundEntries.SelectedIndices.Count == 4)
+			//{ v2 = journalBoundaries.FirstOrDefault(p => p.Value > lstFoundEntries.SelectedIndices[3]); }
+			//else if(lstFoundEntries.SelectedIndices.Count > 0) { v2 = journalBoundaries.FirstOrDefault(p => p.Value > lstFoundEntries.SelectedIndex); }
+
+			return kvp.Key == "" ? null : new Journal(kvp.Key).Open();
 		}
 	}
 }

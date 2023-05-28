@@ -88,11 +88,19 @@ namespace myJournal
         {
             JournalEntry je = null;
 
-			//var test = a.ClearTitle() + a.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"];
+			foreach (JournalEntry jeEntry in this.Entries)
+			{
+				if (jeEntry.ClearTitle() == Title & jeEntry.Date.ToString("MM/dd/yy HH:mm:ss") == Date)
+				{
+					je = jeEntry; break;
+				}
+			}
 
-			try { je = Entries.First(a => a.ClearTitle() + a.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) == Title + Date); }
-            catch(Exception ex) { Console.Write(ex.Message); }
-            return je;
+			if (je != null) { JournalEntry jeTmp = Entries.First(a => a.ClearTitle() == Title && a.Date.ToString("MM/dd/yy HH:mm:ss") == Date); }
+
+			//try { je = Entries.First(a => a.ClearTitle() == Title & a.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) == Title + Date); }
+			//catch (Exception ex) { Console.Write(ex.Message); }
+			return je;
         }
 
         public Journal Open(bool useFileName = false)

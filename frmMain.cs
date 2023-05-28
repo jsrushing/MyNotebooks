@@ -232,7 +232,7 @@ namespace myJournal.subforms
 					}
 					else
 					{
-						Utilities.PopulateEntries(lstEntries, currentJournal.Entries, currentJournal.Name, DateTime.Now.AddDays(-61).ToString(), DateTime.Now.ToString(), true, 0) ;
+						Utilities.PopulateEntries(lstEntries, currentJournal.Entries, currentJournal.Name, DateTime.Now.AddDays(-61).ToString(), DateTime.Now.ToString(), true, 0);
 
 						if (lstEntries.Items.Count == 0) { Utilities.PopulateEntries(lstEntries, currentJournal.Entries); }
 
@@ -426,7 +426,6 @@ namespace myJournal.subforms
 					lblSelectionType.Visible = rtb.Text.Length > 0;
 					lblSeparator.Visible = rtb.Text.Length > 0;
 					Utilities.ResizeListsAndRTBs(lstEntries, rtbSelectedEntry, lblSeparator, lblSelectionType, this);
-					//lb.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectEntry);
 					ShowHideMenusAndControls(SelectionState.EntrySelected);
 				}
 				else

@@ -106,7 +106,7 @@ namespace myJournal
 			return bLabelEdited;
 		}
 
-		public static JournalEntry Select(RichTextBox rtb, ListBox lb, Journal currentJournal, bool FirstSelection, JournalEntry je = null)
+		public static JournalEntry Select(RichTextBox rtb, ListBox lb, Journal currentJournal, bool firstSelection = false, JournalEntry je = null)
 		{
 			rtb.Clear();
 			List<int> targets = new List<int>();
@@ -200,7 +200,7 @@ namespace myJournal
 
 					lb.Height = rtb.Text.Length > 0 ? rtb.Top - 132 : 100;
 
-					if (FirstSelection)
+					if (firstSelection)
 					{
 						lb.TopIndex = lb.Top + lb.Height < rtb.Top ? ctr : lb.TopIndex;
 					}
