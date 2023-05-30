@@ -21,17 +21,6 @@ namespace myJournal.subforms
 		private List<int> threeSelections = new List<int>();
 		private bool IgnoreCheckChange = false;
 
-		struct EntryProperties
-		{
-			public string title;
-			public string text;
-			public string displayText;
-			public string parentJournalName;
-			public string[] synopsis;
-		}
-
-		List<EntryProperties> entryProperties = new List<EntryProperties>();
-
 		public frmSearch(Journal jrnl, Form parent)
 		{
 			InitializeComponent();
@@ -84,7 +73,6 @@ namespace myJournal.subforms
 
 		private void btnSelectJournals_Click(object sender, EventArgs e)
 		{
-			//StringBuilder sb = new StringBuilder();
 			cbxJournalsToSearch.Items.Clear();
 
 			using (frmSelectJournalsToSearch frm = new frmSelectJournalsToSearch(this, this.CheckedJournals))
@@ -95,20 +83,23 @@ namespace myJournal.subforms
 
 			if (CheckedJournals.Count > 0)
 			{
-				var displayWidth = this.Width - lblFoundEntries.Left - 25;
-				var sectionWidth = displayWidth / CheckedJournals.Count;
-				var itemToAppend = string.Empty;
+				var sectionWidth = cbxJournalsToSearch.Width;
 
 				foreach (KeyValuePair<string, string> kvp in CheckedJournals)
 				{
-					itemToAppend = kvp.Key.Length > sectionWidth ? kvp.Key.Substring(0, sectionWidth - 3) + "..., " : kvp.Key + ", ";
-					cbxJournalsToSearch.Items.Add(itemToAppend.Remove(itemToAppend.Length - 2, 1));
-					//sb.Append(itemToAppend);
+					cbxJournalsToSearch.Items.Add(kvp.Key.Length > sectionWidth ? kvp.Key.Substring(0, sectionWidth - 3) + "..." : kvp.Key);
 				}
+
 				cbxJournalsToSearch.SelectedIndex = 0;
 			}
 			else { cbxJournalsToSearch.Text = "(no Journals selected)"; }
 
+		}
+
+		private void cbxJournalsToSearch_DropDownClosed(object sender, EventArgs e)
+		{
+			cbxJournalsToSearch.SelectedIndex = 0;
+			btnSelectJournals.Focus();
 		}
 
 		private void chkUseDate_CheckedChanged(object sender, EventArgs e) { ToggleDateControls(true); }
@@ -221,11 +212,6 @@ namespace myJournal.subforms
 				}
 			}
 
-		}
-
-		private void cbxJournalsToSearch_DropDownClosed(object sender, EventArgs e)
-		{
-			cbxJournalsToSearch.SelectedIndex = -1;
 		}
 	}
 }
