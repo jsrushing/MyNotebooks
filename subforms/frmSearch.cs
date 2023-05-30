@@ -19,6 +19,7 @@ namespace myJournal.subforms
 		private Dictionary<string, string> CheckedJournals = new Dictionary<string, string>();
 		private Dictionary<string, int> journalBoundaries = new Dictionary<string, int>();
 		private List<int> threeSelections = new List<int>();
+		private bool IgnoreCheckChange = false;
 
 		struct EntryProperties
 		{
@@ -38,9 +39,10 @@ namespace myJournal.subforms
 			{
 				journalsToSearch.Add(jrnl);
 				CheckedJournals.Add(jrnl.Name, Program.PIN);
-				lblJournalsToSearch.Text = jrnl.Name;
+				cbxJournalsToSearch.Text = jrnl.Name;
+				//lblJournalsToSearch.Text = jrnl.Name;
 			}
-
+			if (cbxJournalsToSearch.Items.Count == 0) { cbxJournalsToSearch.Text = "(no Journals selected)"; }
 			LabelsManager.PopulateLabelsList(lstLabelsForSearch);
 			Utilities.SetStartPosition(this, parent);
 			dtFindDate.Value = DateTime.Now;
@@ -82,7 +84,8 @@ namespace myJournal.subforms
 
 		private void btnSelectJournals_Click(object sender, EventArgs e)
 		{
-			StringBuilder sb = new StringBuilder();
+			//StringBuilder sb = new StringBuilder();
+			cbxJournalsToSearch.Items.Clear();
 
 			using (frmSelectJournalsToSearch frm = new frmSelectJournalsToSearch(this, this.CheckedJournals))
 			{
@@ -99,24 +102,18 @@ namespace myJournal.subforms
 				foreach (KeyValuePair<string, string> kvp in CheckedJournals)
 				{
 					itemToAppend = kvp.Key.Length > sectionWidth ? kvp.Key.Substring(0, sectionWidth - 3) + "..., " : kvp.Key + ", ";
-					sb.Append(itemToAppend);
+					cbxJournalsToSearch.Items.Add(itemToAppend.Remove(itemToAppend.Length - 2, 1));
+					//sb.Append(itemToAppend);
 				}
-
+				cbxJournalsToSearch.SelectedIndex = 0;
 			}
-
-			if (sb.ToString().Length > 2) { lblJournalsToSearch.Text = sb.ToString().Substring(0, sb.ToString().Length - 2); }
-			else { lblJournalsToSearch.Text = "(no journals selected"; }
+			else { cbxJournalsToSearch.Text = "(no Journals selected)"; }
 
 		}
 
-		private void chkUseDateRange_CheckedChanged(object sender, EventArgs e)
-		{
-			dtFindDate_From.Enabled = chkUseDateRange.Checked;
-			dtFindDate_To.Enabled = chkUseDateRange.Checked;
-		}
+		private void chkUseDate_CheckedChanged(object sender, EventArgs e) { ToggleDateControls(true); }
 
-		private void chkUseDate_CheckedChanged(object sender, EventArgs e)
-		{ dtFindDate.Enabled = chkUseDate.Enabled; }
+		private void chkUseDateRange_CheckedChanged(object sender, EventArgs e) { ToggleDateControls(false); }
 
 		private void GetCurrentSelections()
 		{
@@ -194,6 +191,41 @@ namespace myJournal.subforms
 		private void mnuSelectJournals_Click(object sender, EventArgs e)
 		{
 			// code to select journals to search - enhancement
+		}
+
+		private void ToggleDateControls(bool toggleUseDate)
+		{
+			if (!IgnoreCheckChange)
+			{
+				dtFindDate.Enabled = false;
+				dtFindDate_From.Enabled = false;
+				dtFindDate_To.Enabled = false;
+
+				if (chkUseDate.Checked | chkUseDateRange.Checked)
+				{
+					if (toggleUseDate)
+					{
+						dtFindDate.Enabled = true;
+						IgnoreCheckChange = true;
+						chkUseDateRange.Checked = false;
+						IgnoreCheckChange = false;
+					}
+					else
+					{
+						dtFindDate_From.Enabled = true;
+						dtFindDate_To.Enabled = true;
+						IgnoreCheckChange = true;
+						chkUseDate.Checked = false;
+						IgnoreCheckChange = false;
+					}
+				}
+			}
+
+		}
+
+		private void cbxJournalsToSearch_DropDownClosed(object sender, EventArgs e)
+		{
+			cbxJournalsToSearch.SelectedIndex = -1;
 		}
 	}
 }

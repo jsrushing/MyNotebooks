@@ -158,37 +158,53 @@ namespace myJournal
 
 		public List<JournalEntry> Search(SearchObject So)
 		{
+			List<JournalEntry> allEntries	= this.Entries;
 			List<JournalEntry> foundEntries = new List<JournalEntry>();
-			string entryText = string.Empty;
-			string entryTitle = string.Empty;
+			string entryText				= string.Empty;
+			string entryTitle				= string.Empty;
 
-			foreach (JournalEntry je in this.Entries)
+			if(So.chkUseDate.Checked | So.chkUseDateRange.Checked)
 			{
-				// date
-				if (So.chkUseDate.Checked)
-				{ if (je.Date.ToShortDateString() == So.dtFindDate.Value.ToShortDateString()) { foundEntries.Add(je); } }
+				if (So.chkUseDate.Checked) 
+				{ allEntries = Entries.Where(p => p.LastEditedOn.ToShortDateString() == So.dtFindDate.Value.ToShortDateString()).ToList(); }
+				else
+				{ allEntries = Entries.Where(p => p.LastEditedOn >= So.dtFindDate_From.Value && p.Date <= So.dtFindDate_To.Value).ToList(); }
+			}
 
-				if (So.chkUseDateRange.Checked)
-				{ if (je.Date >= So.dtFindDate_From.Value && je.Date <= So.dtFindDate_To.Value) { foundEntries.Add(je); } }
+			foreach (JournalEntry je in allEntries)
+			{
+				//// date
+				//if (So.chkUseDate.Checked & je.Date.ToShortDateString() == So.dtFindDate.Value.ToShortDateString()) { foundEntries.Add(je); }
+				//if (So.chkUseDateRange.Checked & (je.Date >= So.dtFindDate_From.Value && je.Date <= So.dtFindDate_To.Value)) { foundEntries.Add(je); }
 
 				// labels
-				string s = je.ClearLabels();
+				var s = je.ClearLabels();
 
 				if (So.labelsArray != null)
 				{ foreach (var label in So.labelsArray) { if (je.ClearLabels().Contains(label)) { foundEntries.Add(je); } } }
 
 				// title and/or text
-				So.searchTitle = So.chkMatchCase.Checked ? So.searchTitle : So.searchTitle.ToLower();
-				So.searchText = So.chkMatchCase.Checked ? So.searchText : So.searchText.ToLower();
-				entryText = So.chkMatchCase.Checked ? je.ClearText() : je.ClearText().ToLower();
-				entryTitle = So.chkMatchCase.Checked ? je.ClearTitle() : je.ClearTitle().ToLower();
+				So.searchTitle	= So.chkMatchCase.Checked ? So.searchTitle	: So.searchTitle.ToLower();
+				So.searchText	= So.chkMatchCase.Checked ? So.searchText	: So.searchText.ToLower();
+				entryText		= So.chkMatchCase.Checked ? je.ClearText()	: je.ClearText().ToLower();
+				entryTitle		= So.chkMatchCase.Checked ? je.ClearTitle() : je.ClearTitle().ToLower();
 
 				if (So.searchTitle.Length > 0 && So.searchText.Length > 0)
 				{
 					if (So.radBtnAnd.Checked)
-					{ if (entryText.Contains(So.searchText) & entryTitle.Contains(So.searchTitle)) { foundEntries.Add(je); } }
+					{ if (entryText.Contains(So.searchText) & entryTitle.Contains(So.searchTitle)) 
+						{
+							if(!foundEntries.Contains(je)) { foundEntries.Add(je); }
+							//foundEntries.Add(je); 
+						} 
+					}
 					else
-					{ if (So.searchText.Length > 0 | entryText.Contains(So.searchText)) { foundEntries.Add(je); } }
+					{ if (entryText.Contains(So.searchText) | entryText.Contains(So.searchTitle)) 
+						{
+							if (!foundEntries.Contains(je)) { foundEntries.Add(je); }
+							//foundEntries.Add(je); 
+						}
+					}
 				}
 				else if (So.searchText.Length > 0)
 				{

@@ -14,20 +14,9 @@ namespace myJournal.subforms
 {
 	public partial class frmSelectJournalsToSearch : Form
 	{
-		public List<Journal> SelectedJournals;
-		public string CommonPIN;
 		public Dictionary<string, string>	CheckedJournals { get { return dictJournalsAndPINs; } }
 		private Dictionary<string, string>	dictJournalsAndPINs = new Dictionary<string, string>();
 		private Dictionary<string, string>	dictCheckedItems = new Dictionary<string, string>();
-
-		List<journalListItem> journalListItems = new List<journalListItem>();
-
-		struct journalListItem
-		{
-			string sItem;
-			string sPIN;
-			bool isChecked;
-		}
 
 		public frmSelectJournalsToSearch(Form parent, Dictionary<string, string> checkedItems)
 		{
@@ -36,9 +25,6 @@ namespace myJournal.subforms
 			 
 			foreach (Journal j in Program.AllJournals)
 			{
-				//dictAllJournals.Add(j.Name, "");
-				//lstJournalPINs.Items.Add(j.Name);
-
 				if (dictCheckedItems.ContainsKey(j.Name))
 				{
 					if (dictCheckedItems[j.Name].Length > 0)
@@ -60,13 +46,10 @@ namespace myJournal.subforms
 		{
 			string s = lstJournalPINs.Text.Replace(" (****)", "");
 			var itemIndex = lstJournalPINs.SelectedIndex;
-
 			dictJournalsAndPINs[s] = txtPIN.Text;
 			s += " (****)";
-
 			lstJournalPINs.Items.Insert(lstJournalPINs.SelectedIndex, s);
 			lstJournalPINs.Items.RemoveAt(lstJournalPINs.SelectedIndex);
-
 			txtPIN.PasswordChar = '\0';
 			txtPIN.Text = "(select a Journal)";
 			txtPIN.Enabled = false;
@@ -84,19 +67,13 @@ namespace myJournal.subforms
 			for(var i = 0; i < checkedItems.Length; i++) { checkedItems[i] = Scrubbed(checkedItems[i]); }
 			Dictionary<string, string> tmpDict = dictJournalsAndPINs;
 
-			// remove from dictJournalsAndPINs if not in checkedItems
-
 			foreach(KeyValuePair<string, string> kvp in tmpDict)
-			{
-				if (!checkedItems.Contains(kvp.Key)) { tmpDict.Remove(kvp.Key); }
-			}
+			{ if (!checkedItems.Contains(kvp.Key)) { tmpDict.Remove(kvp.Key); } }
 			
-			foreach(string item in checkedItems)
+			foreach(var item in checkedItems)
 			{
 				if (!tmpDict.ContainsKey(Scrubbed(item))) 
-				{
-					dictJournalsAndPINs.Add(Scrubbed(item), ""); 	
-				}	
+				{ dictJournalsAndPINs.Add(Scrubbed(item), ""); }	
 			}
 
 			this.Hide();
@@ -128,9 +105,6 @@ namespace myJournal.subforms
 			e.Cancel = true;
 		}
 
-		private string Scrubbed(string stringToScrub)
-		{
-			return stringToScrub.Replace(" (****)", "");
-		}
+		private string Scrubbed(string stringToScrub) { return stringToScrub.Replace(" (****)", ""); }
 	}
 }

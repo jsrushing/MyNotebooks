@@ -12,13 +12,13 @@ namespace myJournal.subforms
 {
 	public partial class frmNewEntry : Form
 	{
-		private JournalEntry entry = null;
-		private Journal currentJournal = null;
-		private bool isEdit = false;
-		private int originalEntryLength = -1;
-		private string originalText_Full;
-		private bool isDirty = false;
-		private string originalTitle;
+		private JournalEntry	entry				= null;
+		private Journal			currentJournal		= null;
+		private bool			isEdit				= false;
+		private int				originalEntryLength = -1;
+		private bool			isDirty				= false;
+		private string			originalTitle;
+		private string			originalText_Full;
 		private LabelsManager.LabelsSortType sort = LabelsManager.LabelsSortType.None;
 
 		public bool saved { get; private set; }
@@ -181,16 +181,7 @@ namespace myJournal.subforms
 		private void Save()
 		{
 			JournalEntry newEntry = new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, rtbNewEntry.Rtf, LabelsManager.CheckedLabels_Get(clbLabels), "", false);
-
-			if (entry == null)
-			{
-				currentJournal.AddEntry(newEntry);
-			}
-			else
-			{
-				currentJournal.ReplaceEntry(entry, newEntry);
-			}
-
+			if (entry == null) { currentJournal.AddEntry(newEntry); } else { currentJournal.ReplaceEntry(entry, newEntry); }
 			currentJournal.Save();
 			entry = newEntry;
 			saved = true;
