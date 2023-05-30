@@ -86,21 +86,10 @@ namespace myJournal
 
         public JournalEntry GetEntry(string Title, string Date)
         {
-            JournalEntry je = null;
-
-			foreach (JournalEntry jeEntry in this.Entries)
-			{
-				if (jeEntry.ClearTitle() == Title & jeEntry.Date.ToString("MM/dd/yy HH:mm:ss") == Date)
-				{
-					je = jeEntry; break;
-				}
-			}
-
-			if (je != null) { JournalEntry jeTmp = Entries.First(a => a.ClearTitle() == Title && a.Date.ToString("MM/dd/yy HH:mm:ss") == Date); }
-
-			//try { je = Entries.First(a => a.ClearTitle() == Title & a.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) == Title + Date); }
-			//catch (Exception ex) { Console.Write(ex.Message); }
-			return je;
+			JournalEntry jeRtrn = null;
+			try { jeRtrn = Entries.First(a => a.ClearTitle() == Title && a.Date.ToString("MM/dd/yy HH:mm:ss") == Date); }
+			catch (Exception) { }
+			return jeRtrn;
         }
 
         public Journal Open(bool useFileName = false)
@@ -183,11 +172,10 @@ namespace myJournal
 				{ if (je.Date >= So.dtFindDate_From.Value && je.Date <= So.dtFindDate_To.Value) { foundEntries.Add(je); } }
 
 				// labels
-
 				string s = je.ClearLabels();
 
 				if (So.labelsArray != null)
-				{ foreach (string label in So.labelsArray) { if (je.ClearLabels().Contains(label)) { foundEntries.Add(je); } } }
+				{ foreach (var label in So.labelsArray) { if (je.ClearLabels().Contains(label)) { foundEntries.Add(je); } } }
 
 				// title and/or text
 				So.searchTitle = So.chkMatchCase.Checked ? So.searchTitle : So.searchTitle.ToLower();

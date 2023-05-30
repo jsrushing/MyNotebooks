@@ -16,7 +16,7 @@ namespace myJournal.subforms
 	{
 		private bool firstSelection = true;
 		private List<Journal> journalsToSearch = new List<Journal>();
-		private Dictionary<string, string> JournalsWithPINs = new Dictionary<string, string>();
+		private Dictionary<string, string> CheckedJournals = new Dictionary<string, string>();
 		private Dictionary<string, int> journalBoundaries = new Dictionary<string, int>();
 		private List<int> threeSelections = new List<int>();
 
@@ -37,7 +37,7 @@ namespace myJournal.subforms
 			if (jrnl != null)
 			{
 				journalsToSearch.Add(jrnl);
-				JournalsWithPINs.Add(jrnl.Name, Program.PIN);
+				CheckedJournals.Add(jrnl.Name, Program.PIN);
 				lblJournalsToSearch.Text = jrnl.Name;
 			}
 
@@ -54,47 +54,23 @@ namespace myJournal.subforms
 			journalBoundaries.Clear();
 			var labels = string.Empty;
 			string[] labelsArray;
-			//var journalName = string.Empty;
-			//var journalPIN = string.Empty;
-			//var originalPIN = Program.PIN;
 			List<JournalEntry> foundEntries = new List<JournalEntry>();
 			List<JournalEntry> jeFound = null;
-			string sSynopsis0 = string.Empty;
 
 			lstFoundEntries.Items.Clear();
-
-			for (int i = 0; i < lstLabelsForSearch.CheckedItems.Count; i++) { labels += lstLabelsForSearch.CheckedItems[i].ToString() + ","; }
-
+			for (var i = 0; i < lstLabelsForSearch.CheckedItems.Count; i++) { labels += lstLabelsForSearch.CheckedItems[i].ToString() + ","; }
 			labels = labels.Length > 0 ? labels.Substring(0, labels.Length - 1) : string.Empty;
 			labelsArray = labels.Length > 0 ? labels.Split(',') : null;
 
 			SearchObject so = new SearchObject(chkUseDate, chkUseDateRange, chkMatchCase, dtFindDate,
 					dtFindDate_From, dtFindDate_To, radBtnAnd, txtSearchTitle.Text, txtSearchText.Text, labelsArray);
 
-			foreach (KeyValuePair<string, string> kvp in this.JournalsWithPINs)
+			foreach (KeyValuePair<string, string> kvp in this.CheckedJournals)
 			{
 				Program.PIN = kvp.Value;
 				jeFound = new Journal(kvp.Key).Open().Search(so);
+				foreach (JournalEntry je in jeFound) { je.JournalName = kvp.Key; }
 				foundEntries.AddRange(jeFound);
-				string[] synopsis = new string[4];
-				JournalEntry jeTemp = null;
-
-				foreach (JournalEntry jeEntry in foundEntries)
-				{
-					jeTemp = new JournalEntry(jeEntry.Synopsis[0], jeEntry.Synopsis[1], "", labels, kvp.Key);
-					jeEntry.Replace(jeTemp);
-
-					//synopsis[0] = jeEntry.Synopsis[0] + " in " + kvp.Key;
-					//synopsis[1] = jeEntry.Synopsis[1];
-					//synopsis[2] = jeEntry.Synopsis[2];
-					//synopsis[3] = jeEntry.Synopsis[3];
-
-					//jeEntry.Synopsis = synopsis;
-
-					//var title = jeEntry.Synopsis[0] + " in " + kvp.Key;
-					//jeEntry.Synopsis[0] = title;
-				}
-
 				Utilities.PopulateEntries(lstFoundEntries, foundEntries, "", "", "", false);
 				journalBoundaries.Add(kvp.Key, lstFoundEntries.Items.Count);
 				foundEntries.Clear();
@@ -108,19 +84,19 @@ namespace myJournal.subforms
 		{
 			StringBuilder sb = new StringBuilder();
 
-			using (frmSelectJournalsToSearch frm = new frmSelectJournalsToSearch(this, this.JournalsWithPINs))
+			using (frmSelectJournalsToSearch frm = new frmSelectJournalsToSearch(this, this.CheckedJournals))
 			{
 				frm.ShowDialog();
-				this.JournalsWithPINs = frm.DictJournals;
+				this.CheckedJournals = frm.CheckedJournals;
 			}
 
-			if (JournalsWithPINs.Count > 0)
+			if (CheckedJournals.Count > 0)
 			{
 				var displayWidth = this.Width - lblFoundEntries.Left - 25;
-				var sectionWidth = displayWidth / JournalsWithPINs.Count;
+				var sectionWidth = displayWidth / CheckedJournals.Count;
 				var itemToAppend = string.Empty;
 
-				foreach (KeyValuePair<string, string> kvp in JournalsWithPINs)
+				foreach (KeyValuePair<string, string> kvp in CheckedJournals)
 				{
 					itemToAppend = kvp.Key.Length > sectionWidth ? kvp.Key.Substring(0, sectionWidth - 3) + "..., " : kvp.Key + ", ";
 					sb.Append(itemToAppend);
@@ -141,6 +117,22 @@ namespace myJournal.subforms
 
 		private void chkUseDate_CheckedChanged(object sender, EventArgs e)
 		{ dtFindDate.Enabled = chkUseDate.Enabled; }
+
+		private void GetCurrentSelections()
+		{
+			threeSelections.Clear();
+			foreach (int i in lstFoundEntries.SelectedIndices) { threeSelections.Add(i); }
+		}
+
+		private Journal GetEntryJournal()
+		{
+			List<int> selectedIndices = new List<int>();
+			KeyValuePair<string, int> kvp = new KeyValuePair<string, int>();
+			foreach (int i in lstFoundEntries.SelectedIndices) { selectedIndices.Add(i); }
+			if (selectedIndices.Count() > 1) { selectedIndices = selectedIndices.Except(threeSelections).ToList(); }
+			kvp = journalBoundaries.FirstOrDefault(p => p.Value > selectedIndices[0]);
+			return kvp.Key == "" ? null : new Journal(kvp.Key).Open();
+		}
 
 		private void lblSeparator_MouseMove(object sender, MouseEventArgs e)
 		{
@@ -164,7 +156,7 @@ namespace myJournal.subforms
 			{
 				lb.SelectedIndexChanged -= new System.EventHandler(this.lstFoundEntries_SelectedIndexChanged);
 				Journal j = GetEntryJournal();
-				Program.PIN = JournalsWithPINs.FirstOrDefault(p => p.Key == j.Name).Value;
+				Program.PIN = CheckedJournals.FirstOrDefault(p => p.Key == j.Name).Value;
 				JournalEntry currentEntry = JournalEntry.Select(rtb, lb, j);
 				GetCurrentSelections();
 
@@ -202,22 +194,6 @@ namespace myJournal.subforms
 		private void mnuSelectJournals_Click(object sender, EventArgs e)
 		{
 			// code to select journals to search - enhancement
-		}
-
-		private void GetCurrentSelections()
-		{
-			threeSelections.Clear();
-			foreach (int i in lstFoundEntries.SelectedIndices) { threeSelections.Add(i); }
-		}
-
-		private Journal GetEntryJournal()
-		{
-			List<int> selected = new List<int>();
-			KeyValuePair<string, int> kvp = new KeyValuePair<string, int>();
-			foreach (int i in lstFoundEntries.SelectedIndices) { selected.Add(i); }
-			if (selected.Count() > 1) { selected = selected.Except(threeSelections).ToList(); }
-			kvp = journalBoundaries.FirstOrDefault(p => p.Value > selected[0]);
-			return kvp.Key == "" ? null : new Journal(kvp.Key).Open();
 		}
 	}
 }

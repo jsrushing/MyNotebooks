@@ -64,7 +64,7 @@ namespace myJournal
 			int iTextChunkLength = 150;
 			string sTitle = ClearTitle() + " (" + Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"
 				+ (LastEditedOn < new DateTime(2000, 1, 1) ? "" : " [edited on " + LastEditedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + "]");
-			sTitle += this.JournalName == null ? "" : " [in " + JournalName + "]";
+			sTitle += this.JournalName == null ? "" : " > in '" + JournalName + "'";
 			sRtrn[0] = sTitle;
 			string sEntryText = ClearText();
 			sEntryText = (sEntryText.Length < iTextChunkLength ? sEntryText : sEntryText.Substring(0, iTextChunkLength) + " ...");
@@ -79,6 +79,7 @@ namespace myJournal
 			Labels = newEntry.Labels;
 			Text = newEntry.Text;
 			Title = newEntry.Title;
+			JournalName = newEntry.JournalName;
 		}
 
 		public bool RemoveOrReplaceLabel(string newLabelName, string oldLabelName, bool renaming = true)

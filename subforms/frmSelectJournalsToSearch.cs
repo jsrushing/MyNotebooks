@@ -16,27 +16,41 @@ namespace myJournal.subforms
 	{
 		public List<Journal> SelectedJournals;
 		public string CommonPIN;
-		public Dictionary<string, string> DictJournals { get { return dictAllJournals; } }
-		private Dictionary<string, string> dictAllJournals = new Dictionary<string, string>();
-		private Dictionary<string, string> dictCheckedItems = new Dictionary<string, string>();
+		public Dictionary<string, string>	CheckedJournals { get { return dictJournalsAndPINs; } }
+		private Dictionary<string, string>	dictJournalsAndPINs = new Dictionary<string, string>();
+		private Dictionary<string, string>	dictCheckedItems = new Dictionary<string, string>();
+
+		List<journalListItem> journalListItems = new List<journalListItem>();
+
+		struct journalListItem
+		{
+			string sItem;
+			string sPIN;
+			bool isChecked;
+		}
 
 		public frmSelectJournalsToSearch(Form parent, Dictionary<string, string> checkedItems)
 		{
 			InitializeComponent();
 			dictCheckedItems = checkedItems;
-
+			 
 			foreach (Journal j in Program.AllJournals)
 			{
-				dictAllJournals.Add(j.Name, "");
-				lstJournalPINs.Items.Add(j.Name);
+				//dictAllJournals.Add(j.Name, "");
+				//lstJournalPINs.Items.Add(j.Name);
 
 				if (dictCheckedItems.ContainsKey(j.Name))
 				{
-					var origText = lstJournalPINs.Items[(lstJournalPINs.Items.Count) - 1].ToString();
-					lstJournalPINs.Items.Insert(lstJournalPINs.Items.Count - 1, origText + (dictCheckedItems[j.Name].Length > 0 ? " (****)" : ""));
-					lstJournalPINs.Items.RemoveAt(lstJournalPINs.Items.Count - 1);
+					if (dictCheckedItems[j.Name].Length > 0)
+					{ 
+						lstJournalPINs.Items.Add(j.Name + " (****)");	
+						dictJournalsAndPINs.Add(j.Name, dictCheckedItems[j.Name]);
+					}
+					else { lstJournalPINs.Items.Add(j.Name); dictJournalsAndPINs.Add(j.Name, ""); }
+					
 					lstJournalPINs.SetItemChecked(lstJournalPINs.Items.Count - 1, true);
 				}
+				else { lstJournalPINs.Items.Add(j.Name); }
 			}
 
 			Utilities.SetStartPosition(this, parent);
@@ -46,10 +60,13 @@ namespace myJournal.subforms
 		{
 			string s = lstJournalPINs.Text.Replace(" (****)", "");
 			var itemIndex = lstJournalPINs.SelectedIndex;
-			dictAllJournals[s] = txtPIN.Text;
+
+			dictJournalsAndPINs[s] = txtPIN.Text;
 			s += " (****)";
+
 			lstJournalPINs.Items.Insert(lstJournalPINs.SelectedIndex, s);
 			lstJournalPINs.Items.RemoveAt(lstJournalPINs.SelectedIndex);
+
 			txtPIN.PasswordChar = '\0';
 			txtPIN.Text = "(select a Journal)";
 			txtPIN.Enabled = false;
@@ -58,24 +75,32 @@ namespace myJournal.subforms
 			lblShowPIN.Visible = false;
 			lstJournalPINs.SetItemChecked(itemIndex, true);
 			lstJournalPINs.SelectedItems.Add(s);
+			
 		}
 
 		private void btnDone_Click(object sender, EventArgs e)
 		{
 			string[] checkedItems = lstJournalPINs.CheckedItems.OfType<string>().ToArray();
-			string[] cleanedItems = new string[checkedItems.Length];
-			Dictionary<string, string> tmpDict = dictAllJournals;
+			for(var i = 0; i < checkedItems.Length; i++) { checkedItems[i] = Scrubbed(checkedItems[i]); }
+			Dictionary<string, string> tmpDict = dictJournalsAndPINs;
 
-			for (int i = 0; i < checkedItems.Length; i++)
-			{ cleanedItems[i] = checkedItems[i].Replace("(****)", "").Trim(); }
+			// remove from dictJournalsAndPINs if not in checkedItems
 
-			foreach (KeyValuePair<string, string> item in tmpDict)
-			{ if (!cleanedItems.Contains(item.Key)) { dictAllJournals.Remove(item.Key); } }
+			foreach(KeyValuePair<string, string> kvp in tmpDict)
+			{
+				if (!checkedItems.Contains(kvp.Key)) { tmpDict.Remove(kvp.Key); }
+			}
+			
+			foreach(string item in checkedItems)
+			{
+				if (!tmpDict.ContainsKey(Scrubbed(item))) 
+				{
+					dictJournalsAndPINs.Add(Scrubbed(item), ""); 	
+				}	
+			}
 
 			this.Hide();
 		}
-
-		private void SetProgramPINForSelectedJournal(Journal journal) { Program.PIN = DictJournals[journal.Name]; }
 
 		private void lblShowPIN_Click(object sender, EventArgs e)
 		{
@@ -88,20 +113,24 @@ namespace myJournal.subforms
 			if (lstJournalPINs.SelectedIndex > -1)
 			{
 				txtPIN.PasswordChar = '*';
-				txtPIN.Text = dictCheckedItems.ContainsKey(lstJournalPINs.Text.Replace(" (****)", "")) ?
-					dictCheckedItems[lstJournalPINs.Text.Replace(" (****)", "")] : string.Empty;
-				txtPIN.Enabled = true;
-				btnAddPIN.Enabled = true;
+				txtPIN.Text			= dictCheckedItems.ContainsKey(Scrubbed(lstJournalPINs.Text)) ? dictCheckedItems[Scrubbed(lstJournalPINs.Text)] : string.Empty;
+				txtPIN.Enabled		= true;
+				btnAddPIN.Enabled	= true;
 				txtPIN.Focus();
-				lblShowPIN.Visible = true;
-				lblShowPIN.Text = "show";
+				lblShowPIN.Visible	= true;
+				lblShowPIN.Text		= "show";
 			}
 		}
 
 		private void frmSelectJournalsToSearch_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			dictAllJournals.Clear();
+			dictJournalsAndPINs.Clear();
 			e.Cancel = true;
+		}
+
+		private string Scrubbed(string stringToScrub)
+		{
+			return stringToScrub.Replace(" (****)", "");
 		}
 	}
 }
