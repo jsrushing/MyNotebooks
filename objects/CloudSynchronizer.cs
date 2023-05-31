@@ -207,7 +207,7 @@ namespace myJournal.objects
 			FileInfo localSettings				= new FileInfo(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFile"]);
 			var sLocalLabelsFile				= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"];
 			var sLocalSettingsFile				= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFile"];
-			var tempFolder						= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + "_labels";
+			var tempFolder						= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"];
 
 			try
 			{
@@ -215,7 +215,7 @@ namespace myJournal.objects
 					{
 						try
 						{
-							await AzureFileClient.DownloadOrDeleteFile(tempFolder, Program.AzurePassword + "_labels", FileMode.Create, false, "labelsandsettings");
+							await AzureFileClient.DownloadOrDeleteFile(tempFolder, Program.AzurePassword + "_labels", FileMode.Create, true, "labelsandsettings");
 							downloadedAzureLabels = Program.AzureFileExists ? new FileInfo(tempFolder) : null; 
 						}
 						catch(Exception ex) { Err = ex.Message; }

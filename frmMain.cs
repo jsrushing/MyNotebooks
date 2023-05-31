@@ -656,20 +656,11 @@ namespace myJournal.subforms
 
 		private void mnuJournal_Search_Click(object sender, EventArgs e)
 		{
-			Program.PIN = txtJournalPIN.Text;
 			using (frmSearch frm = new frmSearch(currentJournal, this))
 			{
-				try
-				{
-					frm.ShowDialog();
-				}
+				try { frm.ShowDialog(); }
 				catch (Exception ex)
-				{
-					//using frmMessage frmMsg = new frmMessage(frmMessage.OperationType.Message, ex.Message, "An error occurred", this) { frmMsg.ShowDialog(); }
-					frmMessage frmMsg = new frmMessage(frmMessage.OperationType.Message, ex.Message, "An error occurred", this);
-					frmMsg.ShowDialog();
-					frmMsg.Close();
-				}
+				{ using (frmMessage frmMsg = new frmMessage(frmMessage.OperationType.Message, ex.Message, "An error occurred", this)) { frmMsg.ShowDialog(); } }
 			}
 		}
 

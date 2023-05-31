@@ -173,7 +173,7 @@ namespace myJournal
 
 		public List<JournalEntry> Search(SearchObject So)
 		{
-			List<JournalEntry> allEntries	= this.Entries;0
+			List<JournalEntry> allEntries	= this.Entries;
 
 			if(So.chkUseDate.Checked | So.chkUseDateRange.Checked)
 			{

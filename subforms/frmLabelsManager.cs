@@ -74,13 +74,7 @@ namespace myJournal.subforms
 			ShowHideOccurrences();
 		}
 
-		private void AddLabelToUIListbox()
-		{
-			if (txtLabelName.Text.Length > 0)
-			{
-				lstLabels.Items.Add(txtLabelName.Text);
-			}
-		}
+		private void AddLabelToUIListbox() { if (txtLabelName.Text.Length > 0) { lstLabels.Items.Add(txtLabelName.Text); } }
 
 		private void btnAddPIN_Click(object sender, EventArgs e)
 		{
@@ -159,12 +153,12 @@ namespace myJournal.subforms
 					}
 					else    // It was a delete. If label exists in any journal, leave in list, otherwise remove from list.
 					{
-						if (LabelsManager.JournalsContainingLabel(txtLabelName.Text).Count == 0)
-						{
-							lstLabels.Items.RemoveAt(lstLabels.SelectedIndex);
-							lstOccurrences.Items.Clear();
-							ShowHideOccurrences();
-						}
+						//if (LabelsManager.JournalsContainingLabel(txtLabelName.Text).Count == 0)
+						//{
+						//	lstLabels.Items.RemoveAt(lstLabels.SelectedIndex);
+						//	lstOccurrences.Items.Clear();
+						//	ShowHideOccurrences();
+						//}
 					}
 
 					SaveLabels();
@@ -309,13 +303,23 @@ namespace myJournal.subforms
 
 		private void mnuDelete_Click(object sender, EventArgs e)
 		{
-			Deleting = true;
-			EditingAllJournals = ((ToolStripMenuItem)sender).Text.ToLower().StartsWith("in all");
-			lblOperation.Text = "Delete this label in " + (EditingAllJournals ? "all journals?" : "'" + this.CurrentJournal.Name) + "'?";
-			pnlNewLabelName.Visible = true;
-			txtLabelName.Text = lstLabels.SelectedItem.ToString();
-			txtLabelName.Enabled = false;
-			btnCancel.Focus();
+			bool deleteOK = false;
+
+			using(frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Do you want to delete the label '" + lstLabels.SelectedItem.ToString() + "'?", "Delete Label?", this))
+			{
+				frm.ShowDialog();
+				deleteOK = frm.Result == frmMessage.ReturnResult.Yes;
+			}
+
+			if (deleteOK) { LabelsManager.Delete(lstLabels.SelectedItem.ToString()); LabelsManager.PopulateLabelsList(null, lstLabels); }
+
+			//Deleting = true;
+			//EditingAllJournals = ((ToolStripMenuItem)sender).Text.ToLower().StartsWith("in all");
+			//lblOperation.Text = "Delete this label in " + (EditingAllJournals ? "all journals?" : "'" + this.CurrentJournal.Name) + "'?";
+			//pnlNewLabelName.Visible = true;
+			//txtLabelName.Text = lstLabels.SelectedItem.ToString();
+			//txtLabelName.Enabled = false;
+			//btnCancel.Focus();
 		}
 
 		private void mnuExit_Click(object sender, EventArgs e)
