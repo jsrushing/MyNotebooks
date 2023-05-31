@@ -130,7 +130,7 @@ namespace myJournal.subforms
 			// 
 			// btnSearch
 			// 
-			btnSearch.Location = new System.Drawing.Point(338, 117);
+			btnSearch.Location = new System.Drawing.Point(507, 133);
 			btnSearch.Name = "btnSearch";
 			btnSearch.Size = new System.Drawing.Size(75, 23);
 			btnSearch.TabIndex = 43;
