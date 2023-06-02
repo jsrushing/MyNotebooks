@@ -46,25 +46,13 @@ namespace myJournal.subforms
 			mnuLabelsOperations = new System.Windows.Forms.ToolStripMenuItem();
 			mnuAdd = new System.Windows.Forms.ToolStripMenuItem();
 			mnuRename = new System.Windows.Forms.ToolStripMenuItem();
-			mnuRename_InCurrentJournal = new System.Windows.Forms.ToolStripMenuItem();
-			mnuRename_InAllJournals = new System.Windows.Forms.ToolStripMenuItem();
 			mnuDelete = new System.Windows.Forms.ToolStripMenuItem();
-			mnuDelete_InCurrentJournal = new System.Windows.Forms.ToolStripMenuItem();
-			mnuDelete_InAllJournals = new System.Windows.Forms.ToolStripMenuItem();
 			mnuFindOrphans = new System.Windows.Forms.ToolStripMenuItem();
 			mnuMoveTop = new System.Windows.Forms.ToolStripMenuItem();
 			mnuMoveUp = new System.Windows.Forms.ToolStripMenuItem();
 			mnuMoveDown = new System.Windows.Forms.ToolStripMenuItem();
 			mnuAssignPINs = new System.Windows.Forms.ToolStripMenuItem();
 			mnuExit = new System.Windows.Forms.ToolStripMenuItem();
-			pnlJournalPINs = new System.Windows.Forms.Panel();
-			lblShowPIN = new System.Windows.Forms.Label();
-			label2 = new System.Windows.Forms.Label();
-			btnPINsOK = new System.Windows.Forms.Button();
-			btnAddPIN = new System.Windows.Forms.Button();
-			txtPIN = new System.Windows.Forms.TextBox();
-			lblEnterPIN = new System.Windows.Forms.Label();
-			lstJournalPINs = new System.Windows.Forms.ListBox();
 			lstEntryObjects = new System.Windows.Forms.ListBox();
 			pnlOrphanedLabels = new System.Windows.Forms.Panel();
 			btnExitOrphans = new System.Windows.Forms.Button();
@@ -75,7 +63,6 @@ namespace myJournal.subforms
 			pnlMain.SuspendLayout();
 			pnlNewLabelName.SuspendLayout();
 			mnuMain.SuspendLayout();
-			pnlJournalPINs.SuspendLayout();
 			pnlOrphanedLabels.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -234,6 +221,7 @@ namespace myJournal.subforms
 			mnuLabelsOperations.Name = "mnuLabelsOperations";
 			mnuLabelsOperations.Size = new System.Drawing.Size(52, 20);
 			mnuLabelsOperations.Text = "Labels";
+			mnuLabelsOperations.Click += this.mnuLabelsOperations_Click;
 			// 
 			// mnuAdd
 			// 
@@ -244,47 +232,21 @@ namespace myJournal.subforms
 			// 
 			// mnuRename
 			// 
-			mnuRename.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuRename_InCurrentJournal, mnuRename_InAllJournals });
+			mnuRename.Enabled = false;
 			mnuRename.Name = "mnuRename";
 			mnuRename.Size = new System.Drawing.Size(145, 22);
 			mnuRename.Text = "&Rename";
+			mnuRename.Visible = false;
 			mnuRename.Click += this.mnuRename_Click;
-			// 
-			// mnuRename_InCurrentJournal
-			// 
-			mnuRename_InCurrentJournal.Name = "mnuRename_InCurrentJournal";
-			mnuRename_InCurrentJournal.Size = new System.Drawing.Size(168, 22);
-			mnuRename_InCurrentJournal.Text = "In Current Journal";
-			mnuRename_InCurrentJournal.Click += this.mnuRename_Click;
-			// 
-			// mnuRename_InAllJournals
-			// 
-			mnuRename_InAllJournals.Name = "mnuRename_InAllJournals";
-			mnuRename_InAllJournals.Size = new System.Drawing.Size(168, 22);
-			mnuRename_InAllJournals.Text = "In All Journals";
-			mnuRename_InAllJournals.Click += this.mnuRename_Click;
 			// 
 			// mnuDelete
 			// 
-			mnuDelete.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuDelete_InCurrentJournal, mnuDelete_InAllJournals });
+			mnuDelete.Enabled = false;
 			mnuDelete.Name = "mnuDelete";
 			mnuDelete.Size = new System.Drawing.Size(145, 22);
 			mnuDelete.Text = "&Delete";
+			mnuDelete.Visible = false;
 			mnuDelete.Click += this.mnuDelete_Click;
-			// 
-			// mnuDelete_InCurrentJournal
-			// 
-			mnuDelete_InCurrentJournal.Name = "mnuDelete_InCurrentJournal";
-			mnuDelete_InCurrentJournal.Size = new System.Drawing.Size(168, 22);
-			mnuDelete_InCurrentJournal.Text = "In Current Journal";
-			mnuDelete_InCurrentJournal.Click += this.mnuDelete_Click;
-			// 
-			// mnuDelete_InAllJournals
-			// 
-			mnuDelete_InAllJournals.Name = "mnuDelete_InAllJournals";
-			mnuDelete_InAllJournals.Size = new System.Drawing.Size(168, 22);
-			mnuDelete_InAllJournals.Text = "In All Journals";
-			mnuDelete_InAllJournals.Click += this.mnuDelete_Click;
 			// 
 			// mnuFindOrphans
 			// 
@@ -328,92 +290,6 @@ namespace myJournal.subforms
 			mnuExit.Size = new System.Drawing.Size(38, 20);
 			mnuExit.Text = "E&xit";
 			mnuExit.Click += this.mnuExit_Click;
-			// 
-			// pnlJournalPINs
-			// 
-			pnlJournalPINs.Controls.Add(lblShowPIN);
-			pnlJournalPINs.Controls.Add(label2);
-			pnlJournalPINs.Controls.Add(btnPINsOK);
-			pnlJournalPINs.Controls.Add(btnAddPIN);
-			pnlJournalPINs.Controls.Add(txtPIN);
-			pnlJournalPINs.Controls.Add(lblEnterPIN);
-			pnlJournalPINs.Controls.Add(lstJournalPINs);
-			pnlJournalPINs.Location = new System.Drawing.Point(413, 0);
-			pnlJournalPINs.Name = "pnlJournalPINs";
-			pnlJournalPINs.Size = new System.Drawing.Size(382, 518);
-			pnlJournalPINs.TabIndex = 2;
-			pnlJournalPINs.Visible = false;
-			// 
-			// lblShowPIN
-			// 
-			lblShowPIN.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
-			lblShowPIN.Location = new System.Drawing.Point(168, 50);
-			lblShowPIN.Name = "lblShowPIN";
-			lblShowPIN.Size = new System.Drawing.Size(35, 13);
-			lblShowPIN.TabIndex = 41;
-			lblShowPIN.Text = "show";
-			lblShowPIN.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			lblShowPIN.Visible = false;
-			lblShowPIN.Click += this.lblShowPIN_Click;
-			// 
-			// label2
-			// 
-			label2.AutoSize = true;
-			label2.Location = new System.Drawing.Point(72, 31);
-			label2.Name = "label2";
-			label2.Size = new System.Drawing.Size(26, 15);
-			label2.TabIndex = 6;
-			label2.Text = "PIN";
-			// 
-			// btnPINsOK
-			// 
-			btnPINsOK.Location = new System.Drawing.Point(132, 447);
-			btnPINsOK.Name = "btnPINsOK";
-			btnPINsOK.Size = new System.Drawing.Size(120, 23);
-			btnPINsOK.TabIndex = 5;
-			btnPINsOK.Text = "Done";
-			btnPINsOK.UseVisualStyleBackColor = true;
-			btnPINsOK.Click += this.btnPINsOK_Click;
-			// 
-			// btnAddPIN
-			// 
-			btnAddPIN.Enabled = false;
-			btnAddPIN.Location = new System.Drawing.Point(210, 26);
-			btnAddPIN.Name = "btnAddPIN";
-			btnAddPIN.Size = new System.Drawing.Size(66, 23);
-			btnAddPIN.TabIndex = 4;
-			btnAddPIN.Text = "Add PIN";
-			btnAddPIN.UseVisualStyleBackColor = true;
-			btnAddPIN.Click += this.btnAddPIN_Click;
-			// 
-			// txtPIN
-			// 
-			txtPIN.Enabled = false;
-			txtPIN.Location = new System.Drawing.Point(103, 26);
-			txtPIN.Name = "txtPIN";
-			txtPIN.Size = new System.Drawing.Size(100, 23);
-			txtPIN.TabIndex = 3;
-			txtPIN.Text = "(select a Journal)";
-			txtPIN.KeyUp += this.txtPIN_KeyUp;
-			// 
-			// lblEnterPIN
-			// 
-			lblEnterPIN.Location = new System.Drawing.Point(2, 2);
-			lblEnterPIN.Name = "lblEnterPIN";
-			lblEnterPIN.Size = new System.Drawing.Size(331, 16);
-			lblEnterPIN.TabIndex = 2;
-			lblEnterPIN.Text = "Specify a PIN for all protected Journals you wish to work with.";
-			lblEnterPIN.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// lstJournalPINs
-			// 
-			lstJournalPINs.FormattingEnabled = true;
-			lstJournalPINs.ItemHeight = 15;
-			lstJournalPINs.Location = new System.Drawing.Point(10, 68);
-			lstJournalPINs.Name = "lstJournalPINs";
-			lstJournalPINs.Size = new System.Drawing.Size(350, 364);
-			lstJournalPINs.TabIndex = 1;
-			lstJournalPINs.SelectedIndexChanged += this.lstJournalPINs_SelectedIndexChanged;
 			// 
 			// lstEntryObjects
 			// 
@@ -498,7 +374,6 @@ namespace myJournal.subforms
 			ClientSize = new System.Drawing.Size(1314, 642);
 			Controls.Add(pnlOrphanedLabels);
 			Controls.Add(lstEntryObjects);
-			Controls.Add(pnlJournalPINs);
 			Controls.Add(pnlMain);
 			Controls.Add(mnuMain);
 			FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -507,7 +382,6 @@ namespace myJournal.subforms
 			MinimumSize = new System.Drawing.Size(382, 518);
 			Name = "frmLabelsManager";
 			Text = "Manage Labels";
-			FormClosing += this.frmLabelsManager_FormClosing;
 			Load += this.frmLabelsManager_Load;
 			Resize += this.frmLabelsManager_Resize;
 			pnlMain.ResumeLayout(false);
@@ -516,8 +390,6 @@ namespace myJournal.subforms
 			pnlNewLabelName.PerformLayout();
 			mnuMain.ResumeLayout(false);
 			mnuMain.PerformLayout();
-			pnlJournalPINs.ResumeLayout(false);
-			pnlJournalPINs.PerformLayout();
 			pnlOrphanedLabels.ResumeLayout(false);
 			pnlOrphanedLabels.PerformLayout();
 			this.ResumeLayout(false);
@@ -539,19 +411,11 @@ namespace myJournal.subforms
 		private System.Windows.Forms.Label lblOperation;
 		private System.Windows.Forms.TextBox txtLabelName;
 		private System.Windows.Forms.ListBox lstOccurrences;
-		private System.Windows.Forms.Panel pnlJournalPINs;
-		private System.Windows.Forms.Button btnAddPIN;
-		private System.Windows.Forms.TextBox txtPIN;
-		private System.Windows.Forms.Label lblEnterPIN;
-		private System.Windows.Forms.ListBox lstJournalPINs;
-		private System.Windows.Forms.Button btnPINsOK;
-		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.ToolStripMenuItem mnuAssignPINs;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label lblLabelExists;
 		private System.Windows.Forms.Label lblSortType;
 		private System.Windows.Forms.ListBox lstEntryObjects;
-		private System.Windows.Forms.Label lblShowPIN;
 		private System.Windows.Forms.ToolStripMenuItem mnuLabelsOperations;
 		private System.Windows.Forms.ToolStripMenuItem mnuMoveTop;
 		private System.Windows.Forms.ToolStripMenuItem mnuFindOrphans;
@@ -564,10 +428,6 @@ namespace myJournal.subforms
 		private System.Windows.Forms.ToolStripMenuItem mnuAdd;
 		private System.Windows.Forms.ToolStripMenuItem mnuRename;
 		private System.Windows.Forms.ToolStripMenuItem mnuDelete;
-		private System.Windows.Forms.ToolStripMenuItem mnuRename_InCurrentJournal;
-		private System.Windows.Forms.ToolStripMenuItem mnuRename_InAllJournals;
-		private System.Windows.Forms.ToolStripMenuItem mnuDelete_InCurrentJournal;
-		private System.Windows.Forms.ToolStripMenuItem mnuDelete_InAllJournals;
 		private System.Windows.Forms.Label label5;
 	}
 }

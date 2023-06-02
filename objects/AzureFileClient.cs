@@ -62,7 +62,6 @@ namespace myJournal.objects
 					}
 				}
 			}
-			else { var i = 0; }
 		}
 
 		public static async Task CheckForCloudJournalAndRemoveEntries(Journal j)

@@ -104,7 +104,7 @@ namespace myJournal
 						arrLabels.RemoveAt(iLabelIndex);
 					}
 
-					string finalLabelsString = String.Join(",", arrLabels).Trim(',').Replace(",,", "");
+					var finalLabelsString = String.Join(",", arrLabels).Trim(',').Replace(",,", "");
 					this.Labels = finalLabelsString.Length > 0 ? EncryptDecrypt.Encrypt(finalLabelsString) : string.Empty;
 					bLabelEdited = true;
 				}

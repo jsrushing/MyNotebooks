@@ -72,6 +72,7 @@ namespace myJournal.subforms
 					pnlOk.Visible = true;
 					this.AcceptButton = btnOk2;
 					this.Text = "";
+					this.Height = pnlOk.Top + pnlOk.Height + 55;
 					break;
 				case OperationType.YesNoQuestion:
 					pnlYesNoCancel.Top = 28 * ((int)Math.Ceiling((double)msg.Length / 38));

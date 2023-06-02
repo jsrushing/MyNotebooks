@@ -150,10 +150,10 @@ namespace myJournal.subforms
 {
 	public partial class frmMain : Form
 	{
-		Journal currentJournal;
-		JournalEntry currentEntry;
-		private bool firstSelection = true;
-		bool suppressDateClick = false;
+		Journal CurrentJournal;
+		JournalEntry CurrentEntry;
+		private bool FirstSelection = true;
+		bool SuppressDateClick = false;
 
 		private enum SelectionState
 		{
@@ -220,11 +220,11 @@ namespace myJournal.subforms
 			try
 			{
 				string fullJournalName = ddlJournals.Text;
-				currentJournal = new Journal(fullJournalName).Open();
+				CurrentJournal = new Journal(fullJournalName).Open();
 
-				if (currentJournal != null)
+				if (CurrentJournal != null)
 				{
-					if (currentJournal.Entries[0].ClearText().Length == 0)  // the PIN is wrong
+					if (CurrentJournal.Entries[0].ClearText().Length == 0)  // the PIN is wrong
 					{
 						lblWrongPin.Visible = true;
 						txtJournalPIN.Focus();
@@ -232,9 +232,9 @@ namespace myJournal.subforms
 					}
 					else
 					{
-						Utilities.PopulateEntries(lstEntries, currentJournal.Entries, currentJournal.Name, DateTime.Now.AddDays(-61).ToString(), DateTime.Now.ToString(), true, 0);
+						Utilities.PopulateEntries(lstEntries, CurrentJournal.Entries, CurrentJournal.Name, DateTime.Now.AddDays(-61).ToString(), DateTime.Now.ToString(), true, 0);
 
-						if (lstEntries.Items.Count == 0) { Utilities.PopulateEntries(lstEntries, currentJournal.Entries); }
+						if (lstEntries.Items.Count == 0) { Utilities.PopulateEntries(lstEntries, CurrentJournal.Entries); }
 
 						lstEntries.Height = this.Height - lstEntries.Top - 50;
 						lstEntries.Visible = true;
@@ -250,9 +250,9 @@ namespace myJournal.subforms
 							}
 						}
 
-						suppressDateClick = true;
+						SuppressDateClick = true;
 						cbxDatesTo.SelectedIndex = 0;
-						suppressDateClick = false;
+						SuppressDateClick = false;
 						ShowHideMenusAndControls(SelectionState.JournalLoaded);
 					}
 				}
@@ -266,14 +266,14 @@ namespace myJournal.subforms
 
 		private void cbxDates_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!suppressDateClick) { ProcessDateFilters(); }
+			if (!SuppressDateClick) { ProcessDateFilters(); }
 		}
 
 		private void cbxSortEntriesBy_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (currentJournal != null)
+			if (CurrentJournal != null)
 			{
-				Utilities.PopulateEntries(lstEntries, currentJournal.Entries, currentJournal.Name, cbxDatesFrom.Text, cbxDatesTo.Text, true, cbxSortEntriesBy.SelectedIndex);
+				Utilities.PopulateEntries(lstEntries, CurrentJournal.Entries, CurrentJournal.Name, cbxDatesFrom.Text, cbxDatesTo.Text, true, cbxSortEntriesBy.SelectedIndex);
 				lstEntries.Focus();
 			}
 		}
@@ -345,8 +345,8 @@ namespace myJournal.subforms
 			ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
 			btnLoadJournal.Enabled = true;
 			txtJournalPIN.Focus();
-			currentEntry = null;
-			currentJournal = null;
+			CurrentEntry = null;
+			CurrentJournal = null;
 			cbxDatesFrom.DataSource = null;
 			lblWrongPin.Visible = false;
 			lstEntries.Items.Clear();
@@ -418,11 +418,11 @@ namespace myJournal.subforms
 			if (lb.SelectedIndex > -1)
 			{
 				lb.SelectedIndexChanged -= new System.EventHandler(this.lstEntries_SelectEntry);
-				currentEntry = JournalEntry.Select(rtb, lb, currentJournal, firstSelection);
+				CurrentEntry = JournalEntry.Select(rtb, lb, CurrentJournal, FirstSelection);
 
-				if (currentEntry != null)
+				if (CurrentEntry != null)
 				{
-					firstSelection = false;
+					FirstSelection = false;
 					lblSelectionType.Visible = rtb.Text.Length > 0;
 					lblSeparator.Visible = rtb.Text.Length > 0;
 					Utilities.ResizeListsAndRTBs(lstEntries, rtbSelectedEntry, lblSeparator, lblSelectionType, this);
@@ -447,14 +447,14 @@ namespace myJournal.subforms
 		{
 			this.Cursor = Cursors.WaitCursor;
 
-			using (frmNewEntry frm = new frmNewEntry(this, currentJournal))
+			using (frmNewEntry frm = new frmNewEntry(this, CurrentJournal))
 			{
-				frm.Text = "New entry in " + currentJournal.Name;
+				frm.Text = "New entry in " + CurrentJournal.Name;
 				frm.ShowDialog(this);
 
 				if (frm.saved)
 				{
-					Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDatesFrom.Text);
+					Utilities.PopulateEntries(lstEntries, CurrentJournal.Entries, cbxDatesFrom.Text);
 					ShowHideMenusAndControls(SelectionState.JournalLoaded);
 				}
 			}
@@ -464,15 +464,15 @@ namespace myJournal.subforms
 
 		private void mnuEntryDelete_Click(object sender, EventArgs e)
 		{
-			using (frmMessage frm = new frmMessage(frmMessage.OperationType.DeleteEntry, currentEntry.ClearTitle(), "", this))
+			using (frmMessage frm = new frmMessage(frmMessage.OperationType.DeleteEntry, CurrentEntry.ClearTitle(), "", this))
 			{
 				frm.ShowDialog(this);
 
 				if (frm.Result == frmMessage.ReturnResult.Yes)
 				{
-					currentJournal.Entries.Remove(currentEntry);
-					currentJournal.Save();
-					Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDatesFrom.Text);
+					CurrentJournal.Entries.Remove(CurrentEntry);
+					CurrentJournal.Save();
+					Utilities.PopulateEntries(lstEntries, CurrentJournal.Entries, cbxDatesFrom.Text);
 					ShowHideMenusAndControls(SelectionState.JournalLoaded);
 				}
 			}
@@ -482,14 +482,14 @@ namespace myJournal.subforms
 		{
 			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
 
-			using (frmNewEntry frm = new frmNewEntry(this, currentJournal, currentEntry, mnu.Text.ToLower().StartsWith("preserve")))
+			using (frmNewEntry frm = new frmNewEntry(this, CurrentJournal, CurrentEntry, mnu.Text.ToLower().StartsWith("preserve")))
 			{
-				frm.Text = "Edit '" + currentEntry.ClearTitle() + "' in '" + currentJournal.Name + "'";
+				frm.Text = "Edit '" + CurrentEntry.ClearTitle() + "' in '" + CurrentJournal.Name + "'";
 				frm.ShowDialog(this);
 
 				if (frm.saved)
 				{
-					Utilities.PopulateEntries(lstEntries, currentJournal.Entries, cbxDatesFrom.Text);
+					Utilities.PopulateEntries(lstEntries, CurrentJournal.Entries, cbxDatesFrom.Text);
 					ShowHideMenusAndControls(SelectionState.JournalLoaded);
 				}
 			}
@@ -524,13 +524,13 @@ namespace myJournal.subforms
 
 		private void mnuJournal_Delete_Click(object sender, EventArgs e)
 		{
-			using (frmMessage frm = new frmMessage(frmMessage.OperationType.DeleteJournal, currentJournal.Name.Replace("\\", ""), "", this))
+			using (frmMessage frm = new frmMessage(frmMessage.OperationType.DeleteJournal, CurrentJournal.Name.Replace("\\", ""), "", this))
 			{
 				frm.ShowDialog(this);
 
 				if (frm.Result == frmMessage.ReturnResult.Yes)
 				{
-					currentJournal.Delete();
+					CurrentJournal.Delete();
 					ddlJournals.Text = string.Empty;
 					lstEntries.Items.Clear();
 					ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
@@ -542,9 +542,7 @@ namespace myJournal.subforms
 						frm2.ShowDialog();
 
 						if (frm2.Result == frmMessage.ReturnResult.Yes)
-						{
-							using (frmLabelsManager frm3 = new frmLabelsManager(this)) { frm3.ShowDialog(); }
-						}
+						{ using (frmLabelsManager frm3 = new frmLabelsManager(this)) { frm3.ShowDialog(); } }
 					}
 
 					Program.AllJournals = Utilities.AllJournals();
@@ -572,8 +570,8 @@ namespace myJournal.subforms
 
 		private void mnuJournal_ForceBackup_Click(object sender, EventArgs e)
 		{
-			currentJournal.Backup_Forced();
-			string sMsg = currentJournal.BackupCompleted ? "The backup was completed" : "An error occurred. The backup was not completed.";
+			CurrentJournal.Backup_Forced();
+			string sMsg = CurrentJournal.BackupCompleted ? "The backup was completed" : "An error occurred. The backup was not completed.";
 			using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "", this)) { frm.ShowDialog(this); }
 		}
 
@@ -615,8 +613,8 @@ namespace myJournal.subforms
 					{
 						File.Copy(fName, tgt, true);
 						filesCopied = true;
-						LabelsManager lm = new LabelsManager();
-						if (lm.FindOrphansInAJournal(new Journal(jrnlName).Open(), true).Count > 0) { } // code for orphans being found
+						//LabelsManager lm = new LabelsManager();
+						if (LabelsManager.FindOrphansInAJournal(new Journal(jrnlName).Open(), true).Count > 0) { } // code for orphans being found
 																										//Utilities.Labels_FindOrphansInOneJournal(new Journal(jrnlName).Open(), true);
 					}
 
@@ -630,13 +628,13 @@ namespace myJournal.subforms
 
 		private void mnuJournal_Rename_Click(object sender, EventArgs e)
 		{
-			using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "Enter the new journal name.", currentJournal.Name, this))
+			using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "Enter the new journal name.", CurrentJournal.Name, this))
 			{
 				frm.ShowDialog(this);
 
 				if (frm.Result == frmMessage.ReturnResult.Ok && frm.EnteredValue.Length > 0)
 				{
-					currentJournal.Rename(frm.EnteredValue);
+					CurrentJournal.Rename(frm.EnteredValue);
 					Program.AllJournals = Utilities.AllJournals();
 					LoadJournals();
 				}
@@ -656,7 +654,7 @@ namespace myJournal.subforms
 
 		private void mnuJournal_Search_Click(object sender, EventArgs e)
 		{
-			using (frmSearch frm = new frmSearch(currentJournal, this))
+			using (frmSearch frm = new frmSearch(CurrentJournal, this))
 			{
 				try { frm.ShowDialog(); }
 				catch (Exception ex)
@@ -666,10 +664,10 @@ namespace myJournal.subforms
 
 		private void mnuJournal_Settings_Click(object sender, EventArgs e)
 		{
-			using (frmJournalSettings frm = new frmJournalSettings(currentJournal, this))
+			using (frmJournalSettings frm = new frmJournalSettings(CurrentJournal, this))
 			{
 				frm.ShowDialog();
-				if (frm.isDirty) { currentJournal.Save(); }
+				if (frm.isDirty) { CurrentJournal.Save(); }
 				//frm.Close();
 			}
 			SetDisplayText();
@@ -677,7 +675,7 @@ namespace myJournal.subforms
 
 		private void mnuLabels_Click(object sender, EventArgs e)
 		{
-			using (frmLabelsManager frm = new frmLabelsManager(this, this.currentJournal))
+			using (frmLabelsManager frm = new frmLabelsManager(this, CurrentJournal))
 			{
 				frm.ShowDialog();
 				if (frm.ActionTaken) { LoadJournals(); }
@@ -717,27 +715,27 @@ namespace myJournal.subforms
 
 		private void PopulateShowFromDates()
 		{
-			suppressDateClick = true;
+			SuppressDateClick = true;
 			cbxDatesFrom.DataSource = null;
 			cbxDatesTo.Items.Clear();
-			List<string> l = currentJournal.Entries.Select(e => e.Date.ToShortDateString()).Distinct().ToList();
+			List<string> l = CurrentJournal.Entries.Select(e => e.Date.ToShortDateString()).Distinct().ToList();
 			l.Sort((x, y) => -DateTime.Parse(x).CompareTo(DateTime.Parse(y)));
 			cbxDatesFrom.DataSource = l;
 			//cbxDatesTo.Items.AddRange(cbxDates.Items.Cast<Object>().ToArray());
 			foreach (string s in cbxDatesFrom.Items) { cbxDatesTo.Items.Add(s); }
 			cbxDatesTo.SelectedIndex = 0;
-			suppressDateClick = false;
+			SuppressDateClick = false;
 		}
 
 		private void ProcessDateFilters()
 		{
 			if (cbxDatesFrom.Text.Length > 0 && cbxDatesTo.Text.Length > 0)
 			{
-				Utilities.PopulateEntries(lstEntries, currentJournal.Entries, currentJournal.Name, cbxDatesFrom.Text, cbxDatesTo.Text, true, cbxSortEntriesBy.SelectedIndex);
+				Utilities.PopulateEntries(lstEntries, CurrentJournal.Entries, CurrentJournal.Name, cbxDatesFrom.Text, cbxDatesTo.Text, true, cbxSortEntriesBy.SelectedIndex);
 
-				if (lstEntries.SelectedIndex == -1 && currentJournal.Entries.Contains(currentEntry))
+				if (lstEntries.SelectedIndex == -1 && CurrentJournal.Entries.Contains(CurrentEntry))
 				{
-					JournalEntry.Select(rtbSelectedEntry, lstEntries, null, true, currentEntry);
+					JournalEntry.Select(rtbSelectedEntry, lstEntries, null, true, CurrentEntry);
 				}
 				lblEntriesCount.Text = (lstEntries.Items.Count / 4).ToString();
 			}
@@ -746,7 +744,7 @@ namespace myJournal.subforms
 		private void SetDisplayText()
 		{
 			this.Text = this.Text.EndsWith(" (local)") ? this.Text.Replace(" (local)", "") : this.Text;
-			this.Text = currentJournal != null ? currentJournal.Settings.AllowCloud ? this.Text : this.Text + " (local)" : this.Text;
+			this.Text = CurrentJournal != null ? CurrentJournal.Settings.AllowCloud ? this.Text : this.Text + " (local)" : this.Text;
 		}
 
 		private void ShowHideMenusAndControls(SelectionState st)

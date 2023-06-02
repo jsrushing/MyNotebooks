@@ -36,6 +36,7 @@ namespace myJournal.subforms
 			label2 = new System.Windows.Forms.Label();
 			txtPIN = new System.Windows.Forms.TextBox();
 			lstJournalPINs = new System.Windows.Forms.CheckedListBox();
+			chkSelectAll = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// btnDone
@@ -107,12 +108,24 @@ namespace myJournal.subforms
 			lstJournalPINs.TabIndex = 51;
 			lstJournalPINs.SelectedIndexChanged += this.lstJournalPINs_SelectedIndexChanged;
 			// 
+			// chkSelectAll
+			// 
+			chkSelectAll.AutoSize = true;
+			chkSelectAll.Location = new System.Drawing.Point(274, 57);
+			chkSelectAll.Name = "chkSelectAll";
+			chkSelectAll.Size = new System.Drawing.Size(71, 19);
+			chkSelectAll.TabIndex = 52;
+			chkSelectAll.Text = "select all";
+			chkSelectAll.UseVisualStyleBackColor = true;
+			chkSelectAll.CheckedChanged += this.chkSelectAll_CheckedChanged;
+			// 
 			// frmSelectJournalsToSearch
 			// 
 			AcceptButton = btnAddPIN;
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			ClientSize = new System.Drawing.Size(376, 483);
+			Controls.Add(chkSelectAll);
 			Controls.Add(lstJournalPINs);
 			Controls.Add(btnDone);
 			Controls.Add(txtPIN);
@@ -135,5 +148,6 @@ namespace myJournal.subforms
 		private System.Windows.Forms.Button btnDone;
 		private System.Windows.Forms.TextBox txtPIN;
 		private System.Windows.Forms.CheckedListBox lstJournalPINs;
+		private System.Windows.Forms.CheckBox chkSelectAll;
 	}
 }

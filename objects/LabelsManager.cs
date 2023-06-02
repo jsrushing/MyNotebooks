@@ -14,7 +14,7 @@ using System.Windows.Forms;
 
 namespace myJournal.objects
 {
-	public class LabelsManager
+	public static class LabelsManager
 	{
 		public enum LabelsSortType
 		{
@@ -23,13 +23,15 @@ namespace myJournal.objects
 			None
 		}		
 
-		public bool ActionTaken { get; private set; }
-		public Journal Journal { private get; set; }
+		//public bool ActionTaken { get; private set; }
+		//public Journal Journal { private get; set; }
 
-		public LabelsManager(Journal journal = null, JournalEntry journalEntry = null, string journalPIN = null)
-		{
-			//_currentJournal = journal == null ? null : journal;
-		}
+		//public LabelsManager(Journal journal = null, JournalEntry journalEntry = null, string journalPIN = null)
+		//{
+		//	  = journal == null ? null : journal;
+		//}
+
+		//public LabelsManager() { }
 
 		public static void Add(string[] lables)
 		{
@@ -37,16 +39,24 @@ namespace myJournal.objects
 				File.AppendAllLines(AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"], newLabels);
 		}
 
-		public static void Delete(string labelName)
+		public static async Task DeleteLabel(string labelName, List<Journal> journalsToEdit, Dictionary<string, string> jrnlsAndPINs)
 		{
-			string[] labels = File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Where(c => c != labelName).ToArray().SkipLast(1).ToArray();
+			journalsToEdit = journalsToEdit == null ? Program.AllJournals : journalsToEdit;
+			bool bDeleteFromLabelsFile = false;
+			List<Journal> jrnlsWithLabel = new List<Journal>();
 
-			Save(File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Where(c => c != labelName).ToArray().SkipLast(1).ToList());
+			foreach (Journal j in Program.AllJournals)
+			{
+				Program.PIN = jrnlsAndPINs[j.Name];
+				if (j.HasLabel(labelName)) { jrnlsWithLabel.Add(j); }
+			}
 
-			//Save(File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Where(c => c != labelName).ToList()); 
+			bDeleteFromLabelsFile = journalsToEdit.Count == 1 & jrnlsWithLabel.Count > 1;
+			await Save(File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Where(c => c != labelName).ToArray().SkipLast(1).ToList());
+			foreach(Journal j in journalsToEdit) { j.PurgeLabel(labelName); }
 		}
 
-		public List<string> FindOrphansInAJournal(Journal journal, bool addFoundOrphansToLabels = false)
+		public static List<string> FindOrphansInAJournal(Journal journal, bool addFoundOrphansToLabels = false)
 		{
 			List<string> lstReturn = new List<string>();
 			string[] allLabels = GetLabels_NoFileDate();
@@ -68,7 +78,7 @@ namespace myJournal.objects
 		{ 
 			DateTime dt = DateTime.MinValue;
 			string lastLabel = labels.Last();
-			try { dt = DateTime.ParseExact(lastLabel.Replace("_", " "), "dd/MM/yyyy HH:mm:ss", null); }
+			try { dt = DateTime.ParseExact(lastLabel.Replace("_", " "), "dd/MM/yyyy HH:mm:ss", null); }		// USE CONFIGMANAGER !!!! <<<
 			catch { }	// lastLabel isn't a DateTime.
 			return dt;
 		}
@@ -115,17 +125,19 @@ namespace myJournal.objects
 			return lstReturn;
 		}
 
-		public static List<Journal> JournalsContainingLabel(string labelName)
+		public static List<Journal> JournalsContainingLabel(string labelName, Dictionary<string, string> dictPINs, bool returnIfTwoFound = false)
 		{
-			LabelsManager lm = new LabelsManager();	
 			List<Journal> lstRtrn = new List<Journal>();
+			List<Journal> jrnls2Search = Program.AllJournals.Where(e => dictPINs.ContainsKey(e.Name)).ToList();
 
-			foreach (Journal journal in Program.AllJournals)
+			foreach (Journal journal in jrnls2Search)
 			{
-				//SetProgramPINForSelectedJournal(jrnl);
-
-				if(journal.Entries.Where(t => ("," + t.ClearLabels() + ",").Contains("," + labelName + ",")).ToList().Count > 0)
-				{ lstRtrn.Add(journal); }
+				Program.PIN = dictPINs[journal.Name];
+				if (journal.Entries.Where(t => ("," + t.ClearLabels() + ",").Contains("," + labelName + ",")).ToList().Count > 0)
+				{
+					lstRtrn.Add(journal);
+					if (returnIfTwoFound && lstRtrn.Count == 2) { break; }
+				}
 			}
 			return lstRtrn;
 		}
@@ -134,18 +146,15 @@ namespace myJournal.objects
 		{
 			if (clb != null) { clb.Items.Clear(); }
 			if (lb != null) { lb.Items.Clear(); }
-			//LabelsManager lm = new LabelsManager();
 
 			foreach (string label in LabelsManager.GetLabels_NoFileDate(sort))
 			{
-				if (lb != null)
-				{ lb.Items.Add(label); }
-				else
-				{ clb.Items.Add(label); }
+				if (lb != null) { lb.Items.Add(label); }
+				else { clb.Items.Add(label); }
 			}
 		}
 
-		public static bool Save(List<string> labels = null)
+		public static async Task<bool> Save(List<string> labels = null)
 		{
 			var bRtrn = false;
 
@@ -156,7 +165,7 @@ namespace myJournal.objects
 				foreach (string tag in labels) { sb.AppendLine(tag); }
 				sb.AppendLine (DateTime.Now.ToString(ConfigurationManager.AppSettings["FileDate"]));
 				File.WriteAllText(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"], sb.ToString());
-				cs.SyncLabelsAndSettings();
+				await cs.SyncLabelsAndSettings();
 				bRtrn = true;
 			}
 			catch (Exception) { }

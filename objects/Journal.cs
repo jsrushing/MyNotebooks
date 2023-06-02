@@ -92,6 +92,11 @@ namespace myJournal
 			return jeRtrn;
         }
 
+		public bool HasLabel(string Label)
+		{
+			return Entries.Where(e => e.ClearLabels().Contains(Label)).Any();
+		}
+
         public Journal Open(bool useFileName = false)
         {
             Journal jRtrn = null;
@@ -128,6 +133,11 @@ namespace myJournal
 			}
 
 			return entriesToReturn;
+		}
+
+		public void PurgeLabel(string label)
+		{
+			foreach(JournalEntry entry in this.Entries.Where(e => e.ClearLabels().Contains(label)).ToList()) { entry.RemoveOrReplaceLabel("", label, false); }
 		}
 
 		public void Rename(string newName)
