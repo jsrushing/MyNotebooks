@@ -137,7 +137,7 @@ namespace myJournal
 
 		public void PurgeLabel(string label)
 		{
-			foreach(JournalEntry entry in this.Entries.Where(e => e.ClearLabels().Contains(label)).ToList()) { entry.RemoveOrReplaceLabel("", label, false); }
+			foreach(JournalEntry entry in this.Entries.Where(e => e.ClearLabels().Contains(label)).ToList()) { if(entry.RemoveOrReplaceLabel("", label, false)) this.Save(); }
 		}
 
 		public void Rename(string newName)

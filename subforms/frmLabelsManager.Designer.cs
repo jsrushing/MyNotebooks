@@ -1,4 +1,6 @@
 ﻿
+using System.Windows.Forms;
+
 namespace myJournal.subforms
 {
 	partial class frmLabelsManager
@@ -29,39 +31,48 @@ namespace myJournal.subforms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			pnlMain = new System.Windows.Forms.Panel();
-			pnlNewLabelName = new System.Windows.Forms.Panel();
-			btnOK = new System.Windows.Forms.Button();
-			lblLabelExists = new System.Windows.Forms.Label();
-			btnCancel = new System.Windows.Forms.Button();
-			lblOperation = new System.Windows.Forms.Label();
-			txtLabelName = new System.Windows.Forms.TextBox();
-			label5 = new System.Windows.Forms.Label();
-			lblSortType = new System.Windows.Forms.Label();
-			lstLabels = new System.Windows.Forms.ListBox();
-			label3 = new System.Windows.Forms.Label();
-			lstOccurrences = new System.Windows.Forms.ListBox();
-			label1 = new System.Windows.Forms.Label();
-			mnuMain = new System.Windows.Forms.MenuStrip();
-			mnuLabelsOperations = new System.Windows.Forms.ToolStripMenuItem();
-			mnuAdd = new System.Windows.Forms.ToolStripMenuItem();
-			mnuRename = new System.Windows.Forms.ToolStripMenuItem();
-			mnuDelete = new System.Windows.Forms.ToolStripMenuItem();
-			mnuFindOrphans = new System.Windows.Forms.ToolStripMenuItem();
-			mnuMoveTop = new System.Windows.Forms.ToolStripMenuItem();
-			mnuMoveUp = new System.Windows.Forms.ToolStripMenuItem();
-			mnuMoveDown = new System.Windows.Forms.ToolStripMenuItem();
-			mnuAssignPINs = new System.Windows.Forms.ToolStripMenuItem();
-			mnuExit = new System.Windows.Forms.ToolStripMenuItem();
-			lstEntryObjects = new System.Windows.Forms.ListBox();
-			pnlOrphanedLabels = new System.Windows.Forms.Panel();
-			btnExitOrphans = new System.Windows.Forms.Button();
-			chkSelectAllOrphans = new System.Windows.Forms.CheckBox();
-			btnRemoveSelectedOrphans = new System.Windows.Forms.Button();
-			lstOrphanedLabels = new System.Windows.Forms.ListBox();
-			label4 = new System.Windows.Forms.Label();
+			components = new System.ComponentModel.Container();
+			pnlMain = new Panel();
+			pnlNewLabelName = new Panel();
+			btnOK = new Button();
+			lblLabelExists = new Label();
+			btnCancel = new Button();
+			lblOperation = new Label();
+			txtLabelName = new TextBox();
+			label5 = new Label();
+			lblSortType = new Label();
+			lstLabels = new ListBox();
+			label3 = new Label();
+			lstOccurrences = new ListBox();
+			mnuFoundEntries = new ContextMenuStrip(components);
+			mnuContextDelete = new ToolStripMenuItem();
+			mnuDelete_OneJournal = new ToolStripMenuItem();
+			mnuDelete_AllJournals = new ToolStripMenuItem();
+			mnuContextRename = new ToolStripMenuItem();
+			mnuRename_OneJournal = new ToolStripMenuItem();
+			mnuRename_AllJournals = new ToolStripMenuItem();
+			label1 = new Label();
+			mnuMain = new MenuStrip();
+			mnuLabelsOperations = new ToolStripMenuItem();
+			mnuAdd = new ToolStripMenuItem();
+			mnuRename = new ToolStripMenuItem();
+			mnuDelete = new ToolStripMenuItem();
+			mnuFindOrphans = new ToolStripMenuItem();
+			mnuMoveTop = new ToolStripMenuItem();
+			mnuMoveUp = new ToolStripMenuItem();
+			mnuMoveDown = new ToolStripMenuItem();
+			mnuAssignPINs = new ToolStripMenuItem();
+			mnuExit = new ToolStripMenuItem();
+			lstEntryObjects = new ListBox();
+			pnlOrphanedLabels = new Panel();
+			btnExitOrphans = new Button();
+			chkSelectAllOrphans = new CheckBox();
+			btnRemoveSelectedOrphans = new Button();
+			lstOrphanedLabels = new ListBox();
+			label4 = new Label();
 			pnlMain.SuspendLayout();
 			pnlNewLabelName.SuspendLayout();
+			mnuFoundEntries.SuspendLayout();
 			mnuMain.SuspendLayout();
 			pnlOrphanedLabels.SuspendLayout();
 			this.SuspendLayout();
@@ -156,7 +167,7 @@ namespace myJournal.subforms
 			// lblSortType
 			// 
 			lblSortType.AutoSize = true;
-			lblSortType.Cursor = System.Windows.Forms.Cursors.Hand;
+			lblSortType.Cursor = Cursors.Hand;
 			lblSortType.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
 			lblSortType.ForeColor = System.Drawing.SystemColors.MenuHighlight;
 			lblSortType.Location = new System.Drawing.Point(234, 4);
@@ -168,6 +179,7 @@ namespace myJournal.subforms
 			// 
 			// lstLabels
 			// 
+			lstLabels.ContextMenuStrip = mnuFoundEntries;
 			lstLabels.FormattingEnabled = true;
 			lstLabels.IntegralHeight = false;
 			lstLabels.ItemHeight = 15;
@@ -195,7 +207,54 @@ namespace myJournal.subforms
 			lstOccurrences.Name = "lstOccurrences";
 			lstOccurrences.Size = new System.Drawing.Size(348, 266);
 			lstOccurrences.TabIndex = 3;
+			lstOccurrences.MouseClick += this.lstOccurrences_MouseClick;
 			lstOccurrences.DoubleClick += this.lstOccurrences_DoubleClick;
+			// 
+			// mnuFoundEntries
+			// 
+			mnuFoundEntries.Items.AddRange(new ToolStripItem[] { mnuContextDelete, mnuContextRename });
+			mnuFoundEntries.Name = "mnuFoundEntries";
+			mnuFoundEntries.Size = new System.Drawing.Size(118, 48);
+			// 
+			// mnuContextDelete
+			// 
+			mnuContextDelete.DropDownItems.AddRange(new ToolStripItem[] { mnuDelete_OneJournal, mnuDelete_AllJournals });
+			mnuContextDelete.Name = "mnuContextDelete";
+			mnuContextDelete.Size = new System.Drawing.Size(117, 22);
+			mnuContextDelete.Text = "Delete";
+			mnuContextDelete.Click += this.mnuDelete_Click;
+			// 
+			// mnuDelete_OneJournal
+			// 
+			mnuDelete_OneJournal.Name = "mnuDelete_OneJournal";
+			mnuDelete_OneJournal.Size = new System.Drawing.Size(150, 22);
+			mnuDelete_OneJournal.Text = "in One Journal";
+			// 
+			// mnuDelete_AllJournals
+			// 
+			mnuDelete_AllJournals.Name = "mnuDelete_AllJournals";
+			mnuDelete_AllJournals.Size = new System.Drawing.Size(150, 22);
+			mnuDelete_AllJournals.Text = "in All Journals";
+			// 
+			// mnuContextRename
+			// 
+			mnuContextRename.DropDownItems.AddRange(new ToolStripItem[] { mnuRename_OneJournal, mnuRename_AllJournals });
+			mnuContextRename.Name = "mnuContextRename";
+			mnuContextRename.Size = new System.Drawing.Size(117, 22);
+			mnuContextRename.Text = "Rename";
+			mnuContextRename.Click += this.mnuRename_Click;
+			// 
+			// mnuRename_OneJournal
+			// 
+			mnuRename_OneJournal.Name = "mnuRename_OneJournal";
+			mnuRename_OneJournal.Size = new System.Drawing.Size(150, 22);
+			mnuRename_OneJournal.Text = "in One Journal";
+			// 
+			// mnuRename_AllJournals
+			// 
+			mnuRename_AllJournals.Name = "mnuRename_AllJournals";
+			mnuRename_AllJournals.Size = new System.Drawing.Size(150, 22);
+			mnuRename_AllJournals.Text = "in All Journals";
 			// 
 			// label1
 			// 
@@ -208,7 +267,7 @@ namespace myJournal.subforms
 			// 
 			// mnuMain
 			// 
-			mnuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuLabelsOperations, mnuMoveTop, mnuAssignPINs, mnuExit });
+			mnuMain.Items.AddRange(new ToolStripItem[] { mnuLabelsOperations, mnuMoveTop, mnuAssignPINs, mnuExit });
 			mnuMain.Location = new System.Drawing.Point(0, 0);
 			mnuMain.Name = "mnuMain";
 			mnuMain.Size = new System.Drawing.Size(1314, 24);
@@ -217,7 +276,7 @@ namespace myJournal.subforms
 			// 
 			// mnuLabelsOperations
 			// 
-			mnuLabelsOperations.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuAdd, mnuRename, mnuDelete, mnuFindOrphans });
+			mnuLabelsOperations.DropDownItems.AddRange(new ToolStripItem[] { mnuAdd, mnuRename, mnuDelete, mnuFindOrphans });
 			mnuLabelsOperations.Name = "mnuLabelsOperations";
 			mnuLabelsOperations.Size = new System.Drawing.Size(52, 20);
 			mnuLabelsOperations.Text = "Labels";
@@ -257,7 +316,7 @@ namespace myJournal.subforms
 			// 
 			// mnuMoveTop
 			// 
-			mnuMoveTop.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuMoveUp, mnuMoveDown });
+			mnuMoveTop.DropDownItems.AddRange(new ToolStripItem[] { mnuMoveUp, mnuMoveDown });
 			mnuMoveTop.Enabled = false;
 			mnuMoveTop.Name = "mnuMoveTop";
 			mnuMoveTop.Size = new System.Drawing.Size(49, 20);
@@ -280,8 +339,8 @@ namespace myJournal.subforms
 			// mnuAssignPINs
 			// 
 			mnuAssignPINs.Name = "mnuAssignPINs";
-			mnuAssignPINs.Size = new System.Drawing.Size(43, 20);
-			mnuAssignPINs.Text = "PINs";
+			mnuAssignPINs.Size = new System.Drawing.Size(96, 20);
+			mnuAssignPINs.Text = "&Select Journals";
 			mnuAssignPINs.Click += this.mnuAssignPINs_Click;
 			// 
 			// mnuExit
@@ -293,11 +352,11 @@ namespace myJournal.subforms
 			// 
 			// lstEntryObjects
 			// 
-			lstEntryObjects.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+			lstEntryObjects.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
 			lstEntryObjects.FormattingEnabled = true;
 			lstEntryObjects.IntegralHeight = false;
 			lstEntryObjects.ItemHeight = 15;
-			lstEntryObjects.Location = new System.Drawing.Point(1146, 8);
+			lstEntryObjects.Location = new System.Drawing.Point(827, 29);
 			lstEntryObjects.Name = "lstEntryObjects";
 			lstEntryObjects.Size = new System.Drawing.Size(203, 200);
 			lstEntryObjects.TabIndex = 4;
@@ -310,7 +369,7 @@ namespace myJournal.subforms
 			pnlOrphanedLabels.Controls.Add(btnRemoveSelectedOrphans);
 			pnlOrphanedLabels.Controls.Add(lstOrphanedLabels);
 			pnlOrphanedLabels.Controls.Add(label4);
-			pnlOrphanedLabels.Location = new System.Drawing.Point(804, 0);
+			pnlOrphanedLabels.Location = new System.Drawing.Point(425, 29);
 			pnlOrphanedLabels.Name = "pnlOrphanedLabels";
 			pnlOrphanedLabels.Size = new System.Drawing.Size(382, 518);
 			pnlOrphanedLabels.TabIndex = 5;
@@ -349,12 +408,12 @@ namespace myJournal.subforms
 			// 
 			// lstOrphanedLabels
 			// 
-			lstOrphanedLabels.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+			lstOrphanedLabels.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
 			lstOrphanedLabels.FormattingEnabled = true;
 			lstOrphanedLabels.ItemHeight = 15;
 			lstOrphanedLabels.Location = new System.Drawing.Point(7, 31);
 			lstOrphanedLabels.Name = "lstOrphanedLabels";
-			lstOrphanedLabels.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			lstOrphanedLabels.SelectionMode = SelectionMode.MultiExtended;
 			lstOrphanedLabels.Size = new System.Drawing.Size(353, 139);
 			lstOrphanedLabels.TabIndex = 2;
 			// 
@@ -370,13 +429,13 @@ namespace myJournal.subforms
 			// frmLabelsManager
 			// 
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new System.Drawing.Size(1314, 642);
 			Controls.Add(pnlOrphanedLabels);
 			Controls.Add(lstEntryObjects);
 			Controls.Add(pnlMain);
 			Controls.Add(mnuMain);
-			FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			FormBorderStyle = FormBorderStyle.FixedSingle;
 			MainMenuStrip = mnuMain;
 			MaximizeBox = false;
 			MinimumSize = new System.Drawing.Size(382, 518);
@@ -388,6 +447,7 @@ namespace myJournal.subforms
 			pnlMain.PerformLayout();
 			pnlNewLabelName.ResumeLayout(false);
 			pnlNewLabelName.PerformLayout();
+			mnuFoundEntries.ResumeLayout(false);
 			mnuMain.ResumeLayout(false);
 			mnuMain.PerformLayout();
 			pnlOrphanedLabels.ResumeLayout(false);
@@ -429,5 +489,12 @@ namespace myJournal.subforms
 		private System.Windows.Forms.ToolStripMenuItem mnuRename;
 		private System.Windows.Forms.ToolStripMenuItem mnuDelete;
 		private System.Windows.Forms.Label label5;
+		private ContextMenuStrip mnuFoundEntries;
+		private ToolStripMenuItem mnuContextRename;
+		private ToolStripMenuItem mnuContextDelete;
+		private ToolStripMenuItem mnuDelete_OneJournal;
+		private ToolStripMenuItem mnuDelete_AllJournals;
+		private ToolStripMenuItem mnuRename_OneJournal;
+		private ToolStripMenuItem mnuRename_AllJournals;
 	}
 }

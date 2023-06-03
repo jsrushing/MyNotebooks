@@ -66,11 +66,13 @@ namespace myJournal.subforms
 					this.AcceptButton = btnNo2;
 					shownPanel = pnlYesNo;
 					this.Text = "Please Confirm";
+					this.Height = pnlYesNo.Top + pnlYesNo.Height + 55;
 					break;
 				case OperationType.Message:
 					pnlOk.Top = 28 * ((int)Math.Ceiling((double)msg.Length / 38));
 					pnlOk.Visible = true;
 					this.AcceptButton = btnOk2;
+					shownPanel = pnlOk;
 					this.Text = "";
 					this.Height = pnlOk.Top + pnlOk.Height + 55;
 					break;
@@ -80,6 +82,7 @@ namespace myJournal.subforms
 					this.AcceptButton = btnCancel1;
 					shownPanel = pnlYesNoCancel;
 					this.Text = "Please Confirm";
+					this.Height = pnlYesNoCancel.Top + pnlYesNoCancel.Height + 55;
 					break;
 				case OperationType.InputBox:
 					lblMessage.Text = msg;
@@ -92,6 +95,7 @@ namespace myJournal.subforms
 					this.AcceptButton = btnOk1;
 					shownPanel = pnlOkCancel;
 					this.Text = "Enter New Value";
+					this.Height = pnlOkCancel.Top + pnlOkCancel.Height + 55;
 					break;
 			}
 

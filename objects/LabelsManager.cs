@@ -11,6 +11,7 @@ using System.IO;
 using static myJournal.objects.Utilities;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
+using myJournal.subforms;
 
 namespace myJournal.objects
 {
@@ -41,19 +42,28 @@ namespace myJournal.objects
 
 		public static async Task DeleteLabel(string labelName, List<Journal> journalsToEdit, Dictionary<string, string> jrnlsAndPINs)
 		{
-			journalsToEdit = journalsToEdit == null ? Program.AllJournals : journalsToEdit;
-			bool bDeleteFromLabelsFile = false;
-			List<Journal> jrnlsWithLabel = new List<Journal>();
+			//journalsToEdit = journalsToEdit == null ? Program.AllJournals : journalsToEdit;
+			//bool bDeleteFromLabelsFile = false;
+			//List<Journal> jrnlsWithLabel = new List<Journal>();
 
-			foreach (Journal j in Program.AllJournals)
-			{
-				Program.PIN = jrnlsAndPINs[j.Name];
-				if (j.HasLabel(labelName)) { jrnlsWithLabel.Add(j); }
-			}
+			//foreach (Journal j in  Program.AllJournals)
+			//{
+			//	Program.PIN = jrnlsAndPINs[j.Name];
+			//	if (j.HasLabel(labelName)) { jrnlsWithLabel.Add(j); }
+			//}
 
-			bDeleteFromLabelsFile = journalsToEdit.Count == 1 & jrnlsWithLabel.Count > 1;
-			await Save(File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Where(c => c != labelName).ToArray().SkipLast(1).ToList());
+			//bDeleteFromLabelsFile = journalsToEdit.Count == 1 & jrnlsWithLabel.Count > 1;
+
 			foreach(Journal j in journalsToEdit) { j.PurgeLabel(labelName); }
+
+			if(journalsToEdit.Count == Program.AllJournals.Count)
+			{ await Save(File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Where(c => c != labelName).ToArray().SkipLast(1).ToList()); }
+			else
+			{
+				var sMsg = "The label has been left in the labels list because you did not search all Journals. " +
+					"You must select ALL journals (and provide PINs for all protected journals) to clear the label from the list.";
+				using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "Label May Still Exist")) { frm.ShowDialog(); }
+			}
 		}
 
 		public static List<string> FindOrphansInAJournal(Journal journal, bool addFoundOrphansToLabels = false)

@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using myJournal.objects;
 using System.Threading.Tasks;
+using Org.BouncyCastle.Crypto.Agreement.JPake;
 
 namespace myJournal.subforms
 {
@@ -49,10 +50,8 @@ namespace myJournal.subforms
 			using (frmSelectJournalsToSearch frm = new frmSelectJournalsToSearch(this, DictJournals))
 			{ frm.ShowDialog(); this.DictJournals = frm.CheckedJournals; }
 
-			//ShowPanel(pnlJournalPINs);
 			ShowHideOccurrences();
-
-			foreach (KeyValuePair<string, string> kvp in DictJournals) { SelectedJournals.Add(new Journal(kvp.Key).Open()); }
+			this.GetSelectedJournals();
 			sort = LabelsManager.LabelsSortType.None;
 			lblSortType_Click(null, null);
 		}
@@ -64,21 +63,6 @@ namespace myJournal.subforms
 		}
 
 		private void AddLabelToUIListbox() { if (txtLabelName.Text.Length > 0) { lstLabels.Items.Add(txtLabelName.Text); } }
-
-		private void btnAddPIN_Click(object sender, EventArgs e)
-		{
-			//string s = lstJournalPINs.Text.Replace(" (****)", "");
-			//DictJournals[s] = txtPIN.Text;
-			//s += " (****)";
-			//lstJournalPINs.Items.Insert(lstJournalPINs.SelectedIndex, s);
-			//lstJournalPINs.Items.RemoveAt(lstJournalPINs.SelectedIndex);
-			//txtPIN.PasswordChar = '\0';
-			//txtPIN.Text = "(select a Journal)";
-			//txtPIN.Enabled = false;
-			//btnAddPIN.Enabled = false;
-			//lstJournalPINs.SelectedIndex = -1;
-			//lblShowPIN.Visible = false;
-		}
 
 		private void btnCancel_Click(object sender, EventArgs e)
 		{
@@ -170,22 +154,22 @@ namespace myJournal.subforms
 
 		private void btnRemoveSelectedOrphans_Click(object sender, EventArgs e)
 		{
-			//using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Are you sure you want to delete the lables? This action cannot be reversed!", "", this))
-			//{
-			//	frm.ShowDialog(this);
+			using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Are you sure you want to delete the lables? This action cannot be reversed!", "", this))
+			{
+				frm.ShowDialog(this);
 
-			//	if (frm.Result == frmMessage.ReturnResult.Yes)
-			//	{ foreach (string lbl in lstOrphanedLabels.SelectedItems) { LabelsManager.Delete(lbl, ); } }
+				//if (frm.Result == frmMessage.ReturnResult.Yes)
+				//{ foreach (string lbl in lstOrphanedLabels.SelectedItems) { LabelsManager.DoDelete(lbl, ); } }
 
-			//	if (lstOrphanedLabels.SelectedItems.Count > 0)
-			//	{
-			//		LabelsManager.PopulateLabelsList(null, lstLabels);
-			//		ShowHideOccurrences();
-			//	}
-			//	lstLabels.SelectedItems.Clear();
-			//	lstOccurrences.Items.Clear();
-			//	ShowPanel(pnlMain);
-			//}
+				if (lstOrphanedLabels.SelectedItems.Count > 0)
+				{
+					LabelsManager.PopulateLabelsList(null, lstLabels);
+					ShowHideOccurrences();
+				}
+				lstLabels.SelectedItems.Clear();
+				lstOccurrences.Items.Clear();
+				this.ShowPanel(pnlMain);
+			}
 		}
 
 		private void chkSelectAllOrphans_CheckedChanged(object sender, EventArgs e)
@@ -200,6 +184,24 @@ namespace myJournal.subforms
 		private async Task DoDelete(string lblName, List<Journal> journalsToEdit, Dictionary<string, string> journalsAndPINs)
 		{
 			await LabelsManager.DeleteLabel(lblName, journalsToEdit, journalsAndPINs);
+
+		}
+
+		private List<Journal> GetSelectedJournals()
+		{
+			SelectedJournals.Clear();
+			foreach (KeyValuePair<string, string> kvp in DictJournals) { SelectedJournals.Add(new Journal(kvp.Key).Open()); }
+			return SelectedJournals;
+		}
+
+		private void KickLstLabels()
+		{
+			if (lstLabels.SelectedItems.Count == 1)
+			{
+				var indx = lstLabels.SelectedIndex;
+				lstLabels.SelectedIndex = -1;
+				lstLabels.SelectedIndex = indx;
+			}
 		}
 
 		private void lblSortType_Click(object sender, EventArgs e)
@@ -287,7 +289,9 @@ namespace myJournal.subforms
 				frm.ShowDialog();
 				this.DictJournals = frm.CheckedJournals;
 			}
+			GetSelectedJournals();
 			this.Size = this.MinimumSize;
+			KickLstLabels();
 		}
 
 		private void mnuDelete_Click(object sender, EventArgs e)
@@ -307,18 +311,10 @@ namespace myJournal.subforms
 
 			if (deleteOK)
 			{
-				List<Journal> jrnlsToEdit = EditingAllJournals ? Program.AllJournals : SelectedJournals;
-				DoDelete(lstLabels.SelectedItem.ToString(), jrnlsToEdit, DictJournals);
+				DoDelete(lstLabels.SelectedItem.ToString(), this.GetSelectedJournals(), DictJournals);
 				LabelsManager.PopulateLabelsList(null, lstLabels);
+				KickLstLabels();
 			}
-
-			//Deleting = true;
-			//EditingAllJournals = ((ToolStripMenuItem)sender).Text.ToLower().StartsWith("in all");
-			//lblOperation.Text = "Delete this label in " + (EditingAllJournals ? "all journals?" : "'" + this.CurrentJournal.Name) + "'?";
-			//pnlNewLabelName.Visible = true;
-			//txtLabelName.Text = lstLabels.SelectedItem.ToString();
-			//txtLabelName.Enabled = false;
-			//btnCancel.Focus();
 		}
 
 		private void mnuExit_Click(object sender, EventArgs e)
@@ -477,6 +473,14 @@ namespace myJournal.subforms
 			lblLabelExists.Visible = !btnOK.Visible;
 		}
 
-		private void txtPIN_KeyUp(object sender, KeyEventArgs e) { if (e.KeyCode == Keys.Enter) { btnAddPIN_Click(null, null); } }
+		private void lstOccurrences_MouseClick(object sender, MouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Right)
+			{
+				this.Text = e.X.ToString() + ", " + e.Y.ToString();
+			}
+
+			this.Text = e.X.ToString() + ", " + e.Y.ToString();
+		}
 	}
 }
