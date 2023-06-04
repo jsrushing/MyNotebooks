@@ -142,7 +142,7 @@ namespace myJournal.objects
 
 			foreach (Journal journal in jrnls2Search)
 			{
-				Program.PIN = dictPINs[journal.Name];
+				Program.PIN = dictPINs[journal.Name] == "" ? "12345678" : dictPINs[journal.Name];
 				if (journal.Entries.Where(t => ("," + t.ClearLabels() + ",").Contains("," + labelName + ",")).ToList().Count > 0)
 				{
 					lstRtrn.Add(journal);
