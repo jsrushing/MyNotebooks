@@ -69,7 +69,7 @@ namespace myJournal.subforms
 					this.Height = pnlYesNo.Top + pnlYesNo.Height + 55;
 					break;
 				case OperationType.Message:
-					pnlOk.Top = 28 * ((int)Math.Ceiling((double)msg.Length / 38));
+					pnlOk.Height = 28 * ((int)Math.Ceiling((double)msg.Length / 38));
 					pnlOk.Visible = true;
 					this.AcceptButton = btnOk2;
 					shownPanel = pnlOk;

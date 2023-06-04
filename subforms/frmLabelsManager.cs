@@ -28,6 +28,7 @@ namespace myJournal.subforms
 		private string MnuRename_OneJournalText = "{0} only";
 		private string MnuDelete_SelectedJournalaText = "from the {0} selected journals";
 		private string MnuRename_SelectedJournalsText = "in the {0} selected journals";
+		private List<int> occurenceTitleIndicies = new List<int>();
 
 		private List<Journal> SelectedJournals { get; set; }
 
@@ -184,7 +185,7 @@ namespace myJournal.subforms
 
 		private async Task DoDelete(string lblName, List<Journal> journalsToEdit, Dictionary<string, string> journalsAndPINs)
 		{
-			await LabelsManager.DeleteLabel(lblName, journalsToEdit, journalsAndPINs);
+			await LabelsManager.DeleteLabel(lblName, journalsToEdit, journalsAndPINs, this);
 			KickLstLabels();
 		}
 
@@ -195,11 +196,13 @@ namespace myJournal.subforms
 			return SelectedJournals;
 		}
 
-		private void KickLstLabels()
+		private void KickLstLabels(int previousIndex = -1)
 		{
-			if (lstLabels.SelectedItems.Count == 1)
+			//var indx = previousIndex == -1 ? lstLabels.SelectedIndex : previousIndex;
+
+			if (lstLabels.SelectedItems.Count == 1 | previousIndex > -1)
 			{
-				var indx = lstLabels.SelectedIndex;
+				var indx = previousIndex > -1 ? previousIndex : lstLabels.SelectedIndex;
 				lstLabels.SelectedIndex = -1;
 				lstLabels.SelectedIndex = indx;
 			}
@@ -276,15 +279,19 @@ namespace myJournal.subforms
 			if (e.Button == MouseButtons.Right)
 			{
 				lstOccurrences.SelectedIndex = e.Y / 15;
-				if (lstOccurrences.SelectedIndex % 3 != 0) { lstOccurrences.SelectedIndex = -1; }
-				mnuContextEntries.Visible = lstOccurrences.SelectedIndex != -1;
 
-				if (mnuContextEntries.Visible)
+				if (!occurenceTitleIndicies.Contains(lstOccurrences.SelectedIndex)) 
+				{ mnuContextEntries.Visible = false; lstOccurrences.SelectedIndex = -1; }
+				else
 				{
+					mnuContextEntries.Visible = true;
+					mnuContextDelete.Text = "Delete '" + lstLabels.Text + "'";
+					mnuContextRename.Text = "Rename '" + lstLabels.Text + "'";
 					mnuDelete_OneJournal.Text = string.Format(MnuDelete_OneJournalText, lstOccurrences.SelectedItem.ToString().Replace("in", "from"));
 					mnuRename_OneJournal.Text = string.Format(MnuRename_OneJournalText, lstOccurrences.SelectedItem.ToString());
 					mnuDelete_AllJournals.Text = DictJournals.Count == Program.AllJournals.Count ? "from all journals" : string.Format(MnuDelete_SelectedJournalaText, DictJournals.Count.ToString());
 					mnuRename_AllJournals.Text = DictJournals.Count == Program.AllJournals.Count ? "in all journals" : string.Format(MnuRename_SelectedJournalsText, DictJournals.Count.ToString());
+
 				}
 			}
 		}
@@ -319,6 +326,7 @@ namespace myJournal.subforms
 			var editingOneJournal = false;
 
 			editingOneJournal = mnu.Text.ToLower().Contains("only");
+			this.Cursor = Cursors.WaitCursor;
 
 			if(editingOneJournal)
 			{
@@ -341,9 +349,12 @@ namespace myJournal.subforms
 
 			if (deleteOK)
 			{
+				var pIndex = lstLabels.SelectedIndex;
 				DoDelete(lstLabels.SelectedItem.ToString(), (oneJournal == null? this.GetSelectedJournals() : oneJournal), DictJournals);
 				LabelsManager.PopulateLabelsList(null, lstLabels);
+				KickLstLabels(pIndex);
 			}
+			this.Cursor = Cursors.Default;
 		}
 
 		private void mnuExit_Click(object sender, EventArgs e)
@@ -431,6 +442,7 @@ namespace myJournal.subforms
 						if (foundLables.Count > 0)
 						{
 							lstOccurrences.Items.Add("in '" + jrnl.Name + "'");
+							occurenceTitleIndicies.Add(lstOccurrences.Items.Count - 1);
 							lstEntryObjects.Items.Add("");
 
 							foreach (JournalEntry je in foundLables)

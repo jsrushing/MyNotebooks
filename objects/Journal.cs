@@ -8,6 +8,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading.Tasks;
 using myJournal.objects;
 
 namespace myJournal
@@ -135,9 +136,10 @@ namespace myJournal
 			return entriesToReturn;
 		}
 
-		public void PurgeLabel(string label)
+		public async Task PurgeLabel(string label, Dictionary<string, string> journalsAndPINs)
 		{
-			foreach(JournalEntry entry in this.Entries.Where(e => e.ClearLabels().Contains(label)).ToList()) { if(entry.RemoveOrReplaceLabel("", label, false)) this.Save(); }
+			foreach(JournalEntry entry in this.Entries.Where(e => e.ClearLabels().Contains(label)).ToList()) 
+			{ if(entry.RemoveOrReplaceLabel("", label, false)) await this.Save(); }		
 		}
 
 		public void Rename(string newName)
@@ -160,7 +162,7 @@ namespace myJournal
 			this.Entries.Insert(idx, jeToInsert);
 		}
 
-		public async void Save()
+		public async Task Save()
 		{
 			this.LastSaved = DateTime.Now;
 

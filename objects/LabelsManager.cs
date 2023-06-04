@@ -12,6 +12,7 @@ using static myJournal.objects.Utilities;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using myJournal.subforms;
+using System.Xml;
 
 namespace myJournal.objects
 {
@@ -24,37 +25,15 @@ namespace myJournal.objects
 			None
 		}		
 
-		//public bool ActionTaken { get; private set; }
-		//public Journal Journal { private get; set; }
-
-		//public LabelsManager(Journal journal = null, JournalEntry journalEntry = null, string journalPIN = null)
-		//{
-		//	  = journal == null ? null : journal;
-		//}
-
-		//public LabelsManager() { }
-
 		public static void Add(string[] lables)
 		{
 				string[] newLabels = ((lables).Except(GetLabels_NoFileDate())).ToArray();
 				File.AppendAllLines(AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"], newLabels);
 		}
 
-		public static async Task DeleteLabel(string labelName, List<Journal> journalsToEdit, Dictionary<string, string> jrnlsAndPINs)
+		public static async Task DeleteLabel(string labelName, List<Journal> journalsToEdit, Dictionary<string, string> jrnlsAndPINs, Form parent)
 		{
-			//journalsToEdit = journalsToEdit == null ? Program.AllJournals : journalsToEdit;
-			//bool bDeleteFromLabelsFile = false;
-			//List<Journal> jrnlsWithLabel = new List<Journal>();
-
-			//foreach (Journal j in  Program.AllJournals)
-			//{
-			//	Program.PIN = jrnlsAndPINs[j.Name];
-			//	if (j.HasLabel(labelName)) { jrnlsWithLabel.Add(j); }
-			//}
-
-			//bDeleteFromLabelsFile = journalsToEdit.Count == 1 & jrnlsWithLabel.Count > 1;
-
-			foreach(Journal j in journalsToEdit) { j.PurgeLabel(labelName); }
+			foreach(Journal j in journalsToEdit) { SetProgramPIN(j, jrnlsAndPINs); await j.PurgeLabel(labelName, jrnlsAndPINs); }
 
 			if(journalsToEdit.Count == Program.AllJournals.Count)
 			{ await Save(File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Where(c => c != labelName).ToArray().SkipLast(1).ToList()); }
@@ -62,7 +41,7 @@ namespace myJournal.objects
 			{
 				var sMsg = "The label has been left in the labels list because you did not search all Journals. " +
 					"You must select ALL journals (and provide PINs for all protected journals) to clear the label from the list.";
-				using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "Label May Still Exist")) { frm.ShowDialog(); }
+				using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "Label May Still Exist", parent)) { frm.ShowDialog(); }
 			}
 		}
 
@@ -142,7 +121,8 @@ namespace myJournal.objects
 
 			foreach (Journal journal in jrnls2Search)
 			{
-				Program.PIN = dictPINs[journal.Name] == "" ? "12345678" : dictPINs[journal.Name];
+				//Program.PIN = dictPINs[journal.Name] == "" ? "12345678" : dictPINs[journal.Name];
+				SetProgramPIN(journal, dictPINs);
 				if (journal.Entries.Where(t => ("," + t.ClearLabels() + ",").Contains("," + labelName + ",")).ToList().Count > 0)
 				{
 					lstRtrn.Add(journal);
@@ -181,6 +161,11 @@ namespace myJournal.objects
 			catch (Exception) { }
 
 			return bRtrn;
+		}
+
+		private static void SetProgramPIN(Journal journal, Dictionary<string, string> jrnlsAndPINs)
+		{
+			Program.PIN = jrnlsAndPINs[journal.Name] == "" ? "12345678" : jrnlsAndPINs[journal.Name];
 		}
 	}
 }
