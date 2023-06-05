@@ -136,11 +136,13 @@ namespace myJournal
 			return entriesToReturn;
 		}
 
-		public async Task PurgeLabel(string label, Dictionary<string, string> journalsAndPINs)
+		public async Task DeleteLabel(string label)
 		{
-			foreach(JournalEntry entry in this.Entries.Where(e => e.ClearLabels().Contains(label)).ToList()) 
-			{ if(entry.RemoveOrReplaceLabel("", label, false)) await this.Save(); }		
-		}
+			var saveJournal = false;
+			foreach (JournalEntry entry in this.Entries.Where(e => e.ClearLabels().Contains(label)).ToList())
+			{ saveJournal = entry.RemoveOrReplaceLabel("", label, false); } 
+			
+			if(saveJournal) { await this.Save(); } }
 
 		public void Rename(string newName)
 		{
@@ -150,6 +152,15 @@ namespace myJournal
 			this.Save();
 			File.Move(this.FileName, this.FileName.Substring(0, this.FileName.LastIndexOf("\\")) + "\\" + newName);
 			Backup();
+		}
+
+		public async Task RenameLabel(string oldName,  string newName)
+		{
+			var saveJournal = false;
+			foreach(JournalEntry entry in this.Entries.Where(e => e.ClearLabels().Contains(oldName)).ToList()) 
+			{ saveJournal = entry.RemoveOrReplaceLabel(newName, oldName); }
+
+			if(saveJournal ) { await this.Save(); }
 		}
 
         public void ReplaceEntry(JournalEntry jeToReplace, JournalEntry jeToInsert)

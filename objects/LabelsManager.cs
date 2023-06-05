@@ -33,7 +33,11 @@ namespace myJournal.objects
 
 		public static async Task DeleteLabel(string labelName, List<Journal> journalsToEdit, Dictionary<string, string> jrnlsAndPINs, Form parent)
 		{
-			foreach(Journal j in journalsToEdit) { SetProgramPIN(j, jrnlsAndPINs); await j.PurgeLabel(labelName, jrnlsAndPINs); }
+			foreach(Journal j in journalsToEdit) 
+			{ 
+				SetProgramPIN(j, jrnlsAndPINs); 
+				await j.DeleteLabel(labelName); 
+			}
 
 			if(journalsToEdit.Count == Program.AllJournals.Count)
 			{ await Save(File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Where(c => c != labelName).ToArray().SkipLast(1).ToList()); }
@@ -141,6 +145,15 @@ namespace myJournal.objects
 			{
 				if (lb != null) { lb.Items.Add(label); }
 				else { clb.Items.Add(label); }
+			}
+		}
+
+		public static async Task RenameLabel(string oldLabelName, string newLabelName, List<Journal> journalsToEdit, Dictionary<string, string> jrnlsAndPINs, Form parent)
+		{
+			foreach(Journal j in journalsToEdit)
+			{
+				SetProgramPIN(j, jrnlsAndPINs);
+				await j.RenameLabel(oldLabelName, newLabelName);
 			}
 		}
 

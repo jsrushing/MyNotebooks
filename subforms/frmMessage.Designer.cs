@@ -53,7 +53,7 @@ namespace myJournal.subforms
 			// 
 			lblMessage.Location = new System.Drawing.Point(5, 5);
 			lblMessage.Name = "lblMessage";
-			lblMessage.Size = new System.Drawing.Size(251, 55);
+			lblMessage.Size = new System.Drawing.Size(251, 56);
 			lblMessage.TabIndex = 0;
 			lblMessage.Text = "Delete entry 'this is the entry'?";
 			// 

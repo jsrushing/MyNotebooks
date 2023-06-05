@@ -84,13 +84,13 @@ namespace myJournal
 
 		public bool RemoveOrReplaceLabel(string newLabelName, string oldLabelName, bool renaming = true)
 		{
-			string labels = this.ClearLabels();
-			bool bLabelEdited = false;
+			var labels = this.ClearLabels();
+			var bLabelEdited = false;
 
 			if (labels.Length > 0)
 			{
 				List<string> arrLabels = labels.Split(',').ToList();
-				int iLabelIndex = arrLabels.IndexOf(oldLabelName);
+				var iLabelIndex = arrLabels.IndexOf(oldLabelName);
 
 				if (iLabelIndex > -1)
 				{
