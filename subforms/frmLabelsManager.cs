@@ -46,12 +46,7 @@ namespace myJournal.subforms
 		private void frmLabelsManager_Load(object sender, EventArgs e)
 		{
 			this.Size = this.MinimumSize;
-
 			foreach (Control c in this.Controls) if (c.GetType() == typeof(Panel)) c.Location = new Point(0, 25);
-
-			//using (frmSelectJournalsToSearch frm = new frmSelectJournalsToSearch(this, DictJournals))
-			//{ frm.ShowDialog(); this.DictJournals = frm.CheckedJournals; }
-
 			ShowHideOccurrences();
 			this.GetSelectedJournals();
 			sort = LabelsManager.LabelsSortType.None;
@@ -269,23 +264,26 @@ namespace myJournal.subforms
 			this.Cursor = Cursors.Default;
 		}
 
-		private async Task MenuMoveDown()
+		private async Task MenuMove(object sender)
 		{
-			string sLbl = lstLabels.SelectedItem.ToString();
-			int selIndx = lstLabels.SelectedIndex;
+			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
+			var isUp = mnu.Name.ToLower().Contains("up");
+			var sLbl = lstLabels.SelectedItem.ToString();
+			var selIndx = lstLabels.SelectedIndex;
 			lstLabels.Items.RemoveAt(selIndx);
-			lstLabels.Items.Insert(selIndx + 1, sLbl);
-			lstLabels.SelectedIndex = selIndx + 1;
-			await LabelsManager.Save(lstLabels.Items.OfType<string>().ToList());
-		}
+			lstLabels.Items.Insert(selIndx + (isUp ? -1 : 1), sLbl);
+			lstLabels.SelectedIndex = selIndx + (isUp ? -1 : 1);
 
-		private async Task MenuMoveUp()
-		{
-			string sLbl = lstLabels.SelectedItem.ToString();
-			int selIndx = lstLabels.SelectedIndex;
-			lstLabels.Items.RemoveAt(selIndx);
-			lstLabels.Items.Insert(selIndx - 1, sLbl);
-			lstLabels.SelectedIndex = selIndx - 1;
+			//if (mnu.Name.ToLower().Contains("up"))
+			//{
+			//	lstLabels.Items.Insert(selIndx - 1, sLbl);
+			//	lstLabels.SelectedIndex = selIndx - 1;
+			//}
+			//else
+			//{
+			//	lstLabels.Items.Insert(selIndx + 1, sLbl);
+			//	lstLabels.SelectedIndex = selIndx + 1;
+			//}
 			await LabelsManager.Save(lstLabels.Items.OfType<string>().ToList());
 		}
 
@@ -375,9 +373,9 @@ namespace myJournal.subforms
 
 		}
 
-		private void mnuMoveUp_Click(object sender, EventArgs e) { MenuMoveUp(); }
+		private void mnuMoveUp_Click(object sender, EventArgs e) { MenuMove(sender); }
 
-		private void mnuMoveDown_Click(object sender, EventArgs e) { MenuMoveDown(); }
+		private void mnuMoveDown_Click(object sender, EventArgs e) { MenuMove(sender); }
 
 		private void mnuRename_Click(object sender, EventArgs e) { MenuRename(); }
 
@@ -461,6 +459,5 @@ namespace myJournal.subforms
 			btnOK.Visible = Deleting ? true : !lstLabels.Items.Contains(txtLabelName.Text.Trim());
 			lblLabelExists.Visible = !btnOK.Visible;
 		}
-
 	}
 }
