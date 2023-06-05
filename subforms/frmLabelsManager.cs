@@ -156,6 +156,7 @@ namespace myJournal.subforms
 				else
 				{
 					mnuMoveTop.Visible = true;
+					mnuMoveTop.Enabled = true;
 					mnuMoveUp.Visible = lstLabels.SelectedIndex > 0;
 					mnuMoveDown.Visible = lstLabels.SelectedIndex != lstLabels.Items.Count - 1;
 					lstOccurrences.Items.Clear();
@@ -273,17 +274,6 @@ namespace myJournal.subforms
 			lstLabels.Items.RemoveAt(selIndx);
 			lstLabels.Items.Insert(selIndx + (isUp ? -1 : 1), sLbl);
 			lstLabels.SelectedIndex = selIndx + (isUp ? -1 : 1);
-
-			//if (mnu.Name.ToLower().Contains("up"))
-			//{
-			//	lstLabels.Items.Insert(selIndx - 1, sLbl);
-			//	lstLabels.SelectedIndex = selIndx - 1;
-			//}
-			//else
-			//{
-			//	lstLabels.Items.Insert(selIndx + 1, sLbl);
-			//	lstLabels.SelectedIndex = selIndx + 1;
-			//}
 			await LabelsManager.Save(lstLabels.Items.OfType<string>().ToList());
 		}
 
