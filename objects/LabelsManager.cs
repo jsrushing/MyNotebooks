@@ -31,6 +31,23 @@ namespace myJournal.objects
 				File.AppendAllLines(AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"], newLabels);
 		}
 
+		public static string CheckedLabels_Get(CheckedListBox cbx)
+		{
+			string labels = string.Empty;
+			for (int i = 0; i < cbx.CheckedItems.Count; i++)
+			{
+				labels += cbx.CheckedItems[i].ToString() + ",";
+			}
+			labels = labels.Length > 0 ? labels.Substring(0, labels.Length - 1) : string.Empty;
+			return labels;
+		}
+
+		public static void CheckedLabels_Set(CheckedListBox clb, JournalEntry entry)
+		{
+			var labels = entry.ClearLabels().Split(",");
+			for (var i = 0; i < clb.Items.Count; i++) { clb.SetItemChecked(i, labels.Contains(clb.Items[i].ToString())); }
+		}
+
 		public static async Task DeleteLabel(string labelName, List<Journal> journalsToEdit, Dictionary<string, string> jrnlsAndPINs, Form parent)
 		{
 			foreach(Journal j in journalsToEdit) 
@@ -67,6 +84,22 @@ namespace myJournal.objects
 			return lstReturn;
 		}
 
+		public static List<string> FindOrphansInOneJournal(Journal journal, bool addFoundOrphansToLabels = false)
+		{
+			List<string> lstReturn = new List<string>();
+			string[] allLabels = GetLabels_NoFileDate();
+
+			foreach (JournalEntry je in journal.Entries)
+			{
+				foreach (string jeLabel in je.ClearLabels().Split(","))
+				{
+					if (jeLabel.Length > 0 && !allLabels.Contains(jeLabel) && !lstReturn.Contains(jeLabel))
+					{ lstReturn.Add(jeLabel); }
+				}
+			}
+			return lstReturn;
+		}
+
 		public static DateTime GetLabelsFileDate(string[] labels) 
 		{ 
 			DateTime dt = DateTime.MinValue;
@@ -83,39 +116,6 @@ namespace myJournal.objects
 			Array.Sort(labels);
 			if(sort == LabelsSortType.Ascending) { Array.Reverse(labels); }
 			return labels;	
-		}
-
-		public static string CheckedLabels_Get(CheckedListBox cbx)
-		{
-			string labels = string.Empty;
-			for (int i = 0; i < cbx.CheckedItems.Count; i++)
-			{
-				labels += cbx.CheckedItems[i].ToString() + ",";
-			}
-			labels = labels.Length > 0 ? labels.Substring(0, labels.Length - 1) : string.Empty;
-			return labels;
-		}
-
-		public static void CheckedLabels_Set(CheckedListBox clb, JournalEntry entry)
-		{
-			var labels = entry.ClearLabels().Split(",");
-			for (var i = 0; i < clb.Items.Count; i++) { clb.SetItemChecked(i, labels.Contains(clb.Items[i].ToString())); }
-		}
-
-		public static List<string> FindOrphansInOneJournal(Journal journal, bool addFoundOrphansToLabels = false)
-		{
-			List<string> lstReturn = new List<string>();
-			string[] allLabels = GetLabels_NoFileDate();
-
-			foreach (JournalEntry je in journal.Entries)
-			{
-				foreach (string jeLabel in je.ClearLabels().Split(","))
-				{
-					if (jeLabel.Length > 0 && !allLabels.Contains(jeLabel) && !lstReturn.Contains(jeLabel))
-					{ lstReturn.Add(jeLabel); }
-				}
-			}
-			return lstReturn;
 		}
 
 		public static List<Journal> JournalsContainingLabel(string labelName, Dictionary<string, string> dictPINs, bool returnIfTwoFound = false)

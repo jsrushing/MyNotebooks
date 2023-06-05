@@ -634,7 +634,7 @@ namespace myJournal.subforms
 
 				if (frm.Result == frmMessage.ReturnResult.Ok && frm.EnteredValue.Length > 0)
 				{
-					CurrentJournal.Rename(frm.EnteredValue);
+					CurrentJournal.RenameJournal(frm.EnteredValue);
 					Program.AllJournals = Utilities.AllJournals();
 					LoadJournals();
 				}

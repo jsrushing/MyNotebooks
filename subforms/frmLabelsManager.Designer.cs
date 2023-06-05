@@ -42,15 +42,14 @@ namespace myJournal.subforms
 			label5 = new Label();
 			lblSortType = new Label();
 			lstLabels = new ListBox();
+			mnuContextLabels = new ContextMenuStrip(components);
+			mnuContextRename = new ToolStripMenuItem();
 			label3 = new Label();
 			lstOccurrences = new ListBox();
 			mnuContextEntries = new ContextMenuStrip(components);
 			mnuContextDelete = new ToolStripMenuItem();
 			mnuDelete_OneJournal = new ToolStripMenuItem();
 			mnuDelete_AllJournals = new ToolStripMenuItem();
-			mnuContextRename = new ToolStripMenuItem();
-			mnuRename_OneJournal = new ToolStripMenuItem();
-			mnuRename_AllJournals = new ToolStripMenuItem();
 			label1 = new Label();
 			mnuMain = new MenuStrip();
 			mnuLabelsOperations = new ToolStripMenuItem();
@@ -70,6 +69,7 @@ namespace myJournal.subforms
 			label4 = new Label();
 			pnlMain.SuspendLayout();
 			pnlNewLabelName.SuspendLayout();
+			mnuContextLabels.SuspendLayout();
 			mnuContextEntries.SuspendLayout();
 			mnuMain.SuspendLayout();
 			pnlOrphanedLabels.SuspendLayout();
@@ -177,6 +177,7 @@ namespace myJournal.subforms
 			// 
 			// lstLabels
 			// 
+			lstLabels.ContextMenuStrip = mnuContextLabels;
 			lstLabels.FormattingEnabled = true;
 			lstLabels.IntegralHeight = false;
 			lstLabels.ItemHeight = 15;
@@ -185,6 +186,20 @@ namespace myJournal.subforms
 			lstLabels.Size = new System.Drawing.Size(348, 184);
 			lstLabels.TabIndex = 0;
 			lstLabels.SelectedIndexChanged += this.lstLabels_SelectedIndexChanged;
+			lstLabels.MouseUp += this.lstLabels_MouseUp;
+			// 
+			// mnuContextLabels
+			// 
+			mnuContextLabels.Items.AddRange(new ToolStripItem[] { mnuContextRename });
+			mnuContextLabels.Name = "mnuContextLabels";
+			mnuContextLabels.Size = new System.Drawing.Size(181, 48);
+			// 
+			// mnuContextRename
+			// 
+			mnuContextRename.Name = "mnuContextRename";
+			mnuContextRename.Size = new System.Drawing.Size(180, 22);
+			mnuContextRename.Text = "Rename";
+			mnuContextRename.Click += this.mnuRename_Click;
 			// 
 			// label3
 			// 
@@ -210,15 +225,15 @@ namespace myJournal.subforms
 			// 
 			// mnuContextEntries
 			// 
-			mnuContextEntries.Items.AddRange(new ToolStripItem[] { mnuContextDelete, mnuContextRename });
+			mnuContextEntries.Items.AddRange(new ToolStripItem[] { mnuContextDelete });
 			mnuContextEntries.Name = "mnuFoundEntries";
-			mnuContextEntries.Size = new System.Drawing.Size(181, 70);
+			mnuContextEntries.Size = new System.Drawing.Size(108, 26);
 			// 
 			// mnuContextDelete
 			// 
 			mnuContextDelete.DropDownItems.AddRange(new ToolStripItem[] { mnuDelete_OneJournal, mnuDelete_AllJournals });
 			mnuContextDelete.Name = "mnuContextDelete";
-			mnuContextDelete.Size = new System.Drawing.Size(180, 22);
+			mnuContextDelete.Size = new System.Drawing.Size(107, 22);
 			mnuContextDelete.Text = "Delete";
 			// 
 			// mnuDelete_OneJournal
@@ -234,27 +249,6 @@ namespace myJournal.subforms
 			mnuDelete_AllJournals.Size = new System.Drawing.Size(199, 22);
 			mnuDelete_AllJournals.Text = "in {0} selected journals";
 			mnuDelete_AllJournals.Click += this.mnuDelete_Click;
-			// 
-			// mnuContextRename
-			// 
-			mnuContextRename.DropDownItems.AddRange(new ToolStripItem[] { mnuRename_OneJournal, mnuRename_AllJournals });
-			mnuContextRename.Name = "mnuContextRename";
-			mnuContextRename.Size = new System.Drawing.Size(180, 22);
-			mnuContextRename.Text = "Rename";
-			// 
-			// mnuRename_OneJournal
-			// 
-			mnuRename_OneJournal.Name = "mnuRename_OneJournal";
-			mnuRename_OneJournal.Size = new System.Drawing.Size(199, 22);
-			mnuRename_OneJournal.Text = "in <journal name> only";
-			mnuRename_OneJournal.Click += this.mnuRename_Click;
-			// 
-			// mnuRename_AllJournals
-			// 
-			mnuRename_AllJournals.Name = "mnuRename_AllJournals";
-			mnuRename_AllJournals.Size = new System.Drawing.Size(199, 22);
-			mnuRename_AllJournals.Text = "in {0} selected journals";
-			mnuRename_AllJournals.Click += this.mnuRename_Click;
 			// 
 			// label1
 			// 
@@ -284,14 +278,14 @@ namespace myJournal.subforms
 			// mnuAdd
 			// 
 			mnuAdd.Name = "mnuAdd";
-			mnuAdd.Size = new System.Drawing.Size(180, 22);
+			mnuAdd.Size = new System.Drawing.Size(145, 22);
 			mnuAdd.Text = "&Add";
 			mnuAdd.Click += this.mnuAdd_Click;
 			// 
 			// mnuFindOrphans
 			// 
 			mnuFindOrphans.Name = "mnuFindOrphans";
-			mnuFindOrphans.Size = new System.Drawing.Size(180, 22);
+			mnuFindOrphans.Size = new System.Drawing.Size(145, 22);
 			mnuFindOrphans.Text = "Find &Orphans";
 			mnuFindOrphans.Click += this.mnuFindOrphans_Click;
 			// 
@@ -428,6 +422,7 @@ namespace myJournal.subforms
 			pnlMain.PerformLayout();
 			pnlNewLabelName.ResumeLayout(false);
 			pnlNewLabelName.PerformLayout();
+			mnuContextLabels.ResumeLayout(false);
 			mnuContextEntries.ResumeLayout(false);
 			mnuMain.ResumeLayout(false);
 			mnuMain.PerformLayout();
@@ -468,12 +463,13 @@ namespace myJournal.subforms
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.ToolStripMenuItem mnuAdd;
 		private System.Windows.Forms.Label label5;
+
 		private ContextMenuStrip mnuContextEntries;
-		private ToolStripMenuItem mnuContextRename;
+		private ContextMenuStrip mnuContextLabels;
+
 		private ToolStripMenuItem mnuContextDelete;
 		private ToolStripMenuItem mnuDelete_OneJournal;
 		private ToolStripMenuItem mnuDelete_AllJournals;
-		private ToolStripMenuItem mnuRename_OneJournal;
-		private ToolStripMenuItem mnuRename_AllJournals;
+		private ToolStripMenuItem mnuContextRename;
 	}
 }

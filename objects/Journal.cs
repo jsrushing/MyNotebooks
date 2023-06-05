@@ -93,10 +93,7 @@ namespace myJournal
 			return jeRtrn;
         }
 
-		public bool HasLabel(string Label)
-		{
-			return Entries.Where(e => e.ClearLabels().Contains(Label)).Any();
-		}
+		public bool HasLabel(string Label) { return Entries.Where(e => e.ClearLabels().Contains(Label)).Any(); }
 
         public Journal Open(bool useFileName = false)
         {
@@ -144,12 +141,12 @@ namespace myJournal
 			
 			if(saveJournal) { await this.Save(); } }
 
-		public void Rename(string newName)
+		public async Task RenameJournal(string newName)
 		{
 			DeleteBackups();
 			this.Name = newName;
 			this.FileName = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"] + this.Name;
-			this.Save();
+			await this.Save();
 			File.Move(this.FileName, this.FileName.Substring(0, this.FileName.LastIndexOf("\\")) + "\\" + newName);
 			Backup();
 		}

@@ -55,13 +55,14 @@ namespace myJournal.subforms
 			}
 
 			lblMessage.Text = msg;
+			lblMessage.Height = 28 * ((int)Math.Ceiling((double)msg.Length / 38));
 
 			switch (opType)
 			{
 				case OperationType.DeleteEntry:
 				case OperationType.DeleteJournal:
 					lblMessage.Text = opType == OperationType.DeleteJournal ? "Delete journal '" + msg + "'?" : "Delete entry '" + msg + "' ? ";
-					pnlYesNo.Top = 28 * ((int)Math.Ceiling((double)lblMessage.Text.Length / 38));
+					pnlYesNo.Top =lblMessage.Top + lblMessage.Height;
 					pnlYesNo.Visible = true;
 					this.AcceptButton = btnNo2;
 					shownPanel = pnlYesNo;
@@ -69,8 +70,7 @@ namespace myJournal.subforms
 					this.Height = pnlYesNo.Top + pnlYesNo.Height + 55;
 					break;
 				case OperationType.Message:
-					lblMessage.Height = 28 * ((int)Math.Ceiling((double)msg.Length / 38));
-					pnlOk.Top = lblMessage.Top + lblMessage.Height + 25;	// 28 * ((int)Math.Ceiling((double)msg.Length / 38));
+					pnlOk.Top = lblMessage.Top + lblMessage.Height;	
 					pnlOk.Visible = true;
 					this.AcceptButton = btnOk2;
 					shownPanel = pnlOk;
@@ -78,7 +78,7 @@ namespace myJournal.subforms
 					this.Height = pnlOk.Top + pnlOk.Height + 55;
 					break;
 				case OperationType.YesNoQuestion:
-					pnlYesNoCancel.Top = 28 * ((int)Math.Ceiling((double)msg.Length / 38));
+					pnlYesNoCancel.Top = lblMessage.Top + lblMessage.Height;
 					pnlYesNoCancel.Visible = true;
 					this.AcceptButton = btnCancel1;
 					shownPanel = pnlYesNoCancel;
@@ -86,10 +86,9 @@ namespace myJournal.subforms
 					this.Height = pnlYesNoCancel.Top + pnlYesNoCancel.Height + 55;
 					break;
 				case OperationType.InputBox:
-					lblMessage.Text = msg;
 					txtInput.Text = defaultText;
 					txtInput.Visible = true;
-					txtInput.Top = 23 * ((int)Math.Ceiling((double)msg.Length / 42));
+					//txtInput.Top = 23 * ((int)Math.Ceiling((double)msg.Length / 42));
 					pnlOkCancel.Top = txtInput.Top + txtInput.Height + 15;
 					pnlOkCancel.Visible = true;
 					txtInput.SelectAll();
