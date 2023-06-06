@@ -125,8 +125,8 @@ namespace myJournal.objects
 
 			foreach (Journal journal in jrnls2Search)
 			{
-				//Program.PIN = dictPINs[journal.Name] == "" ? "12345678" : dictPINs[journal.Name];
 				SetProgramPIN(journal, dictPINs);
+
 				if (journal.Entries.Where(t => ("," + t.ClearLabels() + ",").Contains("," + labelName + ",")).ToList().Count > 0)
 				{
 					lstRtrn.Add(journal);
@@ -178,7 +178,7 @@ namespace myJournal.objects
 
 		private static void SetProgramPIN(Journal journal, Dictionary<string, string> jrnlsAndPINs)
 		{
-			Program.PIN = jrnlsAndPINs[journal.Name] == "" ? "12345678" : jrnlsAndPINs[journal.Name];
+			Program.PIN = jrnlsAndPINs[journal.Name] == "" ? "" : jrnlsAndPINs[journal.Name];
 		}
 	}
 }

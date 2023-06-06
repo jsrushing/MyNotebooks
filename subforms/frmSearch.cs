@@ -14,7 +14,6 @@ namespace myJournal.subforms
 {
 	public partial class frmSearch : Form
 	{
-		private bool firstSelection = true;
 		private List<Journal> journalsToSearch = new List<Journal>();
 		private Dictionary<string, string> CheckedJournals = new Dictionary<string, string>();
 		private Dictionary<string, int> journalBoundaries = new Dictionary<string, int>();

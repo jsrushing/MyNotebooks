@@ -152,7 +152,6 @@ namespace myJournal.subforms
 			txtLabelName.Name = "txtLabelName";
 			txtLabelName.Size = new System.Drawing.Size(249, 23);
 			txtLabelName.TabIndex = 0;
-			txtLabelName.TextChanged += this.txtLabelName_TextChanged;
 			// 
 			// label5
 			// 
@@ -192,12 +191,12 @@ namespace myJournal.subforms
 			// 
 			mnuContextLabels.Items.AddRange(new ToolStripItem[] { mnuContextRename });
 			mnuContextLabels.Name = "mnuContextLabels";
-			mnuContextLabels.Size = new System.Drawing.Size(181, 48);
+			mnuContextLabels.Size = new System.Drawing.Size(118, 26);
 			// 
 			// mnuContextRename
 			// 
 			mnuContextRename.Name = "mnuContextRename";
-			mnuContextRename.Size = new System.Drawing.Size(180, 22);
+			mnuContextRename.Size = new System.Drawing.Size(117, 22);
 			mnuContextRename.Text = "Rename";
 			mnuContextRename.Click += this.mnuRename_Click;
 			// 

@@ -17,24 +17,16 @@ namespace myJournal.subforms
 {
 	public partial class frmLabelsManager : Form
 	{
-		private bool Renaming = false;
-		private bool Adding = false;
-		private bool Deleting = false;
-
+		//private bool Adding = false;
 		private LabelsManager.LabelsSortType sort = LabelsManager.LabelsSortType.None;
-		private string OriginalPIN = Program.PIN;
 		private Dictionary<string, string> DictJournals = new Dictionary<string, string>();
 		private string MnuDelete_OneJournalText = "{0} only";
 		private string MnuDelete_SelectedJournalaText = "from the {0} selected journals";
-		//private string MnuRename_OneJournalText = "{0} only";
-		//private string MnuRename_SelectedJournalsText = "in the {0} selected journals";
 		private List<int> occurenceTitleIndicies = new List<int>();
 
 		private List<Journal> SelectedJournals { get; set; }
 
 		public bool ActionTaken { get; private set; }
-
-		private Journal CurrentJournal;
 
 		public frmLabelsManager(Form parent, Journal _jrnl = null)
 		{
@@ -210,18 +202,13 @@ namespace myJournal.subforms
 		private async Task MenuBtnOk()
 		{
 			this.Cursor = Cursors.WaitCursor;
-
-			if (Adding)
-			{
-				AddLabelToUIListbox();
-				await LabelsManager.Save(lstLabels.Items.OfType<string>().ToList());
-				pnlNewLabelName.Visible = false;
-				LabelsManager.PopulateLabelsList(null, lstLabels);
-				lstOccurrences.Items.Clear();
-				this.ShowHideOccurrences();
-				this.ShowPanel(pnlMain);
-			}
-
+			AddLabelToUIListbox();
+			await LabelsManager.Save(lstLabels.Items.OfType<string>().ToList());
+			pnlNewLabelName.Visible = false;
+			LabelsManager.PopulateLabelsList(null, lstLabels);
+			lstOccurrences.Items.Clear();
+			this.ShowHideOccurrences();
+			this.ShowPanel(pnlMain);
 			this.Cursor = Cursors.Default;
 		}
 
@@ -282,7 +269,7 @@ namespace myJournal.subforms
 			var oldLabelName = lstLabels.Text;
 			var newLabelName = string.Empty;
 
-			using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "What is the new label name?",oldLabelName, this))
+			using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "What is the new label name?", oldLabelName, this))
 			{
 				frm.ShowDialog();
 				if (frm.Result == frmMessage.ReturnResult.Ok) { newLabelName = frm.EnteredValue; }
@@ -316,7 +303,6 @@ namespace myJournal.subforms
 
 		private void mnuAdd_Click(object sender, EventArgs e)
 		{
-			Adding = true;
 			lblOperation.Text = "Label Name:";
 			pnlNewLabelName.Visible = true;
 			txtLabelName.Text = string.Empty;
@@ -421,7 +407,7 @@ namespace myJournal.subforms
 			this.Cursor = Cursors.Default;
 		}
 
-		private void SetProgramPINForSelectedJournal(Journal journal) { Program.PIN = DictJournals[journal.Name] == "" ? "12345678" : DictJournals[journal.Name]; }
+		private void SetProgramPINForSelectedJournal(Journal journal) { Program.PIN = DictJournals[journal.Name] == "" ? "" : DictJournals[journal.Name]; }
 
 		private void ShowPanel(Panel panelToShow)
 		{
@@ -442,12 +428,6 @@ namespace myJournal.subforms
 			if (lstOccurrences.Items.Count > 0)
 			{ lstLabels.Height = pnlMain.Height - 340; lstOccurrences.Height = pnlMain.Height - 300; lstOccurrences.Visible = true; }
 			else { lstLabels.Height = pnlMain.Height - 100; lstOccurrences.Visible = false; }
-		}
-
-		private void txtLabelName_TextChanged(object sender, EventArgs e)
-		{
-			btnOK.Visible = Deleting ? true : !lstLabels.Items.Contains(txtLabelName.Text.Trim());
-			lblLabelExists.Visible = !btnOK.Visible;
 		}
 	}
 }
