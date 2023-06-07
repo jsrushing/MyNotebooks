@@ -51,21 +51,28 @@ namespace myJournal.objects
 			for (var i = 0; i < clb.Items.Count; i++) { clb.SetItemChecked(i, labels.Contains(clb.Items[i].ToString())); }
 		}
 
-		public static async Task DeleteLabel(string labelName, List<Journal> journalsToEdit, Form parent)
+		public static async Task DeleteLabel(string labelName, List<Journal> journalsToEdit, Form parent, bool isOrphan = false)
 		{
-			foreach(Journal j in journalsToEdit) 
-			{ 
-				Utilities.SetProgramPIN(j.Name);
-				await j.DeleteLabel(labelName); 
+			if (isOrphan)
+			{
+				await Save(File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Where(c => c != labelName).ToArray().SkipLast(1).ToList());
 			}
-
-			if(journalsToEdit.Count == Program.AllJournals.Count)
-			{ await Save(File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Where(c => c != labelName).ToArray().SkipLast(1).ToList()); }
 			else
 			{
-				var sMsg = "The label has been left in the labels list because you did not search all Journals. " +
-					"You must select ALL journals (and provide PINs for all protected journals) to clear the label from the list.";
-				using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "Label May Still Exist", parent)) { frm.ShowDialog(); }
+				foreach(Journal j in journalsToEdit) 
+				{ 
+					Utilities.SetProgramPIN(j.Name);
+					await j.DeleteLabel(labelName); 
+				}
+
+				if(journalsToEdit.Count == Program.AllJournals.Count)
+				{ await Save(File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Where(c => c != labelName).ToArray().SkipLast(1).ToList()); }
+				else
+				{
+					var sMsg = "The label has been left in the labels list because you did not search all Journals. " +
+						"You must select ALL journals (and provide PINs for all protected journals) to clear the label from the list.";
+					using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "Label May Still Exist", parent)) { frm.ShowDialog(); }
+				}
 			}
 		}
 
@@ -81,9 +88,12 @@ namespace myJournal.objects
 				Utilities.SetProgramPIN(kvp.Key);
 				journal = new Journal(kvp.Key).Open();
 
-				foreach (JournalEntry je in journal.Entries)
+				if(journal != null)
 				{
-					foreach(var v2 in allLabels.Intersect(je.ClearLabels().Split(',')).ToList()) { lstReturn.Remove(v2); }
+					foreach (JournalEntry je in journal.Entries)
+					{
+						foreach(var v2 in allLabels.Intersect(je.ClearLabels().Split(',')).ToList()) { lstReturn.Remove(v2); }
+					}
 				}
 			}
 

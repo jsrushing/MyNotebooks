@@ -85,7 +85,7 @@ namespace myJournal.subforms
 			pnlMain.Controls.Add(label1);
 			pnlMain.Location = new System.Drawing.Point(16, 25);
 			pnlMain.Name = "pnlMain";
-			pnlMain.Size = new System.Drawing.Size(382, 518);
+			pnlMain.Size = new System.Drawing.Size(366, 500);
 			pnlMain.TabIndex = 0;
 			// 
 			// pnlNewLabelName
@@ -263,7 +263,7 @@ namespace myJournal.subforms
 			mnuMain.Items.AddRange(new ToolStripItem[] { mnuLabelsOperations, mnuMoveTop, mnuAssignPINs, mnuExit });
 			mnuMain.Location = new System.Drawing.Point(0, 0);
 			mnuMain.Name = "mnuMain";
-			mnuMain.Size = new System.Drawing.Size(1314, 24);
+			mnuMain.Size = new System.Drawing.Size(887, 24);
 			mnuMain.TabIndex = 1;
 			mnuMain.Text = "menuStrip1";
 			// 
@@ -332,7 +332,7 @@ namespace myJournal.subforms
 			lstEntryObjects.ItemHeight = 15;
 			lstEntryObjects.Location = new System.Drawing.Point(827, 29);
 			lstEntryObjects.Name = "lstEntryObjects";
-			lstEntryObjects.Size = new System.Drawing.Size(203, 200);
+			lstEntryObjects.Size = new System.Drawing.Size(203, 88);
 			lstEntryObjects.TabIndex = 4;
 			lstEntryObjects.Visible = false;
 			// 
@@ -345,7 +345,7 @@ namespace myJournal.subforms
 			pnlOrphanedLabels.Controls.Add(label4);
 			pnlOrphanedLabels.Location = new System.Drawing.Point(425, 29);
 			pnlOrphanedLabels.Name = "pnlOrphanedLabels";
-			pnlOrphanedLabels.Size = new System.Drawing.Size(382, 518);
+			pnlOrphanedLabels.Size = new System.Drawing.Size(366, 212);
 			pnlOrphanedLabels.TabIndex = 5;
 			pnlOrphanedLabels.Visible = false;
 			// 
@@ -388,7 +388,7 @@ namespace myJournal.subforms
 			lstOrphanedLabels.Location = new System.Drawing.Point(7, 31);
 			lstOrphanedLabels.Name = "lstOrphanedLabels";
 			lstOrphanedLabels.SelectionMode = SelectionMode.MultiExtended;
-			lstOrphanedLabels.Size = new System.Drawing.Size(353, 139);
+			lstOrphanedLabels.Size = new System.Drawing.Size(350, 139);
 			lstOrphanedLabels.TabIndex = 2;
 			// 
 			// label4
@@ -404,7 +404,7 @@ namespace myJournal.subforms
 			// 
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new System.Drawing.Size(1314, 642);
+			ClientSize = new System.Drawing.Size(887, 530);
 			Controls.Add(pnlOrphanedLabels);
 			Controls.Add(lstEntryObjects);
 			Controls.Add(pnlMain);
@@ -412,7 +412,6 @@ namespace myJournal.subforms
 			FormBorderStyle = FormBorderStyle.FixedSingle;
 			MainMenuStrip = mnuMain;
 			MaximizeBox = false;
-			MinimumSize = new System.Drawing.Size(382, 518);
 			Name = "frmLabelsManager";
 			Text = "Manage Labels";
 			Load += this.frmLabelsManager_Load;
