@@ -16,23 +16,27 @@ namespace myJournal.subforms
 	{
 		public Dictionary<string, string> CheckedJournals { get { return dictJournalsAndPINs; } }
 		private Dictionary<string, string> dictJournalsAndPINs = new Dictionary<string, string>();
-		private Dictionary<string, string> dictCheckedItems = new Dictionary<string, string>();
+		//private Dictionary<string, string> dictCheckedItems = new Dictionary<string, string>();
 
-		public frmSelectJournalsToSearch(Form parent, Dictionary<string, string> checkedItems)
+		public frmSelectJournalsToSearch(Form parent)
 		{
 			InitializeComponent();
-			dictCheckedItems = checkedItems;
+			//dictCheckedItems = checkedItems;
 
 			foreach (Journal j in Program.AllJournals)
 			{
-				if (dictCheckedItems.ContainsKey(j.Name))
+				if (Program.DictCheckedJournals.ContainsKey(j.Name))
 				{
-					if (dictCheckedItems[j.Name].Length > 0)
+					if (Program.DictCheckedJournals[j.Name].Length > 0)
 					{
 						lstJournalPINs.Items.Add(j.Name + " (****)");
-						dictJournalsAndPINs.Add(j.Name, dictCheckedItems[j.Name]);
+						dictJournalsAndPINs.Add(j.Name, Program.DictCheckedJournals[j.Name]);
 					}
-					else { lstJournalPINs.Items.Add(j.Name); dictJournalsAndPINs.Add(j.Name, ""); }
+					else 
+					{ 
+						lstJournalPINs.Items.Add(j.Name); 
+						dictJournalsAndPINs.Add(j.Name, ""); 
+					}
 
 					lstJournalPINs.SetItemChecked(lstJournalPINs.Items.Count - 1, true);
 				}
@@ -76,6 +80,7 @@ namespace myJournal.subforms
 				{ dictJournalsAndPINs.Add(Scrubbed(item), ""); }
 			}
 
+			Program.DictCheckedJournals = dictJournalsAndPINs;
 			this.Hide();
 		}
 
@@ -105,7 +110,7 @@ namespace myJournal.subforms
 			if (lstJournalPINs.SelectedIndex > -1)
 			{
 				txtPIN.PasswordChar = '*';
-				txtPIN.Text = dictCheckedItems.ContainsKey(Scrubbed(lstJournalPINs.Text)) ? dictCheckedItems[Scrubbed(lstJournalPINs.Text)] : string.Empty;
+				txtPIN.Text = Program.DictCheckedJournals.ContainsKey(Scrubbed(lstJournalPINs.Text)) ? Program.DictCheckedJournals[Scrubbed(lstJournalPINs.Text)] : string.Empty;
 				txtPIN.Enabled = true;
 				btnAddPIN.Enabled = true;
 				txtPIN.Focus();

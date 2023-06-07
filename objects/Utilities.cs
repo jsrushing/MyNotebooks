@@ -49,9 +49,9 @@ namespace myJournal.objects
 
 			foreach (JournalEntry je in tmpEntries)
 			{
-				for(int i = 0; i < je.Synopsis.Length; i++) 
+				for(int i = 0; i < je.GetSynopsis().Length; i++) 
 				{ 
-					lbxToPopulate.Items.Add(je.Synopsis[i]);    //i == 0 ? "journal: " + journalName + ", title: " + je.Synopsis[i] :
+					lbxToPopulate.Items.Add(je.GetSynopsis()[i]);
 				} 
 			}
 		}
@@ -67,6 +67,11 @@ namespace myJournal.objects
 			typeLabel.Top = seperatorLabel.Top + seperatorLabel.Height;
 			entryRTB.Top = typeLabel.Top + typeLabel.Height;
 			entryRTB.Height = callingForm.Height - entryRTB.Top - 50;
+		}
+
+		public static void SetProgramPIN(string j)
+		{
+			Program.PIN = Program.DictCheckedJournals[j] == "" ? "" : Program.DictCheckedJournals[j];
 		}
 
 		public static void SetStartPosition(Form formToInitialize, Form parentForm)

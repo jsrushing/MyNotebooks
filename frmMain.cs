@@ -613,9 +613,8 @@ namespace myJournal.subforms
 					{
 						File.Copy(fName, tgt, true);
 						filesCopied = true;
-						//LabelsManager lm = new LabelsManager();
-						if (LabelsManager.FindOrphansInAJournal(new Journal(jrnlName).Open(), true).Count > 0) { } // code for orphans being found
-																										//Utilities.Labels_FindOrphansInOneJournal(new Journal(jrnlName).Open(), true);
+						//if (LabelsManager.FindOrphansInAJournal(new Journal(jrnlName).Open(), true).Count > 0) { } // code for orphans being found
+
 					}
 
 					ok2copy = true;
@@ -654,7 +653,7 @@ namespace myJournal.subforms
 
 		private void mnuJournal_Search_Click(object sender, EventArgs e)
 		{
-			using (frmSearch frm = new frmSearch(CurrentJournal, this))
+			using (frmSearch frm = new frmSearch(this))
 			{
 				try { frm.ShowDialog(); }
 				catch (Exception ex)
@@ -678,7 +677,13 @@ namespace myJournal.subforms
 			using (frmLabelsManager frm = new frmLabelsManager(this, CurrentJournal))
 			{
 				frm.ShowDialog();
-				if (frm.ActionTaken) { LoadJournals(); }
+				if (frm.ActionTaken) 
+				{
+					var indx = ddlJournals.SelectedIndex;
+					LoadJournals();
+					ddlJournals.SelectedIndex = -1;
+					ddlJournals.SelectedIndex = indx;
+				}
 			}
 		}
 

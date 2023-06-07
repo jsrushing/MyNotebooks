@@ -14,22 +14,28 @@ namespace myJournal.subforms
 {
 	public partial class frmSearch : Form
 	{
-		private List<Journal> journalsToSearch = new List<Journal>();
-		private Dictionary<string, string> CheckedJournals = new Dictionary<string, string>();
+		//private List<Journal> journalsToSearch = new List<Journal>();
+		//private Dictionary<string, string> CheckedJournals = new Dictionary<string, string>();
 		private Dictionary<string, int> journalBoundaries = new Dictionary<string, int>();
 		private List<int> threeSelections = new List<int>();
 		private bool IgnoreCheckChange = false;
 
-		public frmSearch(Journal jrnl, Form parent)
+		public frmSearch(Form parent)
 		{
 			InitializeComponent();
-			if (jrnl != null)
-			{
-				journalsToSearch.Add(jrnl);
-				CheckedJournals.Add(jrnl.Name, Program.PIN);
-				cbxJournalsToSearch.Text = jrnl.Name;
-				//lblJournalsToSearch.Text = jrnl.Name;
-			}
+			//if (jrnl != null)
+			//{
+			//	journalsToSearch.Add(jrnl);
+			//	CheckedJournals.Add(jrnl.Name, Program.PIN);
+			//	cbxJournalsToSearch.Text = jrnl.Name;
+			//}
+
+			if (Program.DictCheckedJournals.Count == 0)
+			{ using (frmSelectJournalsToSearch frm = new frmSelectJournalsToSearch(this)) { frm.ShowDialog(); } }
+
+			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedJournals)
+			{ cbxJournalsToSearch.Items.Add(kvp.Key); }
+
 			if (cbxJournalsToSearch.Items.Count == 0) { cbxJournalsToSearch.Text = "(no Journals selected)"; }
 			LabelsManager.PopulateLabelsList(lstLabelsForSearch);
 			Utilities.SetStartPosition(this, parent);
@@ -55,7 +61,7 @@ namespace myJournal.subforms
 			SearchObject so = new SearchObject(chkUseDate, chkUseDateRange, chkMatchCase, dtFindDate,
 					dtFindDate_From, dtFindDate_To, radBtnAnd, txtSearchTitle.Text, txtSearchText.Text, labelsArray);
 
-			foreach (KeyValuePair<string, string> kvp in this.CheckedJournals)
+			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedJournals)	//this.CheckedJournals)
 			{
 				Program.PIN = kvp.Value;
 				jeFound = new Journal(kvp.Key).Open().Search(so);
@@ -74,17 +80,16 @@ namespace myJournal.subforms
 		{
 			cbxJournalsToSearch.Items.Clear();
 
-			using (frmSelectJournalsToSearch frm = new frmSelectJournalsToSearch(this, this.CheckedJournals))
+			using (frmSelectJournalsToSearch frm = new frmSelectJournalsToSearch(this))
 			{
 				frm.ShowDialog();
-				this.CheckedJournals = frm.CheckedJournals;
 			}
 
-			if (CheckedJournals.Count > 0)
+			if (Program.DictCheckedJournals.Count > 0)
 			{
 				var sectionWidth = cbxJournalsToSearch.Width;
 
-				foreach (KeyValuePair<string, string> kvp in CheckedJournals)
+				foreach (KeyValuePair<string, string> kvp in Program.DictCheckedJournals)
 				{
 					cbxJournalsToSearch.Items.Add(kvp.Key.Length > sectionWidth ? kvp.Key.Substring(0, sectionWidth - 3) + "..." : kvp.Key);
 				}
@@ -143,7 +148,7 @@ namespace myJournal.subforms
 			{
 				lb.SelectedIndexChanged -= new System.EventHandler(this.lstFoundEntries_SelectedIndexChanged);
 				Journal j = GetEntryJournal();
-				Program.PIN = CheckedJournals.FirstOrDefault(p => p.Key == j.Name).Value;
+				Program.PIN = Program.DictCheckedJournals.FirstOrDefault(p => p.Key == j.Name).Value;
 				JournalEntry currentEntry = JournalEntry.Select(rtb, lb, j);
 				GetCurrentSelections();
 

@@ -18,7 +18,6 @@ namespace myJournal
         public DateTime Date;
 		public DateTime LastEditedOn;
         public string	Text;
-		public string[] Synopsis{ get { synopsis = GetSynopsis(); return synopsis; } set { synopsis = value; } }
 		public string	DisplayText { get { return GetTextDisplayText(); } set { DisplayText = value; } }
 		public string		JournalName { get; set; }
 
@@ -58,13 +57,13 @@ namespace myJournal
 				, ClearTitle(), Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), ClearLabels().Replace(",", ", "), ClearText());
 		}
 
-		string[] GetSynopsis()
+		public string[] GetSynopsis(bool includeJournalName = false)
 		{
 			string[] sRtrn = new string[4];
 			int iTextChunkLength = 150;
 			string sTitle = ClearTitle() + " (" + Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"
 				+ (LastEditedOn < new DateTime(2000, 1, 1) ? "" : " [edited on " + LastEditedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + "]");
-			sTitle += this.JournalName == null ? "" : " > in '" + JournalName + "'";
+			//if (includeJournalName) { sTitle += this.JournalName == null ? "" : " > in '" + JournalName + "'"; }
 			sRtrn[0] = sTitle;
 			string sEntryText = ClearText();
 			sEntryText = (sEntryText.Length < iTextChunkLength ? sEntryText : sEntryText.Substring(0, iTextChunkLength) + " ...");
@@ -124,7 +123,7 @@ namespace myJournal
 
 				for (var i = 0; i < lb.Items.Count; i++)
 				{
-					if (lb.Items[i].ToString().StartsWith(je.Synopsis[0].ToString()))
+					if (lb.Items[i].ToString().StartsWith(je.GetSynopsis()[0].ToString()))
 					{
 						lb.SelectedIndices.Add(i);
 						lb.SelectedIndices.Add(i + 1);
@@ -192,7 +191,7 @@ namespace myJournal
 
 				if (entryRtrn != null)
 				{
-					if (entryRtrn.DisplayText != null)    // entries prior to 1.0.0.1 will not have .DisplayText
+					if (entryRtrn.DisplayText != null)
 					{
 						rtb.Text = entryRtrn.DisplayText;
 					}

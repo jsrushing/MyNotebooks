@@ -13,6 +13,9 @@ using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using myJournal.subforms;
 using System.Xml;
+using Org.BouncyCastle.Crypto.Agreement;
+using System.Reflection.Emit;
+using Newtonsoft.Json.Linq;
 
 namespace myJournal.objects
 {
@@ -48,11 +51,11 @@ namespace myJournal.objects
 			for (var i = 0; i < clb.Items.Count; i++) { clb.SetItemChecked(i, labels.Contains(clb.Items[i].ToString())); }
 		}
 
-		public static async Task DeleteLabel(string labelName, List<Journal> journalsToEdit, Dictionary<string, string> jrnlsAndPINs, Form parent)
+		public static async Task DeleteLabel(string labelName, List<Journal> journalsToEdit, Form parent)
 		{
 			foreach(Journal j in journalsToEdit) 
 			{ 
-				SetProgramPIN(j, jrnlsAndPINs); 
+				Utilities.SetProgramPIN(j.Name);
 				await j.DeleteLabel(labelName); 
 			}
 
@@ -66,37 +69,25 @@ namespace myJournal.objects
 			}
 		}
 
-		public static List<string> FindOrphansInAJournal(Journal journal, bool addFoundOrphansToLabels = false)
+		public static List<string> FindOrphansInSelectedJournals()
 		{
 			List<string> lstReturn = new List<string>();
-			string[] allLabels = GetLabels_NoFileDate();
+			List<string> allLabels = GetLabels_NoFileDate().ToList();
+			lstReturn.AddRange(allLabels);
+			Journal journal = null;
 
-			foreach (JournalEntry je in journal.Entries)
+			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedJournals)
 			{
-				foreach (string jeLabel in je.ClearLabels().Split(","))
+				Utilities.SetProgramPIN(kvp.Key);
+				journal = new Journal(kvp.Key).Open();
+
+				foreach (JournalEntry je in journal.Entries)
 				{
-					if (jeLabel.Length > 0 && !allLabels.Contains(jeLabel) && !lstReturn.Contains(jeLabel))
-					{ lstReturn.Add(jeLabel); }
+					foreach(var v2 in allLabels.Intersect(je.ClearLabels().Split(',')).ToList()) { lstReturn.Remove(v2); }
 				}
 			}
 
-			if (addFoundOrphansToLabels) { Add(lstReturn.ToArray()); }
-			return lstReturn;
-		}
-
-		public static List<string> FindOrphansInOneJournal(Journal journal, bool addFoundOrphansToLabels = false)
-		{
-			List<string> lstReturn = new List<string>();
-			string[] allLabels = GetLabels_NoFileDate();
-
-			foreach (JournalEntry je in journal.Entries)
-			{
-				foreach (string jeLabel in je.ClearLabels().Split(","))
-				{
-					if (jeLabel.Length > 0 && !allLabels.Contains(jeLabel) && !lstReturn.Contains(jeLabel))
-					{ lstReturn.Add(jeLabel); }
-				}
-			}
+			//if (addFoundOrphansToLabels) { Add(lstReturn.ToArray()); }
 			return lstReturn;
 		}
 
@@ -118,14 +109,14 @@ namespace myJournal.objects
 			return labels;	
 		}
 
-		public static List<Journal> JournalsContainingLabel(string labelName, Dictionary<string, string> dictPINs, bool returnIfTwoFound = false)
+		public static List<Journal> JournalsContainingLabel(string labelName, bool returnIfTwoFound = false)
 		{
 			List<Journal> lstRtrn = new List<Journal>();
-			List<Journal> jrnls2Search = Program.AllJournals.Where(e => dictPINs.ContainsKey(e.Name)).ToList();
+			List<Journal> jrnls2Search = Program.AllJournals.Where(e => Program.DictCheckedJournals.ContainsKey(e.Name)).ToList();
 
 			foreach (Journal journal in jrnls2Search)
 			{
-				SetProgramPIN(journal, dictPINs);
+				Utilities.SetProgramPIN(journal.Name);
 
 				if (journal.Entries.Where(t => ("," + t.ClearLabels() + ",").Contains("," + labelName + ",")).ToList().Count > 0)
 				{
@@ -152,7 +143,7 @@ namespace myJournal.objects
 		{
 			foreach(Journal j in journalsToEdit)
 			{
-				SetProgramPIN(j, jrnlsAndPINs);
+				Utilities.SetProgramPIN(j.Name);
 				await j.RenameLabel(oldLabelName, newLabelName);
 			}
 		}
@@ -174,11 +165,6 @@ namespace myJournal.objects
 			catch (Exception) { }
 
 			return bRtrn;
-		}
-
-		private static void SetProgramPIN(Journal journal, Dictionary<string, string> jrnlsAndPINs)
-		{
-			Program.PIN = jrnlsAndPINs[journal.Name] == "" ? "" : jrnlsAndPINs[journal.Name];
 		}
 	}
 }

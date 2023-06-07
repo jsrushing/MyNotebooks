@@ -20,25 +20,28 @@ namespace encrypt_decrypt_string
 
 				if(Program.PIN == null || Program.PIN.Length == 0)
 				{
-					Program.PIN = "12345678";
-					PublicKey = "87654321";
+					strReturn = TextToEncrypt;
+					//Program.PIN = "12345678";
+					//PublicKey = "87654321";
 				}
-
-				byte[] secretkeyByte = { };
-                secretkeyByte = System.Text.Encoding.UTF8.GetBytes(PublicKey);
-                byte[] publickeybyte = { };
-                publickeybyte = System.Text.Encoding.UTF8.GetBytes(FullPin(Program.PIN));
-                MemoryStream ms = null;
-                CryptoStream cs = null;
-                byte[] inputbyteArray = System.Text.Encoding.UTF8.GetBytes(TextToEncrypt);
-                using (DESCryptoServiceProvider des = new DESCryptoServiceProvider())
-                {
-                    ms = new MemoryStream();
-                    cs = new CryptoStream(ms, des.CreateEncryptor(publickeybyte, secretkeyByte), CryptoStreamMode.Write);
-                    cs.Write(inputbyteArray, 0, inputbyteArray.Length);
-                    cs.FlushFinalBlock();
-                    strReturn = Convert.ToBase64String(ms.ToArray());
-                }
+				else
+				{
+					byte[] secretkeyByte = { };
+					secretkeyByte = System.Text.Encoding.UTF8.GetBytes(PublicKey);
+					byte[] publickeybyte = { };
+					publickeybyte = System.Text.Encoding.UTF8.GetBytes(FullPin(Program.PIN));
+					MemoryStream ms = null;
+					CryptoStream cs = null;
+					byte[] inputbyteArray = System.Text.Encoding.UTF8.GetBytes(TextToEncrypt);
+					using (DESCryptoServiceProvider des = new DESCryptoServiceProvider())
+					{
+						ms = new MemoryStream();
+						cs = new CryptoStream(ms, des.CreateEncryptor(publickeybyte, secretkeyByte), CryptoStreamMode.Write);
+						cs.Write(inputbyteArray, 0, inputbyteArray.Length);
+						cs.FlushFinalBlock();
+						strReturn = Convert.ToBase64String(ms.ToArray());
+					}
+				}
                 return strReturn;
             }
             catch (Exception ex)
@@ -58,27 +61,30 @@ namespace encrypt_decrypt_string
 
 				if (Program.PIN == null || Program.PIN.Length == 0)
 				{
-					Program.PIN = "12345678";
-					PublicKey = "87654321";
+					strReturn = TextToDecrypt;
+					//Program.PIN = "12345678";
+					//PublicKey = "87654321";
 				}
-
-				byte[] privatekeyByte = { };
-                privatekeyByte = System.Text.Encoding.UTF8.GetBytes(PublicKey);
-                byte[] publickeybyte = { };
-                publickeybyte = System.Text.Encoding.UTF8.GetBytes(FullPin(Program.PIN)); 
-                MemoryStream ms = null;
-                CryptoStream cs = null;
-                byte[] inputbyteArray = new byte[TextToDecrypt.Replace(" ", "+").Length];
-                inputbyteArray = Convert.FromBase64String(TextToDecrypt.Replace(" ", "+"));
-                using (DESCryptoServiceProvider des = new DESCryptoServiceProvider())
-                {
-                    ms = new MemoryStream();
-                    cs = new CryptoStream(ms, des.CreateDecryptor(publickeybyte, privatekeyByte), CryptoStreamMode.Write);
-                    cs.Write(inputbyteArray, 0, inputbyteArray.Length);
-                    cs.FlushFinalBlock();
-                    Encoding encoding = Encoding.UTF8;
-                    strReturn = encoding.GetString(ms.ToArray());
-                }
+				else
+				{
+					byte[] privatekeyByte = { };
+					privatekeyByte = System.Text.Encoding.UTF8.GetBytes(PublicKey);
+					byte[] publickeybyte = { };
+					publickeybyte = System.Text.Encoding.UTF8.GetBytes(FullPin(Program.PIN)); 
+					MemoryStream ms = null;
+					CryptoStream cs = null;
+					byte[] inputbyteArray = new byte[TextToDecrypt.Replace(" ", "+").Length];
+					inputbyteArray = Convert.FromBase64String(TextToDecrypt.Replace(" ", "+"));
+					using (DESCryptoServiceProvider des = new DESCryptoServiceProvider())
+					{
+						ms = new MemoryStream();
+						cs = new CryptoStream(ms, des.CreateDecryptor(publickeybyte, privatekeyByte), CryptoStreamMode.Write);
+						cs.Write(inputbyteArray, 0, inputbyteArray.Length);
+						cs.FlushFinalBlock();
+						Encoding encoding = Encoding.UTF8;
+						strReturn = encoding.GetString(ms.ToArray());
+					}
+				}
                 return strReturn;
             }
             

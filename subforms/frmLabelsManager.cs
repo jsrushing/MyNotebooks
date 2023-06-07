@@ -17,9 +17,7 @@ namespace myJournal.subforms
 {
 	public partial class frmLabelsManager : Form
 	{
-		//private bool Adding = false;
 		private LabelsManager.LabelsSortType sort = LabelsManager.LabelsSortType.None;
-		private Dictionary<string, string> DictJournals = new Dictionary<string, string>();
 		private string MnuDelete_OneJournalText = "{0} only";
 		private string MnuDelete_SelectedJournalaText = "from the {0} selected journals";
 		private List<int> occurenceTitleIndicies = new List<int>();
@@ -43,6 +41,10 @@ namespace myJournal.subforms
 			this.GetSelectedJournals();
 			sort = LabelsManager.LabelsSortType.None;
 			lblSortType_Click(null, null);
+
+			if(Program.DictCheckedJournals.Count == 0)
+			{ using(frmSelectJournalsToSearch frm = new frmSelectJournalsToSearch(this)) { frm.ShowDialog(); } }
+			
 		}
 
 		private void frmLabelsManager_Resize(object sender, EventArgs e)
@@ -51,38 +53,48 @@ namespace myJournal.subforms
 			ShowHideOccurrences();
 		}
 
-		private void AddLabelToUIListbox() { if (txtLabelName.Text.Length > 0) { lstLabels.Items.Add(txtLabelName.Text); } }
+		private void AddLabelToUIListbox() 
+		{ if (txtLabelName.Text.Length > 0) { lstLabels.Items.Add(txtLabelName.Text); } }
 
 		private void btnCancel_Click(object sender, EventArgs e)
 		{
 			pnlNewLabelName.Visible = false;
 		}
 
-		private void btnExitOrphans_Click(object sender, EventArgs e) { lstOccurrences.Items.Clear(); ShowHideOccurrences(); ShowPanel(pnlMain); }
-
-		private async Task Saver() { await LabelsManager.Save(lstLabels.Items.Cast<string>().ToList()); }
+		private void btnExitOrphans_Click(object sender, EventArgs e) 
+		{ lstOccurrences.Items.Clear(); ShowHideOccurrences(); ShowPanel(pnlMain); }
 
 		private void btnOK_Click(object sender, EventArgs e) { MenuBtnOk(); }
 
 		private void btnPINsOK_Click(object sender, EventArgs e) { ShowPanel(pnlMain); ShowHideOccurrences(); }
 
+		private async Task RemoveOrphans()
+		{
+			{ foreach (string lbl in lstOrphanedLabels.SelectedItems) { await LabelsManager.DeleteLabel(lbl, Program.AllJournals, this); } }
+		}
+
 		private void btnRemoveSelectedOrphans_Click(object sender, EventArgs e)
 		{
-			using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Are you sure you want to delete the lables? This action cannot be reversed!", "", this))
+			if(lstOrphanedLabels.SelectedItems.Count > 0)
 			{
-				frm.ShowDialog(this);
-
-				//if (frm.Result == frmMessage.ReturnResult.Yes)
-				//{ foreach (string lbl in lstOrphanedLabels.SelectedItems) { LabelsManager.DoDelete(lbl, ); } }
-
-				if (lstOrphanedLabels.SelectedItems.Count > 0)
+				using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Are you sure you want to delete the lables? This action cannot be undone!", "", this))
 				{
-					LabelsManager.PopulateLabelsList(null, lstLabels);
-					ShowHideOccurrences();
+					frm.ShowDialog(this);
+
+					if (frm.Result == frmMessage.ReturnResult.Yes)
+					{ RemoveOrphans(); }
+
+
+					if (lstOrphanedLabels.SelectedItems.Count > 0)
+					{
+						LabelsManager.PopulateLabelsList(null, lstLabels);
+						ShowHideOccurrences();
+					}
+
+					lstLabels.SelectedItems.Clear();
+					lstOccurrences.Items.Clear();
+					this.ShowPanel(pnlMain);
 				}
-				lstLabels.SelectedItems.Clear();
-				lstOccurrences.Items.Clear();
-				this.ShowPanel(pnlMain);
 			}
 		}
 
@@ -98,7 +110,7 @@ namespace myJournal.subforms
 		private List<Journal> GetSelectedJournals()
 		{
 			SelectedJournals.Clear();
-			foreach (KeyValuePair<string, string> kvp in DictJournals) { SelectedJournals.Add(new Journal(kvp.Key).Open()); }
+			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedJournals) { SelectedJournals.Add(new Journal(kvp.Key).Open()); }
 			return SelectedJournals;
 		}
 
@@ -138,7 +150,7 @@ namespace myJournal.subforms
 		{
 			if (lstLabels.SelectedIndex > -1)
 			{
-				if (DictJournals.Count == 0)
+				if (Program.DictCheckedJournals.Count == 0)
 				{
 					using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message,
 						"No journal is selected for the search.", "No Journal Selected", this))
@@ -159,7 +171,8 @@ namespace myJournal.subforms
 			}
 		}
 
-		private void lstLabels_MouseUp(object sender, MouseEventArgs e) { lstLabels.SelectedIndex = e.Button == MouseButtons.Right ? e.Y / 15 : lstLabels.SelectedIndex; }
+		private void lstLabels_MouseUp(object sender, MouseEventArgs e) 
+		{ lstLabels.SelectedIndex = e.Button == MouseButtons.Right ? e.Y / 15 : lstLabels.SelectedIndex; }
 
 		private void lstOccurrences_DoubleClick(object sender, EventArgs e)
 		{
@@ -169,7 +182,8 @@ namespace myJournal.subforms
 				KeyValuePair<Journal, JournalEntry> kvp = (KeyValuePair<Journal, JournalEntry>)lstEntryObjects.Items[i];
 				Journal j = kvp.Key;
 				JournalEntry je = kvp.Value;
-				SetProgramPINForSelectedJournal(j);
+				//SetProgramPINForSelectedJournal(j);
+				Utilities.SetProgramPIN(j.Name);
 
 				using (frmNewEntry frm = new frmNewEntry(this, j, je))
 				{ frm.ShowDialog(); if (frm.saved) { PopulateOccurrences(); } }
@@ -191,9 +205,8 @@ namespace myJournal.subforms
 					mnuContextDelete.Text = "Delete '" + lstLabels.Text + "'";
 					mnuContextRename.Text = "Rename '" + lstLabels.Text + "'";
 					mnuDelete_OneJournal.Text = string.Format(MnuDelete_OneJournalText, lstOccurrences.SelectedItem.ToString().Replace("in", "from"));
-					//mnuRename_OneJournal.Text = string.Format(MnuRename_OneJournalText, lstOccurrences.SelectedItem.ToString());
-					//mnuRename_AllJournals.Text = DictJournals.Count == Program.AllJournals.Count ? "in all journals" : string.Format(MnuRename_SelectedJournalsText, DictJournals.Count.ToString());
-					mnuDelete_AllJournals.Text = DictJournals.Count == Program.AllJournals.Count ? "from all journals" : string.Format(MnuDelete_SelectedJournalaText, DictJournals.Count.ToString());
+					mnuDelete_AllJournals.Text = Program.DictCheckedJournals.Count == Program.AllJournals.Count ? "from all journals" 
+						: string.Format(MnuDelete_SelectedJournalaText, Program.DictCheckedJournals.Count.ToString());
 
 				}
 			}
@@ -231,8 +244,8 @@ namespace myJournal.subforms
 
 			var sMsg = "Do you want to delete the label '" + lstLabels.SelectedItem.ToString() + "' ";
 			sMsg += (editingOneJournal ? mnu.Text.Replace("in", "from").Replace(" only", "") :
-				DictJournals.Count == Program.AllJournals.Count ? " from all journals " : " the " + DictJournals.Count.ToString() + " selected journal"
-				+ (DictJournals.Count == 1 && !editingOneJournal ? "" : "s")) + "?";
+				Program.DictCheckedJournals	.Count == Program.AllJournals.Count ? " from all journals " : " the " + Program.DictCheckedJournals.Count.ToString() + " selected journal"
+				+ (Program.DictCheckedJournals.Count == 1 && !editingOneJournal ? "" : "s")) + "?";
 
 			using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, sMsg, "Delete Label?", this))
 			{
@@ -244,11 +257,12 @@ namespace myJournal.subforms
 			{
 				var pIndex = lstLabels.SelectedIndex;
 
-				//await DoDelete(lstLabels.SelectedItem.ToString(), (oneJournal == null ? this.GetSelectedJournals() : oneJournal), DictJournals);
-				await LabelsManager.DeleteLabel(lstLabels.SelectedItem.ToString(), (oneJournal == null ? this.GetSelectedJournals() : oneJournal), DictJournals, this);
+				await LabelsManager.DeleteLabel(lstLabels.SelectedItem.ToString(), (oneJournal == null ? this.GetSelectedJournals() : oneJournal), this);
 				LabelsManager.PopulateLabelsList(null, lstLabels);
 				KickLstLabels(pIndex);
 			}
+
+			ActionTaken = true;
 			this.Cursor = Cursors.Default;
 		}
 
@@ -278,8 +292,7 @@ namespace myJournal.subforms
 			if (newLabelName.Length > 0)
 			{
 				List<Journal> jrnlsToSearch = GetSelectedJournals();
-				//DoRename(oldLabelName, newLabelName, jrnlsToSearch, DictJournals);
-				await LabelsManager.RenameLabel(oldLabelName, newLabelName, jrnlsToSearch, DictJournals, this);
+				await LabelsManager.RenameLabel(oldLabelName, newLabelName, jrnlsToSearch, Program.DictCheckedJournals, this);
 
 				if (jrnlsToSearch.Count != Program.AllJournals.Count)
 				{
@@ -295,9 +308,9 @@ namespace myJournal.subforms
 					lstLabels.Items.Insert(lstLabels.SelectedIndex, newLabelName);
 					lstLabels.Items.RemoveAt(lstLabels.SelectedIndex);
 				}
-
-				//DoSave();
+				
 				await LabelsManager.Save(lstLabels.Items.OfType<string>().ToList());
+				ActionTaken = true;
 			}
 		}
 
@@ -312,10 +325,10 @@ namespace myJournal.subforms
 
 		private void mnuAssignPINs_Click(object sender, EventArgs e)
 		{
-			using (frmSelectJournalsToSearch frm = new frmSelectJournalsToSearch(this, DictJournals))
+			using (frmSelectJournalsToSearch frm = new frmSelectJournalsToSearch(this))
 			{
 				frm.ShowDialog();
-				this.DictJournals = frm.CheckedJournals;
+				Program.DictCheckedJournals = frm.CheckedJournals;
 			}
 			GetSelectedJournals();
 			this.Size = this.MinimumSize;
@@ -332,14 +345,8 @@ namespace myJournal.subforms
 		private void mnuFindOrphans_Click(object sender, EventArgs e)
 		{
 			ShowPanel(pnlOrphanedLabels);
-			List<string> lstOrphans = new List<string>();
+			List<string> lstOrphans = LabelsManager.FindOrphansInSelectedJournals();
 			lstOrphanedLabels.Items.Clear();
-
-			foreach (string label in LabelsManager.GetLabels_NoFileDate())
-			{
-				PopulateOccurrences(label);
-				if (lstOccurrences.Items.Count == 1) { lstOrphans.Add(label); }
-			}
 
 			if (lstOrphans.Count > 0)
 			{
@@ -349,11 +356,11 @@ namespace myJournal.subforms
 
 		}
 
-		private void mnuMoveUp_Click(object sender, EventArgs e) { MenuMove(sender); }
+		private void mnuMoveUp_Click(object sender, EventArgs e) { this.MenuMove(sender); }
 
-		private void mnuMoveDown_Click(object sender, EventArgs e) { MenuMove(sender); }
+		private void mnuMoveDown_Click(object sender, EventArgs e) { this.MenuMove(sender); }
 
-		private void mnuRename_Click(object sender, EventArgs e) { MenuRename(); }
+		private void mnuRename_Click(object sender, EventArgs e) { this.MenuRename(); }
 
 		private void PopulateOccurrences(string labelName = null)
 		{
@@ -370,13 +377,13 @@ namespace myJournal.subforms
 				lstOccurrences.Items.Clear();
 				var currentPIN = Program.PIN;
 
-				List<Journal> journalsWithLabel = LabelsManager.JournalsContainingLabel(labelName, DictJournals);
+				List<Journal> journalsWithLabel = LabelsManager.JournalsContainingLabel(labelName);
 
 				if (journalsWithLabel.Count > 0)
 				{
 					foreach (Journal jrnl in journalsWithLabel)
 					{
-						SetProgramPINForSelectedJournal(jrnl);
+						Utilities.SetProgramPIN(jrnl.Name);
 						List<JournalEntry> foundLables = jrnl.Entries.Where(t => ("," + t.ClearLabels() + ",").Contains("," + labelName + ",")).ToList();
 
 						if (foundLables.Count > 0)
@@ -407,7 +414,8 @@ namespace myJournal.subforms
 			this.Cursor = Cursors.Default;
 		}
 
-		private void SetProgramPINForSelectedJournal(Journal journal) { Program.PIN = DictJournals[journal.Name] == "" ? "" : DictJournals[journal.Name]; }
+		//private void SetProgramPINForSelectedJournal(Journal journal) 
+		//{ Program.PIN = Program.DictCheckedJournals[journal.Name] == "" ? "" : Program.DictCheckedJournals[journal.Name]; }
 
 		private void ShowPanel(Panel panelToShow)
 		{

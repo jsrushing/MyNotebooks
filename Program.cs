@@ -21,6 +21,7 @@ namespace myJournal
 		public static bool		SkipFileSizeComparison	= false;
 		public static List<string> AzureJournalNames	= new List<string>();
 		public static List<Journal> AllJournals			= new List<Journal>();
+		public static Dictionary<string, string> DictCheckedJournals = new Dictionary<string, string>();
 
 		[STAThread]
         static void Main()
