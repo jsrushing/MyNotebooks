@@ -31,6 +31,7 @@ namespace myJournal.objects
 			dtFindDate_From		= _dtFindDate_From;
 			dtFindDate_To		= _dtFindDate_To;
 			radBtnAnd			= _radBtnAnd;
+			radBtnLabelsAnd		= _radLabelsAnd;
 			searchTitle			= _searchTitle;
 			searchText			= _searchText;
 			labelsArray			= _labelsArray;

@@ -118,16 +118,39 @@ namespace myJournal
             return jRtrn;
         }
 
-		private List<JournalEntry> ProcessLabels(List<JournalEntry> entriesToSearch, string[] labelsArray)
+		private List<JournalEntry> ProcessLabels(List<JournalEntry> entriesToSearch, string[] labelsArray, bool UseAnd)
 		{
 			List<JournalEntry> entriesToReturn = new List<JournalEntry>();
 
+			string[] a = labelsArray;
+			string[] b;
+
+
 			foreach (JournalEntry entry in entriesToSearch)
 			{
-				foreach (var label in labelsArray)
+				if (UseAnd)
 				{
-					if (entry.ClearLabels().Contains(label)) { entriesToReturn.Add(entry); }
+					if(entry.ClearLabels().Length > 0)
+					{
+						b = entry.ClearLabels().Split(',');
+					}
+
+
+
+					//entriesToReturn.AddRange(entriesToSearch.Where(e => e.ClearLabels().Split(',').Contains(labelsArray)));
+
+					if(entry.ClearLabels().Length > 0)
+					{
+						string[] v = entry.ClearLabels().Split(',').ToArray();
+
+
+					}
 				}
+
+				//foreach (var label in labelsArray)
+				//{
+				//	if (entry.ClearLabels().Contains(label)) { entriesToReturn.Add(entry); }
+				//}
 			}
 
 			return entriesToReturn;
@@ -203,7 +226,7 @@ namespace myJournal
 				{ allEntries = Entries.Where(p => p.Date >= So.dtFindDate_From.Value && p.Date <= So.dtFindDate_To.Value).ToList(); }
 			}
 
-			if(So.labelsArray != null) { allEntries = ProcessLabels(allEntries, So.labelsArray); }
+			if(So.labelsArray != null) { allEntries = ProcessLabels(allEntries, So.labelsArray, So.radBtnLabelsAnd.Checked); }
 
 			if(!So.chkMatchCase.Checked) { So.searchTitle = So.searchTitle.ToLower(); So.searchText = So.searchText.ToLower(); }
 
