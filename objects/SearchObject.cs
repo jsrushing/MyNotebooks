@@ -14,13 +14,15 @@ namespace myJournal.objects
 		public DateTimePicker dtFindDate_From { get; set; }
 		public DateTimePicker dtFindDate_To { get; set; }
 		public RadioButton radBtnAnd { get; set; }
+		public RadioButton radBtnLabelsAnd { get; set; }
+
 		public string searchTitle { get; set; }
 		public string searchText { get; set; }
 		public string[] labelsArray { get; set; }
 
 
 		public SearchObject(CheckBox _chkUseDate, CheckBox _chkUseDateRange, CheckBox _chkMatchCase, DateTimePicker _dtFindDate, 
-			DateTimePicker _dtFindDate_From, DateTimePicker _dtFindDate_To, RadioButton _radBtnAnd, string _searchTitle, string _searchText, string[] _labelsArray)
+			DateTimePicker _dtFindDate_From, DateTimePicker _dtFindDate_To, RadioButton _radBtnAnd, RadioButton _radLabelsAnd, string _searchTitle, string _searchText, string[] _labelsArray)
 		{
 			chkUseDate			= _chkUseDate;
 			chkUseDateRange		= _chkUseDateRange;

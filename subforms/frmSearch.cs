@@ -14,8 +14,6 @@ namespace myJournal.subforms
 {
 	public partial class frmSearch : Form
 	{
-		//private List<Journal> journalsToSearch = new List<Journal>();
-		//private Dictionary<string, string> CheckedJournals = new Dictionary<string, string>();
 		private Dictionary<string, int> journalBoundaries = new Dictionary<string, int>();
 		private List<int> threeSelections = new List<int>();
 		private bool IgnoreCheckChange = false;
@@ -23,20 +21,11 @@ namespace myJournal.subforms
 		public frmSearch(Form parent)
 		{
 			InitializeComponent();
-			//if (jrnl != null)
-			//{
-			//	journalsToSearch.Add(jrnl);
-			//	CheckedJournals.Add(jrnl.Name, Program.PIN);
-			//	cbxJournalsToSearch.Text = jrnl.Name;
-			//}
 
 			if (Program.DictCheckedJournals.Count == 0)
 			{ using (frmSelectJournalsToSearch frm = new frmSelectJournalsToSearch(this)) { frm.ShowDialog(); } }
 
-			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedJournals)
-			{ cbxJournalsToSearch.Items.Add(kvp.Key); }
-
-			if (cbxJournalsToSearch.Items.Count == 0) { cbxJournalsToSearch.Text = "(no Journals selected)"; }
+			SetJournalSelectLabelAndButton();
 			LabelsManager.PopulateLabelsList(lstLabelsForSearch);
 			Utilities.SetStartPosition(this, parent);
 			dtFindDate.Value = DateTime.Now;
@@ -59,13 +48,12 @@ namespace myJournal.subforms
 			labelsArray = labels.Length > 0 ? labels.Split(',') : null;
 
 			SearchObject so = new SearchObject(chkUseDate, chkUseDateRange, chkMatchCase, dtFindDate,
-					dtFindDate_From, dtFindDate_To, radBtnAnd, txtSearchTitle.Text, txtSearchText.Text, labelsArray);
+					dtFindDate_From, dtFindDate_To, radBtnAnd, radLabels_And, txtSearchTitle.Text, txtSearchText.Text, labelsArray);
 
-			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedJournals)	//this.CheckedJournals)
+			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedJournals)   //this.CheckedJournals)
 			{
-				Program.PIN = kvp.Value;
+				Utilities.SetProgramPIN(kvp.Key);
 				jeFound = new Journal(kvp.Key).Open().Search(so);
-				foreach (JournalEntry je in jeFound) { je.JournalName = kvp.Key; }
 				foundEntries.AddRange(jeFound);
 				Utilities.PopulateEntries(lstFoundEntries, foundEntries, "", "", "", false);
 				journalBoundaries.Add(kvp.Key, lstFoundEntries.Items.Count);
@@ -78,32 +66,8 @@ namespace myJournal.subforms
 
 		private void btnSelectJournals_Click(object sender, EventArgs e)
 		{
-			cbxJournalsToSearch.Items.Clear();
-
-			using (frmSelectJournalsToSearch frm = new frmSelectJournalsToSearch(this))
-			{
-				frm.ShowDialog();
-			}
-
-			if (Program.DictCheckedJournals.Count > 0)
-			{
-				var sectionWidth = cbxJournalsToSearch.Width;
-
-				foreach (KeyValuePair<string, string> kvp in Program.DictCheckedJournals)
-				{
-					cbxJournalsToSearch.Items.Add(kvp.Key.Length > sectionWidth ? kvp.Key.Substring(0, sectionWidth - 3) + "..." : kvp.Key);
-				}
-
-				cbxJournalsToSearch.SelectedIndex = 0;
-			}
-			else { cbxJournalsToSearch.Text = "(no Journals selected)"; }
-
-		}
-
-		private void cbxJournalsToSearch_DropDownClosed(object sender, EventArgs e)
-		{
-			cbxJournalsToSearch.SelectedIndex = 0;
-			btnSelectJournals.Focus();
+			using (frmSelectJournalsToSearch frm = new frmSelectJournalsToSearch(this)) { frm.ShowDialog(); }
+			SetJournalSelectLabelAndButton();
 		}
 
 		private void chkUseDate_CheckedChanged(object sender, EventArgs e) { ToggleDateControls(true); }
@@ -183,9 +147,12 @@ namespace myJournal.subforms
 
 		private void mnuExit_Click(object sender, EventArgs e) { this.Hide(); }
 
-		private void mnuSelectJournals_Click(object sender, EventArgs e)
+		private void SetJournalSelectLabelAndButton()
 		{
-			// code to select journals to search - enhancement
+			lblSearchingIn.Text = "Searching in " +
+				(Program.DictCheckedJournals.Count == Program.AllJournals.Count ? "all " : Program.DictCheckedJournals.Count.ToString() + " selected ") + "journal" + (Program.DictCheckedJournals.Count == 1 ? "" : "s");
+
+			btnSelectJournals.Left = lblSearchingIn.Left + lblSearchingIn.Width + 5;
 		}
 
 		private void ToggleDateControls(bool toggleUseDate)

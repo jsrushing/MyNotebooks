@@ -31,8 +31,10 @@ namespace myJournal.subforms
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSearch));
 			grpFindEntry = new System.Windows.Forms.GroupBox();
-			label1 = new System.Windows.Forms.Label();
-			cbxJournalsToSearch = new System.Windows.Forms.ComboBox();
+			pnlLabels_AndOr = new System.Windows.Forms.Panel();
+			radLabels_Or = new System.Windows.Forms.RadioButton();
+			radLabels_And = new System.Windows.Forms.RadioButton();
+			lblSearchingIn = new System.Windows.Forms.Label();
 			btnSelectJournals = new System.Windows.Forms.Button();
 			btnSearch = new System.Windows.Forms.Button();
 			label2 = new System.Windows.Forms.Label();
@@ -58,18 +60,18 @@ namespace myJournal.subforms
 			label8 = new System.Windows.Forms.Label();
 			lblFoundEntries = new System.Windows.Forms.Label();
 			menuStrip1 = new System.Windows.Forms.MenuStrip();
-			mnuSelectJournals = new System.Windows.Forms.ToolStripMenuItem();
 			mnuClearFields = new System.Windows.Forms.ToolStripMenuItem();
 			mnuExit = new System.Windows.Forms.ToolStripMenuItem();
 			grpFindEntry.SuspendLayout();
+			pnlLabels_AndOr.SuspendLayout();
 			menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// grpFindEntry
 			// 
 			grpFindEntry.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-			grpFindEntry.Controls.Add(label1);
-			grpFindEntry.Controls.Add(cbxJournalsToSearch);
+			grpFindEntry.Controls.Add(pnlLabels_AndOr);
+			grpFindEntry.Controls.Add(lblSearchingIn);
 			grpFindEntry.Controls.Add(btnSelectJournals);
 			grpFindEntry.Controls.Add(btnSearch);
 			grpFindEntry.Controls.Add(label2);
@@ -100,27 +102,49 @@ namespace myJournal.subforms
 			grpFindEntry.TabIndex = 7;
 			grpFindEntry.TabStop = false;
 			// 
-			// label1
+			// pnlLabels_AndOr
 			// 
-			label1.AutoSize = true;
-			label1.Location = new System.Drawing.Point(149, 15);
-			label1.Name = "label1";
-			label1.Size = new System.Drawing.Size(103, 15);
-			label1.TabIndex = 47;
-			label1.Text = "Selected Journals: ";
+			pnlLabels_AndOr.Controls.Add(radLabels_Or);
+			pnlLabels_AndOr.Controls.Add(radLabels_And);
+			pnlLabels_AndOr.Location = new System.Drawing.Point(54, 5);
+			pnlLabels_AndOr.Name = "pnlLabels_AndOr";
+			pnlLabels_AndOr.Size = new System.Drawing.Size(90, 25);
+			pnlLabels_AndOr.TabIndex = 48;
 			// 
-			// cbxJournalsToSearch
+			// radLabels_Or
 			// 
-			cbxJournalsToSearch.FormattingEnabled = true;
-			cbxJournalsToSearch.Location = new System.Drawing.Point(252, 12);
-			cbxJournalsToSearch.Name = "cbxJournalsToSearch";
-			cbxJournalsToSearch.Size = new System.Drawing.Size(229, 23);
-			cbxJournalsToSearch.TabIndex = 46;
-			cbxJournalsToSearch.DropDownClosed += this.cbxJournalsToSearch_DropDownClosed;
+			radLabels_Or.AutoSize = true;
+			radLabels_Or.Checked = true;
+			radLabels_Or.Location = new System.Drawing.Point(2, 4);
+			radLabels_Or.Name = "radLabels_Or";
+			radLabels_Or.Size = new System.Drawing.Size(36, 19);
+			radLabels_Or.TabIndex = 1;
+			radLabels_Or.TabStop = true;
+			radLabels_Or.Text = "or";
+			radLabels_Or.UseVisualStyleBackColor = true;
+			// 
+			// radLabels_And
+			// 
+			radLabels_And.AutoSize = true;
+			radLabels_And.Location = new System.Drawing.Point(39, 4);
+			radLabels_And.Name = "radLabels_And";
+			radLabels_And.Size = new System.Drawing.Size(45, 19);
+			radLabels_And.TabIndex = 0;
+			radLabels_And.Text = "and";
+			radLabels_And.UseVisualStyleBackColor = true;
+			// 
+			// lblSearchingIn
+			// 
+			lblSearchingIn.AutoSize = true;
+			lblSearchingIn.Location = new System.Drawing.Point(149, 18);
+			lblSearchingIn.Name = "lblSearchingIn";
+			lblSearchingIn.Size = new System.Drawing.Size(172, 15);
+			lblSearchingIn.TabIndex = 47;
+			lblSearchingIn.Text = "Searching in 3 selected journals";
 			// 
 			// btnSelectJournals
 			// 
-			btnSelectJournals.Location = new System.Drawing.Point(489, 12);
+			btnSelectJournals.Location = new System.Drawing.Point(323, 14);
 			btnSelectJournals.Name = "btnSelectJournals";
 			btnSelectJournals.Size = new System.Drawing.Size(101, 23);
 			btnSelectJournals.TabIndex = 45;
@@ -130,9 +154,9 @@ namespace myJournal.subforms
 			// 
 			// btnSearch
 			// 
-			btnSearch.Location = new System.Drawing.Point(507, 133);
+			btnSearch.Location = new System.Drawing.Point(488, 133);
 			btnSearch.Name = "btnSearch";
-			btnSearch.Size = new System.Drawing.Size(75, 23);
+			btnSearch.Size = new System.Drawing.Size(127, 23);
 			btnSearch.TabIndex = 43;
 			btnSearch.Text = "&Search";
 			btnSearch.UseVisualStyleBackColor = true;
@@ -231,7 +255,7 @@ namespace myJournal.subforms
 			// chkUseDate
 			// 
 			chkUseDate.AutoSize = true;
-			chkUseDate.Location = new System.Drawing.Point(169, 119);
+			chkUseDate.Location = new System.Drawing.Point(169, 123);
 			chkUseDate.Name = "chkUseDate";
 			chkUseDate.Size = new System.Drawing.Size(49, 19);
 			chkUseDate.TabIndex = 33;
@@ -264,7 +288,7 @@ namespace myJournal.subforms
 			dtFindDate.CustomFormat = "M/d/yyyy";
 			dtFindDate.Enabled = false;
 			dtFindDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-			dtFindDate.Location = new System.Drawing.Point(220, 117);
+			dtFindDate.Location = new System.Drawing.Point(220, 121);
 			dtFindDate.Name = "dtFindDate";
 			dtFindDate.ShowUpDown = true;
 			dtFindDate.Size = new System.Drawing.Size(79, 23);
@@ -379,20 +403,12 @@ namespace myJournal.subforms
 			// 
 			// menuStrip1
 			// 
-			menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuSelectJournals, mnuClearFields, mnuExit });
+			menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuClearFields, mnuExit });
 			menuStrip1.Location = new System.Drawing.Point(0, 0);
 			menuStrip1.Name = "menuStrip1";
 			menuStrip1.Size = new System.Drawing.Size(685, 24);
 			menuStrip1.TabIndex = 8;
 			menuStrip1.Text = "menuStrip1";
-			// 
-			// mnuSelectJournals
-			// 
-			mnuSelectJournals.Name = "mnuSelectJournals";
-			mnuSelectJournals.Size = new System.Drawing.Size(96, 20);
-			mnuSelectJournals.Text = "Select &Journals";
-			mnuSelectJournals.Visible = false;
-			mnuSelectJournals.Click += this.mnuSelectJournals_Click;
 			// 
 			// mnuClearFields
 			// 
@@ -422,6 +438,8 @@ namespace myJournal.subforms
 			Text = "Search";
 			grpFindEntry.ResumeLayout(false);
 			grpFindEntry.PerformLayout();
+			pnlLabels_AndOr.ResumeLayout(false);
+			pnlLabels_AndOr.PerformLayout();
 			menuStrip1.ResumeLayout(false);
 			menuStrip1.PerformLayout();
 			this.ResumeLayout(false);
@@ -454,12 +472,14 @@ namespace myJournal.subforms
 		private System.Windows.Forms.Label lblSeparator;
 		private System.Windows.Forms.ToolStripMenuItem mnuExit;
 		private System.Windows.Forms.CheckBox chkMatchCase;
-		private System.Windows.Forms.ToolStripMenuItem mnuSelectJournals;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.CheckBox chkMatchWholeWord;
 		private System.Windows.Forms.Button btnSearch;
 		private System.Windows.Forms.Button btnSelectJournals;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.ComboBox cbxJournalsToSearch;
+		private System.Windows.Forms.Label lblSearchingIn;
+		private System.Windows.Forms.Panel pnlOkCancel;
+		private System.Windows.Forms.RadioButton radLabels_Or;
+		private System.Windows.Forms.RadioButton radLabels_And;
+		private System.Windows.Forms.Panel pnlLabels_AndOr;
 	}
 }

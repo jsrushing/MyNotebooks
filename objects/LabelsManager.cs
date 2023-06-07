@@ -81,7 +81,7 @@ namespace myJournal.objects
 			List<string> lstReturn = new List<string>();
 			List<string> allLabels = GetLabels_NoFileDate().ToList();
 			lstReturn.AddRange(allLabels);
-			Journal journal = null;
+			Journal journal;
 
 			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedJournals)
 			{
@@ -96,8 +96,6 @@ namespace myJournal.objects
 					}
 				}
 			}
-
-			//if (addFoundOrphansToLabels) { Add(lstReturn.ToArray()); }
 			return lstReturn;
 		}
 
