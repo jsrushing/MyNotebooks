@@ -133,24 +133,23 @@ namespace myJournal
 					if(entry.ClearLabels().Length > 0)
 					{
 						b = entry.ClearLabels().Split(',');
-					}
+						var hasLabels = true;
 
+						foreach(string label in labelsArray)
+						{
+							if(!b.Contains(label)) { hasLabels = false; break; }
+						}
 
-
-					//entriesToReturn.AddRange(entriesToSearch.Where(e => e.ClearLabels().Split(',').Contains(labelsArray)));
-
-					if(entry.ClearLabels().Length > 0)
-					{
-						string[] v = entry.ClearLabels().Split(',').ToArray();
-
-
+						if(hasLabels) { if(!entriesToReturn.Contains(entry)) entriesToReturn.Add(entry); }
 					}
 				}
-
-				//foreach (var label in labelsArray)
-				//{
-				//	if (entry.ClearLabels().Contains(label)) { entriesToReturn.Add(entry); }
-				//}
+				else
+				{
+					foreach (var label in labelsArray)
+					{
+						if (entry.ClearLabels().Contains(label)) { if (!entriesToReturn.Contains(entry)) entriesToReturn.Add(entry); }
+					}
+				}
 			}
 
 			return entriesToReturn;
