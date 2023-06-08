@@ -184,12 +184,10 @@ namespace myJournal
 
         public void ReplaceEntry(JournalEntry jeToReplace, JournalEntry jeToInsert)
 		{
-			int idx;
 			jeToInsert.Date = jeToReplace.Date;
 			jeToInsert.LastEditedOn = DateTime.Now;
-			for(idx = 0; idx < this.Entries.Count; idx++) { if(this.Entries[idx].Id == jeToReplace.Id) { break; } }
-			this.Entries.Remove(jeToReplace);
-			this.Entries.Insert(idx, jeToInsert);
+			var index = Array.FindIndex(Entries.ToArray(), row => row.Id == jeToReplace.Id);
+			Entries[index] = jeToInsert;
 		}
 
 		public async Task Save()
@@ -215,7 +213,7 @@ namespace myJournal
 
 		public List<JournalEntry> Search(SearchObject So)
 		{
-			List<JournalEntry> allEntries	= this.Entries;
+			List<JournalEntry> allEntries = this.Entries;
 
 			if(So.chkUseDate.Checked | So.chkUseDateRange.Checked)
 			{

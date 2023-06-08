@@ -17,7 +17,7 @@ namespace myJournal.subforms
 		private Dictionary<string, int> journalBoundaries = new Dictionary<string, int>();
 		private List<int> threeSelections = new List<int>();
 		private bool IgnoreCheckChange = false;
-		private List<FoundEntry> DisplayedEntries = new List<FoundEntry>();
+		private List<FoundEntry> FoundEntries = new List<FoundEntry>();
 
 		public frmSearch(Form parent)
 		{
@@ -36,32 +36,22 @@ namespace myJournal.subforms
 
 		private void btnEditEntry_Click(object sender, EventArgs e)
 		{
-			FoundEntry fe = lstFoundEntries.SelectedIndex == 0 ? DisplayedEntries[0] : DisplayedEntries[lstFoundEntries.SelectedIndex / 4];
-			//this.Close();
-
+			FoundEntry fe = lstFoundEntries.SelectedIndex == 0 ? FoundEntries[0] : FoundEntries[lstFoundEntries.SelectedIndex / 4];
 			frmNewEntry frm = new frmNewEntry(this, new Journal(fe.journalName).Open(), fe.journalEntry);
 			frm.Show();
-
-			//using (frmNewEntry frm = new frmNewEntry(this, new Journal(fe.journalName).Open(), fe.journalEntry)) 
-			//{
-			//	frm.Show();
-			//	//this.Close();
-			//	//this.Visible = false;
-			//	//ShowDialog(frm); 
-			//}
 		}
 
 		private void btnSearch_Click(object sender, EventArgs e)
 		{
 			this.Cursor = Cursors.WaitCursor;
-			journalBoundaries.Clear();
 			var labels = string.Empty;
 			string[] labelsArray;
 			List<JournalEntry> foundEntries = new List<JournalEntry>();
 			List<JournalEntry> jeFound = null;
 
+			journalBoundaries.Clear();
 			lstFoundEntries.Items.Clear();
-			DisplayedEntries.Clear();
+			FoundEntries.Clear();
 			for (var i = 0; i < lstLabelsForSearch.CheckedItems.Count; i++) { labels += lstLabelsForSearch.CheckedItems[i].ToString() + ","; }
 			labels = labels.Length > 0 ? labels.Substring(0, labels.Length - 1) : string.Empty;
 			labelsArray = labels.Length > 0 ? labels.Split(',') : null;
@@ -75,7 +65,7 @@ namespace myJournal.subforms
 				jeFound = new Journal(kvp.Key).Open().Search(so);
 				foundEntries.AddRange(jeFound);
 				
-				foreach(JournalEntry je in jeFound) { DisplayedEntries.Add(new FoundEntry { journalName = kvp.Key, journalEntry = je }); }
+				foreach(JournalEntry je in jeFound) { FoundEntries.Add(new FoundEntry { journalName = kvp.Key, journalEntry = je }); }
 
 				Utilities.PopulateEntries(lstFoundEntries, foundEntries, "", "", "", false, 0, true);
 				journalBoundaries.Add(kvp.Key, lstFoundEntries.Items.Count);
