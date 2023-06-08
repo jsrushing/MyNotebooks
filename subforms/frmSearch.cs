@@ -63,10 +63,8 @@ namespace myJournal.subforms
 			{
 				Utilities.SetProgramPIN(kvp.Key);
 				jeFound = new Journal(kvp.Key).Open().Search(so);
-				foundEntries.AddRange(jeFound);
-				
+				foundEntries.AddRange(jeFound);	
 				foreach(JournalEntry je in jeFound) { FoundEntries.Add(new FoundEntry { journalName = kvp.Key, journalEntry = je }); }
-
 				Utilities.PopulateEntries(lstFoundEntries, foundEntries, "", "", "", false, 0, true);
 				journalBoundaries.Add(kvp.Key, lstFoundEntries.Items.Count);
 				foundEntries.Clear();

@@ -455,7 +455,8 @@ namespace myJournal.subforms
 
 				if (frm.saved)
 				{
-					Utilities.PopulateEntries(lstEntries, CurrentJournal.Entries, cbxDatesFrom.Text);
+					Utilities.PopulateEntries(lstEntries, CurrentJournal.Entries, cbxDatesFrom.Text, cbxDatesTo.Text);
+					ProcessDateFilters();
 					ShowHideMenusAndControls(SelectionState.JournalLoaded);
 				}
 			}
@@ -473,7 +474,8 @@ namespace myJournal.subforms
 				{
 					CurrentJournal.Entries.Remove(CurrentEntry);
 					CurrentJournal.Save();
-					Utilities.PopulateEntries(lstEntries, CurrentJournal.Entries, cbxDatesFrom.Text);
+					Utilities.PopulateEntries(lstEntries, CurrentJournal.Entries, cbxDatesFrom.Text, cbxDatesTo.Text);
+					ProcessDateFilters();
 					ShowHideMenusAndControls(SelectionState.JournalLoaded);
 				}
 			}
@@ -490,7 +492,8 @@ namespace myJournal.subforms
 
 				if (frm.saved)
 				{
-					Utilities.PopulateEntries(lstEntries, CurrentJournal.Entries, cbxDatesFrom.Text);
+					Utilities.PopulateEntries(lstEntries, CurrentJournal.Entries, cbxDatesFrom.Text, cbxDatesTo.Text);
+					ProcessDateFilters();
 					ShowHideMenusAndControls(SelectionState.JournalLoaded);
 				}
 			}
