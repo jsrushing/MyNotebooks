@@ -168,6 +168,15 @@ namespace myJournal.subforms
 
 		private async void frmMain_Load(object sender, EventArgs e)
 		{
+			//foreach(Journal j in Utilities.AllJournals())
+			//{
+			//	foreach(JournalEntry je in j.Entries)
+			//	{
+			//		je.JournalName = j.Name;
+			//	}
+			//	await j.Save();
+			//}
+
 			System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
 			System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
 			this.Text = "myJournal " + Program.AppVersion + (fvi.FileName.ToLower().Contains("debug") ? " - DEBUG MODE" : "");
@@ -175,7 +184,7 @@ namespace myJournal.subforms
 			CheckForSystemDirectories();
 			frmAzurePwd frm = new frmAzurePwd(this, frmAzurePwd.Mode.AskingForKey);
 
-			//Program.AzurePassword = string.Empty;	// kills the Azure synch process if desired.
+			//Program.AzurePassword = string.Empty;	// Kills the Azure synch process for debugging if desired.
 
 			if (Program.AzurePassword.Length > 0)
 			{

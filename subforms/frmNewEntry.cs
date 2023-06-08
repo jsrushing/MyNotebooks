@@ -4,6 +4,7 @@
 using System;
 using System.Configuration;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using myJournal.objects;
 using Org.BouncyCastle.Asn1.Sec;
@@ -178,14 +179,24 @@ namespace myJournal.subforms
 
 		private void rtbNewEntry_TextChanged(object sender, EventArgs e) { SetIsDirty(true); }
 
-		private void Save()
+		private async Task Save()
 		{
-			JournalEntry newEntry = new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, rtbNewEntry.Rtf, LabelsManager.CheckedLabels_Get(clbLabels), "", false);
-			if (entry == null) { currentJournal.AddEntry(newEntry); } else { currentJournal.ReplaceEntry(entry, newEntry); }
-			currentJournal.Save();
-			entry = newEntry;
-			saved = true;
-			SetIsDirty(false);
+			string[] DateAndTitle = Utilities.GetTitleAndDate(txtNewEntryTitle.Text);
+
+			if (DateAndTitle[0].Length > 0 && DateAndTitle[1].Length > 0)
+			{
+				JournalEntry newEntry = new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, rtbNewEntry.Rtf, LabelsManager.CheckedLabels_Get(clbLabels), currentJournal.Name, false);
+				if (entry == null) { currentJournal.AddEntry(newEntry); } else { currentJournal.ReplaceEntry(entry, newEntry); }
+				await currentJournal.Save();
+				entry = newEntry;
+				saved = true;
+				SetIsDirty(false);
+			}
+			else
+			{
+				var sMsg = "Entry titles may not contain a date and time surrounded by parentheses. Edit the title accordingly.";
+				using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "Improperly Contstructed Title")) { ShowDialog(frm); }
+			}
 		}
 
 		private void SetIsDirty(bool dirty)

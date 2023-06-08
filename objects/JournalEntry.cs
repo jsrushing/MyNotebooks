@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Text;
 using myJournal.subforms;
 using System.Windows.Forms;
+using System.Runtime.CompilerServices;
+using myJournal.objects;
 
 namespace myJournal
 {
@@ -42,6 +44,48 @@ namespace myJournal
 			isEdited	= _edited;	
 		}
 
+		//public static string[] GetTitleAndDate(string searchString, int startPosition = 0)
+		//{
+		//	var result = new string[2];
+
+		//	try
+		//	{
+		//		var paren1 = -1;
+		//		var paren2 = -1;
+
+		//		if (searchString.Contains('('))
+		//		{
+		//			paren1 = searchString.IndexOf('(', startPosition) + 1;
+		//			paren2 = searchString.IndexOf(")", startPosition + 1);
+
+		//			//var test = searchString.Substring(paren1, paren2 - paren1);
+
+		//			if (paren2 - paren1 == 17)
+		//			{
+		//				DateTime tryDate;
+
+		//				//var v = searchString.Substring(paren1, paren2 - paren1);
+
+		//				DateTime.TryParse(searchString.Substring(paren1, paren2 - paren1), out tryDate);
+
+		//				if (tryDate > DateTime.MinValue)
+		//				{
+		//					result[0] = searchString.Substring(0, paren1 - 1).Trim();
+		//					result[1] = tryDate.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]);
+		//				}
+		//				else
+		//				{
+		//					result = GetTitleAndDate(searchString, paren2);
+		//				}
+		//			}
+		//			else { result = GetTitleAndDate(searchString, paren2); }
+		//		}
+		//	}
+		//	catch (Exception) { }
+
+		//	return result;
+		//}
+
 		public string GetFirstOrLastEditDate(bool getFirst)
 		{
 			var sText = this.ClearText();
@@ -63,7 +107,7 @@ namespace myJournal
 			int iTextChunkLength = 150;
 			string sTitle = ClearTitle() + " (" + Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"
 				+ (LastEditedOn < new DateTime(2000, 1, 1) ? "" : " [edited on " + LastEditedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + "]");
-			//if (includeJournalName) { sTitle += this.JournalName == null ? "" : " > in '" + JournalName + "'"; }
+			if (includeJournalName) { sTitle += this.JournalName == null ? "" : " > in '" + JournalName + "'"; }
 			sRtrn[0] = sTitle;
 			string sEntryText = ClearText();
 			sEntryText = (sEntryText.Length < iTextChunkLength ? sEntryText : sEntryText.Substring(0, iTextChunkLength) + " ...");
@@ -177,43 +221,40 @@ namespace myJournal
 				lb.SelectedIndices.Add(ctr + 1);
 				lb.SelectedIndices.Add(ctr + 2);                        //
 
-				var sTitleAndDate = lb.Items[ctr].ToString().Replace(" - EDITED", "");        // Use the title and date of the entry to create a JournalEntry object whose .ClearText will populate the display ...
-				var sTitle = sTitleAndDate.Substring(0, sTitleAndDate.LastIndexOf('(') - 1);
-				var sDate = sTitleAndDate.Substring(sTitleAndDate.LastIndexOf('(') + 1, sTitleAndDate.LastIndexOf(')') - sTitleAndDate.LastIndexOf('(') - 1);
+				var sTitleAndDate = lb.Items[ctr].ToString().Replace(" - EDITED", "");        // Use the title and date of the entry to create a JournalEntry object whose .ClearText will populate the display
 
-				entryRtrn = currentJournal.GetEntry(sTitle, sDate);
+				string[] titleAndDate = Utilities.GetTitleAndDate(sTitleAndDate);
 
-				if (sTitle == "created")
+				if (titleAndDate[0].Length > 0 && titleAndDate[1].Length > 0)
 				{
-					lb.SelectedIndices.Clear();
-					entryRtrn = null;
+					var sTitle = titleAndDate[0];   // sTitleAndDate.Substring(0, sTitleAndDate.IndexOf('(') - 1);
+					var sDate = titleAndDate[1];	// sTitleAndDate.Substring(sTitleAndDate.IndexOf('(') + 1, sTitleAndDate.IndexOf(')') - sTitleAndDate.IndexOf('(') - 1);
+
+					entryRtrn = currentJournal.GetEntry(sTitle, sDate);
+
+					if (sTitle == "created")
+					{
+						lb.SelectedIndices.Clear();
+						entryRtrn = null;
+					}
+
+					if (entryRtrn != null)
+					{
+						if (entryRtrn.DisplayText != null) { rtb.Text = entryRtrn.DisplayText; }
+						else
+						{
+							rtb.Text = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
+							, entryRtrn.ClearTitle(), entryRtrn.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), entryRtrn.ClearLabels(), entryRtrn.ClearText());
+						}
+
+						if (rtb.Text.Length == 0) { lb.TopIndex = lb.Top + lb.Height < rtb.Top ? ctr : lb.TopIndex; }
+						lb.Height = rtb.Text.Length > 0 ? rtb.Top - 132 : 100;
+						if (firstSelection) { lb.TopIndex = lb.Top + lb.Height < rtb.Top ? ctr : lb.TopIndex; }
+					}
+
+					rtb.Visible = rtb.Text.Length > 0;
 				}
-
-				if (entryRtrn != null)
-				{
-					if (entryRtrn.DisplayText != null)
-					{
-						rtb.Text = entryRtrn.DisplayText;
-					}
-					else
-					{
-						rtb.Text = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
-						, entryRtrn.ClearTitle(), entryRtrn.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), entryRtrn.ClearLabels(), entryRtrn.ClearText());
-					}
-
-					if (rtb.Text.Length == 0) { lb.TopIndex = lb.Top + lb.Height < rtb.Top ? ctr : lb.TopIndex; }
-
-					lb.Height = rtb.Text.Length > 0 ? rtb.Top - 132 : 100;
-
-					if (firstSelection)
-					{
-						lb.TopIndex = lb.Top + lb.Height < rtb.Top ? ctr : lb.TopIndex;
-					}
-				}
-
-				rtb.Visible = rtb.Text.Length > 0;
 			}
-
 			return entryRtrn;
 		}
 

@@ -47,11 +47,7 @@ namespace myJournal.subforms
 
 		}
 
-		private void frmLabelsManager_Resize(object sender, EventArgs e)
-		{
-			//if (this.Width > this.MinimumSize.Width) { this.Width = this.MinimumSize.Width; };
-			ShowHideOccurrences();
-		}
+		private void frmLabelsManager_Resize(object sender, EventArgs e) { ShowHideOccurrences(); }
 
 		private void AddLabelToUIListbox()
 		{ if (txtLabelName.Text.Length > 0) { lstLabels.Items.Add(txtLabelName.Text); } }
@@ -70,7 +66,7 @@ namespace myJournal.subforms
 
 		private async Task RemoveOrphans()
 		{
-			{ foreach (string lbl in lstOrphanedLabels.SelectedItems) { await LabelsManager.DeleteLabel(lbl, Program.AllJournals, this, true); } }
+			foreach (string lbl in lstOrphanedLabels.SelectedItems) { await LabelsManager.DeleteLabel(lbl, Program.AllJournals, this, true); }
 		}
 
 		private void btnRemoveSelectedOrphans_Click(object sender, EventArgs e)

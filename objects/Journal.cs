@@ -61,12 +61,12 @@ namespace myJournal
 			catch (Exception) { }
 		}
 
-		public void Create()
+		public async Task Create()
         {
 			this.FileName += " (local)";
-			Entries.Add(new JournalEntry("created", "-", "-", ""));
+			Entries.Add(new JournalEntry("created", "-", "-", this.Name));
 			Program.SkipFileSizeComparison = true;
-			this.Save();
+			await this.Save();
 			Program.SkipFileSizeComparison = false;
 		}
 
@@ -135,7 +135,7 @@ namespace myJournal
 						b = entry.ClearLabels().Split(',');
 						var hasLabels = true;
 
-						foreach(string label in labelsArray)
+						foreach(var label in labelsArray)
 						{
 							if(!b.Contains(label)) { hasLabels = false; break; }
 						}
@@ -240,7 +240,7 @@ namespace myJournal
 					{
 						if (So.radBtnAnd.Checked)
 						{ allEntries = allEntries.Where(e => e.ClearTitle().ToLower().Contains(So.searchTitle) & e.ClearText().ToLower().Contains(So.searchText)).ToList(); }
-						else { allEntries = allEntries.Where(e => e.ClearTitle().ToLower().Contains(So.searchTitle) | e.ClearText().ToLower().Contains(So.searchTitle)).ToList(); }
+						else { allEntries = allEntries.Where(e => e.ClearTitle().ToLower().Contains(So.searchTitle) | e.ClearText().ToLower().Contains(So.searchText)).ToList(); }
 					}
 					else if (So.searchText.Length > 0)
 					{ allEntries = allEntries.Where(e => e.ClearText().ToLower().Contains(So.searchText)).ToList(); }
@@ -263,6 +263,5 @@ namespace myJournal
 			}
 			return allEntries;
 		}
-
     }
 }

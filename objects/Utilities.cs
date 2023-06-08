@@ -27,7 +27,45 @@ namespace myJournal.objects
 			return jrnlReturn;
 		}
 
-		public static void PopulateEntries(ListBox lbxToPopulate, List<JournalEntry> entries, string journalName = "", string startDate = "", string endDate = "", bool clearPrevious = true, int SortBy = 0)
+		public static string[] GetTitleAndDate(string searchString, int startPosition = 0)
+		{
+			var result = new string[2];
+
+			try
+			{
+				var paren1 = -1;
+				var paren2 = -1;
+
+				if (searchString.Contains('('))
+				{
+					paren1 = searchString.IndexOf('(', startPosition) + 1;
+					paren2 = searchString.IndexOf(")", startPosition + 1);
+
+					//var test = searchString.Substring(paren1, paren2 - paren1);
+
+					if (paren2 - paren1 == 17)
+					{
+						DateTime.TryParse(searchString.Substring(paren1, paren2 - paren1), out DateTime tryDate);
+
+						if (tryDate > DateTime.MinValue)
+						{
+							result[0] = searchString.Substring(0, paren1 - 1).Trim();
+							result[1] = tryDate.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]);
+						}
+						else
+						{
+							result = GetTitleAndDate(searchString, paren2);
+						}
+					}
+					else { result = GetTitleAndDate(searchString, paren2); }
+				}
+			}
+			catch (Exception) { }
+
+			return result;
+		}
+
+		public static void PopulateEntries(ListBox lbxToPopulate, List<JournalEntry> entries, string journalName = "", string startDate = "", string endDate = "", bool clearPrevious = true, int SortBy = 0, bool includeJrnlName = false)
 		{
 			if(clearPrevious) lbxToPopulate.Items.Clear();
 			List<JournalEntry> tmpEntries = null;
@@ -49,9 +87,11 @@ namespace myJournal.objects
 
 			foreach (JournalEntry je in tmpEntries)
 			{
-				for(int i = 0; i < je.GetSynopsis().Length; i++) 
+				var synopsis = je.GetSynopsis(includeJrnlName);
+
+				for(int i = 0; i < synopsis.Length; i++) 
 				{ 
-					lbxToPopulate.Items.Add(je.GetSynopsis()[i]);
+					lbxToPopulate.Items.Add(synopsis[i]);
 				} 
 			}
 		}

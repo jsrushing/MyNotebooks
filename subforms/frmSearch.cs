@@ -55,7 +55,7 @@ namespace myJournal.subforms
 				Utilities.SetProgramPIN(kvp.Key);
 				jeFound = new Journal(kvp.Key).Open().Search(so);
 				foundEntries.AddRange(jeFound);
-				Utilities.PopulateEntries(lstFoundEntries, foundEntries, "", "", "", false);
+				Utilities.PopulateEntries(lstFoundEntries, foundEntries, "", "", "", false, 0, true);
 				journalBoundaries.Add(kvp.Key, lstFoundEntries.Items.Count);
 				foundEntries.Clear();
 			}
@@ -108,24 +108,32 @@ namespace myJournal.subforms
 			ListBox lb = (ListBox)sender;
 			RichTextBox rtb = rtbSelectedEntry_Found;
 
-			if (lb.SelectedIndex > -1)
-			{
-				lb.SelectedIndexChanged -= new System.EventHandler(this.lstFoundEntries_SelectedIndexChanged);
-				Journal j = GetEntryJournal();
-				Program.PIN = Program.DictCheckedJournals.FirstOrDefault(p => p.Key == j.Name).Value;
-				JournalEntry currentEntry = JournalEntry.Select(rtb, lb, j);
-				GetCurrentSelections();
+			lb.SelectedIndexChanged -= new System.EventHandler(this.lstFoundEntries_SelectedIndexChanged);
 
-				if (currentEntry != null)
+			try
+			{
+				if (lb.SelectedIndex > -1)
 				{
-					lblSelectionType.Visible = rtb.Text.Length > 0;
-					lblSeparator.Visible = rtb.Text.Length > 0;
-					Utilities.ResizeListsAndRTBs(lb, rtb, lblSeparator, lblSelectionType, this);
+					Journal j = GetEntryJournal();
+					Utilities.SetProgramPIN(j.Name);
+					//Program.PIN = Program.DictCheckedJournals.FirstOrDefault(p => p.Key == j.Name).Value;
+					JournalEntry currentEntry = JournalEntry.Select(rtb, lb, j);
+					GetCurrentSelections();
+
+					if (currentEntry != null)
+					{
+						lblSelectionType.Visible = rtb.Text.Length > 0;
+						lblSeparator.Visible = rtb.Text.Length > 0;
+						Utilities.ResizeListsAndRTBs(lb, rtb, lblSeparator, lblSelectionType, this);
+					}
+					else { lstFoundEntries.SelectedIndices.Clear(); }
 				}
-				else { lstFoundEntries.SelectedIndices.Clear(); }
+
 			}
+			catch(Exception ex) { lb.SelectedIndex = -1; }
 
 			lb.SelectedIndexChanged += new System.EventHandler(this.lstFoundEntries_SelectedIndexChanged);
+
 		}
 
 		private void mnuClearFields_Click(object sender, EventArgs e)
