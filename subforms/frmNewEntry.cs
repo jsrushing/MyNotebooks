@@ -133,7 +133,7 @@ namespace myJournal.subforms
 				{
 					frm.ShowDialog(this);
 					if (frm.Result == frmMessage.ReturnResult.No) { entry = null; }
-					else if (frm.Result == frmMessage.ReturnResult.Yes) { Save(); }
+					else if (frm.Result == frmMessage.ReturnResult.Yes) { SaveEntry(); }
 				}
 			}
 			else
@@ -157,15 +157,15 @@ namespace myJournal.subforms
 
 		private void mnuSaveAndExit_Click(object sender, EventArgs e)
 		{
-			Save();
+			SaveEntry();
 			this.Hide();
 		}
 
 		private void mnuSaveEntry_Click(object sender, EventArgs e)
 		{
-			if (rtbNewEntry.Text.Length > 0 && txtNewEntryTitle.Text.Length > 0)
+			if (rtbNewEntry.Text.Length > 0 && txtNewEntryTitle.Text.Length > 0 && isDirty)
 			{
-				Save();
+				SaveEntry();
 			}
 			else
 			{
@@ -179,24 +179,24 @@ namespace myJournal.subforms
 
 		private void rtbNewEntry_TextChanged(object sender, EventArgs e) { SetIsDirty(true); }
 
-		private async Task Save()
+		private async Task SaveEntry()
 		{
-			string[] DateAndTitle = Utilities.GetTitleAndDate(txtNewEntryTitle.Text);
+			//string[] DateAndTitle = Utilities.GetTitleAndDate(txtNewEntryTitle.Text);
 
-			if (DateAndTitle[0].Length > 0 && DateAndTitle[1].Length > 0)
-			{
-				JournalEntry newEntry = new JournalEntry(txtNewEntryTitle.Text, rtbNewEntry.Text, rtbNewEntry.Rtf, LabelsManager.CheckedLabels_Get(clbLabels), currentJournal.Name, false);
+			//if (DateAndTitle[0] != null && DateAndTitle[1] != null && DateAndTitle[0].Length > 0 && DateAndTitle[1].Length > 0)
+			//{
+				JournalEntry newEntry = new JournalEntry(txtNewEntryTitle.Text.Trim(), rtbNewEntry.Text.Trim(), rtbNewEntry.Rtf, LabelsManager.CheckedLabels_Get(clbLabels), currentJournal.Name, false);
 				if (entry == null) { currentJournal.AddEntry(newEntry); } else { currentJournal.ReplaceEntry(entry, newEntry); }
 				await currentJournal.Save();
 				entry = newEntry;
 				saved = true;
 				SetIsDirty(false);
-			}
-			else
-			{
-				var sMsg = "Entry titles may not contain a date and time surrounded by parentheses. Edit the title accordingly.";
-				using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "Improperly Contstructed Title")) { ShowDialog(frm); }
-			}
+			//}
+			//else
+			//{
+			//	var sMsg = "Entry titles may not contain a date and time surrounded by parentheses. Edit the title accordingly.";
+			//	using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "Improperly Contstructed Title")) { ShowDialog(frm); }
+			//}
 		}
 
 		private void SetIsDirty(bool dirty)

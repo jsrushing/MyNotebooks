@@ -17,13 +17,14 @@ namespace myJournal.subforms
 		private Dictionary<string, int> journalBoundaries = new Dictionary<string, int>();
 		private List<int> threeSelections = new List<int>();
 		private bool IgnoreCheckChange = false;
+		private List<FoundEntry> DisplayedEntries = new List<FoundEntry>();
 
 		public frmSearch(Form parent)
 		{
 			InitializeComponent();
 
 			if (Program.DictCheckedJournals.Count == 0)
-			{ using (frmSelectJournalsToSearch frm = new frmSelectJournalsToSearch(this)) { frm.ShowDialog(); } }
+			{ using (frmSelectJournalsToSearch frm = new frmSelectJournalsToSearch(parent)) { frm.ShowDialog(); } }
 
 			SetJournalSelectLabelAndButton();
 			LabelsManager.PopulateLabelsList(lstLabelsForSearch);
@@ -31,6 +32,23 @@ namespace myJournal.subforms
 			dtFindDate.Value = DateTime.Now;
 			dtFindDate_From.Value = DateTime.Now.AddDays(-30);
 			dtFindDate_To.Value = DateTime.Now;
+		}
+
+		private void btnEditEntry_Click(object sender, EventArgs e)
+		{
+			FoundEntry fe = lstFoundEntries.SelectedIndex == 0 ? DisplayedEntries[0] : DisplayedEntries[lstFoundEntries.SelectedIndex / 4];
+			//this.Close();
+
+			frmNewEntry frm = new frmNewEntry(this, new Journal(fe.journalName).Open(), fe.journalEntry);
+			frm.Show();
+
+			//using (frmNewEntry frm = new frmNewEntry(this, new Journal(fe.journalName).Open(), fe.journalEntry)) 
+			//{
+			//	frm.Show();
+			//	//this.Close();
+			//	//this.Visible = false;
+			//	//ShowDialog(frm); 
+			//}
 		}
 
 		private void btnSearch_Click(object sender, EventArgs e)
@@ -43,6 +61,7 @@ namespace myJournal.subforms
 			List<JournalEntry> jeFound = null;
 
 			lstFoundEntries.Items.Clear();
+			DisplayedEntries.Clear();
 			for (var i = 0; i < lstLabelsForSearch.CheckedItems.Count; i++) { labels += lstLabelsForSearch.CheckedItems[i].ToString() + ","; }
 			labels = labels.Length > 0 ? labels.Substring(0, labels.Length - 1) : string.Empty;
 			labelsArray = labels.Length > 0 ? labels.Split(',') : null;
@@ -50,11 +69,14 @@ namespace myJournal.subforms
 			SearchObject so = new SearchObject(chkUseDate, chkUseDateRange, chkMatchCase, dtFindDate,
 					dtFindDate_From, dtFindDate_To, radBtnAnd, radLabels_And, txtSearchTitle.Text, txtSearchText.Text, labelsArray);
 
-			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedJournals)   //this.CheckedJournals)
+			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedJournals)
 			{
 				Utilities.SetProgramPIN(kvp.Key);
 				jeFound = new Journal(kvp.Key).Open().Search(so);
 				foundEntries.AddRange(jeFound);
+				
+				foreach(JournalEntry je in jeFound) { DisplayedEntries.Add(new FoundEntry { journalName = kvp.Key, journalEntry = je }); }
+
 				Utilities.PopulateEntries(lstFoundEntries, foundEntries, "", "", "", false, 0, true);
 				journalBoundaries.Add(kvp.Key, lstFoundEntries.Items.Count);
 				foundEntries.Clear();
@@ -96,10 +118,8 @@ namespace myJournal.subforms
 			{
 				lblSeparator.Top += e.Y;
 				Utilities.ResizeListsAndRTBs(lstFoundEntries, rtbSelectedEntry_Found, lblSeparator, lblSelectionType, this);
-				if (lstFoundEntries.SelectedIndices.Count > 0)
-				{
-					lstFoundEntries.TopIndex = lstFoundEntries.SelectedIndices[0];
-				}
+				RepositionBtnEditEntry();
+				if (lstFoundEntries.SelectedIndices.Count > 0) { lstFoundEntries.TopIndex = lstFoundEntries.SelectedIndices[0]; }
 			}
 		}
 
@@ -116,7 +136,6 @@ namespace myJournal.subforms
 				{
 					Journal j = GetEntryJournal();
 					Utilities.SetProgramPIN(j.Name);
-					//Program.PIN = Program.DictCheckedJournals.FirstOrDefault(p => p.Key == j.Name).Value;
 					JournalEntry currentEntry = JournalEntry.Select(rtb, lb, j);
 					GetCurrentSelections();
 
@@ -125,12 +144,13 @@ namespace myJournal.subforms
 						lblSelectionType.Visible = rtb.Text.Length > 0;
 						lblSeparator.Visible = rtb.Text.Length > 0;
 						Utilities.ResizeListsAndRTBs(lb, rtb, lblSeparator, lblSelectionType, this);
+						RepositionBtnEditEntry();
 					}
 					else { lstFoundEntries.SelectedIndices.Clear(); }
 				}
 
 			}
-			catch(Exception ex) { lb.SelectedIndex = -1; }
+			catch (Exception ex) { lb.SelectedIndex = -1; }
 
 			lb.SelectedIndexChanged += new System.EventHandler(this.lstFoundEntries_SelectedIndexChanged);
 
@@ -163,6 +183,14 @@ namespace myJournal.subforms
 			btnSelectJournals.Left = lblSearchingIn.Left + lblSearchingIn.Width + 5;
 		}
 
+		private void RepositionBtnEditEntry()
+		{
+			btnEditEntry.Visible = lblSelectionType.Visible;
+
+			btnEditEntry.Location = btnEditEntry.Visible ?
+				new System.Drawing.Point(lblSelectionType.Left + lblSelectionType.Width + 15, lblSelectionType.Top - 3) : btnEditEntry.Location;
+		}
+
 		private void ToggleDateControls(bool toggleUseDate)
 		{
 			if (!IgnoreCheckChange)
@@ -192,5 +220,11 @@ namespace myJournal.subforms
 			}
 
 		}
+	}
+
+	public struct FoundEntry
+	{
+		public string journalName;
+		public JournalEntry journalEntry;
 	}
 }

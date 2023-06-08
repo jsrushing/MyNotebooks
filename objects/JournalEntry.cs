@@ -17,10 +17,10 @@ namespace myJournal
 	[Serializable]
     public class JournalEntry
     {
-        public DateTime Date;
-		public DateTime LastEditedOn;
-        public string	Text;
-		public string	DisplayText { get { return GetTextDisplayText(); } set { DisplayText = value; } }
+        public DateTime		Date;
+		public DateTime		LastEditedOn;
+        public string		Text;
+		public string		DisplayText { get { return GetTextDisplayText(); } set { DisplayText = value; } }
 		public string		JournalName { get; set; }
 
 		private string[]	synopsis;
@@ -35,56 +35,14 @@ namespace myJournal
 		public JournalEntry(string _title, string _text, string _RTF, string _labels, string _journalName = "", bool _edited = false)
         {
 			Date		= DateTime.Now;
-			Text		= EncryptDecrypt.Encrypt(_text);
-            Title		= EncryptDecrypt.Encrypt(_title);
+			Text		= EncryptDecrypt.Encrypt(_text.Trim());
+            Title		= EncryptDecrypt.Encrypt(_title.Trim());
 			RTF			= EncryptDecrypt.Encrypt(_RTF);
             Labels		= EncryptDecrypt.Encrypt(_labels);
             Id			= Guid.NewGuid().ToString();
 			JournalName = _journalName;
 			isEdited	= _edited;	
 		}
-
-		//public static string[] GetTitleAndDate(string searchString, int startPosition = 0)
-		//{
-		//	var result = new string[2];
-
-		//	try
-		//	{
-		//		var paren1 = -1;
-		//		var paren2 = -1;
-
-		//		if (searchString.Contains('('))
-		//		{
-		//			paren1 = searchString.IndexOf('(', startPosition) + 1;
-		//			paren2 = searchString.IndexOf(")", startPosition + 1);
-
-		//			//var test = searchString.Substring(paren1, paren2 - paren1);
-
-		//			if (paren2 - paren1 == 17)
-		//			{
-		//				DateTime tryDate;
-
-		//				//var v = searchString.Substring(paren1, paren2 - paren1);
-
-		//				DateTime.TryParse(searchString.Substring(paren1, paren2 - paren1), out tryDate);
-
-		//				if (tryDate > DateTime.MinValue)
-		//				{
-		//					result[0] = searchString.Substring(0, paren1 - 1).Trim();
-		//					result[1] = tryDate.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]);
-		//				}
-		//				else
-		//				{
-		//					result = GetTitleAndDate(searchString, paren2);
-		//				}
-		//			}
-		//			else { result = GetTitleAndDate(searchString, paren2); }
-		//		}
-		//	}
-		//	catch (Exception) { }
-
-		//	return result;
-		//}
 
 		public string GetFirstOrLastEditDate(bool getFirst)
 		{
@@ -207,7 +165,7 @@ namespace myJournal
 
 				var ctr = lb.SelectedIndex;
 
-				if (lb.Items[ctr].ToString().StartsWith("--")) ctr--;
+				if (lb.Items[ctr].ToString().StartsWith("--")) { ctr--; }
 
 				while (!lb.Items[ctr].ToString().StartsWith("--") & ctr > 0)
 				{
@@ -227,8 +185,8 @@ namespace myJournal
 
 				if (titleAndDate[0].Length > 0 && titleAndDate[1].Length > 0)
 				{
-					var sTitle = titleAndDate[0];   // sTitleAndDate.Substring(0, sTitleAndDate.IndexOf('(') - 1);
-					var sDate = titleAndDate[1];	// sTitleAndDate.Substring(sTitleAndDate.IndexOf('(') + 1, sTitleAndDate.IndexOf(')') - sTitleAndDate.IndexOf('(') - 1);
+					var sTitle = titleAndDate[0];
+					var sDate = titleAndDate[1];
 
 					entryRtrn = currentJournal.GetEntry(sTitle, sDate);
 

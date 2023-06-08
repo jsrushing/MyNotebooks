@@ -31,6 +31,7 @@ namespace myJournal.subforms
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSearch));
 			grpFindEntry = new System.Windows.Forms.GroupBox();
+			btnEditEntry = new System.Windows.Forms.Button();
 			pnlLabels_AndOr = new System.Windows.Forms.Panel();
 			radLabels_Or = new System.Windows.Forms.RadioButton();
 			radLabels_And = new System.Windows.Forms.RadioButton();
@@ -62,6 +63,7 @@ namespace myJournal.subforms
 			menuStrip1 = new System.Windows.Forms.MenuStrip();
 			mnuClearFields = new System.Windows.Forms.ToolStripMenuItem();
 			mnuExit = new System.Windows.Forms.ToolStripMenuItem();
+			lstEntryObjects = new System.Windows.Forms.ListBox();
 			grpFindEntry.SuspendLayout();
 			pnlLabels_AndOr.SuspendLayout();
 			menuStrip1.SuspendLayout();
@@ -70,6 +72,8 @@ namespace myJournal.subforms
 			// grpFindEntry
 			// 
 			grpFindEntry.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+			grpFindEntry.Controls.Add(lstEntryObjects);
+			grpFindEntry.Controls.Add(btnEditEntry);
 			grpFindEntry.Controls.Add(pnlLabels_AndOr);
 			grpFindEntry.Controls.Add(lblSearchingIn);
 			grpFindEntry.Controls.Add(btnSelectJournals);
@@ -98,9 +102,22 @@ namespace myJournal.subforms
 			grpFindEntry.Controls.Add(lblFoundEntries);
 			grpFindEntry.Location = new System.Drawing.Point(16, 22);
 			grpFindEntry.Name = "grpFindEntry";
-			grpFindEntry.Size = new System.Drawing.Size(657, 717);
+			grpFindEntry.Size = new System.Drawing.Size(683, 717);
 			grpFindEntry.TabIndex = 7;
 			grpFindEntry.TabStop = false;
+			// 
+			// btnEditEntry
+			// 
+			btnEditEntry.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			btnEditEntry.Location = new System.Drawing.Point(105, 281);
+			btnEditEntry.Name = "btnEditEntry";
+			btnEditEntry.Size = new System.Drawing.Size(75, 21);
+			btnEditEntry.TabIndex = 49;
+			btnEditEntry.Text = "&edit entry";
+			btnEditEntry.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			btnEditEntry.UseVisualStyleBackColor = true;
+			btnEditEntry.Visible = false;
+			btnEditEntry.Click += this.btnEditEntry_Click;
 			// 
 			// pnlLabels_AndOr
 			// 
@@ -199,7 +216,7 @@ namespace myJournal.subforms
 			lblSeparator.ForeColor = System.Drawing.Color.Red;
 			lblSeparator.Location = new System.Drawing.Point(105, 271);
 			lblSeparator.Name = "lblSeparator";
-			lblSeparator.Size = new System.Drawing.Size(540, 19);
+			lblSeparator.Size = new System.Drawing.Size(566, 19);
 			lblSeparator.TabIndex = 37;
 			lblSeparator.Text = resources.GetString("lblSeparator.Text");
 			lblSeparator.Visible = false;
@@ -236,7 +253,7 @@ namespace myJournal.subforms
 			lstFoundEntries.Location = new System.Drawing.Point(6, 175);
 			lstFoundEntries.Name = "lstFoundEntries";
 			lstFoundEntries.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
-			lstFoundEntries.Size = new System.Drawing.Size(645, 92);
+			lstFoundEntries.Size = new System.Drawing.Size(671, 92);
 			lstFoundEntries.TabIndex = 14;
 			lstFoundEntries.UseTabStops = false;
 			lstFoundEntries.SelectedIndexChanged += this.lstFoundEntries_SelectedIndexChanged;
@@ -301,7 +318,7 @@ namespace myJournal.subforms
 			txtSearchText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			txtSearchText.Location = new System.Drawing.Point(196, 92);
 			txtSearchText.Name = "txtSearchText";
-			txtSearchText.Size = new System.Drawing.Size(449, 23);
+			txtSearchText.Size = new System.Drawing.Size(475, 23);
 			txtSearchText.TabIndex = 22;
 			// 
 			// txtSearchTitle
@@ -310,7 +327,7 @@ namespace myJournal.subforms
 			txtSearchTitle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			txtSearchTitle.Location = new System.Drawing.Point(192, 48);
 			txtSearchTitle.Name = "txtSearchTitle";
-			txtSearchTitle.Size = new System.Drawing.Size(453, 23);
+			txtSearchTitle.Size = new System.Drawing.Size(479, 23);
 			txtSearchTitle.TabIndex = 21;
 			// 
 			// dtFindDate_To
@@ -352,7 +369,7 @@ namespace myJournal.subforms
 			rtbSelectedEntry_Found.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			rtbSelectedEntry_Found.Location = new System.Drawing.Point(6, 304);
 			rtbSelectedEntry_Found.Name = "rtbSelectedEntry_Found";
-			rtbSelectedEntry_Found.Size = new System.Drawing.Size(645, 407);
+			rtbSelectedEntry_Found.Size = new System.Drawing.Size(671, 407);
 			rtbSelectedEntry_Found.TabIndex = 12;
 			rtbSelectedEntry_Found.Text = "";
 			// 
@@ -406,7 +423,7 @@ namespace myJournal.subforms
 			menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuClearFields, mnuExit });
 			menuStrip1.Location = new System.Drawing.Point(0, 0);
 			menuStrip1.Name = "menuStrip1";
-			menuStrip1.Size = new System.Drawing.Size(685, 24);
+			menuStrip1.Size = new System.Drawing.Size(711, 24);
 			menuStrip1.TabIndex = 8;
 			menuStrip1.Text = "menuStrip1";
 			// 
@@ -424,12 +441,22 @@ namespace myJournal.subforms
 			mnuExit.Text = "E&xit";
 			mnuExit.Click += this.mnuExit_Click;
 			// 
+			// lstEntryObjects
+			// 
+			lstEntryObjects.FormattingEnabled = true;
+			lstEntryObjects.ItemHeight = 15;
+			lstEntryObjects.Location = new System.Drawing.Point(667, 123);
+			lstEntryObjects.Name = "lstEntryObjects";
+			lstEntryObjects.Size = new System.Drawing.Size(120, 34);
+			lstEntryObjects.TabIndex = 50;
+			lstEntryObjects.Visible = false;
+			// 
 			// frmSearch
 			// 
 			AcceptButton = btnSearch;
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			ClientSize = new System.Drawing.Size(685, 751);
+			ClientSize = new System.Drawing.Size(711, 751);
 			Controls.Add(grpFindEntry);
 			Controls.Add(menuStrip1);
 			MainMenuStrip = menuStrip1;
@@ -481,5 +508,7 @@ namespace myJournal.subforms
 		private System.Windows.Forms.RadioButton radLabels_Or;
 		private System.Windows.Forms.RadioButton radLabels_And;
 		private System.Windows.Forms.Panel pnlLabels_AndOr;
+		private System.Windows.Forms.Button btnEditEntry;
+		private System.Windows.Forms.ListBox lstEntryObjects;
 	}
 }

@@ -205,9 +205,9 @@ namespace myJournal.subforms
 			label3.AutoSize = true;
 			label3.Location = new System.Drawing.Point(9, 210);
 			label3.Name = "label3";
-			label3.Size = new System.Drawing.Size(294, 15);
+			label3.Size = new System.Drawing.Size(338, 15);
 			label3.TabIndex = 4;
-			label3.Text = "Found Entries (dbl-click to edit, right-click for options)";
+			label3.Text = "Found Entries (dbl-click to edit, rt-click journal name to delete)";
 			// 
 			// lstOccurrences
 			// 

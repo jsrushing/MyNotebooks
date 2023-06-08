@@ -178,7 +178,6 @@ namespace myJournal.subforms
 				KeyValuePair<Journal, JournalEntry> kvp = (KeyValuePair<Journal, JournalEntry>)lstEntryObjects.Items[i];
 				Journal j = kvp.Key;
 				JournalEntry je = kvp.Value;
-				//SetProgramPINForSelectedJournal(j);
 				Utilities.SetProgramPIN(j.Name);
 
 				using (frmNewEntry frm = new frmNewEntry(this, j, je))
@@ -351,12 +350,12 @@ namespace myJournal.subforms
 
 				//foreach (string lbl in lstOrphans) { lstOrphanedLabels.Items.Add(lbl); }
 			}
-			else 
+			else
 			{
 				using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "No orphans were found.", Application.ProductName, this)) { frm.ShowDialog(); }
 				this.ShowPanel(pnlMain);
 				//lstOrphanedLabels.Items.Add("no orphans were found."); 
-			
+
 			}
 
 		}
@@ -430,14 +429,14 @@ namespace myJournal.subforms
 		private void ShowHideOccurrences()
 		{
 			if (lstOccurrences.Items.Count > 0)
-			{ 
-				lstLabels.Height = pnlMain.Height - 325; 
-				lstOccurrences.Height = pnlMain.Height - 250; lstOccurrences.Visible = true; 
+			{
+				lstLabels.Height = pnlMain.Height - 325;
+				lstOccurrences.Height = pnlMain.Height - 250; lstOccurrences.Visible = true;
 			}
-			else 
-			{ 
+			else
+			{
 				lstLabels.Height = pnlMain.Height - 40;
-				lstOccurrences.Visible = false; 
+				lstOccurrences.Visible = false;
 			}
 		}
 	}

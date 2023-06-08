@@ -168,15 +168,6 @@ namespace myJournal.subforms
 
 		private async void frmMain_Load(object sender, EventArgs e)
 		{
-			//foreach(Journal j in Utilities.AllJournals())
-			//{
-			//	foreach(JournalEntry je in j.Entries)
-			//	{
-			//		je.JournalName = j.Name;
-			//	}
-			//	await j.Save();
-			//}
-
 			System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
 			System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
 			this.Text = "myJournal " + Program.AppVersion + (fvi.FileName.ToLower().Contains("debug") ? " - DEBUG MODE" : "");
@@ -362,6 +353,7 @@ namespace myJournal.subforms
 			lstEntries.Visible = false;
 			cbxSortEntriesBy.SelectedIndex = 0;
 			pnlPin.Visible = ddlJournals.SelectedIndex > -1;
+			txtJournalPIN.Text = Program.DictCheckedJournals.FirstOrDefault(e => e.Key == ddlJournals.Text).Value;
 			pnlDateFilters.Visible = false;
 		}
 
