@@ -4,7 +4,6 @@ using System.Configuration;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.IO;
-//using System.Net.Mail;
 using myJournal.objects;
 using MailKit;
 using MailKit.Net.Smtp;

@@ -63,8 +63,8 @@ namespace myJournal.subforms
 			{
 				Utilities.SetProgramPIN(kvp.Key);
 				jeFound = new Journal(kvp.Key).Open().Search(so);
-				foundEntries.AddRange(jeFound);	
-				foreach(JournalEntry je in jeFound) { FoundEntries.Add(new FoundEntry { journalName = kvp.Key, journalEntry = je }); }
+				foundEntries.AddRange(jeFound);
+				foreach (JournalEntry je in jeFound) { FoundEntries.Add(new FoundEntry { journalName = kvp.Key, journalEntry = je }); }
 				Utilities.PopulateEntries(lstFoundEntries, foundEntries, "", "", "", false, 0, true);
 				journalBoundaries.Add(kvp.Key, lstFoundEntries.Items.Count);
 				foundEntries.Clear();
@@ -166,7 +166,7 @@ namespace myJournal.subforms
 		private void SetJournalSelectLabelAndButton()
 		{
 			lblSearchingIn.Text = "Searching in " +
-				(Program.DictCheckedJournals.Count == Program.AllJournals.Count ? "all " : Program.DictCheckedJournals.Count.ToString() + " selected ") + "journal" + (Program.DictCheckedJournals.Count == 1 ? "" : "s");
+				(Program.DictCheckedJournals.Count == Program.AllJournals.Count ? "all " : Program.DictCheckedJournals.Count.ToString() + " selected ") + "notebook" + (Program.DictCheckedJournals.Count == 1 ? "" : "s");
 
 			btnSelectJournals.Left = lblSearchingIn.Left + lblSearchingIn.Width + 5;
 		}

@@ -31,13 +31,14 @@ namespace myJournal.subforms
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSearch));
 			grpFindEntry = new System.Windows.Forms.GroupBox();
+			btnSearch = new System.Windows.Forms.Button();
+			lstEntryObjects = new System.Windows.Forms.ListBox();
 			btnEditEntry = new System.Windows.Forms.Button();
 			pnlLabels_AndOr = new System.Windows.Forms.Panel();
 			radLabels_Or = new System.Windows.Forms.RadioButton();
 			radLabels_And = new System.Windows.Forms.RadioButton();
 			lblSearchingIn = new System.Windows.Forms.Label();
 			btnSelectJournals = new System.Windows.Forms.Button();
-			btnSearch = new System.Windows.Forms.Button();
 			label2 = new System.Windows.Forms.Label();
 			chkMatchWholeWord = new System.Windows.Forms.CheckBox();
 			chkMatchCase = new System.Windows.Forms.CheckBox();
@@ -59,11 +60,9 @@ namespace myJournal.subforms
 			label9 = new System.Windows.Forms.Label();
 			lblSelectionType = new System.Windows.Forms.Label();
 			label8 = new System.Windows.Forms.Label();
-			lblFoundEntries = new System.Windows.Forms.Label();
 			menuStrip1 = new System.Windows.Forms.MenuStrip();
 			mnuClearFields = new System.Windows.Forms.ToolStripMenuItem();
 			mnuExit = new System.Windows.Forms.ToolStripMenuItem();
-			lstEntryObjects = new System.Windows.Forms.ListBox();
 			grpFindEntry.SuspendLayout();
 			pnlLabels_AndOr.SuspendLayout();
 			menuStrip1.SuspendLayout();
@@ -72,12 +71,12 @@ namespace myJournal.subforms
 			// grpFindEntry
 			// 
 			grpFindEntry.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+			grpFindEntry.Controls.Add(btnSearch);
 			grpFindEntry.Controls.Add(lstEntryObjects);
 			grpFindEntry.Controls.Add(btnEditEntry);
 			grpFindEntry.Controls.Add(pnlLabels_AndOr);
 			grpFindEntry.Controls.Add(lblSearchingIn);
 			grpFindEntry.Controls.Add(btnSelectJournals);
-			grpFindEntry.Controls.Add(btnSearch);
 			grpFindEntry.Controls.Add(label2);
 			grpFindEntry.Controls.Add(chkMatchWholeWord);
 			grpFindEntry.Controls.Add(chkMatchCase);
@@ -99,17 +98,36 @@ namespace myJournal.subforms
 			grpFindEntry.Controls.Add(label9);
 			grpFindEntry.Controls.Add(lblSelectionType);
 			grpFindEntry.Controls.Add(label8);
-			grpFindEntry.Controls.Add(lblFoundEntries);
 			grpFindEntry.Location = new System.Drawing.Point(16, 22);
 			grpFindEntry.Name = "grpFindEntry";
 			grpFindEntry.Size = new System.Drawing.Size(683, 717);
 			grpFindEntry.TabIndex = 7;
 			grpFindEntry.TabStop = false;
 			// 
+			// btnSearch
+			// 
+			btnSearch.Location = new System.Drawing.Point(488, 133);
+			btnSearch.Name = "btnSearch";
+			btnSearch.Size = new System.Drawing.Size(127, 23);
+			btnSearch.TabIndex = 43;
+			btnSearch.Text = "&Search";
+			btnSearch.UseVisualStyleBackColor = true;
+			btnSearch.Click += this.btnSearch_Click;
+			// 
+			// lstEntryObjects
+			// 
+			lstEntryObjects.FormattingEnabled = true;
+			lstEntryObjects.ItemHeight = 15;
+			lstEntryObjects.Location = new System.Drawing.Point(557, 121);
+			lstEntryObjects.Name = "lstEntryObjects";
+			lstEntryObjects.Size = new System.Drawing.Size(120, 34);
+			lstEntryObjects.TabIndex = 50;
+			lstEntryObjects.Visible = false;
+			// 
 			// btnEditEntry
 			// 
 			btnEditEntry.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			btnEditEntry.Location = new System.Drawing.Point(105, 281);
+			btnEditEntry.Location = new System.Drawing.Point(105, 443);
 			btnEditEntry.Name = "btnEditEntry";
 			btnEditEntry.Size = new System.Drawing.Size(75, 21);
 			btnEditEntry.TabIndex = 49;
@@ -155,29 +173,19 @@ namespace myJournal.subforms
 			lblSearchingIn.AutoSize = true;
 			lblSearchingIn.Location = new System.Drawing.Point(149, 18);
 			lblSearchingIn.Name = "lblSearchingIn";
-			lblSearchingIn.Size = new System.Drawing.Size(172, 15);
+			lblSearchingIn.Size = new System.Drawing.Size(186, 15);
 			lblSearchingIn.TabIndex = 47;
-			lblSearchingIn.Text = "Searching in 3 selected journals";
+			lblSearchingIn.Text = "Searching in 3 selected notebooks";
 			// 
 			// btnSelectJournals
 			// 
-			btnSelectJournals.Location = new System.Drawing.Point(323, 14);
+			btnSelectJournals.Location = new System.Drawing.Point(343, 14);
 			btnSelectJournals.Name = "btnSelectJournals";
-			btnSelectJournals.Size = new System.Drawing.Size(101, 23);
+			btnSelectJournals.Size = new System.Drawing.Size(116, 23);
 			btnSelectJournals.TabIndex = 45;
-			btnSelectJournals.Text = "select Journals";
+			btnSelectJournals.Text = "select notebooks";
 			btnSelectJournals.UseVisualStyleBackColor = true;
 			btnSelectJournals.Click += this.btnSelectJournals_Click;
-			// 
-			// btnSearch
-			// 
-			btnSearch.Location = new System.Drawing.Point(488, 133);
-			btnSearch.Name = "btnSearch";
-			btnSearch.Size = new System.Drawing.Size(127, 23);
-			btnSearch.TabIndex = 43;
-			btnSearch.Text = "&Search";
-			btnSearch.UseVisualStyleBackColor = true;
-			btnSearch.Click += this.btnSearch_Click;
 			// 
 			// label2
 			// 
@@ -214,7 +222,7 @@ namespace myJournal.subforms
 			lblSeparator.Cursor = System.Windows.Forms.Cursors.HSplit;
 			lblSeparator.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			lblSeparator.ForeColor = System.Drawing.Color.Red;
-			lblSeparator.Location = new System.Drawing.Point(105, 271);
+			lblSeparator.Location = new System.Drawing.Point(105, 433);
 			lblSeparator.Name = "lblSeparator";
 			lblSeparator.Size = new System.Drawing.Size(566, 19);
 			lblSeparator.TabIndex = 37;
@@ -253,7 +261,7 @@ namespace myJournal.subforms
 			lstFoundEntries.Location = new System.Drawing.Point(6, 175);
 			lstFoundEntries.Name = "lstFoundEntries";
 			lstFoundEntries.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
-			lstFoundEntries.Size = new System.Drawing.Size(671, 92);
+			lstFoundEntries.Size = new System.Drawing.Size(671, 197);
 			lstFoundEntries.TabIndex = 14;
 			lstFoundEntries.UseTabStops = false;
 			lstFoundEntries.SelectedIndexChanged += this.lstFoundEntries_SelectedIndexChanged;
@@ -284,9 +292,10 @@ namespace myJournal.subforms
 			// 
 			lstLabelsForSearch.CheckOnClick = true;
 			lstLabelsForSearch.FormattingEnabled = true;
+			lstLabelsForSearch.IntegralHeight = false;
 			lstLabelsForSearch.Location = new System.Drawing.Point(6, 30);
 			lstLabelsForSearch.Name = "lstLabelsForSearch";
-			lstLabelsForSearch.Size = new System.Drawing.Size(137, 112);
+			lstLabelsForSearch.Size = new System.Drawing.Size(137, 140);
 			lstLabelsForSearch.TabIndex = 29;
 			// 
 			// label17
@@ -367,9 +376,9 @@ namespace myJournal.subforms
 			// 
 			rtbSelectedEntry_Found.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
 			rtbSelectedEntry_Found.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			rtbSelectedEntry_Found.Location = new System.Drawing.Point(6, 304);
+			rtbSelectedEntry_Found.Location = new System.Drawing.Point(6, 464);
 			rtbSelectedEntry_Found.Name = "rtbSelectedEntry_Found";
-			rtbSelectedEntry_Found.Size = new System.Drawing.Size(671, 407);
+			rtbSelectedEntry_Found.Size = new System.Drawing.Size(671, 247);
 			rtbSelectedEntry_Found.TabIndex = 12;
 			rtbSelectedEntry_Found.Text = "";
 			// 
@@ -389,7 +398,7 @@ namespace myJournal.subforms
 			lblSelectionType.AutoSize = true;
 			lblSelectionType.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			lblSelectionType.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			lblSelectionType.Location = new System.Drawing.Point(3, 283);
+			lblSelectionType.Location = new System.Drawing.Point(3, 445);
 			lblSelectionType.Name = "lblSelectionType";
 			lblSelectionType.Size = new System.Drawing.Size(96, 17);
 			lblSelectionType.TabIndex = 15;
@@ -405,18 +414,6 @@ namespace myJournal.subforms
 			label8.Size = new System.Drawing.Size(40, 17);
 			label8.TabIndex = 2;
 			label8.Text = "Title:";
-			// 
-			// lblFoundEntries
-			// 
-			lblFoundEntries.AutoSize = true;
-			lblFoundEntries.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-			lblFoundEntries.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			lblFoundEntries.Location = new System.Drawing.Point(3, 154);
-			lblFoundEntries.Name = "lblFoundEntries";
-			lblFoundEntries.Size = new System.Drawing.Size(93, 17);
-			lblFoundEntries.TabIndex = 13;
-			lblFoundEntries.Text = "Found Entries";
-			lblFoundEntries.Visible = false;
 			// 
 			// menuStrip1
 			// 
@@ -440,16 +437,6 @@ namespace myJournal.subforms
 			mnuExit.Size = new System.Drawing.Size(38, 20);
 			mnuExit.Text = "E&xit";
 			mnuExit.Click += this.mnuExit_Click;
-			// 
-			// lstEntryObjects
-			// 
-			lstEntryObjects.FormattingEnabled = true;
-			lstEntryObjects.ItemHeight = 15;
-			lstEntryObjects.Location = new System.Drawing.Point(667, 123);
-			lstEntryObjects.Name = "lstEntryObjects";
-			lstEntryObjects.Size = new System.Drawing.Size(120, 34);
-			lstEntryObjects.TabIndex = 50;
-			lstEntryObjects.Visible = false;
 			// 
 			// frmSearch
 			// 
