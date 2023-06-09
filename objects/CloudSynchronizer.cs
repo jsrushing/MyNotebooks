@@ -222,8 +222,7 @@ namespace myJournal.objects
 					}
 
 					if (downloadedAzureLabels != null)
-					{
-						
+					{						
 						switch(CompareLabelsAndSettings(localLabels, downloadedAzureLabels))
 						{
 							case ComparisonResult.Same:

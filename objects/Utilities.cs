@@ -84,25 +84,25 @@ namespace myJournal.objects
 			if (ofd.ShowDialog() == DialogResult.OK)
 			{
 				var target = String.Empty;
-				var jrnlName = string.Empty;
+				var bookName = string.Empty;
 				var ok2copy = true;
 
-				foreach (string fileName in ofd.FileNames)
+				foreach (var fileName in ofd.FileNames)
 				{
-					jrnlName = fileName.Substring(fileName.LastIndexOf("\\") + 1);
-					target = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + jrnlName;
+					bookName = fileName.Substring(fileName.LastIndexOf("\\") + 1);
+					target = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + bookName;
 
 					if (File.Exists(target))
 					{
 						using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion,
-							"The journal '" + jrnlName + "' already exists. Do you want to ovewrwrite the journal?", "", parent))
+							"The notebook '" + bookName + "' already exists. Do you want to ovewrwrite the notebook?", "", parent))
 						{
 							frm.ShowDialog(parent);
 							ok2copy = frm.Result == frmMessage.ReturnResult.Yes;
 						}
 					}
 
-					using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.InputBox, "Enter the PIN for '" + jrnlName + "'.", "", parent))
+					using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.InputBox, "Enter the PIN for '" + bookName + "'.", "", parent))
 					{
 						frm2.ShowDialog();
 						ok2copy = frm2.Result == frmMessage.ReturnResult.Ok;
@@ -112,14 +112,14 @@ namespace myJournal.objects
 					if (ok2copy)
 					{
 						File.Copy(fileName, target, true);
-						Program.DictCheckedJournals.Add(jrnlName, Program.PIN);
-						Program.AllJournals.Add(new Journal(jrnlName).Open());
+						Program.DictCheckedJournals.Add(bookName, Program.PIN);
+						Program.AllJournals.Add(new Journal(bookName).Open());
 						filesCopied = true;
-						List<string> newLabels = LabelsManager.FindNewLabelsInOneSelectedJournal(null, jrnlName);
+						List<string> newLabels = LabelsManager.FindNewLabelsInOneSelectedJournal(null, bookName);
 
 						if (newLabels.Count > 0)
 						{
-							string lbls = string.Join(',', newLabels);
+							var lbls = string.Join(',', newLabels);
 
 							using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "The following labels were found in the " +
 								"imported notebook but are not in your main labels list." + Environment.NewLine + lbls + Environment.NewLine + 

@@ -539,18 +539,7 @@ namespace myJournal.subforms
 					lstEntries.Items.Clear();
 					ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
 					pnlDateFilters.Visible = false;
-
 					using (frmLabelsManager frm3 = new frmLabelsManager(this, true)) { frm3.ShowDialog(); }
-
-					//using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.YesNoQuestion, "The Joural was deleted. " +
-					//	"You should check for orpahned labels using the Labels Manager. Would you like to do that now?", "", this))
-					//{
-					//	frm2.ShowDialog();
-
-					//	if (frm2.Result == frmMessage.ReturnResult.Yes)
-					//	{ using (frmLabelsManager frm3 = new frmLabelsManager(this, true)) { frm3.ShowDialog(); } }
-					//}
-
 					Program.AllJournals = Utilities.AllJournals();
 					LoadJournals();
 				}
