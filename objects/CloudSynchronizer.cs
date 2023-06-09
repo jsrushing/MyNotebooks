@@ -41,8 +41,9 @@ namespace myJournal.objects
 		{
 			foreach (var sJrnlName in Program.AzureJournalNames.Except(Utilities.AllJournalNames()))        // any journal on Azure not found locally
 			{
-				await AzureFileClient.DownloadOrDeleteFile(tempFolder + sJrnlName, Program.AzurePassword + "_" + sJrnlName);
-				Journal j3 = new Journal(tempFolder + sJrnlName, tempFolder + sJrnlName).Open(true);
+				//await AzureFileClient.DownloadOrDeleteFile(tempFolder + sJrnlName, Program.AzurePassword + "_" + sJrnlName);
+				//Journal j3 = new Journal(tempFolder + sJrnlName, tempFolder + sJrnlName).Open(true);
+				Journal j3 = new Journal(sJrnlName).Open();	
 
 				if (j3.Settings.IfCloudOnly_Download)
 				{
@@ -208,6 +209,8 @@ namespace myJournal.objects
 			var sLocalLabelsFile				= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"];
 			var sLocalSettingsFile				= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFile"];
 			var tempFolder						= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"];
+			var tempLabelsFile					= tempFolder + "_labels";
+			var tempSettingsFile				= tempFolder + "_settings";
 
 			try
 			{
@@ -215,8 +218,9 @@ namespace myJournal.objects
 					{
 						try
 						{
-							await AzureFileClient.DownloadOrDeleteFile(tempFolder, Program.AzurePassword + "_labels", FileMode.Create, true, "labelsandsettings");
-							downloadedAzureLabels = Program.AzureFileExists ? new FileInfo(tempFolder) : null; 
+							// this is failing ... 060923 0930
+							await AzureFileClient.DownloadOrDeleteFile(tempLabelsFile, Program.AzurePassword + "_labels", FileMode.Create, false, "labelsandsettings");
+							downloadedAzureLabels = Program.AzureFileExists ? new FileInfo(tempLabelsFile) : null; 
 						}
 						catch(Exception ex) { Err = ex.Message; }
 					}
@@ -231,7 +235,7 @@ namespace myJournal.objects
 								AzureFileClient.UploadFile(sLocalLabelsFile, "labelsandsettings");
 								break;
 							case ComparisonResult.CloudNewer:
-								File.Move(tempFolder, sLocalLabelsFile, true);
+								File.Move(tempLabelsFile, sLocalLabelsFile, true);
 								break;	
 						}
 					}
@@ -240,46 +244,48 @@ namespace myJournal.objects
 					if (new FileInfo(sLocalLabelsFile).Length > 0) AzureFileClient.UploadFile(sLocalLabelsFile, "labelsandsettings");
 				}
 
-				File.Delete(tempFolder);			
+				File.Delete(tempLabelsFile);			
 			}
 			catch (Exception ex) { Err = ex.Message; }
 
-			try
-			{
-				if (localSettings.Length > 0)
-				{
-					tempFolder = tempFolder.Substring(0, tempFolder.LastIndexOf("\\")) + "_settings";
+			//try
+			//{
+			//	if (localSettings.Length > 0)
+			//	{
+			//		try
+			//		{
+			//			await AzureFileClient.DownloadOrDeleteFile(tempSettingsFile, Program.AzurePassword + "_settings", FileMode.Open, false, "labelsandsettings");
+			//			downloadedAzureSettings = Program.AzureFileExists ? new FileInfo(tempSettingsFile) : null;
+			//		}
+			//		catch (Exception ex) { Err = ex.Message; }
 
-					try
-					{
-						await AzureFileClient.DownloadOrDeleteFile(sLocalSettingsFile, Program.AzurePassword + "_settings", FileMode.Open, false, "labelsandsettings");
-						downloadedAzureSettings = Program.AzureFileExists ? new FileInfo(tempFolder) : null;
-					}
-					catch (Exception ex) { Err = ex.Message; }
+			//		if (downloadedAzureSettings != null)
+			//		{
+			//			switch (CompareLabelsAndSettings(localLabels, downloadedAzureLabels))
+			//			{
+			//				case ComparisonResult.Same:
+			//					break;
+			//				case ComparisonResult.LocalNewer:
+			//					AzureFileClient.UploadFile(sLocalSettingsFile, "labelsandsettings");
+			//					break;
+			//				case ComparisonResult.CloudNewer:
+			//					File.Move(tempSettingsFile, sLocalSettingsFile, true);
+			//					break;
+			//			}
+			//		}
+			//		else
+			//		{
+			//			if (new FileInfo(sLocalSettingsFile).Length > 0) AzureFileClient.UploadFile(sLocalSettingsFile);
+			//		}
+			//	}
+			//	else
+			//	{
+			//		if (new FileInfo(sLocalSettingsFile).Length > 0) AzureFileClient.UploadFile(sLocalSettingsFile);
+			//	}
+			//}
+			//catch (Exception ex) { Err = ex.Message; }
 
-					if (downloadedAzureSettings != null)
-					{
-						switch (CompareLabelsAndSettings(localLabels, downloadedAzureLabels))
-						{
-							case ComparisonResult.Same:
-								break;
-							case ComparisonResult.LocalNewer:
-								AzureFileClient.UploadFile(sLocalSettingsFile, "labelsandsettings");
-								break;
-							case ComparisonResult.CloudNewer:
-								File.Move(tempFolder, sLocalSettingsFile, true);
-								break;
-						}
-					}
-				}
-				else
-				{
-					if (new FileInfo(sLocalSettingsFile).Length > 0) AzureFileClient.UploadFile(sLocalSettingsFile);
-				}
-			}
-			catch (Exception ex) { Err = ex.Message; }
-
-			File.Delete(tempFolder + "_settings");
+			File.Delete(tempSettingsFile);
 		}
 	}
 }

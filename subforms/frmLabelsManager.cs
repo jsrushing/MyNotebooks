@@ -343,7 +343,6 @@ namespace myJournal.subforms
 		{
 			lstOrphanedLabels.Items.Clear();
 			List<string> lstOrphans = LabelsManager.FindOrphansInSelectedJournals();
-			ShowPanel(pnlOrphanedLabels);
 
 			if (lstOrphans.Count > 0)
 			{
@@ -355,11 +354,11 @@ namespace myJournal.subforms
 					RemoveOrphans();
 					this.Hide();
 				}
+				else { ShowPanel(pnlOrphanedLabels); }	
 			}
 			else
 			{
 				using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "No orphaned labels were found.", Application.ProductName, this)) { frm.ShowDialog(); }
-				ShowPanel(pnlMain);
 			}
 		}
 
