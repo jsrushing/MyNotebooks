@@ -586,17 +586,17 @@ namespace myJournal.subforms
 
 			if (ofd.ShowDialog() == DialogResult.OK)
 			{
-				string tgt = String.Empty;
+				string target = String.Empty;
 				string jrnlName = string.Empty;
 				bool ok2copy = true;
 				bool filesCopied = false;
 
-				foreach (string fName in ofd.FileNames)
+				foreach (string fileName in ofd.FileNames)
 				{
-					tgt = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + fName.Substring(fName.LastIndexOf("\\") + 1);
-					jrnlName = fName.Substring(fName.LastIndexOf("\\") + 1);
+					jrnlName = fileName.Substring(fileName.LastIndexOf("\\") + 1);
+					target = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + jrnlName;
 
-					if (File.Exists(tgt))
+					if (File.Exists(target))
 					{
 						using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion,
 							"The journal '" + jrnlName + "' already exists. Do you want to ovewrwrite the journal?", "", this))
@@ -610,15 +610,27 @@ namespace myJournal.subforms
 					{
 						frm2.ShowDialog();
 						ok2copy = frm2.Result == frmMessage.ReturnResult.Ok;
-						Program.PIN = ok2copy ? frm2.EnteredValue : Program.PIN;
+						if(ok2copy) { Program.PIN = frm2.EnteredValue; }
 					}
 
 					if (ok2copy)
 					{
-						File.Copy(fName, tgt, true);
+						File.Copy(fileName, target, true);
+						Program.DictCheckedJournals.Add(jrnlName, Program.PIN);
 						filesCopied = true;
-						//if (LabelsManager.FindOrphansInAJournal(new Journal(jrnlName).Open(), true).Count > 0) { } // code for orphans being found
+						List <string> newLabels = LabelsManager.FindNewLabelsInOneSelectedJournal(null, jrnlName);
+						if (newLabels.Count > 0)
+						{
+							string lbls = string.Join(',', newLabels);
 
+							using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "The following labels were found in the " + 
+								"imported Journal." + Environment.NewLine + lbls + Environment.NewLine + "Do you want to add them to your Labels list?"
+								, "New Labels Found", this))
+							{
+								frm.ShowDialog();
+								if(frm.Result == frmMessage.ReturnResult.Yes) { LabelsManager.Add(newLabels.ToArray()); }
+							}	
+						}
 					}
 
 					ok2copy = true;

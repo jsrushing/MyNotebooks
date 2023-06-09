@@ -85,18 +85,35 @@ namespace myJournal.objects
 
 			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedJournals)
 			{
-				Utilities.SetProgramPIN(kvp.Key);
 				journal = new Journal(kvp.Key).Open();
 
 				if(journal != null)
 				{
+					Utilities.SetProgramPIN(kvp.Key);
 					foreach (JournalEntry je in journal.Entries)
-					{
-						foreach(var v2 in allLabels.Intersect(je.ClearLabels().Split(',')).ToList()) { lstReturn.Remove(v2); }
-					}
+					{ foreach(var v2 in allLabels.Intersect(je.ClearLabels().Split(',')).ToList()) { lstReturn.Remove(v2); } }
 				}
 			}
 			return lstReturn;
+		}
+
+		public static List<string> FindNewLabelsInOneSelectedJournal(Journal journalToSearch = null, string journalName = "")
+		{
+			List<string> lstRtrn = new List<string>();
+
+			if(journalToSearch == null && journalName != string.Empty) { journalToSearch = new Journal(journalName).Open(); }
+
+			List<JournalEntry> v = 
+				(List<JournalEntry>)journalToSearch.Entries.Where(e => e.ClearLabels().Split(',').Except(GetLabels_NoFileDate()).ToList().Count > 0);
+
+
+
+
+
+
+
+
+			return lstRtrn;
 		}
 
 		public static DateTime GetLabelsFileDate(string[] labels) 
