@@ -28,10 +28,11 @@ namespace myJournal.objects
 			None
 		}		
 
-		public static void Add(string[] lables)
+		public static async Task AddLabel(string[] lables)
 		{
-				string[] newLabels = ((lables).Except(GetLabels_NoFileDate())).ToArray();
-				File.AppendAllLines(AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"], newLabels);
+			List<string> newLabels = (lables).Except(GetLabels_NoFileDate()).ToList();
+			newLabels.AddRange(GetLabels_NoFileDate());
+			await SaveLabels(newLabels.ToList());
 		}
 
 		public static string CheckedLabels_Get(CheckedListBox cbx)
@@ -55,7 +56,7 @@ namespace myJournal.objects
 		{
 			if (isOrphan)
 			{
-				await Save(File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Where(c => c != labelName).ToArray().SkipLast(1).ToList());
+				await SaveLabels(File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Where(c => c != labelName).ToArray().SkipLast(1).ToList());
 			}
 			else
 			{
@@ -66,7 +67,7 @@ namespace myJournal.objects
 				}
 
 				if(journalsToEdit.Count == Program.AllJournals.Count)
-				{ await Save(File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Where(c => c != labelName).ToArray().SkipLast(1).ToList()); }
+				{ await SaveLabels(File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Where(c => c != labelName).ToArray().SkipLast(1).ToList()); }
 				else
 				{
 					var sMsg = "The label has been left in the labels list because you did not search all Journals. " +
@@ -103,10 +104,21 @@ namespace myJournal.objects
 
 			if(journalToSearch == null && journalName != string.Empty) { journalToSearch = new Journal(journalName).Open(); }
 
-			List<JournalEntry> v = 
-				(List<JournalEntry>)journalToSearch.Entries.Where(e => e.ClearLabels().Split(',').Except(GetLabels_NoFileDate()).ToList().Count > 0);
+			foreach(JournalEntry je in journalToSearch.Entries)
+			{
+				var sLabels = je.ClearLabels();
 
-			lstRtrn = (List<string>)v.Select(l => (l.ClearLabels().Split(',').Except(GetLabels_NoFileDate())));
+				if(sLabels.Length > 0)
+				{
+					lstRtrn.AddRange(sLabels.Split(",").Except(GetLabels_NoFileDate()).ToList());
+				}
+			}
+
+
+			//List<JournalEntry> v = 
+			//	(List<JournalEntry>)journalToSearch.Entries.Where(e => e.ClearLabels().Split(',').Except(GetLabels_NoFileDate()).ToList().Count > 0);
+
+			//lstRtrn = (List<string>)v.Select(l => (l.ClearLabels().Split(',').Except(GetLabels_NoFileDate())));
 			return lstRtrn;
 		}
 
@@ -167,7 +179,7 @@ namespace myJournal.objects
 			}
 		}
 
-		public static async Task<bool> Save(List<string> labels = null)
+		public static async Task<bool> SaveLabels(List<string> labels = null)
 		{
 			var bRtrn = false;
 

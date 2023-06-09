@@ -540,14 +540,16 @@ namespace myJournal.subforms
 					ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
 					pnlDateFilters.Visible = false;
 
-					using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.YesNoQuestion, "The Joural was deleted. " +
-						"You should check for orpahned labels using the Labels Manager. Would you like to do that now?", "", this))
-					{
-						frm2.ShowDialog();
+					using (frmLabelsManager frm3 = new frmLabelsManager(this, true)) { frm3.ShowDialog(); }
 
-						if (frm2.Result == frmMessage.ReturnResult.Yes)
-						{ using (frmLabelsManager frm3 = new frmLabelsManager(this)) { frm3.ShowDialog(); } }
-					}
+					//using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.YesNoQuestion, "The Joural was deleted. " +
+					//	"You should check for orpahned labels using the Labels Manager. Would you like to do that now?", "", this))
+					//{
+					//	frm2.ShowDialog();
+
+					//	if (frm2.Result == frmMessage.ReturnResult.Yes)
+					//	{ using (frmLabelsManager frm3 = new frmLabelsManager(this, true)) { frm3.ShowDialog(); } }
+					//}
 
 					Program.AllJournals = Utilities.AllJournals();
 					LoadJournals();
@@ -579,67 +581,7 @@ namespace myJournal.subforms
 			using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "", this)) { frm.ShowDialog(this); }
 		}
 
-		private void mnuJournal_Import_Click(object sender, EventArgs e)
-		{
-			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Multiselect = true;
-
-			if (ofd.ShowDialog() == DialogResult.OK)
-			{
-				string target = String.Empty;
-				string jrnlName = string.Empty;
-				bool ok2copy = true;
-				bool filesCopied = false;
-
-				foreach (string fileName in ofd.FileNames)
-				{
-					jrnlName = fileName.Substring(fileName.LastIndexOf("\\") + 1);
-					target = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + jrnlName;
-
-					if (File.Exists(target))
-					{
-						using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion,
-							"The journal '" + jrnlName + "' already exists. Do you want to ovewrwrite the journal?", "", this))
-						{
-							frm.ShowDialog(this);
-							ok2copy = frm.Result == frmMessage.ReturnResult.Yes;
-						}
-					}
-
-					using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.InputBox, "Please enter the PIN for '" + jrnlName + "'.", "", this))
-					{
-						frm2.ShowDialog();
-						ok2copy = frm2.Result == frmMessage.ReturnResult.Ok;
-						if(ok2copy) { Program.PIN = frm2.EnteredValue; }
-					}
-
-					if (ok2copy)
-					{
-						File.Copy(fileName, target, true);
-						Program.DictCheckedJournals.Add(jrnlName, Program.PIN);
-						filesCopied = true;
-						List <string> newLabels = LabelsManager.FindNewLabelsInOneSelectedJournal(null, jrnlName);
-						if (newLabels.Count > 0)
-						{
-							string lbls = string.Join(',', newLabels);
-
-							using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "The following labels were found in the " + 
-								"imported Journal." + Environment.NewLine + lbls + Environment.NewLine + "Do you want to add them to your Labels list?"
-								, "New Labels Found", this))
-							{
-								frm.ShowDialog();
-								if(frm.Result == frmMessage.ReturnResult.Yes) { LabelsManager.Add(newLabels.ToArray()); }
-							}	
-						}
-					}
-
-					ok2copy = true;
-				}
-
-				if (filesCopied) { Program.AllJournals = Utilities.AllJournals(); LoadJournals(); }
-
-			}
-		}
+		private void mnuJournal_Import_Click(object sender, EventArgs e) { if (Utilities.ImportNotebooks(this)) { LoadJournals(); } }
 
 		private void mnuJournal_Rename_Click(object sender, EventArgs e)
 		{
@@ -690,10 +632,10 @@ namespace myJournal.subforms
 
 		private void mnuLabels_Click(object sender, EventArgs e)
 		{
-			using (frmLabelsManager frm = new frmLabelsManager(this, CurrentJournal))
+			using (frmLabelsManager frm = new frmLabelsManager(this, false, CurrentJournal))
 			{
 				frm.ShowDialog();
-				if (frm.ActionTaken) 
+				if (frm.ActionTaken)
 				{
 					var indx = ddlJournals.SelectedIndex;
 					LoadJournals();

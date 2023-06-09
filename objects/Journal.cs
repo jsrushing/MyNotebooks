@@ -9,7 +9,9 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using myJournal.objects;
+using myJournal.subforms;
 
 namespace myJournal
 {
@@ -95,7 +97,7 @@ namespace myJournal
 
 		public bool HasLabel(string Label) { return Entries.Where(e => e.ClearLabels().Contains(Label)).Any(); }
 
-        public Journal Open(bool useFileName = false)
+		public Journal Open(bool useFileName = false)
         {
             Journal jRtrn = null;
 			var journalToOpen = useFileName ? this.FileName : Program.AppRoot + this.root + this.Name;

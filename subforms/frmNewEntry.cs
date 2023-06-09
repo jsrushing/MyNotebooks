@@ -114,7 +114,7 @@ namespace myJournal.subforms
 
 		private void lblManageLabels_Click(object sender, EventArgs e)
 		{
-			using (frmLabelsManager frm = new frmLabelsManager(this, this.currentJournal)) { frm.ShowDialog(); }
+			using (frmLabelsManager frm = new frmLabelsManager(this, false, this.currentJournal)) { frm.ShowDialog(); }
 			LabelsManager.PopulateLabelsList(clbLabels);
 		}
 

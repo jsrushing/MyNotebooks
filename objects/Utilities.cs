@@ -7,6 +7,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using myJournal.subforms;
 
 namespace myJournal.objects
 {
@@ -25,6 +26,16 @@ namespace myJournal.objects
 			var sJrnlFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"];
 			foreach (var s in Directory.GetFiles(sJrnlFolder)) { jrnlReturn.Add(new Journal(s.Replace(sJrnlFolder, "")).Open()); }
 			return jrnlReturn;
+		}
+
+		public static List<Journal> CheckedJournals()
+		{
+			List<Journal> rtrn = new List<Journal>();
+
+			foreach(KeyValuePair<string, string> kvp in Program.DictCheckedJournals)
+			{ rtrn.Add(new Journal(kvp.Key).Open()); }
+
+			return rtrn;
 		}
 
 		public static string[] GetTitleAndDate(string searchString, int startPosition = 0)
@@ -63,6 +74,67 @@ namespace myJournal.objects
 			catch (Exception) { }
 
 			return result;
+		}
+
+		public static bool ImportNotebooks(Form parent)
+		{
+			OpenFileDialog ofd = new OpenFileDialog { Multiselect = true };
+			var filesCopied = false;
+
+			if (ofd.ShowDialog() == DialogResult.OK)
+			{
+				var target = String.Empty;
+				var jrnlName = string.Empty;
+				var ok2copy = true;
+
+				foreach (string fileName in ofd.FileNames)
+				{
+					jrnlName = fileName.Substring(fileName.LastIndexOf("\\") + 1);
+					target = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + jrnlName;
+
+					if (File.Exists(target))
+					{
+						using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion,
+							"The journal '" + jrnlName + "' already exists. Do you want to ovewrwrite the journal?", "", parent))
+						{
+							frm.ShowDialog(parent);
+							ok2copy = frm.Result == frmMessage.ReturnResult.Yes;
+						}
+					}
+
+					using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.InputBox, "Enter the PIN for '" + jrnlName + "'.", "", parent))
+					{
+						frm2.ShowDialog();
+						ok2copy = frm2.Result == frmMessage.ReturnResult.Ok;
+						if (ok2copy) { Program.PIN = frm2.EnteredValue; }
+					}
+
+					if (ok2copy)
+					{
+						File.Copy(fileName, target, true);
+						Program.DictCheckedJournals.Add(jrnlName, Program.PIN);
+						Program.AllJournals.Add(new Journal(jrnlName).Open());
+						filesCopied = true;
+						List<string> newLabels = LabelsManager.FindNewLabelsInOneSelectedJournal(null, jrnlName);
+
+						if (newLabels.Count > 0)
+						{
+							string lbls = string.Join(',', newLabels);
+
+							using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "The following labels were found in the " +
+								"imported notebook but are not in your main labels list." + Environment.NewLine + lbls + Environment.NewLine + 
+								"Do you want to add themt?", "New Labels Found", parent))
+							{
+								frm.ShowDialog();
+								if (frm.Result == frmMessage.ReturnResult.Yes) { LabelsManager.AddLabel(newLabels.ToArray()); }
+							}
+						}
+					}
+
+					ok2copy = true;
+				}	
+			}
+			return filesCopied;
 		}
 
 		public static void PopulateEntries(ListBox lbxToPopulate, List<JournalEntry> entries, string journalName = "", string startDate = "", string endDate = "", bool clearPrevious = true, int SortBy = 0, bool includeJrnlName = false)
