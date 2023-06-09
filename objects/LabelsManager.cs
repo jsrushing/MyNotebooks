@@ -106,13 +106,7 @@ namespace myJournal.objects
 			List<JournalEntry> v = 
 				(List<JournalEntry>)journalToSearch.Entries.Where(e => e.ClearLabels().Split(',').Except(GetLabels_NoFileDate()).ToList().Count > 0);
 
-
-
-
-
-
-
-
+			lstRtrn = (List<string>)v.Select(l => (l.ClearLabels().Split(',').Except(GetLabels_NoFileDate())));
 			return lstRtrn;
 		}
 
