@@ -99,7 +99,6 @@ namespace myJournal.subforms
 			{
 				lblSeparator.Top += e.Y;
 				Utilities.ResizeListsAndRTBs(lstFoundEntries, rtbSelectedEntry_Found, lblSeparator, lblSelectionType, this);
-				RepositionBtnEditEntry();
 				if (lstFoundEntries.SelectedIndices.Count > 0) { lstFoundEntries.TopIndex = lstFoundEntries.SelectedIndices[0]; }
 			}
 		}
@@ -107,17 +106,13 @@ namespace myJournal.subforms
 		private void lstFoundEntries_MouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Right)
-			{
-				mnuEntryEditTop.Visible = false;
-				if (lstFoundEntries.SelectedIndices.Contains(e.Y / 15)) { mnuEntryEditTop.Visible = true; }
-			}
+			{ if (!lstFoundEntries.SelectedIndices.Contains(e.Y / 15)) { lstFoundEntries.SelectedIndex = e.Y / 15; } }
 		}
 
 		private void lstFoundEntries_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			ListBox lb = (ListBox)sender;
 			RichTextBox rtb = rtbSelectedEntry_Found;
-
 			lb.SelectedIndexChanged -= new System.EventHandler(this.lstFoundEntries_SelectedIndexChanged);
 
 			try
@@ -134,7 +129,6 @@ namespace myJournal.subforms
 						lblSelectionType.Visible = rtb.Text.Length > 0;
 						lblSeparator.Visible = rtb.Text.Length > 0;
 						Utilities.ResizeListsAndRTBs(lb, rtb, lblSeparator, lblSelectionType, this);
-						RepositionBtnEditEntry();
 					}
 					else { lstFoundEntries.SelectedIndices.Clear(); }
 				}
@@ -178,14 +172,6 @@ namespace myJournal.subforms
 				(Program.DictCheckedJournals.Count == Program.AllJournals.Count ? "all " : Program.DictCheckedJournals.Count.ToString() + " selected ") + "notebook" + (Program.DictCheckedJournals.Count == 1 ? "" : "s");
 
 			btnSelectJournals.Left = lblSearchingIn.Left + lblSearchingIn.Width + 5;
-		}
-
-		private void RepositionBtnEditEntry()
-		{
-			btnEditEntry.Visible = lblSelectionType.Visible;
-
-			btnEditEntry.Location = btnEditEntry.Visible ?
-				new System.Drawing.Point(lblSelectionType.Left + lblSelectionType.Width + 15, lblSelectionType.Top - 3) : btnEditEntry.Location;
 		}
 
 		private void ToggleDateControls(bool toggleUseDate)

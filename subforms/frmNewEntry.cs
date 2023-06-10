@@ -187,10 +187,10 @@ namespace myJournal.subforms
 			//{
 				JournalEntry newEntry = new JournalEntry(txtNewEntryTitle.Text.Trim(), rtbNewEntry.Text.Trim(), rtbNewEntry.Rtf, LabelsManager.CheckedLabels_Get(clbLabels), currentJournal.Name, false);
 				if (entry == null) { currentJournal.AddEntry(newEntry); } else { currentJournal.ReplaceEntry(entry, newEntry); }
-				await currentJournal.Save();
 				entry = newEntry;
 				saved = true;
 				SetIsDirty(false);
+				await currentJournal.Save();
 			//}
 			//else
 			//{

@@ -767,6 +767,12 @@ namespace myJournal.subforms
 			}
 		}
 
+		private void lstEntries_MouseUp(object sender, MouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Right)
+			{ if (!lstEntries.SelectedIndices.Contains(e.Y / 15)) { lstEntries.SelectedIndex = e.Y / 15; } }
+		}
+
 		protected override CreateParams CreateParams
 		{
 			get
