@@ -1,4 +1,6 @@
 ﻿
+using System.Windows.Forms;
+
 namespace myJournal.subforms
 {
 	partial class frmSearch
@@ -29,51 +31,50 @@ namespace myJournal.subforms
 		/// </summary>
 		private void InitializeComponent()
 		{
+			components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSearch));
-			grpFindEntry = new System.Windows.Forms.GroupBox();
-			btnSearch = new System.Windows.Forms.Button();
-			lstEntryObjects = new System.Windows.Forms.ListBox();
-			btnEditEntry = new System.Windows.Forms.Button();
-			pnlLabels_AndOr = new System.Windows.Forms.Panel();
-			radLabels_Or = new System.Windows.Forms.RadioButton();
-			radLabels_And = new System.Windows.Forms.RadioButton();
-			lblSearchingIn = new System.Windows.Forms.Label();
-			btnSelectJournals = new System.Windows.Forms.Button();
-			label2 = new System.Windows.Forms.Label();
-			chkMatchWholeWord = new System.Windows.Forms.CheckBox();
-			chkMatchCase = new System.Windows.Forms.CheckBox();
-			lblSeparator = new System.Windows.Forms.Label();
-			radBtnAnd = new System.Windows.Forms.RadioButton();
-			radBtnOr = new System.Windows.Forms.RadioButton();
-			lstFoundEntries = new System.Windows.Forms.ListBox();
-			chkUseDateRange = new System.Windows.Forms.CheckBox();
-			chkUseDate = new System.Windows.Forms.CheckBox();
-			lstLabelsForSearch = new System.Windows.Forms.CheckedListBox();
-			label17 = new System.Windows.Forms.Label();
-			dtFindDate = new System.Windows.Forms.DateTimePicker();
-			txtSearchText = new System.Windows.Forms.TextBox();
-			txtSearchTitle = new System.Windows.Forms.TextBox();
-			dtFindDate_To = new System.Windows.Forms.DateTimePicker();
-			label12 = new System.Windows.Forms.Label();
-			dtFindDate_From = new System.Windows.Forms.DateTimePicker();
-			rtbSelectedEntry_Found = new System.Windows.Forms.RichTextBox();
-			label9 = new System.Windows.Forms.Label();
-			lblSelectionType = new System.Windows.Forms.Label();
-			label8 = new System.Windows.Forms.Label();
-			menuStrip1 = new System.Windows.Forms.MenuStrip();
-			mnuClearFields = new System.Windows.Forms.ToolStripMenuItem();
-			mnuExit = new System.Windows.Forms.ToolStripMenuItem();
+			grpFindEntry = new GroupBox();
+			btnSearch = new Button();
+			lstEntryObjects = new ListBox();
+			pnlLabels_AndOr = new Panel();
+			radLabels_Or = new RadioButton();
+			radLabels_And = new RadioButton();
+			lblSearchingIn = new Label();
+			btnSelectJournals = new Button();
+			label2 = new Label();
+			chkMatchWholeWord = new CheckBox();
+			chkMatchCase = new CheckBox();
+			lblSeparator = new Label();
+			radBtnAnd = new RadioButton();
+			radBtnOr = new RadioButton();
+			lstFoundEntries = new ListBox();
+			mnuEntryEditTop = new ContextMenuStrip(components);
+			mnuEntryEdit = new ToolStripMenuItem();
+			chkUseDateRange = new CheckBox();
+			chkUseDate = new CheckBox();
+			lstLabelsForSearch = new CheckedListBox();
+			label17 = new Label();
+			dtFindDate = new DateTimePicker();
+			txtSearchText = new TextBox();
+			txtSearchTitle = new TextBox();
+			dtFindDate_To = new DateTimePicker();
+			label12 = new Label();
+			dtFindDate_From = new DateTimePicker();
+			rtbSelectedEntry_Found = new RichTextBox();
+			label9 = new Label();
+			lblSelectionType = new Label();
+			label8 = new Label();
+			mnuEditEntry = new ToolStripMenuItem();
 			grpFindEntry.SuspendLayout();
 			pnlLabels_AndOr.SuspendLayout();
-			menuStrip1.SuspendLayout();
+			mnuEntryEditTop.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// grpFindEntry
 			// 
-			grpFindEntry.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+			grpFindEntry.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
 			grpFindEntry.Controls.Add(btnSearch);
 			grpFindEntry.Controls.Add(lstEntryObjects);
-			grpFindEntry.Controls.Add(btnEditEntry);
 			grpFindEntry.Controls.Add(pnlLabels_AndOr);
 			grpFindEntry.Controls.Add(lblSearchingIn);
 			grpFindEntry.Controls.Add(btnSelectJournals);
@@ -123,19 +124,6 @@ namespace myJournal.subforms
 			lstEntryObjects.Size = new System.Drawing.Size(120, 34);
 			lstEntryObjects.TabIndex = 50;
 			lstEntryObjects.Visible = false;
-			// 
-			// btnEditEntry
-			// 
-			btnEditEntry.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			btnEditEntry.Location = new System.Drawing.Point(105, 443);
-			btnEditEntry.Name = "btnEditEntry";
-			btnEditEntry.Size = new System.Drawing.Size(75, 21);
-			btnEditEntry.TabIndex = 49;
-			btnEditEntry.Text = "&edit entry";
-			btnEditEntry.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			btnEditEntry.UseVisualStyleBackColor = true;
-			btnEditEntry.Visible = false;
-			btnEditEntry.Click += this.btnEditEntry_Click;
 			// 
 			// pnlLabels_AndOr
 			// 
@@ -211,15 +199,13 @@ namespace myJournal.subforms
 			chkMatchCase.AutoSize = true;
 			chkMatchCase.Location = new System.Drawing.Point(325, 72);
 			chkMatchCase.Name = "chkMatchCase";
-			chkMatchCase.Size = new System.Drawing.Size(49, 19);
+			chkMatchCase.Size = new System.Drawing.Size(15, 14);
 			chkMatchCase.TabIndex = 38;
-			chkMatchCase.Text = "case";
-			chkMatchCase.UseVisualStyleBackColor = true;
 			// 
 			// lblSeparator
 			// 
-			lblSeparator.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-			lblSeparator.Cursor = System.Windows.Forms.Cursors.HSplit;
+			lblSeparator.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+			lblSeparator.Cursor = Cursors.HSplit;
 			lblSeparator.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			lblSeparator.ForeColor = System.Drawing.Color.Red;
 			lblSeparator.Location = new System.Drawing.Point(105, 433);
@@ -254,17 +240,32 @@ namespace myJournal.subforms
 			// 
 			// lstFoundEntries
 			// 
-			lstFoundEntries.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-			lstFoundEntries.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			lstFoundEntries.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+			lstFoundEntries.BorderStyle = BorderStyle.FixedSingle;
+			lstFoundEntries.ContextMenuStrip = mnuEntryEditTop;
 			lstFoundEntries.FormattingEnabled = true;
 			lstFoundEntries.ItemHeight = 15;
 			lstFoundEntries.Location = new System.Drawing.Point(6, 175);
 			lstFoundEntries.Name = "lstFoundEntries";
-			lstFoundEntries.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
-			lstFoundEntries.Size = new System.Drawing.Size(671, 197);
+			lstFoundEntries.SelectionMode = SelectionMode.MultiSimple;
+			lstFoundEntries.Size = new System.Drawing.Size(671, 257);
 			lstFoundEntries.TabIndex = 14;
 			lstFoundEntries.UseTabStops = false;
 			lstFoundEntries.SelectedIndexChanged += this.lstFoundEntries_SelectedIndexChanged;
+			lstFoundEntries.MouseUp += this.lstFoundEntries_MouseUp;
+			// 
+			// mnuEntryEditTop
+			// 
+			mnuEntryEditTop.Items.AddRange(new ToolStripItem[] { mnuEntryEdit });
+			mnuEntryEditTop.Name = "mnuEntryEditTop";
+			mnuEntryEditTop.Size = new System.Drawing.Size(125, 26);
+			// 
+			// mnuEntryEdit
+			// 
+			mnuEntryEdit.Name = "mnuEntryEdit";
+			mnuEntryEdit.Size = new System.Drawing.Size(124, 22);
+			mnuEntryEdit.Text = "Edit Entry";
+			mnuEntryEdit.Click += this.mnuEditEntry_Click;
 			// 
 			// chkUseDateRange
 			// 
@@ -313,7 +314,7 @@ namespace myJournal.subforms
 			// 
 			dtFindDate.CustomFormat = "M/d/yyyy";
 			dtFindDate.Enabled = false;
-			dtFindDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+			dtFindDate.Format = DateTimePickerFormat.Custom;
 			dtFindDate.Location = new System.Drawing.Point(220, 121);
 			dtFindDate.Name = "dtFindDate";
 			dtFindDate.ShowUpDown = true;
@@ -323,8 +324,8 @@ namespace myJournal.subforms
 			// 
 			// txtSearchText
 			// 
-			txtSearchText.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-			txtSearchText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			txtSearchText.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+			txtSearchText.BorderStyle = BorderStyle.FixedSingle;
 			txtSearchText.Location = new System.Drawing.Point(196, 92);
 			txtSearchText.Name = "txtSearchText";
 			txtSearchText.Size = new System.Drawing.Size(475, 23);
@@ -332,8 +333,8 @@ namespace myJournal.subforms
 			// 
 			// txtSearchTitle
 			// 
-			txtSearchTitle.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-			txtSearchTitle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			txtSearchTitle.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+			txtSearchTitle.BorderStyle = BorderStyle.FixedSingle;
 			txtSearchTitle.Location = new System.Drawing.Point(192, 48);
 			txtSearchTitle.Name = "txtSearchTitle";
 			txtSearchTitle.Size = new System.Drawing.Size(479, 23);
@@ -343,7 +344,7 @@ namespace myJournal.subforms
 			// 
 			dtFindDate_To.CustomFormat = "M/d/yyyy";
 			dtFindDate_To.Enabled = false;
-			dtFindDate_To.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+			dtFindDate_To.Format = DateTimePickerFormat.Custom;
 			dtFindDate_To.Location = new System.Drawing.Point(360, 147);
 			dtFindDate_To.Name = "dtFindDate_To";
 			dtFindDate_To.ShowUpDown = true;
@@ -364,7 +365,7 @@ namespace myJournal.subforms
 			// 
 			dtFindDate_From.CustomFormat = "M/d/yyyy";
 			dtFindDate_From.Enabled = false;
-			dtFindDate_From.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+			dtFindDate_From.Format = DateTimePickerFormat.Custom;
 			dtFindDate_From.Location = new System.Drawing.Point(254, 147);
 			dtFindDate_From.Name = "dtFindDate_From";
 			dtFindDate_From.ShowUpDown = true;
@@ -374,8 +375,8 @@ namespace myJournal.subforms
 			// 
 			// rtbSelectedEntry_Found
 			// 
-			rtbSelectedEntry_Found.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-			rtbSelectedEntry_Found.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			rtbSelectedEntry_Found.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+			rtbSelectedEntry_Found.BorderStyle = BorderStyle.FixedSingle;
 			rtbSelectedEntry_Found.Location = new System.Drawing.Point(6, 464);
 			rtbSelectedEntry_Found.Name = "rtbSelectedEntry_Found";
 			rtbSelectedEntry_Found.Size = new System.Drawing.Size(671, 247);
@@ -415,38 +416,19 @@ namespace myJournal.subforms
 			label8.TabIndex = 2;
 			label8.Text = "Title:";
 			// 
-			// menuStrip1
+			// mnuEditEntry
 			// 
-			menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuClearFields, mnuExit });
-			menuStrip1.Location = new System.Drawing.Point(0, 0);
-			menuStrip1.Name = "menuStrip1";
-			menuStrip1.Size = new System.Drawing.Size(711, 24);
-			menuStrip1.TabIndex = 8;
-			menuStrip1.Text = "menuStrip1";
-			// 
-			// mnuClearFields
-			// 
-			mnuClearFields.Name = "mnuClearFields";
-			mnuClearFields.Size = new System.Drawing.Size(79, 20);
-			mnuClearFields.Text = "&Clear Fields";
-			mnuClearFields.Click += this.mnuClearFields_Click;
-			// 
-			// mnuExit
-			// 
-			mnuExit.Name = "mnuExit";
-			mnuExit.Size = new System.Drawing.Size(38, 20);
-			mnuExit.Text = "E&xit";
-			mnuExit.Click += this.mnuExit_Click;
+			mnuEditEntry.Name = "mnuEditEntry";
+			mnuEditEntry.Size = new System.Drawing.Size(32, 19);
+			mnuEditEntry.Text = "Edit Entry";
 			// 
 			// frmSearch
 			// 
 			AcceptButton = btnSearch;
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new System.Drawing.Size(711, 751);
 			Controls.Add(grpFindEntry);
-			Controls.Add(menuStrip1);
-			MainMenuStrip = menuStrip1;
 			MinimumSize = new System.Drawing.Size(509, 512);
 			Name = "frmSearch";
 			Text = "Search";
@@ -454,10 +436,8 @@ namespace myJournal.subforms
 			grpFindEntry.PerformLayout();
 			pnlLabels_AndOr.ResumeLayout(false);
 			pnlLabels_AndOr.PerformLayout();
-			menuStrip1.ResumeLayout(false);
-			menuStrip1.PerformLayout();
+			mnuEntryEditTop.ResumeLayout(false);
 			this.ResumeLayout(false);
-			this.PerformLayout();
 		}
 
 		#endregion
@@ -479,12 +459,9 @@ namespace myJournal.subforms
 		private System.Windows.Forms.Label lblSelectionType;
 		private System.Windows.Forms.Label label8;
 		private System.Windows.Forms.Label lblFoundEntries;
-		private System.Windows.Forms.MenuStrip menuStrip1;
-		private System.Windows.Forms.ToolStripMenuItem mnuClearFields;
 		private System.Windows.Forms.RadioButton radBtnAnd;
 		private System.Windows.Forms.RadioButton radBtnOr;
 		private System.Windows.Forms.Label lblSeparator;
-		private System.Windows.Forms.ToolStripMenuItem mnuExit;
 		private System.Windows.Forms.CheckBox chkMatchCase;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.CheckBox chkMatchWholeWord;
@@ -497,5 +474,8 @@ namespace myJournal.subforms
 		private System.Windows.Forms.Panel pnlLabels_AndOr;
 		private System.Windows.Forms.Button btnEditEntry;
 		private System.Windows.Forms.ListBox lstEntryObjects;
+		private ContextMenuStrip mnuEntryEditTop;
+		private ToolStripMenuItem mnuEntryEdit;
+		private ToolStripMenuItem mnuEditEntry;
 	}
 }

@@ -34,13 +34,6 @@ namespace myJournal.subforms
 			dtFindDate_To.Value = DateTime.Now;
 		}
 
-		private void btnEditEntry_Click(object sender, EventArgs e)
-		{
-			FoundEntry fe = lstFoundEntries.SelectedIndex == 0 ? FoundEntries[0] : FoundEntries[lstFoundEntries.SelectedIndex / 4];
-			frmNewEntry frm = new frmNewEntry(this, new Journal(fe.journalName).Open(), fe.journalEntry);
-			frm.Show();
-		}
-
 		private void btnSearch_Click(object sender, EventArgs e)
 		{
 			this.Cursor = Cursors.WaitCursor;
@@ -111,6 +104,15 @@ namespace myJournal.subforms
 			}
 		}
 
+		private void lstFoundEntries_MouseUp(object sender, MouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Right)
+			{
+				mnuEntryEditTop.Visible = false;
+				if (lstFoundEntries.SelectedIndices.Contains(e.Y / 15)) { mnuEntryEditTop.Visible = true; }
+			}
+		}
+
 		private void lstFoundEntries_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			ListBox lb = (ListBox)sender;
@@ -159,6 +161,13 @@ namespace myJournal.subforms
 			lstFoundEntries.Items.Clear();
 			rtbSelectedEntry_Found.Text = string.Empty;
 			lblSeparator.Visible = false;
+		}
+
+		private void mnuEditEntry_Click(object sender, EventArgs e)
+		{
+			FoundEntry fe = lstFoundEntries.SelectedIndex == 0 ? FoundEntries[0] : FoundEntries[lstFoundEntries.SelectedIndex / 4];
+			frmNewEntry frm = new frmNewEntry(this, new Journal(fe.journalName).Open(), fe.journalEntry);
+			frm.Show();
 		}
 
 		private void mnuExit_Click(object sender, EventArgs e) { this.Hide(); }

@@ -41,8 +41,8 @@ namespace myJournal.subforms
 			lblOperation = new Label();
 			label5 = new Label();
 			lstLabels = new ListBox();
-			mnuContextLabels = new ContextMenuStrip(components);
 			mnuContextRename = new ToolStripMenuItem();
+			mnuContextLabels = new ContextMenuStrip(components);
 			lblEntries2 = new Label();
 			lblSortType = new Label();
 			lblEntries1 = new Label();
@@ -72,7 +72,6 @@ namespace myJournal.subforms
 			mnuContextLabels.SuspendLayout();
 			mnuContextEntries.SuspendLayout();
 			mnuMain.SuspendLayout();
-			pnlOrphanedLabels.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// pnlMain
@@ -469,7 +468,6 @@ namespace myJournal.subforms
 
 		private ContextMenuStrip mnuContextEntries;
 		private ContextMenuStrip mnuContextLabels;
-
 		private ToolStripMenuItem mnuContextDelete;
 		private ToolStripMenuItem mnuDelete_OneJournal;
 		private ToolStripMenuItem mnuDelete_AllJournals;
