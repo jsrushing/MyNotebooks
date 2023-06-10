@@ -127,7 +127,7 @@ namespace myJournal.subforms
 			ddlJournals.FormattingEnabled = true;
 			ddlJournals.Location = new System.Drawing.Point(61, 30);
 			ddlJournals.Name = "ddlJournals";
-			ddlJournals.Size = new System.Drawing.Size(939, 23);
+			ddlJournals.Size = new System.Drawing.Size(713, 23);
 			ddlJournals.TabIndex = 1;
 			ddlJournals.SelectedIndexChanged += this.ddlJournals_SelectedIndexChanged;
 			ddlJournals.Click += this.ddlJournals_Click;
@@ -152,7 +152,7 @@ namespace myJournal.subforms
 			lstEntries.Location = new System.Drawing.Point(12, 106);
 			lstEntries.Name = "lstEntries";
 			lstEntries.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
-			lstEntries.Size = new System.Drawing.Size(988, 123);
+			lstEntries.Size = new System.Drawing.Size(762, 123);
 			lstEntries.TabIndex = 8;
 			lstEntries.UseTabStops = false;
 			lstEntries.Visible = false;
@@ -212,7 +212,7 @@ namespace myJournal.subforms
 			rtbSelectedEntry.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			rtbSelectedEntry.Location = new System.Drawing.Point(15, 271);
 			rtbSelectedEntry.Name = "rtbSelectedEntry";
-			rtbSelectedEntry.Size = new System.Drawing.Size(985, 184);
+			rtbSelectedEntry.Size = new System.Drawing.Size(759, 184);
 			rtbSelectedEntry.TabIndex = 5;
 			rtbSelectedEntry.TabStop = false;
 			rtbSelectedEntry.Text = "";
@@ -227,7 +227,7 @@ namespace myJournal.subforms
 			lblSeparator.ForeColor = System.Drawing.Color.Red;
 			lblSeparator.Location = new System.Drawing.Point(13, 232);
 			lblSeparator.Name = "lblSeparator";
-			lblSeparator.Size = new System.Drawing.Size(990, 19);
+			lblSeparator.Size = new System.Drawing.Size(764, 19);
 			lblSeparator.TabIndex = 30;
 			lblSeparator.Text = resources.GetString("lblSeparator.Text");
 			lblSeparator.Visible = false;
@@ -238,7 +238,7 @@ namespace myJournal.subforms
 			menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuJournal, mnuLabels, helpToolStripMenuItem, mnuSwitchAccount });
 			menuStrip1.Location = new System.Drawing.Point(0, 0);
 			menuStrip1.Name = "menuStrip1";
-			menuStrip1.Size = new System.Drawing.Size(1012, 24);
+			menuStrip1.Size = new System.Drawing.Size(786, 24);
 			menuStrip1.TabIndex = 37;
 			menuStrip1.Text = "menuStrip1";
 			// 
@@ -252,7 +252,7 @@ namespace myJournal.subforms
 			// mnuJournal_Create
 			// 
 			mnuJournal_Create.Name = "mnuJournal_Create";
-			mnuJournal_Create.Size = new System.Drawing.Size(180, 22);
+			mnuJournal_Create.Size = new System.Drawing.Size(160, 22);
 			mnuJournal_Create.Text = "&Create";
 			mnuJournal_Create.Click += this.mnuJournal_Create_Click;
 			// 
@@ -260,14 +260,14 @@ namespace myJournal.subforms
 			// 
 			mnuJournal_Delete.Enabled = false;
 			mnuJournal_Delete.Name = "mnuJournal_Delete";
-			mnuJournal_Delete.Size = new System.Drawing.Size(180, 22);
+			mnuJournal_Delete.Size = new System.Drawing.Size(160, 22);
 			mnuJournal_Delete.Text = "Delete";
 			mnuJournal_Delete.Click += this.mnuJournal_Delete_Click;
 			// 
 			// mnuJournal_Search
 			// 
 			mnuJournal_Search.Name = "mnuJournal_Search";
-			mnuJournal_Search.Size = new System.Drawing.Size(180, 22);
+			mnuJournal_Search.Size = new System.Drawing.Size(160, 22);
 			mnuJournal_Search.Text = "&Search";
 			mnuJournal_Search.Click += this.mnuJournal_Search_Click;
 			// 
@@ -275,7 +275,7 @@ namespace myJournal.subforms
 			// 
 			mnuJournal_Rename.Enabled = false;
 			mnuJournal_Rename.Name = "mnuJournal_Rename";
-			mnuJournal_Rename.Size = new System.Drawing.Size(180, 22);
+			mnuJournal_Rename.Size = new System.Drawing.Size(160, 22);
 			mnuJournal_Rename.Text = "Rename";
 			mnuJournal_Rename.Click += this.mnuJournal_Rename_Click;
 			// 
@@ -283,7 +283,7 @@ namespace myJournal.subforms
 			// 
 			mnuJournal_ForceBackup.Enabled = false;
 			mnuJournal_ForceBackup.Name = "mnuJournal_ForceBackup";
-			mnuJournal_ForceBackup.Size = new System.Drawing.Size(180, 22);
+			mnuJournal_ForceBackup.Size = new System.Drawing.Size(160, 22);
 			mnuJournal_ForceBackup.Text = "Force &Backup";
 			mnuJournal_ForceBackup.Visible = false;
 			mnuJournal_ForceBackup.Click += this.mnuJournal_ForceBackup_Click;
@@ -291,7 +291,7 @@ namespace myJournal.subforms
 			// mnuJournal_RestoreBackups
 			// 
 			mnuJournal_RestoreBackups.Name = "mnuJournal_RestoreBackups";
-			mnuJournal_RestoreBackups.Size = new System.Drawing.Size(180, 22);
+			mnuJournal_RestoreBackups.Size = new System.Drawing.Size(160, 22);
 			mnuJournal_RestoreBackups.Text = "&Restore Backups";
 			mnuJournal_RestoreBackups.Visible = false;
 			mnuJournal_RestoreBackups.Click += this.mnuJournal_RestoreBackups_Click;
@@ -299,14 +299,14 @@ namespace myJournal.subforms
 			// mnuJournal_Import
 			// 
 			mnuJournal_Import.Name = "mnuJournal_Import";
-			mnuJournal_Import.Size = new System.Drawing.Size(180, 22);
+			mnuJournal_Import.Size = new System.Drawing.Size(160, 22);
 			mnuJournal_Import.Text = "Import";
 			mnuJournal_Import.Click += this.mnuJournal_Import_Click;
 			// 
 			// mnuJournal_Export
 			// 
 			mnuJournal_Export.Name = "mnuJournal_Export";
-			mnuJournal_Export.Size = new System.Drawing.Size(180, 22);
+			mnuJournal_Export.Size = new System.Drawing.Size(160, 22);
 			mnuJournal_Export.Text = "Synch";
 			mnuJournal_Export.Visible = false;
 			mnuJournal_Export.Click += this.mnuJournal_Export_Click;
@@ -315,7 +315,7 @@ namespace myJournal.subforms
 			// 
 			mnuJournal_Settings.Enabled = false;
 			mnuJournal_Settings.Name = "mnuJournal_Settings";
-			mnuJournal_Settings.Size = new System.Drawing.Size(180, 22);
+			mnuJournal_Settings.Size = new System.Drawing.Size(160, 22);
 			mnuJournal_Settings.Text = "Settings";
 			mnuJournal_Settings.Click += this.mnuJournal_Settings_Click;
 			// 
@@ -491,7 +491,7 @@ namespace myJournal.subforms
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			BackColor = System.Drawing.SystemColors.Window;
-			ClientSize = new System.Drawing.Size(1012, 628);
+			ClientSize = new System.Drawing.Size(786, 628);
 			Controls.Add(lblEntries);
 			Controls.Add(pnlPin);
 			Controls.Add(pnlDateFilters);

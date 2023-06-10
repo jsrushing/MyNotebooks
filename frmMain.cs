@@ -411,6 +411,12 @@ namespace myJournal.subforms
 
 		}
 
+		private void lstEntries_MouseUp(object sender, MouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Right)
+			{ mnuEntryTop.Visible = lstEntries.SelectedIndices.Contains((e.Y / 15) + lstEntries.TopIndex); }
+		}
+
 		private void lstEntries_SelectEntry(object sender, EventArgs e)
 		{
 			ListBox lb = (ListBox)sender;
@@ -747,7 +753,6 @@ namespace myJournal.subforms
 				txtJournalPIN.Text = string.Empty;
 				pnlDateFilters.Visible = true;
 				SetDisplayText();
-				//lblEntriesCount.Text = lstEntries.Items.Count.ToString();
 			}
 			else if (st == SelectionState.EntrySelected)
 			{
@@ -765,12 +770,6 @@ namespace myJournal.subforms
 				pnlPin.Visible = false;
 				pnlDateFilters.Visible = false;
 			}
-		}
-
-		private void lstEntries_MouseUp(object sender, MouseEventArgs e)
-		{
-			if (e.Button == MouseButtons.Right)
-			{ if (!lstEntries.SelectedIndices.Contains(e.Y / 15)) { lstEntries.SelectedIndex = e.Y / 15; } }
 		}
 
 		protected override CreateParams CreateParams
