@@ -41,7 +41,7 @@ namespace myJournal.subforms
 			// 
 			// btnDone
 			// 
-			btnDone.Location = new System.Drawing.Point(123, 443);
+			btnDone.Location = new System.Drawing.Point(65, 453);
 			btnDone.Name = "btnDone";
 			btnDone.Size = new System.Drawing.Size(133, 23);
 			btnDone.TabIndex = 49;
@@ -51,7 +51,7 @@ namespace myJournal.subforms
 			// 
 			// btnAddPIN
 			// 
-			btnAddPIN.Location = new System.Drawing.Point(193, 33);
+			btnAddPIN.Location = new System.Drawing.Point(171, 44);
 			btnAddPIN.Name = "btnAddPIN";
 			btnAddPIN.Size = new System.Drawing.Size(59, 23);
 			btnAddPIN.TabIndex = 48;
@@ -62,7 +62,7 @@ namespace myJournal.subforms
 			// lblShowPIN
 			// 
 			lblShowPIN.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
-			lblShowPIN.Location = new System.Drawing.Point(148, 56);
+			lblShowPIN.Location = new System.Drawing.Point(59, 66);
 			lblShowPIN.Name = "lblShowPIN";
 			lblShowPIN.Size = new System.Drawing.Size(35, 13);
 			lblShowPIN.TabIndex = 46;
@@ -73,17 +73,17 @@ namespace myJournal.subforms
 			// 
 			// label1
 			// 
-			label1.AutoSize = true;
-			label1.Location = new System.Drawing.Point(12, 4);
+			label1.Location = new System.Drawing.Point(5, 4);
 			label1.Name = "label1";
-			label1.Size = new System.Drawing.Size(331, 15);
+			label1.Size = new System.Drawing.Size(248, 32);
 			label1.TabIndex = 0;
-			label1.Text = "Specify a PIN for all protected Journals you wish to work with.";
+			label1.Text = "Specify a PIN for all protected notebooks with which you intend to work";
+			label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// label2
 			// 
 			label2.AutoSize = true;
-			label2.Location = new System.Drawing.Point(50, 37);
+			label2.Location = new System.Drawing.Point(28, 48);
 			label2.Name = "label2";
 			label2.Size = new System.Drawing.Size(29, 15);
 			label2.TabIndex = 42;
@@ -92,7 +92,7 @@ namespace myJournal.subforms
 			// txtPIN
 			// 
 			txtPIN.Enabled = false;
-			txtPIN.Location = new System.Drawing.Point(83, 33);
+			txtPIN.Location = new System.Drawing.Point(61, 44);
 			txtPIN.Name = "txtPIN";
 			txtPIN.Size = new System.Drawing.Size(100, 23);
 			txtPIN.TabIndex = 50;
@@ -100,18 +100,19 @@ namespace myJournal.subforms
 			// 
 			// lstJournalPINs
 			// 
+			lstJournalPINs.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
 			lstJournalPINs.CheckOnClick = true;
 			lstJournalPINs.FormattingEnabled = true;
-			lstJournalPINs.Location = new System.Drawing.Point(12, 78);
+			lstJournalPINs.Location = new System.Drawing.Point(12, 96);
 			lstJournalPINs.Name = "lstJournalPINs";
-			lstJournalPINs.Size = new System.Drawing.Size(352, 346);
+			lstJournalPINs.Size = new System.Drawing.Size(236, 346);
 			lstJournalPINs.TabIndex = 51;
 			lstJournalPINs.SelectedIndexChanged += this.lstJournalPINs_SelectedIndexChanged;
 			// 
 			// chkSelectAll
 			// 
 			chkSelectAll.AutoSize = true;
-			chkSelectAll.Location = new System.Drawing.Point(274, 57);
+			chkSelectAll.Location = new System.Drawing.Point(165, 78);
 			chkSelectAll.Name = "chkSelectAll";
 			chkSelectAll.Size = new System.Drawing.Size(71, 19);
 			chkSelectAll.TabIndex = 52;
@@ -124,8 +125,7 @@ namespace myJournal.subforms
 			AcceptButton = btnAddPIN;
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			ClientSize = new System.Drawing.Size(376, 483);
-			Controls.Add(chkSelectAll);
+			ClientSize = new System.Drawing.Size(260, 483);
 			Controls.Add(lstJournalPINs);
 			Controls.Add(btnDone);
 			Controls.Add(txtPIN);
@@ -133,7 +133,10 @@ namespace myJournal.subforms
 			Controls.Add(btnAddPIN);
 			Controls.Add(label1);
 			Controls.Add(lblShowPIN);
+			Controls.Add(chkSelectAll);
 			FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
+			MaximizeBox = false;
+			MinimizeBox = false;
 			Name = "frmSelectJournalsToSearch";
 			Text = "Choose Journals To Search";
 			this.ResumeLayout(false);

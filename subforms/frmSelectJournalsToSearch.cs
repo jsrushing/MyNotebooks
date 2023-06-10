@@ -32,10 +32,10 @@ namespace myJournal.subforms
 						lstJournalPINs.Items.Add(j.Name + " (****)");
 						dictJournalsAndPINs.Add(j.Name, Program.DictCheckedJournals[j.Name]);
 					}
-					else 
-					{ 
-						lstJournalPINs.Items.Add(j.Name); 
-						dictJournalsAndPINs.Add(j.Name, ""); 
+					else
+					{
+						lstJournalPINs.Items.Add(j.Name);
+						dictJournalsAndPINs.Add(j.Name, "");
 					}
 
 					lstJournalPINs.SetItemChecked(lstJournalPINs.Items.Count - 1, true);
@@ -46,12 +46,20 @@ namespace myJournal.subforms
 			Utilities.SetStartPosition(this, parent);
 		}
 
+		private void AddHasPINTIndicators()
+		{
+			for(int i = 0; i < lstJournalPINs.Items.Count; i++)
+			{
+
+			}
+		}
+
 		private void btnAddPIN_Click(object sender, EventArgs e)
 		{
-			string s = lstJournalPINs.Text.Replace(" (****)", "");
+			var s = lstJournalPINs.Text.Replace(" (****)", "");
 			var itemIndex = lstJournalPINs.SelectedIndex;
 			dictJournalsAndPINs[s] = txtPIN.Text;
-			s += " (****)";
+			s += txtPIN.Text.Length == 0 ? "" : " (****)";
 			lstJournalPINs.Items.Insert(lstJournalPINs.SelectedIndex, s);
 			lstJournalPINs.Items.RemoveAt(lstJournalPINs.SelectedIndex);
 			txtPIN.PasswordChar = '\0';
