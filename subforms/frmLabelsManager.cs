@@ -22,14 +22,14 @@ namespace myJournal.subforms
 		private List<int> OccurenceTitleIndicies = new List<int>();
 		private bool DeletingOrphans;
 
-		private List<Journal> SelectedJournals { get; set; }
+		private List<Notebook> SelectedJournals { get; set; }
 
 		public bool ActionTaken { get; private set; }
 
-		public frmLabelsManager(Form parent, bool deleteOrphans = false, Journal _jrnl = null)
+		public frmLabelsManager(Form parent, bool deleteOrphans = false, Notebook _jrnl = null)
 		{
 			InitializeComponent();
-			SelectedJournals = new List<Journal>();
+			SelectedJournals = new List<Notebook>();
 			Utilities.SetStartPosition(this, parent);
 			DeletingOrphans = deleteOrphans;
 		}
@@ -103,10 +103,10 @@ namespace myJournal.subforms
 			else { lstOrphanedLabels.SelectedItems.Clear(); }
 		}
 
-		private List<Journal> GetSelectedJournals()
+		private List<Notebook> GetSelectedJournals()
 		{
 			SelectedJournals.Clear();
-			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedJournals) { SelectedJournals.Add(new Journal(kvp.Key).Open()); }
+			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedJournals) { SelectedJournals.Add(new Notebook(kvp.Key).Open()); }
 			return SelectedJournals;
 		}
 
@@ -174,9 +174,9 @@ namespace myJournal.subforms
 			try
 			{
 				int i = lstOccurrences.SelectedIndex;
-				KeyValuePair<Journal, JournalEntry> kvp = (KeyValuePair<Journal, JournalEntry>)lstEntryObjects.Items[i];
-				Journal j = kvp.Key;
-				JournalEntry je = kvp.Value;
+				KeyValuePair<Notebook, Entry> kvp = (KeyValuePair<Notebook, Entry>)lstEntryObjects.Items[i];
+				Notebook j = kvp.Key;
+				Entry je = kvp.Value;
 				Utilities.SetProgramPIN(j.Name);
 
 				using (frmNewEntry frm = new frmNewEntry(this, j, je))
@@ -226,7 +226,7 @@ namespace myJournal.subforms
 		{
 			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
 			var deleteOK = false;
-			List<Journal> oneJournal = null;
+			List<Notebook> oneJournal = null;
 			var editingOneJournal = false;
 
 			editingOneJournal = mnu.Text.ToLower().Contains("only");
@@ -235,8 +235,8 @@ namespace myJournal.subforms
 			if (editingOneJournal)
 			{
 				var journalName = lstOccurrences.Text.Replace("in ", "").Replace(" only", "").Replace("'", "");
-				oneJournal = new List<Journal>();
-				oneJournal.Add(new Journal(journalName).Open());
+				oneJournal = new List<Notebook>();
+				oneJournal.Add(new Notebook(journalName).Open());
 			}
 
 			var sMsg = "Do you want to delete the label '" + lstLabels.SelectedItem.ToString() + "' ";
@@ -291,7 +291,7 @@ namespace myJournal.subforms
 
 			if (newLabelName.Length > 0)
 			{
-				List<Journal> jrnlsToSearch = GetSelectedJournals();
+				List<Notebook> jrnlsToSearch = GetSelectedJournals();
 				await LabelsManager.RenameLabel(oldLabelName, newLabelName, jrnlsToSearch, Program.DictCheckedJournals, this);
 
 				if (!lstLabels.Items.OfType<string>().Contains(newLabelName))
@@ -392,14 +392,14 @@ namespace myJournal.subforms
 				lstOccurrences.Items.Clear();
 				var currentPIN = Program.PIN;
 
-				List<Journal> journalsWithLabel = LabelsManager.JournalsContainingLabel(labelName);
+				List<Notebook> journalsWithLabel = LabelsManager.JournalsContainingLabel(labelName);
 
 				if (journalsWithLabel.Count > 0)
 				{
-					foreach (Journal jrnl in journalsWithLabel)
+					foreach (Notebook jrnl in journalsWithLabel)
 					{
 						Utilities.SetProgramPIN(jrnl.Name);
-						List<JournalEntry> foundLables = jrnl.Entries.Where(t => ("," + t.ClearLabels() + ",").Contains("," + labelName + ",")).ToList();
+						List<Entry> foundLables = jrnl.Entries.Where(t => ("," + t.ClearLabels() + ",").Contains("," + labelName + ",")).ToList();
 
 						if (foundLables.Count > 0)
 						{
@@ -407,10 +407,10 @@ namespace myJournal.subforms
 							OccurenceTitleIndicies.Add(lstOccurrences.Items.Count - 1);
 							lstEntryObjects.Items.Add("");
 
-							foreach (JournalEntry je in foundLables)
+							foreach (Entry je in foundLables)
 							{
 								lstOccurrences.Items.Add("   > " + je.ClearTitle());
-								lstEntryObjects.Items.Add(new KeyValuePair<Journal, JournalEntry>(jrnl, je));
+								lstEntryObjects.Items.Add(new KeyValuePair<Notebook, Entry>(jrnl, je));
 							}
 
 							lstOccurrences.Items.Add("-----------------------");

@@ -13,6 +13,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="C:\Users\js_ru\source\repos\saved items from myJournal2022\Journal.cs" Link="Journal.cs" />
+    <Compile Include="C:\Users\js_ru\source\repos\saved items from myJournal2022\JournalEntry.cs" Link="JournalEntry.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

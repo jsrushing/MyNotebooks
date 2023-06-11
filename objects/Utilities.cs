@@ -16,24 +16,32 @@ namespace myJournal.objects
 		public static List<string> AllJournalNames()
 		{
 			List<string> lstRtrn = new List<string>();
-			foreach (Journal j in Program.AllNotebooks) lstRtrn.Add(j.Name);
+			foreach (Notebook nb in Program.AllNotebooks) lstRtrn.Add(nb.Name);
 			return lstRtrn;
 		} 
 
-		public static List<Journal> AllNotebooks()
+		public static List<Notebook> AllNotebooks()
+		{
+			List<Notebook> nbReturn = new List<Notebook>();
+			var sNotebooksFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"];
+			foreach (var s in Directory.GetFiles(sNotebooksFolder)) { nbReturn.Add(new Notebook(s.Replace(sNotebooksFolder, "")).Open()); }
+			return nbReturn;
+		}
+
+		public static List<Journal> AllJournals()
 		{
 			List<Journal> jrnlReturn = new List<Journal>();
-			var sJrnlFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"];
-			foreach (var s in Directory.GetFiles(sJrnlFolder)) { jrnlReturn.Add(new Journal(s.Replace(sJrnlFolder, "")).Open()); }
+			var sJournalsFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"];
+			foreach (var s in Directory.GetFiles(sJournalsFolder)) { jrnlReturn.Add(new Journal(s.Replace(sJournalsFolder, "")).Open()); }	// (new Journal(s.Replace(sJournalsFolder, "")).Open()); }
 			return jrnlReturn;
 		}
 
-		public static List<Journal> CheckedJournals()
+		public static List<Notebook> CheckedJournals()
 		{
-			List<Journal> rtrn = new List<Journal>();
+			List<Notebook> rtrn = new List<Notebook>();
 
 			foreach(KeyValuePair<string, string> kvp in Program.DictCheckedJournals)
-			{ rtrn.Add(new Journal(kvp.Key).Open()); }
+			{ rtrn.Add(new Notebook(kvp.Key).Open()); }
 
 			return rtrn;
 		}
@@ -84,25 +92,25 @@ namespace myJournal.objects
 			if (ofd.ShowDialog() == DialogResult.OK)
 			{
 				var target = String.Empty;
-				var bookName = string.Empty;
+				var nbName = string.Empty;
 				var ok2copy = true;
 
 				foreach (var fileName in ofd.FileNames)
 				{
-					bookName = fileName.Substring(fileName.LastIndexOf("\\") + 1);
-					target = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + bookName;
+					nbName = fileName.Substring(fileName.LastIndexOf("\\") + 1);
+					target = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + nbName;
 
 					if (File.Exists(target))
 					{
 						using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion,
-							"The notebook '" + bookName + "' already exists. Do you want to ovewrwrite the notebook?", "", parent))
+							"The notebook '" + nbName + "' already exists. Do you want to ovewrwrite the notebook?", "", parent))
 						{
 							frm.ShowDialog(parent);
 							ok2copy = frm.Result == frmMessage.ReturnResult.Yes;
 						}
 					}
 
-					using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.InputBox, "Enter the PIN for '" + bookName + "'.", "", parent))
+					using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.InputBox, "Enter the PIN for '" + nbName + "'.", "", parent))
 					{
 						frm2.ShowDialog();
 						ok2copy = frm2.Result == frmMessage.ReturnResult.Ok;
@@ -112,10 +120,10 @@ namespace myJournal.objects
 					if (ok2copy)
 					{
 						File.Copy(fileName, target, true);
-						Program.DictCheckedJournals.Add(bookName, Program.PIN);
-						Program.AllNotebooks.Add(new Journal(bookName).Open());
+						Program.DictCheckedJournals.Add(nbName, Program.PIN);
+						Program.AllNotebooks.Add(new Notebook(nbName).Open());
 						filesCopied = true;
-						List<string> newLabels = LabelsManager.FindNewLabelsInOneSelectedJournal(null, bookName);
+						List<string> newLabels = LabelsManager.FindNewLabelsInOneSelectedJournal(null, nbName);
 
 						if (newLabels.Count > 0)
 						{
@@ -137,10 +145,10 @@ namespace myJournal.objects
 			return filesCopied;
 		}
 
-		public static void PopulateEntries(ListBox lbxToPopulate, List<JournalEntry> entries, string journalName = "", string startDate = "", string endDate = "", bool clearPrevious = true, int SortBy = 0, bool includeJrnlName = false)
+		public static void PopulateEntries(ListBox lbxToPopulate, List<Entry> entries, string journalName = "", string startDate = "", string endDate = "", bool clearPrevious = true, int SortBy = 0, bool includeJrnlName = false)
 		{
 			if(clearPrevious) lbxToPopulate.Items.Clear();
-			List<JournalEntry> tmpEntries = null;
+			List<Entry> tmpEntries = null;
 			tmpEntries = startDate.Length > 0 ? entries.Where(d => DateTime.Parse(d.Date.ToShortDateString()) >= DateTime.Parse(startDate)).ToList() : entries;
 			tmpEntries = endDate.Length > 0 ? tmpEntries.Where(d => DateTime.Parse(d.Date.ToShortDateString()) <= DateTime.Parse(endDate)).ToList() : tmpEntries;
 
@@ -157,7 +165,7 @@ namespace myJournal.objects
 					break;
 			}
 
-			foreach (JournalEntry je in tmpEntries)
+			foreach (Entry je in tmpEntries)
 			{
 				var synopsis = je.GetSynopsis(includeJrnlName);
 

@@ -43,9 +43,9 @@ namespace myJournal.objects
 			{
 				await AzureFileClient.DownloadOrDeleteFile(tempFolder + sJrnlName, Program.AzurePassword + "_" + sJrnlName);
 				//Journal j3 = new Journal(tempFolder + sJrnlName, tempFolder + sJrnlName).Open(true);
-				Journal j3 = new Journal(sJrnlName).Open();	
+				Notebook j3 = new Notebook(sJrnlName).Open();	
 
-				if(j3 == null) { j3 = new Journal(sJrnlName, tempFolder + sJrnlName).Open(true);}
+				if(j3 == null) { j3 = new Notebook(sJrnlName, tempFolder + sJrnlName).Open(true);}
 
 				if (j3.Settings.IfCloudOnly_Download)
 				{
@@ -63,7 +63,7 @@ namespace myJournal.objects
 
 			foreach (var sLocalFile in Utilities.AllJournalNames().Except(Program.AzureJournalNames))   // any journal found locally but not on Azure
 			{
-				Journal j2 = new Journal(sLocalFile).Open();
+				Notebook j2 = new Notebook(sLocalFile).Open();
 				if (j2.Settings.AllowCloud)
 				{
 					if (j2.Settings.IfLocalOnly_Delete) { j2.Delete(); }
@@ -73,7 +73,7 @@ namespace myJournal.objects
 			}
 		}
 
-		private void CompareJournals(Journal localJournal, Journal cloudJournal)
+		private void CompareJournals(Notebook localJournal, Notebook cloudJournal)
 		{
 			if(!Program.SkipFileSizeComparison)
 			{ this.journalComparisonResult = localJournal.LastSaved > cloudJournal.LastSaved ? (ComparisonResult.LocalNewer) : cloudJournal.LastSaved > localJournal.LastSaved ? (ComparisonResult.CloudNewer) : (ComparisonResult.Same); }
@@ -103,10 +103,10 @@ namespace myJournal.objects
 			return sRtrn.Substring(0, sRtrn.LastIndexOf("\r\n")).Split("\r\n");
 		}
 
-		private async Task ProcessJournals(List<Journal> allJournals, string tempFolder, string journalsFolder)
+		private async Task ProcessJournals(List<Notebook> allJournals, string tempFolder, string journalsFolder)
 		{
-			Journal cloudJournal = null;
-			Journal j;
+			Notebook cloudJournal = null;
+			Notebook j;
 
 			for (var i = 0; i < allJournals.Count; i++)
 			{
@@ -119,7 +119,7 @@ namespace myJournal.objects
 						try
 						{
 							await AzureFileClient.DownloadOrDeleteFile(tempFolder + j.Name, Program.AzurePassword + "_" + j.Name);
-							cloudJournal = File.Exists(tempFolder + j.Name) ? new Journal(j.Name, tempFolder + j.Name).Open(true) : null;
+							cloudJournal = File.Exists(tempFolder + j.Name) ? new Notebook(j.Name, tempFolder + j.Name).Open(true) : null;
 						}
 						catch (Exception) { }
 
@@ -166,34 +166,34 @@ namespace myJournal.objects
 			}
 		}
 
-		public async Task SynchWithCloud(bool alsoSynchSettings = false, Journal journal = null)
+		public async Task SynchWithCloud(bool alsoSynchSettings = false, Notebook notebook = null)
 		{
 			var journalsFolder			= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"];
 			var tempFolder				= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"];
-			List<Journal> allJournals	= new List<Journal>();
-			Program.AllNotebooks			= Utilities.AllNotebooks();
+			List<Notebook> allNotebooks	= new List<Notebook>();
+			Program.AllNotebooks		= Utilities.AllNotebooks();
 
-			if (journal == null)	// If no journal is passed then 'allJournals' will contain all local journals. If one is passed (from Journal.Save()) it will only contain one.
+			if (notebook == null)	// If no journal is passed then 'allJournals' will contain all local journals. If one is passed (from Journal.Save()) it will only contain one.
 			{ 
-				allJournals = Program.AllNotebooks; } 
+				allNotebooks = Program.AllNotebooks; } 
 			else 
 			{
 				// Handle newly created, nevewr uploaded journal (title ends with '(local)').
-				if (journal.FileName.EndsWith(" (local)"))
+				if (notebook.FileName.EndsWith(" (local)"))
 				{
-					var sOldName		= journal.FileName;
-					var sNewName		= journal.FileName.Substring(0, journal.FileName.LastIndexOf("\\") + 1) + journal.Name;
-					journal.FileName	= sNewName;
+					var sOldName		= notebook.FileName;
+					var sNewName		= notebook.FileName.Substring(0, notebook.FileName.LastIndexOf("\\") + 1) + notebook.Name;
+					notebook.FileName	= sNewName;
 					File.Copy(sOldName, sNewName, true);
 					File.Delete(sOldName);
-					if (journal.Settings.AllowCloud) { AzureFileClient.UploadFile(journalsFolder + journal.Name); }
+					if (notebook.Settings.AllowCloud) { AzureFileClient.UploadFile(journalsFolder + notebook.Name); }
 					return;
 				}
 
-				allJournals.Add(journal); 
+				allNotebooks.Add(notebook); 
 			}
 
-			await ProcessJournals(allJournals, tempFolder, journalsFolder);
+			await ProcessJournals(allNotebooks, tempFolder, journalsFolder);
 			await AzureFileClient.GetAzureJournalNames(Program.AzurePassword, true);
 			Program.AllNotebooks = Utilities.AllNotebooks();
 			await CheckForLocalOrCloudOnly(tempFolder, journalsFolder);		

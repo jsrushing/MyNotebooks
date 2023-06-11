@@ -151,10 +151,10 @@ namespace myJournal.subforms
 {
 	public partial class frmMain : Form
 	{
-		Journal CurrentJournal;
-		JournalEntry CurrentEntry;
-		private bool FirstSelection = true;
-		bool SuppressDateClick = false;
+		Notebook		CurrentNotebook;
+		Entry			CurrentEntry;
+		private bool	FirstSelection = true;
+		bool			SuppressDateClick = false;
 
 		private enum SelectionState
 		{
@@ -173,7 +173,15 @@ namespace myJournal.subforms
 			System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
 			this.Text = "myJournal " + Program.AppVersion + (fvi.FileName.ToLower().Contains("debug") ? " - DEBUG MODE" : "");
 
-			CheckForSystemDirectories();
+			// one-time code to convert Journal objects into Notebook objects
+
+			//foreach (Journal j in Utilities.AllJournals())
+			//{
+			//	Notebook notebook = new Notebook(j);
+			//	notebook.Save();
+			//}
+
+			CheckForSystemDirectories();	// am I keeping system directories now that the cloud is working? Why or why not?
 			frmAzurePwd frm = new frmAzurePwd(this, frmAzurePwd.Mode.AskingForKey);
 
 			//Program.AzurePassword = string.Empty;	// Kills the Azure synch process for debugging if desired.
@@ -197,8 +205,9 @@ namespace myJournal.subforms
 			}
 
 			pnlDateFilters.Left = pnlPin.Left - 11;
+
 			Program.AllNotebooks = Utilities.AllNotebooks();
-			LoadJournals();
+			LoadNotebooks();
 			ShowHideMenusAndControls(SelectionState.HideAll);
 		}
 
@@ -211,7 +220,7 @@ namespace myJournal.subforms
 			}
 		}
 
-		private void btnLoadJournal_Click(object sender, EventArgs e)
+		private void btnLoadNotebook_Click(object sender, EventArgs e)
 		{
 			lstEntries.Items.Clear();
 			rtbSelectedEntry.Text = string.Empty;
@@ -221,11 +230,13 @@ namespace myJournal.subforms
 			try
 			{
 				string fullJournalName = ddlJournals.Text;
-				CurrentJournal = new Journal(fullJournalName).Open();
+				CurrentNotebook = new Notebook(fullJournalName).Open();
 
-				if (CurrentJournal != null)
+				if (CurrentNotebook != null)
 				{
-					if (CurrentJournal.Entries[0].ClearText().Length == 0)  // the PIN is wrong
+					var text = CurrentNotebook.Entries[0].ClearText();
+
+					if (CurrentNotebook.Entries[0].ClearText().Length == 0 | (!text.Contains(" ") & text.Length > 50 & !text.Equals("-")))	// the text isn't the 'created' entry, and has no spaces, and is more than 50 chars long, then it's encrypted text meaning the PIN is wrong
 					{
 						lblWrongPin.Visible = true;
 						txtJournalPIN.Focus();
@@ -233,10 +244,8 @@ namespace myJournal.subforms
 					}
 					else
 					{
-						Utilities.PopulateEntries(lstEntries, CurrentJournal.Entries, CurrentJournal.Name, DateTime.Now.AddDays(-61).ToString(), DateTime.Now.ToString(), true, 0);
-
-						if (lstEntries.Items.Count == 0) { Utilities.PopulateEntries(lstEntries, CurrentJournal.Entries); }
-
+						Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, CurrentNotebook.Name, DateTime.Now.AddDays(-61).ToString(), DateTime.Now.ToString(), true, 0);
+						if (lstEntries.Items.Count == 0) { Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries); }
 						lstEntries.Height = this.Height - lstEntries.Top - 50;
 						lstEntries.Visible = true;
 						pnlDateFilters.Visible = true;
@@ -272,9 +281,9 @@ namespace myJournal.subforms
 
 		private void cbxSortEntriesBy_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (CurrentJournal != null)
+			if (CurrentNotebook != null)
 			{
-				Utilities.PopulateEntries(lstEntries, CurrentJournal.Entries, CurrentJournal.Name, cbxDatesFrom.Text, cbxDatesTo.Text, true, cbxSortEntriesBy.SelectedIndex);
+				Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, CurrentNotebook.Name, cbxDatesFrom.Text, cbxDatesTo.Text, true, cbxSortEntriesBy.SelectedIndex);
 				lstEntries.Focus();
 			}
 		}
@@ -347,7 +356,7 @@ namespace myJournal.subforms
 			btnLoadJournal.Enabled = true;
 			txtJournalPIN.Focus();
 			CurrentEntry = null;
-			CurrentJournal = null;
+			CurrentNotebook = null;
 			cbxDatesFrom.DataSource = null;
 			lblWrongPin.Visible = false;
 			lstEntries.Items.Clear();
@@ -390,11 +399,11 @@ namespace myJournal.subforms
 			}
 		}
 
-		private void LoadJournals()
+		private void LoadNotebooks()
 		{
 			ddlJournals.Items.Clear();
 			ddlJournals.Text = string.Empty;
-			foreach (Journal j in Program.AllNotebooks) { ddlJournals.Items.Add(j.Name); }
+			foreach (Notebook j in Program.AllNotebooks) { ddlJournals.Items.Add(j.Name); }
 
 			if (ddlJournals.Items.Count > 0)
 			{
@@ -409,7 +418,6 @@ namespace myJournal.subforms
 				ShowHideMenusAndControls(SelectionState.JournalNotSelected);
 				txtJournalPIN.Focus();
 			}
-
 		}
 
 		private void lstEntries_MouseUp(object sender, MouseEventArgs e)
@@ -431,7 +439,7 @@ namespace myJournal.subforms
 			if (lb.SelectedIndex > -1)
 			{
 				lb.SelectedIndexChanged -= new System.EventHandler(this.lstEntries_SelectEntry);
-				CurrentEntry = JournalEntry.Select(rtb, lb, CurrentJournal, FirstSelection);
+				CurrentEntry = Entry.Select(rtb, lb, CurrentNotebook, FirstSelection);
 
 				if (CurrentEntry != null)
 				{
@@ -460,14 +468,14 @@ namespace myJournal.subforms
 		{
 			this.Cursor = Cursors.WaitCursor;
 
-			using (frmNewEntry frm = new frmNewEntry(this, CurrentJournal))
+			using (frmNewEntry frm = new frmNewEntry(this, CurrentNotebook))
 			{
-				frm.Text = "New entry in " + CurrentJournal.Name;
+				frm.Text = "New entry in " + CurrentNotebook.Name;
 				frm.ShowDialog(this);
 
 				if (frm.saved)
 				{
-					Utilities.PopulateEntries(lstEntries, CurrentJournal.Entries, cbxDatesFrom.Text, cbxDatesTo.Text);
+					Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, cbxDatesFrom.Text, cbxDatesTo.Text);
 					ProcessDateFilters();
 					ShowHideMenusAndControls(SelectionState.JournalLoaded);
 				}
@@ -484,9 +492,9 @@ namespace myJournal.subforms
 
 				if (frm.Result == frmMessage.ReturnResult.Yes)
 				{
-					CurrentJournal.Entries.Remove(CurrentEntry);
-					CurrentJournal.Save();
-					Utilities.PopulateEntries(lstEntries, CurrentJournal.Entries, cbxDatesFrom.Text, cbxDatesTo.Text);
+					CurrentNotebook.Entries.Remove(CurrentEntry);
+					CurrentNotebook.Save();
+					Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, cbxDatesFrom.Text, cbxDatesTo.Text);
 					ProcessDateFilters();
 					ShowHideMenusAndControls(SelectionState.JournalLoaded);
 				}
@@ -497,14 +505,14 @@ namespace myJournal.subforms
 		{
 			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
 
-			using (frmNewEntry frm = new frmNewEntry(this, CurrentJournal, CurrentEntry, mnu.Text.ToLower().StartsWith("preserve")))
+			using (frmNewEntry frm = new frmNewEntry(this, CurrentNotebook, CurrentEntry, mnu.Text.ToLower().StartsWith("preserve")))
 			{
-				frm.Text = "Edit '" + CurrentEntry.ClearTitle() + "' in '" + CurrentJournal.Name + "'";
+				frm.Text = "Edit '" + CurrentEntry.ClearTitle() + "' in '" + CurrentNotebook.Name + "'";
 				frm.ShowDialog(this);
 
 				if (frm.saved)
 				{
-					Utilities.PopulateEntries(lstEntries, CurrentJournal.Entries, cbxDatesFrom.Text, cbxDatesTo.Text);
+					Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, cbxDatesFrom.Text, cbxDatesTo.Text);
 					ProcessDateFilters();
 					ShowHideMenusAndControls(SelectionState.JournalLoaded);
 				}
@@ -519,7 +527,7 @@ namespace myJournal.subforms
 
 				if (frm.NewJournalName != null)
 				{
-					Journal j = new Journal(frm.NewJournalName);
+					Notebook j = new Notebook(frm.NewJournalName);
 					j.Settings = new JournalSettings();
 					// Apply settings from choices on frmNewJournal (add to this section as new settings are added) ...
 					j.Settings.AllowCloud = frm.AllowCloud;
@@ -532,7 +540,7 @@ namespace myJournal.subforms
 					j.LastSaved = DateTime.Now;
 					j.Create();
 					Program.AllNotebooks = Utilities.AllNotebooks();
-					LoadJournals();
+					LoadNotebooks();
 				}
 				frm.Close();
 			}
@@ -540,20 +548,20 @@ namespace myJournal.subforms
 
 		private void mnuJournal_Delete_Click(object sender, EventArgs e)
 		{
-			using (frmMessage frm = new frmMessage(frmMessage.OperationType.DeleteJournal, CurrentJournal.Name.Replace("\\", ""), "", this))
+			using (frmMessage frm = new frmMessage(frmMessage.OperationType.DeleteJournal, CurrentNotebook.Name.Replace("\\", ""), "", this))
 			{
 				frm.ShowDialog(this);
 
 				if (frm.Result == frmMessage.ReturnResult.Yes)
 				{
-					CurrentJournal.Delete();
+					CurrentNotebook.Delete();
 					ddlJournals.Text = string.Empty;
 					lstEntries.Items.Clear();
 					ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
 					pnlDateFilters.Visible = false;
 					using (frmLabelsManager frm3 = new frmLabelsManager(this, true)) { frm3.ShowDialog(); }
 					Program.AllNotebooks = Utilities.AllNotebooks();
-					LoadJournals();
+					LoadNotebooks();
 				}
 			}
 		}
@@ -577,24 +585,24 @@ namespace myJournal.subforms
 
 		private void mnuJournal_ForceBackup_Click(object sender, EventArgs e)
 		{
-			CurrentJournal.Backup_Forced();
-			string sMsg = CurrentJournal.BackupCompleted ? "The backup was completed" : "An error occurred. The backup was not completed.";
+			CurrentNotebook.Backup_Forced();
+			string sMsg = CurrentNotebook.BackupCompleted ? "The backup was completed" : "An error occurred. The backup was not completed.";
 			using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "", this)) { frm.ShowDialog(this); }
 		}
 
-		private void mnuJournal_Import_Click(object sender, EventArgs e) { if (Utilities.ImportNotebooks(this)) { LoadJournals(); } }
+		private void mnuJournal_Import_Click(object sender, EventArgs e) { if (Utilities.ImportNotebooks(this)) { LoadNotebooks(); } }
 
 		private void mnuJournal_Rename_Click(object sender, EventArgs e)
 		{
-			using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "Enter the new journal name.", CurrentJournal.Name, this))
+			using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "Enter the new journal name.", CurrentNotebook.Name, this))
 			{
 				frm.ShowDialog(this);
 
 				if (frm.Result == frmMessage.ReturnResult.Ok && frm.ResultText.Length > 0)
 				{
-					CurrentJournal.RenameJournal(frm.ResultText);
+					CurrentNotebook.RenameJournal(frm.ResultText);
 					Program.AllNotebooks = Utilities.AllNotebooks();
-					LoadJournals();
+					LoadNotebooks();
 				}
 
 			}
@@ -606,7 +614,7 @@ namespace myJournal.subforms
 			using (frmBackupManager frm = new frmBackupManager(this))
 			{
 				frm.ShowDialog(this);
-				if (frm.BackupRestored) { Program.AllNotebooks = Utilities.AllNotebooks(); LoadJournals(); }
+				if (frm.BackupRestored) { Program.AllNotebooks = Utilities.AllNotebooks(); LoadNotebooks(); }
 			}
 		}
 
@@ -622,10 +630,10 @@ namespace myJournal.subforms
 
 		private void mnuJournal_Settings_Click(object sender, EventArgs e)
 		{
-			using (frmJournalSettings frm = new frmJournalSettings(CurrentJournal, this))
+			using (frmJournalSettings frm = new frmJournalSettings(CurrentNotebook, this))
 			{
 				frm.ShowDialog();
-				if (frm.isDirty) { CurrentJournal.Save(); }
+				if (frm.isDirty) { CurrentNotebook.Save(); }
 				//frm.Close();
 			}
 			SetDisplayText();
@@ -633,23 +641,20 @@ namespace myJournal.subforms
 
 		private void mnuLabels_Click(object sender, EventArgs e)
 		{
-			using (frmLabelsManager frm = new frmLabelsManager(this, false, CurrentJournal))
+			using (frmLabelsManager frm = new frmLabelsManager(this, false, CurrentNotebook))
 			{
 				frm.ShowDialog();
 				if (frm.ActionTaken)
 				{
 					var indx = ddlJournals.SelectedIndex;
-					LoadJournals();
+					LoadNotebooks();
 					ddlJournals.SelectedIndex = -1;
 					ddlJournals.SelectedIndex = indx;
 				}
 			}
 		}
 
-		private void mnuResetPIN_Click(object sender, EventArgs e)
-		{
-			CurrentJournal.ResetPIN(this);
-		}
+		private void mnuResetPIN_Click(object sender, EventArgs e) { CurrentNotebook.ResetPIN(this); }
 
 		private void rtbSelectedEntry_MouseDown(object sender, MouseEventArgs e)
 		{
@@ -687,7 +692,7 @@ namespace myJournal.subforms
 			SuppressDateClick = true;
 			cbxDatesFrom.DataSource = null;
 			cbxDatesTo.Items.Clear();
-			List<string> l = CurrentJournal.Entries.Select(e => e.Date.ToShortDateString()).Distinct().ToList();
+			List<string> l = CurrentNotebook.Entries.Select(e => e.Date.ToShortDateString()).Distinct().ToList();
 			l.Sort((x, y) => -DateTime.Parse(x).CompareTo(DateTime.Parse(y)));
 			cbxDatesFrom.DataSource = l;
 			//cbxDatesTo.Items.AddRange(cbxDates.Items.Cast<Object>().ToArray());
@@ -700,11 +705,11 @@ namespace myJournal.subforms
 		{
 			if (cbxDatesFrom.Text.Length > 0 && cbxDatesTo.Text.Length > 0)
 			{
-				Utilities.PopulateEntries(lstEntries, CurrentJournal.Entries, CurrentJournal.Name, cbxDatesFrom.Text, cbxDatesTo.Text, true, cbxSortEntriesBy.SelectedIndex);
+				Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, CurrentNotebook.Name, cbxDatesFrom.Text, cbxDatesTo.Text, true, cbxSortEntriesBy.SelectedIndex);
 
-				if (lstEntries.SelectedIndex == -1 && CurrentJournal.Entries.Contains(CurrentEntry))
+				if (lstEntries.SelectedIndex == -1 && CurrentNotebook.Entries.Contains(CurrentEntry))
 				{
-					JournalEntry.Select(rtbSelectedEntry, lstEntries, null, true, CurrentEntry);
+					Entry.Select(rtbSelectedEntry, lstEntries, null, true, CurrentEntry);
 				}
 				lblEntriesCount.Text = (lstEntries.Items.Count / 4).ToString();
 			}
@@ -713,7 +718,7 @@ namespace myJournal.subforms
 		private void SetDisplayText()
 		{
 			this.Text = this.Text.EndsWith(" (local)") ? this.Text.Replace(" (local)", "") : this.Text;
-			this.Text = CurrentJournal != null ? CurrentJournal.Settings.AllowCloud ? this.Text : this.Text + " (local)" : this.Text;
+			this.Text = CurrentNotebook != null ? CurrentNotebook.Settings.AllowCloud ? this.Text : this.Text + " (local)" : this.Text;
 		}
 
 		private void ShowHideMenusAndControls(SelectionState st)

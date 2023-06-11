@@ -13,7 +13,7 @@ namespace myJournal.subforms
 {
 	public partial class frmJournalSettings : Form
 	{
-		Journal workingJournal;
+		Notebook workingJournal;
 		public bool isDirty = false;
 		bool allowValueChange = false;
 		bool originalAllowCloud = false;
@@ -27,7 +27,7 @@ namespace myJournal.subforms
 		#endregion
 		// ..........
 
-		public frmJournalSettings(Journal journalToEdit, Form parent)
+		public frmJournalSettings(Notebook journalToEdit, Form parent)
 		{
 			InitializeComponent();
 

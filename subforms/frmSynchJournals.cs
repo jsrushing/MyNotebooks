@@ -28,7 +28,7 @@ namespace myJournal.subforms
 			{ 
 				frm.Close(); 
 				lstJournalsToSynch.Items.Clear();
-				foreach(Journal j in Program.AllNotebooks) { lstJournalsToSynch.Items.Add(j.Name); }
+				foreach(Notebook j in Program.AllNotebooks) { lstJournalsToSynch.Items.Add(j.Name); }
 				lstJournalsToSynch.SelectedItems.Clear();
 				btnOk.Focus();
 				pnlResults.Location = pnlMain.Location;
@@ -45,13 +45,13 @@ namespace myJournal.subforms
 			List<string> itemsSkipped	= new List<string>();
 			List<string> itemsSynchd	= new List<string>();
 			var journalsFolder			= ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"];
-			Journal j;
+			Notebook j;
 			//AzureFileClient client = new AzureFileClient();
 
 			// Synch to Azure
 			for (int i = 0; i < lstJournalsToSynch.SelectedItems.Count; i++)
 			{
-				j = new Journal(lstJournalsToSynch.SelectedItems[i].ToString()).Open();
+				j = new Notebook(lstJournalsToSynch.SelectedItems[i].ToString()).Open();
 
 				if (j.Settings.AllowCloud)
 				{

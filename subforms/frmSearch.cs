@@ -14,10 +14,10 @@ namespace myJournal.subforms
 {
 	public partial class frmSearch : Form
 	{
-		private Dictionary<string, int> journalBoundaries = new Dictionary<string, int>();
-		private List<int> threeSelections = new List<int>();
-		private bool IgnoreCheckChange = false;
-		private List<FoundEntry> FoundEntries = new List<FoundEntry>();
+		private Dictionary<string, int>		journalBoundaries	= new Dictionary<string, int>();
+		private List<int>					threeSelections		= new List<int>();
+		private bool						IgnoreCheckChange	= false;
+		private List<Entry>					FoundEntries		= new List<Entry>();
 
 		public frmSearch(Form parent)
 		{
@@ -39,8 +39,8 @@ namespace myJournal.subforms
 			this.Cursor = Cursors.WaitCursor;
 			var labels = string.Empty;
 			string[] labelsArray;
-			List<JournalEntry> foundEntries = new List<JournalEntry>();
-			List<JournalEntry> jeFound = null;
+			List<Entry> foundEntries = new List<Entry>();
+			List<Entry> jeFound = null;
 
 			journalBoundaries.Clear();
 			lstFoundEntries.Items.Clear();
@@ -55,9 +55,9 @@ namespace myJournal.subforms
 			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedJournals)
 			{
 				Utilities.SetProgramPIN(kvp.Key);
-				jeFound = new Journal(kvp.Key).Open().Search(so);
+				jeFound = new Notebook(kvp.Key).Open().Search(so);
 				foundEntries.AddRange(jeFound);
-				foreach (JournalEntry je in jeFound) { FoundEntries.Add(new FoundEntry { journalName = kvp.Key, journalEntry = je }); }
+				foreach (Entry je in jeFound) { FoundEntries.Add(new Entry { NotebookName = kvp.Key,}); }
 				Utilities.PopulateEntries(lstFoundEntries, foundEntries, "", "", "", false, 0, true);
 				journalBoundaries.Add(kvp.Key, lstFoundEntries.Items.Count);
 				foundEntries.Clear();
@@ -83,14 +83,14 @@ namespace myJournal.subforms
 			foreach (int i in lstFoundEntries.SelectedIndices) { threeSelections.Add(i); }
 		}
 
-		private Journal GetEntryJournal()
+		private Notebook GetEntryJournal()
 		{
 			List<int> selectedIndices = new List<int>();
 			KeyValuePair<string, int> kvp = new KeyValuePair<string, int>();
 			foreach (int i in lstFoundEntries.SelectedIndices) { selectedIndices.Add(i); }
 			if (selectedIndices.Count() > 1) { selectedIndices = selectedIndices.Except(threeSelections).ToList(); }
 			kvp = journalBoundaries.FirstOrDefault(p => p.Value > selectedIndices[0]);
-			return kvp.Key == "" ? null : new Journal(kvp.Key).Open();
+			return kvp.Key == "" ? null : new Notebook(kvp.Key).Open();
 		}
 
 		private void lblSeparator_MouseMove(object sender, MouseEventArgs e)
@@ -119,9 +119,9 @@ namespace myJournal.subforms
 			{
 				if (lb.SelectedIndex > -1)
 				{
-					Journal j = GetEntryJournal();
+					Notebook j = GetEntryJournal();
 					Utilities.SetProgramPIN(j.Name);
-					JournalEntry currentEntry = JournalEntry.Select(rtb, lb, j);
+					Entry currentEntry = Entry.Select(rtb, lb, j);
 					GetCurrentSelections();
 
 					if (currentEntry != null)
@@ -159,8 +159,8 @@ namespace myJournal.subforms
 
 		private void mnuEditEntry_Click(object sender, EventArgs e)
 		{
-			FoundEntry fe = lstFoundEntries.SelectedIndex == 0 ? FoundEntries[0] : FoundEntries[lstFoundEntries.SelectedIndex / 4];
-			frmNewEntry frm = new frmNewEntry(this, new Journal(fe.journalName).Open(), fe.journalEntry);
+			Entry fe = lstFoundEntries.SelectedIndex == 0 ? FoundEntries[0] : FoundEntries[lstFoundEntries.SelectedIndex / 4];
+			frmNewEntry frm = new frmNewEntry(this, new Notebook(fe.NotebookName).Open(), fe);
 			frm.Show();
 		}
 

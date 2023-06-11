@@ -10,6 +10,7 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using encrypt_decrypt_string;
 using myJournal.objects;
 using myJournal.subforms;
 
@@ -34,6 +35,26 @@ namespace myJournal
 				this.Name = _name;
 				if (_fileName != null) { this.FileName = _fileName; } 
 				else { this.FileName = Program.AppRoot + this.root + this.Name; }
+			}
+		}
+
+		// one-time code to convert Journal objects to Notebook objects
+		public Notebook(Journal journalToConvert)
+		{
+			this.Name = journalToConvert.Name;
+			this.LastSaved = journalToConvert.LastSaved;
+			this.FileName = journalToConvert.FileName;
+			this.Settings = journalToConvert.Settings;
+
+			foreach(JournalEntry je in  journalToConvert.Entries)
+			{
+				Entry e = new Entry(je.Title, je.Text, je.ClearRTF(), je.ClearLabels(), je.NotebookName);
+				e.Date = je.Date;
+				e.Id = je.Id;
+				e.isEdited = je.isEdited;
+				e.LastEditedOn = je.LastEditedOn;
+
+				this.Entries.Add(e);
 			}
 		}
 
@@ -193,43 +214,58 @@ namespace myJournal
 			Entries[index] = jeToInsert;
 		}
 
-		public bool ResetPIN(Form parent)
+		public async Task ResetPIN(Form caller)
 		{
-			var bRtrn = false;
+			var currentPIN = Program.PIN;
 			var newPIN = string.Empty;
-			var oldPIN = Program.PIN;
+			var save = false;
 
-			using (frmMessage frmOldPIN = new frmMessage(frmMessage.OperationType.InputBox, "Enter the current PIN", "", parent))
+			// input current PIN
+			using (frmMessage frmGetCurrentPIN = new frmMessage(frmMessage.OperationType.InputBox, "Enter the current PIN.", "(current PIN)", caller))
 			{
-				frmOldPIN.ShowDialog();
+				frmGetCurrentPIN.ShowDialog();
 
-				if (Program.PIN == frmOldPIN.ResultText)
+				if (frmGetCurrentPIN.ResultText != currentPIN)
 				{
-					using (frmMessage frmNewPIN = new frmMessage(frmMessage.OperationType.InputBox, "Enter the new PIN", "", parent))
-					{
-						frmNewPIN.ShowDialog();
-						newPIN = frmNewPIN.ResultText;
-					}
-
-					foreach (Entry je in this.Entries)
-					{
-						// decrypt key values
-
-						// change ProgramPIN
-
-						// set key values = encrypt(value) - this will encrypt w/ newPIN.
-
-						// change ProgramPIN back to oldPIN to do next entry
-					}
+					using (frmMessage frmBadPIN = new frmMessage(frmMessage.OperationType.Message, "The PIN you entered is not correct.", "Bad PIN", caller))
+					{ frmBadPIN.ShowDialog(); }
 				}
 				else
 				{
-					using (frmMessage frmBadPIN = new frmMessage(frmMessage.OperationType.Message, 
-						"Sorry, that PIN is incorrect.", "Wrong PIN", parent)) { frmBadPIN.ShowDialog(); }
-				}
-			}
+					using (frmMessage frmNewPIN = new frmMessage(frmMessage.OperationType.InputBox, "Enter the new PIN", "(enter PIN)", caller))
+					{
+						frmNewPIN.ShowDialog();
+						newPIN = frmNewPIN.ResultText;
 
-			return bRtrn;
+						if (frmNewPIN.Result != frmMessage.ReturnResult.Cancel)
+						{
+							foreach (Entry e in this.Entries)
+							{
+								// get the entry's key values
+								EntryValues ev = new EntryValues
+								{
+									name	= e.NotebookName,	// << this should become ClearName() after refactoring Entry
+									text	= e.ClearText(),
+									RTF		= e.ClearRTF(),
+									title	= e.ClearTitle()
+								};
+
+								// set programPIN to newPin
+								Program.PIN = newPIN;
+
+								// encrypt key values w/ new pin
+								e.Title = EncryptDecrypt.Encrypt(ev.title);
+								e.Text = EncryptDecrypt.Encrypt(ev.text);
+								//e.JournalName = EncryptDecrypt.Encrypt(ev.Name);	// << need to encrypt name
+								Program.PIN = currentPIN;
+								save = true;
+							}
+						}
+					}
+				}
+
+				if (save) { await this.Save(); Program.PIN = newPIN; }
+			}
 		}
 
 		public async Task Save()
@@ -246,7 +282,7 @@ namespace myJournal
 			if (Program.AzurePassword.Length > 0 && this.Settings.AllowCloud)
 			{
 				CloudSynchronizer cs = new CloudSynchronizer();
-				//await cs.SynchWithCloud(false, this);
+				await cs.SynchWithCloud(false, this);
 			}
 
 			//Backup();
@@ -304,12 +340,13 @@ namespace myJournal
 			return allEntries;
 		}
 
-		protected struct TempEntry
+		protected struct EntryValues
 		{
-			public string Title;
-			public string Text;
-			public string Labels;
+			public string title;
+			public string text;
+			public string labels;
 			public string RTF;
+			public string name;
 		}
     }
 

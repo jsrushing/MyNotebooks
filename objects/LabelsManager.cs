@@ -46,13 +46,13 @@ namespace myJournal.objects
 			return labels;
 		}
 
-		public static void CheckedLabels_Set(CheckedListBox clb, JournalEntry entry)
+		public static void CheckedLabels_Set(CheckedListBox clb, Entry entry)
 		{
 			var labels = entry.ClearLabels().Split(",");
 			for (var i = 0; i < clb.Items.Count; i++) { clb.SetItemChecked(i, labels.Contains(clb.Items[i].ToString())); }
 		}
 
-		public static async Task DeleteLabel(string labelName, List<Journal> journalsToEdit, Form parent, bool isOrphan = false)
+		public static async Task DeleteLabel(string labelName, List<Notebook> journalsToEdit, Form parent, bool isOrphan = false)
 		{
 			if (isOrphan)
 			{
@@ -60,7 +60,7 @@ namespace myJournal.objects
 			}
 			else
 			{
-				foreach(Journal j in journalsToEdit) 
+				foreach(Notebook j in journalsToEdit) 
 				{ 
 					Utilities.SetProgramPIN(j.Name);
 					await j.DeleteLabel(labelName); 
@@ -82,29 +82,29 @@ namespace myJournal.objects
 			List<string> lstReturn = new List<string>();
 			List<string> allLabels = GetLabels_NoFileDate().ToList();
 			lstReturn.AddRange(allLabels);
-			Journal journal;
+			Notebook journal;
 
 			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedJournals)
 			{
-				journal = new Journal(kvp.Key).Open();
+				journal = new Notebook(kvp.Key).Open();
 
 				if(journal != null)
 				{
 					Utilities.SetProgramPIN(kvp.Key);
-					foreach (JournalEntry je in journal.Entries)
-					{ foreach(var v2 in allLabels.Intersect(je.ClearLabels().Split(',')).ToList()) { lstReturn.Remove(v2); } }
+					foreach (Entry e in journal.Entries)
+					{ foreach(var v2 in allLabels.Intersect(e.ClearLabels().Split(',')).ToList()) { lstReturn.Remove(v2); } }
 				}
 			}
 			return lstReturn;
 		}
 
-		public static List<string> FindNewLabelsInOneSelectedJournal(Journal journalToSearch = null, string journalName = "")
+		public static List<string> FindNewLabelsInOneSelectedJournal(Notebook journalToSearch = null, string journalName = "")
 		{
 			List<string> lstRtrn = new List<string>();
 
-			if(journalToSearch == null && journalName != string.Empty) { journalToSearch = new Journal(journalName).Open(); }
+			if(journalToSearch == null && journalName != string.Empty) { journalToSearch = new Notebook(journalName).Open(); }
 
-			foreach(JournalEntry je in journalToSearch.Entries)
+			foreach(Entry je in journalToSearch.Entries)
 			{
 				var sLabels = je.ClearLabels();
 
@@ -140,12 +140,12 @@ namespace myJournal.objects
 			return labels;	
 		}
 
-		public static List<Journal> JournalsContainingLabel(string labelName, bool returnIfTwoFound = false)
+		public static List<Notebook> JournalsContainingLabel(string labelName, bool returnIfTwoFound = false)
 		{
-			List<Journal> lstRtrn = new List<Journal>();
-			List<Journal> jrnls2Search = Program.AllNotebooks.Where(e => Program.DictCheckedJournals.ContainsKey(e.Name)).ToList();
+			List<Notebook> lstRtrn = new List<Notebook>();
+			List<Notebook> jrnls2Search = Program.AllNotebooks.Where(e => Program.DictCheckedJournals.ContainsKey(e.Name)).ToList();
 
-			foreach (Journal journal in jrnls2Search)
+			foreach (Notebook journal in jrnls2Search)
 			{
 				Utilities.SetProgramPIN(journal.Name);
 
@@ -170,9 +170,9 @@ namespace myJournal.objects
 			}
 		}
 
-		public static async Task RenameLabel(string oldLabelName, string newLabelName, List<Journal> journalsToEdit, Dictionary<string, string> jrnlsAndPINs, Form parent)
+		public static async Task RenameLabel(string oldLabelName, string newLabelName, List<Notebook> journalsToEdit, Dictionary<string, string> jrnlsAndPINs, Form parent)
 		{
-			foreach(Journal j in journalsToEdit)
+			foreach(Notebook j in journalsToEdit)
 			{
 				Utilities.SetProgramPIN(j.Name);
 				await j.RenameLabel(oldLabelName, newLabelName);

@@ -89,7 +89,7 @@ namespace myJournal.subforms
 			btnLoadJournal.TabIndex = 36;
 			btnLoadJournal.Text = "&Load";
 			btnLoadJournal.UseVisualStyleBackColor = true;
-			btnLoadJournal.Click += this.btnLoadJournal_Click;
+			btnLoadJournal.Click += this.btnLoadNotebook_Click;
 			// 
 			// txtJournalPIN
 			// 

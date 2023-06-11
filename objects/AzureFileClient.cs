@@ -64,7 +64,7 @@ namespace myJournal.objects
 			}
 		}
 
-		public static async Task CheckForCloudJournalAndRemoveEntries(Journal j)
+		public static async Task CheckForCloudJournalAndRemoveEntries(Notebook j)
 		{
 			var tempFolder = ConfigurationManager.AppSettings["FolderStructure_Temp"];
 			var tempFileName = Program.AppRoot + tempFolder + j.Name;
@@ -72,7 +72,7 @@ namespace myJournal.objects
 			try 
 			{ 
 				await DownloadOrDeleteFile(tempFileName, Program.AzurePassword + "_" + j.Name);
-				Journal j2 = new Journal(j.Name, tempFileName).Open(true);
+				Notebook j2 = new Notebook(j.Name, tempFileName).Open(true);
 				j2.Entries.Clear();
 				j2.Save();
 				AzureFileClient.UploadFile(tempFileName);

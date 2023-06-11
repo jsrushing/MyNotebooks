@@ -13,8 +13,8 @@ namespace myJournal.subforms
 {
 	public partial class frmNewEntry : Form
 	{
-		private JournalEntry	entry				= null;
-		private Journal			currentJournal		= null;
+		private Entry			entry				= null;
+		private Notebook		currentNotebook		= null;
 		private bool			isEdit				= false;
 		private int				originalEntryLength = -1;
 		private bool			isDirty				= false;
@@ -26,13 +26,13 @@ namespace myJournal.subforms
 		//public bool preserveOriginalText { get; set; }
 		private bool preserveOriginalText;
 
-		public frmNewEntry(Form parent, Journal journal, JournalEntry entryToEdit = null, bool disallowOriginalTextEdit = false)
+		public frmNewEntry(Form parent, Notebook journal, Entry entryToEdit = null, bool disallowOriginalTextEdit = false)
 		{
 			InitializeComponent();
 			entry = entryToEdit;
 			isEdit = entry != null;
 			preserveOriginalText = disallowOriginalTextEdit;
-			this.currentJournal = journal;
+			this.currentNotebook = journal;
 			Utilities.SetStartPosition(this, parent);
 		}
 
@@ -114,7 +114,7 @@ namespace myJournal.subforms
 
 		private void lblManageLabels_Click(object sender, EventArgs e)
 		{
-			using (frmLabelsManager frm = new frmLabelsManager(this, false, this.currentJournal)) { frm.ShowDialog(); }
+			using (frmLabelsManager frm = new frmLabelsManager(this, false, this.currentNotebook)) { frm.ShowDialog(); }
 			LabelsManager.PopulateLabelsList(clbLabels);
 		}
 
@@ -185,12 +185,12 @@ namespace myJournal.subforms
 
 			//if (DateAndTitle[0] != null && DateAndTitle[1] != null && DateAndTitle[0].Length > 0 && DateAndTitle[1].Length > 0)
 			//{
-				JournalEntry newEntry = new JournalEntry(txtNewEntryTitle.Text.Trim(), rtbNewEntry.Text.Trim(), rtbNewEntry.Rtf, LabelsManager.CheckedLabels_Get(clbLabels), currentJournal.Name, false);
-				if (entry == null) { currentJournal.AddEntry(newEntry); } else { currentJournal.ReplaceEntry(entry, newEntry); }
+				Entry newEntry = new Entry(txtNewEntryTitle.Text.Trim(), rtbNewEntry.Text.Trim(), rtbNewEntry.Rtf, LabelsManager.CheckedLabels_Get(clbLabels), currentNotebook.Name, false);
+				if (entry == null) { currentNotebook.AddEntry(newEntry); } else { currentNotebook.ReplaceEntry(entry, newEntry); }
 				entry = newEntry;
 				saved = true;
 				SetIsDirty(false);
-				await currentJournal.Save();
+				await currentNotebook.Save();
 			//}
 			//else
 			//{
@@ -210,7 +210,7 @@ namespace myJournal.subforms
 
 			if (this.entry != null)
 			{
-				this.Text = "editing '" + entry.ClearTitle() + "' in '" + currentJournal.Name + "'";
+				this.Text = "editing '" + entry.ClearTitle() + "' in '" + currentNotebook.Name + "'";
 			}
 			else
 			{
