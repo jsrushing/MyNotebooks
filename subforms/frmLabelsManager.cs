@@ -202,7 +202,7 @@ namespace myJournal.subforms
 					mnuContextDelete.Text = "Delete '" + lstLabels.Text + "'";
 					mnuContextRename.Text = "Rename '" + lstLabels.Text + "'";
 					mnuDelete_OneJournal.Text = string.Format(MnuDelete_OneJournalText, lstOccurrences.SelectedItem.ToString().Replace("in", "from"));
-					mnuDelete_AllJournals.Text = Program.DictCheckedJournals.Count == Program.AllJournals.Count ? "from all journals"
+					mnuDelete_AllJournals.Text = Program.DictCheckedJournals.Count == Program.AllNotebooks.Count ? "from all journals"
 						: string.Format(MnuDelete_SelectedJournalaText, Program.DictCheckedJournals.Count.ToString());
 				}
 			}
@@ -241,7 +241,7 @@ namespace myJournal.subforms
 
 			var sMsg = "Do you want to delete the label '" + lstLabels.SelectedItem.ToString() + "' ";
 			sMsg += (editingOneJournal ? mnu.Text.Replace("in", "from").Replace(" only", "") :
-				Program.DictCheckedJournals.Count == Program.AllJournals.Count ? " from all journals " : " the " + Program.DictCheckedJournals.Count.ToString() + " selected journal"
+				Program.DictCheckedJournals.Count == Program.AllNotebooks.Count ? " from all journals " : " the " + Program.DictCheckedJournals.Count.ToString() + " selected journal"
 				+ (Program.DictCheckedJournals.Count == 1 && !editingOneJournal ? "" : "s")) + "?";
 
 			using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, sMsg, "Delete Label?", this))
@@ -281,7 +281,7 @@ namespace myJournal.subforms
 			var newLabelName = string.Empty;
 
 			var sMsg = "The label '" + lstLabels.SelectedItem + " will be renamed in " +
-				(Program.DictCheckedJournals.Count == Program.AllJournals.Count ? "all" : "the (" + Program.DictCheckedJournals.Count + ") selected" + " notebooks.");
+				(Program.DictCheckedJournals.Count == Program.AllNotebooks.Count ? "all" : "the (" + Program.DictCheckedJournals.Count + ") selected" + " notebooks.");
 
 			using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, sMsg, "new label name", this))
 			{
@@ -296,7 +296,7 @@ namespace myJournal.subforms
 
 				if (!lstLabels.Items.OfType<string>().Contains(newLabelName))
 				{
-					if (jrnlsToSearch.Count != Program.AllJournals.Count)
+					if (jrnlsToSearch.Count != Program.AllNotebooks.Count)
 					{
 						var sMsg2 = "The old label name has been left in the list. To completely remove the old label select all notebooks " +
 							", add PINs, then try renaming again.";

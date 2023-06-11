@@ -16,11 +16,11 @@ namespace myJournal.objects
 		public static List<string> AllJournalNames()
 		{
 			List<string> lstRtrn = new List<string>();
-			foreach (Journal j in Program.AllJournals) lstRtrn.Add(j.Name);
+			foreach (Journal j in Program.AllNotebooks) lstRtrn.Add(j.Name);
 			return lstRtrn;
 		} 
 
-		public static List<Journal> AllJournals()
+		public static List<Journal> AllNotebooks()
 		{
 			List<Journal> jrnlReturn = new List<Journal>();
 			var sJrnlFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"];
@@ -113,7 +113,7 @@ namespace myJournal.objects
 					{
 						File.Copy(fileName, target, true);
 						Program.DictCheckedJournals.Add(bookName, Program.PIN);
-						Program.AllJournals.Add(new Journal(bookName).Open());
+						Program.AllNotebooks.Add(new Journal(bookName).Open());
 						filesCopied = true;
 						List<string> newLabels = LabelsManager.FindNewLabelsInOneSelectedJournal(null, bookName);
 

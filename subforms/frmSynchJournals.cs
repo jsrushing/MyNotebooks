@@ -28,7 +28,7 @@ namespace myJournal.subforms
 			{ 
 				frm.Close(); 
 				lstJournalsToSynch.Items.Clear();
-				foreach(Journal j in Program.AllJournals) { lstJournalsToSynch.Items.Add(j.Name); }
+				foreach(Journal j in Program.AllNotebooks) { lstJournalsToSynch.Items.Add(j.Name); }
 				lstJournalsToSynch.SelectedItems.Clear();
 				btnOk.Focus();
 				pnlResults.Location = pnlMain.Location;

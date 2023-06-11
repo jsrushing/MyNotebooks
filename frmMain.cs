@@ -197,7 +197,7 @@ namespace myJournal.subforms
 			}
 
 			pnlDateFilters.Left = pnlPin.Left - 11;
-			Program.AllJournals = Utilities.AllJournals();
+			Program.AllNotebooks = Utilities.AllNotebooks();
 			LoadJournals();
 			ShowHideMenusAndControls(SelectionState.HideAll);
 		}
@@ -394,7 +394,7 @@ namespace myJournal.subforms
 		{
 			ddlJournals.Items.Clear();
 			ddlJournals.Text = string.Empty;
-			foreach (Journal j in Program.AllJournals) { ddlJournals.Items.Add(j.Name); }
+			foreach (Journal j in Program.AllNotebooks) { ddlJournals.Items.Add(j.Name); }
 
 			if (ddlJournals.Items.Count > 0)
 			{
@@ -531,7 +531,7 @@ namespace myJournal.subforms
 					// ........................................................................
 					j.LastSaved = DateTime.Now;
 					j.Create();
-					Program.AllJournals = Utilities.AllJournals();
+					Program.AllNotebooks = Utilities.AllNotebooks();
 					LoadJournals();
 				}
 				frm.Close();
@@ -552,7 +552,7 @@ namespace myJournal.subforms
 					ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
 					pnlDateFilters.Visible = false;
 					using (frmLabelsManager frm3 = new frmLabelsManager(this, true)) { frm3.ShowDialog(); }
-					Program.AllJournals = Utilities.AllJournals();
+					Program.AllNotebooks = Utilities.AllNotebooks();
 					LoadJournals();
 				}
 			}
@@ -593,7 +593,7 @@ namespace myJournal.subforms
 				if (frm.Result == frmMessage.ReturnResult.Ok && frm.EnteredValue.Length > 0)
 				{
 					CurrentJournal.RenameJournal(frm.EnteredValue);
-					Program.AllJournals = Utilities.AllJournals();
+					Program.AllNotebooks = Utilities.AllNotebooks();
 					LoadJournals();
 				}
 
@@ -606,7 +606,7 @@ namespace myJournal.subforms
 			using (frmBackupManager frm = new frmBackupManager(this))
 			{
 				frm.ShowDialog(this);
-				if (frm.BackupRestored) { Program.AllJournals = Utilities.AllJournals(); LoadJournals(); }
+				if (frm.BackupRestored) { Program.AllNotebooks = Utilities.AllNotebooks(); LoadJournals(); }
 			}
 		}
 

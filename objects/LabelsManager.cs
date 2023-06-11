@@ -66,7 +66,7 @@ namespace myJournal.objects
 					await j.DeleteLabel(labelName); 
 				}
 
-				if(journalsToEdit.Count == Program.AllJournals.Count)
+				if(journalsToEdit.Count == Program.AllNotebooks.Count)
 				{ await SaveLabels(File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Where(c => c != labelName).ToArray().SkipLast(1).ToList()); }
 				else
 				{
@@ -143,7 +143,7 @@ namespace myJournal.objects
 		public static List<Journal> JournalsContainingLabel(string labelName, bool returnIfTwoFound = false)
 		{
 			List<Journal> lstRtrn = new List<Journal>();
-			List<Journal> jrnls2Search = Program.AllJournals.Where(e => Program.DictCheckedJournals.ContainsKey(e.Name)).ToList();
+			List<Journal> jrnls2Search = Program.AllNotebooks.Where(e => Program.DictCheckedJournals.ContainsKey(e.Name)).ToList();
 
 			foreach (Journal journal in jrnls2Search)
 			{

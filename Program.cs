@@ -20,7 +20,7 @@ namespace myJournal
 		public static string	AzureConnString			= "DefaultEndpointsProtocol=https;AccountName=container1a;AccountKey=4YNQFl9klH9bp8ieKKfhwiVgiKlZKWieBlyzvu8zlm2hyL0HaR/x3XpbpFYjJ5VF4YgtaAR9sN4F+ASttv59jA==;EndpointSuffix=core.windows.net";
 		public static bool		SkipFileSizeComparison	= false;
 		public static List<string> AzureJournalNames	= new List<string>();
-		public static List<Journal> AllJournals			= new List<Journal>();
+		public static List<Journal> AllNotebooks		= new List<Journal>();
 		public static Dictionary<string, string> DictCheckedJournals = new Dictionary<string, string>();
 
 		[STAThread]

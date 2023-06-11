@@ -23,7 +23,7 @@ namespace myJournal.subforms
 			InitializeComponent();
 			//dictCheckedItems = checkedItems;
 
-			foreach (Journal j in Program.AllJournals)
+			foreach (Journal j in Program.AllNotebooks)
 			{
 				if (Program.DictCheckedJournals.ContainsKey(j.Name))
 				{

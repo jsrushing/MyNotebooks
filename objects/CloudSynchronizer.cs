@@ -171,11 +171,11 @@ namespace myJournal.objects
 			var journalsFolder			= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"];
 			var tempFolder				= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"];
 			List<Journal> allJournals	= new List<Journal>();
-			Program.AllJournals			= Utilities.AllJournals();
+			Program.AllNotebooks			= Utilities.AllNotebooks();
 
 			if (journal == null)	// If no journal is passed then 'allJournals' will contain all local journals. If one is passed (from Journal.Save()) it will only contain one.
 			{ 
-				allJournals = Program.AllJournals; } 
+				allJournals = Program.AllNotebooks; } 
 			else 
 			{
 				// Handle newly created, nevewr uploaded journal (title ends with '(local)').
@@ -195,7 +195,7 @@ namespace myJournal.objects
 
 			await ProcessJournals(allJournals, tempFolder, journalsFolder);
 			await AzureFileClient.GetAzureJournalNames(Program.AzurePassword, true);
-			Program.AllJournals = Utilities.AllJournals();
+			Program.AllNotebooks = Utilities.AllNotebooks();
 			await CheckForLocalOrCloudOnly(tempFolder, journalsFolder);		
 
 			if(alsoSynchSettings) await SyncLabelsAndSettings();

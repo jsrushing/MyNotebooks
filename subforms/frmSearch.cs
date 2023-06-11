@@ -169,7 +169,7 @@ namespace myJournal.subforms
 		private void SetJournalSelectLabelAndButton()
 		{
 			lblSearchingIn.Text = "Searching in " +
-				(Program.DictCheckedJournals.Count == Program.AllJournals.Count ? "all " : Program.DictCheckedJournals.Count.ToString() + " selected ") + "notebook" + (Program.DictCheckedJournals.Count == 1 ? "" : "s");
+				(Program.DictCheckedJournals.Count == Program.AllNotebooks.Count ? "all " : Program.DictCheckedJournals.Count.ToString() + " selected ") + "notebook" + (Program.DictCheckedJournals.Count == 1 ? "" : "s");
 
 			btnSelectJournals.Left = lblSearchingIn.Left + lblSearchingIn.Width + 5;
 		}

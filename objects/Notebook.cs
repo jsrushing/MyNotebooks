@@ -16,18 +16,18 @@ using myJournal.subforms;
 namespace myJournal
 {
 	[Serializable]
-	public class Journal
+	public class Notebook
 	{
-		public string Name { get; set; }
-		public DateTime LastSaved { get; set; }
-		public string FileName { get; set; }
-		public List<JournalEntry> Entries = new List<JournalEntry>();
-		string root = "journals\\";
-		public JournalSettings Settings;
+		public string				Name { get; set; }
+		public DateTime				LastSaved { get; set; }
+		public string				FileName { get; set; }
+		public List<Entry>	Entries = new List<Entry>();
+		string root					= "journals\\";
+		public JournalSettings		Settings;
 
 		public bool BackupCompleted { get; private set; }
 
-        public Journal(string _name = null, string _fileName = null) 
+        public Notebook(string _name = null, string _fileName = null) 
         {
             if(_name != null)
             {
@@ -37,7 +37,7 @@ namespace myJournal
 			}
 		}
 
-        public void AddEntry(JournalEntry entryToAdd) { Entries.Add(entryToAdd); }
+        public void AddEntry(Entry entryToAdd) { Entries.Add(entryToAdd); }
 
 		public void Backup()
 		{
@@ -66,7 +66,7 @@ namespace myJournal
 		public async Task Create()
         {
 			this.FileName += " (local)";
-			Entries.Add(new JournalEntry("created", "-", "-", this.Name));
+			Entries.Add(new Entry("created", "-", "-", this.Name));
 			Program.SkipFileSizeComparison = true;
 			await this.Save();
 			Program.SkipFileSizeComparison = false;
@@ -87,9 +87,18 @@ namespace myJournal
 			File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"] + this.Name);
 		}
 
-        public JournalEntry GetEntry(string Title, string Date)
+		public async Task DeleteLabel(string label)
+		{
+			var saveJournal = false;
+			foreach (Entry entry in this.Entries.Where(e => e.ClearLabels().Contains(label)).ToList())
+			{ saveJournal = entry.RemoveOrReplaceLabel("", label, false); } 
+			
+			if(saveJournal) { await this.Save(); } 
+		}
+
+        public Entry GetEntry(string Title, string Date)
         {
-			JournalEntry jeRtrn = null;
+			Entry jeRtrn = null;
 			try { jeRtrn = Entries.First(a => a.ClearTitle() == Title && a.Date.ToString("MM/dd/yy HH:mm:ss") == Date); }
 			catch (Exception) { }
 			return jeRtrn;
@@ -97,38 +106,38 @@ namespace myJournal
 
 		public bool HasLabel(string Label) { return Entries.Where(e => e.ClearLabels().Contains(Label)).Any(); }
 
-		public Journal Open(bool useFileName = false)
+		public Notebook Open(bool useFileName = false)
         {
-            Journal jRtrn = null;
-			var journalToOpen = useFileName ? this.FileName : Program.AppRoot + this.root + this.Name;
+            Notebook jRtrn = null;
+			var NotebookToOpen = useFileName ? this.FileName : Program.AppRoot + this.root + this.Name;
 
 			try
             {
-				if(journalToOpen.Length > 0)
+				if(NotebookToOpen.Length > 0)
 				{
-					using(Stream stream = File.Open(journalToOpen, FileMode.Open))
+					using(Stream stream = File.Open(NotebookToOpen, FileMode.Open))
 					{
 						BinaryFormatter formatter = new BinaryFormatter();
-						jRtrn = (Journal)formatter.Deserialize(stream);
-						jRtrn.FileName = journalToOpen;
-						jRtrn.Name = journalToOpen.Substring(journalToOpen.LastIndexOf("\\") + 1);
+						jRtrn = (Notebook)formatter.Deserialize(stream);
+						jRtrn.FileName = NotebookToOpen;
+						jRtrn.Name = NotebookToOpen.Substring(NotebookToOpen.LastIndexOf("\\") + 1);
 					}
 				}	
             }
-            catch(Exception) { }
+            catch(Exception ex) { Console.WriteLine(ex.Message); }
 
             return jRtrn;
         }
 
-		private List<JournalEntry> ProcessLabels(List<JournalEntry> entriesToSearch, string[] labelsArray, bool UseAnd)
+		private List<Entry> ProcessLabels(List<Entry> entriesToSearch, string[] labelsArray, bool UseAnd)
 		{
-			List<JournalEntry> entriesToReturn = new List<JournalEntry>();
+			List<Entry> entriesToReturn = new List<Entry>();
 
 			string[] a = labelsArray;
 			string[] b;
 
 
-			foreach (JournalEntry entry in entriesToSearch)
+			foreach (Entry entry in entriesToSearch)
 			{
 				if (UseAnd)
 				{
@@ -157,14 +166,6 @@ namespace myJournal
 			return entriesToReturn;
 		}
 
-		public async Task DeleteLabel(string label)
-		{
-			var saveJournal = false;
-			foreach (JournalEntry entry in this.Entries.Where(e => e.ClearLabels().Contains(label)).ToList())
-			{ saveJournal = entry.RemoveOrReplaceLabel("", label, false); } 
-			
-			if(saveJournal) { await this.Save(); } }
-
 		public async Task RenameJournal(string newName)
 		{
 			DeleteBackups();
@@ -178,18 +179,57 @@ namespace myJournal
 		public async Task RenameLabel(string oldName,  string newName)
 		{
 			var saveJournal = false;
-			foreach(JournalEntry entry in this.Entries.Where(e => e.ClearLabels().Contains(oldName)).ToList()) 
+			foreach(Entry entry in this.Entries.Where(e => e.ClearLabels().Contains(oldName)).ToList()) 
 			{ saveJournal = entry.RemoveOrReplaceLabel(newName, oldName); }
 
 			if(saveJournal ) { await this.Save(); }
 		}
 
-        public void ReplaceEntry(JournalEntry jeToReplace, JournalEntry jeToInsert)
+        public void ReplaceEntry(Entry jeToReplace, Entry jeToInsert)
 		{
 			jeToInsert.Date = jeToReplace.Date;
 			jeToInsert.LastEditedOn = DateTime.Now;
 			var index = Array.FindIndex(Entries.ToArray(), row => row.Id == jeToReplace.Id);
 			Entries[index] = jeToInsert;
+		}
+
+		public bool ResetPIN(Form parent)
+		{
+			var bRtrn = false;
+			var newPIN = string.Empty;
+			var oldPIN = Program.PIN;
+
+			using (frmMessage frmOldPIN = new frmMessage(frmMessage.OperationType.InputBox, "Enter the current PIN", "", parent))
+			{
+				frmOldPIN.ShowDialog();
+
+				if (Program.PIN == frmOldPIN.EnteredValue)
+				{
+					using (frmMessage frmNewPIN = new frmMessage(frmMessage.OperationType.InputBox, "Enter the new PIN", "", parent))
+					{
+						frmNewPIN.ShowDialog();
+						newPIN = frmNewPIN.EnteredValue;
+					}
+
+					foreach (Entry je in this.Entries)
+					{
+						// decrypt key values
+
+						// change ProgramPIN
+
+						// set key values = encrypt(value) - this will encrypt w/ newPIN.
+
+						// change ProgramPIN back to oldPIN to do next entry
+					}
+				}
+				else
+				{
+					using (frmMessage frmBadPIN = new frmMessage(frmMessage.OperationType.Message, 
+						"Sorry, that PIN is incorrect.", "Wrong PIN", parent)) { frmBadPIN.ShowDialog(); }
+				}
+			}
+
+			return bRtrn;
 		}
 
 		public async Task Save()
@@ -206,16 +246,16 @@ namespace myJournal
 			if (Program.AzurePassword.Length > 0 && this.Settings.AllowCloud)
 			{
 				CloudSynchronizer cs = new CloudSynchronizer();
-				await cs.SynchWithCloud(false, this);
+				//await cs.SynchWithCloud(false, this);
 			}
 
 			//Backup();
 			Program.AllNotebooks = Utilities.AllNotebooks();
 		}
 
-		public List<JournalEntry> Search(SearchObject So)
+		public List<Entry> Search(SearchObject So)
 		{
-			List<JournalEntry> allEntries = this.Entries;
+			List<Entry> allEntries = this.Entries;
 
 			if(So.chkUseDate.Checked | So.chkUseDateRange.Checked)
 			{
@@ -263,5 +303,14 @@ namespace myJournal
 			}
 			return allEntries;
 		}
+
+		protected struct TempEntry
+		{
+			public string Title;
+			public string Text;
+			public string Labels;
+			public string RTF;
+		}
     }
+
 }
