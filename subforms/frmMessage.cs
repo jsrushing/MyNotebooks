@@ -55,7 +55,7 @@ namespace myJournal.subforms
 			}
 
 			lblMessage.Text = msg;
-			lblMessage.Height = 28 * ((int)Math.Ceiling((double)msg.Length / 38));
+			lblMessage.Height = (int)Math.Ceiling((double)msg.Length / 47) == 1 ? 25 : 10 * ((int)Math.Ceiling((double)msg.Length / 47));
 
 			switch (opType)
 			{
@@ -88,7 +88,7 @@ namespace myJournal.subforms
 				case OperationType.InputBox:
 					txtInput.Text = defaultText;
 					txtInput.Visible = true;
-					//txtInput.Top = 23 * ((int)Math.Ceiling((double)msg.Length / 42));
+					txtInput.Top = lblMessage.Top + lblMessage.Height + 15;
 					pnlOkCancel.Top = txtInput.Top + txtInput.Height + 15;
 					pnlOkCancel.Visible = true;
 					txtInput.SelectAll();

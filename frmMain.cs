@@ -145,6 +145,7 @@ using System.Configuration;
 using System.Windows.Forms;
 using myJournal.objects;
 using System.Text;
+using System.Threading;
 
 namespace myJournal.subforms
 {
@@ -414,7 +415,12 @@ namespace myJournal.subforms
 		private void lstEntries_MouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Right)
-			{ mnuEntryTop.Visible = lstEntries.SelectedIndices.Contains((e.Y / 15) + lstEntries.TopIndex); }
+			{
+				bool entryClicked = lstEntries.SelectedIndices.Contains((e.Y / 15) + lstEntries.TopIndex);
+				mnuEntryEdit.Visible = entryClicked;
+				mnuEntryDelete.Visible = entryClicked;
+
+			}
 		}
 
 		private void lstEntries_SelectEntry(object sender, EventArgs e)

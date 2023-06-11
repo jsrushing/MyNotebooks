@@ -41,9 +41,11 @@ namespace myJournal.objects
 		{
 			foreach (var sJrnlName in Program.AzureJournalNames.Except(Utilities.AllJournalNames()))        // any journal on Azure not found locally
 			{
-				//await AzureFileClient.DownloadOrDeleteFile(tempFolder + sJrnlName, Program.AzurePassword + "_" + sJrnlName);
+				await AzureFileClient.DownloadOrDeleteFile(tempFolder + sJrnlName, Program.AzurePassword + "_" + sJrnlName);
 				//Journal j3 = new Journal(tempFolder + sJrnlName, tempFolder + sJrnlName).Open(true);
 				Journal j3 = new Journal(sJrnlName).Open();	
+
+				if(j3 == null) { j3 = new Journal(sJrnlName, tempFolder + sJrnlName).Open(true);}
 
 				if (j3.Settings.IfCloudOnly_Download)
 				{

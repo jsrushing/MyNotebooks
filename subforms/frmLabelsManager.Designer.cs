@@ -326,7 +326,7 @@ namespace myJournal.subforms
 			mnuAssignPINs.Name = "mnuAssignPINs";
 			mnuAssignPINs.Size = new System.Drawing.Size(111, 20);
 			mnuAssignPINs.Text = "&Select Notebooks";
-			mnuAssignPINs.Click += this.mnuAssignPINs_Click;
+			mnuAssignPINs.Click += this.mnuSelectNotebooks_Click;
 			// 
 			// lstEntryObjects
 			// 

@@ -125,9 +125,9 @@ namespace myJournal.subforms
 			ddlJournals.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
 			ddlJournals.Enabled = false;
 			ddlJournals.FormattingEnabled = true;
-			ddlJournals.Location = new System.Drawing.Point(61, 30);
+			ddlJournals.Location = new System.Drawing.Point(85, 30);
 			ddlJournals.Name = "ddlJournals";
-			ddlJournals.Size = new System.Drawing.Size(713, 23);
+			ddlJournals.Size = new System.Drawing.Size(689, 23);
 			ddlJournals.TabIndex = 1;
 			ddlJournals.SelectedIndexChanged += this.ddlJournals_SelectedIndexChanged;
 			ddlJournals.Click += this.ddlJournals_Click;
@@ -137,9 +137,9 @@ namespace myJournal.subforms
 			label1.AutoSize = true;
 			label1.Location = new System.Drawing.Point(12, 33);
 			label1.Name = "label1";
-			label1.Size = new System.Drawing.Size(48, 15);
+			label1.Size = new System.Drawing.Size(71, 15);
 			label1.TabIndex = 0;
-			label1.Text = "Journal ";
+			label1.Text = "Notebooks: ";
 			// 
 			// lstEntries
 			// 

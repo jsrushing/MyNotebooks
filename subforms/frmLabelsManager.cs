@@ -281,9 +281,9 @@ namespace myJournal.subforms
 			var newLabelName = string.Empty;
 
 			var sMsg = "The label '" + lstLabels.SelectedItem + " will be renamed in " +
-				(Program.DictCheckedJournals.Count == Program.AllJournals.Count ? "all" : "(" + Program.DictCheckedJournals.Count + ") selected" + " notebooks");
+				(Program.DictCheckedJournals.Count == Program.AllJournals.Count ? "all" : "the (" + Program.DictCheckedJournals.Count + ") selected" + " notebooks.");
 
-			using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, sMsg, "What is the new label name?", this))
+			using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, sMsg, "new label name", this))
 			{
 				frm.ShowDialog();
 				if (frm.Result == frmMessage.ReturnResult.Ok) { newLabelName = frm.EnteredValue; }
@@ -329,7 +329,7 @@ namespace myJournal.subforms
 			this.AcceptButton = btnOK;
 		}
 
-		private void mnuAssignPINs_Click(object sender, EventArgs e)
+		private void mnuSelectNotebooks_Click(object sender, EventArgs e)
 		{
 			using (frmSelectJournalsToSearch frm = new frmSelectJournalsToSearch(this))
 			{
@@ -337,7 +337,6 @@ namespace myJournal.subforms
 				Program.DictCheckedJournals = frm.CheckedJournals;
 			}
 			GetSelectedJournals();
-			this.Size = this.MinimumSize;
 			KickLstLabels();
 			ShowPanel(pnlMain);
 		}
