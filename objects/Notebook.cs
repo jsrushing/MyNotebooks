@@ -39,24 +39,23 @@ namespace myJournal
 		}
 
 		// one-time code to convert Journal objects to Notebook objects
-		public Notebook(Journal journalToConvert)
-		{
-			this.Name = journalToConvert.Name;
-			this.LastSaved = journalToConvert.LastSaved;
-			this.FileName = journalToConvert.FileName;
-			this.Settings = journalToConvert.Settings;
+		//public Notebook(Journal journalToConvert)
+		//{
+		//	this.Name = journalToConvert.Name;
+		//	this.LastSaved = journalToConvert.LastSaved;
+		//	this.FileName = journalToConvert.FileName;
+		//	this.Settings = journalToConvert.Settings;
 
-			foreach(JournalEntry je in  journalToConvert.Entries)
-			{
-				Entry e = new Entry(je.Title, je.Text, je.ClearRTF(), je.ClearLabels(), je.NotebookName);
-				e.Date = je.Date;
-				e.Id = je.Id;
-				e.isEdited = je.isEdited;
-				e.LastEditedOn = je.LastEditedOn;
-
-				this.Entries.Add(e);
-			}
-		}
+		//	foreach(JournalEntry je in  journalToConvert.Entries)
+		//	{
+		//		Entry e = new Entry(je.Title, je.Text, je.ClearRTF(), je.ClearLabels(), je.NotebookName);
+		//		e.Date = je.Date;
+		//		e.Id = je.Id;
+		//		e.isEdited = je.isEdited;
+		//		e.LastEditedOn = je.LastEditedOn;
+		//		this.Entries.Add(e);
+		//	}
+		//}
 
         public void AddEntry(Entry entryToAdd) { Entries.Add(entryToAdd); }
 
@@ -129,7 +128,7 @@ namespace myJournal
 
 		public Notebook Open(bool useFileName = false)
         {
-            Notebook jRtrn = null;
+            Notebook nbRtrn = null;
 			var NotebookToOpen = useFileName ? this.FileName : Program.AppRoot + this.root + this.Name;
 
 			try
@@ -139,15 +138,15 @@ namespace myJournal
 					using(Stream stream = File.Open(NotebookToOpen, FileMode.Open))
 					{
 						BinaryFormatter formatter = new BinaryFormatter();
-						jRtrn = (Notebook)formatter.Deserialize(stream);
-						jRtrn.FileName = NotebookToOpen;
-						jRtrn.Name = NotebookToOpen.Substring(NotebookToOpen.LastIndexOf("\\") + 1);
+						nbRtrn = (Notebook)formatter.Deserialize(stream);
+						nbRtrn.FileName = NotebookToOpen;
+						nbRtrn.Name = NotebookToOpen.Substring(NotebookToOpen.LastIndexOf("\\") + 1);
 					}
 				}	
             }
             catch(Exception ex) { Console.WriteLine(ex.Message); }
 
-            return jRtrn;
+            return nbRtrn;
         }
 
 		private List<Entry> ProcessLabels(List<Entry> entriesToSearch, string[] labelsArray, bool UseAnd)

@@ -173,7 +173,7 @@ namespace myJournal.subforms
 			System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
 			this.Text = "myJournal " + Program.AppVersion + (fvi.FileName.ToLower().Contains("debug") ? " - DEBUG MODE" : "");
 
-			// one-time code to convert Journal objects into Notebook objects
+			// one-time code to convert Journal objects to Notebook objects
 
 			//foreach (Journal j in Utilities.AllJournals())
 			//{
@@ -205,7 +205,6 @@ namespace myJournal.subforms
 			}
 
 			pnlDateFilters.Left = pnlPin.Left - 11;
-
 			Program.AllNotebooks = Utilities.AllNotebooks();
 			LoadNotebooks();
 			ShowHideMenusAndControls(SelectionState.HideAll);

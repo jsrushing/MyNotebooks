@@ -168,7 +168,7 @@ namespace myJournal.objects
 
 		public async Task SynchWithCloud(bool alsoSynchSettings = false, Notebook notebook = null)
 		{
-			var journalsFolder			= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"];
+			var NotebooksFolder			= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"];
 			var tempFolder				= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"];
 			List<Notebook> allNotebooks	= new List<Notebook>();
 			Program.AllNotebooks		= Utilities.AllNotebooks();
@@ -186,17 +186,17 @@ namespace myJournal.objects
 					notebook.FileName	= sNewName;
 					File.Copy(sOldName, sNewName, true);
 					File.Delete(sOldName);
-					if (notebook.Settings.AllowCloud) { AzureFileClient.UploadFile(journalsFolder + notebook.Name); }
+					if (notebook.Settings.AllowCloud) { AzureFileClient.UploadFile(NotebooksFolder + notebook.Name); }
 					return;
 				}
 
 				allNotebooks.Add(notebook); 
 			}
 
-			await ProcessJournals(allNotebooks, tempFolder, journalsFolder);
+			await ProcessJournals(allNotebooks, tempFolder, NotebooksFolder);
 			await AzureFileClient.GetAzureJournalNames(Program.AzurePassword, true);
 			Program.AllNotebooks = Utilities.AllNotebooks();
-			await CheckForLocalOrCloudOnly(tempFolder, journalsFolder);		
+			await CheckForLocalOrCloudOnly(tempFolder, NotebooksFolder);		
 
 			if(alsoSynchSettings) await SyncLabelsAndSettings();
 		}
