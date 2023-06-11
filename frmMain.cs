@@ -590,9 +590,9 @@ namespace myJournal.subforms
 			{
 				frm.ShowDialog(this);
 
-				if (frm.Result == frmMessage.ReturnResult.Ok && frm.EnteredValue.Length > 0)
+				if (frm.Result == frmMessage.ReturnResult.Ok && frm.ResultText.Length > 0)
 				{
-					CurrentJournal.RenameJournal(frm.EnteredValue);
+					CurrentJournal.RenameJournal(frm.ResultText);
 					Program.AllNotebooks = Utilities.AllNotebooks();
 					LoadJournals();
 				}
@@ -644,6 +644,11 @@ namespace myJournal.subforms
 					ddlJournals.SelectedIndex = indx;
 				}
 			}
+		}
+
+		private void mnuResetPIN_Click(object sender, EventArgs e)
+		{
+			CurrentJournal.ResetPIN(this);
 		}
 
 		private void rtbSelectedEntry_MouseDown(object sender, MouseEventArgs e)

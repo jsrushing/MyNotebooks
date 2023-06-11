@@ -203,12 +203,12 @@ namespace myJournal
 			{
 				frmOldPIN.ShowDialog();
 
-				if (Program.PIN == frmOldPIN.EnteredValue)
+				if (Program.PIN == frmOldPIN.ResultText)
 				{
 					using (frmMessage frmNewPIN = new frmMessage(frmMessage.OperationType.InputBox, "Enter the new PIN", "", parent))
 					{
 						frmNewPIN.ShowDialog();
-						newPIN = frmNewPIN.EnteredValue;
+						newPIN = frmNewPIN.ResultText;
 					}
 
 					foreach (Entry je in this.Entries)

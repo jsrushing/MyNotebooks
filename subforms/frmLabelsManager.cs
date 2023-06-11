@@ -286,7 +286,7 @@ namespace myJournal.subforms
 			using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, sMsg, "new label name", this))
 			{
 				frm.ShowDialog();
-				if (frm.Result == frmMessage.ReturnResult.Ok) { newLabelName = frm.EnteredValue; }
+				if (frm.Result == frmMessage.ReturnResult.Ok) { newLabelName = frm.ResultText; }
 			}
 
 			if (newLabelName.Length > 0)

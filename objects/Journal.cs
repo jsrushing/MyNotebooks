@@ -10,6 +10,7 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using encrypt_decrypt_string;
 using myJournal.objects;
 using myJournal.subforms;
 
@@ -87,6 +88,15 @@ namespace myJournal
 			File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"] + this.Name);
 		}
 
+		public async Task DeleteLabel(string label)
+		{
+			var saveJournal = false;
+			foreach (JournalEntry entry in this.Entries.Where(e => e.ClearLabels().Contains(label)).ToList())
+			{ saveJournal = entry.RemoveOrReplaceLabel("", label, false); } 
+			
+			if(saveJournal) { await this.Save(); } 
+		}
+
         public JournalEntry GetEntry(string Title, string Date)
         {
 			JournalEntry jeRtrn = null;
@@ -157,14 +167,6 @@ namespace myJournal
 			return entriesToReturn;
 		}
 
-		public async Task DeleteLabel(string label)
-		{
-			var saveJournal = false;
-			foreach (JournalEntry entry in this.Entries.Where(e => e.ClearLabels().Contains(label)).ToList())
-			{ saveJournal = entry.RemoveOrReplaceLabel("", label, false); } 
-			
-			if(saveJournal) { await this.Save(); } }
-
 		public async Task RenameJournal(string newName)
 		{
 			DeleteBackups();
@@ -190,6 +192,60 @@ namespace myJournal
 			jeToInsert.LastEditedOn = DateTime.Now;
 			var index = Array.FindIndex(Entries.ToArray(), row => row.Id == jeToReplace.Id);
 			Entries[index] = jeToInsert;
+		}
+
+		public async Task ResetPIN(Form caller)
+		{
+			var currentPIN	= Program.PIN;
+			var newPIN		= string.Empty;
+			var save		= false;
+
+			// input current PIN
+			using(frmMessage frmGetCurrentPIN = new frmMessage(frmMessage.OperationType.InputBox, "Enter the current PIN.", "(current PIN)", caller))
+			{
+				frmGetCurrentPIN.ShowDialog();
+
+				if (frmGetCurrentPIN.ResultText != currentPIN)
+				{
+					using (frmMessage frmBadPIN = new frmMessage(frmMessage.OperationType.Message, "The PIN you entered is not correct.", "Bad PIN", caller))
+					{ frmBadPIN.ShowDialog(); }
+				}
+				else
+				{
+					using (frmMessage frmNewPIN = new frmMessage(frmMessage.OperationType.InputBox, "Enter the new PIN", "(enter PIN)", caller))
+					{
+						frmNewPIN.ShowDialog();
+						newPIN = frmNewPIN.ResultText;
+
+						if (frmNewPIN.Result != frmMessage.ReturnResult.Cancel)
+						{
+							foreach (JournalEntry e in this.Entries)
+							{
+								// get the entry's key values
+								EntryValues ev = new EntryValues
+								{
+									NotebookName = e.JournalName,
+									text = e.ClearText(),
+									RTF = e.ClearRTF(),
+									title = e.ClearTitle()
+								};
+
+								// set programPIN to newPin
+								Program.PIN = newPIN;
+
+								// encrypt key values w/ new pin
+								e.Title = EncryptDecrypt.Encrypt(ev.title);
+								e.Text = EncryptDecrypt.Encrypt(ev.text);
+								//e.JournalName = EncryptDecrypt.Encrypt(ev.Name);	// << need to encrypt name
+								Program.PIN = currentPIN;
+								save = true;
+							}
+						}
+					}
+				}
+
+				if(save) { await this.Save(); Program.PIN = newPIN; }
+			}
 		}
 
 		public async Task Save()
@@ -262,6 +318,14 @@ namespace myJournal
 				}
 			}
 			return allEntries;
+		}
+
+		protected struct EntryValues
+		{
+			public string title;
+			public string text;
+			public string RTF;
+			public string NotebookName;
 		}
     }
 }

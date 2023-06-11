@@ -87,9 +87,15 @@ csharp_preferred_modifier_order = public,private,static,readonly:suggestion
 #Style - qualification options
 
 #prefer fields not to be prefaced with this. or Me. in Visual Basic
-dotnet_style_qualification_for_field = false:suggestion
+dotnet_style_qualification_for_field = false:none
 #prefer methods to be prefaced with this. in C# or Me. in Visual Basic
-dotnet_style_qualification_for_method = true:suggestion
+dotnet_style_qualification_for_method = true:none
+
+# IDE0059: Unnecessary assignment of a value
+dotnet_diagnostic.IDE0059.severity = none
 
 [*.{cs,vb}]
 indent_style=tab
+
+# IDE0003: Remove qualification
+dotnet_diagnostic.IDE0003.severity = none

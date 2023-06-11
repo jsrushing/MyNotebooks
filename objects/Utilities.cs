@@ -106,7 +106,7 @@ namespace myJournal.objects
 					{
 						frm2.ShowDialog();
 						ok2copy = frm2.Result == frmMessage.ReturnResult.Ok;
-						if (ok2copy) { Program.PIN = frm2.EnteredValue; }
+						if (ok2copy) { Program.PIN = frm2.ResultText; }
 					}
 
 					if (ok2copy)

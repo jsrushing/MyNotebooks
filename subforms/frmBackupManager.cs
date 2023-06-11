@@ -59,7 +59,7 @@ namespace myJournal.subforms
 				using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.InputBox, "Enter the PIN for '" + truncatedForcedFileName + "' so orphaned labels can be restored."))
 				{
 					frm2.ShowDialog();
-					Program.PIN = frm2.EnteredValue;
+					Program.PIN = frm2.ResultText;
 				}
 			}
 
