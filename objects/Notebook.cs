@@ -208,6 +208,8 @@ namespace myNotebooks
 			Thread.Sleep(500);
 			this.FileName = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + newName;
 			this.Name = newName;
+			this.Entries.ForEach(x => x.NotebookName = this.Name);
+
 			if (this.Settings.AllowCloud)
 			{
 				Program.AzureJournalNames.Clear();

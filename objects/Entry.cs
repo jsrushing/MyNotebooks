@@ -113,7 +113,7 @@ namespace myNotebooks
 			return bLabelEdited;
 		}
 
-		public static Entry Select(RichTextBox rtb, ListBox lb, Notebook currentJournal, bool firstSelection = false, Entry je = null)
+		public static Entry Select(RichTextBox rtb, ListBox lb, Notebook currentJournal, bool firstSelection = false, Entry je = null, bool resetTopIndex = true)
 		{
 			rtb.Clear();
 			List<int> targets = new List<int>();
@@ -141,7 +141,7 @@ namespace myNotebooks
 				{
 					if (lb.SelectedIndices.Count > 1)
 					{
-						for (int i = 0; i < lb.SelectedIndices.Count - 1; i++)
+						for (var i = 0; i < lb.SelectedIndices.Count - 1; i++)
 						{
 							if (lb.SelectedIndices[i] == lb.SelectedIndices[i + 1] - 1)
 							{
@@ -157,7 +157,7 @@ namespace myNotebooks
 
 				if (targets.Count == 3)
 				{
-					foreach (int i in targets)
+					foreach (var i in targets)
 					{
 						lb.SelectedIndices.Remove(i);
 					}
@@ -205,7 +205,7 @@ namespace myNotebooks
 							, entryRtrn.ClearTitle(), entryRtrn.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), entryRtrn.ClearLabels(), entryRtrn.ClearText());
 						}
 
-						if (rtb.Text.Length == 0) { lb.TopIndex = lb.Top + lb.Height < rtb.Top ? ctr : lb.TopIndex; }
+						if (resetTopIndex) { if (rtb.Text.Length == 0) { lb.TopIndex = lb.Top + lb.Height < rtb.Top ? ctr : lb.TopIndex; } }
 						lb.Height = rtb.Text.Length > 0 ? rtb.Top - 132 : 100;
 						if (firstSelection) { lb.TopIndex = lb.Top + lb.Height < rtb.Top ? ctr : lb.TopIndex; }
 					}

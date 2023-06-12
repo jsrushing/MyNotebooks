@@ -18,7 +18,7 @@ namespace myNotebooks.subforms
 		public enum OperationType
 		{
 			Message,
-			DeleteJournal,
+			DeleteNotebook,
 			DeleteEntry,
 			YesNoQuestion,
 			InputBox
@@ -60,8 +60,8 @@ namespace myNotebooks.subforms
 			switch (opType)
 			{
 				case OperationType.DeleteEntry:
-				case OperationType.DeleteJournal:
-					lblMessage.Text = opType == OperationType.DeleteJournal ? "Delete journal '" + msg + "'?" : "Delete entry '" + msg + "' ? ";
+				case OperationType.DeleteNotebook:
+					lblMessage.Text = opType == OperationType.DeleteNotebook ? "Delete notebook '" + msg + "'?" : "Delete entry '" + msg + "' ? ";
 					pnlYesNo.Top =lblMessage.Top + lblMessage.Height;
 					pnlYesNo.Visible = true;
 					this.AcceptButton = btnNo2;

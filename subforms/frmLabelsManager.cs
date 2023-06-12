@@ -22,14 +22,14 @@ namespace myNotebooks.subforms
 		private List<int> OccurenceTitleIndicies = new List<int>();
 		private bool DeletingOrphans;
 
-		private List<Notebook> SelectedJournals { get; set; }
+		private List<Notebook> SelectedNotebooks { get; set; }
 
 		public bool ActionTaken { get; private set; }
 
 		public frmLabelsManager(Form parent, bool deleteOrphans = false, Notebook _jrnl = null)
 		{
 			InitializeComponent();
-			SelectedJournals = new List<Notebook>();
+			SelectedNotebooks = new List<Notebook>();
 			Utilities.SetStartPosition(this, parent);
 			DeletingOrphans = deleteOrphans;
 		}
@@ -39,7 +39,7 @@ namespace myNotebooks.subforms
 			foreach (Control c in this.Controls) if (c.GetType() == typeof(Panel)) c.Location = new Point(0, 25);
 			ShowPanel(pnlMain);
 			ShowHideOccurrences();
-			this.GetSelectedJournals();
+			this.GetSelectedNotebooks();
 			sort = LabelsManager.LabelsSortType.None;
 			lblSortType_Click(null, null);
 			pnlMain.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
@@ -103,11 +103,11 @@ namespace myNotebooks.subforms
 			else { lstOrphanedLabels.SelectedItems.Clear(); }
 		}
 
-		private List<Notebook> GetSelectedJournals()
+		private List<Notebook> GetSelectedNotebooks()
 		{
-			SelectedJournals.Clear();
-			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedNotebooks) { SelectedJournals.Add(new Notebook(kvp.Key).Open()); }
-			return SelectedJournals;
+			SelectedNotebooks.Clear();
+			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedNotebooks) { SelectedNotebooks.Add(new Notebook(kvp.Key).Open()); }
+			return SelectedNotebooks;
 		}
 
 		private void KickLstLabels(int previousIndex = -1)
@@ -254,7 +254,7 @@ namespace myNotebooks.subforms
 			{
 				var pIndex = lstLabels.SelectedIndex;
 
-				await LabelsManager.DeleteLabel(lstLabels.SelectedItem.ToString(), (oneJournal == null ? this.GetSelectedJournals() : oneJournal), this);
+				await LabelsManager.DeleteLabel(lstLabels.SelectedItem.ToString(), (oneJournal == null ? this.GetSelectedNotebooks() : oneJournal), this);
 				LabelsManager.PopulateLabelsList(null, lstLabels);
 				KickLstLabels(pIndex);
 			}
@@ -291,7 +291,7 @@ namespace myNotebooks.subforms
 
 			if (newLabelName.Length > 0)
 			{
-				List<Notebook> jrnlsToSearch = GetSelectedJournals();
+				List<Notebook> jrnlsToSearch = GetSelectedNotebooks();
 				await LabelsManager.RenameLabel(oldLabelName, newLabelName, jrnlsToSearch, Program.DictCheckedNotebooks, this);
 
 				if (!lstLabels.Items.OfType<string>().Contains(newLabelName))
@@ -334,9 +334,9 @@ namespace myNotebooks.subforms
 			using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(this))
 			{
 				frm.ShowDialog();
-				Program.DictCheckedNotebooks = frm.CheckedJournals;
+				Program.DictCheckedNotebooks = frm.CheckedNotebooks;
 			}
-			GetSelectedJournals();
+			GetSelectedNotebooks();
 			KickLstLabels();
 			ShowPanel(pnlMain);
 		}
@@ -392,7 +392,7 @@ namespace myNotebooks.subforms
 				lstOccurrences.Items.Clear();
 				var currentPIN = Program.PIN;
 
-				List<Notebook> notebooksWithLabel = LabelsManager.JournalsContainingLabel(labelName);
+				List<Notebook> notebooksWithLabel = LabelsManager.NotebooksContainingLabel(labelName);
 
 				if (notebooksWithLabel.Count > 0)
 				{

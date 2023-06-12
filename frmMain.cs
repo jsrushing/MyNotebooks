@@ -567,7 +567,7 @@ namespace myNotebooks.subforms
 
 		private void mnuJournal_Delete_Click(object sender, EventArgs e)
 		{
-			using (frmMessage frm = new frmMessage(frmMessage.OperationType.DeleteJournal, CurrentNotebook.Name.Replace("\\", ""), "", this))
+			using (frmMessage frm = new frmMessage(frmMessage.OperationType.DeleteNotebook, CurrentNotebook.Name.Replace("\\", ""), "", this))
 			{
 				frm.ShowDialog(this);
 

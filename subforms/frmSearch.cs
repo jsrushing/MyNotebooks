@@ -105,7 +105,7 @@ namespace myNotebooks.subforms
 		private void lstFoundEntries_MouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Right)
-			{ if (!lstFoundEntries.SelectedIndices.Contains(e.Y / 15)) { lstFoundEntries.SelectedIndex = e.Y / 15; } }
+			{ mnuEntryEditTop.Visible = lstFoundEntries.SelectedIndices.Contains((e.Y / 15) + lstFoundEntries.TopIndex); }
 		}
 
 		private void lstFoundEntries_SelectedIndexChanged(object sender, EventArgs e)
@@ -120,7 +120,7 @@ namespace myNotebooks.subforms
 				{
 					Notebook j = GetEntryJournal();
 					Utilities.SetProgramPIN(j.Name);
-					Entry currentEntry = Entry.Select(rtb, lb, j);
+					Entry currentEntry = Entry.Select(rtb, lb, j, false, null, false);
 					GetCurrentSelections();
 
 					if (currentEntry != null)
@@ -128,6 +128,9 @@ namespace myNotebooks.subforms
 						lblSelectionType.Visible = rtb.Text.Length > 0;
 						lblSeparator.Visible = rtb.Text.Length > 0;
 						Utilities.ResizeListsAndRTBs(lb, rtb, lblSeparator, lblSelectionType, this);
+						var topIndex = lstFoundEntries.TopIndex;
+						while(topIndex % 4 != 0) { topIndex--; }
+						lstFoundEntries.TopIndex = topIndex;
 					}
 					else { lstFoundEntries.SelectedIndices.Clear(); }
 				}
