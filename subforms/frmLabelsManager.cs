@@ -201,8 +201,8 @@ namespace myNotebooks.subforms
 					mnuContextEntries.Visible = true;
 					mnuContextDelete.Text = "Delete '" + lstLabels.Text + "'";
 					mnuContextRename.Text = "Rename '" + lstLabels.Text + "'";
-					mnuDelete_OneJournal.Text = string.Format(MnuDelete_OneJournalText, lstOccurrences.SelectedItem.ToString().Replace("in", "from"));
-					mnuDelete_AllJournals.Text = Program.DictCheckedNotebooks.Count == Program.AllNotebooks.Count ? "from all journals"
+					mnuDelete_OneNotebook.Text = string.Format(MnuDelete_OneJournalText, lstOccurrences.SelectedItem.ToString().Replace("in", "from"));
+					mnuDelete_AllNotebooks.Text = Program.DictCheckedNotebooks.Count == Program.AllNotebooks.Count ? "from all notebooks"
 						: string.Format(MnuDelete_SelectedJournalaText, Program.DictCheckedNotebooks.Count.ToString());
 				}
 			}
@@ -241,7 +241,7 @@ namespace myNotebooks.subforms
 
 			var sMsg = "Do you want to delete the label '" + lstLabels.SelectedItem.ToString() + "' ";
 			sMsg += (editingOneJournal ? mnu.Text.Replace("in", "from").Replace(" only", "") :
-				Program.DictCheckedNotebooks.Count == Program.AllNotebooks.Count ? " from all journals " : " the " + Program.DictCheckedNotebooks.Count.ToString() + " selected journal"
+				Program.DictCheckedNotebooks.Count == Program.AllNotebooks.Count ? " from all notebooks " : " the " + Program.DictCheckedNotebooks.Count.ToString() + " selected journal"
 				+ (Program.DictCheckedNotebooks.Count == 1 && !editingOneJournal ? "" : "s")) + "?";
 
 			using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, sMsg, "Delete Label?", this))
@@ -351,7 +351,7 @@ namespace myNotebooks.subforms
 		private void mnuFindOrphans_Click(object sender, EventArgs e)
 		{
 			lstOrphanedLabels.Items.Clear();
-			List<string> lstOrphans = LabelsManager.FindOrphansInSelectedJournals();
+			List<string> lstOrphans = LabelsManager.FindOrphansInSelectedNotebooks();
 
 			if (lstOrphans.Count > 0)
 			{
@@ -392,11 +392,11 @@ namespace myNotebooks.subforms
 				lstOccurrences.Items.Clear();
 				var currentPIN = Program.PIN;
 
-				List<Notebook> journalsWithLabel = LabelsManager.JournalsContainingLabel(labelName);
+				List<Notebook> notebooksWithLabel = LabelsManager.JournalsContainingLabel(labelName);
 
-				if (journalsWithLabel.Count > 0)
+				if (notebooksWithLabel.Count > 0)
 				{
-					foreach (Notebook jrnl in journalsWithLabel)
+					foreach (Notebook jrnl in notebooksWithLabel)
 					{
 						Utilities.SetProgramPIN(jrnl.Name);
 						List<Entry> foundLables = jrnl.Entries.Where(t => ("," + t.ClearLabels() + ",").Contains("," + labelName + ",")).ToList();
@@ -430,7 +430,7 @@ namespace myNotebooks.subforms
 
 		private async Task RemoveOrphans()
 		{
-			foreach (string lbl in lstOrphanedLabels.SelectedItems) { await LabelsManager.DeleteLabel(lbl, Utilities.CheckedJournals(), this, true); }
+			foreach (string lbl in lstOrphanedLabels.SelectedItems) { await LabelsManager.DeleteLabel(lbl, Utilities.CheckedNotebooks(), this, true); }
 		}
 
 		private void ShowPanel(Panel panelToShow)
@@ -445,7 +445,7 @@ namespace myNotebooks.subforms
 		{
 			if (lstOccurrences.Items.Count > 0)
 			{
-				lstLabels.Height = 184;	// pnlMain.Height - 320;
+				lstLabels.Height = 184; // pnlMain.Height - 320;
 				lstOccurrences.Height = pnlMain.Height - 250; lstOccurrences.Visible = true;
 				lblEntries1.Visible = true;
 				lblEntries2.Visible = true;

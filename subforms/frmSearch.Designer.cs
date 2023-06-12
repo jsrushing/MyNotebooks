@@ -40,7 +40,7 @@ namespace myNotebooks.subforms
 			radLabels_Or = new RadioButton();
 			radLabels_And = new RadioButton();
 			lblSearchingIn = new Label();
-			btnSelectJournals = new Button();
+			btnSelectNotebooks = new Button();
 			label2 = new Label();
 			chkMatchWholeWord = new CheckBox();
 			chkMatchCase = new CheckBox();
@@ -77,7 +77,7 @@ namespace myNotebooks.subforms
 			grpFindEntry.Controls.Add(lstEntryObjects);
 			grpFindEntry.Controls.Add(pnlLabels_AndOr);
 			grpFindEntry.Controls.Add(lblSearchingIn);
-			grpFindEntry.Controls.Add(btnSelectJournals);
+			grpFindEntry.Controls.Add(btnSelectNotebooks);
 			grpFindEntry.Controls.Add(label2);
 			grpFindEntry.Controls.Add(chkMatchWholeWord);
 			grpFindEntry.Controls.Add(chkMatchCase);
@@ -165,15 +165,15 @@ namespace myNotebooks.subforms
 			lblSearchingIn.TabIndex = 47;
 			lblSearchingIn.Text = "Searching in 3 selected notebooks";
 			// 
-			// btnSelectJournals
+			// btnSelectNotebooks
 			// 
-			btnSelectJournals.Location = new System.Drawing.Point(343, 14);
-			btnSelectJournals.Name = "btnSelectJournals";
-			btnSelectJournals.Size = new System.Drawing.Size(116, 23);
-			btnSelectJournals.TabIndex = 45;
-			btnSelectJournals.Text = "select notebooks";
-			btnSelectJournals.UseVisualStyleBackColor = true;
-			btnSelectJournals.Click += this.btnSelectJournals_Click;
+			btnSelectNotebooks.Location = new System.Drawing.Point(343, 14);
+			btnSelectNotebooks.Name = "btnSelectNotebooks";
+			btnSelectNotebooks.Size = new System.Drawing.Size(116, 23);
+			btnSelectNotebooks.TabIndex = 45;
+			btnSelectNotebooks.Text = "select notebooks";
+			btnSelectNotebooks.UseVisualStyleBackColor = true;
+			btnSelectNotebooks.Click += this.btnSelectNotebooks_Click;
 			// 
 			// label2
 			// 
@@ -466,7 +466,7 @@ namespace myNotebooks.subforms
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.CheckBox chkMatchWholeWord;
 		private System.Windows.Forms.Button btnSearch;
-		private System.Windows.Forms.Button btnSelectJournals;
+		private System.Windows.Forms.Button btnSelectNotebooks;
 		private System.Windows.Forms.Label lblSearchingIn;
 		private System.Windows.Forms.Panel pnlOkCancel;
 		private System.Windows.Forms.RadioButton radLabels_Or;

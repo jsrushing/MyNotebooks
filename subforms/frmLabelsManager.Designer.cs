@@ -41,16 +41,16 @@ namespace myNotebooks.subforms
 			lblOperation = new Label();
 			label5 = new Label();
 			lstLabels = new ListBox();
-			mnuContextRename = new ToolStripMenuItem();
 			mnuContextLabels = new ContextMenuStrip(components);
+			mnuContextRename = new ToolStripMenuItem();
 			lblEntries2 = new Label();
 			lblSortType = new Label();
 			lblEntries1 = new Label();
 			lstOccurrences = new ListBox();
 			mnuContextEntries = new ContextMenuStrip(components);
 			mnuContextDelete = new ToolStripMenuItem();
-			mnuDelete_OneJournal = new ToolStripMenuItem();
-			mnuDelete_AllJournals = new ToolStripMenuItem();
+			mnuDelete_OneNotebook = new ToolStripMenuItem();
+			mnuDelete_AllNotebooks = new ToolStripMenuItem();
 			label1 = new Label();
 			mnuMain = new MenuStrip();
 			mnuLabelsOperations = new ToolStripMenuItem();
@@ -72,6 +72,7 @@ namespace myNotebooks.subforms
 			mnuContextLabels.SuspendLayout();
 			mnuContextEntries.SuspendLayout();
 			mnuMain.SuspendLayout();
+			pnlOrphanedLabels.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// pnlMain
@@ -241,24 +242,24 @@ namespace myNotebooks.subforms
 			// 
 			// mnuContextDelete
 			// 
-			mnuContextDelete.DropDownItems.AddRange(new ToolStripItem[] { mnuDelete_OneJournal, mnuDelete_AllJournals });
+			mnuContextDelete.DropDownItems.AddRange(new ToolStripItem[] { mnuDelete_OneNotebook, mnuDelete_AllNotebooks });
 			mnuContextDelete.Name = "mnuContextDelete";
 			mnuContextDelete.Size = new System.Drawing.Size(107, 22);
 			mnuContextDelete.Text = "Delete";
 			// 
-			// mnuDelete_OneJournal
+			// mnuDelete_OneNotebook
 			// 
-			mnuDelete_OneJournal.Name = "mnuDelete_OneJournal";
-			mnuDelete_OneJournal.Size = new System.Drawing.Size(199, 22);
-			mnuDelete_OneJournal.Text = "in <journal name> only";
-			mnuDelete_OneJournal.Click += this.mnuDelete_Click;
+			mnuDelete_OneNotebook.Name = "mnuDelete_OneNotebook";
+			mnuDelete_OneNotebook.Size = new System.Drawing.Size(213, 22);
+			mnuDelete_OneNotebook.Text = "in <notebook name> only";
+			mnuDelete_OneNotebook.Click += this.mnuDelete_Click;
 			// 
-			// mnuDelete_AllJournals
+			// mnuDelete_AllNotebooks
 			// 
-			mnuDelete_AllJournals.Name = "mnuDelete_AllJournals";
-			mnuDelete_AllJournals.Size = new System.Drawing.Size(199, 22);
-			mnuDelete_AllJournals.Text = "in {0} selected journals";
-			mnuDelete_AllJournals.Click += this.mnuDelete_Click;
+			mnuDelete_AllNotebooks.Name = "mnuDelete_AllNotebooks";
+			mnuDelete_AllNotebooks.Size = new System.Drawing.Size(213, 22);
+			mnuDelete_AllNotebooks.Text = "in {0} selected notebooks";
+			mnuDelete_AllNotebooks.Click += this.mnuDelete_Click;
 			// 
 			// label1
 			// 
@@ -392,7 +393,7 @@ namespace myNotebooks.subforms
 			lstOrphanedLabels.Location = new System.Drawing.Point(7, 25);
 			lstOrphanedLabels.Name = "lstOrphanedLabels";
 			lstOrphanedLabels.SelectionMode = SelectionMode.MultiExtended;
-			lstOrphanedLabels.Size = new System.Drawing.Size(196, 139);
+			lstOrphanedLabels.Size = new System.Drawing.Size(208, 139);
 			lstOrphanedLabels.TabIndex = 2;
 			// 
 			// label4
@@ -469,8 +470,8 @@ namespace myNotebooks.subforms
 		private ContextMenuStrip mnuContextEntries;
 		private ContextMenuStrip mnuContextLabels;
 		private ToolStripMenuItem mnuContextDelete;
-		private ToolStripMenuItem mnuDelete_OneJournal;
-		private ToolStripMenuItem mnuDelete_AllJournals;
+		private ToolStripMenuItem mnuDelete_OneNotebook;
+		private ToolStripMenuItem mnuDelete_AllNotebooks;
 		private ToolStripMenuItem mnuContextRename;
 		private Label lblEntries2;
 	}

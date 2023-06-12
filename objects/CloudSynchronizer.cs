@@ -37,7 +37,7 @@ namespace myNotebooks.objects
 
 		public CloudSynchronizer() { journalComparisonResult = ComparisonResult.Same; }
 
-		private async Task CheckForLocalOrCloudOnly(string tempFolder, string journalsFolder)
+		private async Task CheckForLocalOrCloudOnly(string tempFolder, string notebooksFolder)
 		{
 			foreach (var sJrnlName in Program.AzureJournalNames.Except(Utilities.AllJournalNames()))        // any journal on Azure not found locally
 			{
@@ -49,7 +49,7 @@ namespace myNotebooks.objects
 
 				if (j3 != null && j3.Settings.IfCloudOnly_Download)
 				{
-					File.Move(tempFolder + sJrnlName, journalsFolder + sJrnlName);
+					File.Move(tempFolder + sJrnlName, notebooksFolder + sJrnlName);
 					ItemsDownloaded.Add(sJrnlName + " dl'd from cloud");
 				}
 
@@ -73,7 +73,7 @@ namespace myNotebooks.objects
 			}
 		}
 
-		private void CompareJournals(Notebook localJournal, Notebook cloudJournal)
+		private void CompareNotebooks(Notebook localJournal, Notebook cloudJournal)
 		{
 			if(!Program.SkipFileSizeComparison)
 			{ this.journalComparisonResult = localJournal.LastSaved > cloudJournal.LastSaved ? (ComparisonResult.LocalNewer) : cloudJournal.LastSaved > localJournal.LastSaved ? (ComparisonResult.CloudNewer) : (ComparisonResult.Same); }
@@ -103,14 +103,14 @@ namespace myNotebooks.objects
 			return sRtrn.Substring(0, sRtrn.LastIndexOf("\r\n")).Split("\r\n");
 		}
 
-		private async Task ProcessJournals(List<Notebook> allJournals, string tempFolder, string journalsFolder)
+		private async Task ProcessNotebooks(List<Notebook> allNotebooks, string tempFolder, string notebooksFolder)
 		{
 			Notebook cloudJournal = null;
 			Notebook j;
 
-			for (var i = 0; i < allJournals.Count; i++)
+			for (var i = 0; i < allNotebooks.Count; i++)
 			{
-				j = allJournals[i];
+				j = allNotebooks[i];
 
 				if (j != null)
 				{
@@ -127,7 +127,7 @@ namespace myNotebooks.objects
 						{                                                                           
 							if (cloudJournal.Entries.Count > 0)
 							{
-								this.CompareJournals(j, cloudJournal);
+								this.CompareNotebooks(j, cloudJournal);
 
 								switch (journalComparisonResult)                                                                                                  
 								{
@@ -159,7 +159,7 @@ namespace myNotebooks.objects
 				}
 				else
 				{
-					if (j.Settings.AllowCloud) { AzureFileClient.UploadFile(journalsFolder + j.Name); }
+					if (j.Settings.AllowCloud) { AzureFileClient.UploadFile(notebooksFolder + j.Name); }
 				}
 
 				File.Delete(tempFolder + j.Name);
@@ -173,7 +173,7 @@ namespace myNotebooks.objects
 			List<Notebook> allNotebooks	= new List<Notebook>();
 			Program.AllNotebooks		= Utilities.AllNotebooks();
 
-			if (notebook == null)	// If no journal is passed then 'allJournals' will contain all local journals. If one is passed (from Journal.Save()) it will only contain one.
+			if (notebook == null)	// If no journal is passed then 'allNotebooks' will contain all local notebooks. If one is passed (from Journal.Save()) it will only contain one.
 			{ 
 				allNotebooks = Program.AllNotebooks; } 
 			else 
@@ -193,7 +193,7 @@ namespace myNotebooks.objects
 				allNotebooks.Add(notebook); 
 			}
 
-			await ProcessJournals(allNotebooks, tempFolder, NotebooksFolder);
+			await ProcessNotebooks(allNotebooks, tempFolder, NotebooksFolder);
 			await AzureFileClient.GetAzureJournalNames(true);
 			Program.AllNotebooks = Utilities.AllNotebooks();
 			await CheckForLocalOrCloudOnly(tempFolder, NotebooksFolder);		

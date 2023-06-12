@@ -52,7 +52,7 @@ namespace myNotebooks.objects
 			for (var i = 0; i < clb.Items.Count; i++) { clb.SetItemChecked(i, labels.Contains(clb.Items[i].ToString())); }
 		}
 
-		public static async Task DeleteLabel(string labelName, List<Notebook> journalsToEdit, Form parent, bool isOrphan = false)
+		public static async Task DeleteLabel(string labelName, List<Notebook> notebooksToEdit, Form parent, bool isOrphan = false)
 		{
 			if (isOrphan)
 			{
@@ -60,24 +60,24 @@ namespace myNotebooks.objects
 			}
 			else
 			{
-				foreach(Notebook j in journalsToEdit) 
+				foreach(Notebook j in notebooksToEdit) 
 				{ 
 					Utilities.SetProgramPIN(j.Name);
 					await j.DeleteLabel(labelName); 
 				}
 
-				if(journalsToEdit.Count == Program.AllNotebooks.Count)
+				if(notebooksToEdit.Count == Program.AllNotebooks.Count)
 				{ await SaveLabels(File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Where(c => c != labelName).ToArray().SkipLast(1).ToList()); }
 				else
 				{
-					var sMsg = "The label has been left in the labels list because you did not search all Journals. " +
-						"You must select ALL journals (and provide PINs for all protected journals) to clear the label from the list.";
+					var sMsg = "The label has been left in the labels list because you did not search all Notebooks. " +
+						"You must select ALL notebooks (and provide PINs for all protected notebooks) to clear the label from the list.";
 					using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "Label May Still Exist", parent)) { frm.ShowDialog(); }
 				}
 			}
 		}
 
-		public static List<string> FindOrphansInSelectedJournals()
+		public static List<string> FindOrphansInSelectedNotebooks()
 		{
 			List<string> lstReturn = new List<string>();
 			List<string> allLabels = GetLabels_NoFileDate().ToList();
@@ -140,7 +140,7 @@ namespace myNotebooks.objects
 			return labels;	
 		}
 
-		public static List<Notebook> JournalsContainingLabel(string labelName, bool returnIfTwoFound = false)
+		public static List<Notebook> NotebooksContainingLabel(string labelName, bool returnIfTwoFound = false)
 		{
 			List<Notebook> lstRtrn = new List<Notebook>();
 			List<Notebook> jrnls2Search = Program.AllNotebooks.Where(e => Program.DictCheckedNotebooks.ContainsKey(e.Name)).ToList();
@@ -170,9 +170,9 @@ namespace myNotebooks.objects
 			}
 		}
 
-		public static async Task RenameLabel(string oldLabelName, string newLabelName, List<Notebook> journalsToEdit, Dictionary<string, string> jrnlsAndPINs, Form parent)
+		public static async Task RenameLabel(string oldLabelName, string newLabelName, List<Notebook> notebooksToEdit, Dictionary<string, string> jrnlsAndPINs, Form parent)
 		{
-			foreach(Notebook j in journalsToEdit)
+			foreach(Notebook j in notebooksToEdit)
 			{
 				Utilities.SetProgramPIN(j.Name);
 				await j.RenameLabel(oldLabelName, newLabelName);

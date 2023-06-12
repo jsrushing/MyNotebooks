@@ -18,7 +18,7 @@ namespace myNotebooks.objects
 	{
 		public enum CompareResult { }
 
-		public static void UploadFile(string localFileName, string shareName = "journals")
+		public static void UploadFile(string localFileName, string shareName = "notebooks")
 		{
 			var fileName = localFileName.Substring(localFileName.LastIndexOf("\\") + 1);
 			ShareClient share = new ShareClient(Program.AzureConnString, shareName);
@@ -38,7 +38,7 @@ namespace myNotebooks.objects
 		}
 
 		public static async Task DownloadOrDeleteFile(string localFileName, string AzFileName,
-			FileMode mode = FileMode.Create, bool deleteFile = false, string shareName = "journals")
+			FileMode mode = FileMode.Create, bool deleteFile = false, string shareName = "notebooks")
 		{
 			Program.AzureFileExists				= false;
 			CloudStorageAccount storageAccount	= CloudStorageAccount.Parse(Program.AzureConnString);
@@ -97,9 +97,9 @@ namespace myNotebooks.objects
 		{
 			CloudStorageAccount storageAccount	= CloudStorageAccount.Parse(Program.AzureConnString);
 			CloudFileClient		fileClient		= storageAccount.CreateCloudFileClient();
-			CloudFileShare		share			= fileClient.GetShareReference("journals");
+			CloudFileShare		share			= fileClient.GetShareReference("notebooks");
 			CloudFileDirectory	root			= share.GetRootDirectoryReference();
-			CloudFileDirectory	myDirectory		= root.GetDirectoryReference("journals");
+			CloudFileDirectory	myDirectory		= root.GetDirectoryReference("notebooks");
 			FileRequestOptions	options			= new FileRequestOptions();
 			FileContinuationToken token			= null;
 			FileResultSegment	rsltSgmnt		= await root.ListFilesAndDirectoriesSegmentedAsync(Program.AzurePassword, null, token, options, null);

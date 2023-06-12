@@ -8,7 +8,6 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using myNotebooks.subforms;
-using myJournal;
 
 namespace myNotebooks.objects
 {
@@ -30,15 +29,15 @@ namespace myNotebooks.objects
 		}
 
 		// one-time code to convert Journal objects to Notebook objects
-		public static List<Journal> AllJournals()
-		{
-			List<Journal> jrnlReturn = new List<Journal>();
-			var sJournalsFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"];
-			foreach (var s in Directory.GetFiles(sJournalsFolder)) { jrnlReturn.Add(new Journal(s.Replace(sJournalsFolder, "")).Open()); }  // (new Journal(s.Replace(sJournalsFolder, "")).Open()); }
-			return jrnlReturn;
-		}
+		//public static List<Journal> AllJournals()
+		//{
+		//	List<Journal> jrnlReturn = new List<Journal>();
+		//	var sJournalsFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"];
+		//	foreach (var s in Directory.GetFiles(sJournalsFolder)) { jrnlReturn.Add(new Journal(s.Replace(sJournalsFolder, "")).Open()); }  // (new Journal(s.Replace(sJournalsFolder, "")).Open()); }
+		//	return jrnlReturn;
+		//}
 
-		public static List<Notebook> CheckedJournals()
+		public static List<Notebook> CheckedNotebooks()
 		{
 			List<Notebook> rtrn = new List<Notebook>();
 

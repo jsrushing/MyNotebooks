@@ -14,10 +14,10 @@ namespace myNotebooks.subforms
 {
 	public partial class frmSearch : Form
 	{
-		private Dictionary<string, int>		journalBoundaries	= new Dictionary<string, int>();
-		private List<int>					threeSelections		= new List<int>();
-		private bool						IgnoreCheckChange	= false;
-		private List<Entry>					FoundEntries		= new List<Entry>();
+		private Dictionary<string, int> journalBoundaries = new Dictionary<string, int>();
+		private List<int> threeSelections = new List<int>();
+		private bool IgnoreCheckChange = false;
+		private List<Entry> FoundEntries = new List<Entry>();
 
 		public frmSearch(Form parent)
 		{
@@ -26,7 +26,7 @@ namespace myNotebooks.subforms
 			if (Program.DictCheckedNotebooks.Count == 0)
 			{ using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(parent)) { frm.ShowDialog(); } }
 
-			SetJournalSelectLabelAndButton();
+			SetNotebookSelectLabelAndButton();
 			LabelsManager.PopulateLabelsList(lstLabelsForSearch);
 			Utilities.SetStartPosition(this, parent);
 			dtFindDate.Value = DateTime.Now;
@@ -66,10 +66,10 @@ namespace myNotebooks.subforms
 			this.Cursor = Cursors.Default;
 		}
 
-		private void btnSelectJournals_Click(object sender, EventArgs e)
+		private void btnSelectNotebooks_Click(object sender, EventArgs e)
 		{
 			using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(this)) { frm.ShowDialog(); }
-			SetJournalSelectLabelAndButton();
+			SetNotebookSelectLabelAndButton();
 		}
 
 		private void chkUseDate_CheckedChanged(object sender, EventArgs e) { ToggleDateControls(true); }
@@ -165,12 +165,12 @@ namespace myNotebooks.subforms
 
 		private void mnuExit_Click(object sender, EventArgs e) { this.Hide(); }
 
-		private void SetJournalSelectLabelAndButton()
+		private void SetNotebookSelectLabelAndButton()
 		{
 			lblSearchingIn.Text = "Searching in " +
 				(Program.DictCheckedNotebooks.Count == Program.AllNotebooks.Count ? "all " : Program.DictCheckedNotebooks.Count.ToString() + " selected ") + "notebook" + (Program.DictCheckedNotebooks.Count == 1 ? "" : "s");
 
-			btnSelectJournals.Left = lblSearchingIn.Left + lblSearchingIn.Width + 5;
+			btnSelectNotebooks.Left = lblSearchingIn.Left + lblSearchingIn.Width + 5;
 		}
 
 		private void ToggleDateControls(bool toggleUseDate)

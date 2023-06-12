@@ -14,8 +14,8 @@ namespace myNotebooks.subforms
 {
 	public partial class frmSelectNotebooksToSearch : Form
 	{
-		public Dictionary<string, string> CheckedJournals { get { return dictJournalsAndPINs; } }
-		private Dictionary<string, string> dictJournalsAndPINs = new Dictionary<string, string>();
+		public Dictionary<string, string> CheckedNotebooks { get { return dictNotebooksAndPINs; } }
+		private Dictionary<string, string> dictNotebooksAndPINs = new Dictionary<string, string>();
 		//private Dictionary<string, string> dictCheckedItems = new Dictionary<string, string>();
 
 		public frmSelectNotebooksToSearch(Form parent)
@@ -30,12 +30,12 @@ namespace myNotebooks.subforms
 					if (Program.DictCheckedNotebooks[j.Name].Length > 0)
 					{
 						lstJournalPINs.Items.Add(j.Name + " (****)");
-						dictJournalsAndPINs.Add(j.Name, Program.DictCheckedNotebooks[j.Name]);
+						dictNotebooksAndPINs.Add(j.Name, Program.DictCheckedNotebooks[j.Name]);
 					}
 					else
 					{
 						lstJournalPINs.Items.Add(j.Name);
-						dictJournalsAndPINs.Add(j.Name, "");
+						dictNotebooksAndPINs.Add(j.Name, "");
 					}
 
 					lstJournalPINs.SetItemChecked(lstJournalPINs.Items.Count - 1, true);
@@ -58,7 +58,7 @@ namespace myNotebooks.subforms
 		{
 			var s = lstJournalPINs.Text.Replace(" (****)", "");
 			var itemIndex = lstJournalPINs.SelectedIndex;
-			dictJournalsAndPINs[s] = txtPIN.Text;
+			dictNotebooksAndPINs[s] = txtPIN.Text;
 			s += txtPIN.Text.Length == 0 ? "" : " (****)";
 			lstJournalPINs.Items.Insert(lstJournalPINs.SelectedIndex, s);
 			lstJournalPINs.Items.RemoveAt(lstJournalPINs.SelectedIndex);
@@ -77,7 +77,7 @@ namespace myNotebooks.subforms
 		{
 			string[] checkedItems = lstJournalPINs.CheckedItems.OfType<string>().ToArray();
 			for (var i = 0; i < checkedItems.Length; i++) { checkedItems[i] = Scrubbed(checkedItems[i]); }
-			Dictionary<string, string> tmpDict = dictJournalsAndPINs;
+			Dictionary<string, string> tmpDict = dictNotebooksAndPINs;
 
 			foreach (KeyValuePair<string, string> kvp in tmpDict)
 			{ if (!checkedItems.Contains(kvp.Key)) { tmpDict.Remove(kvp.Key); } }
@@ -85,10 +85,10 @@ namespace myNotebooks.subforms
 			foreach (var item in checkedItems)
 			{
 				if (!tmpDict.ContainsKey(Scrubbed(item)))
-				{ dictJournalsAndPINs.Add(Scrubbed(item), ""); }
+				{ dictNotebooksAndPINs.Add(Scrubbed(item), ""); }
 			}
 
-			Program.DictCheckedNotebooks = dictJournalsAndPINs;
+			Program.DictCheckedNotebooks = dictNotebooksAndPINs;
 			this.Hide();
 		}
 
@@ -127,9 +127,9 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private void frmSelectJournalsToSearch_FormClosing(object sender, FormClosingEventArgs e)
+		private void frmSelectNotebooksToSearch_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			dictJournalsAndPINs.Clear();
+			dictNotebooksAndPINs.Clear();
 			e.Cancel = true;
 		}
 

@@ -130,8 +130,8 @@ namespace myNotebooks.subforms
 			ddlNotebooks.Name = "ddlNotebooks";
 			ddlNotebooks.Size = new System.Drawing.Size(689, 23);
 			ddlNotebooks.TabIndex = 1;
-			ddlNotebooks.SelectedIndexChanged += this.ddlJournals_SelectedIndexChanged;
-			ddlNotebooks.Click += this.ddlJournals_Click;
+			ddlNotebooks.SelectedIndexChanged += this.ddlNotebooks_SelectedIndexChanged;
+			ddlNotebooks.Click += this.ddlNotebooks_Click;
 			// 
 			// label1
 			// 

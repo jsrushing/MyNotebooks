@@ -369,7 +369,7 @@ namespace myNotebooks.subforms
 
 		}
 
-		private void ddlJournals_SelectedIndexChanged(object sender, EventArgs e)
+		private void ddlNotebooks_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			ShowHideMenusAndControls(SelectionState.NotebookSelectedNotLoaded);
 			btnLoadJournal.Enabled = true;
@@ -386,7 +386,7 @@ namespace myNotebooks.subforms
 			pnlDateFilters.Visible = false;
 		}
 
-		private void ddlJournals_Click(object sender, EventArgs e)
+		private void ddlNotebooks_Click(object sender, EventArgs e)
 		{ if (ddlNotebooks.Items.Count > 0) { ddlNotebooks.DroppedDown = true; } }
 
 		private void lblSeparator_MouseMove(object sender, MouseEventArgs e)
