@@ -8,9 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using myJournal.objects;
+using myNotebooks.objects;
 
-namespace myJournal.subforms
+namespace myNotebooks.subforms
 {
 	public partial class frmSelectJournalsToSearch : Form
 	{

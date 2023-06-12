@@ -8,11 +8,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Azure;
 using Azure.Storage.Files.Shares;
-using encrypt_decrypt_string;
+using Encryption;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.File;
 
-namespace myJournal.objects
+namespace myNotebooks.objects
 {
 	internal static class AzureFileClient
 	{

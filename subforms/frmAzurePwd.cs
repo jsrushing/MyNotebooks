@@ -8,11 +8,11 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using myJournal.objects;
+using myNotebooks.objects;
 using System.IO;
-using encrypt_decrypt_string;
+using Encryption;
 
-namespace myJournal.subforms
+namespace myNotebooks.subforms
 {
 	public partial class frmAzurePwd : Form
 	{

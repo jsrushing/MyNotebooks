@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace myJournal.objects
+namespace myNotebooks.objects
 {
 	internal class CloudSynchronizer
 	{
@@ -43,17 +43,17 @@ namespace myJournal.objects
 			{
 				await AzureFileClient.DownloadOrDeleteFile(tempFolder + sJrnlName, Program.AzurePassword + "_" + sJrnlName);
 				//Journal j3 = new Journal(tempFolder + sJrnlName, tempFolder + sJrnlName).Open(true);
-				Notebook j3 = new Notebook(sJrnlName).Open();	
+				Notebook j3 = new Notebook(tempFolder + sJrnlName, tempFolder + sJrnlName).Open();	
 
 				if(j3 == null) { j3 = new Notebook(sJrnlName, tempFolder + sJrnlName).Open(true);}
 
-				if (j3.Settings.IfCloudOnly_Download)
+				if (j3 != null && j3.Settings.IfCloudOnly_Download)
 				{
 					File.Move(tempFolder + sJrnlName, journalsFolder + sJrnlName);
 					ItemsDownloaded.Add(sJrnlName + " dl'd from cloud");
 				}
 
-				if (j3.Settings.IfCloudOnly_Delete)
+				if (j3 !=null &&j3.Settings.IfCloudOnly_Delete)
 				{
 					await AzureFileClient.DownloadOrDeleteFile(tempFolder + j3.Name, Program.AzurePassword + "_" + j3.Name, FileMode.Open, true);
 				}
@@ -250,42 +250,42 @@ namespace myJournal.objects
 			}
 			catch (Exception ex) { Err = ex.Message; }
 
-			//try
-			//{
-			//	if (localSettings.Length > 0)
-			//	{
-			//		try
-			//		{
-			//			await AzureFileClient.DownloadOrDeleteFile(tempSettingsFile, Program.AzurePassword + "_settings", FileMode.Open, false, "labelsandsettings");
-			//			downloadedAzureSettings = Program.AzureFileExists ? new FileInfo(tempSettingsFile) : null;
-			//		}
-			//		catch (Exception ex) { Err = ex.Message; }
+			try
+			{
+				if (localSettings.Length > 0)
+				{
+					try
+					{
+						await AzureFileClient.DownloadOrDeleteFile(tempSettingsFile, Program.AzurePassword + "_settings", FileMode.Open, false, "labelsandsettings");
+						downloadedAzureSettings = Program.AzureFileExists ? new FileInfo(tempSettingsFile) : null;
+					}
+					catch (Exception ex) { Err = ex.Message; }
 
-			//		if (downloadedAzureSettings != null)
-			//		{
-			//			switch (CompareLabelsAndSettings(localLabels, downloadedAzureLabels))
-			//			{
-			//				case ComparisonResult.Same:
-			//					break;
-			//				case ComparisonResult.LocalNewer:
-			//					AzureFileClient.UploadFile(sLocalSettingsFile, "labelsandsettings");
-			//					break;
-			//				case ComparisonResult.CloudNewer:
-			//					File.Move(tempSettingsFile, sLocalSettingsFile, true);
-			//					break;
-			//			}
-			//		}
-			//		else
-			//		{
-			//			if (new FileInfo(sLocalSettingsFile).Length > 0) AzureFileClient.UploadFile(sLocalSettingsFile);
-			//		}
-			//	}
-			//	else
-			//	{
-			//		if (new FileInfo(sLocalSettingsFile).Length > 0) AzureFileClient.UploadFile(sLocalSettingsFile);
-			//	}
-			//}
-			//catch (Exception ex) { Err = ex.Message; }
+					if (downloadedAzureSettings != null)
+					{
+						switch (CompareLabelsAndSettings(localLabels, downloadedAzureLabels))
+						{
+							case ComparisonResult.Same:
+								break;
+							case ComparisonResult.LocalNewer:
+								AzureFileClient.UploadFile(sLocalSettingsFile, "labelsandsettings");
+								break;
+							case ComparisonResult.CloudNewer:
+								File.Move(tempSettingsFile, sLocalSettingsFile, true);
+								break;
+						}
+					}
+					else
+					{
+						if (new FileInfo(sLocalSettingsFile).Length > 0) AzureFileClient.UploadFile(sLocalSettingsFile);
+					}
+				}
+				else
+				{
+					if (new FileInfo(sLocalSettingsFile).Length > 0) AzureFileClient.UploadFile(sLocalSettingsFile);
+				}
+			}
+			catch (Exception ex) { Err = ex.Message; }
 
 			File.Delete(tempSettingsFile);
 		}

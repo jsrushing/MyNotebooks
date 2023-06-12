@@ -1,4 +1,4 @@
-﻿namespace myJournal.subforms
+﻿namespace myNotebooks.subforms
 {
 	partial class frmAzurePwd
 	{

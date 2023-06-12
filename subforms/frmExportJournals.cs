@@ -4,7 +4,7 @@ using System.Configuration;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.IO;
-using myJournal.objects;
+using myNotebooks.objects;
 using MailKit;
 using MailKit.Net.Smtp;
 using MimeKit;
@@ -13,7 +13,7 @@ using Azure.Storage.Files;
 using Azure.Storage.Blobs;
 using Azure.Storage.Files.Shares;
 
-namespace myJournal.subforms
+namespace myNotebooks.subforms
 {
 	public partial class frmExportJournals : Form
 	{

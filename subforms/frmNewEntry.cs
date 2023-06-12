@@ -6,10 +6,10 @@ using System.Configuration;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using myJournal.objects;
+using myNotebooks.objects;
 using Org.BouncyCastle.Asn1.Sec;
 
-namespace myJournal.subforms
+namespace myNotebooks.subforms
 {
 	public partial class frmNewEntry : Form
 	{

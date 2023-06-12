@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Windows.Forms;
-using myJournal.objects;
+using myNotebooks.objects;
 
-namespace myJournal.subforms
+namespace myNotebooks.subforms
 {
 	public partial class frmNewJournal : Form
 	{

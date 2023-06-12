@@ -1,5 +1,5 @@
 ﻿
-namespace myJournal.subforms
+namespace myNotebooks.subforms
 {
 	partial class frmBackupManager
 	{

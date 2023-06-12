@@ -6,10 +6,10 @@ using System.Drawing;
 using System.Security.Policy;
 using System.Text;
 using System.Windows.Forms;
-using myJournal.objects;
+using myNotebooks.objects;
 using Org.BouncyCastle.Bcpg.Sig;
 
-namespace myJournal.subforms
+namespace myNotebooks.subforms
 {
 	public partial class frmJournalSettings : Form
 	{

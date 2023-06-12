@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Configuration;
 using System.Windows.Forms;
-using myJournal.objects;
+using myNotebooks.objects;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace myJournal.subforms
+namespace myNotebooks.subforms
 {
 	public partial class frmSynchJournals : Form
 	{

@@ -1,5 +1,5 @@
 ﻿
-namespace myJournal.subforms
+namespace myNotebooks.subforms
 {
 	partial class frmMain
 	{
@@ -57,6 +57,7 @@ namespace myJournal.subforms
 			mnuJournal_Import = new System.Windows.Forms.ToolStripMenuItem();
 			mnuJournal_Export = new System.Windows.Forms.ToolStripMenuItem();
 			mnuJournal_Settings = new System.Windows.Forms.ToolStripMenuItem();
+			mnuResetPIN = new System.Windows.Forms.ToolStripMenuItem();
 			mnuLabels = new System.Windows.Forms.ToolStripMenuItem();
 			helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			mnuAboutMyJournal = new System.Windows.Forms.ToolStripMenuItem();
@@ -74,7 +75,6 @@ namespace myJournal.subforms
 			label3 = new System.Windows.Forms.Label();
 			cbxDatesTo = new System.Windows.Forms.ComboBox();
 			pnlPin = new System.Windows.Forms.Panel();
-			mnuResetPIN = new System.Windows.Forms.ToolStripMenuItem();
 			mnuEntryTop.SuspendLayout();
 			menuStrip1.SuspendLayout();
 			pnlDateFilters.SuspendLayout();
@@ -253,7 +253,7 @@ namespace myJournal.subforms
 			// mnuJournal_Create
 			// 
 			mnuJournal_Create.Name = "mnuJournal_Create";
-			mnuJournal_Create.Size = new System.Drawing.Size(180, 22);
+			mnuJournal_Create.Size = new System.Drawing.Size(160, 22);
 			mnuJournal_Create.Text = "&Create";
 			mnuJournal_Create.Click += this.mnuJournal_Create_Click;
 			// 
@@ -261,14 +261,14 @@ namespace myJournal.subforms
 			// 
 			mnuJournal_Delete.Enabled = false;
 			mnuJournal_Delete.Name = "mnuJournal_Delete";
-			mnuJournal_Delete.Size = new System.Drawing.Size(180, 22);
+			mnuJournal_Delete.Size = new System.Drawing.Size(160, 22);
 			mnuJournal_Delete.Text = "Delete";
 			mnuJournal_Delete.Click += this.mnuJournal_Delete_Click;
 			// 
 			// mnuJournal_Search
 			// 
 			mnuJournal_Search.Name = "mnuJournal_Search";
-			mnuJournal_Search.Size = new System.Drawing.Size(180, 22);
+			mnuJournal_Search.Size = new System.Drawing.Size(160, 22);
 			mnuJournal_Search.Text = "&Search";
 			mnuJournal_Search.Click += this.mnuJournal_Search_Click;
 			// 
@@ -276,7 +276,7 @@ namespace myJournal.subforms
 			// 
 			mnuJournal_Rename.Enabled = false;
 			mnuJournal_Rename.Name = "mnuJournal_Rename";
-			mnuJournal_Rename.Size = new System.Drawing.Size(180, 22);
+			mnuJournal_Rename.Size = new System.Drawing.Size(160, 22);
 			mnuJournal_Rename.Text = "Rename";
 			mnuJournal_Rename.Click += this.mnuJournal_Rename_Click;
 			// 
@@ -284,7 +284,7 @@ namespace myJournal.subforms
 			// 
 			mnuJournal_ForceBackup.Enabled = false;
 			mnuJournal_ForceBackup.Name = "mnuJournal_ForceBackup";
-			mnuJournal_ForceBackup.Size = new System.Drawing.Size(180, 22);
+			mnuJournal_ForceBackup.Size = new System.Drawing.Size(160, 22);
 			mnuJournal_ForceBackup.Text = "Force &Backup";
 			mnuJournal_ForceBackup.Visible = false;
 			mnuJournal_ForceBackup.Click += this.mnuJournal_ForceBackup_Click;
@@ -292,7 +292,7 @@ namespace myJournal.subforms
 			// mnuJournal_RestoreBackups
 			// 
 			mnuJournal_RestoreBackups.Name = "mnuJournal_RestoreBackups";
-			mnuJournal_RestoreBackups.Size = new System.Drawing.Size(180, 22);
+			mnuJournal_RestoreBackups.Size = new System.Drawing.Size(160, 22);
 			mnuJournal_RestoreBackups.Text = "&Restore Backups";
 			mnuJournal_RestoreBackups.Visible = false;
 			mnuJournal_RestoreBackups.Click += this.mnuJournal_RestoreBackups_Click;
@@ -300,14 +300,14 @@ namespace myJournal.subforms
 			// mnuJournal_Import
 			// 
 			mnuJournal_Import.Name = "mnuJournal_Import";
-			mnuJournal_Import.Size = new System.Drawing.Size(180, 22);
+			mnuJournal_Import.Size = new System.Drawing.Size(160, 22);
 			mnuJournal_Import.Text = "Import";
 			mnuJournal_Import.Click += this.mnuJournal_Import_Click;
 			// 
 			// mnuJournal_Export
 			// 
 			mnuJournal_Export.Name = "mnuJournal_Export";
-			mnuJournal_Export.Size = new System.Drawing.Size(180, 22);
+			mnuJournal_Export.Size = new System.Drawing.Size(160, 22);
 			mnuJournal_Export.Text = "Synch";
 			mnuJournal_Export.Visible = false;
 			mnuJournal_Export.Click += this.mnuJournal_Export_Click;
@@ -316,9 +316,16 @@ namespace myJournal.subforms
 			// 
 			mnuJournal_Settings.Enabled = false;
 			mnuJournal_Settings.Name = "mnuJournal_Settings";
-			mnuJournal_Settings.Size = new System.Drawing.Size(180, 22);
+			mnuJournal_Settings.Size = new System.Drawing.Size(160, 22);
 			mnuJournal_Settings.Text = "Settings";
 			mnuJournal_Settings.Click += this.mnuJournal_Settings_Click;
+			// 
+			// mnuResetPIN
+			// 
+			mnuResetPIN.Name = "mnuResetPIN";
+			mnuResetPIN.Size = new System.Drawing.Size(160, 22);
+			mnuResetPIN.Text = "Reset &PIN";
+			mnuResetPIN.Click += this.mnuResetPIN_Click;
 			// 
 			// mnuLabels
 			// 
@@ -395,11 +402,11 @@ namespace myJournal.subforms
 			// label2
 			// 
 			label2.AutoSize = true;
-			label2.Location = new System.Drawing.Point(1, 7);
+			label2.Location = new System.Drawing.Point(4, 7);
 			label2.Name = "label2";
-			label2.Size = new System.Drawing.Size(39, 15);
+			label2.Size = new System.Drawing.Size(36, 15);
 			label2.TabIndex = 41;
-			label2.Text = "from: ";
+			label2.Text = "from ";
 			// 
 			// pnlDateFilters
 			// 
@@ -411,7 +418,7 @@ namespace myJournal.subforms
 			pnlDateFilters.Controls.Add(cbxDatesTo);
 			pnlDateFilters.Controls.Add(cbxDatesFrom);
 			pnlDateFilters.Controls.Add(label2);
-			pnlDateFilters.Location = new System.Drawing.Point(260, 58);
+			pnlDateFilters.Location = new System.Drawing.Point(285, 58);
 			pnlDateFilters.Name = "pnlDateFilters";
 			pnlDateFilters.Size = new System.Drawing.Size(489, 27);
 			pnlDateFilters.TabIndex = 49;
@@ -480,18 +487,11 @@ namespace myJournal.subforms
 			pnlPin.Controls.Add(lblShowPIN);
 			pnlPin.Controls.Add(txtJournalPIN);
 			pnlPin.Controls.Add(lblWrongPin);
-			pnlPin.Location = new System.Drawing.Point(33, 56);
+			pnlPin.Location = new System.Drawing.Point(57, 56);
 			pnlPin.Name = "pnlPin";
 			pnlPin.Size = new System.Drawing.Size(218, 46);
 			pnlPin.TabIndex = 50;
 			pnlPin.Visible = false;
-			// 
-			// mnuResetPIN
-			// 
-			mnuResetPIN.Name = "mnuResetPIN";
-			mnuResetPIN.Size = new System.Drawing.Size(180, 22);
-			mnuResetPIN.Text = "Reset &PIN";
-			mnuResetPIN.Click += this.mnuResetPIN_Click;
 			// 
 			// frmMain
 			// 

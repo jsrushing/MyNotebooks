@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace myJournal.Properties {
+namespace myNotebooks.Properties {
     using System;
     
     

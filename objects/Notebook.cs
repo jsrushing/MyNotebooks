@@ -10,11 +10,11 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using encrypt_decrypt_string;
-using myJournal.objects;
-using myJournal.subforms;
+using Encryption;
+using myNotebooks.objects;
+using myNotebooks.subforms;
 
-namespace myJournal
+namespace myNotebooks
 {
 	[Serializable]
 	public class Notebook
@@ -24,7 +24,7 @@ namespace myJournal
 		public string				FileName { get; set; }
 		public List<Entry>	Entries = new List<Entry>();
 		string root					= "journals\\";
-		public JournalSettings		Settings;
+		public NotebookSettings		Settings;
 
 		public bool BackupCompleted { get; private set; }
 
@@ -39,25 +39,37 @@ namespace myJournal
 		}
 
 		// one-time code to convert Journal objects to Notebook objects
-		//public Notebook(Journal journalToConvert)
-		//{
-		//	this.Name = journalToConvert.Name;
-		//	this.LastSaved = journalToConvert.LastSaved;
-		//	this.FileName = journalToConvert.FileName;
-		//	this.Settings = journalToConvert.Settings;
+		public Notebook(myJournal.Journal journalToConvert)
+		{
+			this.Name = journalToConvert.Name;
+			this.LastSaved = journalToConvert.LastSaved;
+			this.FileName = journalToConvert.FileName;
 
-		//	foreach(JournalEntry je in  journalToConvert.Entries)
-		//	{
-		//		Entry e = new Entry(je.Title, je.Text, je.ClearRTF(), je.ClearLabels(), je.NotebookName);
-		//		e.Date = je.Date;
-		//		e.Id = je.Id;
-		//		e.isEdited = je.isEdited;
-		//		e.LastEditedOn = je.LastEditedOn;
-		//		this.Entries.Add(e);
-		//	}
-		//}
+			//this.Settings = journalToConvert.Settings;  // I think this is what broke all the journals :(
 
-        public void AddEntry(Entry entryToAdd) { Entries.Add(entryToAdd); }
+			// should have been ...
+			this.Settings = new NotebookSettings
+			{
+				AllowCloud					= journalToConvert.Settings.AllowCloud,
+				IfCloudOnly_Download		= journalToConvert.Settings.IfCloudOnly_Download,
+				IfCloudOnly_Delete			= journalToConvert.Settings.IfCloudOnly_Delete,
+				IfLocalOnly_Delete			= journalToConvert.Settings.IfLocalOnly_Delete,
+				IfLocalOnly_DisallowCloud	= journalToConvert.Settings.IfLocalOnly_DisallowCloud,
+				IfLocalOnly_Upload			= journalToConvert.Settings.IfLocalOnly_Upload
+			};
+
+			foreach (myJournal.JournalEntry je in journalToConvert.Entries)
+			{
+				Entry e			= new Entry(je.Title, je.Text, je.ClearRTF(), je.ClearLabels(), je.NotebookName);
+				e.Date			= je.Date;
+				e.Id			= je.Id;
+				e.isEdited		= je.isEdited;
+				e.LastEditedOn	= je.LastEditedOn;
+				this.Entries.Add(e);
+			}
+		}
+
+		public void AddEntry(Entry entryToAdd) { Entries.Add(entryToAdd); }
 
 		public void Backup()
 		{
@@ -86,7 +98,7 @@ namespace myJournal
 		public async Task Create()
         {
 			this.FileName += " (local)";
-			Entries.Add(new Entry("created", "-", "-", this.Name));
+			Entries.Add(new Entry("created", "-", "-", "", this.Name));
 			Program.SkipFileSizeComparison = true;
 			await this.Save();
 			Program.SkipFileSizeComparison = false;

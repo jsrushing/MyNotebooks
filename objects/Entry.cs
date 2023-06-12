@@ -4,15 +4,15 @@
 using System;
 using System.Configuration;
 using System.Linq;
-using encrypt_decrypt_string;
+using Encryption;
 using System.Collections.Generic;
 using System.Text;
-using myJournal.subforms;
+using myNotebooks.subforms;
 using System.Windows.Forms;
 using System.Runtime.CompilerServices;
-using myJournal.objects;
+using myNotebooks.objects;
 
-namespace myJournal
+namespace myNotebooks
 {
 	[Serializable]
     public class Entry

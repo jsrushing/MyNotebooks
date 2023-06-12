@@ -7,16 +7,17 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using myJournal.subforms;
+using myNotebooks.subforms;
+using myJournal;
 
-namespace myJournal.objects
+namespace myNotebooks.objects
 {
 	public static class Utilities
 	{
 		public static List<string> AllJournalNames()
 		{
 			List<string> lstRtrn = new List<string>();
-			foreach (Notebook nb in Program.AllNotebooks) lstRtrn.Add(nb.Name);
+			foreach (Notebook nb in Program.AllNotebooks)if(nb != null) lstRtrn.Add(nb.Name);
 			return lstRtrn;
 		} 
 
@@ -28,11 +29,12 @@ namespace myJournal.objects
 			return nbReturn;
 		}
 
+		// one-time code to convert Journal objects to Notebook objects
 		public static List<Journal> AllJournals()
 		{
 			List<Journal> jrnlReturn = new List<Journal>();
 			var sJournalsFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"];
-			foreach (var s in Directory.GetFiles(sJournalsFolder)) { jrnlReturn.Add(new Journal(s.Replace(sJournalsFolder, "")).Open()); }	// (new Journal(s.Replace(sJournalsFolder, "")).Open()); }
+			foreach (var s in Directory.GetFiles(sJournalsFolder)) { jrnlReturn.Add(new Journal(s.Replace(sJournalsFolder, "")).Open()); }  // (new Journal(s.Replace(sJournalsFolder, "")).Open()); }
 			return jrnlReturn;
 		}
 

@@ -8,16 +8,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using static myJournal.objects.Utilities;
+using static myNotebooks.objects.Utilities;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
-using myJournal.subforms;
+using myNotebooks.subforms;
 using System.Xml;
 using Org.BouncyCastle.Crypto.Agreement;
 using System.Reflection.Emit;
 using Newtonsoft.Json.Linq;
 
-namespace myJournal.objects
+namespace myNotebooks.objects
 {
 	public static class LabelsManager
 	{

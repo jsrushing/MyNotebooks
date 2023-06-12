@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace myJournal.objects
+namespace myNotebooks.objects
 {
 	[Serializable]
-	public class JournalSettings
+	public class NotebookSettings
 	{
 		public bool AllowCloud { get; set; }
 		public bool IfCloudOnly_Download { get; set; }
@@ -14,7 +14,7 @@ namespace myJournal.objects
 		public bool IfLocalOnly_Delete { get; set; }
 		public bool IfLocalOnly_DisallowCloud { get; set; }
 
-		public JournalSettings() { }
+		public NotebookSettings() { }
 
 
 	}

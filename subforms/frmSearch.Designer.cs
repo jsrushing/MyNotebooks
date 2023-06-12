@@ -1,7 +1,7 @@
 ﻿
 using System.Windows.Forms;
 
-namespace myJournal.subforms
+namespace myNotebooks.subforms
 {
 	partial class frmSearch
 	{

@@ -3,11 +3,11 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Configuration;
-using myJournal;
+using myNotebooks;
 
 // https://www.delftstack.com/howto/csharp/encrypt-and-decrypt-a-string-in-csharp/
 
-namespace encrypt_decrypt_string
+namespace Encryption
 {
     class EncryptDecrypt
     {

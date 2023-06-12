@@ -9,10 +9,10 @@ using System.Linq;
 using System.Text;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using myJournal.objects;
+using myNotebooks.objects;
 using System.Threading.Tasks;
 
-namespace myJournal.subforms
+namespace myNotebooks.subforms
 {
 	public partial class frmLabelsManager : Form
 	{

@@ -143,18 +143,23 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Windows.Forms;
-using myJournal.objects;
+using myNotebooks.objects;
 using System.Text;
 using System.Threading;
+using myNotebooks.subforms;
+//using myJournal;
+using System.Diagnostics;
+using System.Runtime.Serialization.Formatters.Binary;
+using myNotebooks;
 
-namespace myJournal.subforms
+namespace myNotebooks.subforms
 {
 	public partial class frmMain : Form
 	{
-		Notebook		CurrentNotebook;
-		Entry			CurrentEntry;
-		private bool	FirstSelection = true;
-		bool			SuppressDateClick = false;
+		Notebook CurrentNotebook;
+		Entry CurrentEntry;
+		private bool FirstSelection = true;
+		bool SuppressDateClick = false;
 
 		private enum SelectionState
 		{
@@ -175,13 +180,26 @@ namespace myJournal.subforms
 
 			// one-time code to convert Journal objects to Notebook objects
 
-			//foreach (Journal j in Utilities.AllJournals())
+			//using (Stream stream = File.Open("C://Users//js_ru//source//repos//myJournal2022//bin//Debug//netcoreapp3.1//journals//temp//The New Real Thing 4", FileMode.Open))
+			//{
+			//	BinaryFormatter formatter = new BinaryFormatter();
+			//	//Journal jRtrn = (Journal)formatter.Deserialize(stream);
+			//	Notebook nb = (Notebook)formatter.Deserialize(stream);
+			//	//jRtrn.FileName = journalToOpen;
+			//	//jRtrn.Name = journalToOpen.Substring(journalToOpen.LastIndexOf("\\") + 1);
+			//}
+
+			//Journal jOld = new Journal("The New Real Thing 1", "C://Users//js_ru//source//repos//myJournal2022//bin//Debug//netcoreapp3.1//journals//temp//The New Real Thing 1").Open();
+
+			//Notebook nb = new Notebook("The New Real Thing 1", "C://Users//js_ru//source//repos//myJournal2022//bin//Debug//netcoreapp3.1//journals//temp//The New Real Thing 1").Open();
+
+			//foreach (myJournal.Journal j in Utilities.AllJournals())
 			//{
 			//	Notebook notebook = new Notebook(j);
 			//	notebook.Save();
 			//}
 
-			CheckForSystemDirectories();	// am I keeping system directories now that the cloud is working? Why or why not?
+			//CheckForSystemDirectories();	// am I keeping system directories now that the cloud is working? Why or why not?
 			frmAzurePwd frm = new frmAzurePwd(this, frmAzurePwd.Mode.AskingForKey);
 
 			//Program.AzurePassword = string.Empty;	// Kills the Azure synch process for debugging if desired.
@@ -190,7 +208,7 @@ namespace myJournal.subforms
 			{
 				frm.Close();
 				CloudSynchronizer cs = new CloudSynchronizer();
-				await cs.SynchWithCloud(true);
+				//await cs.SynchWithCloud(true);
 
 				if (this.Text.ToLower().Contains("debug"))
 				{
@@ -235,7 +253,9 @@ namespace myJournal.subforms
 				{
 					var text = CurrentNotebook.Entries[0].ClearText();
 
-					if (CurrentNotebook.Entries[0].ClearText().Length == 0 | (!text.Contains(" ") & text.Length > 50 & !text.Equals("-")))	// the text isn't the 'created' entry, and has no spaces, and is more than 50 chars long, then it's encrypted text meaning the PIN is wrong
+					Program.PIN = txtJournalPIN.Text;
+
+					if (!CurrentNotebook.Entries[0].ClearText().Equals("-"))    // (!text.Contains(" ") & text.Length > 50 & !Encryption.EncryptDecrypt.Decrypt(text).Equals("-")))	// the text isn't the 'created' entry, and has no spaces, and is more than 50 chars long, then it's encrypted text meaning the PIN is wrong
 					{
 						lblWrongPin.Visible = true;
 						txtJournalPIN.Focus();
@@ -402,7 +422,7 @@ namespace myJournal.subforms
 		{
 			ddlJournals.Items.Clear();
 			ddlJournals.Text = string.Empty;
-			foreach (Notebook j in Program.AllNotebooks) { ddlJournals.Items.Add(j.Name); }
+			foreach (Notebook j in Program.AllNotebooks) { if (j != null) ddlJournals.Items.Add(j.Name); }
 
 			if (ddlJournals.Items.Count > 0)
 			{
@@ -526,18 +546,18 @@ namespace myJournal.subforms
 
 				if (frm.NewJournalName != null)
 				{
-					Notebook j = new Notebook(frm.NewJournalName);
-					j.Settings = new JournalSettings();
+					Notebook nb = new Notebook(frm.NewJournalName);
+					nb.Settings = new NotebookSettings();
 					// Apply settings from choices on frmNewJournal (add to this section as new settings are added) ...
-					j.Settings.AllowCloud = frm.AllowCloud;
-					j.Settings.IfCloudOnly_Delete = frm.IfCloudOnly_Delete;
-					j.Settings.IfCloudOnly_Download = frm.IfCloudOnly_Download;
-					j.Settings.IfLocalOnly_Upload = frm.IfLocalOnly_Upload;
-					j.Settings.IfLocalOnly_Delete = frm.IfLocalOnly_Delete;
-					j.Settings.IfLocalOnly_DisallowCloud = frm.IfLocalOnly_DisallowCloud;
+					nb.Settings.AllowCloud = frm.AllowCloud;
+					nb.Settings.IfCloudOnly_Delete		= frm.IfCloudOnly_Delete;
+					nb.Settings.IfCloudOnly_Download	= frm.IfCloudOnly_Download;
+					nb.Settings.IfLocalOnly_Upload		= frm.IfLocalOnly_Upload;
+					nb.Settings.IfLocalOnly_Delete		= frm.IfLocalOnly_Delete;
+					nb.Settings.IfLocalOnly_DisallowCloud = frm.IfLocalOnly_DisallowCloud;
 					// ........................................................................
-					j.LastSaved = DateTime.Now;
-					j.Create();
+					nb.LastSaved = DateTime.Now;
+					nb.Create();
 					Program.AllNotebooks = Utilities.AllNotebooks();
 					LoadNotebooks();
 				}

@@ -3,9 +3,9 @@
  */
 using System;
 using System.Windows.Forms;
-using myJournal.objects;
+using myNotebooks.objects;
 
-namespace myJournal.subforms
+namespace myNotebooks.subforms
 {
 	public partial class frmMessage : Form
 	{

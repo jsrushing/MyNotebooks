@@ -1,10 +1,10 @@
 using System;
 using System.Windows.Forms;
-using myJournal.subforms;
+using myNotebooks.subforms;
 using System.Collections.Generic;
-using myJournal.objects;
+using myNotebooks.objects;
 
-namespace myJournal
+namespace myNotebooks
 {
 	static class Program
     {
@@ -23,7 +23,7 @@ namespace myJournal
 		public static List<Notebook>	AllNotebooks			= new List<Notebook>();
 		public static Dictionary<string, string> DictCheckedJournals = new Dictionary<string, string>();
 
-		public static List<Journal> allJournals = new List<Journal>();
+		//public static List<Journal> allJournals = new List<Journal>();
 
 		[STAThread]
         static void Main()

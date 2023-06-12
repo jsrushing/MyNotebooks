@@ -5,9 +5,9 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using myJournal.objects;
+using myNotebooks.objects;
 
-namespace myJournal.subforms
+namespace myNotebooks.subforms
 {
 	public partial class frmAbout : Form
 	{

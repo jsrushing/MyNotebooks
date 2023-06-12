@@ -5,4 +5,4 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Style", "IDE0003:Remove qualification", Justification = "<Pending>", Scope = "member", Target = "~M:myJournal.Notebook.ResetPIN(System.String)")]
+[assembly: SuppressMessage("Style", "IDE0003:Remove qualification", Justification = "<Pending>", Scope = "member", Target = "~M:myNotebooks.Notebook.ResetPIN(System.String)")]

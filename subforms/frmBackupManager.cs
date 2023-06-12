@@ -12,10 +12,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using myJournal.subforms;
-using myJournal.objects;
+using myNotebooks.subforms;
+using myNotebooks.objects;
 
-namespace myJournal.subforms
+namespace myNotebooks.subforms
 {
 	public partial class frmBackupManager : Form
 	{

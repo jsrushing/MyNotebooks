@@ -7,10 +7,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using encrypt_decrypt_string;
-using myJournal.objects;
+using Encryption;
+using myNotebooks.objects;
 
-namespace myJournal.subforms
+namespace myNotebooks.subforms
 {
 	public partial class frmSearch : Form
 	{
@@ -207,7 +207,7 @@ namespace myJournal.subforms
 
 	public struct FoundEntry
 	{
-		public string journalName;
-		public JournalEntry journalEntry;
+		public string NotebookName;
+		public Entry NotebookEntry;
 	}
 }
