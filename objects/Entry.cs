@@ -65,7 +65,7 @@ namespace myNotebooks
 			int iTextChunkLength = maxWidth > 0 ? maxWidth / 5 : 150;
 			string sTitle = ClearTitle() + " (" + Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"
 				+ (LastEditedOn < new DateTime(2000, 1, 1) ? "" : " [edited on " + LastEditedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + "]");
-			if (includeJournalName) { sTitle += this.NotebookName == null ? "" : " > in '" + NotebookName + "'"; }
+			if (includeJournalName) { sTitle += this.NotebookName == null ? "" : " > in '" + this.ClearName() + "'"; }
 			sRtrn[0] = sTitle;
 			string sEntryText = ClearText();
 			sEntryText = (sEntryText.Length < iTextChunkLength ? sEntryText : sEntryText.Substring(0, iTextChunkLength) + " ...");

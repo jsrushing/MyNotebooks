@@ -35,7 +35,7 @@ namespace myNotebooks.subforms
 			txtJournalPIN = new System.Windows.Forms.TextBox();
 			label4 = new System.Windows.Forms.Label();
 			lblSelectionType = new System.Windows.Forms.Label();
-			ddlJournals = new System.Windows.Forms.ComboBox();
+			ddlNotebooks = new System.Windows.Forms.ComboBox();
 			label1 = new System.Windows.Forms.Label();
 			lstEntries = new System.Windows.Forms.ListBox();
 			mnuEntryTop = new System.Windows.Forms.ContextMenuStrip(components);
@@ -121,17 +121,17 @@ namespace myNotebooks.subforms
 			lblSelectionType.Text = "Selected Entry";
 			lblSelectionType.Visible = false;
 			// 
-			// ddlJournals
+			// ddlNotebooks
 			// 
-			ddlJournals.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-			ddlJournals.Enabled = false;
-			ddlJournals.FormattingEnabled = true;
-			ddlJournals.Location = new System.Drawing.Point(85, 30);
-			ddlJournals.Name = "ddlJournals";
-			ddlJournals.Size = new System.Drawing.Size(689, 23);
-			ddlJournals.TabIndex = 1;
-			ddlJournals.SelectedIndexChanged += this.ddlJournals_SelectedIndexChanged;
-			ddlJournals.Click += this.ddlJournals_Click;
+			ddlNotebooks.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+			ddlNotebooks.Enabled = false;
+			ddlNotebooks.FormattingEnabled = true;
+			ddlNotebooks.Location = new System.Drawing.Point(85, 30);
+			ddlNotebooks.Name = "ddlNotebooks";
+			ddlNotebooks.Size = new System.Drawing.Size(689, 23);
+			ddlNotebooks.TabIndex = 1;
+			ddlNotebooks.SelectedIndexChanged += this.ddlJournals_SelectedIndexChanged;
+			ddlNotebooks.Click += this.ddlJournals_Click;
 			// 
 			// label1
 			// 
@@ -508,7 +508,7 @@ namespace myNotebooks.subforms
 			Controls.Add(rtbSelectedEntry);
 			Controls.Add(lstEntries);
 			Controls.Add(label1);
-			Controls.Add(ddlJournals);
+			Controls.Add(ddlNotebooks);
 			Controls.Add(menuStrip1);
 			MainMenuStrip = menuStrip1;
 			Name = "frmMain";
@@ -531,7 +531,7 @@ namespace myNotebooks.subforms
 		private System.Windows.Forms.TextBox txtJournalPIN;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.Label lblSelectionType;
-		private System.Windows.Forms.ComboBox ddlJournals;
+		private System.Windows.Forms.ComboBox ddlNotebooks;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.ListBox lstEntries;
 		private System.Windows.Forms.RichTextBox rtbSelectedEntry;

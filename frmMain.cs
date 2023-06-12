@@ -199,7 +199,7 @@ namespace myNotebooks.subforms
 			//	notebook.Save();
 			//}
 
-			//CheckForSystemDirectories();	// am I keeping system directories now that the cloud is working? Why or why not?
+			CheckForSystemDirectories();    // am I keeping system directories now that the cloud is working? Why or why not?
 			frmAzurePwd frm = new frmAzurePwd(this, frmAzurePwd.Mode.AskingForKey);
 
 			//Program.AzurePassword = string.Empty;	// Kills the Azure synch process for debugging if desired.
@@ -246,7 +246,7 @@ namespace myNotebooks.subforms
 
 			try
 			{
-				string fullJournalName = ddlJournals.Text;
+				string fullJournalName = ddlNotebooks.Text;
 				CurrentNotebook = new Notebook(fullJournalName).Open();
 
 				if (CurrentNotebook != null)
@@ -340,8 +340,8 @@ namespace myNotebooks.subforms
 			if (recreateAll)
 			{
 				Directory.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"]);
-				Directory.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"]);
-				Directory.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"]);
+				Directory.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebookIncrementalBackupsFolder"]);
+				Directory.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebookForcedBackupsFolder"]);
 				Directory.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFolder"]);
 				Directory.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"]);
 				File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]);
@@ -352,8 +352,8 @@ namespace myNotebooks.subforms
 			if (!Directory.Exists(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"]))    // create system directories and files
 			{
 				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"]);
-				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"]);
-				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"]);
+				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebookIncrementalBackupsFolder"]);
+				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebookForcedBackupsFolder"]);
 				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFolder"]);
 				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"]);
 				File.Create(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFile"]).Close();
@@ -381,13 +381,13 @@ namespace myNotebooks.subforms
 			lstEntries.Items.Clear();
 			lstEntries.Visible = false;
 			cbxSortEntriesBy.SelectedIndex = 0;
-			pnlPin.Visible = ddlJournals.SelectedIndex > -1;
-			txtJournalPIN.Text = Program.DictCheckedNotebooks.FirstOrDefault(e => e.Key == ddlJournals.Text).Value;
+			pnlPin.Visible = ddlNotebooks.SelectedIndex > -1;
+			txtJournalPIN.Text = Program.DictCheckedNotebooks.FirstOrDefault(e => e.Key == ddlNotebooks.Text).Value;
 			pnlDateFilters.Visible = false;
 		}
 
 		private void ddlJournals_Click(object sender, EventArgs e)
-		{ if (ddlJournals.Items.Count > 0) { ddlJournals.DroppedDown = true; } }
+		{ if (ddlNotebooks.Items.Count > 0) { ddlNotebooks.DroppedDown = true; } }
 
 		private void lblSeparator_MouseMove(object sender, MouseEventArgs e)
 		{
@@ -420,17 +420,17 @@ namespace myNotebooks.subforms
 
 		private void LoadNotebooks()
 		{
-			ddlJournals.Items.Clear();
-			ddlJournals.Text = string.Empty;
-			foreach (Notebook j in Program.AllNotebooks) { if (j != null) ddlJournals.Items.Add(j.Name); }
+			ddlNotebooks.Items.Clear();
+			ddlNotebooks.Text = string.Empty;
+			foreach (Notebook j in Program.AllNotebooks) { if (j != null) ddlNotebooks.Items.Add(j.Name); }
 
-			if (ddlJournals.Items.Count > 0)
+			if (ddlNotebooks.Items.Count > 0)
 			{
-				ddlJournals.Enabled = true;
+				ddlNotebooks.Enabled = true;
 				pnlPin.Visible = false;
-				if (ddlJournals.Items.Count == 1)
+				if (ddlNotebooks.Items.Count == 1)
 				{
-					ddlJournals.SelectedIndex = 0;
+					ddlNotebooks.SelectedIndex = 0;
 					txtJournalPIN.Focus();
 				}
 				lstEntries.Visible = false;
@@ -550,10 +550,10 @@ namespace myNotebooks.subforms
 					nb.Settings = new NotebookSettings();
 					// Apply settings from choices on frmNewJournal (add to this section as new settings are added) ...
 					nb.Settings.AllowCloud = frm.AllowCloud;
-					nb.Settings.IfCloudOnly_Delete		= frm.IfCloudOnly_Delete;
-					nb.Settings.IfCloudOnly_Download	= frm.IfCloudOnly_Download;
-					nb.Settings.IfLocalOnly_Upload		= frm.IfLocalOnly_Upload;
-					nb.Settings.IfLocalOnly_Delete		= frm.IfLocalOnly_Delete;
+					nb.Settings.IfCloudOnly_Delete = frm.IfCloudOnly_Delete;
+					nb.Settings.IfCloudOnly_Download = frm.IfCloudOnly_Download;
+					nb.Settings.IfLocalOnly_Upload = frm.IfLocalOnly_Upload;
+					nb.Settings.IfLocalOnly_Delete = frm.IfLocalOnly_Delete;
 					nb.Settings.IfLocalOnly_DisallowCloud = frm.IfLocalOnly_DisallowCloud;
 					// ........................................................................
 					nb.LastSaved = DateTime.Now;
@@ -574,7 +574,7 @@ namespace myNotebooks.subforms
 				if (frm.Result == frmMessage.ReturnResult.Yes)
 				{
 					CurrentNotebook.Delete();
-					ddlJournals.Text = string.Empty;
+					ddlNotebooks.Text = string.Empty;
 					lstEntries.Items.Clear();
 					ShowHideMenusAndControls(SelectionState.NotebookSelectedNotLoaded);
 					pnlDateFilters.Visible = false;
@@ -630,7 +630,7 @@ namespace myNotebooks.subforms
 
 		private void mnuJournal_RestoreBackups_Click(object sender, EventArgs e)
 		{
-			string sJournalName = ddlJournals.Text;
+			string sJournalName = ddlNotebooks.Text;
 			using (frmBackupManager frm = new frmBackupManager(this))
 			{
 				frm.ShowDialog(this);
@@ -666,10 +666,10 @@ namespace myNotebooks.subforms
 				frm.ShowDialog();
 				if (frm.ActionTaken)
 				{
-					var indx = ddlJournals.SelectedIndex;
+					var indx = ddlNotebooks.SelectedIndex;
 					LoadNotebooks();
-					ddlJournals.SelectedIndex = -1;
-					ddlJournals.SelectedIndex = indx;
+					ddlNotebooks.SelectedIndex = -1;
+					ddlNotebooks.SelectedIndex = indx;
 				}
 			}
 		}

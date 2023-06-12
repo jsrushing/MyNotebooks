@@ -56,10 +56,9 @@ namespace myNotebooks.subforms
 			{
 				Utilities.SetProgramPIN(kvp.Key);
 				jeFound = new Notebook(kvp.Key).Open().Search(so);
-				foundEntries.AddRange(jeFound);
-				foreach (Entry je in jeFound) { FoundEntries.Add(new Entry { NotebookName = kvp.Key}); }
-				Utilities.PopulateEntries(lstFoundEntries, foundEntries, "", "", "", false, 0, true);
+				Utilities.PopulateEntries(lstFoundEntries, jeFound, "", "", "", false, 0, true);
 				journalBoundaries.Add(kvp.Key, lstFoundEntries.Items.Count);
+				FoundEntries.AddRange(jeFound);
 				foundEntries.Clear();
 			}
 
@@ -159,7 +158,7 @@ namespace myNotebooks.subforms
 
 		private void mnuEditEntry_Click(object sender, EventArgs e)
 		{
-			Entry fe = lstFoundEntries.SelectedIndex == 0 ? FoundEntries[0] : FoundEntries[lstFoundEntries.SelectedIndex / 4];
+			Entry fe = lstFoundEntries.SelectedIndex == 0 ? FoundEntries[0] : FoundEntries[(lstFoundEntries.SelectedIndex + lstFoundEntries.TopIndex) / 4];
 			frmNewEntry frm = new frmNewEntry(this, new Notebook(fe.NotebookName).Open(), fe);
 			frm.Show();
 		}

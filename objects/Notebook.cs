@@ -74,7 +74,7 @@ namespace myNotebooks
 
 		public void Backup()
 		{
-			string dir = ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"];
+			string dir = ConfigurationManager.AppSettings["FolderStructure_NotebookIncrementalBackupsFolder"];
 			if (!System.IO.Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + dir))
 			{ System.IO.Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + dir); }
 			this.Name = FileName.Substring(FileName.LastIndexOf("\\") + 1);
@@ -85,7 +85,7 @@ namespace myNotebooks
 		{
 			try
 			{
-				string dir = AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"];
+				string dir = AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_NotebookForcedBackupsFolder"];
 				if (!System.IO.Directory.Exists(dir))
 				{ System.IO.Directory.CreateDirectory(dir); }
 				File.Copy(this.FileName, dir + this.Name);
@@ -116,8 +116,8 @@ namespace myNotebooks
 
 		private void DeleteBackups()
 		{
-			File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"] + this.Name);
-			File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"] + this.Name);
+			File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebookIncrementalBackupsFolder"] + this.Name);
+			File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebookForcedBackupsFolder"] + this.Name);
 		}
 
 		public async Task DeleteLabel(string label)

@@ -26,13 +26,13 @@ namespace myNotebooks.subforms
 		//public bool preserveOriginalText { get; set; }
 		private bool preserveOriginalText;
 
-		public frmNewEntry(Form parent, Notebook journal, Entry entryToEdit = null, bool disallowOriginalTextEdit = false)
+		public frmNewEntry(Form parent, Notebook notebook, Entry entryToEdit = null, bool disallowOriginalTextEdit = false)
 		{
 			InitializeComponent();
 			entry = entryToEdit;
 			isEdit = entry != null;
 			preserveOriginalText = disallowOriginalTextEdit;
-			this.currentNotebook = journal;
+			this.currentNotebook = notebook;
 			Utilities.SetStartPosition(this, parent);
 		}
 
@@ -49,7 +49,6 @@ namespace myNotebooks.subforms
 			//ddlFonts.DataSource = Program.lstFonts;
 			//ddlFonts.DisplayMember = "text";
 			sort = LabelsManager.LabelsSortType.None;
-			//lblSortType_Click(null, null);
 			SortLabels();
 			lblCreatedOn.Visible = false;
 			lblEditedOn.Visible = false;
@@ -77,7 +76,6 @@ namespace myNotebooks.subforms
 				}
 
 				LabelsManager.CheckedLabels_Set(clbLabels, entry);
-				//Utilities.Labels_SetCheckedLabels(clbLabels, entry);
 				rtbNewEntry.Focus();
 				rtbNewEntry.SelectionStart = 0;
 			}
@@ -208,7 +206,7 @@ namespace myNotebooks.subforms
 				mnuSaveAndExit.Enabled = isDirty;
 			}
 
-			if (this.entry != null)
+			if (this.entry != null & currentNotebook != null)
 			{
 				this.Text = "editing '" + entry.ClearTitle() + "' in '" + currentNotebook.Name + "'";
 			}
