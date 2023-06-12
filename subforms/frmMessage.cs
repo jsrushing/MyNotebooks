@@ -88,7 +88,7 @@ namespace myNotebooks.subforms
 				case OperationType.InputBox:
 					txtInput.Text = defaultText;
 					txtInput.Visible = true;
-					txtInput.Top = lblMessage.Top + lblMessage.Height + 15;
+					txtInput.Top = lblMessage.Top + lblMessage.Height;
 					pnlOkCancel.Top = txtInput.Top + txtInput.Height + 15;
 					pnlOkCancel.Visible = true;
 					txtInput.SelectAll();

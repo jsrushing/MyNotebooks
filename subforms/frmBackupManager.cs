@@ -19,7 +19,7 @@ namespace myNotebooks.subforms
 {
 	public partial class frmBackupManager : Form
 	{
-		string journalsFolder			= AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"];
+		string journalsFolder			= AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"];
 		string backupFolder_Forced		= AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"];
 		string backupFolder_Incremental = AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"];
 		public bool BackupRestored { get; private set; }

@@ -21,7 +21,7 @@ namespace myNotebooks
 		public static bool				SkipFileSizeComparison	= false;
 		public static List<string>		AzureJournalNames		= new List<string>();
 		public static List<Notebook>	AllNotebooks			= new List<Notebook>();
-		public static Dictionary<string, string> DictCheckedJournals = new Dictionary<string, string>();
+		public static Dictionary<string, string> DictCheckedNotebooks = new Dictionary<string, string>();
 
 		//public static List<Journal> allJournals = new List<Journal>();
 

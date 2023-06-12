@@ -1,7 +1,7 @@
 ﻿
 namespace myNotebooks.subforms
 {
-	partial class frmNewJournal
+	partial class frmNewNotebook
 	{
 		/// <summary>
 		/// Required designer variable.

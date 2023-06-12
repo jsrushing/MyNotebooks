@@ -8,6 +8,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Encryption;
@@ -23,7 +24,7 @@ namespace myNotebooks
 		public DateTime				LastSaved { get; set; }
 		public string				FileName { get; set; }
 		public List<Entry>	Entries = new List<Entry>();
-		string root					= "journals\\";
+		string root					= "notebooks\\";
 		public NotebookSettings		Settings;
 
 		public bool BackupCompleted { get; private set; }
@@ -39,35 +40,35 @@ namespace myNotebooks
 		}
 
 		// one-time code to convert Journal objects to Notebook objects
-		public Notebook(myJournal.Journal journalToConvert)
-		{
-			this.Name = journalToConvert.Name;
-			this.LastSaved = journalToConvert.LastSaved;
-			this.FileName = journalToConvert.FileName;
+		//public Notebook(myJournal.Journal journalToConvert)
+		//{
+		//	this.Name = journalToConvert.Name;
+		//	this.LastSaved = journalToConvert.LastSaved;
+		//	this.FileName = journalToConvert.FileName;
 
-			//this.Settings = journalToConvert.Settings;  // I think this is what broke all the journals :(
+		//	//this.Settings = journalToConvert.Settings;  // I think this is what broke all the journals :(
 
-			// should have been ...
-			this.Settings = new NotebookSettings
-			{
-				AllowCloud					= journalToConvert.Settings.AllowCloud,
-				IfCloudOnly_Download		= journalToConvert.Settings.IfCloudOnly_Download,
-				IfCloudOnly_Delete			= journalToConvert.Settings.IfCloudOnly_Delete,
-				IfLocalOnly_Delete			= journalToConvert.Settings.IfLocalOnly_Delete,
-				IfLocalOnly_DisallowCloud	= journalToConvert.Settings.IfLocalOnly_DisallowCloud,
-				IfLocalOnly_Upload			= journalToConvert.Settings.IfLocalOnly_Upload
-			};
+		//	// should have been ...
+		//	this.Settings = new NotebookSettings
+		//	{
+		//		AllowCloud					= journalToConvert.Settings.AllowCloud,
+		//		IfCloudOnly_Download		= journalToConvert.Settings.IfCloudOnly_Download,
+		//		IfCloudOnly_Delete			= journalToConvert.Settings.IfCloudOnly_Delete,
+		//		IfLocalOnly_Delete			= journalToConvert.Settings.IfLocalOnly_Delete,
+		//		IfLocalOnly_DisallowCloud	= journalToConvert.Settings.IfLocalOnly_DisallowCloud,
+		//		IfLocalOnly_Upload			= journalToConvert.Settings.IfLocalOnly_Upload
+		//	};
 
-			foreach (myJournal.JournalEntry je in journalToConvert.Entries)
-			{
-				Entry e			= new Entry(je.Title, je.Text, je.ClearRTF(), je.ClearLabels(), je.NotebookName);
-				e.Date			= je.Date;
-				e.Id			= je.Id;
-				e.isEdited		= je.isEdited;
-				e.LastEditedOn	= je.LastEditedOn;
-				this.Entries.Add(e);
-			}
-		}
+		//	foreach (myJournal.JournalEntry je in journalToConvert.Entries)
+		//	{
+		//		Entry e			= new Entry(je.Title, je.Text, je.ClearRTF(), je.ClearLabels(), je.NotebookName);
+		//		e.Date			= je.Date;
+		//		e.Id			= je.Id;
+		//		e.isEdited		= je.isEdited;
+		//		e.LastEditedOn	= je.LastEditedOn;
+		//		this.Entries.Add(e);
+		//	}
+		//}
 
 		public void AddEntry(Entry entryToAdd) { Entries.Add(entryToAdd); }
 
@@ -107,7 +108,7 @@ namespace myNotebooks
 		public async void Delete()
 		{
 			if (this.Settings.AllowCloud) 
-			{ await AzureFileClient.DownloadOrDeleteFile(this.FileName, Program.AzurePassword + "_" + this.Name, FileMode.Create, true);  }
+			{ await AzureFileClient.DownloadOrDeleteFile(this.FileName, Program.AzurePassword + this.Name, FileMode.Create, true);  }
 
 			DeleteBackups();
 			File.Delete(this.FileName);
@@ -198,14 +199,27 @@ namespace myNotebooks
 			return entriesToReturn;
 		}
 
-		public async Task RenameJournal(string newName)
+		public async Task Rename(string newName)
 		{
-			DeleteBackups();
-			this.Name = newName;
-			this.FileName = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"] + this.Name;
-			await this.Save();
+			//DeleteBackups();
+			var oldName = this.Name;
+			var oldFileName = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + this.Name;
 			File.Move(this.FileName, this.FileName.Substring(0, this.FileName.LastIndexOf("\\")) + "\\" + newName);
-			Backup();
+			Thread.Sleep(500);
+			this.FileName = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + newName;
+			this.Name = newName;
+			if (this.Settings.AllowCloud)
+			{
+				Program.AzureJournalNames.Clear();
+				await AzureFileClient.GetAzureJournalNames();
+				if(Program.AzureJournalNames.Contains(Program.AzurePassword + oldName)) 
+				{ 
+					await AzureFileClient.DownloadOrDeleteFile(this.FileName, Program.AzurePassword + oldName, FileMode.Create, true); 
+					CloudSynchronizer cs = new CloudSynchronizer(); await cs.SynchWithCloud(false, this);
+					await AzureFileClient.GetAzureJournalNames(); 
+				}
+			}
+			//Backup();
 		}
 
 		public async Task RenameLabel(string oldName,  string newName)
@@ -255,7 +269,7 @@ namespace myNotebooks
 								// get the entry's key values
 								EntryValues ev = new EntryValues
 								{
-									name	= e.NotebookName,	// << this should become ClearName() after refactoring Entry
+									notebookName	= e.ClearName(),	// << this should become ClearName() after refactoring Entry
 									text	= e.ClearText(),
 									RTF		= e.ClearRTF(),
 									title	= e.ClearTitle()
@@ -267,6 +281,7 @@ namespace myNotebooks
 								// encrypt key values w/ new pin
 								e.Title = EncryptDecrypt.Encrypt(ev.title);
 								e.Text = EncryptDecrypt.Encrypt(ev.text);
+								e.NotebookName = EncryptDecrypt.Encrypt(ev.notebookName);
 								//e.JournalName = EncryptDecrypt.Encrypt(ev.Name);	// << need to encrypt name
 								Program.PIN = currentPIN;
 								save = true;
@@ -357,7 +372,7 @@ namespace myNotebooks
 			public string text;
 			public string labels;
 			public string RTF;
-			public string name;
+			public string notebookName;
 		}
     }
 

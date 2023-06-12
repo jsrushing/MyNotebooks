@@ -12,25 +12,25 @@ using myNotebooks.objects;
 
 namespace myNotebooks.subforms
 {
-	public partial class frmSelectJournalsToSearch : Form
+	public partial class frmSelectNotebooksToSearch : Form
 	{
 		public Dictionary<string, string> CheckedJournals { get { return dictJournalsAndPINs; } }
 		private Dictionary<string, string> dictJournalsAndPINs = new Dictionary<string, string>();
 		//private Dictionary<string, string> dictCheckedItems = new Dictionary<string, string>();
 
-		public frmSelectJournalsToSearch(Form parent)
+		public frmSelectNotebooksToSearch(Form parent)
 		{
 			InitializeComponent();
 			//dictCheckedItems = checkedItems;
 
 			foreach (Notebook j in Program.AllNotebooks)
 			{
-				if (Program.DictCheckedJournals.ContainsKey(j.Name))
+				if (Program.DictCheckedNotebooks.ContainsKey(j.Name))
 				{
-					if (Program.DictCheckedJournals[j.Name].Length > 0)
+					if (Program.DictCheckedNotebooks[j.Name].Length > 0)
 					{
 						lstJournalPINs.Items.Add(j.Name + " (****)");
-						dictJournalsAndPINs.Add(j.Name, Program.DictCheckedJournals[j.Name]);
+						dictJournalsAndPINs.Add(j.Name, Program.DictCheckedNotebooks[j.Name]);
 					}
 					else
 					{
@@ -88,7 +88,7 @@ namespace myNotebooks.subforms
 				{ dictJournalsAndPINs.Add(Scrubbed(item), ""); }
 			}
 
-			Program.DictCheckedJournals = dictJournalsAndPINs;
+			Program.DictCheckedNotebooks = dictJournalsAndPINs;
 			this.Hide();
 		}
 
@@ -118,7 +118,7 @@ namespace myNotebooks.subforms
 			if (lstJournalPINs.SelectedIndex > -1)
 			{
 				txtPIN.PasswordChar = '*';
-				txtPIN.Text = Program.DictCheckedJournals.ContainsKey(Scrubbed(lstJournalPINs.Text)) ? Program.DictCheckedJournals[Scrubbed(lstJournalPINs.Text)] : string.Empty;
+				txtPIN.Text = Program.DictCheckedNotebooks.ContainsKey(Scrubbed(lstJournalPINs.Text)) ? Program.DictCheckedNotebooks[Scrubbed(lstJournalPINs.Text)] : string.Empty;
 				txtPIN.Enabled = true;
 				btnAddPIN.Enabled = true;
 				txtPIN.Focus();

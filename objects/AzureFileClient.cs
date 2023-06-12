@@ -23,7 +23,7 @@ namespace myNotebooks.objects
 			var fileName = localFileName.Substring(localFileName.LastIndexOf("\\") + 1);
 			ShareClient share = new ShareClient(Program.AzureConnString, shareName);
 			ShareDirectoryClient directory = share.GetDirectoryClient("");
-			ShareFileClient myFile = directory.GetFileClient(Program.AzurePassword + "_" + fileName);
+			ShareFileClient myFile = directory.GetFileClient(Program.AzurePassword + fileName);
 
 			if (File.Exists(localFileName))
 			{
@@ -71,7 +71,7 @@ namespace myNotebooks.objects
 
 			try 
 			{ 
-				await DownloadOrDeleteFile(tempFileName, Program.AzurePassword + "_" + j.Name);
+				await DownloadOrDeleteFile(tempFileName, Program.AzurePassword + j.Name);
 				Notebook j2 = new Notebook(j.Name, tempFileName).Open(true);
 				j2.Entries.Clear();
 				j2.Save();
@@ -85,15 +85,15 @@ namespace myNotebooks.objects
 		{
 			key									= EncryptDecrypt.Encrypt(key);
 			CloudStorageAccount storageAccount	= CloudStorageAccount.Parse(Program.AzureConnString);
-			CloudFileClient fileClient			= storageAccount.CreateCloudFileClient();
-			CloudFileShare share				= fileClient.GetShareReference("keys");
-			CloudFileDirectory root				= share.GetRootDirectoryReference();
-			CloudFileDirectory myDirectory		= root.GetDirectoryReference("keys");
-			FileResultSegment resultSegment		= await root.ListFilesAndDirectoriesSegmentedAsync(key, 1, null, new FileRequestOptions(), null);
+			CloudFileClient		fileClient		= storageAccount.CreateCloudFileClient();
+			CloudFileShare		share			= fileClient.GetShareReference("keys");
+			CloudFileDirectory	root			= share.GetRootDirectoryReference();
+			CloudFileDirectory	myDirectory		= root.GetDirectoryReference("keys");
+			FileResultSegment	resultSegment	= await root.ListFilesAndDirectoriesSegmentedAsync(key, 1, null, new FileRequestOptions(), null);
 			Program.AzurePassword				= resultSegment.Results.Count() == 1 ? creatingKey ? string.Empty : key : string.Empty;
 		}
 
-		public static async Task GetAzureJournalNames(string pwd, bool scrubAzPwd = false)
+		public static async Task GetAzureJournalNames(bool scrubAzPwd = false)
 		{
 			CloudStorageAccount storageAccount	= CloudStorageAccount.Parse(Program.AzureConnString);
 			CloudFileClient		fileClient		= storageAccount.CreateCloudFileClient();
@@ -102,9 +102,9 @@ namespace myNotebooks.objects
 			CloudFileDirectory	myDirectory		= root.GetDirectoryReference("journals");
 			FileRequestOptions	options			= new FileRequestOptions();
 			FileContinuationToken token			= null;
-			FileResultSegment	rsltSgmnt		= await root.ListFilesAndDirectoriesSegmentedAsync(pwd, null, token, options, null);
+			FileResultSegment	rsltSgmnt		= await root.ListFilesAndDirectoriesSegmentedAsync(Program.AzurePassword, null, token, options, null);
 
-			foreach(CloudFile file in rsltSgmnt.Results) { Program.AzureJournalNames.Add(scrubAzPwd ? file.Name.Replace(Program.AzurePassword + "_", "") : file.Name); }
+			foreach(CloudFile file in rsltSgmnt.Results) { Program.AzureJournalNames.Add(scrubAzPwd ? file.Name.Replace(Program.AzurePassword, "") : file.Name); }
 		}
 	}
 }

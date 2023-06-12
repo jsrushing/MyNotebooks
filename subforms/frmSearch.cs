@@ -23,8 +23,8 @@ namespace myNotebooks.subforms
 		{
 			InitializeComponent();
 
-			if (Program.DictCheckedJournals.Count == 0)
-			{ using (frmSelectJournalsToSearch frm = new frmSelectJournalsToSearch(parent)) { frm.ShowDialog(); } }
+			if (Program.DictCheckedNotebooks.Count == 0)
+			{ using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(parent)) { frm.ShowDialog(); } }
 
 			SetJournalSelectLabelAndButton();
 			LabelsManager.PopulateLabelsList(lstLabelsForSearch);
@@ -52,12 +52,12 @@ namespace myNotebooks.subforms
 			SearchObject so = new SearchObject(chkUseDate, chkUseDateRange, chkMatchCase, dtFindDate,
 					dtFindDate_From, dtFindDate_To, radBtnAnd, radLabels_And, txtSearchTitle.Text, txtSearchText.Text, labelsArray);
 
-			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedJournals)
+			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedNotebooks)
 			{
 				Utilities.SetProgramPIN(kvp.Key);
 				jeFound = new Notebook(kvp.Key).Open().Search(so);
 				foundEntries.AddRange(jeFound);
-				foreach (Entry je in jeFound) { FoundEntries.Add(new Entry { NotebookName = kvp.Key,}); }
+				foreach (Entry je in jeFound) { FoundEntries.Add(new Entry { NotebookName = kvp.Key}); }
 				Utilities.PopulateEntries(lstFoundEntries, foundEntries, "", "", "", false, 0, true);
 				journalBoundaries.Add(kvp.Key, lstFoundEntries.Items.Count);
 				foundEntries.Clear();
@@ -69,7 +69,7 @@ namespace myNotebooks.subforms
 
 		private void btnSelectJournals_Click(object sender, EventArgs e)
 		{
-			using (frmSelectJournalsToSearch frm = new frmSelectJournalsToSearch(this)) { frm.ShowDialog(); }
+			using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(this)) { frm.ShowDialog(); }
 			SetJournalSelectLabelAndButton();
 		}
 
@@ -169,7 +169,7 @@ namespace myNotebooks.subforms
 		private void SetJournalSelectLabelAndButton()
 		{
 			lblSearchingIn.Text = "Searching in " +
-				(Program.DictCheckedJournals.Count == Program.AllNotebooks.Count ? "all " : Program.DictCheckedJournals.Count.ToString() + " selected ") + "notebook" + (Program.DictCheckedJournals.Count == 1 ? "" : "s");
+				(Program.DictCheckedNotebooks.Count == Program.AllNotebooks.Count ? "all " : Program.DictCheckedNotebooks.Count.ToString() + " selected ") + "notebook" + (Program.DictCheckedNotebooks.Count == 1 ? "" : "s");
 
 			btnSelectJournals.Left = lblSearchingIn.Left + lblSearchingIn.Width + 5;
 		}

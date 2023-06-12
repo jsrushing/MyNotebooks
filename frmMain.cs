@@ -163,11 +163,11 @@ namespace myNotebooks.subforms
 
 		private enum SelectionState
 		{
-			JournalSelectedNotLoaded,
-			JournalLoaded,
+			NotebookSelectedNotLoaded,
+			NotebookLoaded,
 			EntrySelected,
 			HideAll,
-			JournalNotSelected
+			NotebookNotSelected
 		}
 
 		public frmMain() { InitializeComponent(); }
@@ -208,16 +208,16 @@ namespace myNotebooks.subforms
 			{
 				frm.Close();
 				CloudSynchronizer cs = new CloudSynchronizer();
-				//await cs.SynchWithCloud(true);
+				await cs.SynchWithCloud(true);
 
 				if (this.Text.ToLower().Contains("debug"))
 				{
 					StringBuilder title = new StringBuilder();
-					title.Append(" synchd: " + cs.JournalsSynchd.ToString());
-					title.Append(" skipped: " + cs.JournalsSkipped.ToString());
-					title.Append(" downloaded:" + cs.JournalsDownloaded.ToString());
-					title.Append(" backed up:" + cs.JournalsBackedUp.ToString());
-					title.Append(" deleted:" + cs.JournalsDeleted.ToString());
+					title.Append(" synchd: " + cs.NotebooksSynchd.ToString());
+					title.Append(" skipped: " + cs.NotebooksSkipped.ToString());
+					title.Append(" downloaded:" + cs.NotebooksDownloaded.ToString());
+					title.Append(" backed up:" + cs.NotebooksBackedUp.ToString());
+					title.Append(" deleted:" + cs.NotebooksDeleted.ToString());
 					this.Text += title.ToString();
 				}
 			}
@@ -282,7 +282,7 @@ namespace myNotebooks.subforms
 						SuppressDateClick = true;
 						cbxDatesTo.SelectedIndex = 0;
 						SuppressDateClick = false;
-						ShowHideMenusAndControls(SelectionState.JournalLoaded);
+						ShowHideMenusAndControls(SelectionState.NotebookLoaded);
 					}
 				}
 				else
@@ -339,7 +339,7 @@ namespace myNotebooks.subforms
 		{
 			if (recreateAll)
 			{
-				Directory.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]);
+				Directory.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"]);
 				Directory.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"]);
 				Directory.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"]);
 				Directory.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFolder"]);
@@ -349,9 +349,9 @@ namespace myNotebooks.subforms
 
 			}
 
-			if (!Directory.Exists(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]))    // create system directories and files
+			if (!Directory.Exists(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"]))    // create system directories and files
 			{
-				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"]);
+				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"]);
 				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalIncrementalBackupsFolder"]);
 				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalForcedBackupsFolder"]);
 				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFolder"]);
@@ -371,7 +371,7 @@ namespace myNotebooks.subforms
 
 		private void ddlJournals_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
+			ShowHideMenusAndControls(SelectionState.NotebookSelectedNotLoaded);
 			btnLoadJournal.Enabled = true;
 			txtJournalPIN.Focus();
 			CurrentEntry = null;
@@ -382,7 +382,7 @@ namespace myNotebooks.subforms
 			lstEntries.Visible = false;
 			cbxSortEntriesBy.SelectedIndex = 0;
 			pnlPin.Visible = ddlJournals.SelectedIndex > -1;
-			txtJournalPIN.Text = Program.DictCheckedJournals.FirstOrDefault(e => e.Key == ddlJournals.Text).Value;
+			txtJournalPIN.Text = Program.DictCheckedNotebooks.FirstOrDefault(e => e.Key == ddlJournals.Text).Value;
 			pnlDateFilters.Visible = false;
 		}
 
@@ -434,7 +434,7 @@ namespace myNotebooks.subforms
 					txtJournalPIN.Focus();
 				}
 				lstEntries.Visible = false;
-				ShowHideMenusAndControls(SelectionState.JournalNotSelected);
+				ShowHideMenusAndControls(SelectionState.NotebookNotSelected);
 				txtJournalPIN.Focus();
 			}
 		}
@@ -446,7 +446,7 @@ namespace myNotebooks.subforms
 				bool entryClicked = lstEntries.SelectedIndices.Contains((e.Y / 15) + lstEntries.TopIndex);
 				mnuEntryEdit.Visible = entryClicked;
 				mnuEntryDelete.Visible = entryClicked;
-
+				mnuEntryCreate.Visible = !entryClicked;
 			}
 		}
 
@@ -470,7 +470,7 @@ namespace myNotebooks.subforms
 				}
 				else
 				{
-					ShowHideMenusAndControls(SelectionState.JournalLoaded);
+					ShowHideMenusAndControls(SelectionState.NotebookLoaded);
 					lstEntries.SelectedIndices.Clear();
 				}
 				lb.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectEntry);
@@ -496,7 +496,7 @@ namespace myNotebooks.subforms
 				{
 					Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, cbxDatesFrom.Text, cbxDatesTo.Text);
 					ProcessDateFilters();
-					ShowHideMenusAndControls(SelectionState.JournalLoaded);
+					ShowHideMenusAndControls(SelectionState.NotebookLoaded);
 				}
 			}
 
@@ -515,7 +515,7 @@ namespace myNotebooks.subforms
 					CurrentNotebook.Save();
 					Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, cbxDatesFrom.Text, cbxDatesTo.Text);
 					ProcessDateFilters();
-					ShowHideMenusAndControls(SelectionState.JournalLoaded);
+					ShowHideMenusAndControls(SelectionState.NotebookLoaded);
 				}
 			}
 		}
@@ -533,14 +533,14 @@ namespace myNotebooks.subforms
 				{
 					Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, cbxDatesFrom.Text, cbxDatesTo.Text);
 					ProcessDateFilters();
-					ShowHideMenusAndControls(SelectionState.JournalLoaded);
+					ShowHideMenusAndControls(SelectionState.NotebookLoaded);
 				}
 			}
 		}
 
 		private void mnuJournal_Create_Click(object sender, EventArgs e)
 		{
-			using (frmNewJournal frm = new frmNewJournal(this))
+			using (frmNewNotebook frm = new frmNewNotebook(this))
 			{
 				frm.ShowDialog(this);
 
@@ -576,7 +576,7 @@ namespace myNotebooks.subforms
 					CurrentNotebook.Delete();
 					ddlJournals.Text = string.Empty;
 					lstEntries.Items.Clear();
-					ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
+					ShowHideMenusAndControls(SelectionState.NotebookSelectedNotLoaded);
 					pnlDateFilters.Visible = false;
 					using (frmLabelsManager frm3 = new frmLabelsManager(this, true)) { frm3.ShowDialog(); }
 					Program.AllNotebooks = Utilities.AllNotebooks();
@@ -613,13 +613,14 @@ namespace myNotebooks.subforms
 
 		private void mnuJournal_Rename_Click(object sender, EventArgs e)
 		{
-			using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "Enter the new journal name.", CurrentNotebook.Name, this))
+			using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "Enter the new notebook name.", CurrentNotebook.Name, this))
 			{
 				frm.ShowDialog(this);
 
 				if (frm.Result == frmMessage.ReturnResult.Ok && frm.ResultText.Length > 0)
 				{
-					CurrentNotebook.RenameJournal(frm.ResultText);
+					CurrentNotebook.Rename(frm.ResultText);
+					Thread.Sleep(1000);
 					Program.AllNotebooks = Utilities.AllNotebooks();
 					LoadNotebooks();
 				}
@@ -649,7 +650,7 @@ namespace myNotebooks.subforms
 
 		private void mnuJournal_Settings_Click(object sender, EventArgs e)
 		{
-			using (frmJournalSettings frm = new frmJournalSettings(CurrentNotebook, this))
+			using (frmNotebookSettings frm = new frmNotebookSettings(CurrentNotebook, this))
 			{
 				frm.ShowDialog();
 				if (frm.isDirty) { CurrentNotebook.Save(); }
@@ -742,7 +743,7 @@ namespace myNotebooks.subforms
 
 		private void ShowHideMenusAndControls(SelectionState st)
 		{
-			if (st == SelectionState.JournalSelectedNotLoaded)
+			if (st == SelectionState.NotebookSelectedNotLoaded)
 			{
 				rtbSelectedEntry.Text = string.Empty;
 				rtbSelectedEntry.Visible = false;
@@ -766,9 +767,9 @@ namespace myNotebooks.subforms
 				pnlPin.Visible = true;
 				SetDisplayText();
 			}
-			else if (st == SelectionState.JournalLoaded)
+			else if (st == SelectionState.NotebookLoaded)
 			{
-				ShowHideMenusAndControls(SelectionState.JournalSelectedNotLoaded);
+				ShowHideMenusAndControls(SelectionState.NotebookSelectedNotLoaded);
 
 				lstEntries.Visible = true;
 				lstEntries.Height = this.Height - 160;
@@ -800,7 +801,7 @@ namespace myNotebooks.subforms
 				lblSelectionType.Visible = true;
 				lblEntries.Visible = true;
 			}
-			else if (st == SelectionState.JournalNotSelected)
+			else if (st == SelectionState.NotebookNotSelected)
 			{
 				pnlPin.Visible = false;
 				pnlDateFilters.Visible = false;

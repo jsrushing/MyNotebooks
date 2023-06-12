@@ -37,7 +37,7 @@ namespace myNotebooks.subforms
 
 			if (mode != Mode.ChangingKey && File.Exists(Program.AppRoot + "ap"))
 			{
-				Program.AzurePassword = File.ReadAllText(Program.AppRoot + "ap");
+				Program.AzurePassword = File.ReadAllText(Program.AppRoot + "ap") + "_";
 				this.Hide();
 			}
 			else

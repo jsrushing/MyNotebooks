@@ -15,9 +15,9 @@ using Azure.Storage.Files.Shares;
 
 namespace myNotebooks.subforms
 {
-	public partial class frmExportJournals : Form
+	public partial class frmExportNotebooks : Form
 	{
-		public frmExportJournals(Form parent)
+		public frmExportNotebooks(Form parent)
 		{
 			InitializeComponent();
 			Utilities.SetStartPosition(this, parent);
@@ -48,7 +48,7 @@ namespace myNotebooks.subforms
 
 			//foreach (string jrnl in lstJournalsToExport.SelectedItems)
 			//{
-			//	builder.Attachments.Add(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + jrnl);
+			//	builder.Attachments.Add(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + jrnl);
 			//}
 
 			//message.Body = builder.ToMessageBody();
@@ -68,7 +68,7 @@ namespace myNotebooks.subforms
 
 			//foreach(string sJournalName in lstJournalsToExport.SelectedItems)
 			//{
-			//	mapi.AddAttachment(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + sJournalName);
+			//	mapi.AddAttachment(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + sJournalName);
 			//}
 
 			////foreach(string sRecipient in txtRecipients.Text.Split(','))

@@ -84,7 +84,7 @@ namespace myNotebooks.objects
 			lstReturn.AddRange(allLabels);
 			Notebook journal;
 
-			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedJournals)
+			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedNotebooks)
 			{
 				journal = new Notebook(kvp.Key).Open();
 
@@ -143,7 +143,7 @@ namespace myNotebooks.objects
 		public static List<Notebook> JournalsContainingLabel(string labelName, bool returnIfTwoFound = false)
 		{
 			List<Notebook> lstRtrn = new List<Notebook>();
-			List<Notebook> jrnls2Search = Program.AllNotebooks.Where(e => Program.DictCheckedJournals.ContainsKey(e.Name)).ToList();
+			List<Notebook> jrnls2Search = Program.AllNotebooks.Where(e => Program.DictCheckedNotebooks.ContainsKey(e.Name)).ToList();
 
 			foreach (Notebook journal in jrnls2Search)
 			{

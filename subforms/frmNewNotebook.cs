@@ -10,7 +10,7 @@ using myNotebooks.objects;
 
 namespace myNotebooks.subforms
 {
-	public partial class frmNewJournal : Form
+	public partial class frmNewNotebook : Form
 	{
 		private List<string> lstAllJournalNames = Utilities.AllJournalNames();
 		public string NewJournalName { get; private set; }
@@ -21,7 +21,7 @@ namespace myNotebooks.subforms
 		public bool IfLocalOnly_Delete { get { return radLocalNotCloud_DeleteLocal.Checked; } }
 		public bool IfLocalOnly_DisallowCloud { get { return radLocalNotCloud_DisallowLocalCloud.Checked; } }
 
-		public frmNewJournal(Form parent)
+		public frmNewNotebook(Form parent)
 		{
 			InitializeComponent();
 			Utilities.SetStartPosition(this, parent);

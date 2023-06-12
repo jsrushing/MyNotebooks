@@ -24,7 +24,7 @@ namespace myNotebooks.objects
 		public static List<Notebook> AllNotebooks()
 		{
 			List<Notebook> nbReturn = new List<Notebook>();
-			var sNotebooksFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"];
+			var sNotebooksFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"];
 			foreach (var s in Directory.GetFiles(sNotebooksFolder)) { nbReturn.Add(new Notebook(s.Replace(sNotebooksFolder, "")).Open()); }
 			return nbReturn;
 		}
@@ -33,7 +33,7 @@ namespace myNotebooks.objects
 		public static List<Journal> AllJournals()
 		{
 			List<Journal> jrnlReturn = new List<Journal>();
-			var sJournalsFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"];
+			var sJournalsFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"];
 			foreach (var s in Directory.GetFiles(sJournalsFolder)) { jrnlReturn.Add(new Journal(s.Replace(sJournalsFolder, "")).Open()); }  // (new Journal(s.Replace(sJournalsFolder, "")).Open()); }
 			return jrnlReturn;
 		}
@@ -42,7 +42,7 @@ namespace myNotebooks.objects
 		{
 			List<Notebook> rtrn = new List<Notebook>();
 
-			foreach(KeyValuePair<string, string> kvp in Program.DictCheckedJournals)
+			foreach(KeyValuePair<string, string> kvp in Program.DictCheckedNotebooks)
 			{ rtrn.Add(new Notebook(kvp.Key).Open()); }
 
 			return rtrn;
@@ -100,7 +100,7 @@ namespace myNotebooks.objects
 				foreach (var fileName in ofd.FileNames)
 				{
 					nbName = fileName.Substring(fileName.LastIndexOf("\\") + 1);
-					target = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"] + nbName;
+					target = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + nbName;
 
 					if (File.Exists(target))
 					{
@@ -122,7 +122,7 @@ namespace myNotebooks.objects
 					if (ok2copy)
 					{
 						File.Copy(fileName, target, true);
-						Program.DictCheckedJournals.Add(nbName, Program.PIN);
+						Program.DictCheckedNotebooks.Add(nbName, Program.PIN);
 						Program.AllNotebooks.Add(new Notebook(nbName).Open());
 						filesCopied = true;
 						List<string> newLabels = LabelsManager.FindNewLabelsInOneSelectedJournal(null, nbName);
@@ -193,7 +193,7 @@ namespace myNotebooks.objects
 
 		public static void SetProgramPIN(string j)
 		{
-			Program.PIN = Program.DictCheckedJournals[j] == "" ? "" : Program.DictCheckedJournals[j];
+			Program.PIN = Program.DictCheckedNotebooks[j] == "" ? "" : Program.DictCheckedNotebooks[j];
 		}
 
 		public static void SetStartPosition(Form formToInitialize, Form parentForm)

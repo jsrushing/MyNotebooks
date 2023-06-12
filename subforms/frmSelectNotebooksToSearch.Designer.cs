@@ -1,7 +1,7 @@
 ﻿
 namespace myNotebooks.subforms
 {
-	partial class frmSelectJournalsToSearch
+	partial class frmSelectNotebooksToSearch
 	{
 		/// <summary>
 		/// Required designer variable.

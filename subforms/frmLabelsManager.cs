@@ -49,8 +49,8 @@ namespace myNotebooks.subforms
 			{ mnuFindOrphans_Click(null, null); }
 			else
 			{
-				if (Program.DictCheckedJournals.Count == 0)
-				{ using (frmSelectJournalsToSearch frm = new frmSelectJournalsToSearch(this)) { frm.ShowDialog(); } }
+				if (Program.DictCheckedNotebooks.Count == 0)
+				{ using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(this)) { frm.ShowDialog(); } }
 			}
 		}
 
@@ -106,7 +106,7 @@ namespace myNotebooks.subforms
 		private List<Notebook> GetSelectedJournals()
 		{
 			SelectedJournals.Clear();
-			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedJournals) { SelectedJournals.Add(new Notebook(kvp.Key).Open()); }
+			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedNotebooks) { SelectedJournals.Add(new Notebook(kvp.Key).Open()); }
 			return SelectedJournals;
 		}
 
@@ -146,7 +146,7 @@ namespace myNotebooks.subforms
 		{
 			if (lstLabels.SelectedIndex > -1)
 			{
-				if (Program.DictCheckedJournals.Count == 0)
+				if (Program.DictCheckedNotebooks.Count == 0)
 				{
 					using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message,
 						"No notebook is selected for the search.", "No Notebook Selected", this))
@@ -202,8 +202,8 @@ namespace myNotebooks.subforms
 					mnuContextDelete.Text = "Delete '" + lstLabels.Text + "'";
 					mnuContextRename.Text = "Rename '" + lstLabels.Text + "'";
 					mnuDelete_OneJournal.Text = string.Format(MnuDelete_OneJournalText, lstOccurrences.SelectedItem.ToString().Replace("in", "from"));
-					mnuDelete_AllJournals.Text = Program.DictCheckedJournals.Count == Program.AllNotebooks.Count ? "from all journals"
-						: string.Format(MnuDelete_SelectedJournalaText, Program.DictCheckedJournals.Count.ToString());
+					mnuDelete_AllJournals.Text = Program.DictCheckedNotebooks.Count == Program.AllNotebooks.Count ? "from all journals"
+						: string.Format(MnuDelete_SelectedJournalaText, Program.DictCheckedNotebooks.Count.ToString());
 				}
 			}
 			else { mnuContextDelete.Visible = false; }  // lstOccurrences.ContextMenuStrip = null; }
@@ -241,8 +241,8 @@ namespace myNotebooks.subforms
 
 			var sMsg = "Do you want to delete the label '" + lstLabels.SelectedItem.ToString() + "' ";
 			sMsg += (editingOneJournal ? mnu.Text.Replace("in", "from").Replace(" only", "") :
-				Program.DictCheckedJournals.Count == Program.AllNotebooks.Count ? " from all journals " : " the " + Program.DictCheckedJournals.Count.ToString() + " selected journal"
-				+ (Program.DictCheckedJournals.Count == 1 && !editingOneJournal ? "" : "s")) + "?";
+				Program.DictCheckedNotebooks.Count == Program.AllNotebooks.Count ? " from all journals " : " the " + Program.DictCheckedNotebooks.Count.ToString() + " selected journal"
+				+ (Program.DictCheckedNotebooks.Count == 1 && !editingOneJournal ? "" : "s")) + "?";
 
 			using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, sMsg, "Delete Label?", this))
 			{
@@ -281,7 +281,7 @@ namespace myNotebooks.subforms
 			var newLabelName = string.Empty;
 
 			var sMsg = "The label '" + lstLabels.SelectedItem + " will be renamed in " +
-				(Program.DictCheckedJournals.Count == Program.AllNotebooks.Count ? "all" : "the (" + Program.DictCheckedJournals.Count + ") selected" + " notebooks.");
+				(Program.DictCheckedNotebooks.Count == Program.AllNotebooks.Count ? "all" : "the (" + Program.DictCheckedNotebooks.Count + ") selected" + " notebooks.");
 
 			using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, sMsg, "new label name", this))
 			{
@@ -292,7 +292,7 @@ namespace myNotebooks.subforms
 			if (newLabelName.Length > 0)
 			{
 				List<Notebook> jrnlsToSearch = GetSelectedJournals();
-				await LabelsManager.RenameLabel(oldLabelName, newLabelName, jrnlsToSearch, Program.DictCheckedJournals, this);
+				await LabelsManager.RenameLabel(oldLabelName, newLabelName, jrnlsToSearch, Program.DictCheckedNotebooks, this);
 
 				if (!lstLabels.Items.OfType<string>().Contains(newLabelName))
 				{
@@ -331,10 +331,10 @@ namespace myNotebooks.subforms
 
 		private void mnuSelectNotebooks_Click(object sender, EventArgs e)
 		{
-			using (frmSelectJournalsToSearch frm = new frmSelectJournalsToSearch(this))
+			using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(this))
 			{
 				frm.ShowDialog();
-				Program.DictCheckedJournals = frm.CheckedJournals;
+				Program.DictCheckedNotebooks = frm.CheckedJournals;
 			}
 			GetSelectedJournals();
 			KickLstLabels();

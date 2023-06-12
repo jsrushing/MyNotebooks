@@ -20,11 +20,11 @@ namespace myNotebooks.objects
 			CloudNewer
 		}
 
-		public int JournalsSynchd		{ get { return ItemsSynchd.Count; } }
-		public int JournalsSkipped		{ get { return ItemsSkipped.Count; } }
-		public int JournalsDownloaded	{ get { return ItemsDownloaded.Count; } }
-		public int JournalsBackedUp		{ get { return ItemsBackedUp.Count; } }
-		public int JournalsDeleted		{ get { return ItemsDeleted.Count; } }
+		public int NotebooksSynchd		{ get { return ItemsSynchd.Count; } }
+		public int NotebooksSkipped		{ get { return ItemsSkipped.Count; } }
+		public int NotebooksDownloaded	{ get { return ItemsDownloaded.Count; } }
+		public int NotebooksBackedUp		{ get { return ItemsBackedUp.Count; } }
+		public int NotebooksDeleted		{ get { return ItemsDeleted.Count; } }
 
 		public string Err = string.Empty; 
 
@@ -41,7 +41,7 @@ namespace myNotebooks.objects
 		{
 			foreach (var sJrnlName in Program.AzureJournalNames.Except(Utilities.AllJournalNames()))        // any journal on Azure not found locally
 			{
-				await AzureFileClient.DownloadOrDeleteFile(tempFolder + sJrnlName, Program.AzurePassword + "_" + sJrnlName);
+				await AzureFileClient.DownloadOrDeleteFile(tempFolder + sJrnlName, Program.AzurePassword + sJrnlName);
 				//Journal j3 = new Journal(tempFolder + sJrnlName, tempFolder + sJrnlName).Open(true);
 				Notebook j3 = new Notebook(tempFolder + sJrnlName, tempFolder + sJrnlName).Open();	
 
@@ -55,7 +55,7 @@ namespace myNotebooks.objects
 
 				if (j3 !=null &&j3.Settings.IfCloudOnly_Delete)
 				{
-					await AzureFileClient.DownloadOrDeleteFile(tempFolder + j3.Name, Program.AzurePassword + "_" + j3.Name, FileMode.Open, true);
+					await AzureFileClient.DownloadOrDeleteFile(tempFolder + j3.Name, Program.AzurePassword + j3.Name, FileMode.Open, true);
 				}
 
 				File.Delete(tempFolder + sJrnlName);
@@ -118,7 +118,7 @@ namespace myNotebooks.objects
 					{
 						try
 						{
-							await AzureFileClient.DownloadOrDeleteFile(tempFolder + j.Name, Program.AzurePassword + "_" + j.Name);
+							await AzureFileClient.DownloadOrDeleteFile(tempFolder + j.Name, Program.AzurePassword + j.Name);
 							cloudJournal = File.Exists(tempFolder + j.Name) ? new Notebook(j.Name, tempFolder + j.Name).Open(true) : null;
 						}
 						catch (Exception) { }
@@ -168,7 +168,7 @@ namespace myNotebooks.objects
 
 		public async Task SynchWithCloud(bool alsoSynchSettings = false, Notebook notebook = null)
 		{
-			var NotebooksFolder			= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_JournalsFolder"];
+			var NotebooksFolder			= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"];
 			var tempFolder				= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"];
 			List<Notebook> allNotebooks	= new List<Notebook>();
 			Program.AllNotebooks		= Utilities.AllNotebooks();
@@ -194,7 +194,7 @@ namespace myNotebooks.objects
 			}
 
 			await ProcessJournals(allNotebooks, tempFolder, NotebooksFolder);
-			await AzureFileClient.GetAzureJournalNames(Program.AzurePassword, true);
+			await AzureFileClient.GetAzureJournalNames(true);
 			Program.AllNotebooks = Utilities.AllNotebooks();
 			await CheckForLocalOrCloudOnly(tempFolder, NotebooksFolder);		
 

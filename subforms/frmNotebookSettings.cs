@@ -11,7 +11,7 @@ using Org.BouncyCastle.Bcpg.Sig;
 
 namespace myNotebooks.subforms
 {
-	public partial class frmJournalSettings : Form
+	public partial class frmNotebookSettings : Form
 	{
 		Notebook workingJournal;
 		public bool isDirty = false;
@@ -27,7 +27,7 @@ namespace myNotebooks.subforms
 		#endregion
 		// ..........
 
-		public frmJournalSettings(Notebook journalToEdit, Form parent)
+		public frmNotebookSettings(Notebook journalToEdit, Form parent)
 		{
 			InitializeComponent();
 
