@@ -540,6 +540,21 @@ namespace myNotebooks.subforms
 			}
 		}
 
+		private void mnuLabels_Click(object sender, EventArgs e)
+		{
+			using (frmLabelsManager frm = new frmLabelsManager(this, false, CurrentNotebook))
+			{
+				frm.ShowDialog();
+				if (frm.ActionTaken)
+				{
+					var indx = ddlNotebooks.SelectedIndex;
+					LoadNotebooks();
+					ddlNotebooks.SelectedIndex = -1;
+					ddlNotebooks.SelectedIndex = indx;
+				}
+			}
+		}
+
 		private async void mnuNotebook_Create_Click(object sender, EventArgs e)
 		{
 			using (frmNewNotebook frm = new frmNewNotebook(this))
@@ -630,6 +645,8 @@ namespace myNotebooks.subforms
 			}
 		}
 
+		private async void mnuNotebook_ResetPIN_Click(object sender, EventArgs e) { await CurrentNotebook.ResetPIN(this); }
+
 		private async void mnuNotebook_RestoreBackups_Click(object sender, EventArgs e)
 		{
 			string sJournalName = ddlNotebooks.Text;
@@ -660,23 +677,6 @@ namespace myNotebooks.subforms
 			}
 			SetDisplayText();
 		}
-
-		private void mnuLabels_Click(object sender, EventArgs e)
-		{
-			using (frmLabelsManager frm = new frmLabelsManager(this, false, CurrentNotebook))
-			{
-				frm.ShowDialog();
-				if (frm.ActionTaken)
-				{
-					var indx = ddlNotebooks.SelectedIndex;
-					LoadNotebooks();
-					ddlNotebooks.SelectedIndex = -1;
-					ddlNotebooks.SelectedIndex = indx;
-				}
-			}
-		}
-
-		private async void mnuNotebook_ResetPIN_Click(object sender, EventArgs e) { await CurrentNotebook.ResetPIN(this); }
 
 		private void rtbSelectedEntry_MouseDown(object sender, MouseEventArgs e)
 		{
