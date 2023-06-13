@@ -418,12 +418,12 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private void LoadNotebooks()
+		private async void LoadNotebooks()
 		{
 			ddlNotebooks.Items.Clear();
 			ddlNotebooks.Text = string.Empty;
-			Utilities.GetAllNotebooks();
-			foreach (Notebook book in Program.AllNotebooks) { ddlNotebooks.Items.Add(book.Name); }
+			await Utilities.GetAllNotebooks();
+			ddlNotebooks.Items.AddRange(Program.AllNotebookNames.ToArray());
 
 			if (ddlNotebooks.Items.Count > 0)
 			{
@@ -432,6 +432,7 @@ namespace myNotebooks.subforms
 				if (ddlNotebooks.Items.Count == 1)
 				{
 					ddlNotebooks.SelectedIndex = 0;
+					ShowHideMenusAndControls(SelectionState.NotebookSelectedNotLoaded);
 					txtJournalPIN.Focus();
 				}
 				lstEntries.Visible = false;
@@ -504,7 +505,7 @@ namespace myNotebooks.subforms
 			this.Cursor = Cursors.Default;
 		}
 
-		private void mnuEntryDelete_Click(object sender, EventArgs e)
+		private async void mnuEntryDelete_Click(object sender, EventArgs e)
 		{
 			using (frmMessage frm = new frmMessage(frmMessage.OperationType.DeleteEntry, CurrentEntry.ClearTitle(), "", this))
 			{
@@ -513,7 +514,7 @@ namespace myNotebooks.subforms
 				if (frm.Result == frmMessage.ReturnResult.Yes)
 				{
 					CurrentNotebook.Entries.Remove(CurrentEntry);
-					CurrentNotebook.Save();
+					await CurrentNotebook.Save();
 					Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, cbxDatesFrom.Text, cbxDatesTo.Text);
 					ProcessDateFilters();
 					ShowHideMenusAndControls(SelectionState.NotebookLoaded);
@@ -539,7 +540,7 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private async void mnuJournal_Create_Click(object sender, EventArgs e)
+		private async void mnuNotebook_Create_Click(object sender, EventArgs e)
 		{
 			using (frmNewNotebook frm = new frmNewNotebook(this))
 			{
@@ -558,7 +559,7 @@ namespace myNotebooks.subforms
 					nb.Settings.IfLocalOnly_DisallowCloud = frm.IfLocalOnly_DisallowCloud;
 					// ........................................................................
 					nb.LastSaved = DateTime.Now;
-					nb.Create();
+					await nb.Create();
 					await Utilities.GetAllNotebooks();
 					LoadNotebooks();
 				}
@@ -587,7 +588,7 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private async void mnuJournal_Export_Click(object sender, EventArgs e)
+		private void mnuNotebook_Export_Click(object sender, EventArgs e)
 		{
 			// How to export? Thinking needs a form of its own. to Excel, .txt, .pdf, encrypted for sharing?
 
@@ -604,16 +605,16 @@ namespace myNotebooks.subforms
 			//}
 		}
 
-		private void mnuJournal_ForceBackup_Click(object sender, EventArgs e)
+		private void mnuNotebook_ForceBackup_Click(object sender, EventArgs e)
 		{
 			CurrentNotebook.Backup_Forced();
 			string sMsg = CurrentNotebook.BackupCompleted ? "The backup was completed" : "An error occurred. The backup was not completed.";
 			using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "", this)) { frm.ShowDialog(this); }
 		}
 
-		private void mnuJournal_Import_Click(object sender, EventArgs e) { if (Utilities.ImportNotebooks(this)) { LoadNotebooks(); } }
+		private async void mnuNotebook_Import_Click(object sender, EventArgs e) { await Utilities.ImportNotebooks(this); { LoadNotebooks(); } }
 
-		private async void mnuJournal_Rename_Click(object sender, EventArgs e)
+		private async void mnuNotebook_Rename_Click(object sender, EventArgs e)
 		{
 			using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "Enter the new notebook name.", CurrentNotebook.Name, this))
 			{
@@ -621,8 +622,7 @@ namespace myNotebooks.subforms
 
 				if (frm.Result == frmMessage.ReturnResult.Ok && frm.ResultText.Length > 0)
 				{
-					CurrentNotebook.Rename(frm.ResultText);
-					Thread.Sleep(1000);
+					await CurrentNotebook.Rename(frm.ResultText);
 					await Utilities.GetAllNotebooks();
 					LoadNotebooks();
 				}
@@ -630,7 +630,7 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private async void mnuJournal_RestoreBackups_Click(object sender, EventArgs e)
+		private async void mnuNotebook_RestoreBackups_Click(object sender, EventArgs e)
 		{
 			string sJournalName = ddlNotebooks.Text;
 			using (frmBackupManager frm = new frmBackupManager(this))
@@ -640,7 +640,7 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private void mnuJournal_Search_Click(object sender, EventArgs e)
+		private void mnuNotebook_Search_Click(object sender, EventArgs e)
 		{
 			using (frmSearch frm = new frmSearch(this))
 			{
@@ -650,12 +650,12 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private void mnuJournal_Settings_Click(object sender, EventArgs e)
+		private async void mnuNotebook_Settings_Click(object sender, EventArgs e)
 		{
 			using (frmNotebookSettings frm = new frmNotebookSettings(CurrentNotebook, this))
 			{
 				frm.ShowDialog();
-				if (frm.isDirty) { CurrentNotebook.Save(); }
+				if (frm.isDirty) { await CurrentNotebook.Save(); }
 				//frm.Close();
 			}
 			SetDisplayText();
@@ -676,7 +676,7 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private void mnuResetPIN_Click(object sender, EventArgs e) { CurrentNotebook.ResetPIN(this); }
+		private async void mnuNotebook_ResetPIN_Click(object sender, EventArgs e) { await CurrentNotebook.ResetPIN(this); }
 
 		private void rtbSelectedEntry_MouseDown(object sender, MouseEventArgs e)
 		{
@@ -699,7 +699,7 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private void txtJournalPIN_TextChanged(object sender, EventArgs e)
+		private void txtNotebookPIN_TextChanged(object sender, EventArgs e)
 		{
 			if (txtJournalPIN.Text.Length > 0)
 			{
@@ -760,12 +760,12 @@ namespace myNotebooks.subforms
 				mnuEntryDelete.Enabled = false;
 				mnuEntryEdit.Enabled = false;
 
-				mnuJournal_Delete.Enabled = false;
-				mnuJournal_Rename.Enabled = false;
+				mnuNotebook_Delete.Enabled = false;
+				mnuNotebook_Rename.Enabled = false;
 				//mnuJournal_Search.Enabled = false;
-				mnuJournal_ForceBackup.Enabled = false;
-				mnuJournal_Export.Enabled = true;
-				mnuJournal_Settings.Enabled = false;
+				mnuNotebook_ForceBackup.Enabled = false;
+				mnuNotebook_Export.Enabled = true;
+				mnuNotebook_Settings.Enabled = false;
 				pnlPin.Visible = true;
 				SetDisplayText();
 			}
@@ -780,12 +780,12 @@ namespace myNotebooks.subforms
 				mnuEntryTop.Enabled = true;
 				mnuEntryCreate.Enabled = true;
 
-				mnuJournal_Delete.Enabled = true;
-				mnuJournal_Rename.Enabled = true;
+				mnuNotebook_Delete.Enabled = true;
+				mnuNotebook_Rename.Enabled = true;
 				//mnuJournal_Search.Enabled = true;
-				mnuJournal_ForceBackup.Enabled = true;
+				mnuNotebook_ForceBackup.Enabled = true;
 				//mnuJournal_Export.Enabled = currentJournal.Settings.AllowCloud;
-				mnuJournal_Settings.Enabled = true;
+				mnuNotebook_Settings.Enabled = true;
 				btnLoadJournal.Enabled = false;
 
 				txtJournalPIN.Text = string.Empty;

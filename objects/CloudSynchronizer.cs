@@ -39,7 +39,7 @@ namespace myNotebooks.objects
 
 		private async Task CheckForLocalOrCloudOnly(string tempFolder, string notebooksFolder)
 		{
-			foreach (var sBookName in Program.AzureJournalNames.Except(Utilities.AllJournalNames()))        // any journal on Azure not found locally
+			foreach (var sBookName in Program.AzureNotebookNames.Except(Program.AllNotebookNames))        // any journal on Azure not found locally
 			{
 				await AzureFileClient.DownloadOrDeleteFile(tempFolder + sBookName, Program.AzurePassword + sBookName);
 				Notebook j3 = new Notebook(tempFolder + sBookName, tempFolder + sBookName).Open();	
@@ -63,14 +63,14 @@ namespace myNotebooks.objects
 				File.Delete(tempFolder + sBookName);
 			}
 
-			foreach (var sLocalFile in Utilities.AllJournalNames().Except(Program.AzureJournalNames))   // any journal found locally but not on Azure
+			foreach (var sLocalFile in Program.AllNotebookNames.Except(Program.AzureNotebookNames))   // any journal found locally but not on Azure
 			{
 				Notebook j2 = new Notebook(sLocalFile).Open();
 				if (j2.Settings.AllowCloud)
 				{
 					if (j2.Settings.IfLocalOnly_Delete) { j2.Delete(); }
 					else if (j2.Settings.IfLocalOnly_Upload) { await AzureFileClient.UploadFile(j2.FileName); }
-					else if (j2.Settings.IfLocalOnly_DisallowCloud) { j2.Settings.AllowCloud = false; j2.Save(); }
+					else if (j2.Settings.IfLocalOnly_DisallowCloud) { j2.Settings.AllowCloud = false; await	j2.Save(); }
 				}
 			}
 		}
@@ -246,7 +246,7 @@ namespace myNotebooks.objects
 						case ComparisonResult.Same:
 							break;
 						case ComparisonResult.LocalNewer:
-							AzureFileClient.UploadFile(sLocalLabelsFile, "labelsandsettings");
+							await AzureFileClient.UploadFile(sLocalLabelsFile, "labelsandsettings");
 							break;
 						case ComparisonResult.CloudNewer:
 							File.Move(tempLabelsFile, sLocalLabelsFile, true);

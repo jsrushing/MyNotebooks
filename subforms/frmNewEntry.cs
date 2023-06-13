@@ -123,7 +123,7 @@ namespace myNotebooks.subforms
 		private void ModifyFontStyle(FontStyle style)
 		{ rtbNewEntry.SelectionFont = new Font(rtbNewEntry.SelectionFont, rtbNewEntry.SelectionFont.Style ^ style); }
 
-		private void mnuCancelExit_Click(object sender, EventArgs e)
+		private async void mnuCancelExit_Click(object sender, EventArgs e)
 		{
 			if (isDirty)
 			{
@@ -131,7 +131,7 @@ namespace myNotebooks.subforms
 				{
 					frm.ShowDialog(this);
 					if (frm.Result == frmMessage.ReturnResult.No) { entry = null; }
-					else if (frm.Result == frmMessage.ReturnResult.Yes) { SaveEntry(); }
+					else if (frm.Result == frmMessage.ReturnResult.Yes) { await SaveEntry(); }
 				}
 			}
 			else
@@ -153,17 +153,17 @@ namespace myNotebooks.subforms
 			txtFind.Focus();
 		}
 
-		private void mnuSaveAndExit_Click(object sender, EventArgs e)
+		private async void mnuSaveAndExit_Click(object sender, EventArgs e)
 		{
-			SaveEntry();
+			await SaveEntry();
 			this.Hide();
 		}
 
-		private void mnuSaveEntry_Click(object sender, EventArgs e)
+		private async void mnuSaveEntry_Click(object sender, EventArgs e)
 		{
 			if (rtbNewEntry.Text.Length > 0 && txtNewEntryTitle.Text.Length > 0 && isDirty)
 			{
-				SaveEntry();
+				await SaveEntry();
 			}
 			else
 			{

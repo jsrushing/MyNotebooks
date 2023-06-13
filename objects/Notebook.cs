@@ -212,13 +212,13 @@ namespace myNotebooks
 			if (this.Settings.AllowCloud)
 			{				await AzureFileClient.GetAzureJournalNames();
 
-				if(Program.AzureJournalNames.Contains(Program.AzurePassword + oldName)) 
+				if(Program.AzureNotebookNames.Contains(Program.AzurePassword + oldName)) 
 				{ 
 					await AzureFileClient.DownloadOrDeleteFile(this.FileName, Program.AzurePassword + oldName, FileMode.Create, true);
-					CloudSynchronizer cs = new CloudSynchronizer(); AzureFileClient.UploadFile(this.FileName);   // gets this newly renamed notebook to Azure
-					Program.AzureJournalNames.Remove(oldName);
+					CloudSynchronizer cs = new CloudSynchronizer(); await AzureFileClient.UploadFile(this.FileName);   // gets this newly renamed notebook to Azure
+					Program.AzureNotebookNames.Remove(oldName);
 				}
-				Program.AzureJournalNames.Add(newName);
+				Program.AzureNotebookNames.Add(newName);
 				AzureFileClient.UploadRenamedFileTrigger(oldName, newName);
 			}
 			//Backup();

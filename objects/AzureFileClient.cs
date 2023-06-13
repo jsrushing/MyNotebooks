@@ -55,8 +55,8 @@ namespace myNotebooks.objects
 				await DownloadOrDeleteFile(tempFileName, Program.AzurePassword + j.Name);
 				Notebook j2 = new Notebook(j.Name, tempFileName).Open(true);
 				j2.Entries.Clear();
-				j2.Save();
-				AzureFileClient.UploadFile(tempFileName);
+				await j2.Save();
+				await AzureFileClient.UploadFile(tempFileName);
 				File.Delete(tempFileName);
 			}
 			catch (Exception) { }
@@ -85,9 +85,9 @@ namespace myNotebooks.objects
 			FileContinuationToken token			= null;
 			FileResultSegment	rsltSgmnt		= await root.ListFilesAndDirectoriesSegmentedAsync(Program.AzurePassword, null, token, options, null);
 
-			Program.AzureJournalNames.Clear();
+			Program.AzureNotebookNames.Clear();
 			foreach(CloudFile file in rsltSgmnt.Results) 
-			{ Program.AzureJournalNames.Add(scrubAzPwd ? file.Name.Replace(Program.AzurePassword, "") : file.Name); }
+			{ Program.AzureNotebookNames.Add(scrubAzPwd ? file.Name.Replace(Program.AzurePassword, "") : file.Name); }
 		}
 
 		public static async Task UploadFile(string localFileName, string shareName = "notebooks")
@@ -109,11 +109,11 @@ namespace myNotebooks.objects
 			}
 		}
 
-		public static void UploadRenamedFileTrigger(string oldName, string newName)
+		public async static void UploadRenamedFileTrigger(string oldName, string newName)
 		{
 			var tempFldr = ConfigurationManager.AppSettings["FolderStructure_Temp"];
 			File.Create(tempFldr + oldName + "_" + newName);
-			UploadFile(tempFldr + oldName + "_" + newName, "notebooksrenamed");
+			await UploadFile(tempFldr + oldName + "_" + newName, "notebooksrenamed");
 		}
 	}
 }

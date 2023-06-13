@@ -14,11 +14,13 @@ namespace myNotebooks.objects
 {
 	public static class Utilities
 	{
-		public static List<string> AllJournalNames()
+		public static async Task AllJournalNames()
 		{
 			List<string> lstRtrn = new List<string>();
-			foreach (Notebook nb in Program.AllNotebooks)if(nb != null) lstRtrn.Add(nb.Name);
-			return lstRtrn;
+			Program.AllNotebookNames.Clear();
+			await Utilities.GetAllNotebooks();
+			foreach (Notebook nb in Program.AllNotebooks)if(nb != null) Program.AllNotebookNames.Add(nb.Name);
+			//return lstRtrn;
 		} 
 
 		public static async Task GetAllNotebooks()
@@ -87,10 +89,10 @@ namespace myNotebooks.objects
 			return result;
 		}
 
-		public static bool ImportNotebooks(Form parent)
+		public async static Task ImportNotebooks(Form parent)
 		{
 			OpenFileDialog ofd = new OpenFileDialog { Multiselect = true };
-			var filesCopied = false;
+			//var filesCopied = false;
 
 			if (ofd.ShowDialog() == DialogResult.OK)
 			{
@@ -125,7 +127,7 @@ namespace myNotebooks.objects
 						File.Copy(fileName, target, true);
 						Program.DictCheckedNotebooks.Add(nbName, Program.PIN);
 						Program.AllNotebooks.Add(new Notebook(nbName).Open());
-						filesCopied = true;
+						//filesCopied = true;
 						List<string> newLabels = LabelsManager.FindNewLabelsInOneSelectedJournal(null, nbName);
 
 						if (newLabels.Count > 0)
@@ -137,7 +139,7 @@ namespace myNotebooks.objects
 								"Do you want to add themt?", "New Labels Found", parent))
 							{
 								frm.ShowDialog();
-								if (frm.Result == frmMessage.ReturnResult.Yes) { LabelsManager.AddLabel(newLabels.ToArray()); }
+								if (frm.Result == frmMessage.ReturnResult.Yes) { await LabelsManager.AddLabel(newLabels.ToArray()); }
 							}
 						}
 					}
@@ -145,7 +147,7 @@ namespace myNotebooks.objects
 					ok2copy = true;
 				}	
 			}
-			return filesCopied;
+			//return filesCopied;
 		}
 
 		public static void PopulateEntries(ListBox lbxToPopulate, List<Entry> entries, string journalName = "", string startDate = "", string endDate = "", bool clearPrevious = true, int SortBy = 0, bool includeJrnlName = false)

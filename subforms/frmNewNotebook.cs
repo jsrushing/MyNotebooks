@@ -12,7 +12,6 @@ namespace myNotebooks.subforms
 {
 	public partial class frmNewNotebook : Form
 	{
-		private List<string> lstAllJournalNames = Utilities.AllJournalNames();
 		public string NewJournalName { get; private set; }
 		public bool AllowCloud { get { return chkAllowWebBackup.Checked; } }
 		public bool IfCloudOnly_Download { get { return radCloudNotLocal_DownloadCloud.Checked; } }
@@ -53,7 +52,7 @@ namespace myNotebooks.subforms
 
 		private void txtName_TextChanged(object sender, EventArgs e)
 		{
-			lblNameExists.Visible = lstAllJournalNames.Contains(txtName.Text);
+			lblNameExists.Visible = Program.AllNotebookNames.Contains(txtName.Text);
 			btnOk.Enabled = txtName.Text.Length > 0 && !lblNameExists.Visible;
 
 			if (txtName.Text.Contains("|"))

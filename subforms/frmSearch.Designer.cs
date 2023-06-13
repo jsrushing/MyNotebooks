@@ -458,7 +458,6 @@ namespace myNotebooks.subforms
 		private System.Windows.Forms.Label label9;
 		private System.Windows.Forms.Label lblSelectionType;
 		private System.Windows.Forms.Label label8;
-		private System.Windows.Forms.Label lblFoundEntries;
 		private System.Windows.Forms.RadioButton radBtnAnd;
 		private System.Windows.Forms.RadioButton radBtnOr;
 		private System.Windows.Forms.Label lblSeparator;
@@ -468,11 +467,9 @@ namespace myNotebooks.subforms
 		private System.Windows.Forms.Button btnSearch;
 		private System.Windows.Forms.Button btnSelectNotebooks;
 		private System.Windows.Forms.Label lblSearchingIn;
-		private System.Windows.Forms.Panel pnlOkCancel;
 		private System.Windows.Forms.RadioButton radLabels_Or;
 		private System.Windows.Forms.RadioButton radLabels_And;
 		private System.Windows.Forms.Panel pnlLabels_AndOr;
-		private System.Windows.Forms.Button btnEditEntry;
 		private System.Windows.Forms.ListBox lstEntryObjects;
 		private ContextMenuStrip mnuEntryEditTop;
 		private ToolStripMenuItem mnuEntryEdit;

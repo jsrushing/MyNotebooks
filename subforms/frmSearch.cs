@@ -136,7 +136,7 @@ namespace myNotebooks.subforms
 				}
 
 			}
-			catch (Exception ex) { lb.SelectedIndex = -1; }
+			catch (Exception) { lb.SelectedIndex = -1; }
 
 			lb.SelectedIndexChanged += new System.EventHandler(this.lstFoundEntries_SelectedIndexChanged);
 

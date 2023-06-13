@@ -67,9 +67,9 @@ namespace myNotebooks.subforms
 		private void btnExitOrphans_Click(object sender, EventArgs e)
 		{ lstOccurrences.Items.Clear(); ShowHideOccurrences(); ShowPanel(pnlMain); }
 
-		private void btnOK_Click(object sender, EventArgs e) { MenuBtnOk(); }
+		private async void btnOK_Click(object sender, EventArgs e) { await MenuBtnOk(); }
 
-		private void btnRemoveSelectedOrphans_Click(object sender, EventArgs e)
+		private async void btnRemoveSelectedOrphans_Click(object sender, EventArgs e)
 		{
 			if (lstOrphanedLabels.SelectedItems.Count > 0)
 			{
@@ -78,8 +78,7 @@ namespace myNotebooks.subforms
 					frm.ShowDialog(this);
 
 					if (frm.Result == frmMessage.ReturnResult.Yes)
-					{ RemoveOrphans(); }
-
+					{ await RemoveOrphans(); }
 
 					if (lstOrphanedLabels.SelectedItems.Count > 0)
 					{
@@ -301,7 +300,7 @@ namespace myNotebooks.subforms
 						var sMsg2 = "The old label name has been left in the list. To completely remove the old label select all notebooks " +
 							", add PINs, then try renaming again.";
 
-						MessageBox.Show(sMsg, "Renamed but old name might still exist");
+						MessageBox.Show(sMsg2, "Renamed but old name might still exist");
 						lstLabels.Items.Add(newLabelName);
 						lstLabels.SelectedIndex = lstLabels.Items.Count - 1;
 					}
@@ -341,14 +340,14 @@ namespace myNotebooks.subforms
 			ShowPanel(pnlMain);
 		}
 
-		private void mnuDelete_Click(object sender, EventArgs e) { this.MenuDelete(sender); }
+		private async void mnuDelete_Click(object sender, EventArgs e) { await this.MenuDelete(sender); }
 
 		private void mnuExit_Click(object sender, EventArgs e)
 		{
 			this.Hide();
 		}
 
-		private void mnuFindOrphans_Click(object sender, EventArgs e)
+		private async void mnuFindOrphans_Click(object sender, EventArgs e)
 		{
 			lstOrphanedLabels.Items.Clear();
 			List<string> lstOrphans = LabelsManager.FindOrphansInSelectedNotebooks();
@@ -360,7 +359,7 @@ namespace myNotebooks.subforms
 				if (DeletingOrphans)
 				{
 					chkSelectAllOrphans.Checked = true;
-					RemoveOrphans();
+					await RemoveOrphans();
 					this.Close();
 				}
 				else { ShowPanel(pnlOrphanedLabels); }
@@ -374,11 +373,11 @@ namespace myNotebooks.subforms
 			if (DeletingOrphans) { this.Close(); }
 		}
 
-		private void mnuMoveUp_Click(object sender, EventArgs e) { this.MenuMove(sender); }
+		private async void mnuMoveUp_Click(object sender, EventArgs e) { await this.MenuMove(sender); }
 
-		private void mnuMoveDown_Click(object sender, EventArgs e) { this.MenuMove(sender); }
+		private async void mnuMoveDown_Click(object sender, EventArgs e) { await this.MenuMove(sender); }
 
-		private void mnuRename_Click(object sender, EventArgs e) { this.MenuRename(); }
+		private async void mnuRename_Click(object sender, EventArgs e) { await this.MenuRename(); }
 
 		private void PopulateOccurrences(string labelName = null)
 		{

@@ -24,10 +24,10 @@ namespace myNotebooks.subforms
 			lstJournalsToSynch.DataSource = Utilities.AllJournalNames();
 		}
 
-		private void btnOk_Click(object sender, EventArgs e)
+		private async void btnOk_Click(object sender, EventArgs e)
 		{
 			//AzureFileClient fileClient = new AzureFileClient();
-			AzureFileClient.UploadFile("C:\\inetpub\\testfile4.txt");
+			await AzureFileClient.UploadFile("C:\\inetpub\\testfile4.txt");
 			this.Close();
 			
 			// email methods tried

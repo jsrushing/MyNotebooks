@@ -160,10 +160,10 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private void StoreAzureKey(string key)
+		private async void StoreAzureKey(string key)
 		{
 			File.WriteAllText(Program.AppRoot + "ap", key);
-			AzureFileClient.UploadFile(Program.AppRoot + "ap", "keys");
+			await AzureFileClient.UploadFile(Program.AppRoot + "ap", "keys");
 			this.Close();
 		}
 

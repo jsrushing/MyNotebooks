@@ -69,7 +69,7 @@ namespace myNotebooks.subforms
 			workingJournal.Settings.IfLocalOnly_Upload = b_IfLocalOnly_Upload;
 			workingJournal.Settings.IfLocalOnly_Delete = b_IfLocalOnly_Delete;
 			workingJournal.Settings.IfLocalOnly_DisallowCloud = b_IfLocalOnly_DisallowCloud;
-			workingJournal.Save();
+			await workingJournal.Save();
 
 			if (b_AllowCloud & !originalAllowCloud)
 			{
