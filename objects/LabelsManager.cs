@@ -63,7 +63,7 @@ namespace myNotebooks.objects
 				foreach(Notebook j in notebooksToEdit) 
 				{ 
 					Utilities.SetProgramPIN(j.Name);
-					await j.DeleteLabel(labelName); 
+					await j.DeleteLabelFromNotebook(labelName); 
 				}
 
 				if(notebooksToEdit.Count == Program.AllNotebooks.Count)

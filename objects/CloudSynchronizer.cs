@@ -185,7 +185,7 @@ namespace myNotebooks.objects
 			var tempFolder				= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"];
 			List<Notebook> allNotebooks	= new List<Notebook>();
 
-			if(Program.AllNotebooks.Count == 0) { await Utilities.GetAllNotebooks(); }
+			if(Program.AllNotebooks.Count == 0) { await Utilities.PopulateAllNotebooks(); }
 			if (notebook == null) { allNotebooks = Program.AllNotebooks.Count > 0 ? Program.AllNotebooks : Program.AllNotebooks; }
 			else { allNotebooks.Add(notebook); }
 
@@ -207,7 +207,7 @@ namespace myNotebooks.objects
 			}
 
 			await ProcessNotebooks(allNotebooks, tempFolder, NotebooksFolder);
-			await AzureFileClient.GetAzureJournalNames(true);
+			await AzureFileClient.GetAzureNotebookNames(true);
 			await CheckForLocalOrCloudOnly(tempFolder, NotebooksFolder);			
 
 			if(alsoSynchSettings) await SyncLabelsAndSettings();

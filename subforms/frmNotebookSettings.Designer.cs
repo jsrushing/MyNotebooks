@@ -42,6 +42,8 @@
 			btnSaveChanges = new System.Windows.Forms.Button();
 			pnlCloudOptions = new System.Windows.Forms.Panel();
 			textBox2 = new System.Windows.Forms.TextBox();
+			label3 = new System.Windows.Forms.Label();
+			txtSettingsPIN = new System.Windows.Forms.TextBox();
 			pnlLocalNotCloud.SuspendLayout();
 			pnlCloudNotLocal.SuspendLayout();
 			pnlCloudOptions.SuspendLayout();
@@ -167,7 +169,7 @@
 			// 
 			// btnSaveChanges
 			// 
-			btnSaveChanges.Location = new System.Drawing.Point(88, 218);
+			btnSaveChanges.Location = new System.Drawing.Point(161, 218);
 			btnSaveChanges.Name = "btnSaveChanges";
 			btnSaveChanges.Size = new System.Drawing.Size(75, 23);
 			btnSaveChanges.TabIndex = 53;
@@ -197,11 +199,29 @@
 			textBox2.Size = new System.Drawing.Size(240, 1);
 			textBox2.TabIndex = 55;
 			// 
+			// label3
+			// 
+			label3.AutoSize = true;
+			label3.Location = new System.Drawing.Point(2, 222);
+			label3.Name = "label3";
+			label3.Size = new System.Drawing.Size(29, 15);
+			label3.TabIndex = 55;
+			label3.Text = "PIN:";
+			// 
+			// txtSettingsPIN
+			// 
+			txtSettingsPIN.Location = new System.Drawing.Point(31, 218);
+			txtSettingsPIN.Name = "txtSettingsPIN";
+			txtSettingsPIN.Size = new System.Drawing.Size(122, 23);
+			txtSettingsPIN.TabIndex = 56;
+			// 
 			// frmNotebookSettings
 			// 
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			ClientSize = new System.Drawing.Size(249, 248);
+			Controls.Add(txtSettingsPIN);
+			Controls.Add(label3);
 			Controls.Add(pnlCloudOptions);
 			Controls.Add(btnSaveChanges);
 			Controls.Add(textBox1);
@@ -239,5 +259,7 @@
 		private System.Windows.Forms.Panel pnlCloudOptions;
 		private System.Windows.Forms.RadioButton radLocalNotCloud_DeleteLocal;
 		private System.Windows.Forms.TextBox textBox2;
+		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.TextBox txtSettingsPIN;
 	}
 }

@@ -120,7 +120,7 @@ namespace myNotebooks
 			File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebookForcedBackupsFolder"] + this.Name);
 		}
 
-		public async Task DeleteLabel(string label)
+		public async Task DeleteLabelFromNotebook(string label)
 		{
 			var saveJournal = false;
 			foreach (Entry entry in this.Entries.Where(e => e.ClearLabels().Contains(label)).ToList())
@@ -210,15 +210,16 @@ namespace myNotebooks
 			this.Name		= newName;
 
 			if (this.Settings.AllowCloud)
-			{				await AzureFileClient.GetAzureJournalNames();
+			{
+				await AzureFileClient.GetAzureNotebookNames();
 
 				if(Program.AzureNotebookNames.Contains(Program.AzurePassword + oldName)) 
 				{ 
 					await AzureFileClient.DownloadOrDeleteFile(this.FileName, Program.AzurePassword + oldName, FileMode.Create, true);
 					CloudSynchronizer cs = new CloudSynchronizer(); await AzureFileClient.UploadFile(this.FileName);   // gets this newly renamed notebook to Azure
-					Program.AzureNotebookNames.Remove(oldName);
+					Program.AzureNotebookNames.Remove(Program.AzurePassword + oldName);
 				}
-				Program.AzureNotebookNames.Add(newName);
+				Program.AzureNotebookNames.Add(Program.AzurePassword + newName);
 				AzureFileClient.UploadRenamedFileTrigger(oldName, newName);
 			}
 			//Backup();
@@ -314,7 +315,7 @@ namespace myNotebooks
 			}
 
 			//Backup();
-			await Utilities.GetAllNotebooks();
+			await Utilities.PopulateAllNotebooks();
 		}
 
 		public List<Entry> Search(SearchObject So)

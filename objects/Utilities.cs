@@ -14,16 +14,16 @@ namespace myNotebooks.objects
 {
 	public static class Utilities
 	{
-		public static async Task AllJournalNames()
+		public static async Task PopulateAllNotebookNames()
 		{
 			List<string> lstRtrn = new List<string>();
 			Program.AllNotebookNames.Clear();
-			await Utilities.GetAllNotebooks();
+			await Utilities.PopulateAllNotebooks();
 			foreach (Notebook nb in Program.AllNotebooks)if(nb != null) Program.AllNotebookNames.Add(nb.Name);
 			//return lstRtrn;
 		} 
 
-		public static async Task GetAllNotebooks()
+		public static async Task PopulateAllNotebooks()
 		{
 			List<Notebook> nbReturn = new List<Notebook>();
 			var sNotebooksFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"];

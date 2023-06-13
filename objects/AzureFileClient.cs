@@ -45,17 +45,17 @@ namespace myNotebooks.objects
 			}
 		}
 
-		public static async Task CheckForCloudJournalAndRemoveEntries(Notebook j)
+		public static async Task CheckForCloudNotebooklAndRemoveEntries(Notebook book)
 		{
 			var tempFolder = ConfigurationManager.AppSettings["FolderStructure_Temp"];
-			var tempFileName = Program.AppRoot + tempFolder + j.Name;
+			var tempFileName = Program.AppRoot + tempFolder + book.Name;
 
 			try 
 			{ 
-				await DownloadOrDeleteFile(tempFileName, Program.AzurePassword + j.Name);
-				Notebook j2 = new Notebook(j.Name, tempFileName).Open(true);
-				j2.Entries.Clear();
-				await j2.Save();
+				await DownloadOrDeleteFile(tempFileName, Program.AzurePassword + book.Name);
+				Notebook book2 = new Notebook(book.Name, tempFileName).Open(true);
+				book2.Entries.Clear();
+				await book2.Save();
 				await AzureFileClient.UploadFile(tempFileName);
 				File.Delete(tempFileName);
 			}
@@ -74,7 +74,7 @@ namespace myNotebooks.objects
 			Program.AzurePassword				= resultSegment.Results.Count() == 1 ? creatingKey ? string.Empty : key : string.Empty;
 		}
 
-		public static async Task GetAzureJournalNames(bool scrubAzPwd = false)
+		public static async Task GetAzureNotebookNames(bool scrubAzPwd = false)
 		{
 			CloudStorageAccount storageAccount	= CloudStorageAccount.Parse(Program.AzureConnString);
 			CloudFileClient		fileClient		= storageAccount.CreateCloudFileClient();
@@ -92,10 +92,10 @@ namespace myNotebooks.objects
 
 		public static async Task UploadFile(string localFileName, string shareName = "notebooks")
 		{
-			var fileName = localFileName.Substring(localFileName.LastIndexOf("\\") + 1);
-			ShareClient share = new ShareClient(Program.AzureConnString, shareName);
-			ShareDirectoryClient directory = share.GetDirectoryClient("");
-			ShareFileClient myFile = directory.GetFileClient(Program.AzurePassword + fileName);
+			var fileName					= localFileName.Substring(localFileName.LastIndexOf("\\") + 1);
+			ShareClient share				= new ShareClient(Program.AzureConnString, shareName);
+			ShareDirectoryClient directory	= share.GetDirectoryClient("");
+			ShareFileClient myFile			= directory.GetFileClient(fileName.Contains(Program.AzurePassword) ? fileName : Program.AzurePassword + fileName);
 
 			if (File.Exists(localFileName))
 			{
@@ -109,11 +109,15 @@ namespace myNotebooks.objects
 			}
 		}
 
+		public static async void UploadDeletedFileTrigger(string deletedFile) { }
+
 		public async static void UploadRenamedFileTrigger(string oldName, string newName)
 		{
-			var tempFldr = ConfigurationManager.AppSettings["FolderStructure_Temp"];
-			File.Create(tempFldr + oldName + "_" + newName);
-			await UploadFile(tempFldr + oldName + "_" + newName, "notebooksrenamed");
+			var tempFldr = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"] + Program.AzurePassword + oldName + "_" + newName;
+			var contents = oldName + "_" + newName;
+			using(StreamWriter sw = new StreamWriter(tempFldr)) {sw.WriteLine(contents); }
+			await UploadFile(tempFldr, "notebooksrenamed");
+			File.Delete(tempFldr);
 		}
 	}
 }

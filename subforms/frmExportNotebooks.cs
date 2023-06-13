@@ -21,7 +21,7 @@ namespace myNotebooks.subforms
 		{
 			InitializeComponent();
 			Utilities.SetStartPosition(this, parent);
-			lstJournalsToSynch.DataSource = Utilities.AllJournalNames();
+			lstJournalsToSynch.DataSource = Utilities.PopulateAllNotebookNames();
 		}
 
 		private async void btnOk_Click(object sender, EventArgs e)

@@ -80,7 +80,7 @@ namespace myNotebooks.subforms
 
 			if (!b_AllowCloud & originalAllowCloud)
 			{
-				await AzureFileClient.CheckForCloudJournalAndRemoveEntries(workingJournal);
+				await AzureFileClient.CheckForCloudNotebooklAndRemoveEntries(workingJournal);
 			}
 		}
 

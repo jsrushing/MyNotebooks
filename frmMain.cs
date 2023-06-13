@@ -223,7 +223,7 @@ namespace myNotebooks.subforms
 			}
 
 			pnlDateFilters.Left = pnlPin.Left - 11;
-			await Utilities.GetAllNotebooks();
+			await Utilities.PopulateAllNotebooks();
 			LoadNotebooks();
 			ShowHideMenusAndControls(SelectionState.HideAll);
 		}
@@ -422,8 +422,11 @@ namespace myNotebooks.subforms
 		{
 			ddlNotebooks.Items.Clear();
 			ddlNotebooks.Text = string.Empty;
-			await Utilities.GetAllNotebooks();
-			ddlNotebooks.Items.AddRange(Program.AllNotebookNames.ToArray());
+			await Utilities.PopulateAllNotebookNames();
+			
+			//ddlNotebooks.Items.AddRange(Program.AllNotebookNames.ToArray());
+
+			foreach(var v in Program.AllNotebookNames) { ddlNotebooks.Items.Add(v); }	
 
 			if (ddlNotebooks.Items.Count > 0)
 			{
@@ -575,7 +578,7 @@ namespace myNotebooks.subforms
 					// ........................................................................
 					nb.LastSaved = DateTime.Now;
 					await nb.Create();
-					await Utilities.GetAllNotebooks();
+					await Utilities.PopulateAllNotebooks();
 					LoadNotebooks();
 				}
 				frm.Close();
@@ -596,7 +599,7 @@ namespace myNotebooks.subforms
 					ShowHideMenusAndControls(SelectionState.NotebookSelectedNotLoaded);
 					pnlDateFilters.Visible = false;
 					using (frmLabelsManager frm3 = new frmLabelsManager(this, true)) { frm3.ShowDialog(); }
-					await Utilities.GetAllNotebooks();
+					await Utilities.PopulateAllNotebooks();
 					File.Delete(CurrentNotebook.FileName);
 					LoadNotebooks();
 				}
@@ -638,10 +641,9 @@ namespace myNotebooks.subforms
 				if (frm.Result == frmMessage.ReturnResult.Ok && frm.ResultText.Length > 0)
 				{
 					await CurrentNotebook.Rename(frm.ResultText);
-					await Utilities.GetAllNotebooks();
+					await Utilities.PopulateAllNotebooks();
 					LoadNotebooks();
 				}
-
 			}
 		}
 
@@ -653,7 +655,7 @@ namespace myNotebooks.subforms
 			using (frmBackupManager frm = new frmBackupManager(this))
 			{
 				frm.ShowDialog(this);
-				if (frm.BackupRestored) { await Utilities.GetAllNotebooks(); LoadNotebooks(); }
+				if (frm.BackupRestored) { await Utilities.PopulateAllNotebooks(); LoadNotebooks(); }
 			}
 		}
 
@@ -762,7 +764,6 @@ namespace myNotebooks.subforms
 
 				mnuNotebook_Delete.Enabled = false;
 				mnuNotebook_Rename.Enabled = false;
-				//mnuJournal_Search.Enabled = false;
 				mnuNotebook_ForceBackup.Enabled = false;
 				mnuNotebook_Export.Enabled = true;
 				mnuNotebook_Settings.Enabled = false;
@@ -782,7 +783,6 @@ namespace myNotebooks.subforms
 
 				mnuNotebook_Delete.Enabled = true;
 				mnuNotebook_Rename.Enabled = true;
-				//mnuJournal_Search.Enabled = true;
 				mnuNotebook_ForceBackup.Enabled = true;
 				//mnuJournal_Export.Enabled = currentJournal.Settings.AllowCloud;
 				mnuNotebook_Settings.Enabled = true;
