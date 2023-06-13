@@ -263,7 +263,7 @@ namespace myNotebooks.subforms
 			mnuJournal_Delete.Name = "mnuJournal_Delete";
 			mnuJournal_Delete.Size = new System.Drawing.Size(160, 22);
 			mnuJournal_Delete.Text = "Delete";
-			mnuJournal_Delete.Click += this.mnuJournal_Delete_Click;
+			mnuJournal_Delete.Click += this.mnuNotebook_Delete_Click;
 			// 
 			// mnuJournal_Search
 			// 

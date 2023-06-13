@@ -129,8 +129,8 @@ namespace myNotebooks.subforms
 						lblSeparator.Visible = rtb.Text.Length > 0;
 						Utilities.ResizeListsAndRTBs(lb, rtb, lblSeparator, lblSelectionType, this);
 						var topIndex = lstFoundEntries.TopIndex;
-						while(topIndex % 4 != 0) { topIndex--; }
-						lstFoundEntries.TopIndex = topIndex;
+						//while(topIndex % 4 != 0) { topIndex--; }
+						//lstFoundEntries.TopIndex = topIndex;
 					}
 					else { lstFoundEntries.SelectedIndices.Clear(); }
 				}

@@ -18,25 +18,6 @@ namespace myNotebooks.objects
 	{
 		public enum CompareResult { }
 
-		public static void UploadFile(string localFileName, string shareName = "notebooks")
-		{
-			var fileName = localFileName.Substring(localFileName.LastIndexOf("\\") + 1);
-			ShareClient share = new ShareClient(Program.AzureConnString, shareName);
-			ShareDirectoryClient directory = share.GetDirectoryClient("");
-			ShareFileClient myFile = directory.GetFileClient(Program.AzurePassword + fileName);
-
-			if (File.Exists(localFileName))
-			{
-				//using FileStream stream = new FileStream(localFileName,
-				//	FileMode.Open, FileAccess.Read, FileShare.Read, 64 * 1024,
-				//		(FileOptions)0x20000000 | FileOptions.WriteThrough & FileOptions.SequentialScan);
-
-				using FileStream stream = new FileStream(localFileName, FileMode.Open, FileAccess.Read);
-				myFile.Create(stream.Length);
-				myFile.UploadRange(new HttpRange(0, stream.Length), stream);
-			}
-		}
-
 		public static async Task DownloadOrDeleteFile(string localFileName, string AzFileName,
 			FileMode mode = FileMode.Create, bool deleteFile = false, string shareName = "notebooks")
 		{
@@ -104,7 +85,35 @@ namespace myNotebooks.objects
 			FileContinuationToken token			= null;
 			FileResultSegment	rsltSgmnt		= await root.ListFilesAndDirectoriesSegmentedAsync(Program.AzurePassword, null, token, options, null);
 
-			foreach(CloudFile file in rsltSgmnt.Results) { Program.AzureJournalNames.Add(scrubAzPwd ? file.Name.Replace(Program.AzurePassword, "") : file.Name); }
+			Program.AzureJournalNames.Clear();
+			foreach(CloudFile file in rsltSgmnt.Results) 
+			{ Program.AzureJournalNames.Add(scrubAzPwd ? file.Name.Replace(Program.AzurePassword, "") : file.Name); }
+		}
+
+		public static async Task UploadFile(string localFileName, string shareName = "notebooks")
+		{
+			var fileName = localFileName.Substring(localFileName.LastIndexOf("\\") + 1);
+			ShareClient share = new ShareClient(Program.AzureConnString, shareName);
+			ShareDirectoryClient directory = share.GetDirectoryClient("");
+			ShareFileClient myFile = directory.GetFileClient(Program.AzurePassword + fileName);
+
+			if (File.Exists(localFileName))
+			{
+				//using FileStream stream = new FileStream(localFileName,
+				//	FileMode.Open, FileAccess.Read, FileShare.Read, 64 * 1024,
+				//		(FileOptions)0x20000000 | FileOptions.WriteThrough & FileOptions.SequentialScan);
+
+				using FileStream stream = new FileStream(localFileName, FileMode.Open, FileAccess.Read);
+				myFile.Create(stream.Length);
+				myFile.UploadRange(new HttpRange(0, stream.Length), stream);
+			}
+		}
+
+		public static void UploadRenamedFileTrigger(string oldName, string newName)
+		{
+			var tempFldr = ConfigurationManager.AppSettings["FolderStructure_Temp"];
+			File.Create(tempFldr + oldName + "_" + newName);
+			UploadFile(tempFldr + oldName + "_" + newName, "notebooksrenamed");
 		}
 	}
 }

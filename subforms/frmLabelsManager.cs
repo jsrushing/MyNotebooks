@@ -361,14 +361,17 @@ namespace myNotebooks.subforms
 				{
 					chkSelectAllOrphans.Checked = true;
 					RemoveOrphans();
-					this.Hide();
+					this.Close();
 				}
 				else { ShowPanel(pnlOrphanedLabels); }
 			}
 			else
 			{
-				using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "No orphaned labels were found.", Application.ProductName, this)) { frm.ShowDialog(); }
+				using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, 
+					"No orphaned labels were found.", Application.ProductName, this)) { frm.ShowDialog(); }
 			}
+
+			if (DeletingOrphans) { this.Close(); }
 		}
 
 		private void mnuMoveUp_Click(object sender, EventArgs e) { this.MenuMove(sender); }

@@ -223,7 +223,7 @@ namespace myNotebooks.subforms
 			}
 
 			pnlDateFilters.Left = pnlPin.Left - 11;
-			Program.AllNotebooks = Utilities.AllNotebooks();
+			await Utilities.GetAllNotebooks();
 			LoadNotebooks();
 			ShowHideMenusAndControls(SelectionState.HideAll);
 		}
@@ -422,7 +422,8 @@ namespace myNotebooks.subforms
 		{
 			ddlNotebooks.Items.Clear();
 			ddlNotebooks.Text = string.Empty;
-			foreach (Notebook j in Program.AllNotebooks) { if (j != null) ddlNotebooks.Items.Add(j.Name); }
+			Utilities.GetAllNotebooks();
+			foreach (Notebook book in Program.AllNotebooks) { ddlNotebooks.Items.Add(book.Name); }
 
 			if (ddlNotebooks.Items.Count > 0)
 			{
@@ -538,7 +539,7 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private void mnuJournal_Create_Click(object sender, EventArgs e)
+		private async void mnuJournal_Create_Click(object sender, EventArgs e)
 		{
 			using (frmNewNotebook frm = new frmNewNotebook(this))
 			{
@@ -558,14 +559,14 @@ namespace myNotebooks.subforms
 					// ........................................................................
 					nb.LastSaved = DateTime.Now;
 					nb.Create();
-					Program.AllNotebooks = Utilities.AllNotebooks();
+					await Utilities.GetAllNotebooks();
 					LoadNotebooks();
 				}
 				frm.Close();
 			}
 		}
 
-		private void mnuJournal_Delete_Click(object sender, EventArgs e)
+		private async void mnuNotebook_Delete_Click(object sender, EventArgs e)
 		{
 			using (frmMessage frm = new frmMessage(frmMessage.OperationType.DeleteNotebook, CurrentNotebook.Name.Replace("\\", ""), "", this))
 			{
@@ -579,7 +580,8 @@ namespace myNotebooks.subforms
 					ShowHideMenusAndControls(SelectionState.NotebookSelectedNotLoaded);
 					pnlDateFilters.Visible = false;
 					using (frmLabelsManager frm3 = new frmLabelsManager(this, true)) { frm3.ShowDialog(); }
-					Program.AllNotebooks = Utilities.AllNotebooks();
+					await Utilities.GetAllNotebooks();
+					File.Delete(CurrentNotebook.FileName);
 					LoadNotebooks();
 				}
 			}
@@ -611,7 +613,7 @@ namespace myNotebooks.subforms
 
 		private void mnuJournal_Import_Click(object sender, EventArgs e) { if (Utilities.ImportNotebooks(this)) { LoadNotebooks(); } }
 
-		private void mnuJournal_Rename_Click(object sender, EventArgs e)
+		private async void mnuJournal_Rename_Click(object sender, EventArgs e)
 		{
 			using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "Enter the new notebook name.", CurrentNotebook.Name, this))
 			{
@@ -621,20 +623,20 @@ namespace myNotebooks.subforms
 				{
 					CurrentNotebook.Rename(frm.ResultText);
 					Thread.Sleep(1000);
-					Program.AllNotebooks = Utilities.AllNotebooks();
+					await Utilities.GetAllNotebooks();
 					LoadNotebooks();
 				}
 
 			}
 		}
 
-		private void mnuJournal_RestoreBackups_Click(object sender, EventArgs e)
+		private async void mnuJournal_RestoreBackups_Click(object sender, EventArgs e)
 		{
 			string sJournalName = ddlNotebooks.Text;
 			using (frmBackupManager frm = new frmBackupManager(this))
 			{
 				frm.ShowDialog(this);
-				if (frm.BackupRestored) { Program.AllNotebooks = Utilities.AllNotebooks(); LoadNotebooks(); }
+				if (frm.BackupRestored) { await Utilities.GetAllNotebooks(); LoadNotebooks(); }
 			}
 		}
 

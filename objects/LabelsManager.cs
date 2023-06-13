@@ -114,11 +114,6 @@ namespace myNotebooks.objects
 				}
 			}
 
-
-			//List<JournalEntry> v = 
-			//	(List<JournalEntry>)journalToSearch.Entries.Where(e => e.ClearLabels().Split(',').Except(GetLabels_NoFileDate()).ToList().Count > 0);
-
-			//lstRtrn = (List<string>)v.Select(l => (l.ClearLabels().Split(',').Except(GetLabels_NoFileDate())));
 			return lstRtrn;
 		}
 
@@ -126,7 +121,7 @@ namespace myNotebooks.objects
 		{ 
 			DateTime dt = DateTime.MinValue;
 			string lastLabel = labels.Last();
-			try { dt = DateTime.ParseExact(lastLabel.Replace("_", " "), "dd/MM/yyyy HH:mm:ss", null); }		// USE CONFIGMANAGER !!!! <<<
+			try { dt = DateTime.ParseExact(lastLabel.Replace("_", " "), ConfigurationManager.AppSettings["LabelsFileDateFormat"], null); }
 			catch { }	// lastLabel isn't a DateTime.
 			return dt;
 		}

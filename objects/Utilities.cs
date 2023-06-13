@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using myNotebooks.subforms;
 
@@ -20,12 +21,13 @@ namespace myNotebooks.objects
 			return lstRtrn;
 		} 
 
-		public static List<Notebook> AllNotebooks()
+		public static async Task GetAllNotebooks()
 		{
 			List<Notebook> nbReturn = new List<Notebook>();
 			var sNotebooksFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"];
-			foreach (var s in Directory.GetFiles(sNotebooksFolder)) { nbReturn.Add(new Notebook(s.Replace(sNotebooksFolder, "")).Open()); }
-			return nbReturn;
+			Program.AllNotebooks.Clear();
+			foreach (var s in Directory.GetFiles(sNotebooksFolder)) { Program.AllNotebooks.Add(new Notebook(s.Replace(sNotebooksFolder, "")).Open()); }
+			//return nbReturn;
 		}
 
 		// one-time code to convert Journal objects to Notebook objects

@@ -24,7 +24,7 @@ namespace myNotebooks
 		public DateTime				LastSaved { get; set; }
 		public string				FileName { get; set; }
 		public List<Entry>	Entries = new List<Entry>();
-		string root					= "notebooks\\";
+		public string root					= "notebooks\\";
 		public NotebookSettings		Settings;
 
 		public bool BackupCompleted { get; private set; }
@@ -107,7 +107,7 @@ namespace myNotebooks
 
 		public async void Delete()
 		{
-			if (this.Settings.AllowCloud) 
+			if (this.Settings.AllowCloud)
 			{ await AzureFileClient.DownloadOrDeleteFile(this.FileName, Program.AzurePassword + this.Name, FileMode.Create, true);  }
 
 			DeleteBackups();
@@ -202,24 +202,24 @@ namespace myNotebooks
 		public async Task Rename(string newName)
 		{
 			//DeleteBackups();
-			var oldName = this.Name;
+			var oldName		= this.Name;
 			var oldFileName = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + this.Name;
-			File.Move(this.FileName, this.FileName.Substring(0, this.FileName.LastIndexOf("\\")) + "\\" + newName);
-			Thread.Sleep(500);
-			this.FileName = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + newName;
-			this.Name = newName;
-			this.Entries.ForEach(x => x.NotebookName = this.Name);
+			File.Move		(this.FileName, this.FileName.Substring(0, this.FileName.LastIndexOf("\\")) + "\\" + newName);
+			Thread.Sleep	(500);
+			this.FileName	= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + newName;
+			this.Name		= newName;
 
 			if (this.Settings.AllowCloud)
-			{
-				Program.AzureJournalNames.Clear();
-				await AzureFileClient.GetAzureJournalNames();
+			{				await AzureFileClient.GetAzureJournalNames();
+
 				if(Program.AzureJournalNames.Contains(Program.AzurePassword + oldName)) 
 				{ 
-					await AzureFileClient.DownloadOrDeleteFile(this.FileName, Program.AzurePassword + oldName, FileMode.Create, true); 
-					CloudSynchronizer cs = new CloudSynchronizer(); await cs.SynchWithCloud(false, this);
-					await AzureFileClient.GetAzureJournalNames(); 
+					await AzureFileClient.DownloadOrDeleteFile(this.FileName, Program.AzurePassword + oldName, FileMode.Create, true);
+					CloudSynchronizer cs = new CloudSynchronizer(); AzureFileClient.UploadFile(this.FileName);   // gets this newly renamed notebook to Azure
+					Program.AzureJournalNames.Remove(oldName);
 				}
+				Program.AzureJournalNames.Add(newName);
+				AzureFileClient.UploadRenamedFileTrigger(oldName, newName);
 			}
 			//Backup();
 		}
@@ -314,7 +314,7 @@ namespace myNotebooks
 			}
 
 			//Backup();
-			Program.AllNotebooks = Utilities.AllNotebooks();
+			await Utilities.GetAllNotebooks();
 		}
 
 		public List<Entry> Search(SearchObject So)
