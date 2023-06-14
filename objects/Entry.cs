@@ -11,6 +11,7 @@ using myNotebooks.subforms;
 using System.Windows.Forms;
 using System.Runtime.CompilerServices;
 using myNotebooks.objects;
+using myJournal;
 
 namespace myNotebooks
 {
@@ -31,9 +32,21 @@ namespace myNotebooks
 
 		public Entry() { }
 
+		//public Entry(JournalEntry entry)
+		//{
+		//	this.Date = entry.Date;
+		//	this.Text = entry.Text;
+		//	this.Title = entry.Title;
+		//	this.RTF = "";
+		//	this.Labels = EncryptDecrypt.Encrypt(entry.ClearLabels());
+		//	this.NotebookName = EncryptDecrypt.Encrypt("The New Real Thing");
+		//	Id = Guid.NewGuid().ToString();
+		//	isEdited = entry.isEdited;
+		//}
+
 		public Entry(string _title, string _text, string _RTF, string _labels, string _NotebookName = "", bool _edited = false)
         {
-			//Date		= DateTime.Now;
+			Date		= DateTime.Now;
 			Text		= EncryptDecrypt.Encrypt(_text.Trim());
             Title		= EncryptDecrypt.Encrypt(_title.Trim());
 			RTF			= EncryptDecrypt.Encrypt(_RTF);

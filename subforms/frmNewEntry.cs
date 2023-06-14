@@ -163,11 +163,17 @@ namespace myNotebooks.subforms
 		{
 			if (rtbNewEntry.Text.Length > 0 && txtNewEntryTitle.Text.Length > 0 && isDirty)
 			{
-				await SaveEntry();
+				if(currentNotebook.Entries.Count == 1 & rtbNewEntry.Text.IndexOf(" ") > 49)
+				{
+					using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, 
+						"Sorry, but because of the way we validate PIN's the 1st entry can't start with a single word longer than 50 characters.")) { frm.ShowDialog(); }
+				}
+				else { await SaveEntry(); }
 			}
 			else
 			{
-				using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "You must enter both a title and text to save an entry.", "", this)) { frm.ShowDialog(this); }
+				using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, 
+					"You must enter both a title and text to save an entry.", "", this)) { frm.ShowDialog(this); }
 			}
 		}
 
@@ -179,22 +185,42 @@ namespace myNotebooks.subforms
 
 		private async Task SaveEntry()
 		{
-			//string[] DateAndTitle = Utilities.GetTitleAndDate(txtNewEntryTitle.Text);
+			// Test title for a date surrounded by parentheses, which interferes with parsing the entry's date when necessary.
+			var title = Utilities.GetTitleAndDate(txtNewEntryTitle.Text)[0];	
+			var openParen = title != null ? title.IndexOf("(") : -1;
+			var closeParen = title != null ? title.IndexOf(')', openParen + 1) : -1;
+			var possibleDate = string.Empty;
+			DateTime date = DateTime.MinValue;
+			var processEntry = true;
 
-			//if (DateAndTitle[0] != null && DateAndTitle[1] != null && DateAndTitle[0].Length > 0 && DateAndTitle[1].Length > 0)
-			//{
+			while(openParen < closeParen & closeParen - openParen == 17 & openParen > -1 & closeParen > -1) 
+			{ 
+				possibleDate = title.Substring(openParen + 1, closeParen - openParen);
+				DateTime.TryParse(possibleDate, out date);
+
+				if(date > DateTime.MinValue) 
+				{ openParen = closeParen + 1; }
+				else 
+				{
+					var sMsg = "Sorry, entry titles may not contain a date and time, formatted as you have, surrounded by parentheses. Edit the title accordingly.";
+					using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "Improperly Contstructed Title")) { ShowDialog(frm); }
+					processEntry = false;
+					break;
+				}
+
+				openParen = title.IndexOf('(', closeParen + 1); 
+				closeParen = title.IndexOf(")", openParen + 1); 
+			}
+
+			if (processEntry)
+			{
 				Entry newEntry = new Entry(txtNewEntryTitle.Text.Trim(), rtbNewEntry.Text.Trim(), rtbNewEntry.Rtf, LabelsManager.CheckedLabels_Get(clbLabels), currentNotebook.Name);
 				if (entry == null) { currentNotebook.AddEntry(newEntry); } else { currentNotebook.ReplaceEntry(entry, newEntry); }
 				entry = newEntry;
 				saved = true;
 				SetIsDirty(false);
 				await currentNotebook.Save();
-			//}
-			//else
-			//{
-			//	var sMsg = "Entry titles may not contain a date and time surrounded by parentheses. Edit the title accordingly.";
-			//	using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "Improperly Contstructed Title")) { ShowDialog(frm); }
-			//}
+			}
 		}
 
 		private void SetIsDirty(bool dirty)

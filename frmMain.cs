@@ -152,6 +152,7 @@ using System.Diagnostics;
 using System.Runtime.Serialization.Formatters.Binary;
 using myNotebooks;
 using System.Threading.Tasks;
+using Encryption;
 
 namespace myNotebooks.subforms
 {
@@ -245,14 +246,16 @@ namespace myNotebooks.subforms
 			{
 				string fullJournalName = ddlNotebooks.Text;
 				CurrentNotebook = new Notebook(fullJournalName).Open();
+				var wrongPIN = true;
 
 				if (CurrentNotebook != null)
 				{
-					var text = CurrentNotebook.Entries[0].ClearText();
-
 					Program.PIN = txtJournalPIN.Text;
+					var iEntryIndx = CurrentNotebook.Entries.Count == 1 ? 0 : 1;
+					var text = EncryptDecrypt.Decrypt(CurrentNotebook.Entries[iEntryIndx].Text);
+					wrongPIN = CurrentNotebook.Entries.Count == 1 ? text != "-" : !text.Contains(" ") & text.Length > 49;
 
-					if (!CurrentNotebook.Entries[0].ClearText().Equals("-"))    // (!text.Contains(" ") & text.Length > 50 & !Encryption.EncryptDecrypt.Decrypt(text).Equals("-")))	// the text isn't the 'created' entry, and has no spaces, and is more than 50 chars long, then it's encrypted text meaning the PIN is wrong
+					if (wrongPIN)
 					{
 						lblWrongPin.Visible = true;
 						txtJournalPIN.Focus();
@@ -260,8 +263,7 @@ namespace myNotebooks.subforms
 					}
 					else
 					{
-						await Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, CurrentNotebook.Name, DateTime.Now.AddDays(-61).ToString(), DateTime.Now.ToString(), true, 0);
-						if (lstEntries.Items.Count == 0) { await Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries); }
+						await ProcessDateFilters();
 						lstEntries.Height = this.Height - lstEntries.Top - 50;
 						lstEntries.Visible = true;
 						pnlDateFilters.Visible = true;
@@ -299,7 +301,7 @@ namespace myNotebooks.subforms
 		{
 			if (CurrentNotebook != null)
 			{
-				await Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, CurrentNotebook.Name, cbxDatesFrom.Text, cbxDatesTo.Text, true, cbxSortEntriesBy.SelectedIndex);
+				await ProcessDateFilters();
 				lstEntries.Focus();
 			}
 		}
@@ -497,7 +499,6 @@ namespace myNotebooks.subforms
 
 				if (frm.saved)
 				{
-					//await Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, cbxDatesFrom.Text, cbxDatesTo.Text);
 					await ProcessDateFilters();
 					ShowHideMenusAndControls(SelectionState.NotebookLoaded);
 				}
@@ -517,7 +518,6 @@ namespace myNotebooks.subforms
 					CurrentNotebook.Entries.Remove(CurrentEntry);
 					await CurrentNotebook.Save();
 					await ProcessDateFilters();
-					await Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, cbxDatesFrom.Text, cbxDatesTo.Text);
 					ShowHideMenusAndControls(SelectionState.NotebookLoaded);
 				}
 			}
@@ -534,7 +534,6 @@ namespace myNotebooks.subforms
 
 				if (frm.saved)
 				{
-					await Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, cbxDatesFrom.Text, cbxDatesTo.Text);
 					await ProcessDateFilters();
 					ShowHideMenusAndControls(SelectionState.NotebookLoaded);
 				}

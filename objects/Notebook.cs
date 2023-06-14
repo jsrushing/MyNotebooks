@@ -40,18 +40,18 @@ namespace myNotebooks
 		//	Program.PIN = "0711";
 		//	//this.Entries.Clear();
 
-		//	foreach(myJournal.JournalEntry je in journal.Entries)
+		//	foreach (myJournal.JournalEntry je in journal.Entries)
 		//	{
-		//		Entry e = new Entry(je.ClearTitle(), je.ClearText(), je.ClearRTF(), je.ClearLabels(), journal.Name, je.isEdited);
+		//		Entry e = new Entry(je);
 		//		e.Date = je.Date;
 		//		this.Entries.Add(e);
 		//	}
 
-		//	this.Settings = new NotebookSettings(journal.Settings);
-
+		//	this.Settings = new NotebookSettings();
+		//	Program.PIN = "";
 		//}
 
-        public Notebook(string _name = null, string _fileName = null) 
+		public Notebook(string _name = null, string _fileName = null) 
         {
             if(_name != null)
             {
@@ -60,37 +60,6 @@ namespace myNotebooks
 				else { this.FileName = Program.AppRoot + this.root + this.Name; }
 			}
 		}
-
-		// one-time code to convert Journal objects to Notebook objects
-		//public Notebook(myJournal.Journal journalToConvert)
-		//{
-		//	this.Name = journalToConvert.Name;
-		//	this.LastSaved = journalToConvert.LastSaved;
-		//	this.FileName = journalToConvert.FileName;
-
-		//	//this.Settings = journalToConvert.Settings;  // I think this is what broke all the journals :(
-
-		//	// should have been ...
-		//	this.Settings = new NotebookSettings
-		//	{
-		//		AllowCloud					= journalToConvert.Settings.AllowCloud,
-		//		IfCloudOnly_Download		= journalToConvert.Settings.IfCloudOnly_Download,
-		//		IfCloudOnly_Delete			= journalToConvert.Settings.IfCloudOnly_Delete,
-		//		IfLocalOnly_Delete			= journalToConvert.Settings.IfLocalOnly_Delete,
-		//		IfLocalOnly_DisallowCloud	= journalToConvert.Settings.IfLocalOnly_DisallowCloud,
-		//		IfLocalOnly_Upload			= journalToConvert.Settings.IfLocalOnly_Upload
-		//	};
-
-		//	foreach (myJournal.JournalEntry je in journalToConvert.Entries)
-		//	{
-		//		Entry e			= new Entry(je.Title, je.Text, je.ClearRTF(), je.ClearLabels(), je.NotebookName);
-		//		e.Date			= je.Date;
-		//		e.Id			= je.Id;
-		//		e.isEdited		= je.isEdited;
-		//		e.LastEditedOn	= je.LastEditedOn;
-		//		this.Entries.Add(e);
-		//	}
-		//}
 
 		public void AddEntry(Entry entryToAdd) { Entries.Add(entryToAdd); }
 

@@ -98,7 +98,7 @@ namespace myNotebooks.objects
 		}
 
 		public static async Task RenameFile(string filePath, string newFileName)
-		{
+		{	// from ChatGPT
 			// Create a connection string to the Azure Storage account
 			ShareServiceClient serviceClient = new ShareServiceClient(Program.AzureConnString);
 

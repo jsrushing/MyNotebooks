@@ -65,8 +65,6 @@ namespace myNotebooks.objects
 					paren1 = searchString.IndexOf('(', startPosition) + 1;
 					paren2 = searchString.IndexOf(")", startPosition + 1);
 
-					//var test = searchString.Substring(paren1, paren2 - paren1);
-
 					if (paren2 - paren1 == 17)
 					{
 						DateTime.TryParse(searchString.Substring(paren1, paren2 - paren1), out DateTime tryDate);
