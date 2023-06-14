@@ -218,9 +218,7 @@ namespace myNotebooks
 				if(Program.AzureNotebookNames.Contains(Program.AzurePassword + oldName)) 
 				{ 
 					Program.AzureNotebookNames.Remove(Program.AzurePassword + oldName);
-
 					//await AzureFileClient.RenameFile($"notebooks/container1a.file.core.windows.net" + "//" + Program.AzurePassword + oldName, newName);
-
 					await AzureFileClient.DownloadOrDeleteFile(this.FileName, Program.AzurePassword + oldName, FileMode.Create, true);
 					CloudSynchronizer cs = new CloudSynchronizer(); await AzureFileClient.UploadFile(this.FileName);   // gets this newly renamed notebook to Azure
 
