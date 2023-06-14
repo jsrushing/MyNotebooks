@@ -151,6 +151,7 @@ using myNotebooks.subforms;
 using System.Diagnostics;
 using System.Runtime.Serialization.Formatters.Binary;
 using myNotebooks;
+using System.Threading.Tasks;
 
 namespace myNotebooks.subforms
 {
@@ -239,7 +240,7 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private void btnLoadNotebook_Click(object sender, EventArgs e)
+		private async void btnLoadNotebook_Click(object sender, EventArgs e)
 		{
 			lstEntries.Items.Clear();
 			rtbSelectedEntry.Text = string.Empty;
@@ -265,8 +266,8 @@ namespace myNotebooks.subforms
 					}
 					else
 					{
-						Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, CurrentNotebook.Name, DateTime.Now.AddDays(-61).ToString(), DateTime.Now.ToString(), true, 0);
-						if (lstEntries.Items.Count == 0) { Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries); }
+						await Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, CurrentNotebook.Name, DateTime.Now.AddDays(-61).ToString(), DateTime.Now.ToString(), true, 0);
+						if (lstEntries.Items.Count == 0) { await Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries); }
 						lstEntries.Height = this.Height - lstEntries.Top - 50;
 						lstEntries.Visible = true;
 						pnlDateFilters.Visible = true;
@@ -295,16 +296,16 @@ namespace myNotebooks.subforms
 			catch (Exception ex) { Console.Write(ex.Message); }
 		}
 
-		private void cbxDates_SelectedIndexChanged(object sender, EventArgs e)
+		private async void cbxDates_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!SuppressDateClick) { ProcessDateFilters(); }
+			if (!SuppressDateClick) { await ProcessDateFilters(); }
 		}
 
-		private void cbxSortEntriesBy_SelectedIndexChanged(object sender, EventArgs e)
+		private async void cbxSortEntriesBy_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (CurrentNotebook != null)
 			{
-				Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, CurrentNotebook.Name, cbxDatesFrom.Text, cbxDatesTo.Text, true, cbxSortEntriesBy.SelectedIndex);
+				await Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, CurrentNotebook.Name, cbxDatesFrom.Text, cbxDatesTo.Text, true, cbxSortEntriesBy.SelectedIndex);
 				lstEntries.Focus();
 			}
 		}
@@ -425,10 +426,10 @@ namespace myNotebooks.subforms
 			ddlNotebooks.Items.Clear();
 			ddlNotebooks.Text = string.Empty;
 			await Utilities.PopulateAllNotebookNames();
-			
+
 			//ddlNotebooks.Items.AddRange(Program.AllNotebookNames.ToArray());
 
-			foreach(var v in Program.AllNotebookNames) { ddlNotebooks.Items.Add(v); }	
+			foreach (var v in Program.AllNotebookNames) { ddlNotebooks.Items.Add(v); }
 
 			if (ddlNotebooks.Items.Count > 0)
 			{
@@ -484,25 +485,26 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private void mnuAboutMyJournal_Click(object sender, EventArgs e)
+		private void mnuAbout_Click(object sender, EventArgs e)
 		{
 			Form frm = new frmAbout(this);
 			frm.ShowDialog(this);
 		}
 
-		private void mnuEntryCreate_Click(object sender, EventArgs e)
+		private async void mnuEntryCreate_Click(object sender, EventArgs e)
 		{
 			this.Cursor = Cursors.WaitCursor;
 
 			using (frmNewEntry frm = new frmNewEntry(this, CurrentNotebook))
 			{
 				frm.Text = "New entry in " + CurrentNotebook.Name;
+
 				frm.ShowDialog(this);
 
 				if (frm.saved)
 				{
-					Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, cbxDatesFrom.Text, cbxDatesTo.Text);
-					ProcessDateFilters();
+					//await Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, cbxDatesFrom.Text, cbxDatesTo.Text);
+					await ProcessDateFilters();
 					ShowHideMenusAndControls(SelectionState.NotebookLoaded);
 				}
 			}
@@ -520,14 +522,14 @@ namespace myNotebooks.subforms
 				{
 					CurrentNotebook.Entries.Remove(CurrentEntry);
 					await CurrentNotebook.Save();
-					Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, cbxDatesFrom.Text, cbxDatesTo.Text);
-					ProcessDateFilters();
+					await ProcessDateFilters();
+					await Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, cbxDatesFrom.Text, cbxDatesTo.Text);
 					ShowHideMenusAndControls(SelectionState.NotebookLoaded);
 				}
 			}
 		}
 
-		private void mnuEntryEdit_Click(object sender, EventArgs e)
+		private async void mnuEntryEdit_Click(object sender, EventArgs e)
 		{
 			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
 
@@ -538,8 +540,8 @@ namespace myNotebooks.subforms
 
 				if (frm.saved)
 				{
-					Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, cbxDatesFrom.Text, cbxDatesTo.Text);
-					ProcessDateFilters();
+					await Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, cbxDatesFrom.Text, cbxDatesTo.Text);
+					await ProcessDateFilters();
 					ShowHideMenusAndControls(SelectionState.NotebookLoaded);
 				}
 			}
@@ -643,13 +645,13 @@ namespace myNotebooks.subforms
 
 				if (frm.Result == frmMessage.ReturnResult.Ok && frm.ResultText.Length > 0)
 				{
-					if(frm.ResultText != CurrentNotebook.Name)
+					if (frm.ResultText != CurrentNotebook.Name)
 					{
 						await CurrentNotebook.Rename(frm.ResultText, true);
 						await Utilities.PopulateAllNotebooks();
 						LoadNotebooks();
 					}
-					else 
+					else
 					{ using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.Message, "The name has not been changed.", "Name Not Changed")) { frm2.ShowDialog(); } }
 				}
 				else if (frm.ResultText.Length == 0)
@@ -738,11 +740,11 @@ namespace myNotebooks.subforms
 			SuppressDateClick = false;
 		}
 
-		private void ProcessDateFilters()
+		private async Task ProcessDateFilters()
 		{
 			if (cbxDatesFrom.Text.Length > 0 && cbxDatesTo.Text.Length > 0)
 			{
-				Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, CurrentNotebook.Name, cbxDatesFrom.Text, cbxDatesTo.Text, true, cbxSortEntriesBy.SelectedIndex);
+				await Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, CurrentNotebook.Name, cbxDatesFrom.Text, cbxDatesTo.Text, true, cbxSortEntriesBy.SelectedIndex);
 
 				if (lstEntries.SelectedIndex == -1 && CurrentNotebook.Entries.Contains(CurrentEntry))
 				{

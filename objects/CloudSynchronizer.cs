@@ -157,17 +157,23 @@ namespace myNotebooks.objects
 								await book.Save();
 							}
 						}
-						else
+						else	// a local notebook doesn't have a match in the cloud
 						{
 							// check for renamed notebook, rename if found
 							await AzureFileClient.GetAzureItemNames(true, "notebooksrenamed");
-							List<string> v = Program.AzureRenameCommands.Where(e => e.StartsWith(book.Name)).ToList();
+							List<string> azCommands = Program.AzureRenameCommands.Where(e => e.StartsWith(book.Name)).ToList();
 
-							if(v.Count > 0)
+							if(azCommands.Count > 0)
 							{
-								var newName = v[0].Replace(book.Name + "_", "");
-								await book.Rename(newName, false);
-								await book.Save();
+								var newName = azCommands[0].Replace(book.Name + "_", "");
+								await book.Rename(newName, false);	// will Save() the book
+
+								// Get the cloud book. The local copy will have been saved so it's newer, but the cloud one is what we want since it has the latest updates.
+								await AzureFileClient.DownloadOrDeleteFile(tempFolder + book.Name, Program.AzurePassword + book.Name);
+								cloudNotebook = File.Exists(tempFolder + book.Name) ? new Notebook(book.Name, tempFolder + book.Name).Open(true) : null;
+								File.Move(cloudNotebook.FileName, book.FileName, true);
+
+								//await book.Save();
 							}
 							else
 							{
