@@ -54,6 +54,8 @@ namespace Encryption
 
         public static string Decrypt(string TextToDecrypt)
         {
+			if(TextToDecrypt == null) { return string.Empty; }
+
             try
             {
                 string strReturn = "";

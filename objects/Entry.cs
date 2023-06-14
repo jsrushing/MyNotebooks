@@ -23,7 +23,6 @@ namespace myNotebooks
 		public string		DisplayText { get { return GetTextDisplayText(); } set { DisplayText = value; } }
 		public string		NotebookName { get; set; }
 
-		//private string[]	synopsis;
 		private string		RTF;
         private string		Labels;
 		public string		Title;
@@ -34,7 +33,7 @@ namespace myNotebooks
 
 		public Entry(string _title, string _text, string _RTF, string _labels, string _NotebookName = "", bool _edited = false)
         {
-			Date		= DateTime.Now;
+			//Date		= DateTime.Now;
 			Text		= EncryptDecrypt.Encrypt(_text.Trim());
             Title		= EncryptDecrypt.Encrypt(_title.Trim());
 			RTF			= EncryptDecrypt.Encrypt(_RTF);

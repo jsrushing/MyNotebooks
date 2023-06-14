@@ -147,7 +147,7 @@ using myNotebooks.objects;
 using System.Text;
 using System.Threading;
 using myNotebooks.subforms;
-//using myJournal;
+using myJournal;
 using System.Diagnostics;
 using System.Runtime.Serialization.Formatters.Binary;
 using myNotebooks;
@@ -182,24 +182,18 @@ namespace myNotebooks.subforms
 
 			// one-time code to convert Journal objects to Notebook objects
 
-			//using (Stream stream = File.Open("C://Users//js_ru//source//repos//myJournal2022//bin//Debug//netcoreapp3.1//journals//temp//The New Real Thing 4", FileMode.Open))
+			//using (Stream stream = File.Open("C:\\Users\\js_ru\\source\\repos\\myJournal2022\\bin\\Debug\\netcoreapp3.1\\journals - Copy\\The New Real Thing", FileMode.Open))
 			//{
 			//	BinaryFormatter formatter = new BinaryFormatter();
-			//	//Journal jRtrn = (Journal)formatter.Deserialize(stream);
-			//	Notebook nb = (Notebook)formatter.Deserialize(stream);
+			//	Journal jRtrn = (Journal)formatter.Deserialize(stream);
+			//	Notebook nb = new Notebook(jRtrn);
+			//	await nb.Save();
+
+			//	//Notebook nb = (Notebook)formatter.Deserialize(stream);
 			//	//jRtrn.FileName = journalToOpen;
 			//	//jRtrn.Name = journalToOpen.Substring(journalToOpen.LastIndexOf("\\") + 1);
 			//}
 
-			//Journal jOld = new Journal("The New Real Thing 1", "C://Users//js_ru//source//repos//myJournal2022//bin//Debug//netcoreapp3.1//journals//temp//The New Real Thing 1").Open();
-
-			//Notebook nb = new Notebook("The New Real Thing 1", "C://Users//js_ru//source//repos//myJournal2022//bin//Debug//netcoreapp3.1//journals//temp//The New Real Thing 1").Open();
-
-			//foreach (myJournal.Journal j in Utilities.AllJournals())
-			//{
-			//	Notebook notebook = new Notebook(j);
-			//	notebook.Save();
-			//}
 
 			CheckForSystemDirectories();    // am I keeping system directories now that the cloud is working? Why or why not?
 			frmAzurePwd frm = new frmAzurePwd(this, frmAzurePwd.Mode.AskingForKey);

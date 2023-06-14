@@ -34,7 +34,7 @@ namespace myNotebooks.subforms
 			dtFindDate_To.Value = DateTime.Now;
 		}
 
-		private void btnSearch_Click(object sender, EventArgs e)
+		private async void btnSearch_Click(object sender, EventArgs e)
 		{
 			this.Cursor = Cursors.WaitCursor;
 			var labels = string.Empty;
@@ -56,7 +56,7 @@ namespace myNotebooks.subforms
 			{
 				Utilities.SetProgramPIN(kvp.Key);
 				jeFound = new Notebook(kvp.Key).Open().Search(so);
-				Utilities.PopulateEntries(lstFoundEntries, jeFound, "", "", "", false, 0, true);
+				await Utilities.PopulateEntries(lstFoundEntries, jeFound, "", "", "", false, 0, true);
 				journalBoundaries.Add(kvp.Key, lstFoundEntries.Items.Count);
 				FoundEntries.AddRange(jeFound);
 				foundEntries.Clear();

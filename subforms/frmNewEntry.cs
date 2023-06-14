@@ -183,7 +183,7 @@ namespace myNotebooks.subforms
 
 			//if (DateAndTitle[0] != null && DateAndTitle[1] != null && DateAndTitle[0].Length > 0 && DateAndTitle[1].Length > 0)
 			//{
-				Entry newEntry = new Entry(txtNewEntryTitle.Text.Trim(), rtbNewEntry.Text.Trim(), rtbNewEntry.Rtf, LabelsManager.CheckedLabels_Get(clbLabels), currentNotebook.Name, false);
+				Entry newEntry = new Entry(txtNewEntryTitle.Text.Trim(), rtbNewEntry.Text.Trim(), rtbNewEntry.Rtf, LabelsManager.CheckedLabels_Get(clbLabels), currentNotebook.Name);
 				if (entry == null) { currentNotebook.AddEntry(newEntry); } else { currentNotebook.ReplaceEntry(entry, newEntry); }
 				entry = newEntry;
 				saved = true;

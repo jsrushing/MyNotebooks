@@ -1,6 +1,7 @@
-﻿/* Journal object
- * Created on: 8/1//21
+﻿/* Notebook object
+ * Created as Journal on: 8/1//21
  * Created by: S. Rushing
+ * Modified to Notebook 0610/23
  */
 using System;
 using System.Collections.Generic;
@@ -23,11 +24,32 @@ namespace myNotebooks
 		public string				Name { get; set; }
 		public DateTime				LastSaved { get; set; }
 		public string				FileName { get; set; }
-		public List<Entry>	Entries = new List<Entry>();
-		public string root					= "notebooks\\";
+		public List<Entry>			Entries = new List<Entry>();
+		public string root			= "notebooks\\";
 		public NotebookSettings		Settings;
 
 		public bool BackupCompleted { get; private set; }
+
+		//public Notebook(myJournal.Journal journal)
+		//{
+		//	this.Name = journal.Name;
+		//	this.FileName = "C:\\Users\\js_ru\\source\\repos\\myJournal2022\\bin\\Debug\\netcoreapp3.1\\notebooks\\" + journal.Name;
+		//	this.LastSaved = DateTime.Now;
+		//	this.root = "notebooks\\";
+		//	this.BackupCompleted = journal.BackupCompleted;
+		//	Program.PIN = "0711";
+		//	//this.Entries.Clear();
+
+		//	foreach(myJournal.JournalEntry je in journal.Entries)
+		//	{
+		//		Entry e = new Entry(je.ClearTitle(), je.ClearText(), je.ClearRTF(), je.ClearLabels(), journal.Name, je.isEdited);
+		//		e.Date = je.Date;
+		//		this.Entries.Add(e);
+		//	}
+
+		//	this.Settings = new NotebookSettings(journal.Settings);
+
+		//}
 
         public Notebook(string _name = null, string _fileName = null) 
         {
