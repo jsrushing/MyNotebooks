@@ -199,7 +199,7 @@ namespace myNotebooks
 			return entriesToReturn;
 		}
 
-		public async Task Rename(string newName)
+		public async Task Rename(string newName, bool uploadTriggerFile)
 		{
 			//DeleteBackups();
 			var oldName		= this.Name;
@@ -208,19 +208,25 @@ namespace myNotebooks
 			Thread.Sleep	(500);
 			this.FileName	= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + newName;
 			this.Name		= newName;
+			this.Entries	.ForEach(e => e.NotebookName = newName);
+			await this.Save(false);
 
 			if (this.Settings.AllowCloud)
 			{
-				await AzureFileClient.GetAzureNotebookNames();
+				await AzureFileClient.GetAzureItemNames();	// Populate Program.AzureNotebooks.
 
 				if(Program.AzureNotebookNames.Contains(Program.AzurePassword + oldName)) 
 				{ 
+					Program.AzureNotebookNames.Remove(Program.AzurePassword + oldName);
+
+					//await AzureFileClient.RenameFile($"notebooks/container1a.file.core.windows.net" + "//" + Program.AzurePassword + oldName, newName);
+
 					await AzureFileClient.DownloadOrDeleteFile(this.FileName, Program.AzurePassword + oldName, FileMode.Create, true);
 					CloudSynchronizer cs = new CloudSynchronizer(); await AzureFileClient.UploadFile(this.FileName);   // gets this newly renamed notebook to Azure
-					Program.AzureNotebookNames.Remove(Program.AzurePassword + oldName);
+
 				}
-				Program.AzureNotebookNames.Add(Program.AzurePassword + newName);
-				AzureFileClient.UploadRenamedFileTrigger(oldName, newName);
+				if (!Program.AzureNotebookNames.Contains(Program.AzurePassword + newName)) { Program.AzureNotebookNames.Add(Program.AzurePassword + newName); }
+				if (uploadTriggerFile) { AzureFileClient.UploadRenamedFileTrigger(oldName, newName); }
 			}
 			//Backup();
 		}
@@ -297,7 +303,7 @@ namespace myNotebooks
 			}
 		}
 
-		public async Task Save()
+		public async Task Save(bool synchWithCloud = true)
 		{
 			this.LastSaved = DateTime.Now;
 
@@ -305,13 +311,15 @@ namespace myNotebooks
 			{
 				BinaryFormatter formatter = new BinaryFormatter();
 				formatter.Serialize(stream, this);
-				stream.Close();
 			}
 
 			if (Program.AzurePassword.Length > 0 && this.Settings.AllowCloud)
 			{
-				CloudSynchronizer cs = new CloudSynchronizer();
-				await cs.SynchWithCloud(false, this);
+				if(synchWithCloud)
+				{
+					CloudSynchronizer cs = new CloudSynchronizer();
+					await cs.SynchWithCloud(false, this);
+				}
 			}
 
 			//Backup();

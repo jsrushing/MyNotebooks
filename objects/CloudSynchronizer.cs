@@ -159,9 +159,22 @@ namespace myNotebooks.objects
 						}
 						else
 						{
-							if (book.Settings.IfLocalOnly_Upload)			{ await AzureFileClient.UploadFile(book.FileName); }
-							if (book.Settings.IfLocalOnly_Delete)			{ File.Delete(book.FileName); }
-							if (book.Settings.IfLocalOnly_DisallowCloud)	{ book.Settings.AllowCloud = false; }
+							// check for renamed notebook, rename if found
+							await AzureFileClient.GetAzureItemNames(true, "notebooksrenamed");
+							List<string> v = Program.AzureRenameCommands.Where(e => e.StartsWith(book.Name)).ToList();
+
+							if(v.Count > 0)
+							{
+								var newName = v[0].Replace(book.Name + "_", "");
+								await book.Rename(newName, false);
+								await book.Save();
+							}
+							else
+							{
+								if (book.Settings.IfLocalOnly_Upload)			{ await AzureFileClient.UploadFile(book.FileName); }
+								if (book.Settings.IfLocalOnly_Delete)			{ File.Delete(book.FileName); }
+								if (book.Settings.IfLocalOnly_DisallowCloud)	{ book.Settings.AllowCloud = false; }
+							}
 						}
 					}
 					else
@@ -184,10 +197,10 @@ namespace myNotebooks.objects
 			var NotebooksFolder			= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"];
 			var tempFolder				= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"];
 			List<Notebook> allNotebooks	= new List<Notebook>();
+			await Utilities.PopulateAllNotebooks();
 
 			if(Program.AllNotebooks.Count == 0) { await Utilities.PopulateAllNotebooks(); }
-			if (notebook == null) { allNotebooks = Program.AllNotebooks.Count > 0 ? Program.AllNotebooks : Program.AllNotebooks; }
-			else { allNotebooks.Add(notebook); }
+			if (notebook == null) { allNotebooks = Program.AllNotebooks; } else { allNotebooks.Add(notebook); }
 
 			if(notebook != null)
 			{
@@ -207,7 +220,7 @@ namespace myNotebooks.objects
 			}
 
 			await ProcessNotebooks(allNotebooks, tempFolder, NotebooksFolder);
-			await AzureFileClient.GetAzureNotebookNames(true);
+			await AzureFileClient.GetAzureItemNames(true);
 			await CheckForLocalOrCloudOnly(tempFolder, NotebooksFolder);			
 
 			if(alsoSynchSettings) await SyncLabelsAndSettings();

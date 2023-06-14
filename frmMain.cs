@@ -174,6 +174,7 @@ namespace myNotebooks.subforms
 
 		private async void frmMain_Load(object sender, EventArgs e)
 		{
+			this.Cursor = Cursors.WaitCursor;
 			System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
 			System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
 			this.Text = "myJournal " + Program.AppVersion + (fvi.FileName.ToLower().Contains("debug") ? " - DEBUG MODE" : "");
@@ -226,6 +227,7 @@ namespace myNotebooks.subforms
 			await Utilities.PopulateAllNotebooks();
 			LoadNotebooks();
 			ShowHideMenusAndControls(SelectionState.HideAll);
+			this.Cursor = Cursors.Default;
 		}
 
 		private void frmMain_Resize(object sender, EventArgs e)
@@ -634,17 +636,28 @@ namespace myNotebooks.subforms
 
 		private async void mnuNotebook_Rename_Click(object sender, EventArgs e)
 		{
+			this.Cursor = Cursors.WaitCursor;
 			using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "Enter the new notebook name.", CurrentNotebook.Name, this))
 			{
 				frm.ShowDialog(this);
 
 				if (frm.Result == frmMessage.ReturnResult.Ok && frm.ResultText.Length > 0)
 				{
-					await CurrentNotebook.Rename(frm.ResultText);
-					await Utilities.PopulateAllNotebooks();
-					LoadNotebooks();
+					if(frm.ResultText != CurrentNotebook.Name)
+					{
+						await CurrentNotebook.Rename(frm.ResultText, true);
+						await Utilities.PopulateAllNotebooks();
+						LoadNotebooks();
+					}
+					else 
+					{ using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.Message, "The name has not been changed.", "Name Not Changed")) { frm2.ShowDialog(); } }
+				}
+				else if (frm.ResultText.Length == 0)
+				{
+					using (frmMessage frm3 = new frmMessage(frmMessage.OperationType.Message, "You must enter a new name.", "Name Required")) { frm3.ShowDialog(); }
 				}
 			}
+			this.Cursor = Cursors.Default;
 		}
 
 		private async void mnuNotebook_ResetPIN_Click(object sender, EventArgs e) { await CurrentNotebook.ResetPIN(this); }

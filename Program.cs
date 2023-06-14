@@ -20,6 +20,7 @@ namespace myNotebooks
 		public static string			AzureConnString			= "DefaultEndpointsProtocol=https;AccountName=container1a;AccountKey=4YNQFl9klH9bp8ieKKfhwiVgiKlZKWieBlyzvu8zlm2hyL0HaR/x3XpbpFYjJ5VF4YgtaAR9sN4F+ASttv59jA==;EndpointSuffix=core.windows.net";
 		public static bool				SkipFileSizeComparison	= false;
 		public static List<string>		AzureNotebookNames		= new List<string>();
+		public static List<string>		AzureRenameCommands		= new List<string>();
 		public static List<Notebook>	AllNotebooks			= new List<Notebook>();
 		public static List<string>		AllNotebookNames		= new List<string>();
 		public static Dictionary<string, string> DictCheckedNotebooks = new Dictionary<string, string>();

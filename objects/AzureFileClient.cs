@@ -2,14 +2,17 @@
  * 1/21/23
  */
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Azure;
 using Azure.Storage.Files.Shares;
 using Encryption;
 using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage.File;
 
 namespace myNotebooks.objects
@@ -74,11 +77,11 @@ namespace myNotebooks.objects
 			Program.AzurePassword				= resultSegment.Results.Count() == 1 ? creatingKey ? string.Empty : key : string.Empty;
 		}
 
-		public static async Task GetAzureNotebookNames(bool scrubAzPwd = false)
+		public static async Task GetAzureItemNames(bool scrubAzPwd = false, string shareName = "notebooks")
 		{
 			CloudStorageAccount storageAccount	= CloudStorageAccount.Parse(Program.AzureConnString);
 			CloudFileClient		fileClient		= storageAccount.CreateCloudFileClient();
-			CloudFileShare		share			= fileClient.GetShareReference("notebooks");
+			CloudFileShare		share			= fileClient.GetShareReference(shareName);
 			CloudFileDirectory	root			= share.GetRootDirectoryReference();
 			CloudFileDirectory	myDirectory		= root.GetDirectoryReference("notebooks");
 			FileRequestOptions	options			= new FileRequestOptions();
@@ -86,8 +89,33 @@ namespace myNotebooks.objects
 			FileResultSegment	rsltSgmnt		= await root.ListFilesAndDirectoriesSegmentedAsync(Program.AzurePassword, null, token, options, null);
 
 			Program.AzureNotebookNames.Clear();
+
 			foreach(CloudFile file in rsltSgmnt.Results) 
-			{ Program.AzureNotebookNames.Add(scrubAzPwd ? file.Name.Replace(Program.AzurePassword, "") : file.Name); }
+			{ 
+				if (shareName == "notebooks") { Program.AzureNotebookNames.Add(scrubAzPwd ? file.Name.Replace(Program.AzurePassword, "") : file.Name); } 
+				else if(shareName == "notebooksrenamed") { Program.AzureRenameCommands.Add(scrubAzPwd ? file.Name.Replace(Program.AzurePassword, "") : file.Name); }
+			}
+		}
+
+		public static async Task RenameFile(string filePath, string newFileName)
+		{
+			// Create a connection string to the Azure Storage account
+			ShareServiceClient serviceClient = new ShareServiceClient(Program.AzureConnString);
+
+			// Get a reference to the file share
+			ShareClient share = serviceClient.GetShareClient("notebooks");
+
+			// Get a reference to the file
+			ShareDirectoryClient directory = share.GetDirectoryClient(Path.GetDirectoryName(filePath));
+			ShareFileClient file = directory.GetFileClient(Path.GetFileName(filePath));
+
+			// Specify the new file name
+			string newFilePath = Path.Combine(directory.Path, newFileName);
+
+			// Rename the file
+			await file.RenameAsync(newFilePath);
+
+			Console.WriteLine("File renamed successfully.");
 		}
 
 		public static async Task UploadFile(string localFileName, string shareName = "notebooks")
