@@ -68,7 +68,7 @@ namespace myNotebooks.subforms
 		{
 			this.Cursor = Cursors.WaitCursor;
 
-			if(txtLabelName.Text.Length > 0)
+			if (txtLabelName.Text.Length > 0)
 			{
 				lstLabels.Items.Add(txtLabelName.Text);
 				await LabelsManager.SaveLabels(lstLabels.Items.OfType<string>().ToList());
@@ -158,28 +158,24 @@ namespace myNotebooks.subforms
 		{
 			if (lstLabels.SelectedIndex > -1)
 			{
+				mnuMoveTop.Visible = true;
+				mnuMoveTop.Enabled = true;
+				mnuMoveUp.Visible = lstLabels.SelectedIndex > 0;
+				mnuMoveDown.Visible = lstLabels.SelectedIndex != lstLabels.Items.Count - 1;
+				lstOccurrences.Items.Clear();
+				lstEntryObjects.Items.Clear();
+				PopulateOccurrences();
+
 				if (Program.DictCheckedNotebooks.Count == 0)
-				{
-					using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message,
-						"No notebook is selected for the search.", "No Notebook Selected", this))
-					{ frm.ShowDialog(); }
-					lstLabels.SelectedIndex = -1;
-				}
-				else
-				{
-					mnuMoveTop.Visible = true;
-					mnuMoveTop.Enabled = true;
-					mnuMoveUp.Visible = lstLabels.SelectedIndex > 0;
-					mnuMoveDown.Visible = lstLabels.SelectedIndex != lstLabels.Items.Count - 1;
-					lstOccurrences.Items.Clear();
-					lstEntryObjects.Items.Clear();
-					PopulateOccurrences();
-				}
+				{ lstOccurrences.Items.Clear(); lstOccurrences.Items.Add("no notebooks are selected"); }
 			}
 		}
 
 		private void lstLabels_MouseUp(object sender, MouseEventArgs e)
-		{ lstLabels.SelectedIndex = e.Button == MouseButtons.Right ? e.Y / 15 : lstLabels.SelectedIndex; }
+		{
+			lstLabels.SelectedIndex = e.Button == MouseButtons.Right && lstLabels.SelectedIndex > -1 ? e.Y / 15 : lstLabels.SelectedIndex;
+			mnuContextLabels.Visible = e.Button == MouseButtons.Right && lstLabels.SelectedIndex > -1;
+		}
 
 		private void lstOccurrences_DoubleClick(object sender, EventArgs e)
 		{
@@ -199,8 +195,7 @@ namespace myNotebooks.subforms
 
 		private void lstOccurrences_MouseUp(object sender, MouseEventArgs e)
 		{
-			mnuContextDelete.Visible = true;
-			//lstOccurrences.ContextMenuStrip = mnuContextEntries;
+			mnuContextDelete_lstEntries.Visible = true;
 
 			if (e.Button == MouseButtons.Right && lstOccurrences.Items.Count > 1)
 			{
@@ -211,14 +206,9 @@ namespace myNotebooks.subforms
 				else
 				{
 					mnuContextEntries.Visible = true;
-					mnuContextDelete.Text = "Delete '" + lstLabels.Text + "'";
-					mnuContextRename.Text = "Rename '" + lstLabels.Text + "'";
-					mnuDelete_OneNotebook.Text = string.Format(MnuDelete_OneJournalText, lstOccurrences.SelectedItem.ToString().Replace("in", "from"));
-					mnuDelete_AllNotebooks.Text = Program.DictCheckedNotebooks.Count == Program.AllNotebooks.Count ? "from all notebooks"
-						: string.Format(MnuDelete_SelectedJournalaText, Program.DictCheckedNotebooks.Count.ToString());
 				}
 			}
-			else { mnuContextDelete.Visible = false; }  // lstOccurrences.ContextMenuStrip = null; }
+			else { mnuContextDelete_lstEntries.Visible = false; }
 		}
 
 		private async void MenuMove(object sender, EventArgs e)
@@ -242,56 +232,65 @@ namespace myNotebooks.subforms
 			this.AcceptButton = btnOK;
 		}
 
-		private void mnuSelectNotebooks_Click(object sender, EventArgs e)
-		{
-			using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(this))
-			{
-				frm.ShowDialog();
-				Program.DictCheckedNotebooks = frm.CheckedNotebooks;
-			}
-			GetSelectedNotebooks();
-			KickLstLabels();
-			ShowPanel(pnlMain);
-		}
-
-		private async void mnuDelete_Click(object sender, EventArgs e)
+		private async void DeleteOrRename(object sender, EventArgs e)
 		{
 			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
-			var deleteOK = false;
-			List<Notebook> oneJournal = null;
-			var editingOneJournal = false;
-
-			editingOneJournal = mnu.Text.ToLower().Contains("only");
+			var commandText = mnu.Text.ToLower().Contains("rename") ? "rename" : "delete";
+			var newLabelName = string.Empty;
+			List<Notebook> notebooksToEdit = new List<Notebook>();
+			var editingOneNotebook = mnu.Name.Contains("Entries");
+			var sMsg = "Do you want to " + commandText + " the label '" + lstLabels.SelectedItem.ToString() + "' ";
 			this.Cursor = Cursors.WaitCursor;
 
-			if (editingOneJournal)
+			if (editingOneNotebook)
 			{
-				var journalName = lstOccurrences.Text.Replace("in ", "").Replace(" only", "").Replace("'", "");
-				oneJournal = new List<Notebook>();
-				oneJournal.Add(new Notebook(journalName).Open());
+				var notebookName = lstOccurrences.Text.Replace("in ", "").Replace(" only", "").Replace("'", "");
+				notebooksToEdit.Add(new Notebook(notebookName).Open());
+				sMsg += "in the notebook '" + notebookName + "'?";
+			}
+			else
+			{
+				notebooksToEdit = Utilities.CheckedNotebooks();
+				sMsg += "in all notebooks?";
 			}
 
-			var sMsg = "Do you want to delete the label '" + lstLabels.SelectedItem.ToString() + "' ";
-			sMsg += (editingOneJournal ? mnu.Text.Replace("in", "from").Replace(" only", "") :
-				Program.DictCheckedNotebooks.Count == Program.AllNotebooks.Count ? " from all notebooks " : " the " + Program.DictCheckedNotebooks.Count.ToString() + " selected journal"
-				+ (Program.DictCheckedNotebooks.Count == 1 && !editingOneJournal ? "" : "s")) + "?";
-
-			using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, sMsg, "Delete Label?", this))
+			if(commandText == "rename")
 			{
-				frm.ShowDialog();
-				deleteOK = frm.Result == frmMessage.ReturnResult.Yes;
+				using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "You are renaming '" +
+					lstLabels.SelectedItem.ToString() + " " +
+					(lstOccurrences.SelectedIndex > -1 ? lstOccurrences.SelectedItem.ToString() : "") + Environment.NewLine + "What's the new label name?"))
+				{
+					frm.ShowDialog();
+					newLabelName = frm.ResultText;
+					ActionTaken = newLabelName != null;
+				}
+			}
+			else
+			{
+				using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, sMsg, "Confirm Action", this))
+				{
+					frm.ShowDialog();
+					ActionTaken = frm.Result == frmMessage.ReturnResult.Yes;
+				}
 			}
 
-			if (deleteOK)
+			if (ActionTaken)
 			{
 				var pIndex = lstLabels.SelectedIndex;
 
-				await LabelsManager.DeleteLabel(lstLabels.SelectedItem.ToString(), (oneJournal == null ? this.GetSelectedNotebooks() : oneJournal), this);
+				if (commandText.Equals("rename"))
+				{
+					await LabelsManager.RenameLabel(lstLabels.SelectedItem.ToString(), newLabelName, notebooksToEdit, Program.DictCheckedNotebooks, this);
+				}
+				else
+				{
+					await LabelsManager.DeleteLabel(lstLabels.SelectedItem.ToString(), notebooksToEdit, this);
+				}
+
 				LabelsManager.PopulateLabelsList(null, lstLabels);
 				KickLstLabels(pIndex);
 			}
 
-			ActionTaken = true;
 			this.Cursor = Cursors.Default;
 		}
 
@@ -369,6 +368,18 @@ namespace myNotebooks.subforms
 				ActionTaken = true;
 				lstOccurrences.Items.Clear();
 			}
+		}
+
+		private void mnuSelectNotebooks_Click(object sender, EventArgs e)
+		{
+			using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(this))
+			{
+				frm.ShowDialog();
+				Program.DictCheckedNotebooks = frm.CheckedNotebooks;
+			}
+			GetSelectedNotebooks();
+			KickLstLabels();
+			ShowPanel(pnlMain);
 		}
 
 		private void PopulateOccurrences(string labelName = null)

@@ -84,7 +84,6 @@ namespace myNotebooks.objects
 
 		private ComparisonResult CompareLabelsAndSettings(FileInfo fileinfo1, FileInfo fileinfo2)
 		{
-			DateTime v = LabelsManager.GetLabelsFileDate(GetLabelsAsArray(fileinfo1));
 			DateTime localLabelsFileDate = LabelsManager.GetLabelsFileDate(GetLabelsAsArray(fileinfo1));
 			DateTime cloudLabelsFileDate = LabelsManager.GetLabelsFileDate(GetLabelsAsArray(fileinfo2));
 
@@ -274,6 +273,7 @@ namespace myNotebooks.objects
 							break;
 					}
 				}
+				else { await AzureFileClient.UploadFile(sLocalLabelsFile, "labelsandsettings"); }
 			}
 			catch (Exception ex) { Err = ex.Message; }
 			

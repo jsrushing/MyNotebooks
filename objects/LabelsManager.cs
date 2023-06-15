@@ -16,6 +16,7 @@ using System.Xml;
 using Org.BouncyCastle.Crypto.Agreement;
 using System.Reflection.Emit;
 using Newtonsoft.Json.Linq;
+using System.Globalization;
 
 namespace myNotebooks.objects
 {
@@ -116,13 +117,11 @@ namespace myNotebooks.objects
 
 			return lstRtrn;
 		}
-		// lastLabel.Replace("_", " "
+
 		public static DateTime GetLabelsFileDate(string[] labels) 
 		{ 
 			DateTime dt = DateTime.MinValue;
-			string lastLabel = labels.Last();
-			try { dt = DateTime.ParseExact("06/13/23 02:50:12", ConfigurationManager.AppSettings["FileDate"], null); }
-			catch(Exception ex) { MessageBox.Show(ex.Message); }	// lastLabel isn't a DateTime.
+			DateTime.TryParse(labels.Last(), out dt);
 			return dt;
 		}
 

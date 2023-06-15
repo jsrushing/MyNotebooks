@@ -42,15 +42,15 @@ namespace myNotebooks.subforms
 			label5 = new Label();
 			lstLabels = new ListBox();
 			mnuContextLabels = new ContextMenuStrip(components);
-			mnuContextRename = new ToolStripMenuItem();
+			mnuContextRename_lstLables = new ToolStripMenuItem();
+			mnuContextDelete_lstLabels = new ToolStripMenuItem();
 			lblEntries2 = new Label();
 			lblSortType = new Label();
 			lblEntries1 = new Label();
 			lstOccurrences = new ListBox();
 			mnuContextEntries = new ContextMenuStrip(components);
-			mnuContextDelete = new ToolStripMenuItem();
-			mnuDelete_OneNotebook = new ToolStripMenuItem();
-			mnuDelete_AllNotebooks = new ToolStripMenuItem();
+			mnuContextRename_lstEntries = new ToolStripMenuItem();
+			mnuContextDelete_lstEntries = new ToolStripMenuItem();
 			label1 = new Label();
 			mnuMain = new MenuStrip();
 			mnuLabelsOperations = new ToolStripMenuItem();
@@ -178,16 +178,23 @@ namespace myNotebooks.subforms
 			// 
 			// mnuContextLabels
 			// 
-			mnuContextLabels.Items.AddRange(new ToolStripItem[] { mnuContextRename });
+			mnuContextLabels.Items.AddRange(new ToolStripItem[] { mnuContextRename_lstLables, mnuContextDelete_lstLabels });
 			mnuContextLabels.Name = "mnuContextLabels";
-			mnuContextLabels.Size = new System.Drawing.Size(118, 26);
+			mnuContextLabels.Size = new System.Drawing.Size(118, 48);
 			// 
-			// mnuContextRename
+			// mnuContextRename_lstLables
 			// 
-			mnuContextRename.Name = "mnuContextRename";
-			mnuContextRename.Size = new System.Drawing.Size(117, 22);
-			mnuContextRename.Text = "Rename";
-			mnuContextRename.Click += this.mnuRename_Click;
+			mnuContextRename_lstLables.Name = "mnuContextRename_lstLables";
+			mnuContextRename_lstLables.Size = new System.Drawing.Size(117, 22);
+			mnuContextRename_lstLables.Text = "&Rename";
+			mnuContextRename_lstLables.Click += this.DeleteOrRename;
+			// 
+			// mnuContextDelete_lstLabels
+			// 
+			mnuContextDelete_lstLabels.Name = "mnuContextDelete_lstLabels";
+			mnuContextDelete_lstLabels.Size = new System.Drawing.Size(117, 22);
+			mnuContextDelete_lstLabels.Text = "&Delete";
+			mnuContextDelete_lstLabels.Click += this.DeleteOrRename;
 			// 
 			// lblEntries2
 			// 
@@ -236,30 +243,23 @@ namespace myNotebooks.subforms
 			// 
 			// mnuContextEntries
 			// 
-			mnuContextEntries.Items.AddRange(new ToolStripItem[] { mnuContextDelete });
+			mnuContextEntries.Items.AddRange(new ToolStripItem[] { mnuContextRename_lstEntries, mnuContextDelete_lstEntries });
 			mnuContextEntries.Name = "mnuFoundEntries";
-			mnuContextEntries.Size = new System.Drawing.Size(108, 26);
+			mnuContextEntries.Size = new System.Drawing.Size(181, 70);
 			// 
-			// mnuContextDelete
+			// mnuContextRename_lstEntries
 			// 
-			mnuContextDelete.DropDownItems.AddRange(new ToolStripItem[] { mnuDelete_OneNotebook, mnuDelete_AllNotebooks });
-			mnuContextDelete.Name = "mnuContextDelete";
-			mnuContextDelete.Size = new System.Drawing.Size(107, 22);
-			mnuContextDelete.Text = "Delete";
+			mnuContextRename_lstEntries.Name = "mnuContextRename_lstEntries";
+			mnuContextRename_lstEntries.Size = new System.Drawing.Size(180, 22);
+			mnuContextRename_lstEntries.Text = "&Rename";
+			mnuContextRename_lstEntries.Click += this.DeleteOrRename;
 			// 
-			// mnuDelete_OneNotebook
+			// mnuContextDelete_lstEntries
 			// 
-			mnuDelete_OneNotebook.Name = "mnuDelete_OneNotebook";
-			mnuDelete_OneNotebook.Size = new System.Drawing.Size(213, 22);
-			mnuDelete_OneNotebook.Text = "in <notebook name> only";
-			mnuDelete_OneNotebook.Click += this.mnuDelete_Click;
-			// 
-			// mnuDelete_AllNotebooks
-			// 
-			mnuDelete_AllNotebooks.Name = "mnuDelete_AllNotebooks";
-			mnuDelete_AllNotebooks.Size = new System.Drawing.Size(213, 22);
-			mnuDelete_AllNotebooks.Text = "in {0} selected notebooks";
-			mnuDelete_AllNotebooks.Click += this.mnuDelete_Click;
+			mnuContextDelete_lstEntries.Name = "mnuContextDelete_lstEntries";
+			mnuContextDelete_lstEntries.Size = new System.Drawing.Size(180, 22);
+			mnuContextDelete_lstEntries.Text = "&Delete";
+			mnuContextDelete_lstEntries.Click += this.DeleteOrRename;
 			// 
 			// label1
 			// 
@@ -311,14 +311,14 @@ namespace myNotebooks.subforms
 			// mnuMoveUp
 			// 
 			mnuMoveUp.Name = "mnuMoveUp";
-			mnuMoveUp.Size = new System.Drawing.Size(180, 22);
+			mnuMoveUp.Size = new System.Drawing.Size(105, 22);
 			mnuMoveUp.Text = "&Up";
 			mnuMoveUp.Click += this.MenuMove;
 			// 
 			// mnuMoveDown
 			// 
 			mnuMoveDown.Name = "mnuMoveDown";
-			mnuMoveDown.Size = new System.Drawing.Size(180, 22);
+			mnuMoveDown.Size = new System.Drawing.Size(105, 22);
 			mnuMoveDown.Text = "D&own";
 			mnuMoveDown.Click += this.MenuMove;
 			// 
@@ -469,10 +469,10 @@ namespace myNotebooks.subforms
 
 		private ContextMenuStrip mnuContextEntries;
 		private ContextMenuStrip mnuContextLabels;
-		private ToolStripMenuItem mnuContextDelete;
-		private ToolStripMenuItem mnuDelete_OneNotebook;
-		private ToolStripMenuItem mnuDelete_AllNotebooks;
-		private ToolStripMenuItem mnuContextRename;
+		private ToolStripMenuItem mnuContextDelete_lstEntries;
+		private ToolStripMenuItem mnuContextRename_lstLables;
 		private Label lblEntries2;
+		private ToolStripMenuItem mnuContextDelete_lstLabels;
+		private ToolStripMenuItem mnuContextRename_lstEntries;
 	}
 }

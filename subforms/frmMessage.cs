@@ -56,6 +56,10 @@ namespace myNotebooks.subforms
 
 			lblMessage.Text = msg;
 			lblMessage.Height = (int)Math.Ceiling((double)msg.Length / 47) == 1 ? 25 : 10 * ((int)Math.Ceiling((double)msg.Length / 47));
+			lblMessage.Height += msg.Length > 45 ? 10 : 0;
+
+
+			if(msg.Length > 45) { lblMessage.Height += 20; }
 
 			switch (opType)
 			{
