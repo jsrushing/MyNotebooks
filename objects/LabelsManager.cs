@@ -121,7 +121,7 @@ namespace myNotebooks.objects
 		{ 
 			DateTime dt = DateTime.MinValue;
 			string lastLabel = labels.Last();
-			try { dt = DateTime.ParseExact("06/14/23 22:50:12", ConfigurationManager.AppSettings["FileDate"], null); }
+			try { dt = DateTime.ParseExact("06/13/23 02:50:12", ConfigurationManager.AppSettings["FileDate"], null); }
 			catch(Exception ex) { MessageBox.Show(ex.Message); }	// lastLabel isn't a DateTime.
 			return dt;
 		}
