@@ -84,6 +84,7 @@ namespace myNotebooks.objects
 
 		private ComparisonResult CompareLabelsAndSettings(FileInfo fileinfo1, FileInfo fileinfo2)
 		{
+			DateTime v = LabelsManager.GetLabelsFileDate(GetLabelsAsArray(fileinfo1));
 			DateTime localLabelsFileDate = LabelsManager.GetLabelsFileDate(GetLabelsAsArray(fileinfo1));
 			DateTime cloudLabelsFileDate = LabelsManager.GetLabelsFileDate(GetLabelsAsArray(fileinfo2));
 
@@ -104,6 +105,7 @@ namespace myNotebooks.objects
 				{ sRtrn = temp.GetString(b); }
 			}
 
+			//var v = sRtrn.Substring(0, sRtrn.LastIndexOf("\r\n")).Split("\r\n").TakeLast(1);
 			return sRtrn.Substring(0, sRtrn.LastIndexOf("\r\n")).Split("\r\n");
 		}
 

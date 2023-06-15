@@ -311,16 +311,16 @@ namespace myNotebooks.subforms
 			// mnuMoveUp
 			// 
 			mnuMoveUp.Name = "mnuMoveUp";
-			mnuMoveUp.Size = new System.Drawing.Size(105, 22);
+			mnuMoveUp.Size = new System.Drawing.Size(180, 22);
 			mnuMoveUp.Text = "&Up";
-			mnuMoveUp.Click += this.mnuMoveUp_Click;
+			mnuMoveUp.Click += this.MenuMove;
 			// 
 			// mnuMoveDown
 			// 
 			mnuMoveDown.Name = "mnuMoveDown";
-			mnuMoveDown.Size = new System.Drawing.Size(105, 22);
+			mnuMoveDown.Size = new System.Drawing.Size(180, 22);
 			mnuMoveDown.Text = "D&own";
-			mnuMoveDown.Click += this.mnuMoveDown_Click;
+			mnuMoveDown.Click += this.MenuMove;
 			// 
 			// mnuAssignPINs
 			// 

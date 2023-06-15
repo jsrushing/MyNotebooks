@@ -116,13 +116,13 @@ namespace myNotebooks.objects
 
 			return lstRtrn;
 		}
-
+		// lastLabel.Replace("_", " "
 		public static DateTime GetLabelsFileDate(string[] labels) 
 		{ 
 			DateTime dt = DateTime.MinValue;
 			string lastLabel = labels.Last();
-			try { dt = DateTime.ParseExact(lastLabel.Replace("_", " "), ConfigurationManager.AppSettings["LabelsFileDateFormat"], null); }
-			catch { }	// lastLabel isn't a DateTime.
+			try { dt = DateTime.ParseExact("06/14/23 22:50:12", ConfigurationManager.AppSettings["FileDate"], null); }
+			catch(Exception ex) { MessageBox.Show(ex.Message); }	// lastLabel isn't a DateTime.
 			return dt;
 		}
 

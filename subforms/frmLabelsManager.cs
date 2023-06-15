@@ -56,9 +56,6 @@ namespace myNotebooks.subforms
 
 		private void frmLabelsManager_Resize(object sender, EventArgs e) { ShowHideOccurrences(); }
 
-		private void AddLabelToUIListbox()
-		{ if (txtLabelName.Text.Length > 0) { lstLabels.Items.Add(txtLabelName.Text); } }
-
 		private void btnCancel_Click(object sender, EventArgs e)
 		{
 			pnlNewLabelName.Visible = false;
@@ -67,7 +64,23 @@ namespace myNotebooks.subforms
 		private void btnExitOrphans_Click(object sender, EventArgs e)
 		{ lstOccurrences.Items.Clear(); ShowHideOccurrences(); ShowPanel(pnlMain); }
 
-		private async void btnOK_Click(object sender, EventArgs e) { await MenuBtnOk(); }
+		private async void btnOK_Click(object sender, EventArgs e)
+		{
+			this.Cursor = Cursors.WaitCursor;
+
+			if(txtLabelName.Text.Length > 0)
+			{
+				lstLabels.Items.Add(txtLabelName.Text);
+				await LabelsManager.SaveLabels(lstLabels.Items.OfType<string>().ToList());
+				pnlNewLabelName.Visible = false;
+				//LabelsManager.PopulateLabelsList(null, lstLabels);
+				lstOccurrences.Items.Clear();
+				this.ShowHideOccurrences();
+				this.ShowPanel(pnlMain);
+			}
+
+			this.Cursor = Cursors.Default;
+		}
 
 		private async void btnRemoveSelectedOrphans_Click(object sender, EventArgs e)
 		{
@@ -208,20 +221,40 @@ namespace myNotebooks.subforms
 			else { mnuContextDelete.Visible = false; }  // lstOccurrences.ContextMenuStrip = null; }
 		}
 
-		private async Task MenuBtnOk()
+		private async void MenuMove(object sender, EventArgs e)
 		{
-			this.Cursor = Cursors.WaitCursor;
-			AddLabelToUIListbox();
+			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
+			var isUp = mnu.Name.ToLower().Contains("up");
+			var sLbl = lstLabels.SelectedItem.ToString();
+			var selIndx = lstLabels.SelectedIndex;
+			lstLabels.Items.RemoveAt(selIndx);
+			lstLabels.Items.Insert(selIndx + (isUp ? -1 : 1), sLbl);
+			lstLabels.SelectedIndex = selIndx + (isUp ? -1 : 1);
 			await LabelsManager.SaveLabels(lstLabels.Items.OfType<string>().ToList());
-			pnlNewLabelName.Visible = false;
-			LabelsManager.PopulateLabelsList(null, lstLabels);
-			lstOccurrences.Items.Clear();
-			this.ShowHideOccurrences();
-			this.ShowPanel(pnlMain);
-			this.Cursor = Cursors.Default;
 		}
 
-		private async Task MenuDelete(object sender)
+		private void mnuAdd_Click(object sender, EventArgs e)
+		{
+			lblOperation.Text = "Label Name:";
+			pnlNewLabelName.Visible = true;
+			txtLabelName.Text = string.Empty;
+			txtLabelName.Focus();
+			this.AcceptButton = btnOK;
+		}
+
+		private void mnuSelectNotebooks_Click(object sender, EventArgs e)
+		{
+			using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(this))
+			{
+				frm.ShowDialog();
+				Program.DictCheckedNotebooks = frm.CheckedNotebooks;
+			}
+			GetSelectedNotebooks();
+			KickLstLabels();
+			ShowPanel(pnlMain);
+		}
+
+		private async void mnuDelete_Click(object sender, EventArgs e)
 		{
 			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
 			var deleteOK = false;
@@ -262,19 +295,38 @@ namespace myNotebooks.subforms
 			this.Cursor = Cursors.Default;
 		}
 
-		private async Task MenuMove(object sender)
+		private void mnuExit_Click(object sender, EventArgs e)
 		{
-			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
-			var isUp = mnu.Name.ToLower().Contains("up");
-			var sLbl = lstLabels.SelectedItem.ToString();
-			var selIndx = lstLabels.SelectedIndex;
-			lstLabels.Items.RemoveAt(selIndx);
-			lstLabels.Items.Insert(selIndx + (isUp ? -1 : 1), sLbl);
-			lstLabels.SelectedIndex = selIndx + (isUp ? -1 : 1);
-			await LabelsManager.SaveLabels(lstLabels.Items.OfType<string>().ToList());
+			this.Hide();
 		}
 
-		private async Task MenuRename()
+		private async void mnuFindOrphans_Click(object sender, EventArgs e)
+		{
+			lstOrphanedLabels.Items.Clear();
+			List<string> lstOrphans = LabelsManager.FindOrphansInSelectedNotebooks();
+
+			if (lstOrphans.Count > 0)
+			{
+				lstOrphanedLabels.Items.AddRange(lstOrphans.ToArray());
+
+				if (DeletingOrphans)
+				{
+					chkSelectAllOrphans.Checked = true;
+					await RemoveOrphans();
+					this.Close();
+				}
+				else { ShowPanel(pnlOrphanedLabels); }
+			}
+			else
+			{
+				using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message,
+					"No orphaned labels were found.", Application.ProductName, this)) { frm.ShowDialog(); }
+			}
+
+			if (DeletingOrphans) { this.Close(); }
+		}
+
+		private async void mnuRename_Click(object sender, EventArgs e)
 		{
 			var oldLabelName = lstLabels.Text;
 			var newLabelName = string.Empty;
@@ -318,66 +370,6 @@ namespace myNotebooks.subforms
 				lstOccurrences.Items.Clear();
 			}
 		}
-
-		private void mnuAdd_Click(object sender, EventArgs e)
-		{
-			lblOperation.Text = "Label Name:";
-			pnlNewLabelName.Visible = true;
-			txtLabelName.Text = string.Empty;
-			txtLabelName.Focus();
-			this.AcceptButton = btnOK;
-		}
-
-		private void mnuSelectNotebooks_Click(object sender, EventArgs e)
-		{
-			using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(this))
-			{
-				frm.ShowDialog();
-				Program.DictCheckedNotebooks = frm.CheckedNotebooks;
-			}
-			GetSelectedNotebooks();
-			KickLstLabels();
-			ShowPanel(pnlMain);
-		}
-
-		private async void mnuDelete_Click(object sender, EventArgs e) { await this.MenuDelete(sender); }
-
-		private void mnuExit_Click(object sender, EventArgs e)
-		{
-			this.Hide();
-		}
-
-		private async void mnuFindOrphans_Click(object sender, EventArgs e)
-		{
-			lstOrphanedLabels.Items.Clear();
-			List<string> lstOrphans = LabelsManager.FindOrphansInSelectedNotebooks();
-
-			if (lstOrphans.Count > 0)
-			{
-				lstOrphanedLabels.Items.AddRange(lstOrphans.ToArray());
-
-				if (DeletingOrphans)
-				{
-					chkSelectAllOrphans.Checked = true;
-					await RemoveOrphans();
-					this.Close();
-				}
-				else { ShowPanel(pnlOrphanedLabels); }
-			}
-			else
-			{
-				using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, 
-					"No orphaned labels were found.", Application.ProductName, this)) { frm.ShowDialog(); }
-			}
-
-			if (DeletingOrphans) { this.Close(); }
-		}
-
-		private async void mnuMoveUp_Click(object sender, EventArgs e) { await this.MenuMove(sender); }
-
-		private async void mnuMoveDown_Click(object sender, EventArgs e) { await this.MenuMove(sender); }
-
-		private async void mnuRename_Click(object sender, EventArgs e) { await this.MenuRename(); }
 
 		private void PopulateOccurrences(string labelName = null)
 		{
