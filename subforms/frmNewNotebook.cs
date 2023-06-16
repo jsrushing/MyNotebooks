@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using myNotebooks.objects;
 
@@ -28,13 +29,26 @@ namespace myNotebooks.subforms
 
 		private void frmNewJournal_Activated(object sender, EventArgs e) { txtName.Focus(); }
 
+		private void frmNewNotebook_FormClosing(object sender, FormClosingEventArgs e)
+		{ this.Notebook = null; }
+
 		private void btnCancel_Click(object sender, EventArgs e) { this.Hide(); }
 
 		private void btnOk_Click(object sender, EventArgs e)
 		{
-			this.Notebook.Name = txtName.Text;
-			Program.PIN = txtPIN.Text;
-			this.Hide();
+			char[] c = System.IO.Path.GetInvalidFileNameChars();
+			if (txtName.Text.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) != -1)
+			{
+				using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "Sorry, notebook names may not contain characters " +
+					"which are not allowed in file names, for example *, <, >, {, }, |, :, ?, /, \\ (and others).", "", this))
+				{ frm.ShowDialog(); }
+			}
+			else
+			{
+				this.Notebook.Name = txtName.Text;
+				Program.PIN = txtPIN.Text;
+				this.Hide();
+			}
 		}
 
 		private void lblShowPIN_Click(object sender, EventArgs e)

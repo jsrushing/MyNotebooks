@@ -163,6 +163,7 @@ namespace myNotebooks.subforms
 			Name = "frmNewNotebook";
 			Text = "New Notebook";
 			Activated += this.frmNewJournal_Activated;
+			FormClosing += this.frmNewNotebook_FormClosing;
 			Load += this.frmNewJournal_Load;
 			grp1.ResumeLayout(false);
 			grp1.PerformLayout();

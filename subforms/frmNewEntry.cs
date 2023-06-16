@@ -188,34 +188,49 @@ namespace myNotebooks.subforms
 		private async Task	SaveEntry()
 		{
 			// Test title for a date surrounded by parentheses, which interferes with parsing the entry's date when necessary.
-			var title = Utilities.GetTitleAndDate(txtNewEntryTitle.Text)[0];
-			var openParen = title != null ? title.IndexOf("(") : -1;
-			var closeParen = title != null ? title.IndexOf(')', openParen + 1) : -1;
+			var openParen = txtNewEntryTitle.Text.IndexOf("(");
+			var closeParen = txtNewEntryTitle.Text.IndexOf(")");
 			var possibleDate = string.Empty;
-			DateTime date = DateTime.MinValue;
 			var processEntry = true;
 
-			while (openParen < closeParen & closeParen - openParen == 17 & openParen > -1 & closeParen > -1)
+			if (openParen > -1 && openParen - closeParen == 17)
 			{
-				possibleDate = title.Substring(openParen + 1, closeParen - openParen);
-				DateTime.TryParse(possibleDate, out date);
+				possibleDate = txtNewEntryTitle.Text.Substring(openParen + 1, closeParen - openParen);
+				DateTime.TryParse(possibleDate, out DateTime date);
 
 				if (date > DateTime.MinValue)
-				{ openParen = closeParen + 1; }
-				else
 				{
 					var sMsg = "Sorry, entry titles may not contain a date and time, formatted as you have, surrounded by parentheses. Edit the title accordingly.";
 					using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "Improperly Contstructed Title")) { ShowDialog(frm); }
 					processEntry = false;
-					break;
 				}
-
-				openParen = title.IndexOf('(', closeParen + 1);
-				closeParen = title.IndexOf(")", openParen + 1);
 			}
+
+			//var possibleDate = string.Empty;
+			//var processEntry = true;
+
+			//while (openParen < closeParen & closeParen - openParen == 17 & openParen > -1 & closeParen > -1)
+			//{
+			//	possibleDate = title.Substring(openParen + 1, closeParen - openParen);
+			//	DateTime.TryParse(possibleDate, out DateTime date);
+
+			//	if (date > DateTime.MinValue)
+			//	{ openParen = closeParen + 1; }
+			//	else
+			//	{
+			//		var sMsg = "Sorry, entry titles may not contain a date and time, formatted as you have, surrounded by parentheses. Edit the title accordingly.";
+			//		using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "Improperly Contstructed Title")) { ShowDialog(frm); }
+			//		processEntry = false;
+			//		break;
+			//	}
+
+			//	openParen = title.IndexOf('(', closeParen + 1);
+			//	closeParen = title.IndexOf(")", openParen + 1);
+			//}
 
 			if (processEntry)
 			{
+				var title = Utilities.GetTitleAndDate(txtNewEntryTitle.Text)[0];
 				Entry newEntry = new Entry(txtNewEntryTitle.Text.Trim(), rtbNewEntry.Text.Trim(), rtbNewEntry.Rtf, LabelsManager.CheckedLabels_Get(clbLabels), currentNotebook.Name);
 				if (entry == null) { currentNotebook.AddEntry(newEntry); } else { currentNotebook.ReplaceEntry(entry, newEntry); }
 				entry = newEntry;

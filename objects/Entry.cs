@@ -57,15 +57,6 @@ namespace myNotebooks
 			isEdited	= _edited;	
 		}
 
-		public string		GetFirstOrLastEditDate(bool getFirst)
-		{
-			var sText = this.ClearText();
-			var sTargetText = "> Original Date: ";
-			var iStartDateString = -1;
-			iStartDateString = getFirst ? sText.IndexOf(sTargetText) + sTargetText.Length : sText.LastIndexOf(sTargetText) + sTargetText.Length;
-			return sText.Substring(iStartDateString, 8);
-		}
-
 		string				GetTextDisplayText()
 		{
 			return String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
@@ -86,14 +77,6 @@ namespace myNotebooks
 			sRtrn[2] = "labels: " + ClearLabels().Replace(",", ", ");
 			sRtrn[3] = "---------------------";
 			return sRtrn;
-		}
-
-		public void			Replace(Entry newEntry)
-		{
-			Labels = newEntry.Labels;
-			Text = newEntry.Text;
-			Title = newEntry.Title;
-			NotebookName = newEntry.NotebookName;
 		}
 
 		public bool			RemoveOrReplaceLabel(string newLabelName, string oldLabelName, bool renaming = true)
@@ -126,7 +109,7 @@ namespace myNotebooks
 			return bLabelEdited;
 		}
 
-		public static Entry Select(RichTextBox rtb, ListBox lb, Notebook currentJournal, bool firstSelection = false, Entry je = null, bool resetTopIndex = true)
+		public static Entry Select(RichTextBox rtb, ListBox lb, Notebook currentNotebook, bool firstSelection = false, Entry je = null, bool resetTopIndex = true)
 		{
 			rtb.Clear();
 			List<int> targets = new List<int>();
@@ -196,26 +179,26 @@ namespace myNotebooks
 
 				string[] titleAndDate = Utilities.GetTitleAndDate(sTitleAndDate);
 
-				if (titleAndDate[0].Length > 0 && titleAndDate[1].Length > 0)
+				if (titleAndDate[0] != null && titleAndDate[1] != null)
 				{
-					var sTitle = titleAndDate[0];
-					var sDate = titleAndDate[1];
+					DateTime.TryParse(titleAndDate[1], out DateTime dt);
+					//entryRtrn = currentNotebook.Entries.Where(e => e.Title == titleAndDate[0] && e.Date == dt).FirstOrDefault();
+					entryRtrn = currentNotebook.GetEntry(titleAndDate[0], titleAndDate[1]);
 
-					entryRtrn = currentJournal.GetEntry(sTitle, sDate);
-
-					if (sTitle == "created")
+					if (titleAndDate[0] == "created")
 					{
 						lb.SelectedIndices.Clear();
-						entryRtrn = null;
 					}
-
-					if (entryRtrn != null)
+					else
 					{
-						if (entryRtrn.DisplayText != null) { rtb.Text = entryRtrn.DisplayText; }
+						if (entryRtrn != null && entryRtrn.DisplayText != null) { rtb.Text = entryRtrn.DisplayText; }
 						else
 						{
-							rtb.Text = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
-							, entryRtrn.ClearTitle(), entryRtrn.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), entryRtrn.ClearLabels(), entryRtrn.ClearText());
+							if(entryRtrn != null)
+							{
+								rtb.Text = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
+								, entryRtrn.ClearTitle(), entryRtrn.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), entryRtrn.ClearLabels(), entryRtrn.ClearText());
+							}
 						}
 
 						if (resetTopIndex) { if (rtb.Text.Length == 0) { lb.TopIndex = lb.Top + lb.Height < rtb.Top ? ctr : lb.TopIndex; } }

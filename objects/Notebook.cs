@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -104,7 +105,7 @@ namespace myNotebooks
 			DeleteBackups();
 			File.Delete(this.FileName);
 		}
-
+		
 		private void DeleteBackups()
 		{
 			File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebookIncrementalBackupsFolder"] + this.Name);
@@ -123,8 +124,20 @@ namespace myNotebooks
         public Entry GetEntry(string Title, string Date)
         {
 			Entry jeRtrn = null;
-			try { jeRtrn = Entries.First(a => a.ClearTitle() == Title && a.Date.ToString("MM/dd/yy HH:mm:ss") == Date); }
-			catch (Exception) { }
+			//CultureInfo provider = CultureInfo.CurrentCulture;
+			//DateTime? theDate = DateTime.ParseExact(Date, ConfigurationManager.AppSettings["DisplayedDateFormat"], provider);
+
+			//DateTime.TryParse(Date, out DateTime theDate);
+
+
+
+			foreach(Entry e in this.Entries)
+			{
+				if(e.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]).Equals(Date)) { jeRtrn = e; break; }
+			}
+
+			//try { jeRtrn = Entries.First(a => a.ClearTitle() == Title && a.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]).Equals(Date)); }
+			//catch (Exception) { }
 			return jeRtrn;
         }
 
