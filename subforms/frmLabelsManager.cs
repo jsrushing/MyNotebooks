@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using myNotebooks.objects;
@@ -175,14 +176,27 @@ namespace myNotebooks.subforms
 		{
 			try
 			{
-				int i = lstOccurrences.SelectedIndex;
+				var i = lstOccurrences.SelectedIndex;
 				KeyValuePair<Notebook, Entry> kvp = (KeyValuePair<Notebook, Entry>)lstEntryObjects.Items[i];
 				Notebook j = kvp.Key;
 				Entry je = kvp.Value;
 				Utilities.SetProgramPIN(j.Name);
 
 				using (frmNewEntry frm = new frmNewEntry(this, j, je))
-				{ frm.ShowDialog(); if (frm.saved) { PopulateOccurrences(); } }
+				{ 
+					frm.ShowDialog(); 
+
+					if (frm.saved) 
+					{
+						var lblIndx = lstLabels.SelectedIndex;
+						PopulateOccurrences();
+						lstLabels.SelectedIndex = -1;
+						lstLabels.SelectedIndex = lblIndx;
+						lstOccurrences.SelectedIndex = i;
+						//Thread.Sleep(1000);
+						//using (frmNewEntry frm2 = new frmNewEntry(this, j, je)) { frm2.ShowDialog(); }
+					} 
+				}
 			}
 			catch (Exception) { }
 		}
