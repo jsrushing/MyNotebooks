@@ -63,7 +63,9 @@ namespace myNotebooks.objects
 				File.Delete(tempFolder + sBookName);
 			}
 
-			foreach (var sLocalFile in Program.AllNotebookNames.Except(Program.AzureNotebookNames))   // any journal found locally but not on Azure
+			List<string> names = Program.AllNotebookNames;
+
+			foreach (var sLocalFile in names.Except(Program.AzureNotebookNames))   // any journal found locally but not on Azure
 			{
 				Notebook j2 = new Notebook(sLocalFile).Open();
 				if (j2.Settings.AllowCloud)

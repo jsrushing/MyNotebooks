@@ -124,12 +124,6 @@ namespace myNotebooks
         public Entry GetEntry(string Title, string Date)
         {
 			Entry jeRtrn = null;
-			//CultureInfo provider = CultureInfo.CurrentCulture;
-			//DateTime? theDate = DateTime.ParseExact(Date, ConfigurationManager.AppSettings["DisplayedDateFormat"], provider);
-
-			//DateTime.TryParse(Date, out DateTime theDate);
-
-
 
 			foreach(Entry e in this.Entries)
 			{

@@ -174,6 +174,16 @@ namespace myNotebooks.subforms
 
 		public frmMain() { InitializeComponent(); }
 
+		private string GetRandomLabels()
+		{
+			var rnd = new Random();
+			string[] labels = LabelsManager.GetLabels_NoFileDate();
+			string[] rtrn = {"",""};
+			rtrn[0] = labels[rnd.Next(labels.Length)];
+			rtrn[1] = labels[rnd.Next(labels.Length)];
+			return string.Join(',', rtrn);
+		}
+
 		private async void	frmMain_Load(object sender, EventArgs e)
 		{
 			this.Cursor = Cursors.WaitCursor;
@@ -195,6 +205,33 @@ namespace myNotebooks.subforms
 			//	//jRtrn.Name = journalToOpen.Substring(journalToOpen.LastIndexOf("\\") + 1);
 			//}
 
+			// one-time code to create 50 notebooks
+			//Notebook newNotebook;
+			//Entry newEntry;
+
+			//for (var i = 0; i < 50; i++)
+			//{
+			//	newNotebook = new Notebook();
+			//	newNotebook.Name = "Project " + i.ToString();
+			//	newNotebook.LastSaved = DateTime.Now;
+			//	newNotebook.FileName = AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + newNotebook.Name;
+			//	var rnd = new Random(Guid.NewGuid().GetHashCode());
+
+			//	for (var j = 0; j < 5; j++)
+			//	{
+			//		newEntry = new Entry(EncryptDecrypt.Encrypt("Entry " + j + 1.ToString() + " in " + newNotebook.Name),
+			//			EncryptDecrypt.Encrypt("This is the entry text for entry " + rnd.Next(1, 150)), "", GetRandomLabels(), newNotebook.Name);
+			//		newEntry.Date = DateTime.Now.AddDays(-Convert.ToDouble(rnd.Next(1, 150)));
+			//		newNotebook.Entries.Add(newEntry);
+			//	}
+
+			//	Entry newEntry1 = new Entry("created", "-", "-", "", this.Name);
+			//	newEntry1.Date = DateTime.Now.AddDays(-165);
+			//	newEntry1.NotebookName = newNotebook.Name;
+			//	newNotebook.Entries.Add(newEntry1);
+			//	newNotebook.Settings = new NotebookSettings { AllowCloud = true };
+			//	await newNotebook.Create();
+			//}
 
 			CheckForSystemDirectories();    // am I keeping system directories now that the cloud is working? Why or why not?
 			frmAzurePwd frm = new frmAzurePwd(this, frmAzurePwd.Mode.AskingForKey);
