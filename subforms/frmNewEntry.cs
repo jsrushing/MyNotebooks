@@ -13,13 +13,13 @@ namespace myNotebooks.subforms
 {
 	public partial class frmNewEntry : Form
 	{
-		private Entry			entry				= null;
-		private Notebook		currentNotebook		= null;
-		private bool			isEdit				= false;
-		private int				originalEntryLength = -1;
-		private bool			isDirty				= false;
-		private string			originalTitle;
-		private string			originalText_Full;
+		private Entry		entry				= null;
+		private Notebook	currentNotebook		= null;
+		private bool		isEdit				= false;
+		private int			originalEntryLength = -1;
+		private bool		isDirty				= false;
+		private string		originalTitle		= string.Empty;
+		private string		originalText_Full	= string.Empty;
 		private LabelsManager.LabelsSortType sort = LabelsManager.LabelsSortType.None;
 
 		public bool saved { get; private set; }
@@ -36,14 +36,14 @@ namespace myNotebooks.subforms
 			Utilities.SetStartPosition(this, parent);
 		}
 
-		private void ddlFonts_SelectedIndexChanged(object sender, EventArgs e)
+		private void		ddlFonts_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			lblSelectedFont.Font = new Font(ddlFonts.Text, 10);
 			lblSelectedFont.Text = lblSelectedFont.Font.Name;
 			Application.DoEvents();
 		}
 
-		private void frmNewEntry_Load(object sender, EventArgs e)
+		private void		frmNewEntry_Load(object sender, EventArgs e)
 		{
 			originalTitle = this.Text;
 			//ddlFonts.DataSource = Program.lstFonts;
@@ -56,6 +56,8 @@ namespace myNotebooks.subforms
 			if (isEdit)
 			{
 				txtNewEntryTitle.Text = entry.ClearTitle();
+				lblCreatedOn.Visible = true;
+				lblEditedOn.Visible = true;
 
 				lblCreatedOn.Text = this.entry.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]);
 				lblEditedOn.Text = this.entry.LastEditedOn < new DateTime(2000, 1, 1) ? "" : this.entry.LastEditedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]);
@@ -83,13 +85,13 @@ namespace myNotebooks.subforms
 			SetIsDirty(false);
 		}
 
-		private void frmNewEntry_FormClosing(object sender, FormClosingEventArgs e)
+		private void		frmNewEntry_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			e.Cancel = true;
 			mnuCancelExit_Click(null, null);
 		}
 
-		private void GrayOriginalText()
+		private void		GrayOriginalText()
 		{
 			rtbNewEntry.SelectionStart = 1;
 			rtbNewEntry.SelectionLength = originalText_Full.Length + 1;
@@ -98,7 +100,7 @@ namespace myNotebooks.subforms
 			rtbNewEntry.SelectionStart = 0;
 		}
 
-		private void InNoTypeArea(bool clicked = false)
+		private void		InNoTypeArea(bool clicked = false)
 		{
 			if (preserveOriginalText)
 			{
@@ -110,20 +112,20 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private void lblManageLabels_Click(object sender, EventArgs e)
+		private void		lblManageLabels_Click(object sender, EventArgs e)
 		{
 			using (frmLabelsManager frm = new frmLabelsManager(this, false, this.currentNotebook)) { frm.ShowDialog(); }
 			LabelsManager.PopulateLabelsList(clbLabels);
 		}
 
-		private void lblSortType_Click(object sender, EventArgs e) { SortLabels(); }
+		private void		lblSortType_Click(object sender, EventArgs e) { SortLabels(); }
 
-		private void lstLabels_SelectedIndexChanged(object sender, EventArgs e) { SetIsDirty(true); }
+		private void		lstLabels_SelectedIndexChanged(object sender, EventArgs e) { SetIsDirty(true); }
 
-		private void ModifyFontStyle(FontStyle style)
+		private void		ModifyFontStyle(FontStyle style)
 		{ rtbNewEntry.SelectionFont = new Font(rtbNewEntry.SelectionFont, rtbNewEntry.SelectionFont.Style ^ style); }
 
-		private async void mnuCancelExit_Click(object sender, EventArgs e)
+		private async void	mnuCancelExit_Click(object sender, EventArgs e)
 		{
 			if (isDirty)
 			{
@@ -142,65 +144,65 @@ namespace myNotebooks.subforms
 			this.Hide();
 		}
 
-		private void mnuFindTextBox_TextChanged(object sender, EventArgs e)
+		private void		mnuFindTextBox_TextChanged(object sender, EventArgs e)
 		{
 			// do find operation here
 		}
 
-		private void mnuFind_Click(object sender, EventArgs e)
+		private void		mnuFind_Click(object sender, EventArgs e)
 		{
 			txtFind.Text = string.Empty;
 			txtFind.Focus();
 		}
 
-		private async void mnuSaveAndExit_Click(object sender, EventArgs e)
+		private async void	mnuSaveAndExit_Click(object sender, EventArgs e)
 		{
 			await SaveEntry();
 			this.Hide();
 		}
 
-		private async void mnuSaveEntry_Click(object sender, EventArgs e)
+		private async void	mnuSaveEntry_Click(object sender, EventArgs e)
 		{
 			if (rtbNewEntry.Text.Length > 0 && txtNewEntryTitle.Text.Length > 0 && isDirty)
 			{
-				if(currentNotebook.Entries.Count == 1 & rtbNewEntry.Text.IndexOf(" ") > 49)
+				if (currentNotebook.Entries.Count == 1 & rtbNewEntry.Text.IndexOf(" ") > 49)
 				{
-					using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, 
+					using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message,
 						"Sorry, but because of the way we validate PIN's the 1st entry can't start with a single word longer than 50 characters.")) { frm.ShowDialog(); }
 				}
 				else { await SaveEntry(); }
 			}
 			else
 			{
-				using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, 
+				using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message,
 					"You must enter both a title and text to save an entry.", "", this)) { frm.ShowDialog(this); }
 			}
 		}
 
-		private void rtbNewEntry_KeyDown(object sender, KeyEventArgs e) { if (e.KeyCode == Keys.Right || e.KeyCode == Keys.Down) { InNoTypeArea(); } }
+		private void		rtbNewEntry_KeyDown(object sender, KeyEventArgs e) { if (e.KeyCode == Keys.Right || e.KeyCode == Keys.Down) { InNoTypeArea(); } }
 
-		private void rtbNewEntry_MouseUp(object sender, MouseEventArgs e) { InNoTypeArea(); }
+		private void		rtbNewEntry_MouseUp(object sender, MouseEventArgs e) { InNoTypeArea(); }
 
-		private void rtbNewEntry_TextChanged(object sender, EventArgs e) { SetIsDirty(true); }
+		private void		rtbNewEntry_TextChanged(object sender, EventArgs e) { SetIsDirty(true); }
 
-		private async Task SaveEntry()
+		private async Task	SaveEntry()
 		{
 			// Test title for a date surrounded by parentheses, which interferes with parsing the entry's date when necessary.
-			var title = Utilities.GetTitleAndDate(txtNewEntryTitle.Text)[0];	
+			var title = Utilities.GetTitleAndDate(txtNewEntryTitle.Text)[0];
 			var openParen = title != null ? title.IndexOf("(") : -1;
 			var closeParen = title != null ? title.IndexOf(')', openParen + 1) : -1;
 			var possibleDate = string.Empty;
 			DateTime date = DateTime.MinValue;
 			var processEntry = true;
 
-			while(openParen < closeParen & closeParen - openParen == 17 & openParen > -1 & closeParen > -1) 
-			{ 
+			while (openParen < closeParen & closeParen - openParen == 17 & openParen > -1 & closeParen > -1)
+			{
 				possibleDate = title.Substring(openParen + 1, closeParen - openParen);
 				DateTime.TryParse(possibleDate, out date);
 
-				if(date > DateTime.MinValue) 
+				if (date > DateTime.MinValue)
 				{ openParen = closeParen + 1; }
-				else 
+				else
 				{
 					var sMsg = "Sorry, entry titles may not contain a date and time, formatted as you have, surrounded by parentheses. Edit the title accordingly.";
 					using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "Improperly Contstructed Title")) { ShowDialog(frm); }
@@ -208,8 +210,8 @@ namespace myNotebooks.subforms
 					break;
 				}
 
-				openParen = title.IndexOf('(', closeParen + 1); 
-				closeParen = title.IndexOf(")", openParen + 1); 
+				openParen = title.IndexOf('(', closeParen + 1);
+				closeParen = title.IndexOf(")", openParen + 1);
 			}
 
 			if (processEntry)
@@ -223,7 +225,7 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private void SetIsDirty(bool dirty)
+		private void		SetIsDirty(bool dirty)
 		{
 			if (txtNewEntryTitle.Text.Length > 0 & rtbNewEntry.Text.Length > 0)
 			{
@@ -242,7 +244,7 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private void SortLabels()
+		private void		SortLabels()
 		{
 			switch (sort)
 			{
@@ -264,13 +266,13 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private void ToolsMenuClick(object sender, EventArgs e)
+		private void		ToolsMenuClick(object sender, EventArgs e)
 		{
 			string btnName = ((ToolStripButton)sender).Name.ToLower();
 			FontStyle style = btnName.Contains("bold") ? FontStyle.Bold : btnName.Contains("underline") ? FontStyle.Underline : FontStyle.Italic;
 			ModifyFontStyle(style);
 		}
 
-		private void txtNewEntryTitle_TextChanged(object sender, EventArgs e) { SetIsDirty(true); }
+		private void		txtNewEntryTitle_TextChanged(object sender, EventArgs e) { SetIsDirty(true); }
 	}
 }

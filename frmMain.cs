@@ -462,7 +462,7 @@ namespace myNotebooks.subforms
 			if (lb.SelectedIndex > -1)
 			{
 				lb.SelectedIndexChanged -= new System.EventHandler(this.lstEntries_SelectEntry);
-				CurrentEntry = Entry.Select(rtb, lb, CurrentNotebook, FirstSelection, null, true, lstEntries.Width - 100);
+				CurrentEntry = Entry.Select(rtb, lb, CurrentNotebook, FirstSelection, null, true);
 
 				if (CurrentEntry != null)
 				{
@@ -719,9 +719,8 @@ namespace myNotebooks.subforms
 					cbxDatesFrom.Text, cbxDatesTo.Text, true, cbxSortEntriesBy.SelectedIndex, false, lstEntries.Width - 75);
 
 				if (lstEntries.SelectedIndex == -1 && CurrentNotebook.Entries.Contains(CurrentEntry))
-				{
-					Entry.Select(rtbSelectedEntry, lstEntries, null, true, CurrentEntry, true, lstEntries.Width - 75);
-				}
+				{ Entry.Select(rtbSelectedEntry, lstEntries, null, true, CurrentEntry, true); }
+
 				lblEntriesCount.Text = (lstEntries.Items.Count / 4).ToString();
 			}
 		}

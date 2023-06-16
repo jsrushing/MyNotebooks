@@ -110,13 +110,13 @@ namespace myNotebooks.subforms
 			pnlEntryDates.Controls.Add(label5);
 			pnlEntryDates.Location = new System.Drawing.Point(46, 46);
 			pnlEntryDates.Name = "pnlEntryDates";
-			pnlEntryDates.Size = new System.Drawing.Size(317, 23);
+			pnlEntryDates.Size = new System.Drawing.Size(398, 23);
 			pnlEntryDates.TabIndex = 48;
 			// 
 			// lblEditedOn
 			// 
 			lblEditedOn.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-			lblEditedOn.Location = new System.Drawing.Point(197, 4);
+			lblEditedOn.Location = new System.Drawing.Point(232, 5);
 			lblEditedOn.Name = "lblEditedOn";
 			lblEditedOn.Size = new System.Drawing.Size(105, 18);
 			lblEditedOn.TabIndex = 47;
@@ -125,7 +125,7 @@ namespace myNotebooks.subforms
 			// lblCreatedOn
 			// 
 			lblCreatedOn.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-			lblCreatedOn.Location = new System.Drawing.Point(50, 4);
+			lblCreatedOn.Location = new System.Drawing.Point(67, 5);
 			lblCreatedOn.Name = "lblCreatedOn";
 			lblCreatedOn.Size = new System.Drawing.Size(100, 18);
 			lblCreatedOn.TabIndex = 45;
@@ -143,21 +143,21 @@ namespace myNotebooks.subforms
 			// 
 			label8.AutoSize = true;
 			label8.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-			label8.Location = new System.Drawing.Point(159, 5);
+			label8.Location = new System.Drawing.Point(177, 4);
 			label8.Name = "label8";
-			label8.Size = new System.Drawing.Size(46, 15);
+			label8.Size = new System.Drawing.Size(60, 15);
 			label8.TabIndex = 46;
-			label8.Text = "edited: ";
+			label8.Text = "edited on:";
 			// 
 			// label5
 			// 
 			label5.AutoSize = true;
 			label5.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-			label5.Location = new System.Drawing.Point(6, 5);
+			label5.Location = new System.Drawing.Point(6, 4);
 			label5.Name = "label5";
-			label5.Size = new System.Drawing.Size(52, 15);
+			label5.Size = new System.Drawing.Size(69, 15);
 			label5.TabIndex = 44;
-			label5.Text = "created: ";
+			label5.Text = "created on: ";
 			// 
 			// lblSortType
 			// 

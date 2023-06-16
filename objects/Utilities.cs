@@ -72,7 +72,7 @@ namespace myNotebooks.objects
 				}
 				else 
 				{ 
-					using(frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "There is a problem with this entry. The Date can not be found.", "")) { frm.ShowDialog(); }
+					//using(frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "There is a problem with this entry. The Date can not be found.", "")) { frm.ShowDialog(); }
 				}
 			}
 			catch (Exception) { }

@@ -57,7 +57,7 @@ namespace myNotebooks
 			isEdited	= _edited;	
 		}
 
-		public string	GetFirstOrLastEditDate(bool getFirst)
+		public string		GetFirstOrLastEditDate(bool getFirst)
 		{
 			var sText = this.ClearText();
 			var sTargetText = "> Original Date: ";
@@ -66,13 +66,13 @@ namespace myNotebooks
 			return sText.Substring(iStartDateString, 8);
 		}
 
-		string			GetTextDisplayText()
+		string				GetTextDisplayText()
 		{
 			return String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
 				, ClearTitle(), Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), ClearLabels().Replace(",", ", "), ClearText());
 		}
 
-		public string[] GetSynopsis(bool includeJournalName = false, int maxWidth = -1)
+		public string[]		GetSynopsis(bool includeJournalName = false, int maxWidth = -1)
 		{
 			string[] sRtrn = new string[4];
 			int iTextChunkLength = maxWidth > 0 ? maxWidth / 5 : 150;
@@ -88,7 +88,7 @@ namespace myNotebooks
 			return sRtrn;
 		}
 
-		public void		Replace(Entry newEntry)
+		public void			Replace(Entry newEntry)
 		{
 			Labels = newEntry.Labels;
 			Text = newEntry.Text;
@@ -96,7 +96,7 @@ namespace myNotebooks
 			NotebookName = newEntry.NotebookName;
 		}
 
-		public bool		RemoveOrReplaceLabel(string newLabelName, string oldLabelName, bool renaming = true)
+		public bool			RemoveOrReplaceLabel(string newLabelName, string oldLabelName, bool renaming = true)
 		{
 			var labels = this.ClearLabels();
 			var bLabelEdited = false;
@@ -126,7 +126,7 @@ namespace myNotebooks
 			return bLabelEdited;
 		}
 
-		public static Entry Select(RichTextBox rtb, ListBox lb, Notebook currentJournal, bool firstSelection = false, Entry je = null, bool resetTopIndex = true, int maxWidth = 0)
+		public static Entry Select(RichTextBox rtb, ListBox lb, Notebook currentJournal, bool firstSelection = false, Entry je = null, bool resetTopIndex = true)
 		{
 			rtb.Clear();
 			List<int> targets = new List<int>();
@@ -138,7 +138,7 @@ namespace myNotebooks
 
 				for (var i = 0; i < lb.Items.Count; i++)
 				{
-					if (lb.Items[i].ToString().StartsWith(je.GetSynopsis(false, maxWidth)[0].ToString()))
+					if (lb.Items[i].ToString().StartsWith(je.GetSynopsis(false)[0].ToString()))
 					{
 						lb.SelectedIndices.Add(i);
 						lb.SelectedIndices.Add(i + 1);
@@ -229,11 +229,11 @@ namespace myNotebooks
 			return entryRtrn;
 		}
 
-		public string ClearText()	{ return EncryptDecrypt.Decrypt(Text); }
-		public string ClearTitle()	{ return EncryptDecrypt.Decrypt(Title); }
-		public string ClearRTF()	{ return EncryptDecrypt.Decrypt(RTF); }
-		public string ClearLabels()	{ return Labels == null ? String.Empty : EncryptDecrypt.Decrypt(Labels); }
+		public string		ClearText()	{ return EncryptDecrypt.Decrypt(Text); }
+		public string		ClearTitle()	{ return EncryptDecrypt.Decrypt(Title); }
+		public string		ClearRTF()	{ return EncryptDecrypt.Decrypt(RTF); }
+		public string		ClearLabels()	{ return Labels == null ? String.Empty : EncryptDecrypt.Decrypt(Labels); }
 
-		public string ClearName() { return EncryptDecrypt.Decrypt(NotebookName); }
+		public string		ClearName() { return EncryptDecrypt.Decrypt(NotebookName); }
 	}
 }
