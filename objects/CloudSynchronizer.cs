@@ -211,13 +211,12 @@ namespace myNotebooks.objects
 
 			if(notebook != null)
 			{
-				if (notebook.FileName.EndsWith(" (local)"))
+				if (notebook.FileName.EndsWith(" (local)") & notebook.Entries.Count == 1)
 				{
 					var sOldName = notebook.FileName;
 					var sNewName = notebook.FileName.Substring(0, notebook.FileName.LastIndexOf("\\") + 1) + notebook.Name;
 					notebook.FileName = sNewName;
-					File.Copy(sOldName, sNewName, true);
-					File.Delete(sOldName);
+					File.Move(sOldName, sNewName);
 					if (notebook.Settings.AllowCloud) { await AzureFileClient.UploadFile(NotebooksFolder + notebook.Name); }
 					return;
 				}

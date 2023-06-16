@@ -24,7 +24,6 @@ namespace myJournal
 		//public string		DisplayText { get { return GetTextDisplayText(); } set { DisplayText = value; } }
 		public string		NotebookName { get; set; }
 
-		private string[]	synopsis;
 		private string		RTF;
         private string		Labels;
 		public string		Title;

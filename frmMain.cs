@@ -263,11 +263,11 @@ namespace myNotebooks.subforms
 					}
 					else
 					{
+						PopulateShowFromDates();
 						await ProcessDateFilters();
 						lstEntries.Height = this.Height - lstEntries.Top - 50;
 						lstEntries.Visible = true;
 						pnlDateFilters.Visible = true;
-						PopulateShowFromDates();
 
 						for (int i = 0; i < cbxDatesFrom.Items.Count; i++)
 						{
@@ -561,24 +561,14 @@ namespace myNotebooks.subforms
 			{
 				frm.ShowDialog(this);
 
-				if (frm.NewJournalName != null)
+				if(frm.Notebook != null)
 				{
-					Notebook nb = new Notebook(frm.NewJournalName);
-					nb.Settings = new NotebookSettings();
-					// Apply settings from choices on frmNewJournal (add to this section as new settings are added) ...
-					nb.Settings.AllowCloud = frm.AllowCloud;
-					nb.Settings.IfCloudOnly_Delete = frm.IfCloudOnly_Delete;
-					nb.Settings.IfCloudOnly_Download = frm.IfCloudOnly_Download;
-					nb.Settings.IfLocalOnly_Upload = frm.IfLocalOnly_Upload;
-					nb.Settings.IfLocalOnly_Delete = frm.IfLocalOnly_Delete;
-					nb.Settings.IfLocalOnly_DisallowCloud = frm.IfLocalOnly_DisallowCloud;
-					// ........................................................................
-					nb.LastSaved = DateTime.Now;
-					await nb.Create();
+					frm.Notebook.LastSaved = DateTime.Now;
+					frm.Notebook.FileName = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + frm.Notebook.Name;
+					await frm.Notebook.Create();
 					await Utilities.PopulateAllNotebooks();
 					LoadNotebooks();
 				}
-				frm.Close();
 			}
 		}
 
@@ -597,8 +587,9 @@ namespace myNotebooks.subforms
 					pnlDateFilters.Visible = false;
 					using (frmLabelsManager frm3 = new frmLabelsManager(this, true)) { frm3.ShowDialog(); }
 					await Utilities.PopulateAllNotebooks();
-					File.Delete(CurrentNotebook.FileName);
+					//File.Delete(CurrentNotebook.FileName);
 					LoadNotebooks();
+					CurrentNotebook = null;
 				}
 			}
 		}
@@ -688,11 +679,6 @@ namespace myNotebooks.subforms
 			SetDisplayText();
 		}
 
-		private void rtbSelectedEntry_MouseDown(object sender, MouseEventArgs e)
-		{
-			lstEntries.Focus();
-		}
-
 		private async void mnuSwitchAccount_Click(object sender, EventArgs e)
 		{
 			frmAzurePwd ap = new frmAzurePwd(this, frmAzurePwd.Mode.ChangingKey);
@@ -706,16 +692,6 @@ namespace myNotebooks.subforms
 					CloudSynchronizer cs = new CloudSynchronizer();
 					await cs.SynchWithCloud();
 				}
-			}
-		}
-
-		private void txtNotebookPIN_TextChanged(object sender, EventArgs e)
-		{
-			if (txtJournalPIN.Text.Length > 0)
-			{
-				btnLoadJournal.Enabled = true;
-				lblShowPIN.Visible = true;
-				lblWrongPin.Visible = false;
 			}
 		}
 
@@ -745,6 +721,11 @@ namespace myNotebooks.subforms
 				}
 				lblEntriesCount.Text = (lstEntries.Items.Count / 4).ToString();
 			}
+		}
+
+		private void rtbSelectedEntry_MouseDown(object sender, MouseEventArgs e)
+		{
+			lstEntries.Focus();
 		}
 
 		private void SetDisplayText()
@@ -815,6 +796,16 @@ namespace myNotebooks.subforms
 			{
 				pnlPin.Visible = false;
 				pnlDateFilters.Visible = false;
+			}
+		}
+
+		private void txtNotebookPIN_TextChanged(object sender, EventArgs e)
+		{
+			if (txtJournalPIN.Text.Length > 0)
+			{
+				btnLoadJournal.Enabled = true;
+				lblShowPIN.Visible = true;
+				lblWrongPin.Visible = false;
 			}
 		}
 

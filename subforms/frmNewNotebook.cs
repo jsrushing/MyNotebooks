@@ -12,24 +12,18 @@ namespace myNotebooks.subforms
 {
 	public partial class frmNewNotebook : Form
 	{
-		public string NewJournalName { get; private set; }
-		public bool AllowCloud { get { return chkAllowWebBackup.Checked; } }
-		public bool IfCloudOnly_Download { get { return radCloudNotLocal_DownloadCloud.Checked; } }
-		public bool IfCloudOnly_Delete { get { return radCloudNotLocal_DeleteCloud.Checked; } }
-		public bool IfLocalOnly_Upload { get { return radLocalNotCloud_UploadToCloud.Checked; } }
-		public bool IfLocalOnly_Delete { get { return radLocalNotCloud_DeleteLocal.Checked; } }
-		public bool IfLocalOnly_DisallowCloud { get { return radLocalNotCloud_DisallowLocalCloud.Checked; } }
+		public Notebook Notebook { get; private set; }
+		public NotebookSettings Settings { get; private set; }
 
 		public frmNewNotebook(Form parent)
 		{
 			InitializeComponent();
 			Utilities.SetStartPosition(this, parent);
+			this.Notebook = new Notebook();
+			this.Notebook.Settings = new NotebookSettings { IfCloudOnly_Download = true, IfLocalOnly_Upload = true, AllowCloud = true };
 		}
 
-		private void frmNewJournal_Load(object sender, EventArgs e)
-		{
-			this.Size = this.MinimumSize;
-		}
+		private void frmNewJournal_Load(object sender, EventArgs e) { this.Size = this.MinimumSize; }
 
 		private void frmNewJournal_Activated(object sender, EventArgs e) { txtName.Focus(); }
 
@@ -37,7 +31,7 @@ namespace myNotebooks.subforms
 
 		private void btnOk_Click(object sender, EventArgs e)
 		{
-			NewJournalName = txtName.Text;
+			this.Notebook.Name = txtName.Text;
 			Program.PIN = txtPIN.Text;
 			this.Hide();
 		}
@@ -54,6 +48,7 @@ namespace myNotebooks.subforms
 		{
 			lblNameExists.Visible = Program.AllNotebookNames.Contains(txtName.Text);
 			btnOk.Enabled = txtName.Text.Length > 0 && !lblNameExists.Visible;
+			btnSettings.Enabled = btnOk.Enabled;
 
 			if (txtName.Text.Contains("|"))
 			{
@@ -65,22 +60,14 @@ namespace myNotebooks.subforms
 
 		}
 
-		private void chkAllowWebBackup_CheckedChanged(object sender, EventArgs e) 
-		{ 
-			pnlCloudOptions.Enabled = chkAllowWebBackup.Checked; 
-
-			if(!chkAllowWebBackup.Checked)
+		private void btnSettings_Click(object sender, EventArgs e)
+		{
+			if (txtName.Text.Length > 0)
 			{
-				radCloudNotLocal_DeleteCloud.Checked = false;
-				radCloudNotLocal_DownloadCloud.Checked = false;
-				radLocalNotCloud_DeleteLocal.Checked = false;
-				radLocalNotCloud_DisallowLocalCloud.Checked = false;
-				radLocalNotCloud_UploadToCloud.Checked = false;
-			}
-			else
-			{
-				radLocalNotCloud_DeleteLocal.Checked = true;
-				radCloudNotLocal_DownloadCloud.Checked = true;
+				//Notebook = new Notebook(txtName.Text);
+				{ Notebook.Settings = this.Settings; }
+				using (frmNotebookSettings nbs = new frmNotebookSettings(Notebook, this, false)) { nbs.ShowDialog(); }
+				this.Settings = Notebook.Settings;
 			}
 		}
 	}

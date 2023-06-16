@@ -176,12 +176,13 @@ namespace myNotebooks.objects
 		public static async Task<bool> SaveLabels(List<string> labels = null)
 		{
 			var bRtrn = false;
+			if(labels == null) { labels = GetLabels_NoFileDate().ToList(); }
 
 			try
 			{
 				StringBuilder sb = new StringBuilder();
 				CloudSynchronizer cs = new CloudSynchronizer();
-				foreach (string tag in labels) { sb.AppendLine(tag); }
+				foreach (string label in labels) { sb.AppendLine(label); }
 				sb.AppendLine (DateTime.Now.ToString(ConfigurationManager.AppSettings["FileDate"]));
 				File.WriteAllText(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"], sb.ToString());
 				await cs.SyncLabelsAndSettings();

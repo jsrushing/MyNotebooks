@@ -89,7 +89,7 @@ namespace myNotebooks
 
 		public async Task Create()
         {
-			this.FileName += " (local)";
+			this.FileName += this.Settings.AllowCloud ? "" : " (local)";
 			Entries.Add(new Entry("created", "-", "-", "", this.Name));
 			Program.SkipFileSizeComparison = true;
 			await this.Save();

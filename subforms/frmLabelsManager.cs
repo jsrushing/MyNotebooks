@@ -17,8 +17,6 @@ namespace myNotebooks.subforms
 	public partial class frmLabelsManager : Form
 	{
 		private LabelsManager.LabelsSortType sort = LabelsManager.LabelsSortType.None;
-		private string MnuDelete_OneJournalText = "{0} only";
-		private string MnuDelete_SelectedJournalaText = "from the {0} selected notebooks";
 		private List<int> OccurenceTitleIndicies = new List<int>();
 		private bool DeletingOrphans;
 
@@ -257,8 +255,8 @@ namespace myNotebooks.subforms
 			if(commandText == "rename")
 			{
 				using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "You are renaming '" +
-					lstLabels.SelectedItem.ToString() + " " +
-					(lstOccurrences.SelectedIndex > -1 ? lstOccurrences.SelectedItem.ToString() : "") + Environment.NewLine + "What's the new label name?"))
+					lstLabels.SelectedItem.ToString() + "' " +
+					(lstOccurrences.SelectedIndex > -1 ? lstOccurrences.SelectedItem.ToString() : "") + "." + Environment.NewLine + "What's the new label name?", "", this))
 				{
 					frm.ShowDialog();
 					newLabelName = frm.ResultText;
@@ -279,14 +277,11 @@ namespace myNotebooks.subforms
 				var pIndex = lstLabels.SelectedIndex;
 
 				if (commandText.Equals("rename"))
-				{
-					await LabelsManager.RenameLabel(lstLabels.SelectedItem.ToString(), newLabelName, notebooksToEdit, Program.DictCheckedNotebooks, this);
-				}
+				{ await LabelsManager.RenameLabel(lstLabels.SelectedItem.ToString(), newLabelName, notebooksToEdit, Program.DictCheckedNotebooks, this); }
 				else
-				{
-					await LabelsManager.DeleteLabel(lstLabels.SelectedItem.ToString(), notebooksToEdit, this);
-				}
+				{ await LabelsManager.DeleteLabel(lstLabels.SelectedItem.ToString(), notebooksToEdit, this); }
 
+				await LabelsManager.SaveLabels();
 				LabelsManager.PopulateLabelsList(null, lstLabels);
 				KickLstLabels(pIndex);
 			}
