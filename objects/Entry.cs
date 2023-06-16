@@ -125,7 +125,7 @@ namespace myNotebooks
 			return bLabelEdited;
 		}
 
-		public static Entry Select(RichTextBox rtb, ListBox lb, Notebook currentJournal, bool firstSelection = false, Entry je = null, bool resetTopIndex = true)
+		public static Entry Select(RichTextBox rtb, ListBox lb, Notebook currentJournal, bool firstSelection = false, Entry je = null, bool resetTopIndex = true, int maxWidth = 0)
 		{
 			rtb.Clear();
 			List<int> targets = new List<int>();
@@ -137,7 +137,7 @@ namespace myNotebooks
 
 				for (var i = 0; i < lb.Items.Count; i++)
 				{
-					if (lb.Items[i].ToString().StartsWith(je.GetSynopsis()[0].ToString()))
+					if (lb.Items[i].ToString().StartsWith(je.GetSynopsis(false, maxWidth)[0].ToString()))
 					{
 						lb.SelectedIndices.Add(i);
 						lb.SelectedIndices.Add(i + 1);

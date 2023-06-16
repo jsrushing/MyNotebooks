@@ -20,7 +20,8 @@ namespace myNotebooks.subforms
 			InitializeComponent();
 			Utilities.SetStartPosition(this, parent);
 			this.Notebook = new Notebook();
-			this.Notebook.Settings = new NotebookSettings { IfCloudOnly_Download = true, IfLocalOnly_Upload = true, AllowCloud = true };
+			this.Settings = new NotebookSettings { IfCloudOnly_Download = true, IfLocalOnly_Upload = true, AllowCloud = true };
+			this.Notebook.Settings = this.Settings;
 		}
 
 		private void frmNewJournal_Load(object sender, EventArgs e) { this.Size = this.MinimumSize; }
@@ -65,7 +66,7 @@ namespace myNotebooks.subforms
 			if (txtName.Text.Length > 0)
 			{
 				//Notebook = new Notebook(txtName.Text);
-				{ Notebook.Settings = this.Settings; }
+				//{ Notebook.Settings = this.Settings; }
 				using (frmNotebookSettings nbs = new frmNotebookSettings(Notebook, this, false)) { nbs.ShowDialog(); }
 				this.Settings = Notebook.Settings;
 			}

@@ -18,7 +18,7 @@ namespace myNotebooks.objects
 		{
 			List<string> lstRtrn = new List<string>();
 			Program.AllNotebookNames.Clear();
-			await Utilities.PopulateAllNotebooks();
+			//await Utilities.PopulateAllNotebooks();
 			foreach (Notebook nb in Program.AllNotebooks)if(nb != null) Program.AllNotebookNames.Add(nb.Name);
 			//return lstRtrn;
 		} 
@@ -29,7 +29,7 @@ namespace myNotebooks.objects
 			var sNotebooksFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"];
 			Program.AllNotebooks.Clear();
 			foreach (var s in Directory.GetFiles(sNotebooksFolder)) { Program.AllNotebooks.Add(new Notebook(s.Replace(sNotebooksFolder, "")).Open()); }
-			//return nbReturn;
+			await PopulateAllNotebookNames();
 		}
 
 		// one-time code to convert Journal objects to Notebook objects
@@ -79,7 +79,7 @@ namespace myNotebooks.objects
 							result = GetTitleAndDate(searchString, paren2);
 						}
 					}
-					else { result = GetTitleAndDate(searchString, paren2); }
+					else { searchString = searchString.Substring(paren1 + 1, searchString.Length - paren1 - 1); result = GetTitleAndDate(searchString, paren1); }
 				}
 			}
 			catch (Exception) { }
@@ -148,7 +148,8 @@ namespace myNotebooks.objects
 			//return filesCopied;
 		}
 
-		public static async Task PopulateEntries(ListBox lbxToPopulate, List<Entry> entries, string journalName = "", string startDate = "", string endDate = "", bool clearPrevious = true, int SortBy = 0, bool includeJrnlName = false)
+		public static async Task PopulateEntries(ListBox lbxToPopulate, List<Entry> entries, string journalName = "", string startDate = "", 
+			string endDate = "", bool clearPrevious = true, int SortBy = 0, bool includeJrnlName = false, int maxWidth = 0)
 		{
 			if(clearPrevious) lbxToPopulate.Items.Clear();
 			List<Entry> tmpEntries = null;
@@ -170,7 +171,7 @@ namespace myNotebooks.objects
 
 			foreach (Entry je in tmpEntries)
 			{
-				var synopsis = je.GetSynopsis(includeJrnlName);
+				var synopsis = je.GetSynopsis(includeJrnlName, maxWidth);
 
 				for(int i = 0; i < synopsis.Length; i++) 
 				{ 

@@ -120,7 +120,7 @@ namespace myNotebooks.subforms
 				{
 					Notebook j = GetEntryJournal();
 					Utilities.SetProgramPIN(j.Name);
-					Entry currentEntry = Entry.Select(rtb, lb, j, false, null, false);
+					Entry currentEntry = Entry.Select(rtb, lb, j, false, null, false, lstFoundEntries.Width - 75);
 					GetCurrentSelections();
 
 					if (currentEntry != null)

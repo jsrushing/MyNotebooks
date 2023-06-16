@@ -68,7 +68,7 @@ namespace myNotebooks.objects
 				Notebook j2 = new Notebook(sLocalFile).Open();
 				if (j2.Settings.AllowCloud)
 				{
-					if (j2.Settings.IfLocalOnly_Delete) { j2.Delete(); }
+					if		(j2.Settings.IfLocalOnly_Delete) { j2.Delete(); }
 					else if (j2.Settings.IfLocalOnly_Upload) { await AzureFileClient.UploadFile(j2.FileName); }
 					else if (j2.Settings.IfLocalOnly_DisallowCloud) { j2.Settings.AllowCloud = false; await	j2.Save(); }
 				}
