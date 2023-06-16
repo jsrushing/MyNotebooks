@@ -57,29 +57,22 @@ namespace myNotebooks.objects
 
 			try
 			{
-				var paren1 = -1;
-				var paren2 = -1;
+				var paren1 = searchString.LastIndexOf("(") + 1;
+				var paren2 = searchString.LastIndexOf(')');
 
-				if (searchString.Contains('('))
+				if (paren2 - paren1 == 17)
 				{
-					paren1 = searchString.IndexOf('(', startPosition) + 1;
-					paren2 = searchString.IndexOf(")", startPosition + 1);
+					DateTime.TryParse(searchString.Substring(paren1, paren2 - paren1), out DateTime tryDate);
 
-					if (paren2 - paren1 == 17)
+					if (tryDate > DateTime.MinValue)
 					{
-						DateTime.TryParse(searchString.Substring(paren1, paren2 - paren1), out DateTime tryDate);
-
-						if (tryDate > DateTime.MinValue)
-						{
-							result[0] = searchString.Substring(0, paren1 - 1).Trim();
-							result[1] = tryDate.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]);
-						}
-						else
-						{
-							result = GetTitleAndDate(searchString, paren2);
-						}
+						result[0] = searchString.Substring(0, paren1 - 1).Trim();
+						result[1] = tryDate.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]);
 					}
-					else { result = GetTitleAndDate(searchString, paren1 + 1); }    //searchString = searchString.Substring(paren1 + 1, searchString.Length - paren1 - 1)
+				}
+				else 
+				{ 
+					using(frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "There is a problem with this entry. The Date can not be found.", "")) { frm.ShowDialog(); }
 				}
 			}
 			catch (Exception) { }

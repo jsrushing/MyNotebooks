@@ -19,7 +19,7 @@ namespace myNotebooks
     public class Entry
     {
         public DateTime		Date;
-		public DateTime		LastEditedOn-*
+		public DateTime		LastEditedOn;
         public string		Text;
 		public string		DisplayText { get { return GetTextDisplayText(); } set { DisplayText = value; } }
 		public string		NotebookName { get; set; }
