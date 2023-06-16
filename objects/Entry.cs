@@ -32,6 +32,7 @@ namespace myNotebooks
 
 		public Entry() { }
 
+		// one-time code for converting Journal to Notebook.
 		//public Entry(JournalEntry entry)
 		//{
 		//	this.Date = entry.Date;
@@ -56,7 +57,7 @@ namespace myNotebooks
 			isEdited	= _edited;	
 		}
 
-		public string GetFirstOrLastEditDate(bool getFirst)
+		public string	GetFirstOrLastEditDate(bool getFirst)
 		{
 			var sText = this.ClearText();
 			var sTargetText = "> Original Date: ";
@@ -65,7 +66,7 @@ namespace myNotebooks
 			return sText.Substring(iStartDateString, 8);
 		}
 
-		string GetTextDisplayText()
+		string			GetTextDisplayText()
 		{
 			return String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
 				, ClearTitle(), Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), ClearLabels().Replace(",", ", "), ClearText());
@@ -79,7 +80,7 @@ namespace myNotebooks
 				+ (LastEditedOn < new DateTime(2000, 1, 1) ? "" : " [edited on " + LastEditedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + "]");
 			if (includeJournalName) { sTitle += this.NotebookName == null ? "" : " > in '" + this.ClearName() + "'"; }
 			sRtrn[0] = sTitle;
-			string sEntryText = ClearText();
+			string sEntryText = ClearText().Replace("\n", " ");
 			sEntryText = (sEntryText.Length < iTextChunkLength ? sEntryText : sEntryText.Substring(0, iTextChunkLength) + " ...");
 			sRtrn[1] = sEntryText;
 			sRtrn[2] = "labels: " + ClearLabels().Replace(",", ", ");
@@ -87,7 +88,7 @@ namespace myNotebooks
 			return sRtrn;
 		}
 
-		public void Replace(Entry newEntry)
+		public void		Replace(Entry newEntry)
 		{
 			Labels = newEntry.Labels;
 			Text = newEntry.Text;
@@ -95,7 +96,7 @@ namespace myNotebooks
 			NotebookName = newEntry.NotebookName;
 		}
 
-		public bool RemoveOrReplaceLabel(string newLabelName, string oldLabelName, bool renaming = true)
+		public bool		RemoveOrReplaceLabel(string newLabelName, string oldLabelName, bool renaming = true)
 		{
 			var labels = this.ClearLabels();
 			var bLabelEdited = false;

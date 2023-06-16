@@ -79,7 +79,7 @@ namespace myNotebooks.objects
 							result = GetTitleAndDate(searchString, paren2);
 						}
 					}
-					else { searchString = searchString.Substring(paren1 + 1, searchString.Length - paren1 - 1); result = GetTitleAndDate(searchString, paren1); }
+					else { result = GetTitleAndDate(searchString, paren1 + 1); }    //searchString = searchString.Substring(paren1 + 1, searchString.Length - paren1 - 1)
 				}
 			}
 			catch (Exception) { }
