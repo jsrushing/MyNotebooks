@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using myNotebooks.objects;
 using System.Threading.Tasks;
+using MimeKit.Encodings;
 
 namespace myNotebooks.subforms
 {
@@ -32,7 +33,7 @@ namespace myNotebooks.subforms
 			DeletingOrphans = deleteOrphans;
 		}
 
-		private void frmLabelsManager_Load(object sender, EventArgs e)
+		private void		frmLabelsManager_Load(object sender, EventArgs e)
 		{
 			foreach (Control c in this.Controls) if (c.GetType() == typeof(Panel)) c.Location = new Point(0, 25);
 			ShowPanel(pnlMain);
@@ -52,17 +53,17 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private void frmLabelsManager_Resize(object sender, EventArgs e) { ShowHideOccurrences(); }
+		private void		frmLabelsManager_Resize(object sender, EventArgs e) { ShowHideOccurrences(); }
 
-		private void btnCancel_Click(object sender, EventArgs e)
+		private void		btnCancel_Click(object sender, EventArgs e)
 		{
 			pnlNewLabelName.Visible = false;
 		}
 
-		private void btnExitOrphans_Click(object sender, EventArgs e)
+		private void		btnExitOrphans_Click(object sender, EventArgs e)
 		{ lstOccurrences.Items.Clear(); ShowHideOccurrences(); ShowPanel(pnlMain); }
 
-		private async void btnOK_Click(object sender, EventArgs e)
+		private async void	btnOK_Click(object sender, EventArgs e)
 		{
 			this.Cursor = Cursors.WaitCursor;
 
@@ -80,7 +81,7 @@ namespace myNotebooks.subforms
 			this.Cursor = Cursors.Default;
 		}
 
-		private async void btnRemoveSelectedOrphans_Click(object sender, EventArgs e)
+		private async void	btnRemoveSelectedOrphans_Click(object sender, EventArgs e)
 		{
 			if (lstOrphanedLabels.SelectedItems.Count > 0)
 			{
@@ -104,7 +105,7 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private void chkSelectAllOrphans_CheckedChanged(object sender, EventArgs e)
+		private void		chkSelectAllOrphans_CheckedChanged(object sender, EventArgs e)
 		{
 			if (chkSelectAllOrphans.Checked)
 			{
@@ -120,7 +121,7 @@ namespace myNotebooks.subforms
 			return SelectedNotebooks;
 		}
 
-		private void KickLstLabels(int previousIndex = -1)
+		private void		KickLstLabels(int previousIndex = -1)
 		{
 			if (lstLabels.SelectedItems.Count == 1 | previousIndex > -1)
 			{
@@ -130,7 +131,7 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private void lblSortType_Click(object sender, EventArgs e)
+		private void		lblSortType_Click(object sender, EventArgs e)
 		{
 			switch (sort)
 			{
@@ -152,7 +153,7 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private void lstLabels_SelectedIndexChanged(object sender, EventArgs e)
+		private void		lstLabels_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (lstLabels.SelectedIndex > -1)
 			{
@@ -169,13 +170,13 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private void lstLabels_MouseUp(object sender, MouseEventArgs e)
+		private void		lstLabels_MouseUp(object sender, MouseEventArgs e)
 		{
 			lstLabels.SelectedIndex = e.Button == MouseButtons.Right && lstLabels.SelectedIndex > -1 ? e.Y / 15 : lstLabels.SelectedIndex;
 			mnuContextLabels.Visible = e.Button == MouseButtons.Right && lstLabels.SelectedIndex > -1;
 		}
 
-		private void lstOccurrences_DoubleClick(object sender, EventArgs e)
+		private void		lstOccurrences_DoubleClick(object sender, EventArgs e)
 		{
 			try
 			{
@@ -191,7 +192,7 @@ namespace myNotebooks.subforms
 			catch (Exception) { }
 		}
 
-		private void lstOccurrences_MouseUp(object sender, MouseEventArgs e)
+		private void		lstOccurrences_MouseUp(object sender, MouseEventArgs e)
 		{
 			mnuContextDelete_lstEntries.Visible = true;
 
@@ -209,7 +210,7 @@ namespace myNotebooks.subforms
 			else { mnuContextDelete_lstEntries.Visible = false; }
 		}
 
-		private async void MenuMove(object sender, EventArgs e)
+		private async void	MenuMove(object sender, EventArgs e)
 		{
 			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
 			var isUp = mnu.Name.ToLower().Contains("up");
@@ -221,7 +222,7 @@ namespace myNotebooks.subforms
 			await LabelsManager.SaveLabels(lstLabels.Items.OfType<string>().ToList());
 		}
 
-		private void mnuAdd_Click(object sender, EventArgs e)
+		private void		mnuAdd_Click(object sender, EventArgs e)
 		{
 			lblOperation.Text = "Label Name:";
 			pnlNewLabelName.Visible = true;
@@ -230,7 +231,7 @@ namespace myNotebooks.subforms
 			this.AcceptButton = btnOK;
 		}
 
-		private async void DeleteOrRename(object sender, EventArgs e)
+		private async void	DeleteOrRename(object sender, EventArgs e)
 		{
 			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
 			var commandText = mnu.Text.ToLower().Contains("rename") ? "rename" : "delete";
@@ -289,12 +290,12 @@ namespace myNotebooks.subforms
 			this.Cursor = Cursors.Default;
 		}
 
-		private void mnuExit_Click(object sender, EventArgs e)
+		private void		mnuExit_Click(object sender, EventArgs e)
 		{
 			this.Hide();
 		}
 
-		private async void mnuFindOrphans_Click(object sender, EventArgs e)
+		private async void	mnuFindOrphans_Click(object sender, EventArgs e)
 		{
 			lstOrphanedLabels.Items.Clear();
 			List<string> lstOrphans = LabelsManager.FindOrphansInSelectedNotebooks();
@@ -320,7 +321,7 @@ namespace myNotebooks.subforms
 			if (DeletingOrphans) { this.Close(); }
 		}
 
-		private async void mnuRename_Click(object sender, EventArgs e)
+		private async void	mnuRename_Click(object sender, EventArgs e)
 		{
 			var oldLabelName = lstLabels.Text;
 			var newLabelName = string.Empty;
@@ -365,7 +366,7 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private void mnuSelectNotebooks_Click(object sender, EventArgs e)
+		private void		mnuSelectNotebooks_Click(object sender, EventArgs e)
 		{
 			using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(this))
 			{
@@ -377,7 +378,7 @@ namespace myNotebooks.subforms
 			ShowPanel(pnlMain);
 		}
 
-		private void PopulateOccurrences(string labelName = null)
+		private void		PopulateOccurrences(string labelName = null)
 		{
 			if (labelName == null)
 			{
@@ -407,7 +408,7 @@ namespace myNotebooks.subforms
 							OccurenceTitleIndicies.Add(lstOccurrences.Items.Count - 1);
 							lstEntryObjects.Items.Add("");
 
-							foreach (Entry je in foundLables)
+							foreach (Entry je in foundLables.OrderByDescending(e => e.Date))
 							{
 								lstOccurrences.Items.Add("   > " + je.ClearTitle());
 								lstEntryObjects.Items.Add(new KeyValuePair<Notebook, Entry>(jrnl, je));
@@ -428,12 +429,12 @@ namespace myNotebooks.subforms
 			this.Cursor = Cursors.Default;
 		}
 
-		private async Task RemoveOrphans()
+		private async Task	RemoveOrphans()
 		{
 			foreach (string lbl in lstOrphanedLabels.SelectedItems) { await LabelsManager.DeleteLabel(lbl, Utilities.CheckedNotebooks(), this, true); }
 		}
 
-		private void ShowPanel(Panel panelToShow)
+		private void		ShowPanel(Panel panelToShow)
 		{   //411, 576
 			foreach (Control c in this.Controls) { if (c.GetType() == typeof(Panel)) { c.Visible = false; } }
 			if (panelToShow == pnlMain) { panelToShow.Top = 25; this.Size = new Size(panelToShow.Left + panelToShow.Width + 17, this.Height = panelToShow.Height + panelToShow.Top + 35); }
@@ -441,7 +442,7 @@ namespace myNotebooks.subforms
 			panelToShow.Visible = true;
 		}
 
-		private void ShowHideOccurrences()
+		private void		ShowHideOccurrences()
 		{
 			if (lstOccurrences.Items.Count > 0)
 			{

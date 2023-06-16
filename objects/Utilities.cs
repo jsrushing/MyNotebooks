@@ -56,28 +56,28 @@ namespace myNotebooks.objects
 			var result = new string[2];
 			var paren1 = searchString.LastIndexOf("(") + 1;
 			var paren2 = searchString.LastIndexOf(')');
-			result[0] = searchString.Substring(0, searchString.LastIndexOf('('));
-			DateTime.TryParse(searchString.Substring(paren1, paren2 - paren1), out DateTime tryDate);
-			result[1] = tryDate > DateTime.MinValue ? tryDate.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) : null; 
+			//	result[0] = searchString.Substring(0, searchString.LastIndexOf('('));
+			//	DateTime.TryParse(searchString.Substring(paren1, paren2 - paren1), out DateTime tryDate);
+			//	result[1] = tryDate > DateTime.MinValue ? tryDate.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) : null;
 
-			//try
-			//{
-			//	if (paren2 - paren1 == 17)
-			//	{
-			//		DateTime.TryParse(searchString.Substring(paren1, paren2 - paren1), out DateTime tryDate);
+			try
+			{
+				if (paren2 - paren1 == 17)
+				{
+					DateTime.TryParse(searchString.Substring(paren1, paren2 - paren1), out DateTime tryDate);
 
-			//		if (tryDate > DateTime.MinValue)
-			//		{
-			//			result[0] = searchString.Substring(0, paren1 + 1 - 1).Trim();
-			//			result[1] = tryDate.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]);
-			//		}
-			//	}
-			//	else
-			//	{
-			//		//using(frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "There is a problem with this entry. The Date can not be found.", "")) { frm.ShowDialog(); }
-			//	}
-			//}
-			//catch (Exception) { }
+					if (tryDate > DateTime.MinValue)
+					{
+						result[0] = searchString.Substring(0, paren1 + 1 - 1).Trim();
+						result[1] = tryDate.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]);
+					}
+				}
+				else
+				{
+					//using(frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "There is a problem with this entry. The Date can not be found.", "")) { frm.ShowDialog(); }
+				}
+			}
+			catch (Exception) { }
 
 			return result;
 		}

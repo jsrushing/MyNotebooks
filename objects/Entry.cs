@@ -182,7 +182,6 @@ namespace myNotebooks
 				if (titleAndDate[0] != null && titleAndDate[1] != null)
 				{
 					DateTime.TryParse(titleAndDate[1], out DateTime dt);
-					//entryRtrn = currentNotebook.Entries.Where(e => e.Title == titleAndDate[0] && e.Date == dt).FirstOrDefault();
 					entryRtrn = currentNotebook.GetEntry(titleAndDate[0], titleAndDate[1]);
 
 					if (titleAndDate[0] == "created")
