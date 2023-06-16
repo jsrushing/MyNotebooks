@@ -1,5 +1,7 @@
 ﻿/* Journal Entry object
  * 8/1//21
+ * Refactored to Notebook Entry object
+ * 06/10/23
  */
 using System;
 using System.Configuration;

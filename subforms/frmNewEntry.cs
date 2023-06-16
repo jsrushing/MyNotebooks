@@ -7,7 +7,6 @@ using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using myNotebooks.objects;
-using Org.BouncyCastle.Asn1.Sec;
 
 namespace myNotebooks.subforms
 {

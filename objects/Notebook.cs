@@ -1,7 +1,7 @@
 ﻿/* Notebook object
  * Created as Journal on: 8/1//21
  * Created by: S. Rushing
- * Modified to Notebook 0610/23
+ * Modified to Notebook 06/10/23
  */
 using System;
 using System.Collections.Generic;

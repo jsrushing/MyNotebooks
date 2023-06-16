@@ -2,16 +2,12 @@
  * 7/9/22
  */
 using System;
-using System.Configuration;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using myNotebooks.objects;
-using System.Threading.Tasks;
-using MimeKit.Encodings;
 
 namespace myNotebooks.subforms
 {
@@ -20,10 +16,9 @@ namespace myNotebooks.subforms
 		private LabelsManager.LabelsSortType sort = LabelsManager.LabelsSortType.None;
 		private List<int> OccurenceTitleIndicies = new List<int>();
 		private bool DeletingOrphans;
-
 		private List<Notebook> SelectedNotebooks { get; set; }
 
-		public bool ActionTaken { get; private set; }
+		public bool			ActionTaken { get; private set; }
 
 		public frmLabelsManager(Form parent, bool deleteOrphans = false, Notebook _jrnl = null)
 		{

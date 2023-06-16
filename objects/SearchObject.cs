@@ -1,4 +1,8 @@
-﻿using System;
+﻿/* Create an object to pass to Search routines.
+ * Can't remember. Added this 06/13/23. Possibly as early as 12/01/22.
+ * JSR
+ */
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
@@ -7,18 +11,18 @@ namespace myNotebooks.objects
 {
 	public class SearchObject
 	{
-		public CheckBox chkUseDate { get; set; }
-		public CheckBox chkUseDateRange { get; set;}
-		public CheckBox chkMatchCase { get; set;}
-		public DateTimePicker dtFindDate { get; set; }
-		public DateTimePicker dtFindDate_From { get; set; }
-		public DateTimePicker dtFindDate_To { get; set; }
-		public RadioButton radBtnAnd { get; set; }
-		public RadioButton radBtnLabelsAnd { get; set; }
+		public CheckBox			chkUseDate { get; set; }
+		public CheckBox			chkUseDateRange { get; set;}
+		public CheckBox			chkMatchCase { get; set;}
+		public DateTimePicker	dtFindDate { get; set; }
+		public DateTimePicker	dtFindDate_From { get; set; }
+		public DateTimePicker	dtFindDate_To { get; set; }
+		public RadioButton		radBtnAnd { get; set; }
+		public RadioButton		radBtnLabelsAnd { get; set; }
 
-		public string searchTitle { get; set; }
-		public string searchText { get; set; }
-		public string[] labelsArray { get; set; }
+		public string			searchTitle { get; set; }
+		public string			searchText { get; set; }
+		public string[]			labelsArray { get; set; }
 
 
 		public SearchObject(CheckBox _chkUseDate, CheckBox _chkUseDateRange, CheckBox _chkMatchCase, DateTimePicker _dtFindDate, 

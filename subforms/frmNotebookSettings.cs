@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Security.Policy;
-using System.Text;
 using System.Windows.Forms;
 using myNotebooks.objects;
-using Org.BouncyCastle.Bcpg.Sig;
 
 namespace myNotebooks.subforms
 {

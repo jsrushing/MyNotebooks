@@ -2,10 +2,6 @@
  * 6/15/22
  */
 using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Text;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using myNotebooks.objects;
 
