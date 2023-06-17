@@ -16,20 +16,22 @@ namespace myNotebooks.objects
 	{
 		public static async Task PopulateAllNotebookNames()
 		{
-			List<string> lstRtrn = new List<string>();
-			Program.AllNotebookNames.Clear();
-			//await Utilities.PopulateAllNotebooks();
-			foreach (Notebook nb in Program.AllNotebooks)if(nb != null) Program.AllNotebookNames.Add(nb.Name);
-			//return lstRtrn;
+			Program.AllNotebookNames.Clear();			
+			List<string> s = Directory.GetFiles(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"]).ToList();
+			Program.AllNotebookNames.AddRange(s.Select(s => s.Substring(s.LastIndexOf("\\") + 1)));
 		} 
 
 		public static async Task PopulateAllNotebooks()
 		{
 			List<Notebook> nbReturn = new List<Notebook>();
 			var sNotebooksFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"];
-			Program.AllNotebooks.Clear();
-			foreach (var s in Directory.GetFiles(sNotebooksFolder)) { Program.AllNotebooks.Add(new Notebook(s.Replace(sNotebooksFolder, "")).Open()); }
-			await PopulateAllNotebookNames();
+
+			Program.AllNotebookNames.Clear();
+			Program.AllNotebookNames.AddRange(Directory.GetFiles(sNotebooksFolder));
+
+			//Program.AllNotebooks.Clear();
+			//foreach (var s in Directory.GetFiles(sNotebooksFolder)) { Program.AllNotebooks.Add(new Notebook(s.Replace(sNotebooksFolder, "")).Open()); }
+			//await PopulateAllNotebookNames();
 		}
 
 		// one-time code to convert Journal objects to Notebook objects

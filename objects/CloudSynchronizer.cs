@@ -68,10 +68,11 @@ namespace myNotebooks.objects
 			foreach (var sLocalFile in names.Except(Program.AzureNotebookNames))   // any journal found locally but not on Azure
 			{
 				Notebook j2 = new Notebook(sLocalFile).Open();
+
 				if (j2.Settings.AllowCloud)
 				{
-					if		(j2.Settings.IfLocalOnly_Delete) { j2.Delete(); }
-					else if (j2.Settings.IfLocalOnly_Upload) { await AzureFileClient.UploadFile(j2.FileName); }
+					if		(j2.Settings.IfLocalOnly_Delete)		{ j2.Delete(); }
+					else if (j2.Settings.IfLocalOnly_Upload)		{ await AzureFileClient.UploadFile(j2.FileName); }
 					else if (j2.Settings.IfLocalOnly_DisallowCloud) { j2.Settings.AllowCloud = false; await	j2.Save(); }
 				}
 			}
@@ -209,6 +210,7 @@ namespace myNotebooks.objects
 			await Utilities.PopulateAllNotebooks();
 
 			if(Program.AllNotebooks.Count == 0) { await Utilities.PopulateAllNotebooks(); }
+
 			if (notebook == null) { allNotebooks = Program.AllNotebooks; } else { allNotebooks.Add(notebook); }
 
 			if(notebook != null)
