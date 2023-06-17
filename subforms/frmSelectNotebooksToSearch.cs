@@ -118,10 +118,7 @@ namespace myNotebooks.subforms
 		{
 			if (lstJournalPINs.SelectedIndex > -1)
 			{
-				if(lstJournalPINs.SelectedItem.ToString() == ShowMoreString)
-				{
-					PopulateNotebooksList(false, true, false);
-				}
+				if(lstJournalPINs.SelectedItem.ToString() == ShowMoreString) { PopulateNotebooksList(false, true, false); }
 				txtPIN.PasswordChar = '*';
 				txtPIN.Text = Program.DictCheckedNotebooks.ContainsKey(Scrubbed(lstJournalPINs.Text)) ? Program.DictCheckedNotebooks[Scrubbed(lstJournalPINs.Text)] : string.Empty;
 				txtPIN.Enabled = true;
@@ -178,7 +175,7 @@ namespace myNotebooks.subforms
 			if (showMore)
 			{
 				lstJournalPINs.Items.Remove(ShowMoreString);
-				foreach(var name in Program.AllNotebookNames) { lstJournalPINs.Items.Add($"{name}"); }
+				foreach(var name in Program.AllNotebookNames.Except(Program.DictCheckedNotebooks.Keys)) { lstJournalPINs.Items.Add($"{name}"); }
 
 				//string[] names = Program.AllNotebookNames.ToArray();
 				//List<string> lst = Program.AllNotebookNames.ToList();
