@@ -15,31 +15,34 @@ namespace myNotebooks.subforms
 		public Dictionary<string, string> CheckedNotebooks { get { return dictNotebooksAndPINs; } }
 		private Dictionary<string, string> dictNotebooksAndPINs = new Dictionary<string, string>();
 		//private Dictionary<string, string> dictCheckedItems = new Dictionary<string, string>();
+		private const string ShowMoreString = "show more";
 
 		public frmSelectNotebooksToSearch(Form parent)
 		{
 			InitializeComponent();
-			//dictCheckedItems = checkedItems;
 
-			foreach (Notebook j in Program.AllNotebooks)
-			{
-				if (Program.DictCheckedNotebooks.ContainsKey(j.Name))
-				{
-					if (Program.DictCheckedNotebooks[j.Name].Length > 0)
-					{
-						lstJournalPINs.Items.Add(j.Name + " (****)");
-						dictNotebooksAndPINs.Add(j.Name, Program.DictCheckedNotebooks[j.Name]);
-					}
-					else
-					{
-						lstJournalPINs.Items.Add(j.Name);
-						dictNotebooksAndPINs.Add(j.Name, "");
-					}
+			if (Program.DictCheckedNotebooks.Count > 0) 
+			{ PopulateNotebooksList(true, false, false); } else { PopulateNotebooksList(false, false, true); }
 
-					lstJournalPINs.SetItemChecked(lstJournalPINs.Items.Count - 1, true);
-				}
-				else { lstJournalPINs.Items.Add(j.Name); }
-			}
+			//foreach (Notebook j in Program.AllNotebooks)
+			//{
+			//	if (Program.DictCheckedNotebooks.ContainsKey(j.Name))
+			//	{
+			//		if (Program.DictCheckedNotebooks[j.Name].Length > 0)
+			//		{
+			//			lstJournalPINs.Items.Add(j.Name + " (****)");
+			//			dictNotebooksAndPINs.Add(j.Name, Program.DictCheckedNotebooks[j.Name]);
+			//		}
+			//		else
+			//		{
+			//			lstJournalPINs.Items.Add(j.Name);
+			//			dictNotebooksAndPINs.Add(j.Name, "");
+			//		}
+
+			//		lstJournalPINs.SetItemChecked(lstJournalPINs.Items.Count - 1, true);
+			//	}
+			//	else { lstJournalPINs.Items.Add(j.Name); }
+			//}
 
 			Utilities.SetStartPosition(this, parent);
 		}
@@ -115,6 +118,10 @@ namespace myNotebooks.subforms
 		{
 			if (lstJournalPINs.SelectedIndex > -1)
 			{
+				if(lstJournalPINs.SelectedItem.ToString() == ShowMoreString)
+				{
+					PopulateNotebooksList(false, true, false);
+				}
 				txtPIN.PasswordChar = '*';
 				txtPIN.Text = Program.DictCheckedNotebooks.ContainsKey(Scrubbed(lstJournalPINs.Text)) ? Program.DictCheckedNotebooks[Scrubbed(lstJournalPINs.Text)] : string.Empty;
 				txtPIN.Enabled = true;
@@ -129,6 +136,59 @@ namespace myNotebooks.subforms
 		{
 			dictNotebooksAndPINs.Clear();
 			e.Cancel = true;
+		}
+
+		private void PopulateNotebooksList(bool populateWithCheckedJournals, bool showMore, bool showAll)
+		{
+			if(!showMore) lstJournalPINs.Items.Clear();
+
+			if(showAll)
+			{
+				foreach (var notebookName in Program.AllNotebookNames)
+				{
+					if (Program.DictCheckedNotebooks.ContainsKey(notebookName))
+					{
+						if (Program.DictCheckedNotebooks[notebookName].Length > 0)
+						{
+							lstJournalPINs.Items.Add(notebookName + " (****)");
+							dictNotebooksAndPINs.Add(notebookName, Program.DictCheckedNotebooks[notebookName]);
+						}
+						else
+						{
+							lstJournalPINs.Items.Add(notebookName);
+							dictNotebooksAndPINs.Add(notebookName, "");
+						}
+
+						lstJournalPINs.SetItemChecked(lstJournalPINs.Items.Count - 1, true);
+					}
+					else { lstJournalPINs.Items.Add(notebookName); }
+				}
+			}
+
+			if (populateWithCheckedJournals)
+			{
+				//object[] objects = (object[])Program);
+				//lstJournalPINs.Items.AddRange(objects);
+
+				foreach (var name in Program.DictCheckedNotebooks.Keys) { lstJournalPINs.Items.Add(name); }
+				for (var i  = 0; i < lstJournalPINs.Items.Count; i++) { lstJournalPINs.SetItemChecked(i, true); }
+				lstJournalPINs.Items.Add(ShowMoreString);
+			}
+
+			if (showMore)
+			{
+				lstJournalPINs.Items.Remove(ShowMoreString);
+				foreach(var name in Program.AllNotebookNames) { lstJournalPINs.Items.Add($"{name}"); }
+
+				//string[] names = Program.AllNotebookNames.ToArray();
+				//List<string> lst = Program.AllNotebookNames.ToList();
+				//IEnumerable<string> strings = Program.AllNotebookNames.Except(Program.DictCheckedNotebooks.Keys);
+				//List <KeyValuePair<string, string>> items = Program.AllNotebookNames.Except(Program.DictCheckedNotebooks.Keys).ToDictionary(x => x, x => x).ToList();
+
+				//object[] objects = (object[])Program.AllNotebookNames.Except(Program.DictCheckedNotebooks.Keys);
+				//List<KeyValuePair<string, string>> lst = new List<KeyValuePair<string, string>>(Program.AllNotebookNames.Except(Program.DictCheckedNotebooks.Keys), "");
+				//lstJournalPINs.Items.AddRange(objects);
+			}
 		}
 
 		private string Scrubbed(string stringToScrub) { return stringToScrub.Replace(" (****)", ""); }
