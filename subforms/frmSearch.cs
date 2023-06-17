@@ -160,7 +160,7 @@ namespace myNotebooks.subforms
 		private void mnuEditEntry_Click(object sender, EventArgs e)
 		{
 			Entry fe = lstFoundEntries.SelectedIndex == 0 ? FoundEntries[0] : FoundEntries[(lstFoundEntries.SelectedIndex + lstFoundEntries.TopIndex) / 4];
-			frmNewEntry frm = new frmNewEntry(this, new Notebook(fe.NotebookName).Open(), fe);
+			frmNewEntry frm = new frmNewEntry(this, new Notebook(fe.ClearNotebookName()).Open(), fe);
 			frm.Show();
 		}
 

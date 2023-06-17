@@ -111,14 +111,14 @@ namespace myNotebooks.objects
 			return sRtrn.Substring(0, sRtrn.LastIndexOf("\r\n")).Split("\r\n");
 		}
 
-		private async Task ProcessNotebooks(List<Notebook> allNotebooks, string tempFolder, string notebooksFolder)
+		private async Task ProcessNotebooks(List<string> allNotebooksNames, string tempFolder, string notebooksFolder)
 		{
 			Notebook cloudNotebook = null;
 			Notebook book;
 
-			for (var i = 0; i < allNotebooks.Count; i++)
+			for (var i = 0; i < allNotebooksNames.Count; i++)
 			{
-				book = allNotebooks[i];
+				book = new Notebook(allNotebooksNames[i]).Open();
 
 				if (book != null)
 				{
@@ -206,12 +206,14 @@ namespace myNotebooks.objects
 		{
 			var NotebooksFolder			= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"];
 			var tempFolder				= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"];
-			List<Notebook> allNotebooks	= new List<Notebook>();
-			await Utilities.PopulateAllNotebooks();
+			//List<Notebook> allNotebooks	= new List<Notebook>();
+			//await Utilities.PopulateAllNotebooks();
+			//if(Program.AllNotebooks.Count == 0) { await Utilities.PopulateAllNotebooks(); }
 
-			if(Program.AllNotebooks.Count == 0) { await Utilities.PopulateAllNotebooks(); }
-
-			if (notebook == null) { allNotebooks = Program.AllNotebooks; } else { allNotebooks.Add(notebook); }
+			//await Utilities.PopulateAllNotebookNames();
+			List<string> allNotebooksNames = new List<string>();
+			
+			if (notebook == null) { allNotebooksNames = Program.AllNotebookNames; } else { allNotebooksNames.Add(notebook.Name); }
 
 			if(notebook != null)
 			{
@@ -225,11 +227,13 @@ namespace myNotebooks.objects
 					return;
 				}
 
-				Notebook nb = allNotebooks.Where(e => e.Name == notebook.Name & e.LastSaved == notebook.LastSaved).First();
+				await Utilities.PopulateAllNotebooks(allNotebooksNames);
+
+				Notebook nb = Program.AllNotebooks.Where(e => e.Name == notebook.Name & e.LastSaved == notebook.LastSaved).First();
 				if (nb == null) { Program.AllNotebooks.Add(notebook); }
 			}
 
-			await ProcessNotebooks(allNotebooks, tempFolder, NotebooksFolder);
+			await ProcessNotebooks(allNotebooksNames, tempFolder, NotebooksFolder);
 			await AzureFileClient.GetAzureItemNames(true);
 			await CheckForLocalOrCloudOnly(tempFolder, NotebooksFolder);			
 

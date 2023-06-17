@@ -14,20 +14,32 @@ namespace myNotebooks.objects
 {
 	public static class Utilities
 	{
-		public static async Task PopulateAllNotebookNames()
+		public static async Task PopulateAllNotebookNames(List<string> notebookNames = null)
 		{
-			Program.AllNotebookNames.Clear();			
-			List<string> s = Directory.GetFiles(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"]).ToList();
-			Program.AllNotebookNames.AddRange(s.Select(s => s.Substring(s.LastIndexOf("\\") + 1)));
+			Program.AllNotebookNames.Clear();	
+			
+			if(notebookNames != null)
+			{
+				Program.AllNotebookNames.AddRange(notebookNames);
+			}
+			else
+			{
+				List<string> s = Directory.GetFiles(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"]).ToList();
+				Program.AllNotebookNames.AddRange(s.Select(s => s[(s.LastIndexOf("\\") + 1)..]));
+			}
 		} 
 
-		public static async Task PopulateAllNotebooks()
+		public static async Task PopulateAllNotebooks(List<string> notebookNames = null)
 		{
-			List<Notebook> nbReturn = new List<Notebook>();
-			var sNotebooksFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"];
+			Program.AllNotebooks.Clear();
+			if(notebookNames == null) { await PopulateAllNotebookNames(); } else { await PopulateAllNotebookNames(notebookNames); }
+			foreach (var notebookName in Program.AllNotebookNames) { Program.AllNotebooks.Add(new Notebook(notebookName).Open()); }
 
-			Program.AllNotebookNames.Clear();
-			Program.AllNotebookNames.AddRange(Directory.GetFiles(sNotebooksFolder));
+			//List<Notebook> nbReturn = new List<Notebook>();
+			//var sNotebooksFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"];
+
+			//Program.AllNotebookNames.Clear();
+			//Program.AllNotebookNames.AddRange(Directory.GetFiles(sNotebooksFolder));
 
 			//Program.AllNotebooks.Clear();
 			//foreach (var s in Directory.GetFiles(sNotebooksFolder)) { Program.AllNotebooks.Add(new Notebook(s.Replace(sNotebooksFolder, "")).Open()); }

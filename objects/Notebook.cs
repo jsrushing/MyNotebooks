@@ -274,7 +274,7 @@ namespace myNotebooks
 								// get the entry's key values
 								EntryValues ev = new EntryValues
 								{
-									notebookName	= e.ClearName(),	// << this should become ClearName() after refactoring Entry
+									notebookName	= e.ClearNotebookName(),	// << this should become ClearName() after refactoring Entry
 									text	= e.ClearText(),
 									RTF		= e.ClearRTF(),
 									title	= e.ClearTitle()
@@ -319,7 +319,7 @@ namespace myNotebooks
 			}
 
 			//Backup();
-			await Utilities.PopulateAllNotebooks();
+			await Utilities.PopulateAllNotebookNames();
 		}
 
 		public List<Entry> Search(SearchObject So)

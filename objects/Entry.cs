@@ -71,7 +71,7 @@ namespace myNotebooks
 			int iTextChunkLength = maxWidth > 0 ? maxWidth / 5 : 150;
 			string sTitle = ClearTitle() + " (" + Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"
 				+ (LastEditedOn < new DateTime(2000, 1, 1) ? "" : " [edited on " + LastEditedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + "]");
-			if (includeJournalName) { sTitle += this.NotebookName == null ? "" : " > in '" + this.ClearName() + "'"; }
+			if (includeJournalName) { sTitle += this.NotebookName == null ? "" : " > in '" + this.ClearNotebookName() + "'"; }
 			sRtrn[0] = sTitle;
 			string sEntryText = ClearText().Replace("\n", " ");
 			sEntryText = (sEntryText.Length < iTextChunkLength ? sEntryText : sEntryText.Substring(0, iTextChunkLength) + " ...");
@@ -217,7 +217,6 @@ namespace myNotebooks
 		public string		ClearTitle()	{ return EncryptDecrypt.Decrypt(Title); }
 		public string		ClearRTF()	{ return EncryptDecrypt.Decrypt(RTF); }
 		public string		ClearLabels()	{ return Labels == null ? String.Empty : EncryptDecrypt.Decrypt(Labels); }
-
-		public string		ClearName() { return EncryptDecrypt.Decrypt(NotebookName); }
+		public string		ClearNotebookName() { return EncryptDecrypt.Decrypt(NotebookName); }
 	}
 }

@@ -15,7 +15,7 @@ namespace myNotebooks.subforms
 		public Dictionary<string, string> CheckedNotebooks { get { return dictNotebooksAndPINs; } }
 		private Dictionary<string, string> dictNotebooksAndPINs = new Dictionary<string, string>();
 		//private Dictionary<string, string> dictCheckedItems = new Dictionary<string, string>();
-		private const string ShowMoreString = "show more";
+		private const string ShowMoreString = "(show more)";
 
 		public frmSelectNotebooksToSearch(Form parent)
 		{
@@ -135,12 +135,14 @@ namespace myNotebooks.subforms
 			e.Cancel = true;
 		}
 
-		private void PopulateNotebooksList(bool populateWithCheckedJournals, bool showMore, bool showAll)
+		private async void PopulateNotebooksList(bool populateWithCheckedJournals, bool showMore, bool showAll)
 		{
 			if(!showMore) lstJournalPINs.Items.Clear();
 
 			if(showAll)
 			{
+				await Utilities.PopulateAllNotebookNames();
+
 				foreach (var notebookName in Program.AllNotebookNames)
 				{
 					if (Program.DictCheckedNotebooks.ContainsKey(notebookName))
@@ -167,7 +169,7 @@ namespace myNotebooks.subforms
 				//object[] objects = (object[])Program);
 				//lstJournalPINs.Items.AddRange(objects);
 
-				foreach (var name in Program.DictCheckedNotebooks.Keys) { lstJournalPINs.Items.Add(name); }
+				foreach (var name in Program.DictCheckedNotebooks.Keys) { lstJournalPINs.Items.Add(Program.DictCheckedNotebooks[name].Length > 0 ? name + " (****)" : name); }
 				for (var i  = 0; i < lstJournalPINs.Items.Count; i++) { lstJournalPINs.SetItemChecked(i, true); }
 				lstJournalPINs.Items.Add(ShowMoreString);
 			}

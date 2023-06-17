@@ -285,6 +285,21 @@ namespace myNotebooks.subforms
 			Program.PIN = txtJournalPIN.Text;
 			lblWrongPin.Visible = false;
 			CurrentNotebook = new Notebook(ddlNotebooks.Text).Open();
+			Program.AllNotebooks.Add(CurrentNotebook);
+			Program.AllNotebookNames.Add(CurrentNotebook.Name);
+
+			if (CurrentNotebook.Settings.AllowCloud)
+			{
+				var nbPath = CurrentNotebook.FileName;
+				var nbName = CurrentNotebook.Name;
+				CloudSynchronizer cs = new CloudSynchronizer();
+				await cs.SynchWithCloud(false, CurrentNotebook);
+				Notebook curNotebook = new Notebook(nbName, nbPath).Open();
+
+				if (curNotebook == null)    // the sync deleted the file
+				{ ddlNotebooks.Items.Remove(nbName); }
+				else { if (!curNotebook.Equals(CurrentNotebook)) { CurrentNotebook = curNotebook; } }// the synch dl'd a newer copy of the file
+			}
 
 			try
 			{
@@ -415,7 +430,7 @@ namespace myNotebooks.subforms
 		private void ddlNotebooks_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			ShowHideMenusAndControls(SelectionState.NotebookSelectedNotLoaded);
-			btnLoadJournal.Enabled = true;
+			btnLoadNotebook.Enabled = true;
 			txtJournalPIN.Focus();
 			CurrentEntry = null;
 			CurrentNotebook = null;
@@ -610,7 +625,7 @@ namespace myNotebooks.subforms
 					frm.Notebook.LastSaved = DateTime.Now;
 					frm.Notebook.FileName = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + frm.Notebook.Name;
 					await frm.Notebook.Create();
-					await Utilities.PopulateAllNotebooks();
+					await Utilities.PopulateAllNotebookNames();
 					LoadNotebooks();
 				}
 			}
@@ -630,9 +645,9 @@ namespace myNotebooks.subforms
 					ShowHideMenusAndControls(SelectionState.NotebookSelectedNotLoaded);
 					pnlDateFilters.Visible = false;
 					using (frmLabelsManager frm3 = new frmLabelsManager(this, true)) { frm3.ShowDialog(); }
-					await Utilities.PopulateAllNotebooks();
-					LoadNotebooks();
+					await Utilities.PopulateAllNotebookNames();
 					CurrentNotebook = null;
+					LoadNotebooks();
 				}
 			}
 		}
@@ -676,7 +691,7 @@ namespace myNotebooks.subforms
 					if (frm.ResultText != CurrentNotebook.Name)
 					{
 						await CurrentNotebook.Rename(frm.ResultText, true);
-						await Utilities.PopulateAllNotebooks();
+						await Utilities.PopulateAllNotebookNames();
 						LoadNotebooks();
 					}
 					else
@@ -699,7 +714,7 @@ namespace myNotebooks.subforms
 			using (frmBackupManager frm = new frmBackupManager(this))
 			{
 				frm.ShowDialog(this);
-				if (frm.BackupRestored) { await Utilities.PopulateAllNotebooks(); LoadNotebooks(); }
+				if (frm.BackupRestored) { await Utilities.PopulateAllNotebookNames(); LoadNotebooks(); }
 			}
 		}
 
@@ -820,7 +835,7 @@ namespace myNotebooks.subforms
 				mnuNotebook_ForceBackup.Enabled = true;
 				//mnuJournal_Export.Enabled = currentJournal.Settings.AllowCloud;
 				mnuNotebook_Settings.Enabled = true;
-				btnLoadJournal.Enabled = false;
+				btnLoadNotebook.Enabled = false;
 
 				txtJournalPIN.Text = string.Empty;
 				pnlDateFilters.Visible = true;
@@ -848,7 +863,7 @@ namespace myNotebooks.subforms
 		{
 			if (txtJournalPIN.Text.Length > 0)
 			{
-				btnLoadJournal.Enabled = true;
+				btnLoadNotebook.Enabled = true;
 				lblShowPIN.Visible = true;
 				lblWrongPin.Visible = false;
 			}

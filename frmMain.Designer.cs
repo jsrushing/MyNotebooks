@@ -31,7 +31,7 @@ namespace myNotebooks.subforms
 		{
 			components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-			btnLoadJournal = new System.Windows.Forms.Button();
+			btnLoadNotebook = new System.Windows.Forms.Button();
 			txtJournalPIN = new System.Windows.Forms.TextBox();
 			label4 = new System.Windows.Forms.Label();
 			lblSelectionType = new System.Windows.Forms.Label();
@@ -81,15 +81,15 @@ namespace myNotebooks.subforms
 			pnlPin.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// btnLoadJournal
+			// btnLoadNotebook
 			// 
-			btnLoadJournal.Location = new System.Drawing.Point(137, 2);
-			btnLoadJournal.Name = "btnLoadJournal";
-			btnLoadJournal.Size = new System.Drawing.Size(75, 23);
-			btnLoadJournal.TabIndex = 36;
-			btnLoadJournal.Text = "&Load";
-			btnLoadJournal.UseVisualStyleBackColor = true;
-			btnLoadJournal.Click += this.btnLoadNotebook_Click;
+			btnLoadNotebook.Location = new System.Drawing.Point(137, 2);
+			btnLoadNotebook.Name = "btnLoadNotebook";
+			btnLoadNotebook.Size = new System.Drawing.Size(75, 23);
+			btnLoadNotebook.TabIndex = 36;
+			btnLoadNotebook.Text = "&Load";
+			btnLoadNotebook.UseVisualStyleBackColor = true;
+			btnLoadNotebook.Click += this.btnLoadNotebook_Click;
 			// 
 			// txtJournalPIN
 			// 
@@ -482,7 +482,7 @@ namespace myNotebooks.subforms
 			// 
 			// pnlPin
 			// 
-			pnlPin.Controls.Add(btnLoadJournal);
+			pnlPin.Controls.Add(btnLoadNotebook);
 			pnlPin.Controls.Add(label4);
 			pnlPin.Controls.Add(lblShowPIN);
 			pnlPin.Controls.Add(txtJournalPIN);
@@ -495,7 +495,7 @@ namespace myNotebooks.subforms
 			// 
 			// frmMain
 			// 
-			AcceptButton = btnLoadJournal;
+			AcceptButton = btnLoadNotebook;
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			BackColor = System.Drawing.SystemColors.Window;
@@ -528,7 +528,7 @@ namespace myNotebooks.subforms
 		}
 
 		#endregion
-		private System.Windows.Forms.Button btnLoadJournal;
+		private System.Windows.Forms.Button btnLoadNotebook;
 		private System.Windows.Forms.TextBox txtJournalPIN;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.Label lblSelectionType;
