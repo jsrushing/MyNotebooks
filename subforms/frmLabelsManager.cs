@@ -194,9 +194,7 @@ namespace myNotebooks.subforms
 						lstLabels.SelectedIndex = lblIndx;
 						lstOccurrences.SelectedIndex = i;
 
-						
-
-						using (frmNewEntry frm2 = new frmNewEntry(this, j, je)) { frm2.ShowDialog(); }
+						//using (frmNewEntry frm2 = new frmNewEntry(this, j, je)) { frm2.ShowDialog(); }
 					} 
 				}
 			}

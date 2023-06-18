@@ -33,39 +33,7 @@ namespace myNotebooks.subforms
 			dtFindDate_To.Value = DateTime.Now;
 		}
 
-		private async void btnSearch_Click(object sender, EventArgs e)
-		{
-			await DoSearch();
-			//this.Cursor = Cursors.WaitCursor;
-			//var labels = string.Empty;
-			//string[] labelsArray;
-			//List<Entry> foundEntries = new List<Entry>();
-			//List<Entry> jeFound = null;
-
-			//journalBoundaries.Clear();
-			//lstFoundEntries.Items.Clear();
-			//FoundEntries.Clear();
-			//for (var i = 0; i < lstLabelsForSearch.CheckedItems.Count; i++) { labels += lstLabelsForSearch.CheckedItems[i].ToString() + ","; }
-			//labels = labels.Length > 0 ? labels.Substring(0, labels.Length - 1) : string.Empty;
-			//labelsArray = labels.Length > 0 ? labels.Split(',') : null;
-
-			//SearchObject so = new SearchObject(chkUseDate, chkUseDateRange, chkMatchCase, dtFindDate,
-			//		dtFindDate_From, dtFindDate_To, radBtnAnd, radLabels_And, txtSearchTitle.Text, txtSearchText.Text, labelsArray);
-
-			//foreach (KeyValuePair<string, string> kvp in Program.DictCheckedNotebooks)
-			//{
-			//	Utilities.SetProgramPIN(kvp.Key);
-			//	jeFound = new Notebook(kvp.Key).Open().Search(so);
-			//	await Utilities.PopulateEntries(lstFoundEntries, jeFound, "", "", "", false, 0, true);
-			//	journalBoundaries.Add(kvp.Key, lstFoundEntries.Items.Count);
-			//	FoundEntries.AddRange(jeFound);
-			//	foundEntries.Clear();
-			//}
-
-			//if (lstFoundEntries.Items.Count == 0) { lstFoundEntries.Items.Add("no matches found"); }
-			//lblSeparator.Visible = true;
-			//this.Cursor = Cursors.Default;
-		}
+		private async void btnSearch_Click(object sender, EventArgs e) { await DoSearch(); }
 
 		private void btnSelectNotebooks_Click(object sender, EventArgs e)
 		{
@@ -164,9 +132,6 @@ namespace myNotebooks.subforms
 						lblSelectionType.Visible = rtb.Text.Length > 0;
 						lblSeparator.Visible = rtb.Text.Length > 0;
 						Utilities.ResizeListsAndRTBs(lb, rtb, lblSeparator, lblSelectionType, this);
-						var topIndex = lstFoundEntries.TopIndex;
-						//while(topIndex % 4 != 0) { topIndex--; }
-						//lstFoundEntries.TopIndex = topIndex;
 					}
 					else { lstFoundEntries.SelectedIndices.Clear(); }
 				}
