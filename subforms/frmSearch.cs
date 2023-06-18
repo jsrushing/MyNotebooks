@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using myNotebooks.objects;
 
@@ -34,6 +35,50 @@ namespace myNotebooks.subforms
 
 		private async void btnSearch_Click(object sender, EventArgs e)
 		{
+			await DoSearch();
+			//this.Cursor = Cursors.WaitCursor;
+			//var labels = string.Empty;
+			//string[] labelsArray;
+			//List<Entry> foundEntries = new List<Entry>();
+			//List<Entry> jeFound = null;
+
+			//journalBoundaries.Clear();
+			//lstFoundEntries.Items.Clear();
+			//FoundEntries.Clear();
+			//for (var i = 0; i < lstLabelsForSearch.CheckedItems.Count; i++) { labels += lstLabelsForSearch.CheckedItems[i].ToString() + ","; }
+			//labels = labels.Length > 0 ? labels.Substring(0, labels.Length - 1) : string.Empty;
+			//labelsArray = labels.Length > 0 ? labels.Split(',') : null;
+
+			//SearchObject so = new SearchObject(chkUseDate, chkUseDateRange, chkMatchCase, dtFindDate,
+			//		dtFindDate_From, dtFindDate_To, radBtnAnd, radLabels_And, txtSearchTitle.Text, txtSearchText.Text, labelsArray);
+
+			//foreach (KeyValuePair<string, string> kvp in Program.DictCheckedNotebooks)
+			//{
+			//	Utilities.SetProgramPIN(kvp.Key);
+			//	jeFound = new Notebook(kvp.Key).Open().Search(so);
+			//	await Utilities.PopulateEntries(lstFoundEntries, jeFound, "", "", "", false, 0, true);
+			//	journalBoundaries.Add(kvp.Key, lstFoundEntries.Items.Count);
+			//	FoundEntries.AddRange(jeFound);
+			//	foundEntries.Clear();
+			//}
+
+			//if (lstFoundEntries.Items.Count == 0) { lstFoundEntries.Items.Add("no matches found"); }
+			//lblSeparator.Visible = true;
+			//this.Cursor = Cursors.Default;
+		}
+
+		private void btnSelectNotebooks_Click(object sender, EventArgs e)
+		{
+			using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(this)) { frm.ShowDialog(); }
+			SetNotebookSelectLabelAndButton();
+		}
+
+		private void chkUseDate_CheckedChanged(object sender, EventArgs e) { ToggleDateControls(true); }
+
+		private void chkUseDateRange_CheckedChanged(object sender, EventArgs e) { ToggleDateControls(false); }
+
+		private async Task DoSearch()
+		{
 			this.Cursor = Cursors.WaitCursor;
 			var labels = string.Empty;
 			string[] labelsArray;
@@ -61,18 +106,9 @@ namespace myNotebooks.subforms
 			}
 
 			if (lstFoundEntries.Items.Count == 0) { lstFoundEntries.Items.Add("no matches found"); }
+			lblSeparator.Visible = true;
 			this.Cursor = Cursors.Default;
 		}
-
-		private void btnSelectNotebooks_Click(object sender, EventArgs e)
-		{
-			using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(this)) { frm.ShowDialog(); }
-			SetNotebookSelectLabelAndButton();
-		}
-
-		private void chkUseDate_CheckedChanged(object sender, EventArgs e) { ToggleDateControls(true); }
-
-		private void chkUseDateRange_CheckedChanged(object sender, EventArgs e) { ToggleDateControls(false); }
 
 		private void GetCurrentSelections()
 		{
@@ -111,6 +147,8 @@ namespace myNotebooks.subforms
 			ListBox lb = (ListBox)sender;
 			RichTextBox rtb = rtbSelectedEntry_Found;
 			lb.SelectedIndexChanged -= new System.EventHandler(this.lstFoundEntries_SelectedIndexChanged);
+
+			//while ((lstFoundEntries.SelectedIndex + lstFoundEntries.TopIndex) % 4 != 0) { lstFoundEntries.TopIndex++; }
 
 			try
 			{
@@ -157,11 +195,19 @@ namespace myNotebooks.subforms
 			lblSeparator.Visible = false;
 		}
 
-		private void mnuEditEntry_Click(object sender, EventArgs e)
+		private async void mnuEditEntry_Click(object sender, EventArgs e)
 		{
-			Entry fe = lstFoundEntries.SelectedIndex == 0 ? FoundEntries[0] : FoundEntries[(lstFoundEntries.SelectedIndex + lstFoundEntries.TopIndex) / 4];
+			Entry fe = lstFoundEntries.SelectedIndex == 0 ? FoundEntries[0] : FoundEntries[lstFoundEntries.SelectedIndex / 4] ;
 			frmNewEntry frm = new frmNewEntry(this, new Notebook(fe.ClearNotebookName()).Open(), fe);
-			frm.Show();
+			frm.ShowDialog();
+			if (frm.Saved)
+			{
+				this.Cursor = Cursors.WaitCursor;
+				var indx = lstFoundEntries.SelectedIndex;
+				await DoSearch();
+				lstFoundEntries.SelectedIndex = indx;
+				this.Cursor = Cursors.Default;
+			}
 		}
 
 		private void mnuExit_Click(object sender, EventArgs e) { this.Hide(); }

@@ -555,7 +555,7 @@ namespace myNotebooks.subforms
 
 				frm.ShowDialog(this);
 
-				if (frm.saved)
+				if (frm.Saved)
 				{
 					var vCurrentEntriesCount = lstEntries.Items.Count;
 					while (vCurrentEntriesCount == lstEntries.Items.Count) { await ProcessDateFilters(); }
@@ -591,7 +591,7 @@ namespace myNotebooks.subforms
 				frm.Text = "Edit '" + CurrentEntry.ClearTitle() + "' in '" + CurrentNotebook.Name + "'";
 				frm.ShowDialog(this);
 
-				if (frm.saved)
+				if (frm.Saved)
 				{
 					await ProcessDateFilters();
 					ShowHideMenusAndControls(SelectionState.NotebookLoaded);

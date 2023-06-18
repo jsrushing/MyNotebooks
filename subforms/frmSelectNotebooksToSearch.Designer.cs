@@ -41,7 +41,7 @@ namespace myNotebooks.subforms
 			// 
 			// btnDone
 			// 
-			btnDone.Location = new System.Drawing.Point(65, 453);
+			btnDone.Location = new System.Drawing.Point(65, 463);
 			btnDone.Name = "btnDone";
 			btnDone.Size = new System.Drawing.Size(133, 23);
 			btnDone.TabIndex = 49;
@@ -51,7 +51,7 @@ namespace myNotebooks.subforms
 			// 
 			// btnAddPIN
 			// 
-			btnAddPIN.Location = new System.Drawing.Point(171, 44);
+			btnAddPIN.Location = new System.Drawing.Point(175, 54);
 			btnAddPIN.Name = "btnAddPIN";
 			btnAddPIN.Size = new System.Drawing.Size(59, 23);
 			btnAddPIN.TabIndex = 48;
@@ -62,7 +62,7 @@ namespace myNotebooks.subforms
 			// lblShowPIN
 			// 
 			lblShowPIN.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
-			lblShowPIN.Location = new System.Drawing.Point(59, 66);
+			lblShowPIN.Location = new System.Drawing.Point(59, 76);
 			lblShowPIN.Name = "lblShowPIN";
 			lblShowPIN.Size = new System.Drawing.Size(35, 13);
 			lblShowPIN.TabIndex = 46;
@@ -73,17 +73,17 @@ namespace myNotebooks.subforms
 			// 
 			// label1
 			// 
-			label1.Location = new System.Drawing.Point(5, 4);
+			label1.Location = new System.Drawing.Point(6, 4);
 			label1.Name = "label1";
-			label1.Size = new System.Drawing.Size(248, 32);
+			label1.Size = new System.Drawing.Size(248, 45);
 			label1.TabIndex = 0;
-			label1.Text = "Specify a PIN for all protected notebooks with which you intend to work";
+			label1.Text = "Specify a PIN for any protected notebooks. To remove a PIN, add a blank value.";
 			label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// label2
 			// 
 			label2.AutoSize = true;
-			label2.Location = new System.Drawing.Point(28, 48);
+			label2.Location = new System.Drawing.Point(22, 58);
 			label2.Name = "label2";
 			label2.Size = new System.Drawing.Size(29, 15);
 			label2.TabIndex = 42;
@@ -92,18 +92,18 @@ namespace myNotebooks.subforms
 			// txtPIN
 			// 
 			txtPIN.Enabled = false;
-			txtPIN.Location = new System.Drawing.Point(61, 44);
+			txtPIN.Location = new System.Drawing.Point(53, 54);
 			txtPIN.Name = "txtPIN";
-			txtPIN.Size = new System.Drawing.Size(100, 23);
+			txtPIN.Size = new System.Drawing.Size(116, 23);
 			txtPIN.TabIndex = 50;
-			txtPIN.Text = "(select a Journal)";
+			txtPIN.Text = "(select a Notebook)";
 			// 
 			// lstJournalPINs
 			// 
 			lstJournalPINs.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
 			lstJournalPINs.CheckOnClick = true;
 			lstJournalPINs.FormattingEnabled = true;
-			lstJournalPINs.Location = new System.Drawing.Point(12, 96);
+			lstJournalPINs.Location = new System.Drawing.Point(12, 106);
 			lstJournalPINs.Name = "lstJournalPINs";
 			lstJournalPINs.Size = new System.Drawing.Size(236, 346);
 			lstJournalPINs.TabIndex = 51;
@@ -112,7 +112,7 @@ namespace myNotebooks.subforms
 			// chkSelectAll
 			// 
 			chkSelectAll.AutoSize = true;
-			chkSelectAll.Location = new System.Drawing.Point(165, 78);
+			chkSelectAll.Location = new System.Drawing.Point(165, 88);
 			chkSelectAll.Name = "chkSelectAll";
 			chkSelectAll.Size = new System.Drawing.Size(71, 19);
 			chkSelectAll.TabIndex = 52;
@@ -120,12 +120,12 @@ namespace myNotebooks.subforms
 			chkSelectAll.UseVisualStyleBackColor = true;
 			chkSelectAll.CheckedChanged += this.chkSelectAll_CheckedChanged;
 			// 
-			// frmSelectJournalsToSearch
+			// frmSelectNotebooksToSearch
 			// 
 			AcceptButton = btnAddPIN;
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			ClientSize = new System.Drawing.Size(260, 483);
+			ClientSize = new System.Drawing.Size(260, 497);
 			Controls.Add(lstJournalPINs);
 			Controls.Add(btnDone);
 			Controls.Add(txtPIN);
@@ -137,8 +137,8 @@ namespace myNotebooks.subforms
 			FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
 			MaximizeBox = false;
 			MinimizeBox = false;
-			Name = "frmSelectJournalsToSearch";
-			Text = "Choose Journals To Search";
+			Name = "frmSelectNotebooksToSearch";
+			Text = "Choose Notebooks";
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}

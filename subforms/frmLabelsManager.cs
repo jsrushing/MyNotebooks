@@ -186,7 +186,7 @@ namespace myNotebooks.subforms
 				{ 
 					frm.ShowDialog(); 
 
-					if (frm.saved) 
+					if (frm.Saved) 
 					{
 						var lblIndx = lstLabels.SelectedIndex;
 						PopulateOccurrences();

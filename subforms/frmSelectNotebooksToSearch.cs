@@ -23,8 +23,9 @@ namespace myNotebooks.subforms
 		{
 			InitializeComponent();
 
-			if (Program.DictCheckedNotebooks.Count > 0) 
-			{ PopulateNotebooksList(true, false, false); } else { PopulateNotebooksList(false, false, true); }
+			if (Program.DictCheckedNotebooks.Count > 0)
+			{ PopulateNotebooksList(true, false, false); }
+			else { PopulateNotebooksList(false, false, true); }
 
 			//foreach (Notebook j in Program.AllNotebooks)
 			//{
@@ -47,16 +48,17 @@ namespace myNotebooks.subforms
 			//}
 
 			Utilities.SetStartPosition(this, parent);
+			label1.Text = "Specify a PIN for any protected notebooks." + Environment.NewLine + "To remove a PIN, add a blank value.";
 		}
-		
+
 		private async Task AddHasPINIndicators()
 		{
 			if (Program.DictCheckedNotebooks.Count > 0)
 			{
 				// JSR : 60/17/23 - Make this more LINQ'd up ...
 				//List<string> v = lstJournalPINs.Items.OfType<string>().ToList().Intersect(Program.DictCheckedNotebooks.Keys).ToList();
-				
-				try 
+
+				try
 				{
 					//var v2 = Program.DictCheckedNotebooks.ToList();  //.ToDictionary(x => x.Value.Length > 0); 
 
@@ -71,7 +73,7 @@ namespace myNotebooks.subforms
 						else { lstJournalPINs.Items[newentry] = name; }
 					}
 				}
-				catch(Exception ex) { using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, ex.Message, "Error", this)); }
+				catch (Exception ex) { using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, ex.Message, "Error", this)) ; }
 			}
 		}
 
@@ -142,7 +144,7 @@ namespace myNotebooks.subforms
 		{
 			if (lstJournalPINs.SelectedIndex > -1)
 			{
-				if(lstJournalPINs.SelectedItem.ToString() == ShowMoreString) { PopulateNotebooksList(false, true, false); }
+				if (lstJournalPINs.SelectedItem.ToString() == ShowMoreString) { PopulateNotebooksList(false, true, false); }
 				txtPIN.PasswordChar = '*';
 				txtPIN.Text = Program.DictCheckedNotebooks.ContainsKey(Scrubbed(lstJournalPINs.Text)) ? Program.DictCheckedNotebooks[Scrubbed(lstJournalPINs.Text)] : string.Empty;
 				txtPIN.Enabled = true;
@@ -161,7 +163,7 @@ namespace myNotebooks.subforms
 
 		private async void PopulateNotebooksList(bool populateWithCheckedJournals, bool showMore, bool showAll)
 		{
-			if(!showMore) lstJournalPINs.Items.Clear();
+			if (!showMore) lstJournalPINs.Items.Clear();
 
 			lstJournalPINs.Items.Clear();
 
@@ -180,7 +182,7 @@ namespace myNotebooks.subforms
 			{
 				PopulateCheckedItems();
 				lstJournalPINs.Items.Remove(ShowMoreString);
-				foreach(var name in Program.AllNotebookNames.Except(Program.DictCheckedNotebooks.Keys)) { lstJournalPINs.Items.Add($"{name}"); }
+				foreach (var name in Program.AllNotebookNames.Except(Program.DictCheckedNotebooks.Keys)) { lstJournalPINs.Items.Add($"{name}"); }
 			}
 
 			AddHasPINIndicators();

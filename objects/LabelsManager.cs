@@ -39,7 +39,7 @@ namespace myNotebooks.objects
 		public static string CheckedLabels_Get(CheckedListBox cbx)
 		{
 			string labels = string.Empty;
-			for (int i = 0; i < cbx.CheckedItems.Count; i++)
+			for (var i = 0; i < cbx.CheckedItems.Count; i++)
 			{
 				labels += cbx.CheckedItems[i].ToString() + ",";
 			}
