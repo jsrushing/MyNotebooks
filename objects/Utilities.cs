@@ -154,7 +154,7 @@ namespace myNotebooks.objects
 			//return filesCopied;
 		}
 
-		public static async Task PopulateEntries(ListBox lbxToPopulate, List<Entry> entries, string journalName = "", string startDate = "", 
+		public static async Task PopulateEntries(ListBox lbxToPopulate, List<Entry> entries, string notebookName = "", string startDate = "", 
 			string endDate = "", bool clearPrevious = true, int SortBy = 0, bool includeJrnlName = false, int maxWidth = 0)
 		{
 			if(clearPrevious) lbxToPopulate.Items.Clear();

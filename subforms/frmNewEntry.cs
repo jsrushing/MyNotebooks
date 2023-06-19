@@ -85,8 +85,8 @@ namespace myNotebooks.subforms
 
 		private void		frmNewEntry_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			e.Cancel = true;
-			mnuCancelExit_Click(null, null);
+			//	e.Cancel = true;
+			//	mnuCancelExit_Click(null, null);
 		}
 
 		private void		GrayOriginalText()

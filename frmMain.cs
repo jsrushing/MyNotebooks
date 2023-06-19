@@ -318,8 +318,7 @@ namespace myNotebooks.subforms
 
 			try
 			{
-				string fullJournalName = ddlNotebooks.Text;
-				CurrentNotebook = new Notebook(fullJournalName).Open();
+				CurrentNotebook = new Notebook(ddlNotebooks.Text).Open();
 				var wrongPIN = true;
 
 				if (CurrentNotebook != null)
@@ -338,7 +337,9 @@ namespace myNotebooks.subforms
 					else
 					{
 						PopulateShowFromDates();
+						SuppressDateClick = true;
 						await ProcessDateFilters();
+						SuppressDateClick = false;
 						lstEntries.Height = this.Height - lstEntries.Top - 50;
 						lstEntries.Visible = true;
 						pnlDateFilters.Visible = true;
@@ -352,9 +353,7 @@ namespace myNotebooks.subforms
 							}
 						}
 
-						SuppressDateClick = true;
 						cbxDatesTo.SelectedIndex = 0;
-						SuppressDateClick = false;
 						ShowHideMenusAndControls(SelectionState.NotebookLoaded);
 					}
 				}
@@ -575,8 +574,11 @@ namespace myNotebooks.subforms
 
 				if (frm.Saved)
 				{
-					await ProcessDateFilters();
-					ShowHideMenusAndControls(SelectionState.NotebookLoaded);
+					CurrentEntry = frm.Entry;
+					await CurrentNotebook.Save();
+					if(!cbxDatesTo.Items.Contains(CurrentEntry.Date)) { cbxDatesTo.Items.Insert(0, CurrentEntry.Date.ToShortDateString()); }
+					cbxDatesTo.SelectedIndex = 0;
+					lstEntries.SelectedIndex = 0;
 				}
 			}
 
@@ -585,6 +587,8 @@ namespace myNotebooks.subforms
 
 		private async void mnuEntryDelete_Click(object sender, EventArgs e)
 		{
+			this.Cursor = Cursors.WaitCursor;
+
 			using (frmMessage frm = new frmMessage(frmMessage.OperationType.DeleteEntry, CurrentEntry.ClearTitle(), "", this))
 			{
 				frm.ShowDialog(this);
@@ -597,10 +601,14 @@ namespace myNotebooks.subforms
 					ShowHideMenusAndControls(SelectionState.NotebookLoaded);
 				}
 			}
+
+			this.Cursor= Cursors.Default;
 		}
 
 		private async void mnuEntryEdit_Click(object sender, EventArgs e)
 		{
+			this.Cursor = Cursors.WaitCursor;
+
 			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
 
 			using (frmNewEntry frm = new frmNewEntry(this, CurrentNotebook, CurrentEntry, mnu.Text.ToLower().StartsWith("preserve")))
@@ -610,12 +618,15 @@ namespace myNotebooks.subforms
 
 				if (frm.Saved)
 				{
+					CurrentEntry = frm.Entry;
 					await CurrentNotebook.Save();
-					//while(CurrentEntry != frm.Entry) { }
 					await ProcessDateFilters();
-					ShowHideMenusAndControls(SelectionState.NotebookLoaded);
+					var v = lstEntries.Items.OfType<string>().FirstOrDefault(e => e.StartsWith(CurrentEntry.ClearTitle()));
+					lstEntries.SelectedIndex = lstEntries.Items.IndexOf(v);
 				}
 			}
+
+			this.Cursor =Cursors.Default;
 		}
 
 		private void mnuLabels_Click(object sender, EventArgs e)
@@ -793,7 +804,7 @@ namespace myNotebooks.subforms
 			if (cbxDatesFrom.Text.Length > 0 && cbxDatesTo.Text.Length > 0)
 			{
 				await Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, CurrentNotebook.Name,
-					cbxDatesFrom.Text, cbxDatesTo.Text, true, cbxSortEntriesBy.SelectedIndex, false, lstEntries.Width - 75);
+					cbxDatesFrom.Text, cbxDatesTo.Text, true, cbxSortEntriesBy.SelectedIndex, false, lstEntries.Width - 85);
 
 				if (lstEntries.SelectedIndex == -1 && CurrentNotebook.Entries.Contains(CurrentEntry))
 				{ Entry.Select(rtbSelectedEntry, lstEntries, null, true, CurrentEntry, true); }
