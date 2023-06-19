@@ -184,23 +184,30 @@ namespace myNotebooks.subforms
 			this.Cursor = Cursors.WaitCursor;
 			Entry fe = lstFoundEntries.SelectedIndex == 0 ? FoundEntries[0] : FoundEntries[lstFoundEntries.SelectedIndex / 4];
 
-			using(frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Do you want to delete '" + fe.ClearTitle() + "' from '" + fe.ClearNotebookName() + "'?", "Delete Entry", this))
+			using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Delete '" + fe.ClearTitle() + "' from '" + fe.ClearNotebookName() + "'?", "Delete Entry", this))
 			{
 				frm.ShowDialog();
 
-				if(frm.Result == frmMessage.ReturnResult.Yes)
+				if (frm.Result == frmMessage.ReturnResult.Yes)
 				{
 					Notebook nb = new Notebook(fe.ClearNotebookName()).Open();
 
-					if(nb != null) 
+					if (nb != null)
 					{
-						Entry e2 = nb.Entries.Single(e2 => e2.Id == fe.Id);	//  nb.Entries.Where(e2.Id == fe.Id);
-
-						nb.Entries.Remove(e2); 
-						await nb.Save();
-						await this.DoSearch();
-					}	
+						var cnt = nb.Entries.Count;
+						nb.Entries.Remove(nb.Entries.Single(e2 => e2.Id == fe.Id));
+						if (nb.Entries.Count == cnt - 1)
+						{
+							await nb.Save();
+							await this.DoSearch();
+						}
+						else
+						{
+							using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.Message, "An error occurred. The entry was not deleted.", "Error", this)) { }
+						}
+					}
 				}
+				this.Cursor = Cursors.Default;
 			}
 		}
 
