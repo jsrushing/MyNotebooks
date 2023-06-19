@@ -70,9 +70,6 @@ namespace myNotebooks.objects
 			var result = new string[2];
 			var paren1 = searchString.LastIndexOf("(") + 1;
 			var paren2 = searchString.LastIndexOf(')');
-			//	result[0] = searchString.Substring(0, searchString.LastIndexOf('('));
-			//	DateTime.TryParse(searchString.Substring(paren1, paren2 - paren1), out DateTime tryDate);
-			//	result[1] = tryDate > DateTime.MinValue ? tryDate.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) : null;
 
 			try
 			{

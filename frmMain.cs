@@ -196,6 +196,8 @@ namespace myNotebooks.subforms
 			System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
 			this.Text = "myJournal " + Program.AppVersion + (fvi.FileName.ToLower().Contains("debug") ? " - DEBUG MODE" : "");
 
+			#region one-time code
+
 			// one-time code to convert Journal objects to Notebook objects
 
 			//using (Stream stream = File.Open("C:\\Users\\js_ru\\source\\repos\\myJournal2022\\bin\\Debug\\netcoreapp3.1\\journals - Copy\\The New Real Thing", FileMode.Open))
@@ -236,36 +238,48 @@ namespace myNotebooks.subforms
 			//	newNotebook.Entries.Add(newEntry1);
 			//	newNotebook.Settings = new NotebookSettings { AllowCloud = true };
 			//	await newNotebook.Create();
-			//}
+			//} 
+			#endregion
 
 			CheckForSystemDirectories();    // am I keeping system directories now that the cloud is working? Why or why not?
-			frmAzurePwd frm = new frmAzurePwd(this, frmAzurePwd.Mode.AskingForKey);
+
+			using (frmAzurePwd frm = new frmAzurePwd(this, frmAzurePwd.Mode.AskingForKey))
+			{
+				if (Program.AzurePassword.Length > 0)
+				{
+					frm.Close();
+					//CloudSynchronizer cs = new CloudSynchronizer();
+					//await cs.SynchWithCloud(true);
+
+					//if (this.Text.ToLower().Contains("debug"))
+					//{
+					//	StringBuilder title = new StringBuilder();
+					//	title.Append(" synchd: " + cs.NotebooksSynchd.ToString());
+					//	title.Append(" skipped: " + cs.NotebooksSkipped.ToString());
+					//	title.Append(" downloaded:" + cs.NotebooksDownloaded.ToString());
+					//	title.Append(" backed up:" + cs.NotebooksBackedUp.ToString());
+					//	title.Append(" deleted:" + cs.NotebooksDeleted.ToString());
+					//	this.Text += title.ToString();
+					//}
+				}
+
+			}
 
 			//Program.AzurePassword = string.Empty;	// Kills the Azure synch process for debugging if desired.
 
-			if (Program.AzurePassword.Length > 0)
-			{
-				frm.Close();
-				CloudSynchronizer cs = new CloudSynchronizer();
-				//await cs.SynchWithCloud(true);
+			pnlDateFilters.Left = pnlPin.Left - 11;
+			//LoadNotebooks();
+			ShowHideMenusAndControls(SelectionState.HideAll);
+			await Utilities.PopulateAllNotebookNames();
 
-				if (this.Text.ToLower().Contains("debug"))
-				{
-					StringBuilder title = new StringBuilder();
-					title.Append(" synchd: " + cs.NotebooksSynchd.ToString());
-					title.Append(" skipped: " + cs.NotebooksSkipped.ToString());
-					title.Append(" downloaded:" + cs.NotebooksDownloaded.ToString());
-					title.Append(" backed up:" + cs.NotebooksBackedUp.ToString());
-					title.Append(" deleted:" + cs.NotebooksDeleted.ToString());
-					this.Text += title.ToString();
-				}
+			if(Program.AzurePassword.Length > 0)
+			{
+				CloudSynchronizer cs = new CloudSynchronizer();
+				await cs.SynchWithCloud(false, null, true);
 			}
 
-			pnlDateFilters.Left = pnlPin.Left - 11;
-			LoadNotebooks();
-			ShowHideMenusAndControls(SelectionState.HideAll);
-			//await Utilities.PopulateAllNotebooks();
 			await Utilities.PopulateAllNotebookNames();
+			LoadNotebooks();
 			this.Cursor = Cursors.Default;
 		}
 
@@ -620,7 +634,7 @@ namespace myNotebooks.subforms
 			{
 				frm.ShowDialog(this);
 
-				if (frm.Notebook != null)
+				if (frm.Notebook != null && frm.Notebook.Name.Length > 0)
 				{
 					frm.Notebook.LastSaved = DateTime.Now;
 					frm.Notebook.FileName = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + frm.Notebook.Name;

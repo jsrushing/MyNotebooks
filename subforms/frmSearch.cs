@@ -162,16 +162,45 @@ namespace myNotebooks.subforms
 
 		private async void mnuEditEntry_Click(object sender, EventArgs e)
 		{
-			Entry fe = lstFoundEntries.SelectedIndex == 0 ? FoundEntries[0] : FoundEntries[lstFoundEntries.SelectedIndex / 4] ;
-			frmNewEntry frm = new frmNewEntry(this, new Notebook(fe.ClearNotebookName()).Open(), fe);
-			frm.ShowDialog();
-			if (frm.Saved)
+			this.Cursor = Cursors.WaitCursor;
+			Entry fe = lstFoundEntries.SelectedIndex == 0 ? FoundEntries[0] : FoundEntries[lstFoundEntries.SelectedIndex / 4];
+			using (frmNewEntry frm = new frmNewEntry(this, new Notebook(fe.ClearNotebookName()).Open(), fe)) 
+			{ 
+				frm.ShowDialog(); 
+
+				if (frm.Saved)
+				{
+					var indx = lstFoundEntries.SelectedIndex;
+					await DoSearch();
+					lstFoundEntries.SelectedIndex = indx;
+				}
+			}
+
+			this.Cursor = Cursors.Default;
+		}
+
+		private async void mnuDeleteEntry_Click(object sender, EventArgs e)
+		{
+			this.Cursor = Cursors.WaitCursor;
+			Entry fe = lstFoundEntries.SelectedIndex == 0 ? FoundEntries[0] : FoundEntries[lstFoundEntries.SelectedIndex / 4];
+
+			using(frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Do you want to delete '" + fe.ClearTitle() + "' from '" + fe.ClearNotebookName() + "'?", "Delete Entry", this))
 			{
-				this.Cursor = Cursors.WaitCursor;
-				var indx = lstFoundEntries.SelectedIndex;
-				await DoSearch();
-				lstFoundEntries.SelectedIndex = indx;
-				this.Cursor = Cursors.Default;
+				frm.ShowDialog();
+
+				if(frm.Result == frmMessage.ReturnResult.Yes)
+				{
+					Notebook nb = new Notebook(fe.ClearNotebookName()).Open();
+
+					if(nb != null) 
+					{
+						Entry e2 = nb.Entries.Single(e2 => e2.Id == fe.Id);	//  nb.Entries.Where(e2.Id == fe.Id);
+
+						nb.Entries.Remove(e2); 
+						await nb.Save();
+						await this.DoSearch();
+					}	
+				}
 			}
 		}
 

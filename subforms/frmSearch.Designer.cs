@@ -65,6 +65,7 @@ namespace myNotebooks.subforms
 			lblSelectionType = new Label();
 			label8 = new Label();
 			mnuEditEntry = new ToolStripMenuItem();
+			mnuDeleteEntry = new ToolStripMenuItem();
 			grpFindEntry.SuspendLayout();
 			pnlLabels_AndOr.SuspendLayout();
 			mnuEntryEditTop.SuspendLayout();
@@ -256,15 +257,15 @@ namespace myNotebooks.subforms
 			// 
 			// mnuEntryEditTop
 			// 
-			mnuEntryEditTop.Items.AddRange(new ToolStripItem[] { mnuEntryEdit });
+			mnuEntryEditTop.Items.AddRange(new ToolStripItem[] { mnuEntryEdit, mnuDeleteEntry });
 			mnuEntryEditTop.Name = "mnuEntryEditTop";
-			mnuEntryEditTop.Size = new System.Drawing.Size(125, 26);
+			mnuEntryEditTop.Size = new System.Drawing.Size(181, 70);
 			// 
 			// mnuEntryEdit
 			// 
 			mnuEntryEdit.Name = "mnuEntryEdit";
-			mnuEntryEdit.Size = new System.Drawing.Size(124, 22);
-			mnuEntryEdit.Text = "Edit Entry";
+			mnuEntryEdit.Size = new System.Drawing.Size(180, 22);
+			mnuEntryEdit.Text = "Edit";
 			mnuEntryEdit.Click += this.mnuEditEntry_Click;
 			// 
 			// chkUseDateRange
@@ -422,6 +423,13 @@ namespace myNotebooks.subforms
 			mnuEditEntry.Size = new System.Drawing.Size(32, 19);
 			mnuEditEntry.Text = "Edit Entry";
 			// 
+			// mnuDeleteEntry
+			// 
+			mnuDeleteEntry.Name = "mnuDeleteEntry";
+			mnuDeleteEntry.Size = new System.Drawing.Size(180, 22);
+			mnuDeleteEntry.Text = "Delete";
+			mnuDeleteEntry.Click += this.mnuDeleteEntry_Click;
+			// 
 			// frmSearch
 			// 
 			AcceptButton = btnSearch;
@@ -474,5 +482,6 @@ namespace myNotebooks.subforms
 		private ContextMenuStrip mnuEntryEditTop;
 		private ToolStripMenuItem mnuEntryEdit;
 		private ToolStripMenuItem mnuEditEntry;
+		private ToolStripMenuItem mnuDeleteEntry;
 	}
 }

@@ -46,7 +46,7 @@ namespace myNotebooks.subforms
 			b_IfLocalOnly_DisallowCloud = workingNotebook.Settings.IfLocalOnly_DisallowCloud;
 
 			allowValueChange						= false;
-			chkAllowCloud.Checked					= b_AllowCloud;
+			chkAllowCloud.Checked					= b_AllowCloud; 
 			pnlCloudOptions.Enabled					= chkAllowCloud.Checked;
 			radCloudNotLocal_DeleteCloud.Checked	= b_IfCloudOnly_Delete;
 			radCloudNotLocal_DownloadCloud.Checked	= b_IfCloudOnly_Download;
@@ -68,7 +68,7 @@ namespace myNotebooks.subforms
 
 			if (saveAndProcess)
 			{
-				await workingNotebook.Save();
+				//await workingNotebook.Save();
 
 				if (b_AllowCloud & !originalAllowCloud)
 				{
