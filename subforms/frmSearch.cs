@@ -196,6 +196,9 @@ namespace myNotebooks.subforms
 					{
 						var cnt = nb.Entries.Count;
 						nb.Entries.Remove(nb.Entries.Single(e2 => e2.Id == fe.Id));
+
+						while(nb.Entries.Count == cnt) { }
+
 						if (nb.Entries.Count == cnt - 1)
 						{
 							await nb.Save();

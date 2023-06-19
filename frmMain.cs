@@ -294,6 +294,7 @@ namespace myNotebooks.subforms
 
 		private async void btnLoadNotebook_Click(object sender, EventArgs e)
 		{
+			this.Cursor= Cursors.WaitCursor;
 			lstEntries.Items.Clear();
 			rtbSelectedEntry.Text = string.Empty;
 			Program.PIN = txtJournalPIN.Text;
@@ -322,7 +323,7 @@ namespace myNotebooks.subforms
 				var wrongPIN = true;
 
 				if (CurrentNotebook != null)
-				{
+				{	// Test the PIN ...
 					Program.PIN = txtJournalPIN.Text;
 					var iEntryIndx = CurrentNotebook.Entries.Count == 1 ? 0 : 1;
 					var text = EncryptDecrypt.Decrypt(CurrentNotebook.Entries[iEntryIndx].Text);
@@ -363,6 +364,8 @@ namespace myNotebooks.subforms
 				}
 			}
 			catch (Exception ex) { Console.Write(ex.Message); }
+
+			this.Cursor = Cursors.Default;
 		}
 
 		private async void cbxDates_SelectedIndexChanged(object sender, EventArgs e)
@@ -562,6 +565,7 @@ namespace myNotebooks.subforms
 		private async void mnuEntryCreate_Click(object sender, EventArgs e)
 		{
 			this.Cursor = Cursors.WaitCursor;
+			var vCurrentEntriesCount = lstEntries.Items.Count;
 
 			using (frmNewEntry frm = new frmNewEntry(this, CurrentNotebook))
 			{
@@ -571,8 +575,7 @@ namespace myNotebooks.subforms
 
 				if (frm.Saved)
 				{
-					var vCurrentEntriesCount = lstEntries.Items.Count;
-					while (vCurrentEntriesCount == lstEntries.Items.Count) { await ProcessDateFilters(); }
+					await ProcessDateFilters();
 					ShowHideMenusAndControls(SelectionState.NotebookLoaded);
 				}
 			}
@@ -607,6 +610,8 @@ namespace myNotebooks.subforms
 
 				if (frm.Saved)
 				{
+					await CurrentNotebook.Save();
+					//while(CurrentEntry != frm.Entry) { }
 					await ProcessDateFilters();
 					ShowHideMenusAndControls(SelectionState.NotebookLoaded);
 				}

@@ -30,7 +30,7 @@ namespace myNotebooks.subforms
 			Entry = entryToEdit;
 			IsEdit = Entry != null;
 			PreserveOriginalText = disallowOriginalTextEdit;
-			this.CurrentNotebook = notebook;
+			CurrentNotebook = notebook;
 			Utilities.SetStartPosition(this, parent);
 		}
 
@@ -127,12 +127,10 @@ namespace myNotebooks.subforms
 		{
 			if (IsDirty)
 			{
-				using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Do you want to save your changes?", "", this))
-				{
-					frm.ShowDialog(this);
-					if (frm.Result == frmMessage.ReturnResult.No) { Entry = null; }
-					else if (frm.Result == frmMessage.ReturnResult.Yes) { await SaveEntry(); }
-				}
+				using frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Do you want to save your changes?", "", this);
+				frm.ShowDialog(this);
+				if (frm.Result == frmMessage.ReturnResult.No) { Entry = null; }
+				else if (frm.Result == frmMessage.ReturnResult.Yes) { await SaveEntry(); }
 			}
 			else
 			{
@@ -163,17 +161,19 @@ namespace myNotebooks.subforms
 		{
 			if (rtbNewEntry.Text.Length > 0 && txtNewEntryTitle.Text.Length > 0 && IsDirty)
 			{
-				if (CurrentNotebook.Entries.Count == 1 & rtbNewEntry.Text.IndexOf(" ") > 49)
-				{
-					using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message,
-						"Sorry, but because of the way we validate PIN's the 1st entry can't start with a single word longer than 50 characters.")) { frm.ShowDialog(); }
+				if (CurrentNotebook.Entries.Count == 1 & rtbNewEntry.Text.IndexOf(" ") > 49)	
+				{   // Bad PINs are detected by checking that the decrypted text in the 0th notebook doesn't start w/ a word 50 chars long. See frmMain.btnLoadNotebook_Click().
+					using frmMessage frm = new frmMessage(frmMessage.OperationType.Message,
+						"Sorry, but for security reasons the very 1st entry in a notebook can't start with a single word longer than 50 characters.");
+					frm.ShowDialog();
 				}
 				else { await SaveEntry(); }
 			}
 			else
 			{
-				using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message,
-					"You must enter both a title and text to save an entry.", "", this)) { frm.ShowDialog(this); }
+				using frmMessage frm = new frmMessage(frmMessage.OperationType.Message,
+					"You must enter both a title and text to save an entry.", "", this);
+				frm.ShowDialog(this);
 			}
 		}
 
@@ -208,7 +208,7 @@ namespace myNotebooks.subforms
 			{
 				//var title = Utilities.GetTitleAndDate(txtNewEntryTitle.Text)[0];
 				Entry newEntry = new Entry(txtNewEntryTitle.Text.Trim(), rtbNewEntry.Text.Trim(), rtbNewEntry.Rtf, LabelsManager.CheckedLabels_Get(clbLabels), CurrentNotebook.Name);
-				if (Entry == null) { CurrentNotebook.AddEntry(newEntry); } else { CurrentNotebook.ReplaceEntry(Entry, newEntry); await CurrentNotebook.Save(); }
+				if (Entry == null) { CurrentNotebook.AddEntry(newEntry); } else { CurrentNotebook.ReplaceEntry(Entry, newEntry); }
 				Entry = newEntry;
 				Saved = true;
 				SetIsDirty(false);	
