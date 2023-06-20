@@ -12,13 +12,13 @@ namespace myNotebooks.subforms
 {
 	public partial class frmNewEntry : Form
 	{
-		public Entry		Entry				{ get; set; }
-		private Notebook	CurrentNotebook		= null;
-		private bool		IsEdit				= false;
-		private int			OriginalEntryLength = -1;
-		private bool		IsDirty				= false;
-		private string		OriginalTitle		= string.Empty;
-		private string		OriginalText_Full	= string.Empty;
+		public Entry Entry { get; set; }
+		private Notebook CurrentNotebook = null;
+		private bool IsEdit = false;
+		private int OriginalEntryLength = -1;
+		private bool IsDirty = false;
+		private string OriginalTitle = string.Empty;
+		private string OriginalText_Full = string.Empty;
 		private LabelsManager.LabelsSortType Sort = LabelsManager.LabelsSortType.None;
 
 		public bool Saved { get; private set; }
@@ -34,14 +34,14 @@ namespace myNotebooks.subforms
 			Utilities.SetStartPosition(this, parent);
 		}
 
-		private void		ddlFonts_SelectedIndexChanged(object sender, EventArgs e)
+		private void ddlFonts_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			lblSelectedFont.Font = new Font(ddlFonts.Text, 10);
 			lblSelectedFont.Text = lblSelectedFont.Font.Name;
 			Application.DoEvents();
 		}
 
-		private void		frmNewEntry_Load(object sender, EventArgs e)
+		private void frmNewEntry_Load(object sender, EventArgs e)
 		{
 			OriginalTitle = this.Text;
 			//ddlFonts.DataSource = Program.lstFonts;
@@ -76,6 +76,7 @@ namespace myNotebooks.subforms
 				}
 
 				LabelsManager.CheckedLabels_Set(clbLabels, Entry);
+				lblNumLabelsSelected.Text = string.Format(lblNumLabelsSelected.Text, clbLabels.CheckedItems.Count.ToString());
 				rtbNewEntry.Focus();
 				rtbNewEntry.SelectionStart = 0;
 			}
@@ -83,13 +84,13 @@ namespace myNotebooks.subforms
 			SetIsDirty(false);
 		}
 
-		private void		frmNewEntry_FormClosing(object sender, FormClosingEventArgs e)
+		private void frmNewEntry_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			//	e.Cancel = true;
 			//	mnuCancelExit_Click(null, null);
 		}
 
-		private void		GrayOriginalText()
+		private void GrayOriginalText()
 		{
 			rtbNewEntry.SelectionStart = 1;
 			rtbNewEntry.SelectionLength = OriginalText_Full.Length + 1;
@@ -98,7 +99,7 @@ namespace myNotebooks.subforms
 			rtbNewEntry.SelectionStart = 0;
 		}
 
-		private void		InNoTypeArea(bool clicked = false)
+		private void InNoTypeArea(bool clicked = false)
 		{
 			if (PreserveOriginalText)
 			{
@@ -110,20 +111,25 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private void		lblManageLabels_Click(object sender, EventArgs e)
+		private void lblManageLabels_Click(object sender, EventArgs e)
 		{
 			using (frmLabelsManager frm = new frmLabelsManager(this, false, this.CurrentNotebook)) { frm.ShowDialog(); }
 			LabelsManager.PopulateLabelsList(clbLabels);
 		}
 
-		private void		lblSortType_Click(object sender, EventArgs e) { SortLabels(); }
+		private void lblSortType_Click(object sender, EventArgs e) { SortLabels(); }
 
-		private void		lstLabels_SelectedIndexChanged(object sender, EventArgs e) { SetIsDirty(true); }
+		private void lstLabels_SelectedIndexChanged(object sender, EventArgs e) 
+		{ 
+			SetIsDirty(true);
+			lblNumLabelsSelected.Text = "({0} selected)";
+			lblNumLabelsSelected.Text = string.Format(lblNumLabelsSelected.Text, clbLabels.CheckedItems.Count);
+		}
 
-		private void		ModifyFontStyle(FontStyle style)
+		private void ModifyFontStyle(FontStyle style)
 		{ rtbNewEntry.SelectionFont = new Font(rtbNewEntry.SelectionFont, rtbNewEntry.SelectionFont.Style ^ style); }
 
-		private async void	mnuCancelExit_Click(object sender, EventArgs e)
+		private async void mnuCancelExit_Click(object sender, EventArgs e)
 		{
 			if (IsDirty)
 			{
@@ -140,28 +146,28 @@ namespace myNotebooks.subforms
 			this.Hide();
 		}
 
-		private void		mnuFindTextBox_TextChanged(object sender, EventArgs e)
+		private void mnuFindTextBox_TextChanged(object sender, EventArgs e)
 		{
 			// do find operation here
 		}
 
-		private void		mnuFind_Click(object sender, EventArgs e)
+		private void mnuFind_Click(object sender, EventArgs e)
 		{
 			txtFind.Text = string.Empty;
 			txtFind.Focus();
 		}
 
-		private async void	mnuSaveAndExit_Click(object sender, EventArgs e)
+		private async void mnuSaveAndExit_Click(object sender, EventArgs e)
 		{
 			await SaveEntry();
 			this.Hide();
 		}
 
-		private async void	mnuSaveEntry_Click(object sender, EventArgs e)
+		private async void mnuSaveEntry_Click(object sender, EventArgs e)
 		{
 			if (rtbNewEntry.Text.Length > 0 && txtNewEntryTitle.Text.Length > 0 && IsDirty)
 			{
-				if (CurrentNotebook.Entries.Count == 1 & rtbNewEntry.Text.IndexOf(" ") > 49)	
+				if (CurrentNotebook.Entries.Count == 1 & rtbNewEntry.Text.IndexOf(" ") > 49)
 				{   // Bad PINs are detected by checking that the decrypted text in the 0th notebook doesn't start w/ a word 50 chars long. See frmMain.btnLoadNotebook_Click().
 					using frmMessage frm = new frmMessage(frmMessage.OperationType.Message,
 						"Sorry, but for security reasons the very 1st entry in a notebook can't start with a single word longer than 50 characters.");
@@ -177,13 +183,13 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private void		rtbNewEntry_KeyDown(object sender, KeyEventArgs e) { if (e.KeyCode == Keys.Right || e.KeyCode == Keys.Down) { InNoTypeArea(); } }
+		private void rtbNewEntry_KeyDown(object sender, KeyEventArgs e) { if (e.KeyCode == Keys.Right || e.KeyCode == Keys.Down) { InNoTypeArea(); } }
 
-		private void		rtbNewEntry_MouseUp(object sender, MouseEventArgs e) { InNoTypeArea(); }
+		private void rtbNewEntry_MouseUp(object sender, MouseEventArgs e) { InNoTypeArea(); }
 
-		private void		rtbNewEntry_TextChanged(object sender, EventArgs e) { SetIsDirty(true); }
+		private void rtbNewEntry_TextChanged(object sender, EventArgs e) { SetIsDirty(true); }
 
-		private async Task	SaveEntry()
+		private async Task SaveEntry()
 		{
 			// Test title for a date surrounded by parentheses, which interferes with parsing the entry's date when necessary.
 			var openParen = txtNewEntryTitle.Text.IndexOf("(");
@@ -212,13 +218,13 @@ namespace myNotebooks.subforms
 				await CurrentNotebook.Save();
 				Entry = newEntry;
 				Saved = true;
-				SetIsDirty(false);	
+				SetIsDirty(false);
 			}
 
 			this.Cursor = Cursors.Default;
 		}
 
-		private void		SetIsDirty(bool dirty)
+		private void SetIsDirty(bool dirty)
 		{
 			if (txtNewEntryTitle.Text.Length > 0 & rtbNewEntry.Text.Length > 0)
 			{
@@ -237,7 +243,7 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private void		SortLabels()
+		private void SortLabels()
 		{
 			switch (Sort)
 			{
@@ -259,13 +265,13 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private void		ToolsMenuClick(object sender, EventArgs e)
+		private void ToolsMenuClick(object sender, EventArgs e)
 		{
 			string btnName = ((ToolStripButton)sender).Name.ToLower();
 			FontStyle style = btnName.Contains("bold") ? FontStyle.Bold : btnName.Contains("underline") ? FontStyle.Underline : FontStyle.Italic;
 			ModifyFontStyle(style);
 		}
 
-		private void		txtNewEntryTitle_TextChanged(object sender, EventArgs e) { SetIsDirty(true); }
+		private void txtNewEntryTitle_TextChanged(object sender, EventArgs e) { SetIsDirty(true); }
 	}
 }

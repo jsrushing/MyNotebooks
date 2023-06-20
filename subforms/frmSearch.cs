@@ -31,6 +31,7 @@ namespace myNotebooks.subforms
 			dtFindDate.Value = DateTime.Now;
 			dtFindDate_From.Value = DateTime.Now.AddDays(-30);
 			dtFindDate_To.Value = DateTime.Now;
+			lblNumEntries.Text = string.Format(lblNumEntries.Text, 0);
 		}
 
 		private async void btnSearch_Click(object sender, EventArgs e) { await DoSearch(); }
@@ -73,7 +74,10 @@ namespace myNotebooks.subforms
 				foundEntries.Clear();
 			}
 
-			if (lstFoundEntries.Items.Count == 0) { lstFoundEntries.Items.Add("no matches found"); }
+			if (lstFoundEntries.Items.Count == 0)
+			{ lstFoundEntries.Items.Add("no matches found"); }
+			else { lblNumEntries.Text = "{0} entries found"; lblNumEntries.Text = string.Format(lblNumEntries.Text, lstFoundEntries.Items.Count / 4); }
+
 			lblSeparator.Visible = true;
 			this.Cursor = Cursors.Default;
 		}

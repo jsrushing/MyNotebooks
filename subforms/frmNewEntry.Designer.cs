@@ -70,6 +70,7 @@ namespace myNotebooks.subforms
 			mnuFind = new System.Windows.Forms.ToolStripMenuItem();
 			txtFind = new System.Windows.Forms.ToolStripTextBox();
 			mnuCancelExit = new System.Windows.Forms.ToolStripMenuItem();
+			lblNumLabelsSelected = new System.Windows.Forms.Label();
 			grpCreateEntry.SuspendLayout();
 			pnlEntryDates.SuspendLayout();
 			panel1.SuspendLayout();
@@ -80,6 +81,7 @@ namespace myNotebooks.subforms
 			// grpCreateEntry
 			// 
 			grpCreateEntry.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+			grpCreateEntry.Controls.Add(lblNumLabelsSelected);
 			grpCreateEntry.Controls.Add(pnlEntryDates);
 			grpCreateEntry.Controls.Add(lblSortType);
 			grpCreateEntry.Controls.Add(panel1);
@@ -502,6 +504,18 @@ namespace myNotebooks.subforms
 			mnuCancelExit.Text = "E&xit";
 			mnuCancelExit.Click += this.mnuCancelExit_Click;
 			// 
+			// lblNumLabelsSelected
+			// 
+			lblNumLabelsSelected.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+			lblNumLabelsSelected.AutoSize = true;
+			lblNumLabelsSelected.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point);
+			lblNumLabelsSelected.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			lblNumLabelsSelected.Location = new System.Drawing.Point(55, 325);
+			lblNumLabelsSelected.Name = "lblNumLabelsSelected";
+			lblNumLabelsSelected.Size = new System.Drawing.Size(83, 17);
+			lblNumLabelsSelected.TabIndex = 49;
+			lblNumLabelsSelected.Text = "({0} selected)";
+			// 
 			// frmNewEntry
 			// 
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -571,5 +585,6 @@ namespace myNotebooks.subforms
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.Panel pnlEntryDates;
 		private System.Windows.Forms.Label label6;
+		private System.Windows.Forms.Label lblNumLabelsSelected;
 	}
 }
