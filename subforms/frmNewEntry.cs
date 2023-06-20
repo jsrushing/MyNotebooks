@@ -76,7 +76,6 @@ namespace myNotebooks.subforms
 					rtbNewEntry.Text = Entry.ClearText();
 				}
 
-				//LabelsManager.PopulateLabelsList(clbLabels);
 				LabelsManager.CheckedLabels_Set(clbLabels, Entry);
 				lblNumLabelsSelected.Text = string.Format(LabelLabelsSelected, clbLabels.CheckedItems.Count);
 				rtbNewEntry.Focus();

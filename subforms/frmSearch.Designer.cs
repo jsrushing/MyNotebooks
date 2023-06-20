@@ -52,6 +52,8 @@ namespace myNotebooks.subforms
 			lstFoundEntries = new ListBox();
 			mnuEntryEditTop = new ContextMenuStrip(components);
 			mnuEntryEdit = new ToolStripMenuItem();
+			preserveOriginalTextToolStripMenuItem = new ToolStripMenuItem();
+			editOriginalTextToolStripMenuItem = new ToolStripMenuItem();
 			mnuDeleteEntry = new ToolStripMenuItem();
 			chkUseDateRange = new CheckBox();
 			chkUseDate = new CheckBox();
@@ -68,8 +70,6 @@ namespace myNotebooks.subforms
 			lblSelectionType = new Label();
 			label8 = new Label();
 			mnuEditEntry = new ToolStripMenuItem();
-			preserveOriginalTextToolStripMenuItem = new ToolStripMenuItem();
-			editOriginalTextToolStripMenuItem = new ToolStripMenuItem();
 			grpFindEntry.SuspendLayout();
 			pnlLabels_AndOr.SuspendLayout();
 			mnuEntryEditTop.SuspendLayout();
@@ -295,7 +295,20 @@ namespace myNotebooks.subforms
 			mnuEntryEdit.Name = "mnuEntryEdit";
 			mnuEntryEdit.Size = new System.Drawing.Size(180, 22);
 			mnuEntryEdit.Text = "Edit";
-			mnuEntryEdit.Click += this.mnuEditEntry_Click;
+			// 
+			// preserveOriginalTextToolStripMenuItem
+			// 
+			preserveOriginalTextToolStripMenuItem.Name = "preserveOriginalTextToolStripMenuItem";
+			preserveOriginalTextToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+			preserveOriginalTextToolStripMenuItem.Text = "Preserve Original Text";
+			preserveOriginalTextToolStripMenuItem.Click += this.mnuEditEntry_Click;
+			// 
+			// editOriginalTextToolStripMenuItem
+			// 
+			editOriginalTextToolStripMenuItem.Name = "editOriginalTextToolStripMenuItem";
+			editOriginalTextToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+			editOriginalTextToolStripMenuItem.Text = "Edit Original Text";
+			editOriginalTextToolStripMenuItem.Click += this.mnuEditEntry_Click;
 			// 
 			// mnuDeleteEntry
 			// 
@@ -458,20 +471,6 @@ namespace myNotebooks.subforms
 			mnuEditEntry.Name = "mnuEditEntry";
 			mnuEditEntry.Size = new System.Drawing.Size(32, 19);
 			mnuEditEntry.Text = "Edit Entry";
-			// 
-			// preserveOriginalTextToolStripMenuItem
-			// 
-			preserveOriginalTextToolStripMenuItem.Name = "preserveOriginalTextToolStripMenuItem";
-			preserveOriginalTextToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
-			preserveOriginalTextToolStripMenuItem.Text = "Preserve Original Text";
-			preserveOriginalTextToolStripMenuItem.Click += this.mnuEditEntry_Click;
-			// 
-			// editOriginalTextToolStripMenuItem
-			// 
-			editOriginalTextToolStripMenuItem.Name = "editOriginalTextToolStripMenuItem";
-			editOriginalTextToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
-			editOriginalTextToolStripMenuItem.Text = "Edit Original Text";
-			editOriginalTextToolStripMenuItem.Click += this.mnuEditEntry_Click;
 			// 
 			// frmSearch
 			// 
