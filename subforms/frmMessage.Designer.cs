@@ -110,7 +110,7 @@ namespace myNotebooks.subforms
 			// 
 			// btnNo2
 			// 
-			btnNo2.Location = new System.Drawing.Point(172, 4);
+			btnNo2.Location = new System.Drawing.Point(142, 4);
 			btnNo2.Name = "btnNo2";
 			btnNo2.Size = new System.Drawing.Size(75, 23);
 			btnNo2.TabIndex = 2;
@@ -120,7 +120,7 @@ namespace myNotebooks.subforms
 			// 
 			// btnYes2
 			// 
-			btnYes2.Location = new System.Drawing.Point(10, 4);
+			btnYes2.Location = new System.Drawing.Point(37, 4);
 			btnYes2.Name = "btnYes2";
 			btnYes2.Size = new System.Drawing.Size(75, 23);
 			btnYes2.TabIndex = 0;
@@ -140,7 +140,7 @@ namespace myNotebooks.subforms
 			// 
 			// btnCancel2
 			// 
-			btnCancel2.Location = new System.Drawing.Point(172, 4);
+			btnCancel2.Location = new System.Drawing.Point(142, 4);
 			btnCancel2.Name = "btnCancel2";
 			btnCancel2.Size = new System.Drawing.Size(75, 23);
 			btnCancel2.TabIndex = 2;
@@ -150,7 +150,7 @@ namespace myNotebooks.subforms
 			// 
 			// btnOk1
 			// 
-			btnOk1.Location = new System.Drawing.Point(10, 4);
+			btnOk1.Location = new System.Drawing.Point(37, 4);
 			btnOk1.Name = "btnOk1";
 			btnOk1.Size = new System.Drawing.Size(75, 23);
 			btnOk1.TabIndex = 0;

@@ -59,14 +59,14 @@ namespace myNotebooks.subforms
 			lblMessage.Height += msg.Length > 45 ? 10 : 0;
 
 
-			if(msg.Length > 45) { lblMessage.Height += 20; }
+			if (msg.Length > 45) { lblMessage.Height += 20; }
 
 			switch (opType)
 			{
 				case OperationType.DeleteEntry:
 				case OperationType.DeleteNotebook:
 					lblMessage.Text = opType == OperationType.DeleteNotebook ? "Delete notebook '" + msg + "'?" : "Delete entry '" + msg + "' ? ";
-					pnlYesNo.Top =lblMessage.Top + lblMessage.Height;
+					pnlYesNo.Top = lblMessage.Top + lblMessage.Height;
 					pnlYesNo.Visible = true;
 					this.AcceptButton = btnNo2;
 					shownPanel = pnlYesNo;
@@ -74,7 +74,7 @@ namespace myNotebooks.subforms
 					this.Height = pnlYesNo.Top + pnlYesNo.Height + 55;
 					break;
 				case OperationType.Message:
-					pnlOk.Top = lblMessage.Top + lblMessage.Height;	
+					pnlOk.Top = lblMessage.Top + lblMessage.Height;
 					pnlOk.Visible = true;
 					this.AcceptButton = btnOk2;
 					shownPanel = pnlOk;

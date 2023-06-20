@@ -14,9 +14,10 @@ namespace myNotebooks.subforms
 	public partial class frmSearch : Form
 	{
 		private Dictionary<string, int> journalBoundaries = new Dictionary<string, int>();
-		private List<int> threeSelections = new List<int>();
-		private bool IgnoreCheckChange = false;
-		private List<Entry> FoundEntries = new List<Entry>();
+		private List<int>				threeSelections = new List<int>();
+		private bool					IgnoreCheckChange = false;
+		private List<Entry>				FoundEntries = new List<Entry>();
+		public bool EntriesExported		{ get; private set; }
 
 		public frmSearch(Form parent)
 		{
@@ -34,6 +35,24 @@ namespace myNotebooks.subforms
 		}
 
 		private async void btnSearch_Click(object sender, EventArgs e) { await DoSearch(); }
+
+		private async void btnExportEntries_Click(object sender, EventArgs e)
+		{
+			using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "What's the new notebook name?", "", this))
+			{
+				frm.ShowDialog();
+
+				if (frm.ResultText != null && frm.ResultText.Length > 0)
+				{
+					Notebook nb = new Notebook(frm.ResultText);
+					FoundEntries.ForEach(e => e.NotebookName = frm.ResultText);
+					nb.Entries.AddRange(this.FoundEntries.ToArray());
+					nb.Settings = new NotebookSettings { AllowCloud = false };
+					await nb.Create();
+					EntriesExported = true;
+				}
+			}
+		}
 
 		private void btnSelectNotebooks_Click(object sender, EventArgs e)
 		{
@@ -74,6 +93,7 @@ namespace myNotebooks.subforms
 			}
 
 			if (lstFoundEntries.Items.Count == 0) { lstFoundEntries.Items.Add("no matches found"); }
+			btnExportEntries.Visible = lstFoundEntries.Items.Count > 0;
 			lblSeparator.Visible = true;
 			this.Cursor = Cursors.Default;
 		}
@@ -166,9 +186,9 @@ namespace myNotebooks.subforms
 			Entry fe = lstFoundEntries.SelectedIndex == 0 ? FoundEntries[0] : FoundEntries[lstFoundEntries.SelectedIndex / 4];
 			Notebook nb = new Notebook(fe.ClearNotebookName()).Open();
 
-			using (frmNewEntry frm = new frmNewEntry(this, nb.Open(), fe)) 
+			using (frmNewEntry frm = new frmNewEntry(this, nb.Open(), fe))
 			{
-				frm.ShowDialog(); 
+				frm.ShowDialog();
 
 				if (frm.Saved)
 				{
@@ -200,7 +220,7 @@ namespace myNotebooks.subforms
 						var cnt = nb.Entries.Count;
 						nb.Entries.Remove(nb.Entries.Single(e2 => e2.Id == fe.Id));
 
-						while(nb.Entries.Count == cnt) { }
+						while (nb.Entries.Count == cnt) { }
 
 						if (nb.Entries.Count == cnt - 1)
 						{

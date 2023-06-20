@@ -753,9 +753,15 @@ namespace myNotebooks.subforms
 		{
 			using (frmSearch frm = new frmSearch(this))
 			{
-				try { frm.ShowDialog(); }
+				try { frm.ShowDialog(); if(frm.EntriesExported) { LoadNotebooks(); }
+}
 				catch (Exception ex)
-				{ using (frmMessage frmMsg = new frmMessage(frmMessage.OperationType.Message, ex.Message, "An error occurred", this)) { frmMsg.ShowDialog(); } }
+				{
+					using (frmMessage frmMsg = new frmMessage(frmMessage.OperationType.Message, ex.Message, "An error occurred", this))
+					{ 
+						frmMsg.ShowDialog(); 
+					}
+				}
 			}
 		}
 
