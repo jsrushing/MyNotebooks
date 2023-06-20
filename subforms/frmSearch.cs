@@ -172,7 +172,7 @@ namespace myNotebooks.subforms
 
 				if (frm.Saved)
 				{
-					await nb.Save();
+					//await nb.Save();
 					var indx = lstFoundEntries.SelectedIndex;
 					await DoSearch();
 					lstFoundEntries.SelectedIndex = indx;

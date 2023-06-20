@@ -208,6 +208,7 @@ namespace myNotebooks.subforms
 			{
 				Entry newEntry = new Entry(txtNewEntryTitle.Text.Trim(), rtbNewEntry.Text.Trim(), rtbNewEntry.Rtf, LabelsManager.CheckedLabels_Get(clbLabels), CurrentNotebook.Name);
 				if (Entry == null) { CurrentNotebook.AddEntry(newEntry); } else { CurrentNotebook.ReplaceEntry(Entry, newEntry); }
+				await CurrentNotebook.Save();
 				Entry = newEntry;
 				Saved = true;
 				SetIsDirty(false);	
