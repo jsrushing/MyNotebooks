@@ -190,6 +190,7 @@ namespace myNotebooks.subforms
 			var closeParen = txtNewEntryTitle.Text.IndexOf(")");
 			var possibleDate = string.Empty;
 			var processEntry = true;
+			this.Cursor = Cursors.WaitCursor;
 
 			if (openParen > -1 && openParen - closeParen == 17)
 			{
@@ -213,6 +214,8 @@ namespace myNotebooks.subforms
 				Saved = true;
 				SetIsDirty(false);	
 			}
+
+			this.Cursor = Cursors.Default;
 		}
 
 		private void		SetIsDirty(bool dirty)

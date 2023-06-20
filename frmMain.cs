@@ -620,7 +620,7 @@ namespace myNotebooks.subforms
 				if (frm.Saved)
 				{
 					CurrentEntry = frm.Entry;
-					await CurrentNotebook.Save();
+					//await CurrentNotebook.Save();
 					await ProcessDateFilters();
 					var v = lstEntries.Items.OfType<string>().FirstOrDefault(e => e.StartsWith(CurrentEntry.ClearTitle()));
 					lstEntries.SelectedIndex = lstEntries.Items.IndexOf(v);

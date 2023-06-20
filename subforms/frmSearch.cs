@@ -163,19 +163,22 @@ namespace myNotebooks.subforms
 		private async void mnuEditEntry_Click(object sender, EventArgs e)
 		{
 			this.Cursor = Cursors.WaitCursor;
+			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
 			Entry fe = lstFoundEntries.SelectedIndex == 0 ? FoundEntries[0] : FoundEntries[lstFoundEntries.SelectedIndex / 4];
 			Notebook nb = new Notebook(fe.ClearNotebookName()).Open();
 
-			using (frmNewEntry frm = new frmNewEntry(this, nb.Open(), fe)) 
+			using (frmNewEntry frm = new frmNewEntry(this, nb.Open(), fe, mnu.Text.ToLower().StartsWith("preserve")))
 			{
-				frm.ShowDialog(); 
+				frm.ShowDialog();
 
 				if (frm.Saved)
 				{
-					//await nb.Save();
 					var indx = lstFoundEntries.SelectedIndex;
+					var cnt = lstFoundEntries.Items.Count;
 					await DoSearch();
-					lstFoundEntries.SelectedIndex = indx;
+					if (lstFoundEntries.Items.Count.Equals(cnt))
+					{ lstFoundEntries.SelectedIndex = indx; }
+					else { lstFoundEntries.SelectedIndex = -1; }
 				}
 			}
 
@@ -200,7 +203,7 @@ namespace myNotebooks.subforms
 						var cnt = nb.Entries.Count;
 						nb.Entries.Remove(nb.Entries.Single(e2 => e2.Id == fe.Id));
 
-						while(nb.Entries.Count == cnt) { }
+						while (nb.Entries.Count == cnt) { }
 
 						if (nb.Entries.Count == cnt - 1)
 						{
