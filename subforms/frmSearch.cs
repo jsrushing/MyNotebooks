@@ -164,12 +164,15 @@ namespace myNotebooks.subforms
 		{
 			this.Cursor = Cursors.WaitCursor;
 			Entry fe = lstFoundEntries.SelectedIndex == 0 ? FoundEntries[0] : FoundEntries[lstFoundEntries.SelectedIndex / 4];
-			using (frmNewEntry frm = new frmNewEntry(this, new Notebook(fe.ClearNotebookName()).Open(), fe)) 
-			{ 
+			Notebook nb = new Notebook(fe.ClearNotebookName()).Open();
+
+			using (frmNewEntry frm = new frmNewEntry(this, nb.Open(), fe)) 
+			{
 				frm.ShowDialog(); 
 
 				if (frm.Saved)
 				{
+					await nb.Save();
 					var indx = lstFoundEntries.SelectedIndex;
 					await DoSearch();
 					lstFoundEntries.SelectedIndex = indx;

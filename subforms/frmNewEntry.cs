@@ -206,7 +206,6 @@ namespace myNotebooks.subforms
 
 			if (processEntry)
 			{
-				//var title = Utilities.GetTitleAndDate(txtNewEntryTitle.Text)[0];
 				Entry newEntry = new Entry(txtNewEntryTitle.Text.Trim(), rtbNewEntry.Text.Trim(), rtbNewEntry.Rtf, LabelsManager.CheckedLabels_Get(clbLabels), CurrentNotebook.Name);
 				if (Entry == null) { CurrentNotebook.AddEntry(newEntry); } else { CurrentNotebook.ReplaceEntry(Entry, newEntry); }
 				Entry = newEntry;

@@ -537,8 +537,9 @@ namespace myNotebooks.subforms
 			{
 				lb.SelectedIndexChanged -= new System.EventHandler(this.lstEntries_SelectEntry);
 				CurrentEntry = Entry.Select(rtb, lb, CurrentNotebook, FirstSelection, null, true);
+				Entry createdEntry = CurrentNotebook.Entries.First(e => e.ClearTitle().Equals("created") & e.ClearText().Equals("-"));
 
-				if (CurrentEntry != null)
+				if (CurrentEntry != null && !CurrentEntry.Id.Equals(createdEntry.Id))	// Disallow modification of the 'created' entry.
 				{
 					FirstSelection = false;
 					lblSelectionType.Visible = rtb.Text.Length > 0;
