@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Encryption;
 using myNotebooks.objects;
 
 namespace myNotebooks.subforms
@@ -18,7 +19,7 @@ namespace myNotebooks.subforms
 		private bool IgnoreCheckChange = false;
 		private List<Entry> FoundEntries = new List<Entry>();
 		private string LabelEntriesFoundText = "{0} entries found";
-		public bool EntriesExported { get; private set; }
+		public string NotebookName { get; private set; }
 
 		public frmSearch(Form parent)
 		{
@@ -39,18 +40,19 @@ namespace myNotebooks.subforms
 
 		private async void btnExportEntries_Click(object sender, EventArgs e)
 		{
-			using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "What's the new notebook name?", "", this))
+			using (frmNewNotebook frm = new frmNewNotebook(this))
 			{
 				frm.ShowDialog();
-
-				if (frm.ResultText != null && frm.ResultText.Length > 0)
+				  
+				if(frm.Notebook.Name.Length > 0)
 				{
-					Notebook nb = new Notebook(frm.ResultText);
-					FoundEntries.ForEach(e => e.NotebookName = frm.ResultText);
-					nb.Entries.AddRange(this.FoundEntries.ToArray());
-					nb.Settings = new NotebookSettings { AllowCloud = false };
-					await nb.Create();
-					EntriesExported = true;
+					Notebook nb = frm.Notebook;
+					FoundEntries.ForEach(e => e.NotebookName = frm.Notebook.Name);
+					await nb.Create(false);
+					nb.Entries.AddRange(FoundEntries);
+					await nb.Save();
+					NotebookName = nb.Name;
+					using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.Message, "The notebook '" + NotebookName + "' was created.", "", this)) { frm2.ShowDialog(); }
 				}
 			}
 		}

@@ -532,14 +532,22 @@ namespace myNotebooks.subforms
 		{
 			ListBox lb = (ListBox)sender;
 			RichTextBox rtb = rtbSelectedEntry;
+			Entry createdEntry = null;
 
 			if (lb.SelectedIndex > -1)
 			{
 				lb.SelectedIndexChanged -= new System.EventHandler(this.lstEntries_SelectEntry);
 				CurrentEntry = Entry.Select(rtb, lb, CurrentNotebook, FirstSelection, null, true);
-				Entry createdEntry = CurrentNotebook.Entries.First(e => e.ClearTitle().Equals("created") & e.ClearText().Equals("-"));
 
-				if (CurrentEntry != null && !CurrentEntry.Id.Equals(createdEntry.Id))	// Disallow modification of the 'created' entry.
+				try
+				{
+					createdEntry = CurrentNotebook.Entries.First(e => e.ClearTitle().Equals("created") & e.ClearText().Equals("-"));
+				}
+				catch(Exception ex) { }
+
+				var currentId  = createdEntry != null ? createdEntry.Id : "";
+
+				if (CurrentEntry != null && !CurrentEntry.Id.Equals(currentId))	// Disallow modification of the 'created' entry.
 				{
 					FirstSelection = false;
 					lblSelectionType.Visible = rtb.Text.Length > 0;
@@ -752,14 +760,15 @@ namespace myNotebooks.subforms
 		{
 			using (frmSearch frm = new frmSearch(this))
 			{
-				try { frm.ShowDialog(); if(frm.EntriesExported) { LoadNotebooks(); }
-}
+				try 
+				{ 
+					frm.ShowDialog();
+					if (frm.NotebookName != null && frm.NotebookName.Length > 0) { LoadNotebooks(); }
+				}
 				catch (Exception ex)
 				{
 					using (frmMessage frmMsg = new frmMessage(frmMessage.OperationType.Message, ex.Message, "An error occurred", this))
-					{ 
-						frmMsg.ShowDialog(); 
-					}
+					{ frmMsg.ShowDialog(); }
 				}
 			}
 		}

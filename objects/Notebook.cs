@@ -88,10 +88,10 @@ namespace myNotebooks
 			catch (Exception) { }
 		}
 
-		public async Task Create()
+		public async Task Create(bool addCreatedOn = true)
         {
 			this.FileName += this.Settings.AllowCloud ? "" : " (local)";
-			Entries.Add(new Entry("created", "-", "-", "", this.Name));
+			if(addCreatedOn) Entries.Add(new Entry("created", "-", "-", "", this.Name));
 			Program.SkipFileSizeComparison = true;
 			await this.Save();
 			Program.SkipFileSizeComparison = false;

@@ -23,29 +23,8 @@ namespace myNotebooks.subforms
 		{
 			InitializeComponent();
 
-			if (Program.DictCheckedNotebooks.Count > 0)
-			{ PopulateNotebooksList(true, false, false); }
+			if (Program.DictCheckedNotebooks.Count > 0) { PopulateNotebooksList(true, false, false); }
 			else { PopulateNotebooksList(false, false, true); }
-
-			//foreach (Notebook j in Program.AllNotebooks)
-			//{
-			//	if (Program.DictCheckedNotebooks.ContainsKey(j.Name))
-			//	{
-			//		if (Program.DictCheckedNotebooks[j.Name].Length > 0)
-			//		{
-			//			lstJournalPINs.Items.Add(j.Name + " (****)");
-			//			dictNotebooksAndPINs.Add(j.Name, Program.DictCheckedNotebooks[j.Name]);
-			//		}
-			//		else
-			//		{
-			//			lstJournalPINs.Items.Add(j.Name);
-			//			dictNotebooksAndPINs.Add(j.Name, "");
-			//		}
-
-			//		lstJournalPINs.SetItemChecked(lstJournalPINs.Items.Count - 1, true);
-			//	}
-			//	else { lstJournalPINs.Items.Add(j.Name); }
-			//}
 
 			Utilities.SetStartPosition(this, parent);
 			label1.Text = "Specify a PIN for any protected notebooks." + Environment.NewLine + "To remove a PIN, add a blank value.";
@@ -73,7 +52,7 @@ namespace myNotebooks.subforms
 						else { lstJournalPINs.Items[newentry] = name; }
 					}
 				}
-				catch (Exception ex) { using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, ex.Message, "Error", this)) ; }
+				catch (Exception ex) { using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, ex.Message, "Error", this)) { frm.ShowDialog(); } }
 			}
 		}
 
@@ -185,7 +164,7 @@ namespace myNotebooks.subforms
 				foreach (var name in Program.AllNotebookNames.Except(Program.DictCheckedNotebooks.Keys)) { lstJournalPINs.Items.Add($"{name}"); }
 			}
 
-			AddHasPINIndicators();
+			await AddHasPINIndicators();
 		}
 
 		private void PopulateCheckedItems()

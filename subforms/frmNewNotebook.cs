@@ -10,15 +10,22 @@ namespace myNotebooks.subforms
 	public partial class frmNewNotebook : Form
 	{
 		public Notebook Notebook { get; private set; }
-		public NotebookSettings Settings { get; private set; }
 
 		public frmNewNotebook(Form parent)
 		{
 			InitializeComponent();
 			Utilities.SetStartPosition(this, parent);
 			this.Notebook = new Notebook();
-			this.Settings = new NotebookSettings { IfCloudOnly_Download = true, IfLocalOnly_Upload = true, AllowCloud = true };
-			this.Notebook.Settings = this.Settings;
+			Notebook.Settings = new NotebookSettings { IfCloudOnly_Download = true, IfLocalOnly_Upload = true, AllowCloud = true };
+		}
+
+		private void btnSettings_Click(object sender, EventArgs e)
+		{
+			if (txtName.Text.Length > 0)
+			{
+				Notebook.Name = txtName.Text;
+				using (frmNotebookSettings nbs = new frmNotebookSettings(Notebook, this, false)) { nbs.ShowDialog(); }
+			}
 		}
 
 		private void frmNewJournal_Load(object sender, EventArgs e) { this.Size = this.MinimumSize; }
@@ -39,7 +46,9 @@ namespace myNotebooks.subforms
 			}
 			else
 			{
-				this.Notebook.Name = txtName.Text;
+				NotebookSettings nbs = Notebook.Settings;
+				this.Notebook = new Notebook(txtName.Text);
+				Notebook.Settings = nbs;
 				Program.PIN = txtPIN.Text;
 				this.Hide();
 			}
@@ -67,17 +76,6 @@ namespace myNotebooks.subforms
 				txtName.Focus();
 			}
 
-		}
-
-		private void btnSettings_Click(object sender, EventArgs e)
-		{
-			if (txtName.Text.Length > 0)
-			{
-				//Notebook = new Notebook(txtName.Text);
-				//{ Notebook.Settings = this.Settings; }
-				using (frmNotebookSettings nbs = new frmNotebookSettings(Notebook, this, false)) { nbs.ShowDialog(); }
-				this.Settings = Notebook.Settings;
-			}
 		}
 	}
 }
