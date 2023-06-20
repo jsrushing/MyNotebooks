@@ -14,10 +14,11 @@ namespace myNotebooks.subforms
 	public partial class frmSearch : Form
 	{
 		private Dictionary<string, int> journalBoundaries = new Dictionary<string, int>();
-		private List<int>				threeSelections = new List<int>();
-		private bool					IgnoreCheckChange = false;
-		private List<Entry>				FoundEntries = new List<Entry>();
-		public bool EntriesExported		{ get; private set; }
+		private List<int> threeSelections = new List<int>();
+		private bool IgnoreCheckChange = false;
+		private List<Entry> FoundEntries = new List<Entry>();
+		private string LabelEntriesFoundText = "{0} entries found";
+		public bool EntriesExported { get; private set; }
 
 		public frmSearch(Form parent)
 		{
@@ -93,7 +94,9 @@ namespace myNotebooks.subforms
 			}
 
 			if (lstFoundEntries.Items.Count == 0) { lstFoundEntries.Items.Add("no matches found"); }
-			btnExportEntries.Visible = lstFoundEntries.Items.Count > 0;
+			btnExportEntries.Visible = lstFoundEntries.Items.Count > 1;
+			lblNumEntriesFound.Visible = btnExportEntries.Visible;
+			lblNumEntriesFound.Text = string.Format(this.LabelEntriesFoundText, lstFoundEntries.Items.Count / 4);
 			lblSeparator.Visible = true;
 			this.Cursor = Cursors.Default;
 		}
@@ -185,8 +188,9 @@ namespace myNotebooks.subforms
 			this.Cursor = Cursors.WaitCursor;
 			Entry fe = lstFoundEntries.SelectedIndex == 0 ? FoundEntries[0] : FoundEntries[lstFoundEntries.SelectedIndex / 4];
 			Notebook nb = new Notebook(fe.ClearNotebookName()).Open();
+			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
 
-			using (frmNewEntry frm = new frmNewEntry(this, nb.Open(), fe))
+			using (frmNewEntry frm = new frmNewEntry(this, nb.Open(), fe, mnu.Text.ToLower().StartsWith("preserve")))
 			{
 				frm.ShowDialog();
 

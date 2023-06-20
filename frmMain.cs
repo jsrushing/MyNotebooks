@@ -609,7 +609,6 @@ namespace myNotebooks.subforms
 		private async void mnuEntryEdit_Click(object sender, EventArgs e)
 		{
 			this.Cursor = Cursors.WaitCursor;
-
 			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
 
 			using (frmNewEntry frm = new frmNewEntry(this, CurrentNotebook, CurrentEntry, mnu.Text.ToLower().StartsWith("preserve")))

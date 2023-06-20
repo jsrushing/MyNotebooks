@@ -34,6 +34,7 @@ namespace myNotebooks.subforms
 			components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSearch));
 			grpFindEntry = new GroupBox();
+			lblNumEntriesFound = new Label();
 			btnExportEntries = new Button();
 			btnSearch = new Button();
 			lstEntryObjects = new ListBox();
@@ -67,6 +68,8 @@ namespace myNotebooks.subforms
 			lblSelectionType = new Label();
 			label8 = new Label();
 			mnuEditEntry = new ToolStripMenuItem();
+			preserveOriginalTextToolStripMenuItem = new ToolStripMenuItem();
+			editOriginalTextToolStripMenuItem = new ToolStripMenuItem();
 			grpFindEntry.SuspendLayout();
 			pnlLabels_AndOr.SuspendLayout();
 			mnuEntryEditTop.SuspendLayout();
@@ -75,6 +78,7 @@ namespace myNotebooks.subforms
 			// grpFindEntry
 			// 
 			grpFindEntry.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+			grpFindEntry.Controls.Add(lblNumEntriesFound);
 			grpFindEntry.Controls.Add(btnExportEntries);
 			grpFindEntry.Controls.Add(btnSearch);
 			grpFindEntry.Controls.Add(lstEntryObjects);
@@ -108,6 +112,17 @@ namespace myNotebooks.subforms
 			grpFindEntry.TabIndex = 7;
 			grpFindEntry.TabStop = false;
 			// 
+			// lblNumEntriesFound
+			// 
+			lblNumEntriesFound.AutoSize = true;
+			lblNumEntriesFound.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+			lblNumEntriesFound.Location = new System.Drawing.Point(569, 158);
+			lblNumEntriesFound.Name = "lblNumEntriesFound";
+			lblNumEntriesFound.Size = new System.Drawing.Size(94, 15);
+			lblNumEntriesFound.TabIndex = 52;
+			lblNumEntriesFound.Text = "{0} entries found";
+			lblNumEntriesFound.Visible = false;
+			// 
 			// btnExportEntries
 			// 
 			btnExportEntries.Location = new System.Drawing.Point(465, 14);
@@ -121,7 +136,7 @@ namespace myNotebooks.subforms
 			// 
 			// btnSearch
 			// 
-			btnSearch.Location = new System.Drawing.Point(488, 133);
+			btnSearch.Location = new System.Drawing.Point(467, 124);
 			btnSearch.Name = "btnSearch";
 			btnSearch.Size = new System.Drawing.Size(127, 23);
 			btnSearch.TabIndex = 43;
@@ -133,7 +148,7 @@ namespace myNotebooks.subforms
 			// 
 			lstEntryObjects.FormattingEnabled = true;
 			lstEntryObjects.ItemHeight = 15;
-			lstEntryObjects.Location = new System.Drawing.Point(557, 121);
+			lstEntryObjects.Location = new System.Drawing.Point(636, 121);
 			lstEntryObjects.Name = "lstEntryObjects";
 			lstEntryObjects.Size = new System.Drawing.Size(120, 34);
 			lstEntryObjects.TabIndex = 50;
@@ -272,19 +287,20 @@ namespace myNotebooks.subforms
 			// 
 			mnuEntryEditTop.Items.AddRange(new ToolStripItem[] { mnuEntryEdit, mnuDeleteEntry });
 			mnuEntryEditTop.Name = "mnuEntryEditTop";
-			mnuEntryEditTop.Size = new System.Drawing.Size(108, 48);
+			mnuEntryEditTop.Size = new System.Drawing.Size(181, 70);
 			// 
 			// mnuEntryEdit
 			// 
+			mnuEntryEdit.DropDownItems.AddRange(new ToolStripItem[] { preserveOriginalTextToolStripMenuItem, editOriginalTextToolStripMenuItem });
 			mnuEntryEdit.Name = "mnuEntryEdit";
-			mnuEntryEdit.Size = new System.Drawing.Size(107, 22);
+			mnuEntryEdit.Size = new System.Drawing.Size(180, 22);
 			mnuEntryEdit.Text = "Edit";
 			mnuEntryEdit.Click += this.mnuEditEntry_Click;
 			// 
 			// mnuDeleteEntry
 			// 
 			mnuDeleteEntry.Name = "mnuDeleteEntry";
-			mnuDeleteEntry.Size = new System.Drawing.Size(107, 22);
+			mnuDeleteEntry.Size = new System.Drawing.Size(180, 22);
 			mnuDeleteEntry.Text = "Delete";
 			mnuDeleteEntry.Click += this.mnuDeleteEntry_Click;
 			// 
@@ -443,6 +459,20 @@ namespace myNotebooks.subforms
 			mnuEditEntry.Size = new System.Drawing.Size(32, 19);
 			mnuEditEntry.Text = "Edit Entry";
 			// 
+			// preserveOriginalTextToolStripMenuItem
+			// 
+			preserveOriginalTextToolStripMenuItem.Name = "preserveOriginalTextToolStripMenuItem";
+			preserveOriginalTextToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+			preserveOriginalTextToolStripMenuItem.Text = "Preserve Original Text";
+			preserveOriginalTextToolStripMenuItem.Click += this.mnuEditEntry_Click;
+			// 
+			// editOriginalTextToolStripMenuItem
+			// 
+			editOriginalTextToolStripMenuItem.Name = "editOriginalTextToolStripMenuItem";
+			editOriginalTextToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+			editOriginalTextToolStripMenuItem.Text = "Edit Original Text";
+			editOriginalTextToolStripMenuItem.Click += this.mnuEditEntry_Click;
+			// 
 			// frmSearch
 			// 
 			AcceptButton = btnSearch;
@@ -497,5 +527,8 @@ namespace myNotebooks.subforms
 		private ToolStripMenuItem mnuEditEntry;
 		private ToolStripMenuItem mnuDeleteEntry;
 		private Button btnExportEntries;
+		private Label lblNumEntriesFound;
+		private ToolStripMenuItem preserveOriginalTextToolStripMenuItem;
+		private ToolStripMenuItem editOriginalTextToolStripMenuItem;
 	}
 }

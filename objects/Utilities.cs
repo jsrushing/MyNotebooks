@@ -178,11 +178,7 @@ namespace myNotebooks.objects
 			foreach (Entry je in tmpEntries)
 			{
 				var synopsis = je.GetSynopsis(includeJrnlName, maxWidth);
-
-				for(int i = 0; i < synopsis.Length; i++) 
-				{ 
-					lbxToPopulate.Items.Add(synopsis[i]);
-				} 
+				for(int i = 0; i < synopsis.Length; i++) { lbxToPopulate.Items.Add(synopsis[i]); } 
 			}
 		}
 
@@ -200,9 +196,7 @@ namespace myNotebooks.objects
 		}
 
 		public static void SetProgramPIN(string j)
-		{
-			Program.PIN = Program.DictCheckedNotebooks[j] == "" ? "" : Program.DictCheckedNotebooks[j];
-		}
+		{ Program.PIN = Program.DictCheckedNotebooks[j] == "" ? "" : Program.DictCheckedNotebooks[j]; }
 
 		public static void SetStartPosition(Form formToInitialize, Form parentForm)
 		{ 
