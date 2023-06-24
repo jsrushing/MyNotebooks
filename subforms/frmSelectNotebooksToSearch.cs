@@ -19,15 +19,17 @@ namespace myNotebooks.subforms
 		//private Dictionary<string, string> dictCheckedItems = new Dictionary<string, string>();
 		private const string ShowMoreString = "(show more)";
 
-		public frmSelectNotebooksToSearch(Form parent)
+		public frmSelectNotebooksToSearch(Form parent, string userMessage = "")
 		{
 			InitializeComponent();
+			lblUserPrompt.Text = userMessage.Length > 0 ? userMessage : "Specify a PIN for any protected notebooks." + Environment.NewLine + "To remove a PIN, add a blank value.";
 
 			if (Program.DictCheckedNotebooks.Count > 0) { PopulateNotebooksList(true, false, false); }
 			else { PopulateNotebooksList(false, false, true); }
 
+			//if (parent != null) { lstJournalPINs.SetItemChecked(lstJournalPINs.Items.IndexOf(parent.Name), true); }
+
 			Utilities.SetStartPosition(this, parent);
-			label1.Text = "Specify a PIN for any protected notebooks." + Environment.NewLine + "To remove a PIN, add a blank value.";
 		}
 
 		private async Task AddHasPINIndicators()
@@ -80,10 +82,7 @@ namespace myNotebooks.subforms
 		{
 			string[] checkedItems = lstJournalPINs.CheckedItems.OfType<string>().ToArray();
 
-
-
 			for (var i = 0; i < checkedItems.Length; i++) { checkedItems[i] = Scrubbed(checkedItems[i]); }
-			//Dictionary<string, string> tmpDict = dictNotebooksAndPINs;
 
 			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedNotebooks)
 			{ if (!checkedItems.Contains(kvp.Key)) { Program.DictCheckedNotebooks.Remove(kvp.Key); } }
@@ -93,8 +92,6 @@ namespace myNotebooks.subforms
 				if (!Program.DictCheckedNotebooks.ContainsKey(Scrubbed(item)))
 				{ Program.DictCheckedNotebooks.Add(Scrubbed(item), ""); }
 			}
-
-			//Program.DictCheckedNotebooks = dictNotebooksAndPINs;
 			this.Hide();
 		}
 
@@ -149,10 +146,7 @@ namespace myNotebooks.subforms
 			if (showAll)
 			{
 				await Utilities.PopulateAllNotebookNames();
-
-				//lstJournalPINs.Items.AddRange(Program.AllNotebookNames)
-
-				foreach (var notebookName in Program.AllNotebookNames) { lstJournalPINs.Items.Add(notebookName); }
+				lstJournalPINs.Items.AddRange(Program.AllNotebookNames.ToArray());
 			}
 
 			if (populateWithCheckedJournals) { PopulateCheckedItems(); }

@@ -6,6 +6,7 @@ using System.Configuration;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Encryption;
 using myNotebooks.objects;
 
 namespace myNotebooks.subforms
@@ -28,10 +29,10 @@ namespace myNotebooks.subforms
 		public frmNewEntry(Form parent, Notebook notebook, Entry entryToEdit = null, bool disallowOriginalTextEdit = false)
 		{
 			InitializeComponent();
-			Entry = entryToEdit;
-			IsEdit = Entry != null;
-			PreserveOriginalText = disallowOriginalTextEdit;
-			CurrentNotebook = notebook;
+			Entry					= entryToEdit;
+			IsEdit					= Entry != null;
+			PreserveOriginalText	= disallowOriginalTextEdit;
+			CurrentNotebook			= notebook;
 			Utilities.SetStartPosition(this, parent);
 		}
 
@@ -212,9 +213,21 @@ namespace myNotebooks.subforms
 
 			if (processEntry)
 			{
-				Entry newEntry = new Entry(txtNewEntryTitle.Text.Trim(), rtbNewEntry.Text.Trim(), rtbNewEntry.Rtf, LabelsManager.CheckedLabels_Get(clbLabels), CurrentNotebook.Name);
-				if (Entry == null) { CurrentNotebook.AddEntry(newEntry); } else { CurrentNotebook.ReplaceEntry(Entry, newEntry); }
-				Entry = newEntry;
+				if(this.Entry != null)
+				{
+					this.Entry.Text = rtbNewEntry.Text.Trim();  //  EncryptDecrypt.Encrypt(rtbNewEntry.Text.Trim());
+					this.Entry.Title = txtNewEntryTitle.Text.Trim();    // EncryptDecrypt.Encrypt(txtNewEntryTitle.Text.Trim());
+					this.Entry.Labels = LabelsManager.CheckedLabels_Get(clbLabels);
+					// can't set RTF ... fix it
+					Entry.LastEditedOn = DateTime.Now;
+				}
+				else
+				{
+					Entry newEntry = new Entry(txtNewEntryTitle.Text.Trim(), rtbNewEntry.Text.Trim(), rtbNewEntry.Rtf, LabelsManager.CheckedLabels_Get(clbLabels), CurrentNotebook.Name);
+					if (Entry == null) { CurrentNotebook.AddEntry(newEntry); } else { CurrentNotebook.ReplaceEntry(Entry, newEntry); }
+					Entry = newEntry;
+				}
+
 				Saved = true;
 				SetIsDirty(false);
 			}

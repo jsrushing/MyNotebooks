@@ -1,0 +1,7 @@
+1) Get labels in the notebook to delete.
+2) If there are any, Get checked notebooks.
+	Else <offer user the frmNotebooksToSearch UI>
+3) If there are any,
+	4) Iterate the list found in 1) and ...
+	5) Iterate checked notebooks, deleting label in each.
+

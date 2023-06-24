@@ -14,6 +14,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Encryption;
+using MailKit.Net.Imap;
 using myNotebooks.objects;
 using myNotebooks.subforms;
 
@@ -28,7 +29,7 @@ namespace myNotebooks
 		public List<Entry>			Entries = new List<Entry>();
 		public string root			= "notebooks\\";
 		public NotebookSettings		Settings;
-
+		//Form						Parent = null;
 		public bool BackupCompleted { get; private set; }
 
 		//public Notebook(myJournal.Journal journal)
@@ -52,7 +53,7 @@ namespace myNotebooks
 		//	Program.PIN = "";
 		//}
 
-		public Notebook(string _name = null, string _fileName = null) 
+		public Notebook(string _name = null, string _fileName = null, Form thisParent = null) 
         {
             if(_name != null)
             {
@@ -60,6 +61,7 @@ namespace myNotebooks
 				if (_fileName != null) { this.FileName = _fileName; } 
 				else { this.FileName = Program.AppRoot + this.root + this.Name; }
 			}
+				//this.Parent = thisParent;
 		}
 
 		public void AddEntry(Entry entryToAdd) { Entries.Add(entryToAdd); }
@@ -102,8 +104,36 @@ namespace myNotebooks
 			if (this.Settings.AllowCloud)
 			{ await AzureFileClient.DownloadOrDeleteFile(this.FileName, Program.AzurePassword + this.Name, FileMode.Create, true);  }
 
-			DeleteBackups();
-			File.Delete(this.FileName);
+			Program.DictCheckedNotebooks.Add(this.Name, Program.PIN);
+			List<string> labelsInBook = this.GetAllLabelsInNotebook();
+			List<Notebook> chkdBooks = Utilities.GetCheckedNotebooks();
+			List<Notebook> booksWithLabel = new List<Notebook>();
+			var proceed = false;
+
+			foreach(var lbl in labelsInBook)
+			{	
+				booksWithLabel.AddRange(chkdBooks.Where(e => e.HasLabel(lbl) == true).ToList().Except(booksWithLabel));
+
+					//.Where(e => e.Entries.Where(x => string.Join(x.ClearLabels(), ",").Contains(lbl)).Any()));
+			}
+
+			if (booksWithLabel.Count > 0) {
+
+				//var checkedLabelsCount = Program.DictCheckedNotebooks.Count;
+
+				using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "This notebook contains " + labelsInBook.Count.ToString() + " labels. Do you want " +
+					"to delete th" + (labelsInBook.Count > 1 ? "is " : "ese ") + "label" + (labelsInBook.Count > 1 ? "s " : " ") + " in the " + booksWithLabel.Count().ToString()
+					+ " selected notebook "+ (labelsInBook.Count > 1 ? "s " : " ") + " in which the label " + (labelsInBook.Count > 1 ? "s " : " ") + (labelsInBook.Count > 1 ? "was " : "were ") + "found? " +
+					"If you need to re-select the notebook " + (labelsInBook.Count > 1 ? "s " : " ") + "in which the label will be deleted, click 'No', then the 'Labels' menu, then 'Select Notebooks'.")) 
+				{ frm.ShowDialog(); proceed = frm.Result == frmMessage.ReturnResult.Yes; }
+			}
+
+			if (proceed) 
+			{ 
+				foreach(var label in labelsInBook) { await LabelsManager.DeleteLabel(label, booksWithLabel); } 
+				File.Delete(this.FileName);
+				DeleteBackups();
+			}
 		}
 		
 		private void DeleteBackups()
@@ -135,6 +165,16 @@ namespace myNotebooks
 			return jeRtrn;
         }
 
+		public List<string> GetAllLabelsInNotebook()
+		{
+			List<string> lstRtrn = new List<string>();
+
+			foreach (Entry entry in this.Entries.Where(e => e.ClearLabels().Length > 0))
+			{ lstRtrn.AddRange(entry.ClearLabels().Split(",").Except(lstRtrn)); }
+
+			return lstRtrn;
+		}
+
 		public bool HasLabel(string Label) { return Entries.Where(e => e.ClearLabels().Contains(Label)).Any(); }
 
 		public Notebook Open(bool useFileName = false)
@@ -152,6 +192,7 @@ namespace myNotebooks
 						nbRtrn = (Notebook)formatter.Deserialize(stream);
 						nbRtrn.FileName = NotebookToOpen;
 						nbRtrn.Name = NotebookToOpen.Substring(NotebookToOpen.LastIndexOf("\\") + 1);
+						//nbRtrn.Parent = this.Parent;
 					}
 				}	
             }
@@ -302,6 +343,7 @@ namespace myNotebooks
 		public async Task Save(bool synchWithCloud = true)
 		{
 			this.LastSaved = DateTime.Now;
+			File.Delete(this.FileName);
 
 			using (Stream stream = File.Open(this.FileName, FileMode.Create))
 			{

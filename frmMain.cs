@@ -244,31 +244,11 @@ namespace myNotebooks.subforms
 			CheckForSystemDirectories();    // am I keeping system directories now that the cloud is working? Why or why not?
 
 			using (frmAzurePwd frm = new frmAzurePwd(this, frmAzurePwd.Mode.AskingForKey))
-			{
-				if (Program.AzurePassword.Length > 0)
-				{
-					frm.Close();
-					//CloudSynchronizer cs = new CloudSynchronizer();
-					//await cs.SynchWithCloud(true);
-
-					//if (this.Text.ToLower().Contains("debug"))
-					//{
-					//	StringBuilder title = new StringBuilder();
-					//	title.Append(" synchd: " + cs.NotebooksSynchd.ToString());
-					//	title.Append(" skipped: " + cs.NotebooksSkipped.ToString());
-					//	title.Append(" downloaded:" + cs.NotebooksDownloaded.ToString());
-					//	title.Append(" backed up:" + cs.NotebooksBackedUp.ToString());
-					//	title.Append(" deleted:" + cs.NotebooksDeleted.ToString());
-					//	this.Text += title.ToString();
-					//}
-				}
-
-			}
+			{ if (Program.AzurePassword.Length > 0) { frm.Close(); } }
 
 			//Program.AzurePassword = string.Empty;	// Kills the Azure synch process for debugging if desired.
 
 			pnlDateFilters.Left = pnlPin.Left - 11;
-			//LoadNotebooks();
 			ShowHideMenusAndControls(SelectionState.HideAll);
 			await Utilities.PopulateAllNotebookNames();
 
@@ -294,12 +274,12 @@ namespace myNotebooks.subforms
 
 		private async void btnLoadNotebook_Click(object sender, EventArgs e)
 		{
-			this.Cursor= Cursors.WaitCursor;
+			this.Cursor = Cursors.WaitCursor;
 			lstEntries.Items.Clear();
 			rtbSelectedEntry.Text = string.Empty;
 			Program.PIN = txtJournalPIN.Text;
 			lblWrongPin.Visible = false;
-			CurrentNotebook = new Notebook(ddlNotebooks.Text).Open();
+			CurrentNotebook = new Notebook(ddlNotebooks.Text, "", this).Open();
 			Program.AllNotebooks.Add(CurrentNotebook);
 			Program.AllNotebookNames.Add(CurrentNotebook.Name);
 
@@ -309,7 +289,7 @@ namespace myNotebooks.subforms
 				var nbName = CurrentNotebook.Name;
 				CloudSynchronizer cs = new CloudSynchronizer();
 				await cs.SynchWithCloud(false, CurrentNotebook);
-				Notebook curNotebook = new Notebook(nbName, nbPath).Open();
+				Notebook curNotebook = new Notebook(nbName, nbPath, this).Open();
 
 				if (curNotebook == null)    // the sync deleted the file
 				{ ddlNotebooks.Items.Remove(nbName); }
@@ -318,7 +298,7 @@ namespace myNotebooks.subforms
 
 			try
 			{
-				CurrentNotebook = new Notebook(ddlNotebooks.Text).Open();
+				CurrentNotebook = new Notebook(ddlNotebooks.Text, "", this).Open();
 				var wrongPIN = true;
 
 				if (CurrentNotebook != null)
@@ -682,7 +662,6 @@ namespace myNotebooks.subforms
 					lstEntries.Items.Clear();
 					ShowHideMenusAndControls(SelectionState.NotebookSelectedNotLoaded);
 					pnlDateFilters.Visible = false;
-					using (frmLabelsManager frm3 = new frmLabelsManager(this, true)) { frm3.ShowDialog(); }
 					await Utilities.PopulateAllNotebookNames();
 					CurrentNotebook = null;
 					LoadNotebooks();

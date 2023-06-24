@@ -34,16 +34,6 @@ namespace myNotebooks.objects
 			Program.AllNotebooks.Clear();
 			if(notebookNames == null) { await PopulateAllNotebookNames(); } else { await PopulateAllNotebookNames(notebookNames); }
 			foreach (var notebookName in Program.AllNotebookNames) { Program.AllNotebooks.Add(new Notebook(notebookName).Open()); }
-
-			//List<Notebook> nbReturn = new List<Notebook>();
-			//var sNotebooksFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"];
-
-			//Program.AllNotebookNames.Clear();
-			//Program.AllNotebookNames.AddRange(Directory.GetFiles(sNotebooksFolder));
-
-			//Program.AllNotebooks.Clear();
-			//foreach (var s in Directory.GetFiles(sNotebooksFolder)) { Program.AllNotebooks.Add(new Notebook(s.Replace(sNotebooksFolder, "")).Open()); }
-			//await PopulateAllNotebookNames();
 		}
 
 		// one-time code to convert Journal objects to Notebook objects
@@ -55,7 +45,7 @@ namespace myNotebooks.objects
 		//	return jrnlReturn;
 		//}
 
-		public static List<Notebook> CheckedNotebooks()
+		public static List<Notebook> GetCheckedNotebooks()
 		{
 			List<Notebook> rtrn = new List<Notebook>();
 

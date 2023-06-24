@@ -27,7 +27,7 @@ namespace myNotebooks
 		public string		NotebookName { get; set; }
 
 		private string		RTF;
-        private string		Labels;
+        public string		Labels;
 		public string		Title;
 		public bool			isEdited = false;
         public string		Id;
@@ -49,7 +49,8 @@ namespace myNotebooks
 
 		public Entry(string _title, string _text, string _RTF, string _labels, string _NotebookName = "", bool _edited = false)
         {
-			Date		= DateTime.Now;
+			if(Date == DateTime.MinValue) { Date = DateTime.Now; }
+
 			Text		= EncryptDecrypt.Encrypt(_text.Trim());
             Title		= EncryptDecrypt.Encrypt(_title.Trim());
 			RTF			= EncryptDecrypt.Encrypt(_RTF);

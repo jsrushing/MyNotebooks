@@ -1,0 +1,15 @@
+1) Publish NBooks to BasicPointIT.
+	done
+2) Get publish link working.
+	done, sort of. Publish.html looks great but 'Install' fails :(
+3) FTP?
+
+
+
+FTP
+user	  pwd
+jsr_FTP : jsrFTP1!
+
+mycPanel1!
+
+BasicPointit pwd : finallySome$1!

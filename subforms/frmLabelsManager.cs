@@ -2,9 +2,11 @@
  * 7/9/22
  */
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -29,23 +31,33 @@ namespace myNotebooks.subforms
 			DeletingOrphans = deleteOrphans;
 		}
 
-		private void		frmLabelsManager_Load(object sender, EventArgs e)
+		private async void		frmLabelsManager_Load(object sender, EventArgs e)
 		{
-			foreach (Control c in this.Controls) if (c.GetType() == typeof(Panel)) c.Location = new Point(0, 25);
-			ShowPanel(pnlMain);
-			ShowHideOccurrences();
-			this.GetSelectedNotebooks();
-			sort = LabelsManager.LabelsSortType.None;
-			lblSortType_Click(null, null);
-			pnlMain.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
-			lstLabels.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
-
 			if (DeletingOrphans)
-			{ mnuFindOrphans_Click(null, null); }
+			{ this.Visible = false; await ManageOrphans(); this.Close(); }
 			else
 			{
 				if (Program.DictCheckedNotebooks.Count == 0)
-				{ using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(this)) { frm.ShowDialog(); } }
+				{
+					var msg = "The labels in the deleted notebook will be deleted from all selected notebooks." + Environment.NewLine + "Specify a PIN for any protected notebooks you select.";
+					using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(this, msg)) { frm.ShowDialog(); } 
+				}
+
+				if(Program.DictCheckedNotebooks.Count == 0)
+				{
+					this.Close();
+				}
+				else
+				{
+					foreach (Control c in this.Controls) if (c.GetType() == typeof(Panel)) c.Location = new Point(0, 25);
+					ShowPanel(pnlMain);
+					ShowHideOccurrences();
+					this.GetSelectedNotebooks();
+					sort = LabelsManager.LabelsSortType.None;
+					lblSortType_Click(null, null);
+					pnlMain.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
+					lstLabels.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
+				}
 			}
 		}
 
@@ -113,7 +125,7 @@ namespace myNotebooks.subforms
 		private List<Notebook> GetSelectedNotebooks()
 		{
 			SelectedNotebooks.Clear();
-			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedNotebooks) { SelectedNotebooks.Add(new Notebook(kvp.Key).Open()); }
+			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedNotebooks) { SelectedNotebooks.Add(new Notebook(kvp.Key, "", this).Open()); }
 			return SelectedNotebooks;
 		}
 
@@ -217,6 +229,59 @@ namespace myNotebooks.subforms
 			else { mnuContextDelete_lstEntries.Visible = false; }
 		}
 
+		private async Task ManageOrphans()
+		{
+			//List<string> lstOrphans = LabelsManager.FindOrphansInSelectedNotebooks();
+
+			var label = lstLabels.Text;
+			List<Notebook> nbList = Utilities.GetCheckedNotebooks();
+			
+			List<Notebook> booksWithLabel = nbList.Where(c => c.HasLabel(label)).ToList();
+
+			foreach (Notebook nb in booksWithLabel) { await nb.DeleteLabelFromNotebook(label); }
+
+			//booksWithLabel.ForEach(b => b.DeleteLabelFromNotebook(label));	// How to await this call?
+
+			var sMsg = nbList.Count + " notebooks were scanned and the label '" + label + "' was found and deleted " ;
+
+
+			if (DeletingOrphans)
+			{
+				chkSelectAllOrphans.Checked = true;
+				await RemoveOrphans();
+				sMsg += " in all which were scanned. ";
+			}
+			else 
+			{ 
+				lstOrphanedLabels.Items.Clear();
+				lstOrphanedLabels.Items.Add(lstOrphanedLabels);
+				ShowPanel(pnlOrphanedLabels); 
+			}
+
+			if(!pnlOrphanedLabels.Visible) { ShowMessage(sMsg); this.Close(); }
+
+
+			//if (lstOrphans.Count > 0)
+			//{
+			//	lstOrphanedLabels.Items.AddRange(lstOrphans.ToArray());
+
+			//	if (DeletingOrphans)
+			//	{
+			//	}
+			//	else { ShowPanel(pnlOrphanedLabels); }
+			//}
+			//else
+			//{
+			//	if(!DeletingOrphans)
+			//	{
+			//		using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message,
+			//			"No orphaned labels were found.", Application.ProductName, this)) { frm.ShowDialog(); }
+			//	}
+			//}
+
+			//if (DeletingOrphans) { this.Close(); }
+		}
+
 		private async void	MenuMove(object sender, EventArgs e)
 		{
 			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
@@ -251,12 +316,12 @@ namespace myNotebooks.subforms
 			if (editingOneNotebook)
 			{
 				var notebookName = lstOccurrences.Text.Replace("in ", "").Replace(" only", "").Replace("'", "");
-				notebooksToEdit.Add(new Notebook(notebookName).Open());
+				notebooksToEdit.Add(new Notebook(notebookName, "", this).Open());
 				sMsg += "in the notebook '" + notebookName + "'?";
 			}
 			else
 			{
-				notebooksToEdit = Utilities.CheckedNotebooks();
+				notebooksToEdit = Utilities.GetCheckedNotebooks();
 				sMsg += "in all notebooks?";
 			}
 
@@ -302,31 +367,7 @@ namespace myNotebooks.subforms
 			this.Hide();
 		}
 
-		private async void	mnuFindOrphans_Click(object sender, EventArgs e)
-		{
-			lstOrphanedLabels.Items.Clear();
-			List<string> lstOrphans = LabelsManager.FindOrphansInSelectedNotebooks();
-
-			if (lstOrphans.Count > 0)
-			{
-				lstOrphanedLabels.Items.AddRange(lstOrphans.ToArray());
-
-				if (DeletingOrphans)
-				{
-					chkSelectAllOrphans.Checked = true;
-					await RemoveOrphans();
-					this.Close();
-				}
-				else { ShowPanel(pnlOrphanedLabels); }
-			}
-			else
-			{
-				using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message,
-					"No orphaned labels were found.", Application.ProductName, this)) { frm.ShowDialog(); }
-			}
-
-			if (DeletingOrphans) { this.Close(); }
-		}
+		private async void	mnuFindOrphans_Click(object sender, EventArgs e) { await ManageOrphans(); }
 
 		private async void	mnuRename_Click(object sender, EventArgs e)
 		{
@@ -438,9 +479,20 @@ namespace myNotebooks.subforms
 
 		private async Task	RemoveOrphans()
 		{
-			foreach (string lbl in lstOrphanedLabels.SelectedItems) { await LabelsManager.DeleteLabel(lbl, Utilities.CheckedNotebooks(), this, true); }
+			foreach (string lbl in lstOrphanedLabels.SelectedItems) { await LabelsManager.DeleteLabel(lbl, Utilities.GetCheckedNotebooks(), this, true); }
 		}
 
+		private void ShowMessage(string sMsg)
+		{
+			sMsg += Utilities.GetCheckedNotebooks().Count == Program.AllNotebookNames.Count ?
+				" from "
+				: "Since all notebooks in your collection were not selected for the search the label has been retained in ";
+
+			sMsg += "your Labels collection.";
+
+			using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "Label Delete Successful", this))
+			{ frm.ShowDialog(); }
+		}
 		private void		ShowPanel(Panel panelToShow)
 		{   //411, 576
 			foreach (Control c in this.Controls) { if (c.GetType() == typeof(Panel)) { c.Visible = false; } }

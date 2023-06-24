@@ -97,6 +97,9 @@ dotnet_diagnostic.IDE0059.severity = none
 # CS1998: Async method lacks 'await' operators and will run synchronously
 dotnet_diagnostic.CS1998.severity = none
 
+# IDE0063: Use simple 'using' statement
+dotnet_diagnostic.IDE0063.severity = none
+
 [*.{cs,vb}]
 indent_style=tab
 

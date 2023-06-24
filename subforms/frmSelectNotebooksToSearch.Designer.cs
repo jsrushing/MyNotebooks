@@ -32,7 +32,7 @@ namespace myNotebooks.subforms
 			btnDone = new System.Windows.Forms.Button();
 			btnAddPIN = new System.Windows.Forms.Button();
 			lblShowPIN = new System.Windows.Forms.Label();
-			label1 = new System.Windows.Forms.Label();
+			lblUserPrompt = new System.Windows.Forms.Label();
 			label2 = new System.Windows.Forms.Label();
 			txtPIN = new System.Windows.Forms.TextBox();
 			lstJournalPINs = new System.Windows.Forms.CheckedListBox();
@@ -71,14 +71,14 @@ namespace myNotebooks.subforms
 			lblShowPIN.Visible = false;
 			lblShowPIN.Click += this.lblShowPIN_Click;
 			// 
-			// label1
+			// lblUserPrompt
 			// 
-			label1.Location = new System.Drawing.Point(6, 4);
-			label1.Name = "label1";
-			label1.Size = new System.Drawing.Size(248, 45);
-			label1.TabIndex = 0;
-			label1.Text = "Specify a PIN for any protected notebooks. To remove a PIN, add a blank value.";
-			label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			lblUserPrompt.Location = new System.Drawing.Point(6, 4);
+			lblUserPrompt.Name = "lblUserPrompt";
+			lblUserPrompt.Size = new System.Drawing.Size(248, 45);
+			lblUserPrompt.TabIndex = 0;
+			lblUserPrompt.Text = "Specify a PIN for any protected notebooks. To remove a PIN, add a blank value.";
+			lblUserPrompt.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// label2
 			// 
@@ -131,7 +131,7 @@ namespace myNotebooks.subforms
 			Controls.Add(txtPIN);
 			Controls.Add(label2);
 			Controls.Add(btnAddPIN);
-			Controls.Add(label1);
+			Controls.Add(lblUserPrompt);
 			Controls.Add(lblShowPIN);
 			Controls.Add(chkSelectAll);
 			FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
@@ -144,7 +144,7 @@ namespace myNotebooks.subforms
 		}
 
 		#endregion
-		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label lblUserPrompt;
 		private System.Windows.Forms.Label lblShowPIN;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Button btnAddPIN;

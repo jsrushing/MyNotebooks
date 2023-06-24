@@ -15,7 +15,7 @@ namespace myNotebooks.subforms
 		{
 			InitializeComponent();
 			Utilities.SetStartPosition(this, parent);
-			this.Notebook = new Notebook();
+			this.Notebook = new Notebook("", "", this);
 			Notebook.Settings = new NotebookSettings { IfCloudOnly_Download = true, IfLocalOnly_Upload = true, AllowCloud = true };
 		}
 
@@ -47,7 +47,7 @@ namespace myNotebooks.subforms
 			else
 			{
 				NotebookSettings nbs = Notebook.Settings;
-				this.Notebook = new Notebook(txtName.Text);
+				this.Notebook = new Notebook(txtName.Text, "", this);
 				Notebook.Settings = nbs;
 				Program.PIN = txtPIN.Text;
 				this.Hide();

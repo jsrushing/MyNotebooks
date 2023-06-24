@@ -52,7 +52,7 @@ namespace myNotebooks.objects
 			for (var i = 0; i < clb.Items.Count; i++) { clb.SetItemChecked(i, labels.Contains(clb.Items[i].ToString())); }
 		}
 
-		public static async Task DeleteLabel(string labelName, List<Notebook> notebooksToEdit, Form parent, bool isOrphan = false)
+		public static async Task DeleteLabel(string labelName, List<Notebook> notebooksToEdit, Form parent = null, bool isOrphan = false)
 		{
 			if (isOrphan)
 			{
@@ -82,16 +82,16 @@ namespace myNotebooks.objects
 			List<string> lstReturn = new List<string>();
 			List<string> allLabels = GetLabels_NoFileDate().ToList();
 			lstReturn.AddRange(allLabels);
-			Notebook journal;
+			Notebook nbook;
 
 			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedNotebooks)
 			{
-				journal = new Notebook(kvp.Key).Open();
+				nbook = new Notebook(kvp.Key).Open();
 
-				if(journal != null)
+				if(nbook != null)
 				{
 					Utilities.SetProgramPIN(kvp.Key);
-					foreach (Entry e in journal.Entries)
+					foreach (Entry e in nbook.Entries)
 					{ foreach(var v2 in allLabels.Intersect(e.ClearLabels().Split(',')).ToList()) { lstReturn.Remove(v2); } }
 				}
 			}

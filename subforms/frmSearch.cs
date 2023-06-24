@@ -88,7 +88,7 @@ namespace myNotebooks.subforms
 			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedNotebooks)
 			{
 				Utilities.SetProgramPIN(kvp.Key);
-				jeFound = new Notebook(kvp.Key).Open().Search(so);
+				jeFound = new Notebook(kvp.Key, "", this).Open().Search(so);
 				await Utilities.PopulateEntries(lstFoundEntries, jeFound, "", "", "", false, 0, true);
 				journalBoundaries.Add(kvp.Key, lstFoundEntries.Items.Count);
 				FoundEntries.AddRange(jeFound);
@@ -109,14 +109,14 @@ namespace myNotebooks.subforms
 			foreach (int i in lstFoundEntries.SelectedIndices) { threeSelections.Add(i); }
 		}
 
-		private Notebook GetEntryJournal()
+		private Notebook GetEntryNotebook()
 		{
 			List<int> selectedIndices = new List<int>();
 			KeyValuePair<string, int> kvp = new KeyValuePair<string, int>();
 			foreach (int i in lstFoundEntries.SelectedIndices) { selectedIndices.Add(i); }
 			if (selectedIndices.Count() > 1) { selectedIndices = selectedIndices.Except(threeSelections).ToList(); }
 			kvp = journalBoundaries.FirstOrDefault(p => p.Value > selectedIndices[0]);
-			return kvp.Key == "" ? null : new Notebook(kvp.Key).Open();
+			return kvp.Key == "" ? null : new Notebook(kvp.Key, "", this).Open();
 		}
 
 		private void lblSeparator_MouseMove(object sender, MouseEventArgs e)
@@ -147,7 +147,7 @@ namespace myNotebooks.subforms
 			{
 				if (lb.SelectedIndex > -1)
 				{
-					Notebook j = GetEntryJournal();
+					Notebook j = GetEntryNotebook();
 					Utilities.SetProgramPIN(j.Name);
 					Entry currentEntry = Entry.Select(rtb, lb, j, false, null, false);
 					GetCurrentSelections();
@@ -189,15 +189,16 @@ namespace myNotebooks.subforms
 		{
 			this.Cursor = Cursors.WaitCursor;
 			Entry fe = lstFoundEntries.SelectedIndex == 0 ? FoundEntries[0] : FoundEntries[lstFoundEntries.SelectedIndex / 4];
-			Notebook nb = new Notebook(fe.ClearNotebookName()).Open();
+			Notebook nb = new Notebook(fe.ClearNotebookName(), "", this).Open();
 			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
 
-			using (frmNewEntry frm = new frmNewEntry(this, nb.Open(), fe, mnu.Text.ToLower().StartsWith("preserve")))
+			using (frmNewEntry frm = new frmNewEntry(this, nb, fe, mnu.Text.ToLower().StartsWith("preserve")))
 			{
 				frm.ShowDialog();
 
 				if (frm.Saved)
 				{
+					nb.ReplaceEntry(fe, frm.Entry);
 					await nb.Save();
 					var indx = lstFoundEntries.SelectedIndex;
 					await DoSearch();
@@ -219,7 +220,7 @@ namespace myNotebooks.subforms
 
 				if (frm.Result == frmMessage.ReturnResult.Yes)
 				{
-					Notebook nb = new Notebook(fe.ClearNotebookName()).Open();
+					Notebook nb = new Notebook(fe.ClearNotebookName(), "", this).Open();
 
 					if (nb != null)
 					{
