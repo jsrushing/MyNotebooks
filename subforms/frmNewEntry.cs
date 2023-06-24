@@ -215,11 +215,11 @@ namespace myNotebooks.subforms
 			{
 				if(this.Entry != null)
 				{
-					this.Entry.Text = rtbNewEntry.Text.Trim();  //  EncryptDecrypt.Encrypt(rtbNewEntry.Text.Trim());
-					this.Entry.Title = txtNewEntryTitle.Text.Trim();    // EncryptDecrypt.Encrypt(txtNewEntryTitle.Text.Trim());
-					this.Entry.Labels = LabelsManager.CheckedLabels_Get(clbLabels);
-					// can't set RTF ... fix it
-					Entry.LastEditedOn = DateTime.Now;
+					this.Entry.Text		= rtbNewEntry.Text.Trim();  //  EncryptDecrypt.Encrypt(rtbNewEntry.Text.Trim());
+					this.Entry.Title	= txtNewEntryTitle.Text.Trim();    // EncryptDecrypt.Encrypt(txtNewEntryTitle.Text.Trim());
+					this.Entry.Labels	= LabelsManager.CheckedLabels_Get(clbLabels);
+					this.Entry.RTF		= rtbNewEntry.Rtf;
+					Entry.LastEditedOn	= DateTime.Now;
 				}
 				else
 				{
