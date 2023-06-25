@@ -215,8 +215,9 @@ namespace myNotebooks.subforms
 			// one-time code to create 50 notebooks
 			//Notebook newNotebook;
 			//Entry newEntry;
+			//Program.PIN = "0000";
 
-			//for (var i = 0; i < 50; i++)
+			//for (var i = 0; i < 10; i++)
 			//{
 			//	newNotebook = new Notebook();
 			//	newNotebook.Name = "Project " + i.ToString();
@@ -226,19 +227,41 @@ namespace myNotebooks.subforms
 
 			//	for (var j = 0; j < 5; j++)
 			//	{
-			//		newEntry = new Entry(EncryptDecrypt.Encrypt("Entry " + j + 1.ToString() + " in " + newNotebook.Name),
-			//			EncryptDecrypt.Encrypt("This is the entry text for entry " + rnd.Next(1, 150)), "", GetRandomLabels(), newNotebook.Name);
+			//		newEntry = new Entry("Entry " + j + 1.ToString() + " in " + newNotebook.Name,
+			//			"This is the entry text for entry " + rnd.Next(1, 150), "", GetRandomLabels(), newNotebook.Name);
 			//		newEntry.Date = DateTime.Now.AddDays(-Convert.ToDouble(rnd.Next(1, 150)));
 			//		newNotebook.Entries.Add(newEntry);
 			//	}
 
-			//	Entry newEntry1 = new Entry("created", "-", "-", "", this.Name);
-			//	newEntry1.Date = DateTime.Now.AddDays(-165);
-			//	newEntry1.NotebookName = newNotebook.Name;
+			//	Entry newEntry1 = new Entry("created", "-", "-", "", newNotebook.Name);
+			//	newEntry1.Date = DateTime.Now.AddDays(-200);
 			//	newNotebook.Entries.Add(newEntry1);
 			//	newNotebook.Settings = new NotebookSettings { AllowCloud = true };
 			//	await newNotebook.Create();
-			//} 
+			//}
+
+			// code to fix The New Real Thing entries
+			//Notebook nb = new Notebook("The New Real Thing").Open();
+			//Program.PIN = "0711";
+			//nb.Entries.ForEach(E => E.NotebookName = EncryptDecrypt.Encrypt("The New Real Thing"));
+			//nb.Save();
+
+			// code to fix all NotebookName values (encrypt them)
+			//Utilities.PopulateAllNotebooks();
+			//Program.PIN = "";
+
+			//foreach(Notebook nb in Program.AllNotebooks)
+			//{
+			//	foreach(Entry en in nb.Entries)
+			//	{
+			//		var name = en.NotebookName;
+
+			//		en.NotebookName = EncryptDecrypt.Encrypt(nb.Name);
+
+			//	}
+			//	nb.Entries.ForEach(e => e.NotebookName = EncryptDecrypt.Encrypt(nb.Name));
+			//}
+
 			#endregion
 
 			CheckForSystemDirectories();    // am I keeping system directories now that the cloud is working? Why or why not?

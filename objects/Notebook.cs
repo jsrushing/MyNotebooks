@@ -110,21 +110,17 @@ namespace myNotebooks
 			List<Notebook> booksWithLabel = new List<Notebook>();
 			var proceed = false;
 
-			foreach(var lbl in labelsInBook)
-			{	
-				booksWithLabel.AddRange(chkdBooks.Where(e => e.HasLabel(lbl) == true).ToList().Except(booksWithLabel));
+			foreach(var lbl in labelsInBook) { booksWithLabel.AddRange(chkdBooks.Where(e => e.HasLabel(lbl) == true).ToList().Except(booksWithLabel)); }
 
-					//.Where(e => e.Entries.Where(x => string.Join(x.ClearLabels(), ",").Contains(lbl)).Any()));
-			}
+			if (booksWithLabel.Count > 0) 
+			{
+				var lblsInBookCount = labelsInBook.Count;
+				var usePlural = lblsInBookCount > 1;
 
-			if (booksWithLabel.Count > 0) {
-
-				//var checkedLabelsCount = Program.DictCheckedNotebooks.Count;
-
-				using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "This notebook contains " + labelsInBook.Count.ToString() + " labels. Do you want " +
-					"to delete th" + (labelsInBook.Count > 1 ? "is " : "ese ") + "label" + (labelsInBook.Count > 1 ? "s " : " ") + " in the " + booksWithLabel.Count().ToString()
-					+ " selected notebook "+ (labelsInBook.Count > 1 ? "s " : " ") + " in which the label " + (labelsInBook.Count > 1 ? "s " : " ") + (labelsInBook.Count > 1 ? "was " : "were ") + "found? " +
-					"If you need to re-select the notebook " + (labelsInBook.Count > 1 ? "s " : " ") + "in which the label will be deleted, click 'No', then the 'Labels' menu, then 'Select Notebooks'.")) 
+				using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "This notebook contains " + lblsInBookCount + " labels. Do you want " +
+					"to delete th" + (usePlural ? "is " : "ese ") + "label" + (usePlural ? "s " : " ") + " in the " + lblsInBookCount + " selected notebook " +
+					(usePlural ? "s " : " ") + " in which the label " + (usePlural ? "s " : " ") + (usePlural ? "was " : "were ") + "found? " +
+					"If you need to re-select the notebook " + (usePlural ? "s " : " ") + "in which the label will be deleted, click 'No', then the 'Labels' menu, then 'Select Notebooks'.")) 
 				{ frm.ShowDialog(); proceed = frm.Result == frmMessage.ReturnResult.Yes; }
 			}
 
@@ -287,9 +283,9 @@ namespace myNotebooks
 
 		public async Task ResetPIN(Form caller)
 		{
-			var currentPIN = Program.PIN;
-			var newPIN = string.Empty;
-			var save = false;
+			var save		= false;
+			var newPIN		= string.Empty;
+			var currentPIN	= Program.PIN;
 
 			// input current PIN
 			using (frmMessage frmGetCurrentPIN = new frmMessage(frmMessage.OperationType.InputBox, "Enter the current PIN.", "(current PIN)", caller))
@@ -315,22 +311,23 @@ namespace myNotebooks
 								// get the entry's key values
 								EntryValues ev = new EntryValues
 								{
-									notebookName	= e.ClearNotebookName(),	// << this should become ClearName() after refactoring Entry
-									text	= e.ClearText(),
-									RTF		= e.ClearRTF(),
-									title	= e.ClearTitle()
+									RTF				= e.ClearRTF(),
+									text			= e.ClearText(),
+									title			= e.ClearTitle(),
+									labels			= e.ClearLabels(),
+									notebookName	= e.ClearNotebookName()
 								};
 
 								// set programPIN to newPin
 								Program.PIN = newPIN;
 
 								// encrypt key values w/ new pin
-								e.Title = EncryptDecrypt.Encrypt(ev.title);
-								e.Text = EncryptDecrypt.Encrypt(ev.text);
-								e.NotebookName = EncryptDecrypt.Encrypt(ev.notebookName);
-								//e.JournalName = EncryptDecrypt.Encrypt(ev.Name);	// << need to encrypt name
-								Program.PIN = currentPIN;
-								save = true;
+								e.Text			= EncryptDecrypt.Encrypt(ev.text);
+								e.Title			= EncryptDecrypt.Encrypt(ev.title);
+								e.Labels		= EncryptDecrypt.Encrypt(ev.labels);
+								e.NotebookName	= EncryptDecrypt.Encrypt(ev.notebookName);
+								Program.PIN		= currentPIN;
+								save			= true;
 							}
 						}
 					}

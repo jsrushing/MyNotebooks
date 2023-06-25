@@ -25,7 +25,6 @@ namespace myNotebooks
         public string		Text;
 		public string		DisplayText { get { return GetTextDisplayText(); } set { DisplayText = value; } }
 		public string		NotebookName { get; set; }
-
 		public string		RTF;
         public string		Labels;
 		public string		Title;
