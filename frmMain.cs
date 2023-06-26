@@ -356,8 +356,8 @@ namespace myNotebooks.subforms
 				{	// Test the PIN ...
 					Program.PIN = txtJournalPIN.Text;
 					var iEntryIndx = CurrentNotebook.Entries.Count == 1 ? 0 : 1;
-					var rtf = CurrentNotebook.Entries[iEntryIndx].RTF;
-					wrongPIN = !rtf.Contains("{");	// CurrentNotebook.Entries.Count == 1 ? text != "-" : !text.Contains(" ") & text.Length > 49;
+					//var rtf = CurrentNotebook.Entries[iEntryIndx].RTF;
+					wrongPIN = !CurrentNotebook.Entries[iEntryIndx].RTF.Contains("{");	// CurrentNotebook.Entries.Count == 1 ? text != "-" : !text.Contains(" ") & text.Length > 49;
 
 					if (wrongPIN)
 					{
