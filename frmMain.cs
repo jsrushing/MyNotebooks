@@ -214,9 +214,8 @@ namespace myNotebooks.subforms
 			// one-time code to create 50 notebooks
 			//Notebook newNotebook;
 			//Entry newEntry;
-			////Program.PIN = "0000";
 
-			//for (var i = 4; i < 20; i++)
+			//for (var i = 1; i < 500; i++)
 			//{
 			//	Program.PIN = "";
 			//	newNotebook = new Notebook();
@@ -230,7 +229,7 @@ namespace myNotebooks.subforms
 			//	newEntry1.RTF = "{rtf";
 			//	newNotebook.Entries.Add(newEntry1);
 
-			//	for (var j = 0; j < 5; j++)
+			//	for (var j = 0; j < 100; j++)
 			//	{
 			//		newEntry = new Entry("Entry " + j + 1.ToString() + " in " + newNotebook.Name,
 			//			"This is the entry text for entry " + rnd.Next(1, 150), "", GetRandomLabels(), newNotebook.Name);

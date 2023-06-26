@@ -48,6 +48,7 @@ namespace myNotebooks.subforms
 				{
 					Notebook nb = frm.Notebook;
 					FoundEntries.ForEach(e => e.NotebookName = frm.Notebook.Name);
+					nb.Entries.Add(new Entry("created", "-", "{rtf", nb.Name));
 					nb.Entries.AddRange(FoundEntries);
 					await nb.Create(false);
 					//await nb.Save();
@@ -252,6 +253,7 @@ namespace myNotebooks.subforms
 				(Program.DictCheckedNotebooks.Count == Program.AllNotebookNames.Count ? "all " : Program.DictCheckedNotebooks.Count.ToString() + " selected ") + "notebook" + (Program.DictCheckedNotebooks.Count == 1 ? "" : "s");
 
 			btnSelectNotebooks.Left = lblSearchingIn.Left + lblSearchingIn.Width + 5;
+			btnExportEntries.Left = btnSelectNotebooks.Left + btnSelectNotebooks.Width + 5;
 		}
 
 		private void ToggleDateControls(bool toggleUseDate)
