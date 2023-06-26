@@ -357,7 +357,7 @@ namespace myNotebooks.subforms
 					Program.PIN = txtJournalPIN.Text;
 					var iEntryIndx = CurrentNotebook.Entries.Count == 1 ? 0 : 1;
 					//var rtf = CurrentNotebook.Entries[iEntryIndx].RTF;
-					wrongPIN = !CurrentNotebook.Entries[iEntryIndx].RTF.Contains("{");	// CurrentNotebook.Entries.Count == 1 ? text != "-" : !text.Contains(" ") & text.Length > 49;
+					wrongPIN = CurrentNotebook.Entries[0].RTF != "-" ;// CurrentNotebook.Entries.Count == 1 ? text != "-" : !text.Contains(" ") & text.Length >9;
 
 					if (wrongPIN)
 					{
@@ -774,7 +774,10 @@ namespace myNotebooks.subforms
 		}
 
 		private async void mnuNotebook_ResetPIN_Click(object sender, EventArgs e)
-		{ await CurrentNotebook.ResetPIN(this); }
+		{ 
+			await CurrentNotebook.ResetPIN(this);
+			if(CurrentNotebook.Saved) { LoadNotebooks(); }
+		}
 
 		private async void mnuNotebook_RestoreBackups_Click(object sender, EventArgs e)
 		{
@@ -931,6 +934,8 @@ namespace myNotebooks.subforms
 			{
 				pnlPin.Visible = false;
 				pnlDateFilters.Visible = false;
+				lblSeparator.Visible = false;
+				rtbSelectedEntry.Visible = false;
 			}
 		}
 

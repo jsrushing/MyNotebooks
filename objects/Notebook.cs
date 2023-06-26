@@ -30,27 +30,7 @@ namespace myNotebooks
 		public string root			= "notebooks\\";
 		public NotebookSettings		Settings;
 		public bool BackupCompleted { get; private set; }
-
-		//public Notebook(myJournal.Journal journal)
-		//{
-		//	this.Name = journal.Name;
-		//	this.FileName = "C:\\Users\\js_ru\\source\\repos\\myJournal2022\\bin\\Debug\\netcoreapp3.1\\notebooks\\" + journal.Name;
-		//	this.LastSaved = DateTime.Now;
-		//	this.root = "notebooks\\";
-		//	this.BackupCompleted = journal.BackupCompleted;
-		//	Program.PIN = "0711";
-		//	//this.Entries.Clear();
-
-		//	foreach (myJournal.JournalEntry je in journal.Entries)
-		//	{
-		//		Entry e = new Entry(je);
-		//		e.Date = je.Date;
-		//		this.Entries.Add(e);
-		//	}
-
-		//	this.Settings = new NotebookSettings();
-		//	Program.PIN = "";
-		//}
+		public bool Saved { get; private set; }
 
 		public Notebook(string _name = null, string _fileName = null, Form thisParent = null) 
         {
@@ -289,9 +269,9 @@ namespace myNotebooks
 
 		public async Task ResetPIN(Form caller)
 		{
-			var save		= false;
 			var newPIN		= string.Empty;
 			var currentPIN	= Program.PIN;
+			Saved = false;
 
 			// input current PIN
 			using (frmMessage frmGetCurrentPIN = new frmMessage(frmMessage.OperationType.InputBox, "Enter the current PIN.", "(current PIN)", caller))
@@ -303,7 +283,7 @@ namespace myNotebooks
 					using (frmMessage frmBadPIN = new frmMessage(frmMessage.OperationType.Message, "The PIN you entered is not correct.", "Bad PIN", caller))
 					{ frmBadPIN.ShowDialog(); }
 				}
-				else
+				else	// input new PIN
 				{
 					using (frmMessage frmNewPIN = new frmMessage(frmMessage.OperationType.InputBox, "Enter the new PIN", "(enter PIN)", caller))
 					{
@@ -313,36 +293,12 @@ namespace myNotebooks
 						if (frmNewPIN.Result != frmMessage.ReturnResult.Cancel)
 						{
 							Program.PIN = newPIN;
-							save = true;
-
-							//foreach (Entry e in this.Entries)
-							//{
-
-							//	// get the entry's key values
-							//	//EntryValues ev = new EntryValues
-							//	//{
-							//	//	RTF				= e.ClearRTF(),
-							//	//	text			= e.ClearText(),
-							//	//	title			= e.ClearTitle(),
-							//	//	labels			= e.ClearLabels(),
-							//	//	notebookName	= e.ClearNotebookName(),
-							//	//};
-
-							//	// set programPIN to newPin
-							//	Program.PIN = newPIN;
-
-							//	// encrypt key values w/ new pin
-							//	//e.Text			= EncryptDecrypt.Encrypt(ev.text);
-							//	//e.Title			= EncryptDecrypt.Encrypt(ev.title);
-							//	//e.Labels		= EncryptDecrypt.Encrypt(ev.labels);
-							//	//e.NotebookName	= EncryptDecrypt.Encrypt(ev.notebookName);
-							//	save			= true;
-							//}
+							Saved = true;
 						}
 					}
 				}
 
-				if (save) { await this.Save(); }
+				if (Saved) { await this.Save(); }
 			}
 		}
 
