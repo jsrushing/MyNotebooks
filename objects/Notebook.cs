@@ -312,29 +312,32 @@ namespace myNotebooks
 
 						if (frmNewPIN.Result != frmMessage.ReturnResult.Cancel)
 						{
-							foreach (Entry e in this.Entries)
-							{
+							Program.PIN = newPIN;
+							save = true;
 
-								// get the entry's key values
-								//EntryValues ev = new EntryValues
-								//{
-								//	RTF				= e.ClearRTF(),
-								//	text			= e.ClearText(),
-								//	title			= e.ClearTitle(),
-								//	labels			= e.ClearLabels(),
-								//	notebookName	= e.ClearNotebookName(),
-								//};
+							//foreach (Entry e in this.Entries)
+							//{
 
-								// set programPIN to newPin
-								Program.PIN = newPIN;
+							//	// get the entry's key values
+							//	//EntryValues ev = new EntryValues
+							//	//{
+							//	//	RTF				= e.ClearRTF(),
+							//	//	text			= e.ClearText(),
+							//	//	title			= e.ClearTitle(),
+							//	//	labels			= e.ClearLabels(),
+							//	//	notebookName	= e.ClearNotebookName(),
+							//	//};
 
-								// encrypt key values w/ new pin
-								//e.Text			= EncryptDecrypt.Encrypt(ev.text);
-								//e.Title			= EncryptDecrypt.Encrypt(ev.title);
-								//e.Labels		= EncryptDecrypt.Encrypt(ev.labels);
-								//e.NotebookName	= EncryptDecrypt.Encrypt(ev.notebookName);
-								save			= true;
-							}
+							//	// set programPIN to newPin
+							//	Program.PIN = newPIN;
+
+							//	// encrypt key values w/ new pin
+							//	//e.Text			= EncryptDecrypt.Encrypt(ev.text);
+							//	//e.Title			= EncryptDecrypt.Encrypt(ev.title);
+							//	//e.Labels		= EncryptDecrypt.Encrypt(ev.labels);
+							//	//e.NotebookName	= EncryptDecrypt.Encrypt(ev.notebookName);
+							//	save			= true;
+							//}
 						}
 					}
 				}

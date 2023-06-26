@@ -276,7 +276,7 @@ namespace myNotebooks.subforms
 			using (frmAzurePwd frm = new frmAzurePwd(this, frmAzurePwd.Mode.AskingForKey))
 			{ if (Program.AzurePassword.Length > 0) { frm.Close(); } }
 
-			Program.AzurePassword = string.Empty;	// Kills the Azure synch process for debugging if desired.
+			Program.AzurePassword = string.Empty;	// Kills the Azure synch process for debugging if desired.	CHANGE BACK !!!!!!!!!!!!!!!!
 
 			pnlDateFilters.Left = pnlPin.Left - 11;
 			ShowHideMenusAndControls(SelectionState.HideAll);
@@ -304,7 +304,8 @@ namespace myNotebooks.subforms
 					}
 					else
 					{
-						using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.Message, "At least one notebook must exist. Please re-open the program and create a notebook.", "One Notebook Must Exist", this))
+						using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.Message, "At least one notebook must exist. " +
+							"Please re-open the program and create a notebook.", "One Notebook Must Exist", this))
 						{ frm2.ShowDialog(); this.Close(); }
 					}
 				}
@@ -355,8 +356,8 @@ namespace myNotebooks.subforms
 				{	// Test the PIN ...
 					Program.PIN = txtJournalPIN.Text;
 					var iEntryIndx = CurrentNotebook.Entries.Count == 1 ? 0 : 1;
-					var text = CurrentNotebook.Entries[iEntryIndx].Text;
-					wrongPIN = CurrentNotebook.Entries.Count == 1 ? text != "-" : !text.Contains(" ") & text.Length > 49;
+					var rtf = CurrentNotebook.Entries[iEntryIndx].RTF;
+					wrongPIN = !rtf.Contains("{");	// CurrentNotebook.Entries.Count == 1 ? text != "-" : !text.Contains(" ") & text.Length > 49;
 
 					if (wrongPIN)
 					{

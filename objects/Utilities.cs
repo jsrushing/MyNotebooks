@@ -21,11 +21,8 @@ namespace myNotebooks.objects
 			
 			if(notebookNames != null)
 			{
-				//Program.AllNotebookNames.AddRange(notebookNames);
-				foreach(string notebookName in notebookNames)
-				{
-					Program.AllNotebookNames.Add(notebookName);
-				}
+				//Program.AllNotebookNames.AddRange(notebookNames); << DOESN'T WORK ??	
+				foreach(string notebookName in notebookNames) { Program.AllNotebookNames.Add(notebookName); }
 			}
 			else
 			{
