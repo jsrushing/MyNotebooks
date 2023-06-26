@@ -119,7 +119,7 @@ namespace myNotebooks
 		public async Task DeleteLabelFromNotebook(string label)
 		{
 			var saveJournal = false;
-			foreach (Entry entry in this.Entries.Where(e => e.ClearLabels().Contains(label)).ToList())
+			foreach (Entry entry in this.Entries.Where(e => e.Labels.Contains(label)).ToList())
 			{ saveJournal = entry.RemoveOrReplaceLabel("", label, false); } 
 			
 			if(saveJournal) { await this.Save(); } 
@@ -143,13 +143,13 @@ namespace myNotebooks
 		{
 			List<string> lstRtrn = new List<string>();
 
-			foreach (Entry entry in this.Entries.Where(e => e.ClearLabels().Length > 0))
-			{ lstRtrn.AddRange(entry.ClearLabels().Split(",").Except(lstRtrn)); }
+			foreach (Entry entry in this.Entries.Where(e => e.Labels.Length > 0))
+			{ lstRtrn.AddRange(entry.Labels.Split(",").Except(lstRtrn)); }
 
 			return lstRtrn;
 		}
 
-		public bool HasLabel(string Label) { return Entries.Where(e => e.ClearLabels().Contains(Label)).Any(); }
+		public bool HasLabel(string Label) { return Entries.Where(e => e.Labels.Contains(Label)).Any(); }
 
 		public Notebook Open(bool useFileName = false)
         {
@@ -195,9 +195,9 @@ namespace myNotebooks
 			{
 				if (UseAnd)
 				{
-					if(entry.ClearLabels().Length > 0)
+					if(entry.Labels.Length > 0)
 					{
-						b = entry.ClearLabels().Split(',');
+						b = entry.Labels.Split(',');
 						var hasLabels = true;
 
 						foreach(var label in labelsArray)
@@ -212,7 +212,7 @@ namespace myNotebooks
 				{
 					foreach (var label in labelsArray)
 					{
-						if (entry.ClearLabels().Contains(label)) { if (!entriesToReturn.Contains(entry)) entriesToReturn.Add(entry); }
+						if (entry.Labels.Contains(label)) { if (!entriesToReturn.Contains(entry)) entriesToReturn.Add(entry); }
 					}
 				}
 			}
@@ -253,7 +253,7 @@ namespace myNotebooks
 		public async Task RenameLabel(string oldName,  string newName)
 		{
 			var saveJournal = false;
-			foreach(Entry entry in this.Entries.Where(e => e.ClearLabels().Contains(oldName)).ToList()) 
+			foreach(Entry entry in this.Entries.Where(e => e.Labels.Contains(oldName)).ToList()) 
 			{ saveJournal = entry.RemoveOrReplaceLabel(newName, oldName); }
 
 			if(saveJournal ) { await this.Save(); }
@@ -373,26 +373,26 @@ namespace myNotebooks
 					if (So.searchText.Length > 0 & So.searchTitle.Length > 0)
 					{
 						if (So.radBtnAnd.Checked)
-						{ allEntries = allEntries.Where(e => e.ClearTitle().ToLower().Contains(So.searchTitle) & e.ClearText().ToLower().Contains(So.searchText)).ToList(); }
-						else { allEntries = allEntries.Where(e => e.ClearTitle().ToLower().Contains(So.searchTitle) | e.ClearText().ToLower().Contains(So.searchText)).ToList(); }
+						{ allEntries = allEntries.Where(e => e.Title.ToLower().Contains(So.searchTitle) & e.Text.ToLower().Contains(So.searchText)).ToList(); }
+						else { allEntries = allEntries.Where(e => e.Title.ToLower().Contains(So.searchTitle) | e.Text.ToLower().Contains(So.searchText)).ToList(); }
 					}
 					else if (So.searchText.Length > 0)
-					{ allEntries = allEntries.Where(e => e.ClearText().ToLower().Contains(So.searchText)).ToList(); }
+					{ allEntries = allEntries.Where(e => e.Text.ToLower().Contains(So.searchText)).ToList(); }
 					else if (So.searchTitle.Length > 0)
-					{ allEntries = allEntries.Where(e => e.ClearTitle().ToLower().Contains(So.searchTitle)).ToList(); }
+					{ allEntries = allEntries.Where(e => e.Title.ToLower().Contains(So.searchTitle)).ToList(); }
 				}
 				else
 				{
 					if(So.searchText.Length > 0 & So.searchTitle.Length > 0)
 					{
 						if (So.radBtnAnd.Checked)
-						{ allEntries = allEntries.Where(e => e.Title.Contains(So.searchTitle) & e.ClearText().Contains(So.searchText)).ToList(); }
-						else { allEntries = allEntries.Where(e => e.Title.Contains(So.searchTitle) | e.ClearText().Contains(So.searchText)).ToList(); }
+						{ allEntries = allEntries.Where(e => e.Title.Contains(So.searchTitle) & e.Text.Contains(So.searchText)).ToList(); }
+						else { allEntries = allEntries.Where(e => e.Title.Contains(So.searchTitle) | e.Text.Contains(So.searchText)).ToList(); }
 					}
 					else if(So.searchText.Length > 0)
-					{ allEntries = allEntries.Where(e => e.ClearText().Contains(So.searchText)).ToList() ; }
+					{ allEntries = allEntries.Where(e => e.Text.Contains(So.searchText)).ToList() ; }
 					else if(So.searchTitle.Length > 0)
-					{ allEntries = allEntries.Where(e => e.ClearTitle().Contains(So.searchTitle)).ToList(); }
+					{ allEntries = allEntries.Where(e => e.Title.Contains(So.searchTitle)).ToList(); }
 				}
 			}
 			return allEntries;

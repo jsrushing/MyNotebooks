@@ -165,7 +165,7 @@ namespace myNotebooks.subforms
 		{
 			foreach (var name in Program.DictCheckedNotebooks.Keys) { lstJournalPINs.Items.Add(name); }
 			for (var i = 0; i < lstJournalPINs.Items.Count; i++) { lstJournalPINs.SetItemChecked(i, true); }
-			lstJournalPINs.Items.Add(ShowMoreString);
+			if (lstJournalPINs.Items.Count < Program.AllNotebookNames.Count) { lstJournalPINs.Items.Add(ShowMoreString); }
 		}
 
 		private string Scrubbed(string stringToScrub) { return stringToScrub.Replace(" (****)", ""); }

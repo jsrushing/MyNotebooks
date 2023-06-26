@@ -147,7 +147,6 @@ using myNotebooks.objects;
 using System.Text;
 using System.Threading;
 using myNotebooks.subforms;
-using myJournal;
 using System.Diagnostics;
 using System.Runtime.Serialization.Formatters.Binary;
 using myNotebooks;
@@ -217,7 +216,7 @@ namespace myNotebooks.subforms
 			//Entry newEntry;
 			////Program.PIN = "0000";
 
-			//for (var i = 0; i < 10; i++)
+			//for (var i = 4; i < 20; i++)
 			//{
 			//	Program.PIN = "";
 			//	newNotebook = new Notebook();
@@ -226,17 +225,20 @@ namespace myNotebooks.subforms
 			//	newNotebook.FileName = AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + newNotebook.Name;
 			//	var rnd = new Random(Guid.NewGuid().GetHashCode());
 
+			//	Entry newEntry1 = new Entry("created", "-", "-", "", newNotebook.Name);
+			//	newEntry1.Date = DateTime.Parse("01/01/23 1:00 AM");
+			//	newEntry1.RTF = "{rtf";
+			//	newNotebook.Entries.Add(newEntry1);
+
 			//	for (var j = 0; j < 5; j++)
 			//	{
 			//		newEntry = new Entry("Entry " + j + 1.ToString() + " in " + newNotebook.Name,
 			//			"This is the entry text for entry " + rnd.Next(1, 150), "", GetRandomLabels(), newNotebook.Name);
 			//		newEntry.Date = DateTime.Now.AddDays(-Convert.ToDouble(rnd.Next(1, 150)));
+			//		newEntry.RTF = "{rtf";
 			//		newNotebook.Entries.Add(newEntry);
 			//	}
 
-			//	Entry newEntry1 = new Entry("created", "-", "-", "", newNotebook.Name);
-			//	newEntry1.Date = DateTime.Parse("01/01/23 1:00 AM");
-			//	newNotebook.Entries.Add(newEntry1);
 			//	newNotebook.Settings = new NotebookSettings { AllowCloud = true };
 			//	await newNotebook.Create(false);
 			//}
@@ -286,7 +288,7 @@ namespace myNotebooks.subforms
 			using (frmAzurePwd frm = new frmAzurePwd(this, frmAzurePwd.Mode.AskingForKey))
 			{ if (Program.AzurePassword.Length > 0) { frm.Close(); } }
 
-			Program.AzurePassword = string.Empty;	// Kills the Azure synch process for debugging if desired.	CHANGE BACK !!!!!!!!!!!!!!!!
+			//Program.AzurePassword = string.Empty;	// Kills the Azure synch process for debugging if desired.
 
 			pnlDateFilters.Left = pnlPin.Left - 11;
 			ShowHideMenusAndControls(SelectionState.HideAll);
@@ -359,13 +361,12 @@ namespace myNotebooks.subforms
 
 			try
 			{
-				//CurrentNotebook = new Notebook(ddlNotebooks.Text, "", this).Open();
 				var wrongPIN = true;
 
 				if (CurrentNotebook != null)
 				{	// Test the PIN ...
 					Program.PIN = txtJournalPIN.Text;
-					wrongPIN = CurrentNotebook.Entries[0].Title != "created"; // The 0th entry is system-defined with its Title = "created". This is encrypted in the file so decrypt will fail with the wrong PIN.
+					wrongPIN = CurrentNotebook.Entries[0].Title != "created"; // The 0th entry is system-defined with its Title = "created". If the NBook has a PIN it is encrypted in the file and decrypt will fail with the wrong PIN.
 
 					if (wrongPIN)
 					{
@@ -580,7 +581,7 @@ namespace myNotebooks.subforms
 
 				try
 				{
-					createdEntry = CurrentNotebook.Entries.First(e => e.ClearTitle().Equals("created") & e.ClearText().Equals("-"));
+					createdEntry = CurrentNotebook.Entries.First(e => e.Title.Equals("created") & e.Text.Equals("-"));
 				}
 				catch(Exception ex) { }
 
@@ -637,7 +638,7 @@ namespace myNotebooks.subforms
 		{
 			this.Cursor = Cursors.WaitCursor;
 
-			using (frmMessage frm = new frmMessage(frmMessage.OperationType.DeleteEntry, CurrentEntry.ClearTitle(), "", this))
+			using (frmMessage frm = new frmMessage(frmMessage.OperationType.DeleteEntry, CurrentEntry.Title, "", this))
 			{
 				frm.ShowDialog(this);
 
@@ -660,7 +661,7 @@ namespace myNotebooks.subforms
 
 			using (frmNewEntry frm = new frmNewEntry(this, CurrentNotebook, CurrentEntry, mnu.Text.ToLower().StartsWith("preserve")))
 			{
-				frm.Text = "Edit '" + CurrentEntry.ClearTitle() + "' in '" + CurrentNotebook.Name + "'";
+				frm.Text = "Edit '" + CurrentEntry.Title + "' in '" + CurrentNotebook.Name + "'";
 				frm.ShowDialog(this);
 
 				if (frm.Saved)
@@ -668,7 +669,7 @@ namespace myNotebooks.subforms
 					CurrentEntry = frm.Entry;
 					//await CurrentNotebook.Save();
 					await ProcessDateFilters();
-					var v = lstEntries.Items.OfType<string>().FirstOrDefault(e => e.StartsWith(CurrentEntry.ClearTitle()));
+					var v = lstEntries.Items.OfType<string>().FirstOrDefault(e => e.StartsWith(CurrentEntry.Title));
 					lstEntries.SelectedIndex = lstEntries.Items.IndexOf(v);
 				}
 			}

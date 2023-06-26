@@ -205,44 +205,44 @@ namespace myNotebooks.objects
 
 		public async Task SynchWithCloud(bool alsoSynchSettings = false, Notebook notebook = null, bool checkCloudStatusOnly = false)
 		{
-			var notebooksFolder				= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"];
-			var tempFolder					= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"];
-			List<string> allNotebooksNames	= new List<string>();
+			//var notebooksFolder				= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"];
+			//var tempFolder					= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"];
+			//List<string> allNotebooksNames	= new List<string>();
 
-			await Utilities.PopulateAllNotebookNames();
-			if (notebook == null) { allNotebooksNames = Program.AllNotebookNames; } else { allNotebooksNames.Add(notebook.Name); }
+			//await Utilities.PopulateAllNotebookNames();
+			//if (notebook == null) { allNotebooksNames = Program.AllNotebookNames; } else { allNotebooksNames.Add(notebook.Name); }
 
-			if(checkCloudStatusOnly)
-			{
-				await CheckForLocalOrCloudOnly(tempFolder, notebooksFolder);
-			}
-			else
-			{
-				if(notebook != null)
-				{
-					if (notebook.FileName.EndsWith(" (local)") & notebook.Entries.Count == 1)
-					{
-						var sOldName = notebook.FileName;
-						var sNewName = notebook.FileName.Substring(0, notebook.FileName.LastIndexOf("\\") + 1) + notebook.Name;
-						notebook.FileName = sNewName;
-						File.Move(sOldName, sNewName);
-						if (notebook.Settings.AllowCloud) { await AzureFileClient.UploadFile(notebooksFolder + notebook.Name); }
-						return;
-					}
+			//if(checkCloudStatusOnly)
+			//{
+			//	await CheckForLocalOrCloudOnly(tempFolder, notebooksFolder);
+			//}
+			//else
+			//{
+			//	if(notebook != null)
+			//	{
+			//		if (notebook.FileName.EndsWith(" (local)") & notebook.Entries.Count == 1)
+			//		{
+			//			var sOldName = notebook.FileName;
+			//			var sNewName = notebook.FileName.Substring(0, notebook.FileName.LastIndexOf("\\") + 1) + notebook.Name;
+			//			notebook.FileName = sNewName;
+			//			File.Move(sOldName, sNewName);
+			//			if (notebook.Settings.AllowCloud) { await AzureFileClient.UploadFile(notebooksFolder + notebook.Name); }
+			//			return;
+			//		}
 
-					await Utilities.PopulateAllNotebooks(allNotebooksNames);
+			//		await Utilities.PopulateAllNotebooks(allNotebooksNames);
 
-					Notebook nb = Program.AllNotebooks.Where(e => e.Name == notebook.Name & e.LastSaved == notebook.LastSaved).First();
+			//		Notebook nb = Program.AllNotebooks.Where(e => e.Name == notebook.Name & e.LastSaved == notebook.LastSaved).First();
 
-					if (nb == null) { Program.AllNotebooks.Add(notebook); }
-				}
+			//		if (nb == null) { Program.AllNotebooks.Add(notebook); }
+			//	}
 
-				await ProcessNotebooks(allNotebooksNames, tempFolder, notebooksFolder);
-				await AzureFileClient.GetAzureItemNames(true);
-				await CheckForLocalOrCloudOnly(tempFolder, notebooksFolder);			
-			}
+			//	await ProcessNotebooks(allNotebooksNames, tempFolder, notebooksFolder);
+			//	await AzureFileClient.GetAzureItemNames(true);
+			//	await CheckForLocalOrCloudOnly(tempFolder, notebooksFolder);			
+			//}
 
-			if(alsoSynchSettings) await SyncLabelsAndSettings();
+			//if(alsoSynchSettings) await SyncLabelsAndSettings();
 		}
 
 		public async Task SyncLabelsAndSettings()

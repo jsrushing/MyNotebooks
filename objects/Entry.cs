@@ -13,7 +13,6 @@ using myNotebooks.subforms;
 using System.Windows.Forms;
 using System.Runtime.CompilerServices;
 using myNotebooks.objects;
-using myJournal;
 
 namespace myNotebooks
 {
@@ -50,11 +49,11 @@ namespace myNotebooks
         {
 			if(Date == DateTime.MinValue) { Date = DateTime.Now; }
 
-			Text			= _text.Trim();		// EncryptDecrypt.Encrypt(_text.Trim());
-			Title			= _title.Trim();	// EncryptDecrypt.Encrypt(_title.Trim());
-			RTF				= _RTF;				//EncryptDecrypt.Encrypt(_RTF);
-			Labels			= _labels;			// EncryptDecrypt.Encrypt(_labels);
-			NotebookName	= _notebookName;	// EncryptDecrypt.Encrypt(_notebookName);
+			Text			= _text.Trim();
+			Title			= _title.Trim();
+			RTF				= _RTF;
+			Labels			= _labels;
+			NotebookName	= _notebookName;
             Id				= Guid.NewGuid().ToString();
 			isEdited		= _edited;	
 		}
@@ -62,28 +61,28 @@ namespace myNotebooks
 		string				GetTextDisplayText()
 		{
 			return String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
-				, ClearTitle(), Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), ClearLabels().Replace(",", ", "), ClearText());
+				, Title, Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), Labels.Replace(",", ", "), Text);
 		}
 
 		public string[]		GetSynopsis(bool includeJournalName = false, int maxWidth = -1)
 		{
 			string[] sRtrn = new string[4];
 			int iTextChunkLength = maxWidth > 0 ? maxWidth / 5 : 150;
-			string sTitle = ClearTitle() + " (" + Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"
+			string sTitle = Title + " (" + Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"
 				+ (LastEditedOn < new DateTime(2000, 1, 1) ? "" : " [edited on " + LastEditedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + "]");
-			if (includeJournalName) { sTitle += this.NotebookName == null ? "" : " > in '" + this.ClearNotebookName() + "'"; }
+			if (includeJournalName) { sTitle += NotebookName == null ? "" : " > in '" + NotebookName + "'"; }
 			sRtrn[0] = sTitle;
-			string sEntryText = ClearText().Replace("\n", " ");
+			string sEntryText = Text.Replace("\n", " ");
 			sEntryText = (sEntryText.Length < iTextChunkLength ? sEntryText : sEntryText.Substring(0, iTextChunkLength) + " ...");
 			sRtrn[1] = sEntryText;
-			sRtrn[2] = "labels: " + ClearLabels().Replace(",", ", ");
+			sRtrn[2] = "labels: " + Labels.Replace(",", ", ");
 			sRtrn[3] = "---------------------";
 			return sRtrn;
 		}
 
 		public bool			RemoveOrReplaceLabel(string newLabelName, string oldLabelName, bool renaming = true)
 		{
-			var labels = this.ClearLabels();
+			var labels = this.Labels;
 			var bLabelEdited = false;
 
 			if (labels.Length > 0)
@@ -198,7 +197,7 @@ namespace myNotebooks
 							if(entryRtrn != null)
 							{
 								rtb.Text = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
-								, entryRtrn.ClearTitle(), entryRtrn.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), entryRtrn.ClearLabels(), entryRtrn.ClearText());
+								, entryRtrn.Title, entryRtrn.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), entryRtrn.Labels, entryRtrn.Text);
 							}
 						}
 
@@ -212,12 +211,5 @@ namespace myNotebooks
 			}
 			return entryRtrn;
 		}
-
-		public string ClearTitle() { return Title; }
-		public string ClearText() { return Text; }  //// EncryptDecrypt.Decrypt(Title); }
-		public string ClearRTF() { return RTF; }// EncryptDecrypt.Decrypt(RTF); }
-		public string ClearLabels() { return Labels == null ? "" : Labels; }
-		public string ClearNotebookName() { return NotebookName; }	// return EncryptDecrypt.Decrypt(NotebookName); }
-
 	}
 }

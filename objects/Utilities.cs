@@ -164,7 +164,7 @@ namespace myNotebooks.objects
 					tmpEntries.Sort((x, y) => -x.LastEditedOn.CompareTo(y.LastEditedOn));
 					break;
 				case 2:
-					tmpEntries.Sort((x, y) => x.ClearTitle().CompareTo(y.ClearTitle()));
+					tmpEntries.Sort((x, y) => x.Title.CompareTo(y.Title));
 					break;
 			}
 

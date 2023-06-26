@@ -48,7 +48,7 @@ namespace myNotebooks.objects
 
 		public static void CheckedLabels_Set(CheckedListBox clb, Entry entry)
 		{
-			var labels = entry.ClearLabels().Split(",");
+			var labels = entry.Labels.Split(",");
 			for (var i = 0; i < clb.Items.Count; i++) { clb.SetItemChecked(i, labels.Contains(clb.Items[i].ToString())); }
 		}
 
@@ -92,7 +92,7 @@ namespace myNotebooks.objects
 				{
 					Utilities.SetProgramPIN(kvp.Key);
 					foreach (Entry e in nbook.Entries)
-					{ foreach(var v2 in allLabels.Intersect(e.ClearLabels().Split(',')).ToList()) { lstReturn.Remove(v2); } }
+					{ foreach(var v2 in allLabels.Intersect(e.Labels.Split(',')).ToList()) { lstReturn.Remove(v2); } }
 				}
 			}
 			return lstReturn;
@@ -104,9 +104,9 @@ namespace myNotebooks.objects
 
 			if(journalToSearch == null && journalName != string.Empty) { journalToSearch = new Notebook(journalName).Open(); }
 
-			foreach(Entry je in journalToSearch.Entries)
+			foreach(Entry nbEntry in journalToSearch.Entries)
 			{
-				var sLabels = je.ClearLabels();
+				var sLabels = nbEntry.Labels;
 
 				if(sLabels.Length > 0)
 				{
@@ -142,7 +142,7 @@ namespace myNotebooks.objects
 			{
 				Utilities.SetProgramPIN(journal.Name);
 
-				if (journal.Entries.Where(t => ("," + t.ClearLabels() + ",").Contains("," + labelName + ",")).ToList().Count > 0)
+				if (journal.Entries.Where(t => ("," + t.Labels + ",").Contains("," + labelName + ",")).ToList().Count > 0)
 				{
 					lstRtrn.Add(journal);
 					if (returnIfTwoFound && lstRtrn.Count == 2) { break; }

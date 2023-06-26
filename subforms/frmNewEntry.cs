@@ -55,7 +55,7 @@ namespace myNotebooks.subforms
 
 			if (IsEdit)
 			{
-				txtNewEntryTitle.Text = Entry.ClearTitle();
+				txtNewEntryTitle.Text = Entry.Title;
 				lblCreatedOn.Visible = true;
 				lblEditedOn.Visible = true;
 
@@ -65,7 +65,7 @@ namespace myNotebooks.subforms
 				if (PreserveOriginalText)
 				{
 					OriginalText_Full = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Editing"],
-						this.Entry.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), this.Entry.ClearTitle(), this.Entry.ClearText());
+						this.Entry.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), this.Entry.Title, this.Entry.Text);
 
 					OriginalEntryLength = OriginalText_Full.Length - 1;
 					OriginalText_Full = OriginalText_Full.Substring(OriginalText_Full.Length - OriginalEntryLength + 1);
@@ -74,7 +74,7 @@ namespace myNotebooks.subforms
 				}
 				else
 				{
-					rtbNewEntry.Text = Entry.ClearText();
+					rtbNewEntry.Text = Entry.Text;
 				}
 
 				LabelsManager.CheckedLabels_Set(clbLabels, Entry);
@@ -244,7 +244,7 @@ namespace myNotebooks.subforms
 
 			if (this.Entry != null & CurrentNotebook != null)
 			{
-				this.Text = "editing '" + Entry.ClearTitle() + "' in '" + CurrentNotebook.Name + "'";
+				this.Text = "editing '" + Entry.Title + "' in '" + CurrentNotebook.Name + "'";
 			}
 			else
 			{

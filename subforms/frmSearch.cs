@@ -48,9 +48,9 @@ namespace myNotebooks.subforms
 				{
 					Notebook nb = frm.Notebook;
 					FoundEntries.ForEach(e => e.NotebookName = frm.Notebook.Name);
-					await nb.Create(false);
 					nb.Entries.AddRange(FoundEntries);
-					await nb.Save();
+					await nb.Create(false);
+					//await nb.Save();
 					NotebookName = nb.Name;
 					using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.Message, "The notebook '" + NotebookName + "' was created.", "", this)) { frm2.ShowDialog(); }
 				}
@@ -189,7 +189,7 @@ namespace myNotebooks.subforms
 		{
 			this.Cursor = Cursors.WaitCursor;
 			Entry fe = lstFoundEntries.SelectedIndex == 0 ? FoundEntries[0] : FoundEntries[lstFoundEntries.SelectedIndex / 4];
-			Notebook nb = new Notebook(fe.ClearNotebookName(), "", this).Open();
+			Notebook nb = new Notebook(fe.NotebookName, "", this).Open();
 			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
 
 			using (frmNewEntry frm = new frmNewEntry(this, nb, fe, mnu.Text.ToLower().StartsWith("preserve")))
@@ -214,13 +214,13 @@ namespace myNotebooks.subforms
 			this.Cursor = Cursors.WaitCursor;
 			Entry fe = lstFoundEntries.SelectedIndex == 0 ? FoundEntries[0] : FoundEntries[lstFoundEntries.SelectedIndex / 4];
 
-			using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Delete '" + fe.ClearTitle() + "' from '" + fe.ClearNotebookName() + "'?", "Delete Entry", this))
+			using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Delete '" + fe.Title + "' from '" + fe.NotebookName + "'?", "Delete Entry", this))
 			{
 				frm.ShowDialog();
 
 				if (frm.Result == frmMessage.ReturnResult.Yes)
 				{
-					Notebook nb = new Notebook(fe.ClearNotebookName(), "", this).Open();
+					Notebook nb = new Notebook(fe.NotebookName, "", this).Open();
 
 					if (nb != null)
 					{
@@ -249,7 +249,7 @@ namespace myNotebooks.subforms
 		private void SetNotebookSelectLabelAndButton()
 		{
 			lblSearchingIn.Text = "Searching in " +
-				(Program.DictCheckedNotebooks.Count == Program.AllNotebooks.Count ? "all " : Program.DictCheckedNotebooks.Count.ToString() + " selected ") + "notebook" + (Program.DictCheckedNotebooks.Count == 1 ? "" : "s");
+				(Program.DictCheckedNotebooks.Count == Program.AllNotebookNames.Count ? "all " : Program.DictCheckedNotebooks.Count.ToString() + " selected ") + "notebook" + (Program.DictCheckedNotebooks.Count == 1 ? "" : "s");
 
 			btnSelectNotebooks.Left = lblSearchingIn.Left + lblSearchingIn.Width + 5;
 		}

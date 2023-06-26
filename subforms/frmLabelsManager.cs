@@ -445,21 +445,21 @@ namespace myNotebooks.subforms
 
 				if (notebooksWithLabel.Count > 0)
 				{
-					foreach (Notebook jrnl in notebooksWithLabel)
+					foreach (Notebook nb in notebooksWithLabel)
 					{
-						Utilities.SetProgramPIN(jrnl.Name);
-						List<Entry> foundLables = jrnl.Entries.Where(t => ("," + t.ClearLabels() + ",").Contains("," + labelName + ",")).ToList();
+						Utilities.SetProgramPIN(nb.Name);
+						List<Entry> foundLables = nb.Entries.Where(t => ("," + t.Labels + ",").Contains("," + labelName + ",")).ToList();
 
 						if (foundLables.Count > 0)
 						{
-							lstOccurrences.Items.Add("in '" + jrnl.Name + "'");
+							lstOccurrences.Items.Add("in '" + nb.Name + "'");
 							OccurenceTitleIndicies.Add(lstOccurrences.Items.Count - 1);
 							lstEntryObjects.Items.Add("");
 
-							foreach (Entry je in foundLables.OrderByDescending(e => e.Date))
+							foreach (Entry nbEntry in foundLables.OrderByDescending(e => e.Date))
 							{
-								lstOccurrences.Items.Add("   > " + je.ClearTitle());
-								lstEntryObjects.Items.Add(new KeyValuePair<Notebook, Entry>(jrnl, je));
+								lstOccurrences.Items.Add("   > " + nbEntry.Title);
+								lstEntryObjects.Items.Add(new KeyValuePair<Notebook, Entry>(nb, nbEntry));
 							}
 
 							lstOccurrences.Items.Add("-----------------------");
