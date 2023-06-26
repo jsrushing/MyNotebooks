@@ -936,6 +936,8 @@ namespace myNotebooks.subforms
 				pnlDateFilters.Visible = false;
 				lblSeparator.Visible = false;
 				rtbSelectedEntry.Visible = false;
+				lblSelectionType.Visible = false;
+				lblEntries.Visible = false;
 			}
 		}
 
