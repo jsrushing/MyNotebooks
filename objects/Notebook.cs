@@ -170,10 +170,10 @@ namespace myNotebooks
 						nbRtrn					= (Notebook)formatter.Deserialize(stream);
 						nbRtrn.FileName			= EncryptDecrypt			.Decrypt(nbRtrn.FileName);
 						nbRtrn.Name				= EncryptDecrypt			.Decrypt(nbRtrn.Name);
-						nbRtrn.Entries.ForEach(e => e.Title = EncryptDecrypt.Decrypt(e.Title));
-						nbRtrn.Entries.ForEach(e => e.Text = EncryptDecrypt	.Decrypt(e.Text));
-						nbRtrn.Entries.ForEach(e => e.Labels = EncryptDecrypt	.Decrypt(e.Labels));
-						nbRtrn.Entries.ForEach(e => e.RTF = EncryptDecrypt	.Decrypt(e.RTF));
+						nbRtrn.Entries.ForEach(e => e.Title		= EncryptDecrypt.Decrypt(e.Title));
+						nbRtrn.Entries.ForEach(e => e.Text		= EncryptDecrypt.Decrypt(e.Text));
+						nbRtrn.Entries.ForEach(e => e.Labels	= EncryptDecrypt.Decrypt(e.Labels));
+						nbRtrn.Entries.ForEach(e => e.RTF		= EncryptDecrypt.Decrypt(e.RTF));
 						nbRtrn.Entries.ForEach(e => e.NotebookName = EncryptDecrypt.Decrypt(e.NotebookName));
 					}
 				}	

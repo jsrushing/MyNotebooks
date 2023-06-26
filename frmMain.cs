@@ -198,7 +198,7 @@ namespace myNotebooks.subforms
 
 			#region one-time code
 
-			// one-time code to convert Journal objects to Notebook objects
+			// convert Journal objects to Notebook objects
 
 			//using (Stream stream = File.Open("C:\\Users\\js_ru\\source\\repos\\myJournal2022\\bin\\Debug\\netcoreapp3.1\\journals - Copy\\The New Real Thing", FileMode.Open))
 			//{
@@ -241,19 +241,29 @@ namespace myNotebooks.subforms
 			//	await newNotebook.Create(false);
 			//}
 
-			// code to fix The New Real Thing entries
-			//Notebook nb = new Notebook("The New Real Thing").Open();
+			// fix The New Real Thing entries
 			//Program.PIN = "0711";
-			//nb.Entries.ForEach(E => E.NotebookName = EncryptDecrypt.Encrypt("The New Real Thing"));
-			//nb.Save();
+			//Notebook nb = new Notebook("The New Real Thing").Open();
 
-			//Notebook nb = new Notebook("The New Real Thing").Open();
-			//Program.PIN = "0711";
+			////fix some entries.RTF property is blank.
+			////List<Entry> v = nb.Entries.Where(e => e.RTF.Length == 0).ToList();
+			////v.ForEach(e => e.RTF = "{rtf");
+			////// nb.Entries.ForEach(E => E.NotebookName = EncryptDecrypt.Encrypt("The New Real Thing"));
+			////nb.Save();
+
+			//// fix The New Real Thing problem of Entry[0] is not the 'created' entry.
+			////Notebook nb = new Notebook("The New Real Thing").Open();
+			////Program.PIN = "0711";
+			//Entry entry = new Entry("created", "-", "{f", "The New Real Thing");
+			//entry.Date = DateTime.Parse("12/01/2021 12:00 AM");
+			//nb.Entries.Insert(0, entry);
+			//nb.Save();
+			//List<Entry> indx = nb.Entries.Where(e => e.Title == EncryptDecrypt.Encrypt("created")).ToList();
 			//nb.FileName = EncryptDecrypt.Encrypt(nb.FileName);
 			//nb.Name = EncryptDecrypt.Encrypt(nb.Name);
 			//nb.Save();
 
-			// code to fix all NotebookName values (encrypt them)
+			// fix all NotebookName values (encrypt them)
 			//Utilities.PopulateAllNotebooks();
 			//Program.PIN = "";
 
@@ -331,8 +341,8 @@ namespace myNotebooks.subforms
 			Program.PIN = txtJournalPIN.Text;
 			lblWrongPin.Visible = false;
 			CurrentNotebook = new Notebook(ddlNotebooks.Text, null, this).Open();
-			Program.AllNotebooks.Add(CurrentNotebook);
-			Program.AllNotebookNames.Add(CurrentNotebook.Name);
+			if (!Program.AllNotebooks.Contains(CurrentNotebook)) { Program.AllNotebooks.Add(CurrentNotebook); }
+			if (!Program.AllNotebookNames.Contains(CurrentNotebook.Name)) { Program.AllNotebookNames.Add(CurrentNotebook.Name); }
 
 			if (CurrentNotebook.Settings.AllowCloud && Program.AzurePassword.Length > 0 )
 			{
@@ -355,9 +365,7 @@ namespace myNotebooks.subforms
 				if (CurrentNotebook != null)
 				{	// Test the PIN ...
 					Program.PIN = txtJournalPIN.Text;
-					var iEntryIndx = CurrentNotebook.Entries.Count == 1 ? 0 : 1;
-					//var rtf = CurrentNotebook.Entries[iEntryIndx].RTF;
-					wrongPIN = CurrentNotebook.Entries[0].RTF != "-" ;// CurrentNotebook.Entries.Count == 1 ? text != "-" : !text.Contains(" ") & text.Length >9;
+					wrongPIN = CurrentNotebook.Entries[0].Title != "created"; // The 0th entry is system-defined with its Title = "created". This is encrypted in the file so decrypt will fail with the wrong PIN.
 
 					if (wrongPIN)
 					{
