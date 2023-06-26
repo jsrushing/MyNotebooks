@@ -215,12 +215,13 @@ namespace myNotebooks.subforms
 			// one-time code to create 50 notebooks
 			//Notebook newNotebook;
 			//Entry newEntry;
-			//Program.PIN = "0000";
+			////Program.PIN = "0000";
 
 			//for (var i = 0; i < 10; i++)
 			//{
+			//	Program.PIN = "";
 			//	newNotebook = new Notebook();
-			//	newNotebook.Name = "Project " + i.ToString();
+			//	newNotebook.Name = "Project " + i.ToString();   // EncryptDecrypt.Encrypt("Project " + i.ToString());
 			//	newNotebook.LastSaved = DateTime.Now;
 			//	newNotebook.FileName = AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + newNotebook.Name;
 			//	var rnd = new Random(Guid.NewGuid().GetHashCode());
@@ -234,16 +235,22 @@ namespace myNotebooks.subforms
 			//	}
 
 			//	Entry newEntry1 = new Entry("created", "-", "-", "", newNotebook.Name);
-			//	newEntry1.Date = DateTime.Now.AddDays(-200);
+			//	newEntry1.Date = DateTime.Parse("01/01/23 1:00 AM");
 			//	newNotebook.Entries.Add(newEntry1);
 			//	newNotebook.Settings = new NotebookSettings { AllowCloud = true };
-			//	await newNotebook.Create();
+			//	await newNotebook.Create(false);
 			//}
 
 			// code to fix The New Real Thing entries
 			//Notebook nb = new Notebook("The New Real Thing").Open();
 			//Program.PIN = "0711";
 			//nb.Entries.ForEach(E => E.NotebookName = EncryptDecrypt.Encrypt("The New Real Thing"));
+			//nb.Save();
+
+			//Notebook nb = new Notebook("The New Real Thing").Open();
+			//Program.PIN = "0711";
+			//nb.FileName = EncryptDecrypt.Encrypt(nb.FileName);
+			//nb.Name = EncryptDecrypt.Encrypt(nb.Name);
 			//nb.Save();
 
 			// code to fix all NotebookName values (encrypt them)
@@ -269,7 +276,7 @@ namespace myNotebooks.subforms
 			using (frmAzurePwd frm = new frmAzurePwd(this, frmAzurePwd.Mode.AskingForKey))
 			{ if (Program.AzurePassword.Length > 0) { frm.Close(); } }
 
-			//Program.AzurePassword = string.Empty;	// Kills the Azure synch process for debugging if desired.
+			Program.AzurePassword = string.Empty;	// Kills the Azure synch process for debugging if desired.
 
 			pnlDateFilters.Left = pnlPin.Left - 11;
 			ShowHideMenusAndControls(SelectionState.HideAll);
@@ -283,6 +290,26 @@ namespace myNotebooks.subforms
 
 			await Utilities.PopulateAllNotebookNames();
 			LoadNotebooks();
+
+			if (ddlNotebooks.Items.Count == 0)
+			{
+				using (frmNewNotebook frm = new frmNewNotebook(this))
+				{
+					frm.ShowDialog();
+
+					if (frm.Notebook != null)
+					{ 
+						await frm.Notebook.Create();
+						LoadNotebooks();
+					}
+					else
+					{
+						using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.Message, "At least one notebook must exist. Please re-open the program and create a notebook.", "One Notebook Must Exist", this))
+						{ frm2.ShowDialog(); this.Close(); }
+					}
+				}
+			}
+
 			this.Cursor = Cursors.Default;
 		}
 
@@ -302,11 +329,11 @@ namespace myNotebooks.subforms
 			rtbSelectedEntry.Text = string.Empty;
 			Program.PIN = txtJournalPIN.Text;
 			lblWrongPin.Visible = false;
-			CurrentNotebook = new Notebook(ddlNotebooks.Text, "", this).Open();
+			CurrentNotebook = new Notebook(ddlNotebooks.Text, null, this).Open();
 			Program.AllNotebooks.Add(CurrentNotebook);
 			Program.AllNotebookNames.Add(CurrentNotebook.Name);
 
-			if (CurrentNotebook.Settings.AllowCloud)
+			if (CurrentNotebook.Settings.AllowCloud && Program.AzurePassword.Length > 0 )
 			{
 				var nbPath = CurrentNotebook.FileName;
 				var nbName = CurrentNotebook.Name;
@@ -321,14 +348,14 @@ namespace myNotebooks.subforms
 
 			try
 			{
-				CurrentNotebook = new Notebook(ddlNotebooks.Text, "", this).Open();
+				//CurrentNotebook = new Notebook(ddlNotebooks.Text, "", this).Open();
 				var wrongPIN = true;
 
 				if (CurrentNotebook != null)
 				{	// Test the PIN ...
 					Program.PIN = txtJournalPIN.Text;
 					var iEntryIndx = CurrentNotebook.Entries.Count == 1 ? 0 : 1;
-					var text = EncryptDecrypt.Decrypt(CurrentNotebook.Entries[iEntryIndx].Text);
+					var text = CurrentNotebook.Entries[iEntryIndx].Text;
 					wrongPIN = CurrentNotebook.Entries.Count == 1 ? text != "-" : !text.Contains(" ") & text.Length > 49;
 
 					if (wrongPIN)
@@ -347,7 +374,7 @@ namespace myNotebooks.subforms
 						lstEntries.Visible = true;
 						pnlDateFilters.Visible = true;
 
-						for (int i = 0; i < cbxDatesFrom.Items.Count; i++)
+						for (var i = 0; i < cbxDatesFrom.Items.Count; i++)
 						{
 							if (DateTime.Parse(cbxDatesFrom.Items[i].ToString()) <= DateTime.Parse(cbxDatesTo.Text).AddDays(-60) || i == cbxDatesFrom.Items.Count - 1)
 							{
@@ -499,7 +526,7 @@ namespace myNotebooks.subforms
 		{
 			ddlNotebooks.Items.Clear();
 			ddlNotebooks.Text = string.Empty;
-			await Utilities.PopulateAllNotebookNames();
+			if(Program.AllNotebookNames.Count == 0) await Utilities.PopulateAllNotebookNames();
 			ddlNotebooks.Items.AddRange(Program.AllNotebookNames.ToArray());
 
 			if (ddlNotebooks.Items.Count > 0)
@@ -666,7 +693,7 @@ namespace myNotebooks.subforms
 					frm.Notebook.LastSaved = DateTime.Now;
 					frm.Notebook.FileName = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + frm.Notebook.Name;
 					await frm.Notebook.Create();
-					await Utilities.PopulateAllNotebookNames();
+					//await Utilities.PopulateAllNotebookNames();
 					LoadNotebooks();
 				}
 			}

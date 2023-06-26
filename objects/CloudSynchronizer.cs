@@ -9,6 +9,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Encryption;
 
 namespace myNotebooks.objects
 {
@@ -204,11 +205,11 @@ namespace myNotebooks.objects
 
 		public async Task SynchWithCloud(bool alsoSynchSettings = false, Notebook notebook = null, bool checkCloudStatusOnly = false)
 		{
-			var notebooksFolder			= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"];
-			var tempFolder				= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"];
+			var notebooksFolder				= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"];
+			var tempFolder					= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"];
+			List<string> allNotebooksNames	= new List<string>();
 
-			List<string> allNotebooksNames = new List<string>();
-			
+			await Utilities.PopulateAllNotebookNames();
 			if (notebook == null) { allNotebooksNames = Program.AllNotebookNames; } else { allNotebooksNames.Add(notebook.Name); }
 
 			if(checkCloudStatusOnly)
@@ -230,7 +231,9 @@ namespace myNotebooks.objects
 					}
 
 					await Utilities.PopulateAllNotebooks(allNotebooksNames);
+
 					Notebook nb = Program.AllNotebooks.Where(e => e.Name == notebook.Name & e.LastSaved == notebook.LastSaved).First();
+
 					if (nb == null) { Program.AllNotebooks.Add(notebook); }
 				}
 

@@ -93,7 +93,7 @@ namespace Encryption
 			catch (Exception ex)
             {
 				Console.Write(ex.Message);
-				return string.Empty;
+				return " <decrypt failed> ";	// string.Empty;
             }
         }
 

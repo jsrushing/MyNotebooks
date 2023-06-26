@@ -46,10 +46,10 @@ namespace myNotebooks.subforms
 			}
 			else
 			{
-				NotebookSettings nbs = Notebook.Settings;
-				this.Notebook = new Notebook(txtName.Text, "", this);
-				Notebook.Settings = nbs;
-				Program.PIN = txtPIN.Text;
+				NotebookSettings nbs	= Notebook.Settings;
+				this.Notebook			= new Notebook(txtName.Text, null, this);
+				Notebook.Settings		= nbs;
+				Program.PIN				= txtPIN.Text;
 				this.Hide();
 			}
 		}

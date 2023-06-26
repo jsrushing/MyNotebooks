@@ -46,17 +46,17 @@ namespace myNotebooks
 		//	isEdited = entry.isEdited;
 		//}
 
-		public Entry(string _title, string _text, string _RTF, string _labels, string _NotebookName = "", bool _edited = false)
+		public Entry(string _title, string _text, string _RTF, string _labels, string _notebookName = "", bool _edited = false)
         {
 			if(Date == DateTime.MinValue) { Date = DateTime.Now; }
 
-			Text		= EncryptDecrypt.Encrypt(_text.Trim());
-            Title		= EncryptDecrypt.Encrypt(_title.Trim());
-			RTF			= EncryptDecrypt.Encrypt(_RTF);
-            Labels		= EncryptDecrypt.Encrypt(_labels);
-			NotebookName = EncryptDecrypt.Encrypt(_NotebookName);
-            Id			= Guid.NewGuid().ToString();
-			isEdited	= _edited;	
+			Text			= _text.Trim();		// EncryptDecrypt.Encrypt(_text.Trim());
+			Title			= _title.Trim();	// EncryptDecrypt.Encrypt(_title.Trim());
+			RTF				= _RTF;				//EncryptDecrypt.Encrypt(_RTF);
+			Labels			= _labels;			// EncryptDecrypt.Encrypt(_labels);
+			NotebookName	= _notebookName;	// EncryptDecrypt.Encrypt(_notebookName);
+            Id				= Guid.NewGuid().ToString();
+			isEdited		= _edited;	
 		}
 
 		string				GetTextDisplayText()
@@ -104,7 +104,7 @@ namespace myNotebooks
 					}
 
 					var finalLabelsString = String.Join(",", arrLabels).Trim(',').Replace(",,", "");
-					this.Labels = finalLabelsString.Length > 0 ? EncryptDecrypt.Encrypt(finalLabelsString) : string.Empty;
+					this.Labels = finalLabelsString.Length > 0 ? finalLabelsString : string.Empty;
 					bLabelEdited = true;
 				}
 			}
@@ -213,10 +213,11 @@ namespace myNotebooks
 			return entryRtrn;
 		}
 
-		public string		ClearText()	{ return EncryptDecrypt.Decrypt(Text); }
-		public string		ClearTitle()	{ return EncryptDecrypt.Decrypt(Title); }
-		public string		ClearRTF()	{ return EncryptDecrypt.Decrypt(RTF); }
-		public string		ClearLabels()	{ return Labels == null ? String.Empty : EncryptDecrypt.Decrypt(Labels); }
-		public string		ClearNotebookName() { return EncryptDecrypt.Decrypt(NotebookName); }
+		public string ClearTitle() { return Title; }
+		public string ClearText() { return Text; }  //// EncryptDecrypt.Decrypt(Title); }
+		public string ClearRTF() { return RTF; }// EncryptDecrypt.Decrypt(RTF); }
+		public string ClearLabels() { return Labels == null ? "" : Labels; }
+		public string ClearNotebookName() { return NotebookName; }	// return EncryptDecrypt.Decrypt(NotebookName); }
+
 	}
 }

@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Encryption;
 using myNotebooks.subforms;
 
 namespace myNotebooks.objects
@@ -20,7 +21,11 @@ namespace myNotebooks.objects
 			
 			if(notebookNames != null)
 			{
-				Program.AllNotebookNames.AddRange(notebookNames);
+				//Program.AllNotebookNames.AddRange(notebookNames);
+				foreach(string notebookName in notebookNames)
+				{
+					Program.AllNotebookNames.Add(notebookName);
+				}
 			}
 			else
 			{
@@ -32,7 +37,8 @@ namespace myNotebooks.objects
 		public static async Task PopulateAllNotebooks(List<string> notebookNames = null)
 		{
 			Program.AllNotebooks.Clear();
-			if(notebookNames == null) { await PopulateAllNotebookNames(); } else { await PopulateAllNotebookNames(notebookNames); }
+			await PopulateAllNotebookNames(notebookNames);
+			//if(notebookNames == null) { await PopulateAllNotebookNames(); } else { await PopulateAllNotebookNames(notebookNames); }
 			foreach (var notebookName in Program.AllNotebookNames) { Program.AllNotebooks.Add(new Notebook(notebookName).Open()); }
 		}
 

@@ -29,7 +29,6 @@ namespace myNotebooks
 		public List<Entry>			Entries = new List<Entry>();
 		public string root			= "notebooks\\";
 		public NotebookSettings		Settings;
-		//Form						Parent = null;
 		public bool BackupCompleted { get; private set; }
 
 		//public Notebook(myJournal.Journal journal)
@@ -61,7 +60,6 @@ namespace myNotebooks
 				if (_fileName != null) { this.FileName = _fileName; } 
 				else { this.FileName = Program.AppRoot + this.root + this.Name; }
 			}
-				//this.Parent = thisParent;
 		}
 
 		public void AddEntry(Entry entryToAdd) { Entries.Add(entryToAdd); }
@@ -176,19 +174,27 @@ namespace myNotebooks
 		public Notebook Open(bool useFileName = false)
         {
             Notebook nbRtrn = null;
-			var NotebookToOpen = useFileName ? this.FileName : Program.AppRoot + this.root + this.Name;
+			var NotebookToOpen = "";
+			NotebookToOpen = useFileName ? this.FileName : Program.AppRoot + this.root + this.Name;
 
 			try
             {
 				if(NotebookToOpen.Length > 0)
 				{
+					var nbName = NotebookToOpen.Contains("\\") ?
+						NotebookToOpen.Substring(NotebookToOpen.LastIndexOf("\\") + 1, NotebookToOpen.Length - NotebookToOpen.LastIndexOf("\\") - 1) : NotebookToOpen;
+
 					using(Stream stream = File.Open(NotebookToOpen, FileMode.Open))
 					{
 						BinaryFormatter formatter = new BinaryFormatter();
-						nbRtrn = (Notebook)formatter.Deserialize(stream);
-						nbRtrn.FileName = NotebookToOpen;
-						nbRtrn.Name = NotebookToOpen.Substring(NotebookToOpen.LastIndexOf("\\") + 1);
-						//nbRtrn.Parent = this.Parent;
+						nbRtrn					= (Notebook)formatter.Deserialize(stream);
+						nbRtrn.FileName			= EncryptDecrypt			.Decrypt(nbRtrn.FileName);
+						nbRtrn.Name				= EncryptDecrypt			.Decrypt(nbRtrn.Name);
+						nbRtrn.Entries.ForEach(e => e.Title = EncryptDecrypt.Decrypt(e.Title));
+						nbRtrn.Entries.ForEach(e => e.Text = EncryptDecrypt	.Decrypt(e.Text));
+						nbRtrn.Entries.ForEach(e => e.Labels = EncryptDecrypt	.Decrypt(e.Labels));
+						nbRtrn.Entries.ForEach(e => e.RTF = EncryptDecrypt	.Decrypt(e.RTF));
+						nbRtrn.Entries.ForEach(e => e.NotebookName = EncryptDecrypt.Decrypt(e.NotebookName));
 					}
 				}	
             }
@@ -308,41 +314,53 @@ namespace myNotebooks
 						{
 							foreach (Entry e in this.Entries)
 							{
+
 								// get the entry's key values
-								EntryValues ev = new EntryValues
-								{
-									RTF				= e.ClearRTF(),
-									text			= e.ClearText(),
-									title			= e.ClearTitle(),
-									labels			= e.ClearLabels(),
-									notebookName	= e.ClearNotebookName()
-								};
+								//EntryValues ev = new EntryValues
+								//{
+								//	RTF				= e.ClearRTF(),
+								//	text			= e.ClearText(),
+								//	title			= e.ClearTitle(),
+								//	labels			= e.ClearLabels(),
+								//	notebookName	= e.ClearNotebookName(),
+								//};
 
 								// set programPIN to newPin
 								Program.PIN = newPIN;
 
 								// encrypt key values w/ new pin
-								e.Text			= EncryptDecrypt.Encrypt(ev.text);
-								e.Title			= EncryptDecrypt.Encrypt(ev.title);
-								e.Labels		= EncryptDecrypt.Encrypt(ev.labels);
-								e.NotebookName	= EncryptDecrypt.Encrypt(ev.notebookName);
-								Program.PIN		= currentPIN;
+								//e.Text			= EncryptDecrypt.Encrypt(ev.text);
+								//e.Title			= EncryptDecrypt.Encrypt(ev.title);
+								//e.Labels		= EncryptDecrypt.Encrypt(ev.labels);
+								//e.NotebookName	= EncryptDecrypt.Encrypt(ev.notebookName);
 								save			= true;
 							}
 						}
 					}
 				}
 
-				if (save) { await this.Save(); Program.PIN = newPIN; }
+				if (save) { await this.Save(); }
 			}
 		}
 
 		public async Task Save(bool synchWithCloud = true)
 		{
-			this.LastSaved = DateTime.Now;
-			File.Delete(this.FileName);
+			var fName = this.FileName.Length > 0 ? this.FileName : Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + this.Name;
+			fName = fName.Contains("\\") ? fName :  Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + this.Name;
 
-			using (Stream stream = File.Open(this.FileName, FileMode.Create))
+			File.Delete(fName);
+
+			// Encrypt the notebook and entries to save to disk.
+			this.LastSaved			= DateTime.Now;
+			this.FileName			= EncryptDecrypt				.Encrypt(this.FileName);
+			this.Name				= EncryptDecrypt				.Encrypt(this.Name);
+			this.Entries.ForEach(e	=> e.Title	= EncryptDecrypt	.Encrypt(e.Title));
+			this.Entries.ForEach(e	=> e.Text	= EncryptDecrypt	.Encrypt(e.Text));
+			this.Entries.ForEach(e	=> e.Labels = EncryptDecrypt	.Encrypt(e.Labels));
+			this.Entries.ForEach(e	=> e.RTF	= EncryptDecrypt	.Encrypt(e.RTF));
+			this.Entries.ForEach(e	=> e.NotebookName = EncryptDecrypt.Encrypt(e.NotebookName));
+
+			using (Stream stream = File.Open(fName, FileMode.Create))
 			{
 				BinaryFormatter formatter = new BinaryFormatter();
 				formatter.Serialize(stream, this);
@@ -356,6 +374,15 @@ namespace myNotebooks
 					await cs.SynchWithCloud(false, this);
 				}
 			}
+
+			// Decrypt the notebook and entries to hold in memory.
+			this.FileName			= EncryptDecrypt			.Decrypt(this.FileName);
+			this.Name				= EncryptDecrypt			.Decrypt(this.Name);
+			this.Entries.ForEach(e	=> e.Title	= EncryptDecrypt.Decrypt(e.Title));
+			this.Entries.ForEach(e	=> e.Text	= EncryptDecrypt.Decrypt(e.Text));
+			this.Entries.ForEach(e	=> e.Labels = EncryptDecrypt.Decrypt(e.Labels));
+			this.Entries.ForEach(e	=> e.RTF	= EncryptDecrypt.Decrypt(e.RTF));
+			this.Entries.ForEach(e	=> e.NotebookName = EncryptDecrypt.Decrypt(e.NotebookName));
 
 			//Backup();
 			await Utilities.PopulateAllNotebookNames();
