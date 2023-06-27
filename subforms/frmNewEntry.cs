@@ -220,6 +220,7 @@ namespace myNotebooks.subforms
 					this.Entry.Labels	= LabelsManager.CheckedLabels_Get(clbLabels);
 					this.Entry.RTF		= rtbNewEntry.Rtf;
 					Entry.LastEditedOn	= DateTime.Now;
+
 				}
 				else
 				{

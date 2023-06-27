@@ -136,15 +136,16 @@ namespace myNotebooks.objects
 		public static List<Notebook> NotebooksContainingLabel(string labelName, bool returnIfTwoFound = false)
 		{
 			List<Notebook> lstRtrn = new List<Notebook>();
-			List<Notebook> jrnls2Search = Program.AllNotebooks.Where(e => Program.DictCheckedNotebooks.ContainsKey(e.Name)).ToList();
 
-			foreach (Notebook journal in jrnls2Search)
+			List<Notebook> nBooks2Search = Utilities.GetCheckedNotebooks().Where(e => Program.DictCheckedNotebooks.ContainsKey(e.Name)).ToList();
+
+			foreach (Notebook nBook in nBooks2Search)
 			{
-				Utilities.SetProgramPIN(journal.Name);
+				Utilities.SetProgramPIN(nBook.Name);
 
-				if (journal.Entries.Where(t => ("," + t.Labels + ",").Contains("," + labelName + ",")).ToList().Count > 0)
+				if (nBook.Entries.Where(t => ("," + t.Labels + ",").Contains("," + labelName + ",")).ToList().Count > 0)
 				{
-					lstRtrn.Add(journal);
+					lstRtrn.Add(nBook);
 					if (returnIfTwoFound && lstRtrn.Count == 2) { break; }
 				}
 			}

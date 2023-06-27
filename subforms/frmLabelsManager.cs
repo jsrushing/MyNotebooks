@@ -19,6 +19,8 @@ namespace myNotebooks.subforms
 		private LabelsManager.LabelsSortType sort = LabelsManager.LabelsSortType.None;
 		private List<int> OccurenceTitleIndicies = new List<int>();
 		private bool DeletingOrphans;
+		private string strSeperator = "-----------------------";
+
 		private List<Notebook> SelectedNotebooks { get; set; }
 
 		public bool			ActionTaken { get; private set; }
@@ -31,7 +33,7 @@ namespace myNotebooks.subforms
 			DeletingOrphans = deleteOrphans;
 		}
 
-		private async void		frmLabelsManager_Load(object sender, EventArgs e)
+		private async void	frmLabelsManager_Load(object sender, EventArgs e)
 		{
 			if (DeletingOrphans)
 			{ this.Visible = false; await ManageOrphans(); this.Close(); }
@@ -122,6 +124,22 @@ namespace myNotebooks.subforms
 			else { lstOrphanedLabels.SelectedItems.Clear(); }
 		}
 
+		private Notebook GetSelectedEntrysNotebook()
+		{
+			Notebook notebook = new Notebook();
+			var curIndx = lstOccurrences.SelectedIndex;
+
+			while (lstOccurrences.Items[curIndx].ToString() != strSeperator) { curIndx--; }
+
+			var name = lstOccurrences.Items[curIndx].ToString();
+
+			var nb = name.Substring(name.IndexOf("'") + 1, name.Length - name.LastIndexOf("'") - 1);
+
+			notebook = new Notebook(nb, null, this);
+
+			return notebook;
+		}
+
 		private List<Notebook> GetSelectedNotebooks()
 		{
 			SelectedNotebooks.Clear();
@@ -184,22 +202,24 @@ namespace myNotebooks.subforms
 			mnuContextLabels.Visible = e.Button == MouseButtons.Right && lstLabels.SelectedIndex > -1;
 		}
 
-		private void		lstOccurrences_DoubleClick(object sender, EventArgs e)
+		private async void	lstOccurrences_DoubleClick(object sender, EventArgs e)
 		{
 			try
 			{
 				var i = lstOccurrences.SelectedIndex;
 				KeyValuePair<Notebook, Entry> kvp = (KeyValuePair<Notebook, Entry>)lstEntryObjects.Items[i];
-				Notebook j = kvp.Key;
-				Entry je = kvp.Value;
-				Utilities.SetProgramPIN(j.Name);
+				Utilities.SetProgramPIN(kvp.Key.Name);
+				var currentEntry = kvp.Value;
 
-				using (frmNewEntry frm = new frmNewEntry(this, j, je))
+				using (frmNewEntry frm = new frmNewEntry(this, kvp.Key, kvp.Value))
 				{ 
 					frm.ShowDialog(); 
 
 					if (frm.Saved) 
 					{
+						Entry nbEntry = frm.Entry;
+						kvp.Key.ReplaceEntry(currentEntry, nbEntry);
+						await kvp.Key.Save();
 						var lblIndx = lstLabels.SelectedIndex;
 						PopulateOccurrences();
 						lstLabels.SelectedIndex = -1;
@@ -229,7 +249,7 @@ namespace myNotebooks.subforms
 			else { mnuContextDelete_lstEntries.Visible = false; }
 		}
 
-		private async Task ManageOrphans()
+		private async Task	ManageOrphans()
 		{
 			//List<string> lstOrphans = LabelsManager.FindOrphansInSelectedNotebooks();
 
@@ -416,11 +436,7 @@ namespace myNotebooks.subforms
 
 		private void		mnuSelectNotebooks_Click(object sender, EventArgs e)
 		{
-			using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(this))
-			{
-				frm.ShowDialog();
-				Program.DictCheckedNotebooks = frm.CheckedNotebooks;
-			}
+			using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(this)) { frm.ShowDialog(); }
 			GetSelectedNotebooks();
 			KickLstLabels();
 			ShowPanel(pnlMain);
@@ -462,7 +478,7 @@ namespace myNotebooks.subforms
 								lstEntryObjects.Items.Add(new KeyValuePair<Notebook, Entry>(nb, nbEntry));
 							}
 
-							lstOccurrences.Items.Add("-----------------------");
+							lstOccurrences.Items.Add(strSeperator);
 							lstEntryObjects.Items.Add("");
 						}
 					}
@@ -482,7 +498,7 @@ namespace myNotebooks.subforms
 			foreach (string lbl in lstOrphanedLabels.SelectedItems) { await LabelsManager.DeleteLabel(lbl, Utilities.GetCheckedNotebooks(), this, true); }
 		}
 
-		private void ShowMessage(string sMsg)
+		private void		ShowMessage(string sMsg)
 		{
 			sMsg += Utilities.GetCheckedNotebooks().Count == Program.AllNotebookNames.Count ?
 				" from "

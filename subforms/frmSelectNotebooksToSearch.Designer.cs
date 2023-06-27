@@ -35,7 +35,7 @@ namespace myNotebooks.subforms
 			lblUserPrompt = new System.Windows.Forms.Label();
 			label2 = new System.Windows.Forms.Label();
 			txtPIN = new System.Windows.Forms.TextBox();
-			lstJournalPINs = new System.Windows.Forms.CheckedListBox();
+			lstNotebookPINs = new System.Windows.Forms.CheckedListBox();
 			chkSelectAll = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
@@ -98,16 +98,16 @@ namespace myNotebooks.subforms
 			txtPIN.TabIndex = 50;
 			txtPIN.Text = "(select a Notebook)";
 			// 
-			// lstJournalPINs
+			// lstNotebookPINs
 			// 
-			lstJournalPINs.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-			lstJournalPINs.CheckOnClick = true;
-			lstJournalPINs.FormattingEnabled = true;
-			lstJournalPINs.Location = new System.Drawing.Point(12, 106);
-			lstJournalPINs.Name = "lstJournalPINs";
-			lstJournalPINs.Size = new System.Drawing.Size(236, 346);
-			lstJournalPINs.TabIndex = 51;
-			lstJournalPINs.SelectedIndexChanged += this.lstJournalPINs_SelectedIndexChanged;
+			lstNotebookPINs.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+			lstNotebookPINs.CheckOnClick = true;
+			lstNotebookPINs.FormattingEnabled = true;
+			lstNotebookPINs.Location = new System.Drawing.Point(12, 106);
+			lstNotebookPINs.Name = "lstNotebookPINs";
+			lstNotebookPINs.Size = new System.Drawing.Size(236, 346);
+			lstNotebookPINs.TabIndex = 51;
+			lstNotebookPINs.SelectedIndexChanged += this.lstJournalPINs_SelectedIndexChanged;
 			// 
 			// chkSelectAll
 			// 
@@ -126,7 +126,7 @@ namespace myNotebooks.subforms
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			ClientSize = new System.Drawing.Size(260, 497);
-			Controls.Add(lstJournalPINs);
+			Controls.Add(lstNotebookPINs);
 			Controls.Add(btnDone);
 			Controls.Add(txtPIN);
 			Controls.Add(label2);
@@ -139,6 +139,7 @@ namespace myNotebooks.subforms
 			MinimizeBox = false;
 			Name = "frmSelectNotebooksToSearch";
 			Text = "Choose Notebooks";
+			FormClosing += this.frmSelectNotebooksToSearch_FormClosing;
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
@@ -150,7 +151,7 @@ namespace myNotebooks.subforms
 		private System.Windows.Forms.Button btnAddPIN;
 		private System.Windows.Forms.Button btnDone;
 		private System.Windows.Forms.TextBox txtPIN;
-		private System.Windows.Forms.CheckedListBox lstJournalPINs;
+		private System.Windows.Forms.CheckedListBox lstNotebookPINs;
 		private System.Windows.Forms.CheckBox chkSelectAll;
 	}
 }

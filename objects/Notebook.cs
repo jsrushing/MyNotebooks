@@ -79,14 +79,13 @@ namespace myNotebooks
 
 		public async void Delete()
 		{
-			if (this.Settings.AllowCloud)
+			if (Program.AzurePassword.Length > 0 && this.Settings.AllowCloud)
 			{ await AzureFileClient.DownloadOrDeleteFile(this.FileName, Program.AzurePassword + this.Name, FileMode.Create, true);  }
 
 			Program.DictCheckedNotebooks.Add(this.Name, Program.PIN);
 			List<string> labelsInBook = this.GetAllLabelsInNotebook();
 			List<Notebook> chkdBooks = Utilities.GetCheckedNotebooks();
 			List<Notebook> booksWithLabel = new List<Notebook>();
-			var proceed = false;
 
 			foreach(var lbl in labelsInBook) { booksWithLabel.AddRange(chkdBooks.Where(e => e.HasLabel(lbl) == true).ToList().Except(booksWithLabel)); }
 
@@ -94,20 +93,24 @@ namespace myNotebooks
 			{
 				var lblsInBookCount = labelsInBook.Count;
 				var usePlural = lblsInBookCount > 1;
-
-				using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "This notebook contains " + lblsInBookCount + " labels. Do you want " +
+				var msg = "This notebook contains " + lblsInBookCount + " labels. Do you want " +
 					"to delete th" + (usePlural ? "is " : "ese ") + "label" + (usePlural ? "s " : " ") + " in the " + lblsInBookCount + " selected notebook " +
 					(usePlural ? "s " : " ") + " in which the label " + (usePlural ? "s " : " ") + (usePlural ? "was " : "were ") + "found? " +
-					"If you need to re-select the notebook " + (usePlural ? "s " : " ") + "in which the label will be deleted, click 'No', then the 'Labels' menu, then 'Select Notebooks'.")) 
-				{ frm.ShowDialog(); proceed = frm.Result == frmMessage.ReturnResult.Yes; }
+					"If you need to re-select the notebook " + (usePlural ? "s " : " ") + "in which the label will be deleted, click 'No', then the 'Labels' menu, then 'Select Notebooks'.";
+
+				using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, msg)) 
+				{ 
+					frm.ShowDialog(); 
+
+					if(frm.Result == frmMessage.ReturnResult.Yes)
+					{
+						foreach(var label in labelsInBook) { await LabelsManager.DeleteLabel(label, booksWithLabel); } 
+					}
+				}
 			}
 
-			if (proceed) 
-			{ 
-				foreach(var label in labelsInBook) { await LabelsManager.DeleteLabel(label, booksWithLabel); } 
-				File.Delete(this.FileName);
-				DeleteBackups();
-			}
+			File.Delete(this.FileName);
+			DeleteBackups();
 		}
 		
 		private void DeleteBackups()

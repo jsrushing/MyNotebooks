@@ -47,7 +47,7 @@ namespace myNotebooks.subforms
 			rtbSelectedEntry = new System.Windows.Forms.RichTextBox();
 			lblSeparator = new System.Windows.Forms.Label();
 			menuStrip1 = new System.Windows.Forms.MenuStrip();
-			mnuJournal = new System.Windows.Forms.ToolStripMenuItem();
+			mnuNotebook = new System.Windows.Forms.ToolStripMenuItem();
 			mnuNotebook_Create = new System.Windows.Forms.ToolStripMenuItem();
 			mnuNotebook_Delete = new System.Windows.Forms.ToolStripMenuItem();
 			mnuNotebook_Search = new System.Windows.Forms.ToolStripMenuItem();
@@ -75,6 +75,7 @@ namespace myNotebooks.subforms
 			label3 = new System.Windows.Forms.Label();
 			cbxDatesTo = new System.Windows.Forms.ComboBox();
 			pnlPin = new System.Windows.Forms.Panel();
+			mnuNotebooks_Select = new System.Windows.Forms.ToolStripMenuItem();
 			mnuEntryTop.SuspendLayout();
 			menuStrip1.SuspendLayout();
 			pnlDateFilters.SuspendLayout();
@@ -236,24 +237,24 @@ namespace myNotebooks.subforms
 			// 
 			// menuStrip1
 			// 
-			menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuJournal, mnuLabels, helpToolStripMenuItem, mnuSwitchAccount });
+			menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuNotebook, mnuLabels, helpToolStripMenuItem, mnuSwitchAccount });
 			menuStrip1.Location = new System.Drawing.Point(0, 0);
 			menuStrip1.Name = "menuStrip1";
 			menuStrip1.Size = new System.Drawing.Size(786, 24);
 			menuStrip1.TabIndex = 37;
 			menuStrip1.Text = "menuStrip1";
 			// 
-			// mnuJournal
+			// mnuNotebook
 			// 
-			mnuJournal.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuNotebook_Create, mnuNotebook_Delete, mnuNotebook_Search, mnuNotebook_Rename, mnuNotebook_ForceBackup, mnuNotebook_RestoreBackups, mnuNotebook_Import, mnuNotebook_Export, mnuNotebook_Settings, mnuNotebook_ResetPIN });
-			mnuJournal.Name = "mnuJournal";
-			mnuJournal.Size = new System.Drawing.Size(77, 20);
-			mnuJournal.Text = "&Notebooks";
+			mnuNotebook.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuNotebooks_Select, mnuNotebook_Create, mnuNotebook_Delete, mnuNotebook_Search, mnuNotebook_Rename, mnuNotebook_ForceBackup, mnuNotebook_RestoreBackups, mnuNotebook_Import, mnuNotebook_Export, mnuNotebook_Settings, mnuNotebook_ResetPIN });
+			mnuNotebook.Name = "mnuNotebook";
+			mnuNotebook.Size = new System.Drawing.Size(77, 20);
+			mnuNotebook.Text = "&Notebooks";
 			// 
 			// mnuNotebook_Create
 			// 
 			mnuNotebook_Create.Name = "mnuNotebook_Create";
-			mnuNotebook_Create.Size = new System.Drawing.Size(160, 22);
+			mnuNotebook_Create.Size = new System.Drawing.Size(180, 22);
 			mnuNotebook_Create.Text = "&Create";
 			mnuNotebook_Create.Click += this.mnuNotebook_Create_Click;
 			// 
@@ -261,14 +262,14 @@ namespace myNotebooks.subforms
 			// 
 			mnuNotebook_Delete.Enabled = false;
 			mnuNotebook_Delete.Name = "mnuNotebook_Delete";
-			mnuNotebook_Delete.Size = new System.Drawing.Size(160, 22);
+			mnuNotebook_Delete.Size = new System.Drawing.Size(180, 22);
 			mnuNotebook_Delete.Text = "Delete";
 			mnuNotebook_Delete.Click += this.mnuNotebook_Delete_Click;
 			// 
 			// mnuNotebook_Search
 			// 
 			mnuNotebook_Search.Name = "mnuNotebook_Search";
-			mnuNotebook_Search.Size = new System.Drawing.Size(160, 22);
+			mnuNotebook_Search.Size = new System.Drawing.Size(180, 22);
 			mnuNotebook_Search.Text = "&Search";
 			mnuNotebook_Search.Click += this.mnuNotebook_Search_Click;
 			// 
@@ -276,7 +277,7 @@ namespace myNotebooks.subforms
 			// 
 			mnuNotebook_Rename.Enabled = false;
 			mnuNotebook_Rename.Name = "mnuNotebook_Rename";
-			mnuNotebook_Rename.Size = new System.Drawing.Size(160, 22);
+			mnuNotebook_Rename.Size = new System.Drawing.Size(180, 22);
 			mnuNotebook_Rename.Text = "Rename";
 			mnuNotebook_Rename.Click += this.mnuNotebook_Rename_Click;
 			// 
@@ -284,7 +285,7 @@ namespace myNotebooks.subforms
 			// 
 			mnuNotebook_ForceBackup.Enabled = false;
 			mnuNotebook_ForceBackup.Name = "mnuNotebook_ForceBackup";
-			mnuNotebook_ForceBackup.Size = new System.Drawing.Size(160, 22);
+			mnuNotebook_ForceBackup.Size = new System.Drawing.Size(180, 22);
 			mnuNotebook_ForceBackup.Text = "Force &Backup";
 			mnuNotebook_ForceBackup.Visible = false;
 			mnuNotebook_ForceBackup.Click += this.mnuNotebook_ForceBackup_Click;
@@ -292,7 +293,7 @@ namespace myNotebooks.subforms
 			// mnuNotebook_RestoreBackups
 			// 
 			mnuNotebook_RestoreBackups.Name = "mnuNotebook_RestoreBackups";
-			mnuNotebook_RestoreBackups.Size = new System.Drawing.Size(160, 22);
+			mnuNotebook_RestoreBackups.Size = new System.Drawing.Size(180, 22);
 			mnuNotebook_RestoreBackups.Text = "&Restore Backups";
 			mnuNotebook_RestoreBackups.Visible = false;
 			mnuNotebook_RestoreBackups.Click += this.mnuNotebook_RestoreBackups_Click;
@@ -300,14 +301,14 @@ namespace myNotebooks.subforms
 			// mnuNotebook_Import
 			// 
 			mnuNotebook_Import.Name = "mnuNotebook_Import";
-			mnuNotebook_Import.Size = new System.Drawing.Size(160, 22);
+			mnuNotebook_Import.Size = new System.Drawing.Size(180, 22);
 			mnuNotebook_Import.Text = "Import";
 			mnuNotebook_Import.Click += this.mnuNotebook_Import_Click;
 			// 
 			// mnuNotebook_Export
 			// 
 			mnuNotebook_Export.Name = "mnuNotebook_Export";
-			mnuNotebook_Export.Size = new System.Drawing.Size(160, 22);
+			mnuNotebook_Export.Size = new System.Drawing.Size(180, 22);
 			mnuNotebook_Export.Text = "Synch";
 			mnuNotebook_Export.Visible = false;
 			mnuNotebook_Export.Click += this.mnuNotebook_Export_Click;
@@ -316,14 +317,14 @@ namespace myNotebooks.subforms
 			// 
 			mnuNotebook_Settings.Enabled = false;
 			mnuNotebook_Settings.Name = "mnuNotebook_Settings";
-			mnuNotebook_Settings.Size = new System.Drawing.Size(160, 22);
+			mnuNotebook_Settings.Size = new System.Drawing.Size(180, 22);
 			mnuNotebook_Settings.Text = "Settings";
 			mnuNotebook_Settings.Click += this.mnuNotebook_Settings_Click;
 			// 
 			// mnuNotebook_ResetPIN
 			// 
 			mnuNotebook_ResetPIN.Name = "mnuNotebook_ResetPIN";
-			mnuNotebook_ResetPIN.Size = new System.Drawing.Size(160, 22);
+			mnuNotebook_ResetPIN.Size = new System.Drawing.Size(180, 22);
 			mnuNotebook_ResetPIN.Text = "Reset &PIN";
 			mnuNotebook_ResetPIN.Click += this.mnuNotebook_ResetPIN_Click;
 			// 
@@ -493,6 +494,13 @@ namespace myNotebooks.subforms
 			pnlPin.TabIndex = 50;
 			pnlPin.Visible = false;
 			// 
+			// mnuNotebooks_Select
+			// 
+			mnuNotebooks_Select.Name = "mnuNotebooks_Select";
+			mnuNotebooks_Select.Size = new System.Drawing.Size(180, 22);
+			mnuNotebooks_Select.Text = "Se&lect";
+			mnuNotebooks_Select.Click += this.mnuNotebooks_Select_Click;
+			// 
 			// frmMain
 			// 
 			AcceptButton = btnLoadNotebook;
@@ -538,7 +546,7 @@ namespace myNotebooks.subforms
 		private System.Windows.Forms.RichTextBox rtbSelectedEntry;
 		private System.Windows.Forms.Label lblSeparator;
 		private System.Windows.Forms.MenuStrip menuStrip1;
-		private System.Windows.Forms.ToolStripMenuItem mnuJournal;
+		private System.Windows.Forms.ToolStripMenuItem mnuNotebook;
 		private System.Windows.Forms.ToolStripMenuItem mnuNotebook_Create;
 		private System.Windows.Forms.ToolStripMenuItem mnuNotebook_Delete;
 		private System.Windows.Forms.ContextMenuStrip mnuEntryTop;
@@ -572,5 +580,6 @@ namespace myNotebooks.subforms
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.Label lblEntriesCount;
 		private System.Windows.Forms.ToolStripMenuItem mnuNotebook_ResetPIN;
+		private System.Windows.Forms.ToolStripMenuItem mnuNotebooks_Select;
 	}
 }

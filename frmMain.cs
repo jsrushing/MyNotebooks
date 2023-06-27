@@ -293,7 +293,7 @@ namespace myNotebooks.subforms
 			ShowHideMenusAndControls(SelectionState.HideAll);
 			await Utilities.PopulateAllNotebookNames();
 
-			if(Program.AzurePassword.Length > 0)
+			if (Program.AzurePassword.Length > 0)
 			{
 				CloudSynchronizer cs = new CloudSynchronizer();
 				await cs.SynchWithCloud(false, null, true);
@@ -309,7 +309,7 @@ namespace myNotebooks.subforms
 					frm.ShowDialog();
 
 					if (frm.Notebook != null)
-					{ 
+					{
 						await frm.Notebook.Create();
 						LoadNotebooks();
 					}
@@ -345,7 +345,7 @@ namespace myNotebooks.subforms
 			if (!Program.AllNotebooks.Contains(CurrentNotebook)) { Program.AllNotebooks.Add(CurrentNotebook); }
 			if (!Program.AllNotebookNames.Contains(CurrentNotebook.Name)) { Program.AllNotebookNames.Add(CurrentNotebook.Name); }
 
-			if (CurrentNotebook.Settings.AllowCloud && Program.AzurePassword.Length > 0 )
+			if (CurrentNotebook.Settings.AllowCloud && Program.AzurePassword.Length > 0)
 			{
 				var nbPath = CurrentNotebook.FileName;
 				var nbName = CurrentNotebook.Name;
@@ -363,7 +363,7 @@ namespace myNotebooks.subforms
 				var wrongPIN = true;
 
 				if (CurrentNotebook != null)
-				{	// Test the PIN ...
+				{   // Test the PIN ...
 					Program.PIN = txtJournalPIN.Text;
 					wrongPIN = CurrentNotebook.Entries[0].Title != "created"; // The 0th entry is system-defined with its Title = "created". If the NBook has a PIN it is encrypted in the file and decrypt will fail with the wrong PIN.
 
@@ -535,7 +535,7 @@ namespace myNotebooks.subforms
 		{
 			ddlNotebooks.Items.Clear();
 			ddlNotebooks.Text = string.Empty;
-			if(Program.AllNotebookNames.Count == 0) await Utilities.PopulateAllNotebookNames();
+			if (Program.AllNotebookNames.Count == 0) await Utilities.PopulateAllNotebookNames();
 			ddlNotebooks.Items.AddRange(Program.AllNotebookNames.ToArray());
 
 			if (ddlNotebooks.Items.Count > 0)
@@ -582,11 +582,11 @@ namespace myNotebooks.subforms
 				{
 					createdEntry = CurrentNotebook.Entries.First(e => e.Title.Equals("created") & e.Text.Equals("-"));
 				}
-				catch(Exception ex) { }
+				catch (Exception ex) { }
 
-				var currentId  = createdEntry != null ? createdEntry.Id : "";
+				var currentId = createdEntry != null ? createdEntry.Id : "";
 
-				if (CurrentEntry != null && !CurrentEntry.Id.Equals(currentId))	// Disallow modification of the 'created' entry.
+				if (CurrentEntry != null && !CurrentEntry.Id.Equals(currentId)) // Disallow modification of the 'created' entry.
 				{
 					FirstSelection = false;
 					lblSelectionType.Visible = rtb.Text.Length > 0;
@@ -624,7 +624,7 @@ namespace myNotebooks.subforms
 				{
 					CurrentEntry = frm.Entry;
 					await CurrentNotebook.Save();
-					if(!cbxDatesTo.Items.Contains(CurrentEntry.Date)) { cbxDatesTo.Items.Insert(0, CurrentEntry.Date.ToShortDateString()); }
+					if (!cbxDatesTo.Items.Contains(CurrentEntry.Date)) { cbxDatesTo.Items.Insert(0, CurrentEntry.Date.ToShortDateString()); }
 					cbxDatesTo.SelectedIndex = 0;
 					lstEntries.SelectedIndex = 0;
 				}
@@ -650,7 +650,7 @@ namespace myNotebooks.subforms
 				}
 			}
 
-			this.Cursor= Cursors.Default;
+			this.Cursor = Cursors.Default;
 		}
 
 		private async void mnuEntryEdit_Click(object sender, EventArgs e)
@@ -673,7 +673,7 @@ namespace myNotebooks.subforms
 				}
 			}
 
-			this.Cursor =Cursors.Default;
+			this.Cursor = Cursors.Default;
 		}
 
 		private void mnuLabels_Click(object sender, EventArgs e)
@@ -720,7 +720,6 @@ namespace myNotebooks.subforms
 					ddlNotebooks.Text = string.Empty;
 					lstEntries.Items.Clear();
 					ShowHideMenusAndControls(SelectionState.NotebookSelectedNotLoaded);
-					pnlDateFilters.Visible = false;
 					await Utilities.PopulateAllNotebookNames();
 					CurrentNotebook = null;
 					LoadNotebooks();
@@ -782,9 +781,9 @@ namespace myNotebooks.subforms
 		}
 
 		private async void mnuNotebook_ResetPIN_Click(object sender, EventArgs e)
-		{ 
+		{
 			await CurrentNotebook.ResetPIN(this);
-			if(CurrentNotebook.Saved) { LoadNotebooks(); }
+			if (CurrentNotebook.Saved) { LoadNotebooks(); }
 		}
 
 		private async void mnuNotebook_RestoreBackups_Click(object sender, EventArgs e)
@@ -801,8 +800,8 @@ namespace myNotebooks.subforms
 		{
 			using (frmSearch frm = new frmSearch(this))
 			{
-				try 
-				{ 
+				try
+				{
 					frm.ShowDialog();
 					if (frm.NotebookName != null && frm.NotebookName.Length > 0) { LoadNotebooks(); }
 				}
@@ -812,6 +811,11 @@ namespace myNotebooks.subforms
 					{ frmMsg.ShowDialog(); }
 				}
 			}
+		}
+
+		private void mnuNotebooks_Select_Click(object sender, EventArgs e)
+		{
+			using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(this, "Select notebooks to work with. Be sure to add a PIN for any protected notebooks.")) { frm.ShowDialog(this); }
 		}
 
 		private async void mnuNotebook_Settings_Click(object sender, EventArgs e)
