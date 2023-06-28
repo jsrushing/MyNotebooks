@@ -33,6 +33,7 @@ namespace myNotebooks.subforms
 		{
 			components = new System.ComponentModel.Container();
 			pnlMain = new Panel();
+			lblFoundEntriesCount = new Label();
 			pnlNewLabelName = new Panel();
 			txtLabelName = new TextBox();
 			lblLabelExists = new Label();
@@ -77,6 +78,7 @@ namespace myNotebooks.subforms
 			// 
 			// pnlMain
 			// 
+			pnlMain.Controls.Add(lblFoundEntriesCount);
 			pnlMain.Controls.Add(pnlNewLabelName);
 			pnlMain.Controls.Add(lstLabels);
 			pnlMain.Controls.Add(lblEntries2);
@@ -88,6 +90,15 @@ namespace myNotebooks.subforms
 			pnlMain.Name = "pnlMain";
 			pnlMain.Size = new System.Drawing.Size(269, 554);
 			pnlMain.TabIndex = 0;
+			// 
+			// lblFoundEntriesCount
+			// 
+			lblFoundEntriesCount.AutoSize = true;
+			lblFoundEntriesCount.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+			lblFoundEntriesCount.Location = new System.Drawing.Point(85, 210);
+			lblFoundEntriesCount.Name = "lblFoundEntriesCount";
+			lblFoundEntriesCount.Size = new System.Drawing.Size(0, 15);
+			lblFoundEntriesCount.TabIndex = 7;
 			// 
 			// pnlNewLabelName
 			// 
@@ -245,19 +256,19 @@ namespace myNotebooks.subforms
 			// 
 			mnuContextEntries.Items.AddRange(new ToolStripItem[] { mnuContextRename_lstEntries, mnuContextDelete_lstEntries });
 			mnuContextEntries.Name = "mnuFoundEntries";
-			mnuContextEntries.Size = new System.Drawing.Size(181, 70);
+			mnuContextEntries.Size = new System.Drawing.Size(118, 48);
 			// 
 			// mnuContextRename_lstEntries
 			// 
 			mnuContextRename_lstEntries.Name = "mnuContextRename_lstEntries";
-			mnuContextRename_lstEntries.Size = new System.Drawing.Size(180, 22);
+			mnuContextRename_lstEntries.Size = new System.Drawing.Size(117, 22);
 			mnuContextRename_lstEntries.Text = "&Rename";
 			mnuContextRename_lstEntries.Click += this.DeleteOrRename;
 			// 
 			// mnuContextDelete_lstEntries
 			// 
 			mnuContextDelete_lstEntries.Name = "mnuContextDelete_lstEntries";
-			mnuContextDelete_lstEntries.Size = new System.Drawing.Size(180, 22);
+			mnuContextDelete_lstEntries.Size = new System.Drawing.Size(117, 22);
 			mnuContextDelete_lstEntries.Text = "&Delete";
 			mnuContextDelete_lstEntries.Click += this.DeleteOrRename;
 			// 
@@ -474,5 +485,6 @@ namespace myNotebooks.subforms
 		private Label lblEntries2;
 		private ToolStripMenuItem mnuContextDelete_lstLabels;
 		private ToolStripMenuItem mnuContextRename_lstEntries;
+		private Label lblFoundEntriesCount;
 	}
 }

@@ -95,7 +95,7 @@ namespace myNotebooks.subforms
 
 		private async void btnDone_Click(object sender, EventArgs e)
 		{
-			//await PopulateProgramDictCheckedNBooks();
+			await PopulateProgramDictCheckedNBooks();
 			IsDirty = false;
 			this.Hide();
 		}
@@ -104,12 +104,12 @@ namespace myNotebooks.subforms
 		{
 			if (chkSelectAll.Checked)
 			{
-				for (int i = 0; i < lstNotebookPINs.Items.Count; i++) { lstNotebookPINs.SetItemChecked(i, true); }
+				for (var i = 0; i < lstNotebookPINs.Items.Count; i++) { lstNotebookPINs.SetItemChecked(i, true); }
+				
 				chkSelectAll.Text = "un-select all";
 			}
 			else
 			{
-				//lstJournalPINs.SelectedIndices.Clear(); 
 				for (int i = 0; i < lstNotebookPINs.Items.Count; i++) { lstNotebookPINs.SetItemChecked(i, false); }
 				chkSelectAll.Text = "select all";
 			}
@@ -126,7 +126,7 @@ namespace myNotebooks.subforms
 			if (lstNotebookPINs.SelectedIndex > -1 && allowSelection)
 			{
 				{
-					if(lstNotebookPINs.SelectedItem.ToString() != ShowMoreString)
+					if (lstNotebookPINs.SelectedItem.ToString() != ShowMoreString)
 					{
 						IsDirty = Program.DictCheckedNotebooks.Count != lstNotebookPINs.CheckedItems.Count;
 
@@ -150,14 +150,26 @@ namespace myNotebooks.subforms
 		private async Task PopulateProgramDictCheckedNBooks()
 		{
 			//List<string> checkedItems = lstNotebookPINs.CheckedItems.OfType<string>().ToList();
+			//List<KeyValuePair<string, string>> chkdBooks = Program.DictCheckedNotebooks.ToList();
+
+			//Program.DictCheckedNotebooks.Clear();
+
+			foreach(string checkedItem in lstNotebookPINs.CheckedItems.OfType<string>().ToList())
+			{
+				if (!Program.DictCheckedNotebooks.Keys.Contains(Scrubbed(checkedItem))) 
+				{
+					Program.DictCheckedNotebooks.Add(checkedItem, "");
+				}
+			}
+
 
 			//foreach (KeyValuePair<string, string> kvp in Program.DictCheckedNotebooks)
-			//{ if (!checkedItems.Contains(Scrubbed(kvp.Key))) { Program.DictCheckedNotebooks.Remove(Scrubbed(kvp.Key)); } }
+			//{ if (!checkedItems.Contains(kvp.Key)) { Program.DictCheckedNotebooks.Remove(Scrubbed(kvp.Key)); } }
 
 			//foreach (KeyValuePair<string, string> item in Program.DictCheckedNotebooks)
 			//{
-			//	if (!Program.DictCheckedNotebooks.ContainsKey(item))
-			//	{ Program.DictCheckedNotebooks.Add(item, ""); }
+			//	if (!Program.DictCheckedNotebooks.ContainsKey(item.Key))
+			//	{ Program.DictCheckedNotebooks.Add(item.Key, ""); }
 			//}
 		}
 

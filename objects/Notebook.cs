@@ -104,7 +104,7 @@ namespace myNotebooks
 
 					if(frm.Result == frmMessage.ReturnResult.Yes)
 					{
-						foreach(var label in labelsInBook) { await LabelsManager.DeleteLabel(label, booksWithLabel); } 
+						foreach(var label in labelsInBook) { await LabelsManager.DeleteLabelInNotebooksList(label, booksWithLabel); } 
 					}
 				}
 			}
