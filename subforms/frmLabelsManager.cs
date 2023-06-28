@@ -139,17 +139,17 @@ namespace myNotebooks.subforms
 			switch (sort)
 			{
 				case LabelsManager.LabelsSortType.None:
-					LabelsManager.PopulateLabelsList(null, lstLabels);
+					LabelsManager.PopulateLabelsList(null, lstLabels, LabelsManager.LabelsSortType.Descending);
 					lblSortType.Text = "sort A-Z";
 					sort = LabelsManager.LabelsSortType.Ascending;
 					break;
 				case LabelsManager.LabelsSortType.Ascending:
-					LabelsManager.PopulateLabelsList(null, lstLabels, LabelsManager.LabelsSortType.Descending);
+					LabelsManager.PopulateLabelsList(null, lstLabels, LabelsManager.LabelsSortType.Ascending);
 					lblSortType.Text = "sort Z-A";
 					sort = LabelsManager.LabelsSortType.Descending;
 					break;
 				case LabelsManager.LabelsSortType.Descending:
-					LabelsManager.PopulateLabelsList(null, lstLabels, LabelsManager.LabelsSortType.Ascending);
+					LabelsManager.PopulateLabelsList(null, lstLabels, LabelsManager.LabelsSortType.None);
 					lblSortType.Text = "unsorted";
 					sort = LabelsManager.LabelsSortType.None;
 					break;

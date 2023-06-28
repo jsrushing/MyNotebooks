@@ -151,7 +151,7 @@ namespace myNotebooks.subforms
 		{
 			foreach(var checkedItem in lstNotebookPINs.CheckedItems.OfType<string>().ToList())
 			{
-				if (!Program.DictCheckedNotebooks.Keys.Contains(Scrubbed(checkedItem))) 
+				if (!Program.DictCheckedNotebooks.Keys.Contains(Scrubbed(checkedItem)) && !checkedItem.Equals(ShowMoreString)) 
 				{
 					Program.DictCheckedNotebooks.Add(checkedItem, "");
 				}

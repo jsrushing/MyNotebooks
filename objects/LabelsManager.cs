@@ -207,9 +207,7 @@ namespace myNotebooks.objects
 			{
 				// changed in a few notebooks
 				List<string> lstLbls = GetLabels_NoFileDate().ToList();
-				lstLbls.Add(newLabelName);
-				await SaveLabelsToFile(lstLbls);
-
+				if (!lstLbls.Contains(newLabelName)) { lstLbls.Add(newLabelName); }
 				sMsg = "The label '" + oldLabelName + "' has been left in the labels list because you did not search all Notebooks. The label '" + newLabelName + "' has been added to your Labels file." +
 					Environment.NewLine + "You must select ALL notebooks (and provide PINs for all protected notebooks) to clear the label from your Labels file.";
 
