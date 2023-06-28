@@ -531,7 +531,7 @@ namespace myNotebooks.subforms
 
 			if (lstOccurrences.Items.Count == 1)
 			{ msg = ""; }
-			else { msg = "Found " + (lstOccurrences.Items.Count - (OccurenceTitleIndicies.Count * 2)).ToString("###,###,###") + " entries in " + (OccurenceTitleIndicies.Count).ToString() + " Notebooks"; }
+			else { msg = "Found " + (lstOccurrences.Items.Count - (OccurenceTitleIndicies.Count * 2)).ToString("###,###,###") + " entries in " + (OccurenceTitleIndicies.Count).ToString() + " notebooks"; }
 
 			lblEntries1.Text = lstOccurrences.Items.Count == 0 ? "Found 0 Entries" : msg;
 		}
