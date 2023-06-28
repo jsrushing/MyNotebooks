@@ -815,8 +815,8 @@ namespace myNotebooks.subforms
 
 		private void mnuNotebooks_Select_Click(object sender, EventArgs e)
 		{
-			using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(this, 
-				"Select notebooks to work with. Be sure to add a PIN for any protected notebooks.")) 
+			using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(this,
+				"Select notebooks to work with. Be sure to add a PIN for any protected notebooks."))
 			{ frm.ShowDialog(this); }
 		}
 
@@ -844,6 +844,15 @@ namespace myNotebooks.subforms
 					CloudSynchronizer cs = new CloudSynchronizer();
 					await cs.SynchWithCloud();
 				}
+			}
+		}
+
+		private async Task PopulateLabelsSummary()
+		{
+			foreach(var label in LabelsManager.GetLabels_NoFileDate())
+			{
+				var v = CurrentNotebook.Entries.Where(e => e.Labels.Contains(label)).ToList();
+				if (v.Count > 0) { mnuLabelsSummary.DropDownItems.Add(label + " (" + v.Count + ")"); }
 			}
 		}
 
@@ -886,7 +895,7 @@ namespace myNotebooks.subforms
 			this.Text = CurrentNotebook != null ? CurrentNotebook.Settings.AllowCloud ? this.Text : this.Text + " (local)" : this.Text;
 		}
 
-		private void ShowHideMenusAndControls(SelectionState st)
+		private async void ShowHideMenusAndControls(SelectionState st)
 		{
 			if (st == SelectionState.NotebookSelectedNotLoaded)
 			{
@@ -908,6 +917,8 @@ namespace myNotebooks.subforms
 				mnuNotebook_ForceBackup.Enabled = false;
 				mnuNotebook_Export.Enabled = true;
 				mnuNotebook_Settings.Enabled = false;
+				mnuLabelsSummary.DropDownItems.Clear();
+				mnuLabelsSummary.Enabled = false;
 				pnlPin.Visible = true;
 				SetDisplayText();
 			}
@@ -927,11 +938,13 @@ namespace myNotebooks.subforms
 				mnuNotebook_ForceBackup.Enabled = true;
 				//mnuJournal_Export.Enabled = currentJournal.Settings.AllowCloud;
 				mnuNotebook_Settings.Enabled = true;
-				btnLoadNotebook.Enabled = false;
+				mnuLabelsSummary.Enabled = true;
 
+				btnLoadNotebook.Enabled = false;
 				txtJournalPIN.Text = string.Empty;
 				pnlDateFilters.Visible = true;
 				SetDisplayText();
+				await PopulateLabelsSummary();
 			}
 			else if (st == SelectionState.EntrySelected)
 			{

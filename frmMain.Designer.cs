@@ -48,6 +48,7 @@ namespace myNotebooks.subforms
 			lblSeparator = new System.Windows.Forms.Label();
 			menuStrip1 = new System.Windows.Forms.MenuStrip();
 			mnuNotebook = new System.Windows.Forms.ToolStripMenuItem();
+			mnuNotebooks_Select = new System.Windows.Forms.ToolStripMenuItem();
 			mnuNotebook_Create = new System.Windows.Forms.ToolStripMenuItem();
 			mnuNotebook_Delete = new System.Windows.Forms.ToolStripMenuItem();
 			mnuNotebook_Search = new System.Windows.Forms.ToolStripMenuItem();
@@ -75,7 +76,7 @@ namespace myNotebooks.subforms
 			label3 = new System.Windows.Forms.Label();
 			cbxDatesTo = new System.Windows.Forms.ComboBox();
 			pnlPin = new System.Windows.Forms.Panel();
-			mnuNotebooks_Select = new System.Windows.Forms.ToolStripMenuItem();
+			mnuLabelsSummary = new System.Windows.Forms.ToolStripMenuItem();
 			mnuEntryTop.SuspendLayout();
 			menuStrip1.SuspendLayout();
 			pnlDateFilters.SuspendLayout();
@@ -246,10 +247,17 @@ namespace myNotebooks.subforms
 			// 
 			// mnuNotebook
 			// 
-			mnuNotebook.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuNotebooks_Select, mnuNotebook_Create, mnuNotebook_Delete, mnuNotebook_Search, mnuNotebook_Rename, mnuNotebook_ForceBackup, mnuNotebook_RestoreBackups, mnuNotebook_Import, mnuNotebook_Export, mnuNotebook_Settings, mnuNotebook_ResetPIN });
+			mnuNotebook.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuNotebooks_Select, mnuNotebook_Create, mnuNotebook_Delete, mnuNotebook_Search, mnuNotebook_Rename, mnuNotebook_ForceBackup, mnuNotebook_RestoreBackups, mnuNotebook_Import, mnuNotebook_Export, mnuNotebook_Settings, mnuNotebook_ResetPIN, mnuLabelsSummary });
 			mnuNotebook.Name = "mnuNotebook";
 			mnuNotebook.Size = new System.Drawing.Size(77, 20);
 			mnuNotebook.Text = "&Notebooks";
+			// 
+			// mnuNotebooks_Select
+			// 
+			mnuNotebooks_Select.Name = "mnuNotebooks_Select";
+			mnuNotebooks_Select.Size = new System.Drawing.Size(180, 22);
+			mnuNotebooks_Select.Text = "Se&lect";
+			mnuNotebooks_Select.Click += this.mnuNotebooks_Select_Click;
 			// 
 			// mnuNotebook_Create
 			// 
@@ -494,12 +502,12 @@ namespace myNotebooks.subforms
 			pnlPin.TabIndex = 50;
 			pnlPin.Visible = false;
 			// 
-			// mnuNotebooks_Select
+			// mnuLabelsSummary
 			// 
-			mnuNotebooks_Select.Name = "mnuNotebooks_Select";
-			mnuNotebooks_Select.Size = new System.Drawing.Size(180, 22);
-			mnuNotebooks_Select.Text = "Se&lect";
-			mnuNotebooks_Select.Click += this.mnuNotebooks_Select_Click;
+			mnuLabelsSummary.Enabled = false;
+			mnuLabelsSummary.Name = "mnuLabelsSummary";
+			mnuLabelsSummary.Size = new System.Drawing.Size(180, 22);
+			mnuLabelsSummary.Text = "Labels Summary";
 			// 
 			// frmMain
 			// 
@@ -581,5 +589,6 @@ namespace myNotebooks.subforms
 		private System.Windows.Forms.Label lblEntriesCount;
 		private System.Windows.Forms.ToolStripMenuItem mnuNotebook_ResetPIN;
 		private System.Windows.Forms.ToolStripMenuItem mnuNotebooks_Select;
+		private System.Windows.Forms.ToolStripMenuItem mnuLabelsSummary;
 	}
 }
