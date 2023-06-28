@@ -17,6 +17,8 @@ namespace myNotebooks.subforms
 	{
 		private const string ShowMoreString = "(show more)";
 		private bool IsDirty = false;
+		private bool allowSelection = true;
+		private Dictionary<string, string> initialDictCheckedItems = Program.DictCheckedNotebooks;
 
 		public frmSelectNotebooksToSearch(Form parent, string userMessage = "")
 		{
@@ -38,8 +40,8 @@ namespace myNotebooks.subforms
 				using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Do you want to save your changes?", "Confirm"))
 				{
 					frm.ShowDialog();
-					if(frm.Result == frmMessage.ReturnResult.Yes) { await PopulateProgramDictCheckedNBooks(); }
-					if(frm.Result != frmMessage.ReturnResult.No) { this.Hide(); }
+					if (frm.Result != frmMessage.ReturnResult.No) { Program.DictCheckedNotebooks = initialDictCheckedItems; }
+					if (frm.Result == frmMessage.ReturnResult.No | frm.Result == frmMessage.ReturnResult.Yes) { this.Hide(); }
 				}
 			}
 			else { e.Cancel = false; }
@@ -49,12 +51,11 @@ namespace myNotebooks.subforms
 		{
 			if (Program.DictCheckedNotebooks.Count > 0)
 			{
-				// JSR : 60/17/23 - Make this more LINQ'd up ...
-				//List<string> v = lstJournalPINs.Items.OfType<string>().ToList().Intersect(Program.DictCheckedNotebooks.Keys).ToList();
+				allowSelection = false;
 
 				try
 				{
-					//var v2 = Program.DictCheckedNotebooks.ToList();  //.ToDictionary(x => x.Value.Length > 0); 
+					//var v2 = Program.DictCheckedNotebooks.ToList();  //.ToDictionary(x => x.Value.Length > 0); // ???
 
 					foreach (KeyValuePair<string, string> kvp in Program.DictCheckedNotebooks)
 					{
@@ -68,6 +69,8 @@ namespace myNotebooks.subforms
 					}
 				}
 				catch (Exception ex) { using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, ex.Message, "Error", this)) { frm.ShowDialog(); } }
+
+				allowSelection = true;
 			}
 		}
 
@@ -76,24 +79,23 @@ namespace myNotebooks.subforms
 			var s = lstNotebookPINs.Text.Replace(" (****)", "");
 			var itemIndex = lstNotebookPINs.SelectedIndex;
 			Program.DictCheckedNotebooks[s] = txtPIN.Text;
-			//s += txtPIN.Text.Length == 0 ? "" : " (****)";
 			await AddHasPINIndicators();
-			//lstJournalPINs.Items.Insert(lstJournalPINs.SelectedIndex, s);
-			//lstJournalPINs.Items.RemoveAt(lstJournalPINs.SelectedIndex);
 			txtPIN.PasswordChar = '\0';
 			txtPIN.Text = "(select a Journal)";
 			txtPIN.Enabled = false;
 			btnAddPIN.Enabled = false;
-			lstNotebookPINs.SelectedIndex = -1;
 			lblShowPIN.Visible = false;
+			lstNotebookPINs.SelectedIndex = -1;
+			allowSelection = false;
 			lstNotebookPINs.SetItemChecked(itemIndex, true);
 			lstNotebookPINs.SelectedItems.Add(s);
+			allowSelection = true;
 
 		}
 
 		private async void btnDone_Click(object sender, EventArgs e)
 		{
-			await PopulateProgramDictCheckedNBooks();
+			//await PopulateProgramDictCheckedNBooks();
 			IsDirty = false;
 			this.Hide();
 		}
@@ -121,33 +123,42 @@ namespace myNotebooks.subforms
 
 		private void lstJournalPINs_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (lstNotebookPINs.SelectedIndex > -1)
+			if (lstNotebookPINs.SelectedIndex > -1 && allowSelection)
 			{
-				IsDirty = Program.DictCheckedNotebooks.Count != lstNotebookPINs.CheckedItems.Count;
-				if (lstNotebookPINs.SelectedItem.ToString() == ShowMoreString) { PopulateNotebooksList(false, true, false); }
-				txtPIN.PasswordChar = '*';
-				txtPIN.Text = Program.DictCheckedNotebooks.ContainsKey(Scrubbed(lstNotebookPINs.Text)) ? Program.DictCheckedNotebooks[Scrubbed(lstNotebookPINs.Text)] : string.Empty;
-				txtPIN.Enabled = true;
-				btnAddPIN.Enabled = true;
-				txtPIN.Focus();
-				lblShowPIN.Visible = true;
-				lblShowPIN.Text = "show";
+				{
+					if(lstNotebookPINs.SelectedItem.ToString() != ShowMoreString)
+					{
+						IsDirty = Program.DictCheckedNotebooks.Count != lstNotebookPINs.CheckedItems.Count;
+
+						if (!Program.DictCheckedNotebooks.ContainsKey(lstNotebookPINs.SelectedItem.ToString()))
+						{ Program.DictCheckedNotebooks.Add(lstNotebookPINs.SelectedItem.ToString(), ""); }
+						else { Program.DictCheckedNotebooks.Remove(lstNotebookPINs.SelectedItem.ToString()); }
+					}
+					else { PopulateNotebooksList(false, true, false); }
+
+					txtPIN.PasswordChar = '*';
+					txtPIN.Text = Program.DictCheckedNotebooks.ContainsKey(Scrubbed(lstNotebookPINs.Text)) ? Program.DictCheckedNotebooks[Scrubbed(lstNotebookPINs.Text)] : string.Empty;
+					txtPIN.Enabled = true;
+					btnAddPIN.Enabled = true;
+					txtPIN.Focus();
+					lblShowPIN.Visible = true;
+					lblShowPIN.Text = "show";
+				}
 			}
 		}
 
 		private async Task PopulateProgramDictCheckedNBooks()
 		{
-			List<string> checkedItems = lstNotebookPINs.CheckedItems.OfType<string>().ToList();
-			checkedItems.ForEach(e => Scrubbed(e));
+			//List<string> checkedItems = lstNotebookPINs.CheckedItems.OfType<string>().ToList();
 
-			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedNotebooks)
-			{ if (!checkedItems.Contains(kvp.Key)) { Program.DictCheckedNotebooks.Remove(kvp.Key); } }
+			//foreach (KeyValuePair<string, string> kvp in Program.DictCheckedNotebooks)
+			//{ if (!checkedItems.Contains(Scrubbed(kvp.Key))) { Program.DictCheckedNotebooks.Remove(Scrubbed(kvp.Key)); } }
 
-			foreach (var item in checkedItems)
-			{
-				if (!Program.DictCheckedNotebooks.ContainsKey(item))
-				{ Program.DictCheckedNotebooks.Add(item, ""); }
-			}
+			//foreach (KeyValuePair<string, string> item in Program.DictCheckedNotebooks)
+			//{
+			//	if (!Program.DictCheckedNotebooks.ContainsKey(item))
+			//	{ Program.DictCheckedNotebooks.Add(item, ""); }
+			//}
 		}
 
 		private async void PopulateNotebooksList(bool populateWithCheckedJournals, bool showMore, bool showAll)

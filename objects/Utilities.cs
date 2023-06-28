@@ -52,8 +52,11 @@ namespace myNotebooks.objects
 		{
 			List<Notebook> rtrn = new List<Notebook>();
 
-			foreach(KeyValuePair<string, string> kvp in Program.DictCheckedNotebooks)
-			{ rtrn.Add(new Notebook(kvp.Key).Open()); }
+			foreach(var key in Program.DictCheckedNotebooks.Keys)
+			{
+				Program.PIN = Program.DictCheckedNotebooks[key];
+				rtrn.Add(new Notebook(key).Open());
+			}
 
 			return rtrn;
 		}

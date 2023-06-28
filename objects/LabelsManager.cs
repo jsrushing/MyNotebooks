@@ -17,6 +17,7 @@ using Org.BouncyCastle.Crypto.Agreement;
 using System.Reflection.Emit;
 using Newtonsoft.Json.Linq;
 using System.Globalization;
+using Encryption;
 
 namespace myNotebooks.objects
 {
@@ -60,10 +61,10 @@ namespace myNotebooks.objects
 			}
 			else
 			{
-				foreach(Notebook j in notebooksToEdit) 
+				foreach(Notebook nb in notebooksToEdit) 
 				{ 
-					Utilities.SetProgramPIN(j.Name);
-					await j.DeleteLabelFromNotebook(labelName); 
+					Utilities.SetProgramPIN(nb.Name);
+					await nb.DeleteLabelFromNotebook(labelName); 
 				}
 
 				if(notebooksToEdit.Count == Program.AllNotebooks.Count)
@@ -136,19 +137,27 @@ namespace myNotebooks.objects
 		public static List<Notebook> NotebooksContainingLabel(string labelName, bool returnIfTwoFound = false)
 		{
 			List<Notebook> lstRtrn = new List<Notebook>();
+			List<Notebook> nBooks2Search = new List<Notebook>();
 
-			List<Notebook> nBooks2Search = Utilities.GetCheckedNotebooks().Where(e => Program.DictCheckedNotebooks.ContainsKey(e.Name)).ToList();
-
-			foreach (Notebook nBook in nBooks2Search)
+			foreach (Notebook n in Utilities.GetCheckedNotebooks())
 			{
-				Utilities.SetProgramPIN(nBook.Name);
+				if (Program.DictCheckedNotebooks.ContainsKey(n.Name)) { nBooks2Search.Add(n); }
+			}
 
-				if (nBook.Entries.Where(t => ("," + t.Labels + ",").Contains("," + labelName + ",")).ToList().Count > 0)
+			//nBooks2Search = Utilities.GetCheckedNotebooks().Where(e => Program.DictCheckedNotebooks.ContainsKey(e.Name)).ToList();
+			Notebook nbTemp = null;
+
+			foreach(KeyValuePair<string, string> kvp in Program.DictCheckedNotebooks)
+			{
+				Program.PIN = kvp.Value;
+				nbTemp = new Notebook(kvp.Key).Open();
+				if (nbTemp.Entries.Where(t => ("," + t.Labels + ",").Contains("," + labelName + ",")).ToList().Count > 0)
 				{
-					lstRtrn.Add(nBook);
+					lstRtrn.Add(nbTemp);
 					if (returnIfTwoFound && lstRtrn.Count == 2) { break; }
 				}
 			}
+
 			return lstRtrn;
 		}
 
@@ -166,10 +175,15 @@ namespace myNotebooks.objects
 
 		public static async Task RenameLabel(string oldLabelName, string newLabelName, List<Notebook> notebooksToEdit, Dictionary<string, string> jrnlsAndPINs, Form parent)
 		{
-			foreach(Notebook j in notebooksToEdit)
+			foreach(Notebook nb in notebooksToEdit)
 			{
-				Utilities.SetProgramPIN(j.Name);
-				await j.RenameLabel(oldLabelName, newLabelName);
+				try
+				{
+					Utilities.SetProgramPIN(nb.Name);
+					await nb.RenameLabel(oldLabelName, newLabelName);
+				}
+				catch(Exception ex) { Console.WriteLine(ex.InnerException);  }	// If a notebook's PIN hasn't been entered SetProgramPIN will fail.
+
 			}
 		}
 

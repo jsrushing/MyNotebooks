@@ -124,22 +124,6 @@ namespace myNotebooks.subforms
 			else { lstOrphanedLabels.SelectedItems.Clear(); }
 		}
 
-		private Notebook GetSelectedEntrysNotebook()
-		{
-			Notebook notebook = new Notebook();
-			var curIndx = lstOccurrences.SelectedIndex;
-
-			while (lstOccurrences.Items[curIndx].ToString() != strSeperator) { curIndx--; }
-
-			var name = lstOccurrences.Items[curIndx].ToString();
-
-			var nb = name.Substring(name.IndexOf("'") + 1, name.Length - name.LastIndexOf("'") - 1);
-
-			notebook = new Notebook(nb, null, this);
-
-			return notebook;
-		}
-
 		private List<Notebook> GetSelectedNotebooks()
 		{
 			SelectedNotebooks.Clear();
@@ -328,28 +312,30 @@ namespace myNotebooks.subforms
 			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
 			var commandText = mnu.Text.ToLower().Contains("rename") ? "rename" : "delete";
 			var newLabelName = string.Empty;
-			List<Notebook> notebooksToEdit = new List<Notebook>();
+			List<Notebook> notebooksToEdit = Utilities.GetCheckedNotebooks();
 			var editingOneNotebook = mnu.Name.Contains("Entries");
 			var sMsg = "Do you want to " + commandText + " the label '" + lstLabels.SelectedItem.ToString() + "' ";
 			this.Cursor = Cursors.WaitCursor;
 
 			if (editingOneNotebook)
 			{
+				notebooksToEdit.Clear();
 				var notebookName = lstOccurrences.Text.Replace("in ", "").Replace(" only", "").Replace("'", "");
 				notebooksToEdit.Add(new Notebook(notebookName, "", this).Open());
 				sMsg += "in the notebook '" + notebookName + "'?";
 			}
 			else
 			{
-				notebooksToEdit = Utilities.GetCheckedNotebooks();
-				sMsg += "in all notebooks?";
+				sMsg += "in all " + (notebooksToEdit.Count == Program.AllNotebookNames.Count ? "" : notebooksToEdit.Count.ToString() + " selected ") +  "notebooks?";
 			}
 
 			if(commandText == "rename")
 			{
-				using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "You are renaming '" +
-					lstLabels.SelectedItem.ToString() + "' " +
-					(lstOccurrences.SelectedIndex > -1 ? lstOccurrences.SelectedItem.ToString() : "") + "." + Environment.NewLine + "What's the new label name?", "", this))
+				var msg = "You are renaming '" +
+					lstLabels.SelectedItem.ToString() + "' in " + (notebooksToEdit.Count() == Program.AllNotebookNames.Count ? " all " : notebooksToEdit.Count.ToString()) 
+					+ " notebooks." + Environment.NewLine + "What's the new label name?";
+
+				using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, msg))
 				{
 					frm.ShowDialog();
 					newLabelName = frm.ResultText;
