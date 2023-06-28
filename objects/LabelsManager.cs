@@ -181,7 +181,7 @@ namespace myNotebooks.objects
 		}
 
 		public static async Task	RenameLabelInNotebooksList(string oldLabelName, string newLabelName, List<Notebook> notebooksToEdit, Dictionary<string, string> jrnlsAndPINs, Form parent)
-		{
+		{	
 			var iBooksToSearch = notebooksToEdit.Where(e => e.HasLabel(oldLabelName)).ToList().Count;
 			var sMsg = string.Empty;
 

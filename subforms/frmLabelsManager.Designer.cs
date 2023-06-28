@@ -245,20 +245,20 @@ namespace myNotebooks.subforms
 			// 
 			mnuContextEntries.Items.AddRange(new ToolStripItem[] { mnuContextRename_lstEntries, mnuContextDelete_lstEntries });
 			mnuContextEntries.Name = "mnuFoundEntries";
-			mnuContextEntries.Size = new System.Drawing.Size(118, 48);
+			mnuContextEntries.Size = new System.Drawing.Size(185, 70);
 			// 
 			// mnuContextRename_lstEntries
 			// 
 			mnuContextRename_lstEntries.Name = "mnuContextRename_lstEntries";
-			mnuContextRename_lstEntries.Size = new System.Drawing.Size(117, 22);
-			mnuContextRename_lstEntries.Text = "&Rename";
+			mnuContextRename_lstEntries.Size = new System.Drawing.Size(184, 22);
+			mnuContextRename_lstEntries.Text = "&Rename in notebook";
 			mnuContextRename_lstEntries.Click += this.DeleteOrRename;
 			// 
 			// mnuContextDelete_lstEntries
 			// 
 			mnuContextDelete_lstEntries.Name = "mnuContextDelete_lstEntries";
-			mnuContextDelete_lstEntries.Size = new System.Drawing.Size(117, 22);
-			mnuContextDelete_lstEntries.Text = "&Delete";
+			mnuContextDelete_lstEntries.Size = new System.Drawing.Size(184, 22);
+			mnuContextDelete_lstEntries.Text = "&Delete in notebook";
 			mnuContextDelete_lstEntries.Click += this.DeleteOrRename;
 			// 
 			// label1

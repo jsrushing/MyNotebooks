@@ -139,19 +139,19 @@ namespace myNotebooks.subforms
 			switch (sort)
 			{
 				case LabelsManager.LabelsSortType.None:
-					LabelsManager.PopulateLabelsList(null, lstLabels, LabelsManager.LabelsSortType.Descending);
-					lblSortType.Text = "sort Z-A";
+					LabelsManager.PopulateLabelsList(null, lstLabels, LabelsManager.LabelsSortType.None);
+					lblSortType.Text = "sort A-Z";
 					sort = LabelsManager.LabelsSortType.Ascending;
 					break;
 				case LabelsManager.LabelsSortType.Ascending:
 					LabelsManager.PopulateLabelsList(null, lstLabels, LabelsManager.LabelsSortType.Ascending);
 					lblSortType.Text = "unsorted";
-					sort = LabelsManager.LabelsSortType.Descending;
+					sort = LabelsManager.LabelsSortType.None;
 					break;
 				case LabelsManager.LabelsSortType.Descending:
 					LabelsManager.PopulateLabelsList(null, lstLabels, LabelsManager.LabelsSortType.None);
 					lblSortType.Text = "sort A-Z";
-					sort = LabelsManager.LabelsSortType.None;
+					sort = LabelsManager.LabelsSortType.Descending;
 					break;
 			}
 		}
@@ -315,7 +315,7 @@ namespace myNotebooks.subforms
 			{
 				notebooksToEdit.Clear();
 				var notebookName = lstOccurrences.Text.Replace("in ", "").Replace(" only", "").Replace("'", "");
-				notebooksToEdit.Add(new Notebook(notebookName, "", this).Open());
+				notebooksToEdit.Add(new Notebook(notebookName, null, this).Open());
 				sMsg += "in the notebook '" + notebookName + "'?";
 			}
 			else
@@ -363,10 +363,6 @@ namespace myNotebooks.subforms
 				{ await LabelsManager.DeleteLabelInNotebooksList(lstLabels.SelectedItem.ToString(), notebooksToEdit, this); }
 
 				lblSortType_Click(null, null);
-
-				//await LabelsManager.SaveLabels();
-				//LabelsManager.PopulateLabelsList(null, lstLabels);
-				//KickLstLabels(pIndex);
 				lstOccurrences.Items.Clear();
 			}
 
