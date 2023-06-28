@@ -151,12 +151,17 @@ namespace myNotebooks.objects
 		}
 
 		public static async Task PopulateEntries(ListBox lbxToPopulate, List<Entry> entries, string notebookName = "", string startDate = "", 
-			string endDate = "", bool clearPrevious = true, int SortBy = 0, bool includeJrnlName = false, int maxWidth = 0)
+			string endDate = "", bool clearPrevious = true, int SortBy = 0, bool includeJrnlName = false, int maxWidth = 0, string labelFilter = "")
 		{
 			if(clearPrevious) lbxToPopulate.Items.Clear();
 			List<Entry> tmpEntries = null;
 			tmpEntries = startDate.Length > 0 ? entries.Where(d => DateTime.Parse(d.Date.ToShortDateString()) >= DateTime.Parse(startDate)).ToList() : entries;
 			tmpEntries = endDate.Length > 0 ? tmpEntries.Where(d => DateTime.Parse(d.Date.ToShortDateString()) <= DateTime.Parse(endDate)).ToList() : tmpEntries;
+
+			if(labelFilter.Length > 0)
+			{
+				tmpEntries = tmpEntries.Where(e => e.Labels.Contains(labelFilter)).ToList();
+			}
 
 			switch (SortBy)
 			{
@@ -171,9 +176,9 @@ namespace myNotebooks.objects
 					break;
 			}
 
-			foreach (Entry je in tmpEntries)
+			foreach (Entry nbEntry in tmpEntries)
 			{
-				var synopsis = je.GetSynopsis(includeJrnlName, maxWidth);
+				var synopsis = nbEntry.GetSynopsis(includeJrnlName, maxWidth);
 				for(int i = 0; i < synopsis.Length; i++) { lbxToPopulate.Items.Add(synopsis[i]); } 
 			}
 		}

@@ -89,7 +89,7 @@ namespace myNotebooks.subforms
 			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedNotebooks)
 			{
 				Utilities.SetProgramPIN(kvp.Key);
-				jeFound = new Notebook(kvp.Key, "", this).Open().Search(so);
+				jeFound = new Notebook(kvp.Key.Replace(" (****)", ""), "", this).Open().Search(so);
 				await Utilities.PopulateEntries(lstFoundEntries, jeFound, "", "", "", false, 0, true);
 				journalBoundaries.Add(kvp.Key, lstFoundEntries.Items.Count);
 				FoundEntries.AddRange(jeFound);

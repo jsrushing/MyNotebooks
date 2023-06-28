@@ -345,35 +345,38 @@ namespace myNotebooks.subforms
 			if (!Program.AllNotebooks.Contains(CurrentNotebook)) { Program.AllNotebooks.Add(CurrentNotebook); }
 			if (!Program.AllNotebookNames.Contains(CurrentNotebook.Name)) { Program.AllNotebookNames.Add(CurrentNotebook.Name); }
 
-			if (CurrentNotebook.Settings.AllowCloud && Program.AzurePassword.Length > 0)
-			{
-				var nbPath = CurrentNotebook.FileName;
-				var nbName = CurrentNotebook.Name;
-				CloudSynchronizer cs = new CloudSynchronizer();
-				await cs.SynchWithCloud(false, CurrentNotebook);
-				Notebook curNotebook = new Notebook(nbName, nbPath, this).Open();
+			var wrongPIN = true;
 
-				if (curNotebook == null)    // the sync deleted the file
-				{ ddlNotebooks.Items.Remove(nbName); }
-				else { if (!curNotebook.Equals(CurrentNotebook)) { CurrentNotebook = curNotebook; } }// the synch dl'd a newer copy of the file
+			if (CurrentNotebook != null)
+			{   // Test the PIN ...
+				Program.PIN = txtJournalPIN.Text;
+				wrongPIN = CurrentNotebook.Entries[0].Title != "created"; // The 0th entry is system-defined with its Title = "created". If the NBook has a PIN it is encrypted in the file and decrypt will fail with the wrong PIN.
 			}
 
-			try
+			if(wrongPIN)
 			{
-				var wrongPIN = true;
+				lblWrongPin.Visible = true;
+				txtJournalPIN.Focus();
+				txtJournalPIN.SelectAll();
+			}
+			else
+			{
+				if (CurrentNotebook.Settings.AllowCloud && Program.AzurePassword.Length > 0)
+				{
+					var nbPath = CurrentNotebook.FileName;
+					var nbName = CurrentNotebook.Name;
+					CloudSynchronizer cs = new CloudSynchronizer();
+					await cs.SynchWithCloud(false, CurrentNotebook);
+					Notebook curNotebook = new Notebook(nbName, nbPath, this).Open();
 
-				if (CurrentNotebook != null)
-				{   // Test the PIN ...
-					Program.PIN = txtJournalPIN.Text;
-					wrongPIN = CurrentNotebook.Entries[0].Title != "created"; // The 0th entry is system-defined with its Title = "created". If the NBook has a PIN it is encrypted in the file and decrypt will fail with the wrong PIN.
+					if (curNotebook == null)    // the sync deleted the file
+					{ ddlNotebooks.Items.Remove(nbName); }
+					else { if (!curNotebook.Equals(CurrentNotebook)) { CurrentNotebook = curNotebook; } }// the synch dl'd a newer copy of the file
+				}
 
-					if (wrongPIN)
-					{
-						lblWrongPin.Visible = true;
-						txtJournalPIN.Focus();
-						txtJournalPIN.SelectAll();
-					}
-					else
+				try
+				{
+					if (CurrentNotebook != null)
 					{
 						PopulateShowFromDates();
 						SuppressDateClick = true;
@@ -395,15 +398,23 @@ namespace myNotebooks.subforms
 						cbxDatesTo.SelectedIndex = 0;
 						ShowHideMenusAndControls(SelectionState.NotebookLoaded);
 					}
+					else
+					{
+						lstEntries.Focus();
+					}
 				}
-				else
-				{
-					lstEntries.Focus();
-				}
+				catch (Exception ex) { Console.Write(ex.Message); }
 			}
-			catch (Exception ex) { Console.Write(ex.Message); }
 
 			this.Cursor = Cursors.Default;
+		}
+
+		private async void btnResetLabelFilter_Click(object sender, EventArgs e)
+		{
+			await Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, "",
+				cbxDatesFrom.Text, cbxDatesTo.Text, true, cbxSortEntriesBy.SelectedIndex);
+
+			ShowHideMenusAndControls(SelectionState.NotebookLoaded);
 		}
 
 		private async void cbxDates_SelectedIndexChanged(object sender, EventArgs e)
@@ -601,6 +612,15 @@ namespace myNotebooks.subforms
 				}
 				lb.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectEntry);
 			}
+		}
+
+		private async void menuLabelsSummary_Click(object sender, System.EventArgs e)
+		{
+			ToolStripMenuItem item = (ToolStripMenuItem)sender;
+			List<Entry> v = CurrentNotebook.Entries.Where(e => e.Labels.Contains(item.Tag.ToString())).ToList();
+			await Utilities.PopulateEntries(lstEntries, v, "", "", "", true, 0, false, 0, item.Tag.ToString());
+			btnResetLabelFilter.Visible = true;
+			lblEntriesCount.Text = (lstEntries.Items.Count / 4).ToString();
 		}
 
 		private void mnuAbout_Click(object sender, EventArgs e)
@@ -849,10 +869,15 @@ namespace myNotebooks.subforms
 
 		private async Task PopulateLabelsSummary()
 		{
-			foreach(var label in LabelsManager.GetLabels_NoFileDate())
+			foreach (var label in LabelsManager.GetLabels_NoFileDate())
 			{
 				var v = CurrentNotebook.Entries.Where(e => e.Labels.Contains(label)).ToList();
-				if (v.Count > 0) { mnuLabelsSummary.DropDownItems.Add(label + " (" + v.Count + ")"); }
+				if (v.Count > 0)
+				{
+					ToolStripMenuItem item = new ToolStripMenuItem(label + " (" + v.Count + ")", null, menuLabelsSummary_Click);
+					item.Tag = label;
+					mnuLabelsSummary.DropDownItems.Add(item);
+				}
 			}
 		}
 
@@ -919,6 +944,8 @@ namespace myNotebooks.subforms
 				mnuNotebook_Settings.Enabled = false;
 				mnuLabelsSummary.DropDownItems.Clear();
 				mnuLabelsSummary.Enabled = false;
+
+				btnResetLabelFilter.Visible = false;
 				pnlPin.Visible = true;
 				SetDisplayText();
 			}
