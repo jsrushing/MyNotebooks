@@ -33,7 +33,6 @@ namespace myNotebooks.subforms
 		{
 			components = new System.ComponentModel.Container();
 			pnlMain = new Panel();
-			lblFoundEntriesCount = new Label();
 			pnlNewLabelName = new Panel();
 			txtLabelName = new TextBox();
 			lblLabelExists = new Label();
@@ -78,7 +77,6 @@ namespace myNotebooks.subforms
 			// 
 			// pnlMain
 			// 
-			pnlMain.Controls.Add(lblFoundEntriesCount);
 			pnlMain.Controls.Add(pnlNewLabelName);
 			pnlMain.Controls.Add(lstLabels);
 			pnlMain.Controls.Add(lblEntries2);
@@ -90,15 +88,6 @@ namespace myNotebooks.subforms
 			pnlMain.Name = "pnlMain";
 			pnlMain.Size = new System.Drawing.Size(269, 554);
 			pnlMain.TabIndex = 0;
-			// 
-			// lblFoundEntriesCount
-			// 
-			lblFoundEntriesCount.AutoSize = true;
-			lblFoundEntriesCount.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-			lblFoundEntriesCount.Location = new System.Drawing.Point(85, 210);
-			lblFoundEntriesCount.Name = "lblFoundEntriesCount";
-			lblFoundEntriesCount.Size = new System.Drawing.Size(0, 15);
-			lblFoundEntriesCount.TabIndex = 7;
 			// 
 			// pnlNewLabelName
 			// 
@@ -485,6 +474,5 @@ namespace myNotebooks.subforms
 		private Label lblEntries2;
 		private ToolStripMenuItem mnuContextDelete_lstLabels;
 		private ToolStripMenuItem mnuContextRename_lstEntries;
-		private Label lblFoundEntriesCount;
 	}
 }

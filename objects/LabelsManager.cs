@@ -70,7 +70,7 @@ namespace myNotebooks.objects
 					await nb.DeleteLabelFromNotebook(labelName); 
 				}
 
-				if(iBooksToSearch == Program.AllNotebookNames.Count)
+				if(iBooksToSearch == Program.AllNotebookNames.Count | iBooksToSearch == 0)
 				{ 
 					await RemoveLabelInFile(labelName);
 					sMsg = "The label '" + labelName + "' has been deleted in all Notebooks.";
@@ -197,7 +197,7 @@ namespace myNotebooks.objects
 
 			var msg = string.Empty;
 
-			if(iBooksToSearch == Program.AllNotebookNames.Count)
+			if(notebooksToEdit.Count == Program.AllNotebookNames.Count)
 			{
 				// changed in every notebook
 				await RemoveLabelInFile(oldLabelName);
@@ -218,7 +218,7 @@ namespace myNotebooks.objects
 
 			List<string> lbls = GetLabels_NoFileDate().ToList();
 			lbls.Add(newLabelName);
-			if (iBooksToSearch == Program.AllNotebookNames.Count) { lbls.Remove(oldLabelName); }
+			//if (notebooksToEdit.Count == Program.AllNotebookNames.Count) { lbls.Remove(oldLabelName); }
 			await SaveLabelsToFile(lbls);
 		}
 

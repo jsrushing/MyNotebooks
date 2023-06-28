@@ -160,7 +160,7 @@ namespace myNotebooks.subforms
 		{
 			if (lstLabels.SelectedIndex > -1)
 			{
-				lblFoundEntriesCount.Text = "";
+				lblEntries1.Text = "";
 				mnuMoveTop.Visible = true;
 				mnuMoveTop.Enabled = true;
 				mnuMoveUp.Visible = lstLabels.SelectedIndex > 0;
@@ -366,7 +366,8 @@ namespace myNotebooks.subforms
 
 				//await LabelsManager.SaveLabels();
 				//LabelsManager.PopulateLabelsList(null, lstLabels);
-				KickLstLabels(pIndex);
+				//KickLstLabels(pIndex);
+				lstOccurrences.Items.Clear();
 			}
 
 			this.Cursor = Cursors.Default;
@@ -528,11 +529,11 @@ namespace myNotebooks.subforms
 
 			var msg = string.Empty;
 
-			if(lstOccurrences.Items.Count == 1)
+			if (lstOccurrences.Items.Count == 1)
 			{ msg = ""; }
-			else { msg = "(" + (lstOccurrences.Items.Count - (OccurenceTitleIndicies.Count * 2)).ToString("###,###,###") + " entries in " + (OccurenceTitleIndicies.Count).ToString() + " books)"; }
+			else { msg = "Found " + (lstOccurrences.Items.Count - (OccurenceTitleIndicies.Count * 2)).ToString("###,###,###") + " entries in " + (OccurenceTitleIndicies.Count).ToString() + " Notebooks"; }
 
-			lblFoundEntriesCount.Text =lstOccurrences.Items.Count == 0 ? "" :  msg;
+			lblEntries1.Text = lstOccurrences.Items.Count == 0 ? "Found 0 Entries" : msg;
 		}
 	}
 }
