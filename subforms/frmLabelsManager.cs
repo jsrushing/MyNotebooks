@@ -73,7 +73,7 @@ namespace myNotebooks.subforms
 			if (txtLabelName.Text.Length > 0)
 			{
 				lstLabels.Items.Add(txtLabelName.Text);
-				await LabelsManager.SaveLabels(lstLabels.Items.OfType<string>().ToList());
+				await LabelsManager.SaveLabelsToFile(lstLabels.Items.OfType<string>().ToList());
 				pnlNewLabelName.Visible = false;
 				//LabelsManager.PopulateLabelsList(null, lstLabels);
 				lstOccurrences.Items.Clear();
@@ -160,6 +160,7 @@ namespace myNotebooks.subforms
 		{
 			if (lstLabels.SelectedIndex > -1)
 			{
+				lblFoundEntriesCount.Text = "";
 				mnuMoveTop.Visible = true;
 				mnuMoveTop.Enabled = true;
 				mnuMoveUp.Visible = lstLabels.SelectedIndex > 0;
@@ -288,7 +289,7 @@ namespace myNotebooks.subforms
 			lstLabels.Items.RemoveAt(selIndx);
 			lstLabels.Items.Insert(selIndx + (isUp ? -1 : 1), sLbl);
 			lstLabels.SelectedIndex = selIndx + (isUp ? -1 : 1);
-			await LabelsManager.SaveLabels(lstLabels.Items.OfType<string>().ToList());
+			await LabelsManager.SaveLabelsToFile(lstLabels.Items.OfType<string>().ToList());
 		}
 
 		private void mnuAdd_Click(object sender, EventArgs e)
@@ -350,7 +351,7 @@ namespace myNotebooks.subforms
 
 				if (commandText.Equals("rename"))
 				{
-					await LabelsManager.RenameLabel(lstLabels.SelectedItem.ToString(), newLabelName, notebooksToEdit, Program.DictCheckedNotebooks, this);
+					await LabelsManager.RenameLabelInNotebooksList(lstLabels.SelectedItem.ToString(), newLabelName, notebooksToEdit, Program.DictCheckedNotebooks, this);
 
 					if (notebooksToEdit.Count < Program.AllNotebookNames.Count)
 					{
@@ -395,7 +396,7 @@ namespace myNotebooks.subforms
 			if (newLabelName.Length > 0)
 			{
 				List<Notebook> jrnlsToSearch = GetSelectedNotebooks();
-				await LabelsManager.RenameLabel(oldLabelName, newLabelName, jrnlsToSearch, Program.DictCheckedNotebooks, this);
+				await LabelsManager.RenameLabelInNotebooksList(oldLabelName, newLabelName, jrnlsToSearch, Program.DictCheckedNotebooks, this);
 
 				if (!lstLabels.Items.OfType<string>().Contains(newLabelName))
 				{
@@ -417,7 +418,7 @@ namespace myNotebooks.subforms
 				else
 				{ lstLabels.Items.RemoveAt(lstLabels.SelectedIndex); }
 
-				await LabelsManager.SaveLabels(lstLabels.Items.OfType<string>().ToList());
+				await LabelsManager.SaveLabelsToFile(lstLabels.Items.OfType<string>().ToList());
 				ActionTaken = true;
 				lstOccurrences.Items.Clear();
 			}
@@ -499,6 +500,7 @@ namespace myNotebooks.subforms
 			using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "Label Delete Successful", this))
 			{ frm.ShowDialog(); }
 		}
+
 		private void ShowPanel(Panel panelToShow)
 		{   //411, 576
 			foreach (Control c in this.Controls) { if (c.GetType() == typeof(Panel)) { c.Visible = false; } }
@@ -526,13 +528,11 @@ namespace myNotebooks.subforms
 
 			var msg = string.Empty;
 
-			
-
 			if(lstOccurrences.Items.Count == 1)
-			{ msg = "(0 in 0 books)"; }
-			else { msg = "(" + (lstOccurrences.Items.Count - (OccurenceTitleIndicies.Count * 2)).ToString("###,###,###") + " in " + (OccurenceTitleIndicies.Count / 2).ToString() + " books)"; }
+			{ msg = ""; }
+			else { msg = "(" + (lstOccurrences.Items.Count - (OccurenceTitleIndicies.Count * 2)).ToString("###,###,###") + " entries in " + (OccurenceTitleIndicies.Count).ToString() + " books)"; }
 
-			lblFoundEntriesCount.Text = msg;
+			lblFoundEntriesCount.Text =lstOccurrences.Items.Count == 0 ? "" :  msg;
 		}
 	}
 }

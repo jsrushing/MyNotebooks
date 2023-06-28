@@ -666,7 +666,7 @@ namespace myNotebooks.subforms
 				if (frm.Saved)
 				{
 					CurrentEntry = frm.Entry;
-					//await CurrentNotebook.Save();
+					await CurrentNotebook.Save();
 					await ProcessDateFilters();
 					var v = lstEntries.Items.OfType<string>().FirstOrDefault(e => e.StartsWith(CurrentEntry.Title));
 					lstEntries.SelectedIndex = lstEntries.Items.IndexOf(v);
@@ -815,7 +815,9 @@ namespace myNotebooks.subforms
 
 		private void mnuNotebooks_Select_Click(object sender, EventArgs e)
 		{
-			using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(this, "Select notebooks to work with. Be sure to add a PIN for any protected notebooks.")) { frm.ShowDialog(this); }
+			using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(this, 
+				"Select notebooks to work with. Be sure to add a PIN for any protected notebooks.")) 
+			{ frm.ShowDialog(this); }
 		}
 
 		private async void mnuNotebook_Settings_Click(object sender, EventArgs e)

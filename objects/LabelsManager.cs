@@ -34,7 +34,7 @@ namespace myNotebooks.objects
 		{
 			List<string> newLabels = (lables).Except(GetLabels_NoFileDate()).ToList();
 			newLabels.AddRange(GetLabels_NoFileDate());
-			await SaveLabels(newLabels.ToList());
+			await SaveLabelsToFile(newLabels.ToList());
 		}
 
 		public static string		CheckedLabels_Get(CheckedListBox cbx)
@@ -55,26 +55,33 @@ namespace myNotebooks.objects
 
 		public static async Task	DeleteLabelInNotebooksList(string labelName, List<Notebook> notebooksToEdit, Form parent = null, bool isOrphan = false)
 		{
+			var iBooksToSearch = notebooksToEdit.Where(e => e.HasLabel(labelName)).ToList().Count;
+			var sMsg = string.Empty;
+
 			if (isOrphan)
 			{
-				await SaveLabels(File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Where(c => c != labelName).ToArray().SkipLast(1).ToList());
+				await SaveLabelsToFile(File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Where(c => c != labelName).ToArray().SkipLast(1).ToList());
 			}
 			else
 			{
-				foreach(Notebook nb in notebooksToEdit) 
-				{ 
-					//Utilities.SetProgramPIN(nb.Name);
+				foreach(Notebook nb in notebooksToEdit.Where(e => e.HasLabel(labelName)).ToList()) 
+				{
+					Utilities.SetProgramPIN(nb.Name);
 					await nb.DeleteLabelFromNotebook(labelName); 
 				}
 
-				if(notebooksToEdit.Count == Program.AllNotebookNames.Count)
-				{ await SaveLabels(File.ReadAllLines(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Where(c => c != labelName).ToArray().SkipLast(1).ToList()); }
+				if(iBooksToSearch == Program.AllNotebookNames.Count)
+				{ 
+					await RemoveLabelInFile(labelName);
+					sMsg = "The label '" + labelName + "' has been deleted in all Notebooks.";
+				}
 				else
 				{
-					var sMsg = "The label has been left in the labels list because you did not search all Notebooks. " +
-						"You must select ALL notebooks (and provide PINs for all protected notebooks) to clear the label from the list.";
-					using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "Label May Still Exist", parent)) { frm.ShowDialog(); }
+					sMsg = "The label '" + labelName + "'  has been left in the labels list because you did not search all Notebooks. " +
+						"You must select ALL notebooks (and provide PINs for all protected notebooks) to clear the label from your Labels file.";
 				}
+
+				using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "Action Taken", parent)) { frm.ShowDialog(); }
 			}
 		}
 
@@ -173,9 +180,12 @@ namespace myNotebooks.objects
 			}
 		}
 
-		public static async Task	RenameLabel(string oldLabelName, string newLabelName, List<Notebook> notebooksToEdit, Dictionary<string, string> jrnlsAndPINs, Form parent)
+		public static async Task	RenameLabelInNotebooksList(string oldLabelName, string newLabelName, List<Notebook> notebooksToEdit, Dictionary<string, string> jrnlsAndPINs, Form parent)
 		{
-			foreach(Notebook nb in notebooksToEdit)
+			var iBooksToSearch = notebooksToEdit.Where(e => e.HasLabel(oldLabelName)).ToList().Count;
+			var sMsg = string.Empty;
+
+			foreach (Notebook nb in notebooksToEdit.Where(e => e.HasLabel(oldLabelName)).ToList())
 			{
 				try
 				{
@@ -185,13 +195,40 @@ namespace myNotebooks.objects
 				catch(Exception ex) { Console.WriteLine(ex.InnerException);  }	// If a notebook's PIN hasn't been entered SetProgramPIN will fail.
 			}
 
+			var msg = string.Empty;
+
+			if(iBooksToSearch == Program.AllNotebookNames.Count)
+			{
+				// changed in every notebook
+				await RemoveLabelInFile(oldLabelName);
+				sMsg = "The label '" + oldLabelName + "' was renamed to '" + newLabelName + "' in all notebooks and has been removed from the Labels file.";	
+			}
+			else
+			{
+				// changed in a few notebooks
+				List<string> lstLbls = GetLabels_NoFileDate().ToList();
+				lstLbls.Add(newLabelName);
+				await SaveLabelsToFile(lstLbls);
+
+				sMsg = "The label '" + oldLabelName + "' has been left in the labels list because you did not search all Notebooks. The label '" + newLabelName + "' has been added to your Labels file." +
+					Environment.NewLine + "You must select ALL notebooks (and provide PINs for all protected notebooks) to clear the label from your Labels file.";
+
+			}
+			using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "Action Taken", parent)) { frm.ShowDialog(); }
+
 			List<string> lbls = GetLabels_NoFileDate().ToList();
 			lbls.Add(newLabelName);
-			if (notebooksToEdit.Count == Program.AllNotebookNames.Count) { lbls.Remove(oldLabelName); }
-			await SaveLabels(lbls);
+			if (iBooksToSearch == Program.AllNotebookNames.Count) { lbls.Remove(oldLabelName); }
+			await SaveLabelsToFile(lbls);
 		}
 
-		public static async Task<bool>	SaveLabels(List<string> labels = null)
+		private static async Task RemoveLabelInFile(string labelName)
+		{
+			await SaveLabelsToFile(File.ReadAllLines(Program.AppRoot + 
+				ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Where(c => c != labelName).ToArray().SkipLast(1).ToList());
+		}
+
+		public static async Task<bool>	SaveLabelsToFile(List<string> labels = null)
 		{
 			var bRtrn = false;
 			if(labels == null) { labels = GetLabels_NoFileDate().ToList(); }

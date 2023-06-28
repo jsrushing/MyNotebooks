@@ -149,28 +149,13 @@ namespace myNotebooks.subforms
 
 		private async Task PopulateProgramDictCheckedNBooks()
 		{
-			//List<string> checkedItems = lstNotebookPINs.CheckedItems.OfType<string>().ToList();
-			//List<KeyValuePair<string, string>> chkdBooks = Program.DictCheckedNotebooks.ToList();
-
-			//Program.DictCheckedNotebooks.Clear();
-
-			foreach(string checkedItem in lstNotebookPINs.CheckedItems.OfType<string>().ToList())
+			foreach(var checkedItem in lstNotebookPINs.CheckedItems.OfType<string>().ToList())
 			{
 				if (!Program.DictCheckedNotebooks.Keys.Contains(Scrubbed(checkedItem))) 
 				{
 					Program.DictCheckedNotebooks.Add(checkedItem, "");
 				}
 			}
-
-
-			//foreach (KeyValuePair<string, string> kvp in Program.DictCheckedNotebooks)
-			//{ if (!checkedItems.Contains(kvp.Key)) { Program.DictCheckedNotebooks.Remove(Scrubbed(kvp.Key)); } }
-
-			//foreach (KeyValuePair<string, string> item in Program.DictCheckedNotebooks)
-			//{
-			//	if (!Program.DictCheckedNotebooks.ContainsKey(item.Key))
-			//	{ Program.DictCheckedNotebooks.Add(item.Key, ""); }
-			//}
 		}
 
 		private async void PopulateNotebooksList(bool populateWithCheckedJournals, bool showMore, bool showAll)

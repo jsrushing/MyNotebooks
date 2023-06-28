@@ -86,7 +86,7 @@ namespace myNotebooks.subforms
 					pnlYesNoCancel.Visible = true;
 					this.AcceptButton = btnCancel1;
 					shownPanel = pnlYesNoCancel;
-					this.Text = "Please Confirm";
+					this.Text = this.defaultText;
 					this.Height = pnlYesNoCancel.Top + pnlYesNoCancel.Height + 55;
 					break;
 				case OperationType.InputBox:
