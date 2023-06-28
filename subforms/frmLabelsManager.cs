@@ -215,7 +215,7 @@ namespace myNotebooks.subforms
 
 			if (e.Button == MouseButtons.Right && lstOccurrences.Items.Count > 1)
 			{
-				lstOccurrences.SelectedIndex = e.Y / 15;
+				lstOccurrences.SelectedIndex = lstOccurrences.TopIndex + e.Y / 15;
 
 				if (!OccurenceTitleIndicies.Contains(lstOccurrences.SelectedIndex))
 				{ mnuContextEntries.Visible = false; lstOccurrences.SelectedIndex = -1; }
