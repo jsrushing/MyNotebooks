@@ -42,9 +42,9 @@ namespace myNotebooks
 			}
 		}
 
-		public void AddEntry(Entry entryToAdd) { Entries.Add(entryToAdd); }
+		public void			AddEntry(Entry entryToAdd) { Entries.Add(entryToAdd); }
 
-		public void Backup()
+		public void			Backup()
 		{
 			string dir = ConfigurationManager.AppSettings["FolderStructure_NotebookIncrementalBackupsFolder"];
 			if (!System.IO.Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + dir))
@@ -53,7 +53,7 @@ namespace myNotebooks
 			File.Copy(this.FileName, AppDomain.CurrentDomain.BaseDirectory + dir + this.Name, true);
 		}
 
-		public void Backup_Forced()
+		public void			Backup_Forced()
 		{
 			try
 			{
@@ -68,7 +68,7 @@ namespace myNotebooks
 			catch (Exception) { }
 		}
 
-		public async Task Create(bool addCreatedOn = true)
+		public async Task	Create(bool addCreatedOn = true)
         {
 			this.FileName += this.Settings.AllowCloud ? "" : " (local)";
 			if(addCreatedOn) Entries.Add(new Entry("created", "-", "-", "", this.Name));
@@ -77,7 +77,7 @@ namespace myNotebooks
 			Program.SkipFileSizeComparison = false;
 		}
 
-		public async void Delete()
+		public async void	Delete()
 		{
 			if (Program.AzurePassword.Length > 0 && this.Settings.AllowCloud)
 			{ await AzureFileClient.DownloadOrDeleteFile(this.FileName, Program.AzurePassword + this.Name, FileMode.Create, true);  }
@@ -113,13 +113,13 @@ namespace myNotebooks
 			DeleteBackups();
 		}
 		
-		private void DeleteBackups()
+		private void		DeleteBackups()
 		{
 			File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebookIncrementalBackupsFolder"] + this.Name);
 			File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebookForcedBackupsFolder"] + this.Name);
 		}
 
-		public async Task DeleteLabelFromNotebook(string label)
+		public async Task	DeleteLabelFromNotebook(string label)
 		{
 			var saveJournal = false;
 			foreach (Entry entry in this.Entries.Where(e => e.Labels.Contains(label)).ToList())
@@ -128,7 +128,7 @@ namespace myNotebooks
 			if(saveJournal) { await this.Save(); } 
 		}
 
-        public Entry GetEntry(string Title, string Date)
+        public Entry		GetEntry(string Title, string Date)
         {
 			Entry jeRtrn = null;
 
@@ -152,9 +152,9 @@ namespace myNotebooks
 			return lstRtrn;
 		}
 
-		public bool HasLabel(string Label) { return Entries.Where(e => e.Labels.Contains(Label)).Any(); }
+		public bool			HasLabel(string Label) { return Entries.Where(e => e.Labels.Contains(Label)).Any(); }
 
-		public Notebook Open(bool useFileName = false)
+		public Notebook		Open(bool useFileName = false)
         {
             Notebook nbRtrn = null;
 			var NotebookToOpen = "";
@@ -171,13 +171,16 @@ namespace myNotebooks
 					{
 						BinaryFormatter formatter = new BinaryFormatter();
 						nbRtrn					= (Notebook)formatter.Deserialize(stream);
-						nbRtrn.FileName			= EncryptDecrypt			.Decrypt(nbRtrn.FileName);
 						nbRtrn.Name				= EncryptDecrypt			.Decrypt(nbRtrn.Name);
-						nbRtrn.Entries.ForEach(e => e.Title		= EncryptDecrypt.Decrypt(e.Title));
-						nbRtrn.Entries.ForEach(e => e.Text		= EncryptDecrypt.Decrypt(e.Text));
-						nbRtrn.Entries.ForEach(e => e.Labels	= EncryptDecrypt.Decrypt(e.Labels));
-						nbRtrn.Entries.ForEach(e => e.RTF		= EncryptDecrypt.Decrypt(e.RTF));
-						nbRtrn.Entries.ForEach(e => e.NotebookName = EncryptDecrypt.Decrypt(e.NotebookName));
+						if(!nbRtrn.Name.Equals(" <decrypt failed> "))
+						{
+							nbRtrn.FileName			= EncryptDecrypt			.Decrypt(nbRtrn.FileName);
+							nbRtrn.Entries.ForEach(e => e.Title		= EncryptDecrypt.Decrypt(e.Title));
+							nbRtrn.Entries.ForEach(e => e.Text		= EncryptDecrypt.Decrypt(e.Text));
+							nbRtrn.Entries.ForEach(e => e.Labels	= EncryptDecrypt.Decrypt(e.Labels));
+							nbRtrn.Entries.ForEach(e => e.RTF		= EncryptDecrypt.Decrypt(e.RTF));
+							nbRtrn.Entries.ForEach(e => e.NotebookName = EncryptDecrypt.Decrypt(e.NotebookName));
+						}
 					}
 				}	
             }
@@ -223,7 +226,7 @@ namespace myNotebooks
 			return entriesToReturn;
 		}
 
-		public async Task Rename(string newName, bool uploadTriggerFile)
+		public async Task	Rename(string newName, bool uploadTriggerFile)
 		{
 			//DeleteBackups();
 			var oldName		= this.Name;
@@ -253,7 +256,7 @@ namespace myNotebooks
 			//Backup();
 		}
 
-		public async Task RenameLabel(string oldName,  string newName)
+		public async Task	RenameLabel(string oldName,  string newName)
 		{
 			var saveJournal = false;
 			foreach(Entry entry in this.Entries.Where(e => e.Labels.Contains(oldName)).ToList()) 
@@ -262,7 +265,7 @@ namespace myNotebooks
 			if(saveJournal ) { await this.Save(); }
 		}
 
-        public void ReplaceEntry(Entry jeToReplace, Entry jeToInsert)
+        public void			ReplaceEntry(Entry jeToReplace, Entry jeToInsert)
 		{
 			jeToInsert.Date = jeToReplace.Date;
 			jeToInsert.LastEditedOn = DateTime.Now;
@@ -270,7 +273,7 @@ namespace myNotebooks
 			Entries[index] = jeToInsert;
 		}
 
-		public async Task ResetPIN(Form caller)
+		public async Task	ResetPIN(Form caller)
 		{
 			var newPIN		= string.Empty;
 			var currentPIN	= Program.PIN;
@@ -305,7 +308,7 @@ namespace myNotebooks
 			}
 		}
 
-		public async Task Save(bool synchWithCloud = true)
+		public async Task	Save(bool synchWithCloud = true)
 		{
 			var fName = this.FileName.Length > 0 ? this.FileName : Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + this.Name;
 			fName = fName.Contains("\\") ? fName :  Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + this.Name;
@@ -350,7 +353,7 @@ namespace myNotebooks
 			await Utilities.PopulateAllNotebookNames();
 		}
 
-		public List<Entry> Search(SearchObject So)
+		public List<Entry>	Search(SearchObject So)
 		{
 			List<Entry> allEntries = this.Entries;
 

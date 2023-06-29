@@ -1,0 +1,14 @@
+Labels
+	Add
+	Rename
+		In all selected books, not all books
+		In all books
+	Delete
+		From all selected books, not all books
+		From all books
+
+Select Notebook
+	ERROR > Hangs if wrong PIN
+		fixed
+	Wrong PIN is working
+

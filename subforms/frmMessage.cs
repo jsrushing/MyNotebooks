@@ -56,7 +56,8 @@ namespace myNotebooks.subforms
 
 			lblMessage.Text = msg;
 			msg = msg.Replace("\\n", "  ");
-			lblMessage.Height = (int)Math.Ceiling((double)msg.Length / 50) <= 1 ? 25 : 25 * ((int)Math.Ceiling((double)msg.Length / 50));
+			var lineLength = 70;
+			lblMessage.Height = (int)Math.Ceiling((double)msg.Length / lineLength) <= 1 ? 25 : 25 * ((int)Math.Ceiling((double)msg.Length / lineLength));
 
 
 			if (msg.Length > 45) { lblMessage.Height += 20; }

@@ -39,7 +39,7 @@ namespace myNotebooks.objects
 
 		public CloudSynchronizer() { notebookComparisonResult = ComparisonResult.Same; }
 
-		private async Task CheckForLocalOrCloudOnly(string tempFolder, string notebooksFolder)
+		private async Task			CheckForLocalOrCloudOnly(string tempFolder, string notebooksFolder)
 		{
 			await AzureFileClient.GetAzureItemNames(true);
 
@@ -48,7 +48,7 @@ namespace myNotebooks.objects
 				await AzureFileClient.DownloadOrDeleteFile(tempFolder + sBookName, Program.AzurePassword + sBookName);
 				Notebook j3 = new Notebook(sBookName, tempFolder + sBookName).Open(true);
 
-				{ j3 = j3.Equals(null) ? null : new Notebook(sBookName, tempFolder + sBookName).Open(true);}
+				//j3 = j3.Equals(null) ? null : new Notebook(sBookName, tempFolder + sBookName).Open(true);
 
 				if (j3 != null && j3.Settings.IfCloudOnly_Download)
 				{
@@ -79,14 +79,14 @@ namespace myNotebooks.objects
 			//}
 		}
 
-		private void CompareNotebooks(Notebook localJournal, Notebook cloudJournal)
+		private void				CompareNotebooks(Notebook localJournal, Notebook cloudJournal)
 		{
 			if(!Program.SkipFileSizeComparison)
 			{ this.notebookComparisonResult = localJournal.LastSaved > cloudJournal.LastSaved ? (ComparisonResult.LocalNewer) : cloudJournal.LastSaved > localJournal.LastSaved ? (ComparisonResult.CloudNewer) : (ComparisonResult.Same); }
 			else { this.notebookComparisonResult = ComparisonResult.Same; }
 		}
 
-		private ComparisonResult CompareLabelsAndSettings(FileInfo fileinfo1, FileInfo fileinfo2)
+		private ComparisonResult	CompareLabelsAndSettings(FileInfo fileinfo1, FileInfo fileinfo2)
 		{
 			DateTime localLabelsFileDate = LabelsManager.GetLabelsFileDate(GetLabelsAsArray(fileinfo1));
 			DateTime cloudLabelsFileDate = LabelsManager.GetLabelsFileDate(GetLabelsAsArray(fileinfo2));
@@ -95,7 +95,7 @@ namespace myNotebooks.objects
 				ComparisonResult.LocalNewer : localLabelsFileDate < cloudLabelsFileDate ? ComparisonResult.CloudNewer : ComparisonResult.Same;
 		}
 
-		private string[] GetLabelsAsArray(FileInfo file)
+		private string[]			GetLabelsAsArray(FileInfo file)
 		{
 			string sRtrn = string.Empty;
 
@@ -112,14 +112,14 @@ namespace myNotebooks.objects
 			return sRtrn.Substring(0, sRtrn.LastIndexOf("\r\n")).Split("\r\n");
 		}
 
-		private async Task ProcessNotebooks(List<string> allNotebooksNames, string tempFolder, string notebooksFolder)
+		private async Task			ProcessNotebooks(List<string> allNotebooksNames, string tempFolder, string notebooksFolder)
 		{
 			Notebook cloudNotebook = null;
 			Notebook book;
 
-			for (var i = 0; i < allNotebooksNames.Count; i++)
+			for (var i = 0; i < Program.AllNotebooks.Count; i++)
 			{
-				book = new Notebook(allNotebooksNames[i]).Open();
+				book = Program.AllNotebooks[i];
 
 				if (book != null)
 				{
@@ -134,7 +134,6 @@ namespace myNotebooks.objects
 
 						if (cloudNotebook != null)
 						{
-
 							if (cloudNotebook.Entries.Count > 0)    // Turning CloudAccess OFF in one notebook propogates to next device.
 							{
 								this.CompareNotebooks(book, cloudNotebook);
@@ -142,15 +141,15 @@ namespace myNotebooks.objects
 								switch (notebookComparisonResult)
 								{
 									case ComparisonResult.Same:
-										ItemsSkipped.Add(book.Name + " (files match)");
+										//ItemsSkipped.Add(book.Name + " (files match)");
 										break;
 									case ComparisonResult.LocalNewer:
 										await AzureFileClient.UploadFile(book.FileName);
-										ItemsSynchd.Add(book.FileName + "up'd (newer)");
+										//ItemsSynchd.Add(book.FileName + "up'd (newer)");
 										break;
 									case ComparisonResult.CloudNewer:
 										File.Move(cloudNotebook.FileName, book.FileName, true);
-										ItemsDownloaded.Add(book.Name + " (syncd from cloud)");
+										//ItemsDownloaded.Add(book.Name + " (syncd from cloud)");
 										break;
 								}
 
@@ -203,7 +202,7 @@ namespace myNotebooks.objects
 			}
 		}
 
-		public async Task SynchWithCloud(bool alsoSynchSettings = false, Notebook notebook = null, bool checkCloudStatusOnly = false)
+		public async Task			SynchWithCloud(bool alsoSynchSettings = false, Notebook notebook = null, bool checkCloudStatusOnly = false)
 		{
 			var notebooksFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"];
 			var tempFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"];
@@ -232,20 +231,25 @@ namespace myNotebooks.objects
 
 					await Utilities.PopulateAllNotebooks(allNotebooksNames);
 
-					Notebook nb = Program.AllNotebooks.Where(e => e.Name == notebook.Name & e.LastSaved == notebook.LastSaved).First();
-
-					if (nb == null) { Program.AllNotebooks.Add(notebook); }
+					try 
+					{ 
+						if(Program.AllNotebooks.Count == 1 && Program.AllNotebooks[0] != null)
+						{
+							Notebook nb = Program.AllNotebooks.Where(e => e.Name == notebook.Name & e.LastSaved == notebook.LastSaved).First(); 
+							if (nb == null) { Program.AllNotebooks.Add(notebook); }
+							await ProcessNotebooks(allNotebooksNames, tempFolder, notebooksFolder);
+							await AzureFileClient.GetAzureItemNames(true);
+							await CheckForLocalOrCloudOnly(tempFolder, notebooksFolder);
+						}
+					} 
+					catch (Exception ex) { Console.WriteLine(ex.Message); }
 				}
-
-				await ProcessNotebooks(allNotebooksNames, tempFolder, notebooksFolder);
-				await AzureFileClient.GetAzureItemNames(true);
-				await CheckForLocalOrCloudOnly(tempFolder, notebooksFolder);
 			}
 
 			if (alsoSynchSettings) await SyncLabelsAndSettings();
 		}
 
-		public async Task SyncLabelsAndSettings()
+		public async Task			SyncLabelsAndSettings()
 		{
 			//return;
 			FileInfo downloadedAzureLabels		= null;

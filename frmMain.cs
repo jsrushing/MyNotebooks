@@ -341,69 +341,70 @@ namespace myNotebooks.subforms
 			rtbSelectedEntry.Text = string.Empty;
 			Program.PIN = txtJournalPIN.Text;
 			lblWrongPin.Visible = false;
+			Program.PIN = txtJournalPIN.Text;
 			CurrentNotebook = new Notebook(ddlNotebooks.Text, null, this).Open();
-			if (!Program.AllNotebooks.Contains(CurrentNotebook)) { Program.AllNotebooks.Add(CurrentNotebook); }
-			if (!Program.AllNotebookNames.Contains(CurrentNotebook.Name)) { Program.AllNotebookNames.Add(CurrentNotebook.Name); }
-
 			var wrongPIN = true;
 
 			if (CurrentNotebook != null)
-			{   // Test the PIN ...
-				Program.PIN = txtJournalPIN.Text;
-				wrongPIN = CurrentNotebook.Entries[0].Title != "created"; // The 0th entry is system-defined with its Title = "created". If the NBook has a PIN it is encrypted in the file and decrypt will fail with the wrong PIN.
-			}
+			{
+				wrongPIN = CurrentNotebook.Name.Equals(" <decrypt failed> ") | !CurrentNotebook.FileName.Contains("\\");
 
-			if(wrongPIN)
-			{
-				lblWrongPin.Visible = true;
-				txtJournalPIN.Focus();
-				txtJournalPIN.SelectAll();
-			}
-			else
-			{
-				if (CurrentNotebook.Settings.AllowCloud && Program.AzurePassword.Length > 0)
+				if (!wrongPIN && !Program.AllNotebookNames.Contains(CurrentNotebook.Name))
 				{
-					var nbPath = CurrentNotebook.FileName;
-					var nbName = CurrentNotebook.Name;
-					CloudSynchronizer cs = new CloudSynchronizer();
-					await cs.SynchWithCloud(false, CurrentNotebook);
-					Notebook curNotebook = new Notebook(nbName, nbPath, this).Open();
-
-					if (curNotebook == null)    // the sync deleted the file
-					{ ddlNotebooks.Items.Remove(nbName); }
-					else { if (!curNotebook.Equals(CurrentNotebook)) { CurrentNotebook = curNotebook; } }// the synch dl'd a newer copy of the file
+					Program.AllNotebooks.Add(CurrentNotebook);
 				}
 
-				try
+				if (wrongPIN)
 				{
-					if (CurrentNotebook != null)
+					lblWrongPin.Visible = true;
+					txtJournalPIN.Focus();
+					txtJournalPIN.SelectAll();
+				}
+				else
+				{
+					if (CurrentNotebook.Settings.AllowCloud && Program.AzurePassword.Length > 0)
 					{
-						PopulateShowFromDates();
-						SuppressDateClick = true;
-						await ProcessDateFilters();
-						SuppressDateClick = false;
-						lstEntries.Height = this.Height - lstEntries.Top - 50;
-						lstEntries.Visible = true;
-						pnlDateFilters.Visible = true;
+						var nbPath = CurrentNotebook.FileName;
+						var nbName = CurrentNotebook.Name;
+						CloudSynchronizer cs = new CloudSynchronizer();
+						await cs.SynchWithCloud(false, CurrentNotebook);
+						Notebook curNotebook = new Notebook(nbName, nbPath, this).Open();
 
-						for (var i = 0; i < cbxDatesFrom.Items.Count; i++)
+						if (curNotebook == null)    // the sync deleted the file
+						{ ddlNotebooks.Items.Remove(nbName); }
+						else { if (!curNotebook.Equals(CurrentNotebook)) { CurrentNotebook = curNotebook; } }// the synch dl'd a newer copy of the file
+					}
+					try
+					{
+						if (CurrentNotebook != null)
 						{
-							if (DateTime.Parse(cbxDatesFrom.Items[i].ToString()) <= DateTime.Parse(cbxDatesTo.Text).AddDays(-60) || i == cbxDatesFrom.Items.Count - 1)
-							{
-								cbxDatesFrom.SelectedIndex = i;
-								break;
-							}
-						}
+							PopulateShowFromDates();
+							SuppressDateClick = true;
+							await ProcessDateFilters();
+							SuppressDateClick = false;
+							lstEntries.Height = this.Height - lstEntries.Top - 50;
+							lstEntries.Visible = true;
+							pnlDateFilters.Visible = true;
 
-						cbxDatesTo.SelectedIndex = 0;
-						ShowHideMenusAndControls(SelectionState.NotebookLoaded);
+							for (var i = 0; i < cbxDatesFrom.Items.Count; i++)
+							{
+								if (DateTime.Parse(cbxDatesFrom.Items[i].ToString()) <= DateTime.Parse(cbxDatesTo.Text).AddDays(-60) || i == cbxDatesFrom.Items.Count - 1)
+								{
+									cbxDatesFrom.SelectedIndex = i;
+									break;
+								}
+							}
+
+							cbxDatesTo.SelectedIndex = 0;
+							ShowHideMenusAndControls(SelectionState.NotebookLoaded);
+						}
+						else
+						{
+							lstEntries.Focus();
+						}
 					}
-					else
-					{
-						lstEntries.Focus();
-					}
+					catch (Exception ex) { Console.Write(ex.Message); }
 				}
-				catch (Exception ex) { Console.Write(ex.Message); }
 			}
 
 			this.Cursor = Cursors.Default;
@@ -899,13 +900,21 @@ namespace myNotebooks.subforms
 		{
 			if (cbxDatesFrom.Text.Length > 0 && cbxDatesTo.Text.Length > 0)
 			{
-				await Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, CurrentNotebook.Name,
-					cbxDatesFrom.Text, cbxDatesTo.Text, true, cbxSortEntriesBy.SelectedIndex, false, lstEntries.Width - 85);
+				if(DateTime.Parse(cbxDatesFrom.Text) > DateTime.Parse(cbxDatesTo.Text))
+				{
+					using(frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The 'from' date must be earlier than the 'to' date.", "Check Your Dates", this))
+					{ frm.ShowDialog(); }
+				}
+				else
+				{
+					await Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, CurrentNotebook.Name,
+						cbxDatesFrom.Text, cbxDatesTo.Text, true, cbxSortEntriesBy.SelectedIndex, false, lstEntries.Width - 85);
 
-				if (lstEntries.SelectedIndex == -1 && CurrentNotebook.Entries.Contains(CurrentEntry))
-				{ Entry.Select(rtbSelectedEntry, lstEntries, null, true, CurrentEntry, true); }
+					if (lstEntries.SelectedIndex == -1 && CurrentNotebook.Entries.Contains(CurrentEntry))
+					{ Entry.Select(rtbSelectedEntry, lstEntries, null, true, CurrentEntry, true); }
 
-				lblEntriesCount.Text = (lstEntries.Items.Count / 4).ToString();
+					lblEntriesCount.Text = (lstEntries.Items.Count / 4).ToString();
+				}
 			}
 		}
 
