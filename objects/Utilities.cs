@@ -196,8 +196,8 @@ namespace myNotebooks.objects
 			entryRTB.Height = callingForm.Height - entryRTB.Top - 50;
 		}
 
-		public static void SetProgramPIN(string j)
-		{ Program.PIN = Program.DictCheckedNotebooks[j] == "" ? "" : Program.DictCheckedNotebooks[j]; }
+		public static void SetProgramPIN(string nb)
+		{ Program.PIN = Program.DictCheckedNotebooks[nb] == "" ? "" : Program.DictCheckedNotebooks[nb]; }
 
 		public static void SetStartPosition(Form formToInitialize, Form parentForm)
 		{ 

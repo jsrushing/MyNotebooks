@@ -74,7 +74,7 @@ namespace myNotebooks.subforms
 			var labels = string.Empty;
 			string[] labelsArray;
 			List<Entry> foundEntries = new List<Entry>();
-			List<Entry> jeFound = null;
+			List<Entry> nbFound = null;
 
 			journalBoundaries.Clear();
 			lstFoundEntries.Items.Clear();
@@ -86,13 +86,17 @@ namespace myNotebooks.subforms
 			SearchObject so = new SearchObject(chkUseDate, chkUseDateRange, chkMatchCase, dtFindDate,
 					dtFindDate_From, dtFindDate_To, radBtnAnd, radLabels_And, txtSearchTitle.Text, txtSearchText.Text, labelsArray);
 
+			var lastIndex = 0;
+
 			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedNotebooks)
 			{
+				if(lastIndex == 0) { journalBoundaries.Add(kvp.Key, 0); }
 				Utilities.SetProgramPIN(kvp.Key);
-				jeFound = new Notebook(kvp.Key.Replace(" (****)", ""), "", this).Open().Search(so);
-				await Utilities.PopulateEntries(lstFoundEntries, jeFound, "", "", "", false, 0, true);
-				journalBoundaries.Add(kvp.Key, lstFoundEntries.Items.Count);
-				FoundEntries.AddRange(jeFound);
+				nbFound = new Notebook(kvp.Key.Replace(" (****)", ""), "", this).Open().Search(so);
+				await Utilities.PopulateEntries(lstFoundEntries, nbFound, "", "", "", false, 0, true);
+				lastIndex += nbFound.Count;
+				journalBoundaries.Add(kvp.Key.ToString(), lastIndex);
+				FoundEntries.AddRange(nbFound);
 				foundEntries.Clear();
 			}
 
@@ -148,9 +152,9 @@ namespace myNotebooks.subforms
 			{
 				if (lb.SelectedIndex > -1)
 				{
-					Notebook j = GetEntryNotebook();
-					Utilities.SetProgramPIN(j.Name);
-					Entry currentEntry = Entry.Select(rtb, lb, j, false, null, false);
+					Notebook nb = GetEntryNotebook();
+					Utilities.SetProgramPIN(nb.Name);
+					Entry currentEntry = Entry.Select(rtb, lb, nb, false, null, false);
 					GetCurrentSelections();
 
 					if (currentEntry != null)
@@ -249,8 +253,8 @@ namespace myNotebooks.subforms
 
 		private void SetNotebookSelectLabelAndButton()
 		{
-			lblSearchingIn.Text = "Searching in " +
-				(Program.DictCheckedNotebooks.Count == Program.AllNotebookNames.Count ? "all " : Program.DictCheckedNotebooks.Count.ToString() + " selected ") + "notebook" + (Program.DictCheckedNotebooks.Count == 1 ? "" : "s");
+			lblSearchingIn.Text = "Searching in " + Program.DictCheckedNotebooks.Count + " of " + Program.AllNotebookNames.Count + " notebooks";
+				//(Program.DictCheckedNotebooks.Count == Program.AllNotebookNames.Count ? "all " : Program.DictCheckedNotebooks.Count.ToString() + " selected ") + "notebook" + (Program.DictCheckedNotebooks.Count == 1 ? "" : "s");
 
 			btnSelectNotebooks.Left = lblSearchingIn.Left + lblSearchingIn.Width + 5;
 			btnExportEntries.Left = btnSelectNotebooks.Left + btnSelectNotebooks.Width + 5;

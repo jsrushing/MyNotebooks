@@ -70,7 +70,6 @@ namespace myNotebooks.subforms
 			cbxDatesFrom = new System.Windows.Forms.ComboBox();
 			label2 = new System.Windows.Forms.Label();
 			pnlDateFilters = new System.Windows.Forms.Panel();
-			label6 = new System.Windows.Forms.Label();
 			lblEntriesCount = new System.Windows.Forms.Label();
 			cbxSortEntriesBy = new System.Windows.Forms.ComboBox();
 			label5 = new System.Windows.Forms.Label();
@@ -131,7 +130,7 @@ namespace myNotebooks.subforms
 			ddlNotebooks.FormattingEnabled = true;
 			ddlNotebooks.Location = new System.Drawing.Point(85, 30);
 			ddlNotebooks.Name = "ddlNotebooks";
-			ddlNotebooks.Size = new System.Drawing.Size(689, 23);
+			ddlNotebooks.Size = new System.Drawing.Size(733, 23);
 			ddlNotebooks.TabIndex = 1;
 			ddlNotebooks.SelectedIndexChanged += this.ddlNotebooks_SelectedIndexChanged;
 			ddlNotebooks.Click += this.ddlNotebooks_Click;
@@ -156,7 +155,7 @@ namespace myNotebooks.subforms
 			lstEntries.Location = new System.Drawing.Point(12, 106);
 			lstEntries.Name = "lstEntries";
 			lstEntries.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
-			lstEntries.Size = new System.Drawing.Size(762, 123);
+			lstEntries.Size = new System.Drawing.Size(806, 123);
 			lstEntries.TabIndex = 8;
 			lstEntries.UseTabStops = false;
 			lstEntries.Visible = false;
@@ -216,7 +215,7 @@ namespace myNotebooks.subforms
 			rtbSelectedEntry.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			rtbSelectedEntry.Location = new System.Drawing.Point(15, 271);
 			rtbSelectedEntry.Name = "rtbSelectedEntry";
-			rtbSelectedEntry.Size = new System.Drawing.Size(759, 184);
+			rtbSelectedEntry.Size = new System.Drawing.Size(803, 184);
 			rtbSelectedEntry.TabIndex = 5;
 			rtbSelectedEntry.TabStop = false;
 			rtbSelectedEntry.Text = "";
@@ -231,7 +230,7 @@ namespace myNotebooks.subforms
 			lblSeparator.ForeColor = System.Drawing.Color.Red;
 			lblSeparator.Location = new System.Drawing.Point(13, 232);
 			lblSeparator.Name = "lblSeparator";
-			lblSeparator.Size = new System.Drawing.Size(764, 19);
+			lblSeparator.Size = new System.Drawing.Size(808, 19);
 			lblSeparator.TabIndex = 30;
 			lblSeparator.Text = resources.GetString("lblSeparator.Text");
 			lblSeparator.Visible = false;
@@ -242,7 +241,7 @@ namespace myNotebooks.subforms
 			menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuNotebook, mnuLabels, helpToolStripMenuItem, mnuSwitchAccount });
 			menuStrip1.Location = new System.Drawing.Point(0, 0);
 			menuStrip1.Name = "menuStrip1";
-			menuStrip1.Size = new System.Drawing.Size(786, 24);
+			menuStrip1.Size = new System.Drawing.Size(830, 24);
 			menuStrip1.TabIndex = 37;
 			menuStrip1.Text = "menuStrip1";
 			// 
@@ -427,7 +426,7 @@ namespace myNotebooks.subforms
 			// 
 			// pnlDateFilters
 			// 
-			pnlDateFilters.Controls.Add(label6);
+			pnlDateFilters.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
 			pnlDateFilters.Controls.Add(lblEntriesCount);
 			pnlDateFilters.Controls.Add(cbxSortEntriesBy);
 			pnlDateFilters.Controls.Add(label5);
@@ -437,26 +436,18 @@ namespace myNotebooks.subforms
 			pnlDateFilters.Controls.Add(label2);
 			pnlDateFilters.Location = new System.Drawing.Point(285, 58);
 			pnlDateFilters.Name = "pnlDateFilters";
-			pnlDateFilters.Size = new System.Drawing.Size(489, 27);
+			pnlDateFilters.Size = new System.Drawing.Size(533, 27);
 			pnlDateFilters.TabIndex = 49;
 			pnlDateFilters.Visible = false;
 			// 
-			// label6
-			// 
-			label6.AutoSize = true;
-			label6.Location = new System.Drawing.Point(407, 5);
-			label6.Name = "label6";
-			label6.Size = new System.Drawing.Size(77, 15);
-			label6.TabIndex = 53;
-			label6.Text = "entries found";
-			// 
 			// lblEntriesCount
 			// 
+			lblEntriesCount.AutoSize = true;
 			lblEntriesCount.Location = new System.Drawing.Point(385, 6);
 			lblEntriesCount.Name = "lblEntriesCount";
-			lblEntriesCount.Size = new System.Drawing.Size(25, 15);
+			lblEntriesCount.Size = new System.Drawing.Size(140, 15);
 			lblEntriesCount.TabIndex = 41;
-			lblEntriesCount.Text = "0";
+			lblEntriesCount.Text = "showing 50 of 100 entries";
 			lblEntriesCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// cbxSortEntriesBy
@@ -512,11 +503,11 @@ namespace myNotebooks.subforms
 			// 
 			// btnResetLabelFilter
 			// 
-			btnResetLabelFilter.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+			btnResetLabelFilter.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
 			btnResetLabelFilter.Font = new System.Drawing.Font("Arial Unicode MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			btnResetLabelFilter.Location = new System.Drawing.Point(652, 86);
 			btnResetLabelFilter.Name = "btnResetLabelFilter";
-			btnResetLabelFilter.Size = new System.Drawing.Size(93, 21);
+			btnResetLabelFilter.Size = new System.Drawing.Size(137, 21);
 			btnResetLabelFilter.TabIndex = 51;
 			btnResetLabelFilter.Text = "reset label filter";
 			btnResetLabelFilter.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -530,7 +521,7 @@ namespace myNotebooks.subforms
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			BackColor = System.Drawing.SystemColors.Window;
-			ClientSize = new System.Drawing.Size(786, 628);
+			ClientSize = new System.Drawing.Size(830, 628);
 			Controls.Add(btnResetLabelFilter);
 			Controls.Add(lblEntries);
 			Controls.Add(pnlPin);
@@ -601,7 +592,6 @@ namespace myNotebooks.subforms
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.ToolStripMenuItem mnuSwitchAccount;
 		private System.Windows.Forms.ToolStripMenuItem mnuNotebook_Settings;
-		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.Label lblEntriesCount;
 		private System.Windows.Forms.ToolStripMenuItem mnuNotebook_ResetPIN;
 		private System.Windows.Forms.ToolStripMenuItem mnuNotebooks_Select;

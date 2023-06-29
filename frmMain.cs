@@ -161,7 +161,7 @@ namespace myNotebooks.subforms
 		Entry CurrentEntry;
 		private bool FirstSelection = true;
 		bool SuppressDateClick = false;
-
+		string FoundCountString = "showing {0} of {1} entries";
 		private enum SelectionState
 		{
 			NotebookSelectedNotLoaded,
@@ -619,7 +619,7 @@ namespace myNotebooks.subforms
 			List<Entry> v = CurrentNotebook.Entries.Where(e => e.Labels.Contains(item.Tag.ToString())).ToList();
 			await Utilities.PopulateEntries(lstEntries, v, "", "", "", true, 0, false, 0, item.Tag.ToString());
 			btnResetLabelFilter.Visible = true;
-			lblEntriesCount.Text = (lstEntries.Items.Count / 4).ToString();
+			lblEntriesCount.Text = string.Format(FoundCountString, (lstEntries.Items.Count / 4).ToString(), CurrentNotebook.Entries.Count.ToString());
 		}
 
 		private void mnuAbout_Click(object sender, EventArgs e)
@@ -898,9 +898,9 @@ namespace myNotebooks.subforms
 		{
 			if (cbxDatesFrom.Text.Length > 0 && cbxDatesTo.Text.Length > 0)
 			{
-				if(DateTime.Parse(cbxDatesFrom.Text) > DateTime.Parse(cbxDatesTo.Text))
+				if (DateTime.Parse(cbxDatesFrom.Text) > DateTime.Parse(cbxDatesTo.Text))
 				{
-					using(frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The 'from' date must be earlier than the 'to' date.", "Check Your Dates", this))
+					using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The 'from' date must be earlier than the 'to' date.", "Check Your Dates", this))
 					{ frm.ShowDialog(); }
 				}
 				else
@@ -911,7 +911,7 @@ namespace myNotebooks.subforms
 					if (lstEntries.SelectedIndex == -1 && CurrentNotebook.Entries.Contains(CurrentEntry))
 					{ Entry.Select(rtbSelectedEntry, lstEntries, null, true, CurrentEntry, true); }
 
-					lblEntriesCount.Text = (lstEntries.Items.Count / 4).ToString();
+					lblEntriesCount.Text = string.Format(FoundCountString, (lstEntries.Items.Count / 4).ToString(), CurrentNotebook.Entries.Count.ToString());
 				}
 			}
 		}
