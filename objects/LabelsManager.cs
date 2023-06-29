@@ -55,7 +55,7 @@ namespace myNotebooks.objects
 
 		public static async Task	DeleteLabelInNotebooksList(string labelName, List<Notebook> notebooksToEdit, Form parent = null, bool isOrphan = false)
 		{
-			var iBooksToSearch = notebooksToEdit.Where(e => e.HasLabel(labelName)).ToList().Count;
+			var iBooksToSearch = notebooksToEdit.Count == 1 ? 1 : notebooksToEdit.Where(e => e.HasLabel(labelName)).ToList().Count;
 			var sMsg = string.Empty;
 
 			if (isOrphan)

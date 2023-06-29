@@ -38,12 +38,12 @@
 			ddlLabels.FormattingEnabled = true;
 			ddlLabels.Location = new System.Drawing.Point(12, 12);
 			ddlLabels.Name = "ddlLabels";
-			ddlLabels.Size = new System.Drawing.Size(158, 23);
+			ddlLabels.Size = new System.Drawing.Size(197, 23);
 			ddlLabels.TabIndex = 0;
 			// 
 			// btnOK
 			// 
-			btnOK.Location = new System.Drawing.Point(20, 47);
+			btnOK.Location = new System.Drawing.Point(30, 47);
 			btnOK.Name = "btnOK";
 			btnOK.Size = new System.Drawing.Size(62, 23);
 			btnOK.TabIndex = 1;
@@ -53,7 +53,7 @@
 			// 
 			// btnCancel
 			// 
-			btnCancel.Location = new System.Drawing.Point(100, 47);
+			btnCancel.Location = new System.Drawing.Point(126, 47);
 			btnCancel.Name = "btnCancel";
 			btnCancel.Size = new System.Drawing.Size(62, 23);
 			btnCancel.TabIndex = 2;
@@ -66,7 +66,7 @@
 			AcceptButton = btnOK;
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			ClientSize = new System.Drawing.Size(191, 82);
+			ClientSize = new System.Drawing.Size(221, 82);
 			Controls.Add(btnCancel);
 			Controls.Add(btnOK);
 			Controls.Add(ddlLabels);

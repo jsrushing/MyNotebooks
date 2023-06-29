@@ -12,6 +12,7 @@ namespace myJournal.subforms
 	public partial class frmSelectLabel : Form
 	{
 		public string SelectedLabel { get; private set; }
+
 		public frmSelectLabel(Form parent)
 		{
 			InitializeComponent();
