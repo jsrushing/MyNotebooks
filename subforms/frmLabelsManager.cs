@@ -314,7 +314,11 @@ namespace myNotebooks.subforms
 			if (editingOneNotebook)
 			{
 				notebooksToEdit.Clear();
-				var notebookName = lstOccurrences.Text.Replace("in ", "").Replace(" only", "").Replace("'", "");
+
+				var notebookName = lstOccurrences.Text;
+				notebookName = notebookName.Substring(4, notebookName.Length - 5);
+				Utilities.SetProgramPIN(notebookName);
+
 				notebooksToEdit.Add(new Notebook(notebookName, null, this).Open());
 				sMsg += "in the notebook '" + notebookName + "'?";
 			}
@@ -329,7 +333,7 @@ namespace myNotebooks.subforms
 					lstLabels.SelectedItem.ToString() + "' in " + (notebooksToEdit.Count() == Program.AllNotebookNames.Count ? " all " : notebooksToEdit.Count.ToString())
 					+ " notebooks." + Environment.NewLine + "What's the new label name?";
 
-				using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, msg))
+				using (frmMessage frm = new frmMessage(frmMessage.OperationType.LabelNameInputBox, msg))
 				{
 					frm.ShowDialog();
 					newLabelName = frm.ResultText;

@@ -3,7 +3,10 @@ Labels
 	Rename
 		In all selected books, not all books
 		In all books
-	Delete
+		06/29/23 0008 - Rename should have a way to select from the labels list. User can 'search' using frmLabelsManager lstLabels_Click, then rename a label in any found notebook, then click another label and rename labels in that notebook to the same as the 1st operation.
+		BUG !! >> Currently renaming with an existing label name creates two labels with same name.
+
+ 	Delete
 		From all selected books, not all books
 		From all books
 
@@ -11,4 +14,29 @@ Select Notebook
 	ERROR > Hangs if wrong PIN
 		fixed
 	Wrong PIN is working
+
+New Entry
+
+Edit Entry from
+	frmMain
+	frmLabelsManager
+	frmSearch
+
+Delete Entry from
+	frmMain
+	frmLabelsManager
+	frmSearch
+
+Search
+	Test w/ 500 notebooks
+	Taking wayyyyy too long. Figure this out.
+
+Reset Date Filter not working 06/28/23 2330
+	fixed
+
+New features
+	Merge notebooks
+
+	Add a label to all displayed entries
+		new menuItem in mnuLabelsSummary.DropDownItems("Add label")
 

@@ -43,6 +43,7 @@ namespace myNotebooks.subforms
 			pnlOk = new System.Windows.Forms.Panel();
 			btnOk2 = new System.Windows.Forms.Button();
 			txtInput = new System.Windows.Forms.TextBox();
+			lblSelectFromLabelsList = new System.Windows.Forms.Label();
 			pnlYesNoCancel.SuspendLayout();
 			pnlYesNo.SuspendLayout();
 			pnlOkCancel.SuspendLayout();
@@ -185,11 +186,26 @@ namespace myNotebooks.subforms
 			txtInput.TabIndex = 0;
 			txtInput.Visible = false;
 			// 
+			// lblSelectFromLabelsList
+			// 
+			lblSelectFromLabelsList.AutoSize = true;
+			lblSelectFromLabelsList.Cursor = System.Windows.Forms.Cursors.Hand;
+			lblSelectFromLabelsList.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+			lblSelectFromLabelsList.ForeColor = System.Drawing.SystemColors.Highlight;
+			lblSelectFromLabelsList.Location = new System.Drawing.Point(131, 213);
+			lblSelectFromLabelsList.Name = "lblSelectFromLabelsList";
+			lblSelectFromLabelsList.Size = new System.Drawing.Size(126, 15);
+			lblSelectFromLabelsList.TabIndex = 5;
+			lblSelectFromLabelsList.Text = "Select From Labels List";
+			lblSelectFromLabelsList.Visible = false;
+			lblSelectFromLabelsList.Click += this.lblSelectFromLabelsList_Click;
+			// 
 			// frmMessage
 			// 
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			ClientSize = new System.Drawing.Size(269, 225);
+			ClientSize = new System.Drawing.Size(269, 309);
+			Controls.Add(lblSelectFromLabelsList);
 			Controls.Add(txtInput);
 			Controls.Add(pnlOk);
 			Controls.Add(pnlOkCancel);
@@ -225,5 +241,6 @@ namespace myNotebooks.subforms
 		private System.Windows.Forms.Panel pnlOk;
 		private System.Windows.Forms.Button btnOk2;
 		private System.Windows.Forms.TextBox txtInput;
+		private System.Windows.Forms.Label lblSelectFromLabelsList;
 	}
 }

@@ -3,6 +3,7 @@
  */
 using System;
 using System.Windows.Forms;
+using myJournal.subforms;
 using myNotebooks.objects;
 
 namespace myNotebooks.subforms
@@ -21,7 +22,8 @@ namespace myNotebooks.subforms
 			DeleteNotebook,
 			DeleteEntry,
 			YesNoQuestion,
-			InputBox
+			InputBox,
+			LabelNameInputBox
 		}
 
 		public enum ReturnResult
@@ -56,11 +58,11 @@ namespace myNotebooks.subforms
 
 			lblMessage.Text = msg;
 			msg = msg.Replace("\\n", "  ");
-			var lineLength = 70;
+			var lineLength = 30;
 			lblMessage.Height = (int)Math.Ceiling((double)msg.Length / lineLength) <= 1 ? 25 : 25 * ((int)Math.Ceiling((double)msg.Length / lineLength));
+			lblSelectFromLabelsList.Visible = false;
 
-
-			if (msg.Length > 45) { lblMessage.Height += 20; }
+			//if (msg.Length > 45) { lblMessage.Height += 20; }
 
 			switch (opType)
 			{
@@ -94,13 +96,29 @@ namespace myNotebooks.subforms
 					txtInput.Text = defaultText;
 					txtInput.Visible = true;
 					txtInput.Top = lblMessage.Top + lblMessage.Height;
-					pnlOkCancel.Top = txtInput.Top + txtInput.Height + 15;
+					pnlOkCancel.Top = txtInput.Top + txtInput.Height + 5;
 					pnlOkCancel.Visible = true;
 					txtInput.SelectAll();
 					this.AcceptButton = btnOk1;
 					shownPanel = pnlOkCancel;
 					this.Text = "Enter New Value";
 					this.Height = pnlOkCancel.Top + pnlOkCancel.Height + 55;
+					break;
+				case OperationType.LabelNameInputBox:
+					txtInput.Text = defaultText;
+					txtInput.Visible = true;
+					txtInput.Top = lblMessage.Top + lblMessage.Height;
+					pnlOkCancel.Top = txtInput.Top + txtInput.Height + 5;
+					pnlOkCancel.Visible = true;
+					txtInput.SelectAll();
+					this.AcceptButton = btnOk1;
+					shownPanel = pnlOkCancel;
+					this.Text = "Enter New Value";
+					this.Height = pnlOkCancel.Top + pnlOkCancel.Height + 55;
+
+					lblSelectFromLabelsList.Visible = true;
+					lblSelectFromLabelsList.Top = txtInput.Top - lblSelectFromLabelsList.Height - 5;
+
 					break;
 			}
 
@@ -131,6 +149,15 @@ namespace myNotebooks.subforms
 			Result = ReturnResult.Ok;
 			ResultText = txtInput.Text;
 			this.Hide();
+		}
+
+		private void lblSelectFromLabelsList_Click(object sender, EventArgs e)
+		{
+			using(frmSelectLabel frm = new frmSelectLabel(this))
+			{
+				frm.ShowDialog(this);
+				txtInput.Text = frm.SelectedLabel;
+			}
 		}
 	}
 }

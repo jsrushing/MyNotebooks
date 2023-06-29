@@ -412,9 +412,7 @@ namespace myNotebooks.subforms
 
 		private async void btnResetLabelFilter_Click(object sender, EventArgs e)
 		{
-			await Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, "",
-				cbxDatesFrom.Text, cbxDatesTo.Text, true, cbxSortEntriesBy.SelectedIndex);
-
+			await ProcessDateFilters();
 			ShowHideMenusAndControls(SelectionState.NotebookLoaded);
 		}
 

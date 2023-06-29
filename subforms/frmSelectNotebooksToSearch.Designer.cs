@@ -112,7 +112,7 @@ namespace myNotebooks.subforms
 			// chkSelectAll
 			// 
 			chkSelectAll.AutoSize = true;
-			chkSelectAll.Location = new System.Drawing.Point(165, 88);
+			chkSelectAll.Location = new System.Drawing.Point(155, 88);
 			chkSelectAll.Name = "chkSelectAll";
 			chkSelectAll.Size = new System.Drawing.Size(71, 19);
 			chkSelectAll.TabIndex = 52;

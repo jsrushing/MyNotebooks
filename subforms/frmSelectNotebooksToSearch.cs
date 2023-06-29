@@ -105,7 +105,7 @@ namespace myNotebooks.subforms
 			if (chkSelectAll.Checked)
 			{
 				for (var i = 0; i < lstNotebookPINs.Items.Count; i++) { lstNotebookPINs.SetItemChecked(i, true); }
-				
+
 				chkSelectAll.Text = "un-select all";
 			}
 			else
@@ -149,9 +149,9 @@ namespace myNotebooks.subforms
 
 		private async Task PopulateProgramDictCheckedNBooks()
 		{
-			foreach(var checkedItem in lstNotebookPINs.CheckedItems.OfType<string>().ToList())
+			foreach (var checkedItem in lstNotebookPINs.CheckedItems.OfType<string>().ToList())
 			{
-				if (!Program.DictCheckedNotebooks.Keys.Contains(Scrubbed(checkedItem)) && !checkedItem.Equals(ShowMoreString)) 
+				if (!Program.DictCheckedNotebooks.Keys.Contains(Scrubbed(checkedItem)) && !checkedItem.Equals(ShowMoreString))
 				{
 					Program.DictCheckedNotebooks.Add(checkedItem, "");
 				}

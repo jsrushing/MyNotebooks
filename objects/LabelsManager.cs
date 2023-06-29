@@ -215,8 +215,7 @@ namespace myNotebooks.objects
 			using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "Action Taken", parent)) { frm.ShowDialog(); }
 
 			List<string> lbls = GetLabels_NoFileDate().ToList();
-			lbls.Add(newLabelName);
-			//if (notebooksToEdit.Count == Program.AllNotebookNames.Count) { lbls.Remove(oldLabelName); }
+			if (!lbls.Contains(newLabelName)) { lbls.Add(newLabelName); }
 			await SaveLabelsToFile(lbls);
 		}
 
