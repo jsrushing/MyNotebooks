@@ -289,12 +289,19 @@ namespace myNotebooks.subforms
 
 			//Program.AzurePassword = string.Empty;	// Kills the Azure synch process for debugging if desired.
 
+			// Populate Program.DictCheckedNotebooks
+			using(frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch
+				(this, "Select notebooks to work with. Notebooks which are PIN-protected can't be synchronized unless you provide the PIN.")) 
+			{ frm.ShowDialog(); }
+			// program.dictcheckednotebooks should be populated at this point.
+
 			pnlDateFilters.Left = pnlPin.Left - 11;
 			ShowHideMenusAndControls(SelectionState.HideAll);
 			await Utilities.PopulateAllNotebookNames();
 
 			if (Program.AzurePassword.Length > 0)
 			{
+				string s = EncryptDecrypt.Decrypt(Program.AzurePassword);
 				CloudSynchronizer cs = new CloudSynchronizer();
 				await cs.SynchWithCloud(false, null, true);
 			}
@@ -341,7 +348,8 @@ namespace myNotebooks.subforms
 			rtbSelectedEntry.Text = string.Empty;
 			Program.PIN = txtJournalPIN.Text;
 			lblWrongPin.Visible = false;
-			Program.PIN = txtJournalPIN.Text;
+			if (CurrentNotebook != null && Program.DictCheckedNotebooks.Count == 1 && Program.DictCheckedNotebooks.Keys.Contains(CurrentNotebook.Name)) { Program.DictCheckedNotebooks.Clear(); }
+			Program.DictCheckedNotebooks.Add(ddlNotebooks.Text, txtJournalPIN.Text);
 			CurrentNotebook = new Notebook(ddlNotebooks.Text, null, this).Open();
 			var wrongPIN = true;
 
@@ -374,6 +382,7 @@ namespace myNotebooks.subforms
 						{ ddlNotebooks.Items.Remove(nbName); }
 						else { if (!curNotebook.Equals(CurrentNotebook)) { CurrentNotebook = curNotebook; } }// the synch dl'd a newer copy of the file
 					}
+
 					try
 					{
 						if (CurrentNotebook != null)
@@ -844,7 +853,7 @@ namespace myNotebooks.subforms
 			using (frmNotebookSettings frm = new frmNotebookSettings(CurrentNotebook, this))
 			{
 				frm.ShowDialog();
-				if (frm.isDirty) { await CurrentNotebook.Save(); }
+				if (frm.IsDirty) { await CurrentNotebook.Save(); }
 				//frm.Close();
 			}
 			SetDisplayText();

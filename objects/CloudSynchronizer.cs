@@ -10,6 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Encryption;
+using myNotebooks.subforms;
 
 namespace myNotebooks.objects
 {
@@ -41,42 +42,53 @@ namespace myNotebooks.objects
 
 		private async Task			CheckForLocalOrCloudOnly(string tempFolder, string notebooksFolder)
 		{
-			await AzureFileClient.GetAzureItemNames(true);
+			return;
+
+			if(Program.AzureNotebookNames.Count == 0) await AzureFileClient.GetAzureItemNames(true);
 
 			foreach (var sBookName in Program.AzureNotebookNames.Except(Program.AllNotebookNames))        // any journal on Azure not found locally
 			{
 				await AzureFileClient.DownloadOrDeleteFile(tempFolder + sBookName, Program.AzurePassword + sBookName);
-				Notebook j3 = new Notebook(sBookName, tempFolder + sBookName).Open(true);
 
-				//j3 = j3.Equals(null) ? null : new Notebook(sBookName, tempFolder + sBookName).Open(true);
-
-				if (j3 != null && j3.Settings.IfCloudOnly_Download)
+				// BUG! 07/01/23 0030 : sBookName [may be / is probably not] in Program.DictCheckedNotebooks and therefore can't be sync'd !!!
+				if(Program.DictCheckedNotebooks.ContainsKey(sBookName))
 				{
-					File.Move(tempFolder + sBookName, notebooksFolder + sBookName, true);
-					if (!Program.AllNotebookNames.Contains(sBookName)) { Program.AllNotebookNames.Add(sBookName); }
+					Utilities.SetProgramPIN(sBookName);
+					Notebook j3 = new Notebook(sBookName, tempFolder + sBookName).Open(true);
+
+					if (j3 != null && j3.Settings.IfCloudOnly_Download)
+					{
+						File.Move(tempFolder + sBookName, notebooksFolder + sBookName, true);
+						if (!Program.AllNotebookNames.Contains(sBookName)) { Program.AllNotebookNames.Add(sBookName); }
+					}
+
+					if (j3 !=null && j3.Settings.IfCloudOnly_Delete)
+					{
+						await AzureFileClient.DownloadOrDeleteFile(tempFolder + j3.Name, Program.AzurePassword + j3.Name, FileMode.Open, true);
+					}
 				}
-
-				if (j3 !=null && j3.Settings.IfCloudOnly_Delete)
+				else
 				{
-					await AzureFileClient.DownloadOrDeleteFile(tempFolder + j3.Name, Program.AzurePassword + j3.Name, FileMode.Open, true);
+					using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The cloud notebook '" + sBookName
+						+ "' is not in your locally selected notebook and cannot be synchronized. " +
+						"Click 'Notebooks > Select' to add the notebook with its PIN to the selected notebooks", "Notebook Can't Be Opened")) 
+					{ frm.ShowDialog(); }
 				}
 
 				File.Delete(tempFolder + sBookName);
 			}
 
-			//List<string> names = Program.AllNotebookNames;
+			foreach (var sLocalFile in Program.AllNotebookNames.Except(Program.AzureNotebookNames))   // any journal found locally but not on Azure
+			{
+				Notebook j2 = new Notebook(sLocalFile).Open();
 
-			//foreach (var sLocalFile in names.Except(Program.AzureNotebookNames))   // any journal found locally but not on Azure
-			//{
-			//	Notebook j2 = new Notebook(sLocalFile).Open();
-
-			//	if (j2.Settings.AllowCloud)
-			//	{
-			//		if		(j2.Settings.IfLocalOnly_Delete)		{ j2.Delete(); }
-			//		else if (j2.Settings.IfLocalOnly_Upload)		{ await AzureFileClient.UploadFile(j2.FileName); }
-			//		else if (j2.Settings.IfLocalOnly_DisallowCloud) { j2.Settings.AllowCloud = false; await	j2.Save(); }
-			//	}
-			//}
+				if (j2.Settings.AllowCloud)
+				{
+					if (j2.Settings.IfLocalOnly_Delete) { j2.Delete(); }
+					else if (j2.Settings.IfLocalOnly_Upload) { await AzureFileClient.UploadFile(j2.FileName); }
+					else if (j2.Settings.IfLocalOnly_DisallowCloud) { j2.Settings.AllowCloud = false; await j2.Save(); }
+				}
+			}
 		}
 
 		private void				CompareNotebooks(Notebook localJournal, Notebook cloudJournal)
@@ -207,8 +219,8 @@ namespace myNotebooks.objects
 			var notebooksFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"];
 			var tempFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"];
 			List<string> allNotebooksNames = new List<string>();
-
 			await Utilities.PopulateAllNotebookNames();
+
 			if (notebook == null) { allNotebooksNames = Program.AllNotebookNames; } else { allNotebooksNames.Add(notebook.Name); }
 
 			if (checkCloudStatusOnly)
@@ -236,7 +248,7 @@ namespace myNotebooks.objects
 						if(Program.AllNotebooks.Count == 1 && Program.AllNotebooks[0] != null)
 						{
 							Notebook nb = Program.AllNotebooks.Where(e => e.Name == notebook.Name & e.LastSaved == notebook.LastSaved).First(); 
-							if (nb == null) { Program.AllNotebooks.Add(notebook); }
+							if (nb == null && !Program.AllNotebooks.Contains(notebook)) { Program.AllNotebooks.Add(notebook); }
 							await ProcessNotebooks(allNotebooksNames, tempFolder, notebooksFolder);
 							await AzureFileClient.GetAzureItemNames(true);
 							await CheckForLocalOrCloudOnly(tempFolder, notebooksFolder);

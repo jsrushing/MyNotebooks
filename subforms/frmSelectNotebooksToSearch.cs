@@ -4,9 +4,14 @@
  */
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Encryption;
+using Microsoft.Extensions.Primitives;
 using myNotebooks.objects;
 using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.Crypto.Prng.Drbg;
@@ -143,6 +148,92 @@ namespace myNotebooks.subforms
 					txtPIN.Focus();
 					lblShowPIN.Visible = true;
 					lblShowPIN.Text = "show";
+				}
+			}
+		}
+
+		private async void ManagePinFile(object sender, EventArgs e)
+		{
+			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
+			if (mnu.Text.ToLower().Contains("import"))
+			{
+				// scan Program.AppRoot for .pin files, show in list
+				// scan Azure pinfiles share for Program.AzurePassword + <*> + .pin files, show in same list
+				// user selects .pin file
+
+				// ask for the .pin file's PIN
+
+				// try to download the .pin file
+
+				// try to decrypt the file with the given PIN
+
+				// if decrypted, populate Program.DictCheckedNotebooks, reload list, and AddHasPINIndicators()
+			}
+			else
+			{
+				if(Program.DictCheckedNotebooks.Count == 0)
+				{
+					using(frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "No notebooks are selected.", "Nothing Selected", this)) 
+					{ frm.ShowDialog(); }
+				}
+				else
+				{
+					var newFileName = string.Empty;
+
+					// ask for the new file name
+					using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "What's the file name?", null, this))
+					{
+						frm.ShowDialog();
+						newFileName = frm.ResultText;
+
+						// see if the file exists, exit unless user chooses to overwrite
+						if(File.Exists(Program.AppRoot + newFileName + ".pin"))
+						{
+							using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.YesNoQuestion, "The file '" + newFileName + " already exists. Would you like to overwrite it?", "File Exists!", this)) 
+							{ 
+								frm2.ShowDialog();
+								newFileName = frm2.Result != frmMessage.ReturnResult.Yes ? "" : newFileName;
+							}
+						}
+					}
+
+					if(newFileName.Length > 0)
+					{
+						if (Utilities.FileNameIsValid(newFileName))
+						{
+							using(frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "What's the PIN?", "", this))
+							{
+								frm.ShowDialog(this);
+								Program.PIN = frm.ResultText;
+							}
+
+							// encrypt Program.DictCheckedNotebooks
+							StringBuilder sb = new StringBuilder();
+
+							foreach(var v in Program.DictCheckedNotebooks)
+							{ sb.AppendLine(EncryptDecrypt.Encrypt(v.Key) + "," + EncryptDecrypt.Encrypt(v.Value)); }
+
+							// save to Program.AppRoot + <filename> + ".pin"	// trap for valid filename
+							File.WriteAllText(Program.AppRoot + newFileName + ".pin", sb.ToString());
+
+							// ask to upload file to cloud
+							using(frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Would you like to keep this PIN file in your cloud?", "Store In Cloud?", this))
+							{
+								frm.ShowDialog(this);
+
+								if(frm.Result == frmMessage.ReturnResult.Yes)
+								{
+									// upload the file to share "pinfiles"
+									await AzureFileClient.UploadFile(Program.AppRoot + newFileName + ".pin", "pinfiles");
+								}
+							}
+						}
+						else
+						{
+							using (frmMessage frm4 = new frmMessage(frmMessage.OperationType.Message, Program.InvalidFileName, "", this))
+							{ frm4.ShowDialog(); }
+						}
+					}
 				}
 			}
 		}

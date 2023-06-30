@@ -29,6 +29,7 @@ namespace myNotebooks.subforms
 		/// </summary>
 		private void InitializeComponent()
 		{
+			components = new System.ComponentModel.Container();
 			btnDone = new System.Windows.Forms.Button();
 			btnAddPIN = new System.Windows.Forms.Button();
 			lblShowPIN = new System.Windows.Forms.Label();
@@ -37,6 +38,10 @@ namespace myNotebooks.subforms
 			txtPIN = new System.Windows.Forms.TextBox();
 			lstNotebookPINs = new System.Windows.Forms.CheckedListBox();
 			chkSelectAll = new System.Windows.Forms.CheckBox();
+			mnuPINFileTop = new System.Windows.Forms.ContextMenuStrip(components);
+			mnuImportPinFile = new System.Windows.Forms.ToolStripMenuItem();
+			mnuExportPinFile = new System.Windows.Forms.ToolStripMenuItem();
+			mnuPINFileTop.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// btnDone
@@ -62,7 +67,7 @@ namespace myNotebooks.subforms
 			// lblShowPIN
 			// 
 			lblShowPIN.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
-			lblShowPIN.Location = new System.Drawing.Point(59, 76);
+			lblShowPIN.Location = new System.Drawing.Point(62, 76);
 			lblShowPIN.Name = "lblShowPIN";
 			lblShowPIN.Size = new System.Drawing.Size(35, 13);
 			lblShowPIN.TabIndex = 46;
@@ -102,6 +107,7 @@ namespace myNotebooks.subforms
 			// 
 			lstNotebookPINs.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
 			lstNotebookPINs.CheckOnClick = true;
+			lstNotebookPINs.ContextMenuStrip = mnuPINFileTop;
 			lstNotebookPINs.FormattingEnabled = true;
 			lstNotebookPINs.Location = new System.Drawing.Point(12, 106);
 			lstNotebookPINs.Name = "lstNotebookPINs";
@@ -119,6 +125,26 @@ namespace myNotebooks.subforms
 			chkSelectAll.Text = "select all";
 			chkSelectAll.UseVisualStyleBackColor = true;
 			chkSelectAll.CheckedChanged += this.chkSelectAll_CheckedChanged;
+			// 
+			// mnuPINFileTop
+			// 
+			mnuPINFileTop.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuImportPinFile, mnuExportPinFile });
+			mnuPINFileTop.Name = "mnuEntryEditTop";
+			mnuPINFileTop.Size = new System.Drawing.Size(154, 48);
+			// 
+			// mnuImportPinFile
+			// 
+			mnuImportPinFile.Name = "mnuImportPinFile";
+			mnuImportPinFile.Size = new System.Drawing.Size(153, 22);
+			mnuImportPinFile.Text = "Import PIN File";
+			mnuImportPinFile.Click += this.ManagePinFile;
+			// 
+			// mnuExportPinFile
+			// 
+			mnuExportPinFile.Name = "mnuExportPinFile";
+			mnuExportPinFile.Size = new System.Drawing.Size(153, 22);
+			mnuExportPinFile.Text = "Export PIN File";
+			mnuExportPinFile.Click += this.ManagePinFile;
 			// 
 			// frmSelectNotebooksToSearch
 			// 
@@ -140,6 +166,7 @@ namespace myNotebooks.subforms
 			Name = "frmSelectNotebooksToSearch";
 			Text = "Choose Notebooks";
 			FormClosing += this.frmSelectNotebooksToSearch_FormClosing;
+			mnuPINFileTop.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
@@ -153,5 +180,8 @@ namespace myNotebooks.subforms
 		private System.Windows.Forms.TextBox txtPIN;
 		private System.Windows.Forms.CheckedListBox lstNotebookPINs;
 		private System.Windows.Forms.CheckBox chkSelectAll;
+		private System.Windows.Forms.ContextMenuStrip mnuPINFileTop;
+		private System.Windows.Forms.ToolStripMenuItem mnuImportPinFile;
+		private System.Windows.Forms.ToolStripMenuItem mnuExportPinFile;
 	}
 }

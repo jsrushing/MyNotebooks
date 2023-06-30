@@ -335,7 +335,7 @@ namespace myNotebooks
 			{
 				if(synchWithCloud)
 				{
-					CloudSynchronizer cs = new CloudSynchronizer();
+					CloudSynchronizer cs = new CloudSynchronizer();	
 					await cs.SynchWithCloud(false, this);
 				}
 			}

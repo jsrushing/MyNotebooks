@@ -6,11 +6,12 @@ namespace myNotebooks.subforms
 {
 	public partial class frmNotebookSettings : Form
 	{
-		Notebook	workingNotebook;
-		public bool isDirty				= false;
-		bool		allowValueChange	= false;
-		bool		originalAllowCloud	= false;
-		bool		saveAndProcess		= true;
+		Notebook	WorkingNotebook;
+		public bool IsDirty				= false;
+		bool		AllowValueChange	= false;
+		bool		OriginalAllowCloud	= false;
+		bool		SaveAndProcess		= true;
+
 		#region Settings
 		bool b_AllowCloud;
 		bool b_IfCloudOnly_Download;
@@ -25,27 +26,27 @@ namespace myNotebooks.subforms
 		{
 			InitializeComponent();
 
-			saveAndProcess = saveAndProcessCloud;
+			SaveAndProcess = saveAndProcessCloud;
 
 			if (notebookToEdit != null)
 			{
-				workingNotebook = notebookToEdit;
+				WorkingNotebook = notebookToEdit;
 				Utilities.SetStartPosition(this, parent);
-				this.Text = "Settings for '" + workingNotebook.Name + "'";
+				this.Text = "Settings for '" + WorkingNotebook.Name + "'";
 			}
 			else { this.Close(); }
 		}
 
 		private void frmJournalSettings_Load(object sender, EventArgs e)
 		{
-			b_AllowCloud			= workingNotebook.Settings.AllowCloud;
-			b_IfCloudOnly_Download	= workingNotebook.Settings.IfCloudOnly_Download;
-			b_IfCloudOnly_Delete	= workingNotebook.Settings.IfCloudOnly_Delete;
-			b_IfLocalOnly_Upload	= workingNotebook.Settings.IfLocalOnly_Upload;
-			b_IfLocalOnly_Delete	= workingNotebook.Settings.IfLocalOnly_Delete;
-			b_IfLocalOnly_DisallowCloud = workingNotebook.Settings.IfLocalOnly_DisallowCloud;
+			b_AllowCloud			= WorkingNotebook.Settings.AllowCloud;
+			b_IfCloudOnly_Download	= WorkingNotebook.Settings.IfCloudOnly_Download;
+			b_IfCloudOnly_Delete	= WorkingNotebook.Settings.IfCloudOnly_Delete;
+			b_IfLocalOnly_Upload	= WorkingNotebook.Settings.IfLocalOnly_Upload;
+			b_IfLocalOnly_Delete	= WorkingNotebook.Settings.IfLocalOnly_Delete;
+			b_IfLocalOnly_DisallowCloud = WorkingNotebook.Settings.IfLocalOnly_DisallowCloud;
 
-			allowValueChange						= false;
+			AllowValueChange						= false;
 			chkAllowCloud.Checked					= b_AllowCloud; 
 			pnlCloudOptions.Enabled					= chkAllowCloud.Checked;
 			radCloudNotLocal_DeleteCloud.Checked	= b_IfCloudOnly_Delete;
@@ -53,39 +54,39 @@ namespace myNotebooks.subforms
 			radLocalNotCloud_DeleteLocal.Checked	= b_IfLocalOnly_Delete;
 			radLocalNotCloud_UploadToCloud.Checked	= b_IfLocalOnly_Upload;
 			radLocalNotCloud_DisallowLocalCloud.Checked = b_IfLocalOnly_DisallowCloud;
-			allowValueChange	= true;
-			originalAllowCloud	= b_AllowCloud;
+			AllowValueChange	= true;
+			OriginalAllowCloud	= b_AllowCloud;
 		}
 
 		private async void ApplySettings()
 		{
-			workingNotebook.Settings.AllowCloud = b_AllowCloud;
-			workingNotebook.Settings.IfCloudOnly_Download = b_IfCloudOnly_Download;
-			workingNotebook.Settings.IfCloudOnly_Delete = b_IfCloudOnly_Delete;
-			workingNotebook.Settings.IfLocalOnly_Upload = b_IfLocalOnly_Upload;
-			workingNotebook.Settings.IfLocalOnly_Delete = b_IfLocalOnly_Delete;
-			workingNotebook.Settings.IfLocalOnly_DisallowCloud = b_IfLocalOnly_DisallowCloud;
+			WorkingNotebook.Settings.AllowCloud = b_AllowCloud;
+			WorkingNotebook.Settings.IfCloudOnly_Download = b_IfCloudOnly_Download;
+			WorkingNotebook.Settings.IfCloudOnly_Delete = b_IfCloudOnly_Delete;
+			WorkingNotebook.Settings.IfLocalOnly_Upload = b_IfLocalOnly_Upload;
+			WorkingNotebook.Settings.IfLocalOnly_Delete = b_IfLocalOnly_Delete;
+			WorkingNotebook.Settings.IfLocalOnly_DisallowCloud = b_IfLocalOnly_DisallowCloud;
 
-			if (saveAndProcess)
+			if (SaveAndProcess)
 			{
-				//await workingNotebook.Save();
+				await WorkingNotebook.Save();
 
-				if (b_AllowCloud & !originalAllowCloud)
-				{
-					CloudSynchronizer cs = new CloudSynchronizer();
-					await cs.SynchWithCloud(false, workingNotebook);
-				}
+				//if (b_AllowCloud & !OriginalAllowCloud)
+				//{
+				//	CloudSynchronizer cs = new CloudSynchronizer();
+				//	await cs.SynchWithCloud(false, WorkingNotebook);
+				//}
 
-				if (!b_AllowCloud & originalAllowCloud)
-				{
-					await AzureFileClient.CheckForCloudNotebooklAndRemoveEntries(workingNotebook);
-				}
+				//if (!b_AllowCloud & OriginalAllowCloud)
+				//{
+				//	await AzureFileClient.CheckForCloudNotebooklAndRemoveEntries(WorkingNotebook);
+				//}
 			}
 		}
 
 		private void btnSaveChanges_Click(object sender, EventArgs e)
 		{
-			if (this.isDirty) { ApplySettings(); }
+			if (this.IsDirty) { ApplySettings(); }
 			this.Hide();
 		}
 
@@ -110,7 +111,7 @@ namespace myNotebooks.subforms
 
 		private void ValueChanged(object sender, EventArgs e)
 		{
-			if (allowValueChange)
+			if (AllowValueChange)
 			{
 				b_AllowCloud = chkAllowCloud.Checked;
 				b_IfCloudOnly_Download = radCloudNotLocal_DownloadCloud.Checked;
@@ -118,7 +119,7 @@ namespace myNotebooks.subforms
 				b_IfLocalOnly_Upload = radLocalNotCloud_UploadToCloud.Checked;
 				b_IfLocalOnly_Delete = radLocalNotCloud_DeleteLocal.Checked;
 				b_IfLocalOnly_DisallowCloud = radLocalNotCloud_DisallowLocalCloud.Checked;
-				isDirty = true;
+				IsDirty = true;
 			}
 		}
 	}

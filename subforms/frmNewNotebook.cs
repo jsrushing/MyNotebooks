@@ -38,19 +38,18 @@ namespace myNotebooks.subforms
 		{
 			char[] c = System.IO.Path.GetInvalidFileNameChars();
 
-			if (txtName.Text.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) != -1)
-			{
-				using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "Sorry, notebook names may not contain characters " +
-					"which are not allowed in file names, for example *, <, >, {, }, |, :, ?, /, \\ (and others).", "", this))
-				{ frm.ShowDialog(); }
-			}
-			else
+			if (Utilities.FileNameIsValid(txtName.Text))
 			{
 				NotebookSettings nbs	= Notebook.Settings;
 				this.Notebook			= new Notebook(txtName.Text, null, this);
 				Notebook.Settings		= nbs;
 				Program.PIN				= txtPIN.Text;
 				this.Hide();
+			}
+			else
+			{
+				using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, Program.InvalidFileName, "", this))
+				{ frm.ShowDialog(); }
 			}
 		}
 

@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using Encryption;
 using myNotebooks.subforms;
 
@@ -204,5 +205,7 @@ namespace myNotebooks.objects
 			formToInitialize.StartPosition = FormStartPosition.Manual;	
 			formToInitialize.Location = new System.Drawing.Point(parentForm.Location.X + 25, parentForm.Location.Y + 25); 
 		}
+
+		public static bool FileNameIsValid(string proposedFileName) { return proposedFileName.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) == -1; }
 	}
 }
