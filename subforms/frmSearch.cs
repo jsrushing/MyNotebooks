@@ -14,12 +14,12 @@ namespace myNotebooks.subforms
 {
 	public partial class frmSearch : Form
 	{
-		private Dictionary<string, int> NotebookBoundariesDict = new Dictionary<string, int>();
-		private List<int> threeSelections = new List<int>();
-		private bool IgnoreCheckChange = false;
+		private List<int>	ThreeSelections = new List<int>();
+		private bool		IgnoreCheckChange = false;
 		private List<Entry> FoundEntries = new List<Entry>();
-		private string LabelEntriesFoundText = "{0} entries found";
-		public string NotebookName { get; private set; }
+		private string		LabelEntriesFoundText = "{0} entries found";
+		private Dictionary<string, int> NotebookBoundariesDict = new Dictionary<string, int>();
+		public string		NotebookName { get; private set; }
 
 		public frmSearch(Form parent)
 		{
@@ -114,8 +114,8 @@ namespace myNotebooks.subforms
 
 		private void GetCurrentSelections()
 		{
-			threeSelections.Clear();
-			foreach (int i in lstFoundEntries.SelectedIndices) { threeSelections.Add(i); }
+			ThreeSelections.Clear();
+			foreach (int i in lstFoundEntries.SelectedIndices) { ThreeSelections.Add(i); }
 		}
 
 		private Notebook GetEntryNotebook()
@@ -123,7 +123,7 @@ namespace myNotebooks.subforms
 			List<int> selectedIndices = new List<int>();
 			KeyValuePair<string, int> kvp = new KeyValuePair<string, int>();
 			foreach (int i in lstFoundEntries.SelectedIndices) { selectedIndices.Add(i); }
-			if (selectedIndices.Count() > 1) { selectedIndices = selectedIndices.Except(threeSelections).ToList(); }
+			if (selectedIndices.Count() > 1) { selectedIndices = selectedIndices.Except(ThreeSelections).ToList(); }
 			kvp = NotebookBoundariesDict.FirstOrDefault(p => p.Value >= selectedIndices[0]);
 			Utilities.SetProgramPIN(kvp.Key);
 			return kvp.Key == "" ? null : new Notebook(kvp.Key, "", this).Open();

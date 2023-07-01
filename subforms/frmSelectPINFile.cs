@@ -46,6 +46,12 @@ namespace myJournal.subforms
 			lstAzureFileNames.Items.AddRange(Program.AzurePinFileNames.ToArray());
 		}
 
+		private void btnCancel_Click(object sender, EventArgs e)
+		{
+			PINFileName = "";
+			this.Hide();
+		}
+
 		private void btnOK_Click(object sender, EventArgs e)
 		{
 			PINFileName = lstAzureFileNames.SelectedItems.Count > 0 ?
@@ -53,12 +59,6 @@ namespace myJournal.subforms
 			PINFileName += ".pin";
 			PIN = txtPIN.Text;
 			IsLocalFile = PINFileName.Length > 0 ? lstLocalFileNames.SelectedItems.Count == 1 : lstAzureFileNames.SelectedItems.Count == 1;
-			this.Hide();
-		}
-
-		private void btnCancel_Click(object sender, EventArgs e)
-		{
-			PINFileName = "";
 			this.Hide();
 		}
 
@@ -95,5 +95,7 @@ namespace myJournal.subforms
 		{
 			lblShowPIN.Visible = txtPIN.Text.Length > 0;
 		}
+
+		private void lstLocalFileNames_DoubleClick(object sender, EventArgs e) { btnOK_Click(sender, e); }
 	}
 }

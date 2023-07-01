@@ -42,15 +42,43 @@ namespace myNotebooks.objects
 
 		private async Task			CheckForLocalOrCloudOnly(string tempFolder, string notebooksFolder)
 		{
-			return;
+			//return;
 
-			if(Program.AzureNotebookNames.Count == 0) await AzureFileClient.GetAzureItemNames(true);
+			if (Program.AzureNotebookNames.Count == 0) await AzureFileClient.GetAzureItemNames(true);
 
+
+
+			// If a PIN is given,
+			// dl the book and try to decrypt.
+
+			// If Decrypt fails (wrong PIN) ...
+			// notify user
+			// else ...
+			// Do what its Settings tell you to do
+			// Notify user.
+
+			var booksOnAzureNotLocal = Program.AzureNotebookNames.Except(Program.AllNotebookNames);
+
+			if(booksOnAzureNotLocal.Count() > 0)
+			{
+
+			}
+
+			// check for cloud nb's which aren't local.
 			foreach (var sBookName in Program.AzureNotebookNames.Except(Program.AllNotebookNames))        // any journal on Azure not found locally
 			{
+
+				// For all found, notify user and ask for PIN to check the file.
+					// Must write a way for user to ignore the notebook. Keep a list of ignored items.
+					// Otherwise user will be notified on possibly 100's of books.
+
+				
+
+
+
 				await AzureFileClient.DownloadOrDeleteFile(tempFolder + sBookName, Program.AzurePassword + sBookName);
 
-				// BUG! 07/01/23 0030 : sBookName [may be / is probably not] in Program.DictCheckedNotebooks and therefore can't be sync'd !!!
+				// BUG! 06/30/23 0030 : sBookName is not in Program.DictCheckedNotebooks and therefore can't be sync'd !!!
 				if(Program.DictCheckedNotebooks.ContainsKey(sBookName))
 				{
 					Utilities.SetProgramPIN(sBookName);

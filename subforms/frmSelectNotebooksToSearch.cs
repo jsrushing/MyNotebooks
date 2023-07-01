@@ -4,6 +4,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -25,6 +26,9 @@ namespace myNotebooks.subforms
 		private bool IsDirty = false;
 		private bool allowSelection = true;
 		private Dictionary<string, string> initialDictCheckedItems = Program.DictCheckedNotebooks;
+		private Font mouseOffFont = new Font("Segoe UI", 9F, FontStyle.Underline, GraphicsUnit.Point);
+		private Font mouseOverFont = new Font("Segoe UI Semibold", 9F, FontStyle.Bold | FontStyle.Underline | FontStyle.Italic, GraphicsUnit.Point);
+
 
 		public frmSelectNotebooksToSearch(Form parent, string userMessage = "")
 		{
@@ -36,6 +40,8 @@ namespace myNotebooks.subforms
 
 			Utilities.SetStartPosition(this, parent);
 		}
+
+		private void frmSelectNotebooksToSearch_Load(object sender, EventArgs e) { }
 
 		private async void frmSelectNotebooksToSearch_FormClosing(object sender, FormClosingEventArgs e)
 		{
@@ -78,6 +84,18 @@ namespace myNotebooks.subforms
 
 				allowSelection = true;
 			}
+		}
+
+		private void AnimateExportImportLabels_MouseOff(object sender, EventArgs e)
+		{
+			lblExport.Font = mouseOffFont;
+			lblImport.Font = mouseOffFont;
+		}
+
+		private void AnimateExportImportLabels_MouseOver(object sender, EventArgs e)
+		{
+			Label lbl = (Label)sender;
+			lbl.Font = mouseOverFont;
 		}
 
 		private async void btnAddPIN_Click(object sender, EventArgs e)
@@ -160,27 +178,27 @@ namespace myNotebooks.subforms
 
 			if (lbl.Text.ToLower().Contains("import"))
 			{
-				using(frmSelectPINFile frm = new frmSelectPINFile(this)) 
-				{ 
+				using (frmSelectPINFile frm = new frmSelectPINFile(this))
+				{
 					frm.ShowDialog();
 					var pinFileName = frm.PINFileName != null ? frm.PINFileName.Replace(".pin", "") : null;
 					Program.PIN = frm.PIN != null ? frm.PIN : string.Empty;
 
-					if(pinFileName != null && pinFileName.Length > 0)
+					if (pinFileName != null && pinFileName.Length > 0)
 					{
 						Program.DictCheckedNotebooks.Clear();
 						if (frm.IsLocalFile)
 						{
-							foreach(var pinFile in File.ReadAllLines(Program.AppRoot + pinFileName + ".pin"))
+							foreach (var pinFile in File.ReadAllLines(Program.AppRoot + pinFileName + ".pin"))
 							{
 								Utilities.PopulateDictCheckedNotebooks(pinFile);
 							}
 						}
-						else	// its an Azure PIN file
+						else    // its an Azure PIN file
 						{
 							await AzureFileClient.GetAzureItemNames(true, "pinfiles");
 
-							foreach(var s in Program.AzurePinFileNames)
+							foreach (var s in Program.AzurePinFileNames)
 							{
 								Utilities.PopulateDictCheckedNotebooks(s);
 							}
@@ -287,7 +305,7 @@ namespace myNotebooks.subforms
 
 			if (showMore)
 			{
-				if(!populateWithCheckedJournals) PopulateCheckedItems();
+				if (!populateWithCheckedJournals) PopulateCheckedItems();
 				lstNotebookPINs.Items.Remove(ShowMoreString);
 				foreach (var name in Program.AllNotebookNames.Except(Program.DictCheckedNotebooks.Keys)) { lstNotebookPINs.Items.Add($"{name}"); }
 			}

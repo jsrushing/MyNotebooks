@@ -58,6 +58,7 @@
 			lstLocalFileNames.Size = new System.Drawing.Size(109, 229);
 			lstLocalFileNames.TabIndex = 1;
 			lstLocalFileNames.SelectedIndexChanged += this.LstClicks;
+			lstLocalFileNames.DoubleClick += this.lstLocalFileNames_DoubleClick;
 			// 
 			// btnCancel
 			// 
@@ -78,6 +79,7 @@
 			lstAzureFileNames.Size = new System.Drawing.Size(109, 229);
 			lstAzureFileNames.TabIndex = 3;
 			lstAzureFileNames.SelectedIndexChanged += this.LstClicks;
+			lstAzureFileNames.DoubleClick += this.lstLocalFileNames_DoubleClick;
 			// 
 			// label1
 			// 
