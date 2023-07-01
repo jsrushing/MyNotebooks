@@ -124,7 +124,6 @@ namespace myNotebooks.subforms
 			KeyValuePair<string, int> kvp = new KeyValuePair<string, int>();
 			foreach (int i in lstFoundEntries.SelectedIndices) { selectedIndices.Add(i); }
 			if (selectedIndices.Count() > 1) { selectedIndices = selectedIndices.Except(threeSelections).ToList(); }
-
 			kvp = NotebookBoundariesDict.FirstOrDefault(p => p.Value >= selectedIndices[0]);
 			Utilities.SetProgramPIN(kvp.Key);
 			return kvp.Key == "" ? null : new Notebook(kvp.Key, "", this).Open();
