@@ -186,7 +186,7 @@ namespace myNotebooks.subforms
 							}
 						}
 
-						if (Program.DictCheckedNotebooks.Count > 0) { PopulateNotebooksList(true, true, true); }
+						if (Program.DictCheckedNotebooks.Count > 0) { PopulateNotebooksList(true, false, false); }
 						else { using frmMessage frm2 = new frmMessage(frmMessage.OperationType.Message, "The PIN was incorrect.", "Wrong PIN", this); frm2.ShowDialog(); }
 					}
 				}
@@ -214,7 +214,7 @@ namespace myNotebooks.subforms
 							using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.YesNoQuestion, "The file '" + newFileName + " already exists. Would you like to overwrite it?", "File Exists!", this))
 							{
 								frm2.ShowDialog();
-								newFileName = frm2.Result != frmMessage.ReturnResult.Yes ? "" : newFileName;
+								newFileName = frm2.Result != frmMessage.ReturnResult.Yes ? null : newFileName;
 							}
 						}
 					}

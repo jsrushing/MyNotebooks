@@ -1,0 +1,31 @@
+entry edit from found labels isn't working
+
+06/28/23 0206
+To fully delete or rename a label all nb's have to be checked. 
+If this means they all have to be added to a list as Notebook objects then fix it - can't happen.
+
+select from pin files list shouldn't then ask for PIN
+	fixed - using PIN from frmSelectPINFile
+
+after pin file import all books are checked
+	fixed
+
+I think I should force unique Entry titles ...
+
+Why is security important?
+Corporations with many users might use MyNotebooks to communicate, plan, document, and deliver on hundreds of projects. The risk of exposure of company and personally identifiable data is significant.
+
+MyNotebooks is a powerful organizational and record-keeping system.
+
+Cloud Synchronization
+Always have a secure backup of your notebooks. 
+Changes from other users are synchronized to your local cache when you access the notebook.
+
+We've built lots of logic to prevent accidental deletes - but that's not enough for a corportate environment. Corporate users will always have long-term backups available.
+
+Group your notebooks. Anyone who has the group name and password can access the group's notebooks.
+
+
+
+
+

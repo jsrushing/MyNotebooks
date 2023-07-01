@@ -129,8 +129,10 @@
 			// 
 			// frmSelectPINFile
 			// 
+			AcceptButton = btnOK;
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			CancelButton = btnCancel;
 			ClientSize = new System.Drawing.Size(255, 313);
 			Controls.Add(lblShowPIN);
 			Controls.Add(label3);
