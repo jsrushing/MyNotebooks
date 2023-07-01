@@ -90,14 +90,13 @@ namespace myNotebooks.subforms
 
 			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedNotebooks)
 			{
-				if(lastIndex == 0) { NotebookBoundariesDict.Add(kvp.Key, 0); }
 				Utilities.SetProgramPIN(kvp.Key);
 				nbFound = new Notebook(kvp.Key.Replace(" (****)", ""), "", this).Open().Search(so);
 				await Utilities.PopulateEntries(lstFoundEntries, nbFound, "", "", "", false, 0, true);
 
 				if(nbFound.Count > 0 )
 				{
-					lastIndex += nbFound.Count;
+					lastIndex += nbFound.Count * 4;
 					if(!NotebookBoundariesDict.Keys.Contains(kvp.Key)) NotebookBoundariesDict.Add(kvp.Key, lastIndex);
 					FoundEntries.AddRange(nbFound);
 				}
@@ -125,7 +124,8 @@ namespace myNotebooks.subforms
 			KeyValuePair<string, int> kvp = new KeyValuePair<string, int>();
 			foreach (int i in lstFoundEntries.SelectedIndices) { selectedIndices.Add(i); }
 			if (selectedIndices.Count() > 1) { selectedIndices = selectedIndices.Except(threeSelections).ToList(); }
-			kvp = NotebookBoundariesDict.FirstOrDefault(p => p.Value < selectedIndices[0]);
+
+			kvp = NotebookBoundariesDict.FirstOrDefault(p => p.Value >= selectedIndices[0]);
 			Utilities.SetProgramPIN(kvp.Key);
 			return kvp.Key == "" ? null : new Notebook(kvp.Key, "", this).Open();
 		}
