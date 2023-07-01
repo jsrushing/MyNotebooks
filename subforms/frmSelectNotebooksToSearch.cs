@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Encryption;
 using Microsoft.Extensions.Primitives;
+using myJournal.subforms;
 using myNotebooks.objects;
 using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.Crypto.Prng.Drbg;
@@ -154,26 +155,47 @@ namespace myNotebooks.subforms
 
 		private async void ManagePinFile(object sender, EventArgs e)
 		{
-			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
-			if (mnu.Text.ToLower().Contains("import"))
+			//ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
+			Label lbl = (Label)sender;
+
+			if (lbl.Text.ToLower().Contains("import"))
 			{
-				// scan Program.AppRoot for .pin files, show in list
-				// scan Azure pinfiles share for Program.AzurePassword + <*> + .pin files, show in same list
-				// user selects .pin file
+				using(frmSelectPINFile frm = new frmSelectPINFile(this)) 
+				{ 
+					frm.ShowDialog();
+					var pinFileName = frm.PINFileName != null ? frm.PINFileName.Replace(".pin", "") : null;
+					Program.PIN = frm.PIN != null ? frm.PIN : string.Empty;
 
-				// ask for the .pin file's PIN
+					if(pinFileName != null && pinFileName.Length > 0)
+					{
+						Program.DictCheckedNotebooks.Clear();
+						if (frm.IsLocalFile)
+						{
+							foreach(var pinFile in File.ReadAllLines(Program.AppRoot + pinFileName + ".pin"))
+							{
+								Utilities.PopulateDictCheckedNotebooks(pinFile);
+							}
+						}
+						else	// its an Azure PIN file
+						{
+							await AzureFileClient.GetAzureItemNames(true, "pinfiles");
 
-				// try to download the .pin file
+							foreach(var s in Program.AzurePinFileNames)
+							{
+								Utilities.PopulateDictCheckedNotebooks(s);
+							}
+						}
 
-				// try to decrypt the file with the given PIN
-
-				// if decrypted, populate Program.DictCheckedNotebooks, reload list, and AddHasPINIndicators()
+						if (Program.DictCheckedNotebooks.Count > 0) { PopulateNotebooksList(true, true, true); }
+						else { using frmMessage frm2 = new frmMessage(frmMessage.OperationType.Message, "The PIN was incorrect.", "Wrong PIN", this); frm2.ShowDialog(); }
+					}
+				}
 			}
 			else
 			{
-				if(Program.DictCheckedNotebooks.Count == 0)
+				if (Program.DictCheckedNotebooks.Count == 0)
 				{
-					using(frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "No notebooks are selected.", "Nothing Selected", this)) 
+					using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "No notebooks are selected.", "Nothing Selected", this))
 					{ frm.ShowDialog(); }
 				}
 				else
@@ -181,27 +203,27 @@ namespace myNotebooks.subforms
 					var newFileName = string.Empty;
 
 					// ask for the new file name
-					using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "What's the file name?", null, this))
+					using (frmMessage frm = new frmMessage(frmMessage.OperationType.PINFileInputBox, "File name?", null, this))
 					{
 						frm.ShowDialog();
-						newFileName = frm.ResultText;
+						newFileName = frm.ResultText + ".pin";
 
 						// see if the file exists, exit unless user chooses to overwrite
-						if(File.Exists(Program.AppRoot + newFileName + ".pin"))
+						if (File.Exists(Program.AppRoot + newFileName))
 						{
-							using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.YesNoQuestion, "The file '" + newFileName + " already exists. Would you like to overwrite it?", "File Exists!", this)) 
-							{ 
+							using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.YesNoQuestion, "The file '" + newFileName + " already exists. Would you like to overwrite it?", "File Exists!", this))
+							{
 								frm2.ShowDialog();
 								newFileName = frm2.Result != frmMessage.ReturnResult.Yes ? "" : newFileName;
 							}
 						}
 					}
 
-					if(newFileName.Length > 0)
+					if (newFileName != null && newFileName.Length > 0)
 					{
 						if (Utilities.FileNameIsValid(newFileName))
 						{
-							using(frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "What's the PIN?", "", this))
+							using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "What's the PIN?", "", this))
 							{
 								frm.ShowDialog(this);
 								Program.PIN = frm.ResultText;
@@ -210,18 +232,18 @@ namespace myNotebooks.subforms
 							// encrypt Program.DictCheckedNotebooks
 							StringBuilder sb = new StringBuilder();
 
-							foreach(var v in Program.DictCheckedNotebooks)
+							foreach (var v in Program.DictCheckedNotebooks)
 							{ sb.AppendLine(EncryptDecrypt.Encrypt(v.Key) + "," + EncryptDecrypt.Encrypt(v.Value)); }
 
 							// save to Program.AppRoot + <filename> + ".pin"	// trap for valid filename
-							File.WriteAllText(Program.AppRoot + newFileName + ".pin", sb.ToString());
+							File.WriteAllText(Program.AppRoot + newFileName, sb.ToString());
 
 							// ask to upload file to cloud
-							using(frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Would you like to keep this PIN file in your cloud?", "Store In Cloud?", this))
+							using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Would you like to keep this PIN file in your cloud?", "Store In Cloud?", this))
 							{
 								frm.ShowDialog(this);
 
-								if(frm.Result == frmMessage.ReturnResult.Yes)
+								if (frm.Result == frmMessage.ReturnResult.Yes)
 								{
 									// upload the file to share "pinfiles"
 									await AzureFileClient.UploadFile(Program.AppRoot + newFileName + ".pin", "pinfiles");
@@ -265,7 +287,7 @@ namespace myNotebooks.subforms
 
 			if (showMore)
 			{
-				PopulateCheckedItems();
+				if(!populateWithCheckedJournals) PopulateCheckedItems();
 				lstNotebookPINs.Items.Remove(ShowMoreString);
 				foreach (var name in Program.AllNotebookNames.Except(Program.DictCheckedNotebooks.Keys)) { lstNotebookPINs.Items.Add($"{name}"); }
 			}

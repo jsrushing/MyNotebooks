@@ -15,6 +15,7 @@ namespace myNotebooks.subforms
 		string defaultText;
 		public ReturnResult Result = ReturnResult.Cancel;
 		public string ResultText { get; private set; }
+		public bool IsLocalFile { get; private set; }
 
 		public enum OperationType
 		{
@@ -23,7 +24,8 @@ namespace myNotebooks.subforms
 			DeleteEntry,
 			YesNoQuestion,
 			InputBox,
-			LabelNameInputBox
+			LabelNameInputBox,
+			PINFileInputBox
 		}
 
 		public enum ReturnResult
@@ -35,13 +37,19 @@ namespace myNotebooks.subforms
 			None
 		}
 
-		public frmMessage(OperationType type, string message = "", string defaultText = "", Form parent = null)
+		public frmMessage(OperationType type, string message = "", string defaultText = "", Form parent = null, string[] dropDownItems = null)
 		{
 			InitializeComponent();
 			opType = type;
 			msg = message;
 			this.defaultText = defaultText;
 			if (parent != null) { Utilities.SetStartPosition(this, parent); }
+
+			if (dropDownItems != null)
+			{
+				ddlItemsToSelect.Items.AddRange(dropDownItems);
+				ddlItemsToSelect.Visible = true;
+			}
 		}
 
 		private void frmMessage_Activated(object sender, EventArgs e)
@@ -93,17 +101,7 @@ namespace myNotebooks.subforms
 					this.Height = pnlYesNoCancel.Top + pnlYesNoCancel.Height + 55;
 					break;
 				case OperationType.InputBox:
-					txtInput.Text = defaultText;
-					txtInput.Visible = true;
-					txtInput.Top = lblMessage.Top + lblMessage.Height;
-					pnlOkCancel.Top = txtInput.Top + txtInput.Height + 5;
-					pnlOkCancel.Visible = true;
-					txtInput.SelectAll();
-					this.AcceptButton = btnOk1;
-					shownPanel = pnlOkCancel;
-					this.Text = "Enter New Value";
-					this.Height = pnlOkCancel.Top + pnlOkCancel.Height + 55;
-					break;
+				case OperationType.PINFileInputBox:
 				case OperationType.LabelNameInputBox:
 					txtInput.Text = defaultText;
 					txtInput.Visible = true;
@@ -115,15 +113,23 @@ namespace myNotebooks.subforms
 					shownPanel = pnlOkCancel;
 					this.Text = "Enter New Value";
 					this.Height = pnlOkCancel.Top + pnlOkCancel.Height + 55;
-
-					lblSelectFromLabelsList.Visible = true;
-					lblSelectFromLabelsList.Top = txtInput.Top - lblSelectFromLabelsList.Height - 5;
-
+					lblSelectFromLabelsList.Visible = opType != OperationType.InputBox;
 					break;
 			}
 
-			lblMessage.Height = lblMessage.Text.Length > 0 ? (Convert.ToInt16(lblMessage.Text.Length / 25) > 0 ? Convert.ToInt16(lblMessage.Text.Length / 25) : 1) * 28 : 28;
-			if (shownPanel != null) { this.Height = shownPanel.Height + shownPanel.Top + 50; }
+			if (lblSelectFromLabelsList.Visible)
+			{
+				lblSelectFromLabelsList.Top = lblSelectFromLabelsList.Visible ? txtInput.Top - lblSelectFromLabelsList.Height - 5 : 0;
+				lblSelectFromLabelsList.Text = "Select from " + (opType == OperationType.LabelNameInputBox ? " Labels " : "PIN Files") + " list";
+			}
+
+			if (ddlItemsToSelect.Visible)
+			{
+				pnlDropDown.Top = pnlOkCancel.Top;
+				pnlOkCancel.Top += pnlDropDown.Top + pnlDropDown.Height + 5;
+			}
+
+			if (shownPanel != null) { this.Height = shownPanel.Height + shownPanel.Top + 50 + (pnlDropDown.Visible ? pnlDropDown.Height + 5 : 0); }
 		}
 
 		private void btnYes_Click(object sender, EventArgs e)
@@ -151,12 +157,29 @@ namespace myNotebooks.subforms
 			this.Hide();
 		}
 
+		private void ddlItemsToSelect_SelectedIndexChanged(object sender, EventArgs e) { txtInput.Text = ddlItemsToSelect.Text; }
+
 		private void lblSelectFromLabelsList_Click(object sender, EventArgs e)
 		{
-			using(frmSelectLabel frm = new frmSelectLabel(this))
+			Label lbl = (Label)sender;
+
+			if (lbl.Text.ToLower().Contains("label"))
 			{
-				frm.ShowDialog(this);
-				txtInput.Text = frm.SelectedLabel;
+				using (frmSelectLabel frm = new frmSelectLabel(this))
+				{
+					frm.ShowDialog(this);
+					txtInput.Text = frm.SelectedLabel;
+				}
+			}
+
+			if (lbl.Text.ToLower().Contains("pin file"))
+			{
+				using (frmSelectPINFile frm = new frmSelectPINFile(this))
+				{
+					frm.ShowDialog();
+					txtInput.Text = frm.PINFileName;
+					IsLocalFile = frm.IsLocalFile;
+				}
 			}
 		}
 	}

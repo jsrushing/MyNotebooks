@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using Encryption;
 using myNotebooks.subforms;
+using static Azure.Core.HttpHeader;
 
 namespace myNotebooks.objects
 {
@@ -48,6 +49,16 @@ namespace myNotebooks.objects
 		//	foreach (var s in Directory.GetFiles(sJournalsFolder)) { jrnlReturn.Add(new Journal(s.Replace(sJournalsFolder, "")).Open()); }  // (new Journal(s.Replace(sJournalsFolder, "")).Open()); }
 		//	return jrnlReturn;
 		//}
+
+		public static void PopulateDictCheckedNotebooks(string name)
+		{
+			var items = name.Split(",");
+
+			if (Program.AllNotebookNames.Contains(EncryptDecrypt.Decrypt(items[0])))
+			{
+				Program.DictCheckedNotebooks.Add(EncryptDecrypt.Decrypt(items[0]), EncryptDecrypt.Decrypt(items[1]));
+			}
+		}
 
 		public static List<Notebook> GetCheckedNotebooks()
 		{

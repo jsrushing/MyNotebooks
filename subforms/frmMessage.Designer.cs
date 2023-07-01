@@ -44,10 +44,14 @@ namespace myNotebooks.subforms
 			btnOk2 = new System.Windows.Forms.Button();
 			txtInput = new System.Windows.Forms.TextBox();
 			lblSelectFromLabelsList = new System.Windows.Forms.Label();
+			pnlDropDown = new System.Windows.Forms.Panel();
+			ddlItemsToSelect = new System.Windows.Forms.ComboBox();
+			label1 = new System.Windows.Forms.Label();
 			pnlYesNoCancel.SuspendLayout();
 			pnlYesNo.SuspendLayout();
 			pnlOkCancel.SuspendLayout();
 			pnlOk.SuspendLayout();
+			pnlDropDown.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// lblMessage
@@ -192,19 +196,48 @@ namespace myNotebooks.subforms
 			lblSelectFromLabelsList.Cursor = System.Windows.Forms.Cursors.Hand;
 			lblSelectFromLabelsList.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
 			lblSelectFromLabelsList.ForeColor = System.Drawing.SystemColors.Highlight;
-			lblSelectFromLabelsList.Location = new System.Drawing.Point(131, 213);
+			lblSelectFromLabelsList.Location = new System.Drawing.Point(117, 213);
 			lblSelectFromLabelsList.Name = "lblSelectFromLabelsList";
-			lblSelectFromLabelsList.Size = new System.Drawing.Size(126, 15);
+			lblSelectFromLabelsList.Size = new System.Drawing.Size(136, 15);
 			lblSelectFromLabelsList.TabIndex = 5;
-			lblSelectFromLabelsList.Text = "Select From Labels List";
+			lblSelectFromLabelsList.Text = "Select From PIN files List";
 			lblSelectFromLabelsList.Visible = false;
 			lblSelectFromLabelsList.Click += this.lblSelectFromLabelsList_Click;
+			// 
+			// pnlDropDown
+			// 
+			pnlDropDown.Controls.Add(ddlItemsToSelect);
+			pnlDropDown.Controls.Add(label1);
+			pnlDropDown.Location = new System.Drawing.Point(8, 244);
+			pnlDropDown.Name = "pnlDropDown";
+			pnlDropDown.Size = new System.Drawing.Size(253, 32);
+			pnlDropDown.TabIndex = 6;
+			pnlDropDown.Visible = false;
+			// 
+			// ddlItemsToSelect
+			// 
+			ddlItemsToSelect.FormattingEnabled = true;
+			ddlItemsToSelect.Location = new System.Drawing.Point(57, 5);
+			ddlItemsToSelect.Name = "ddlItemsToSelect";
+			ddlItemsToSelect.Size = new System.Drawing.Size(191, 23);
+			ddlItemsToSelect.TabIndex = 0;
+			ddlItemsToSelect.SelectedIndexChanged += this.ddlItemsToSelect_SelectedIndexChanged;
+			// 
+			// label1
+			// 
+			label1.AutoSize = true;
+			label1.Location = new System.Drawing.Point(3, 9);
+			label1.Name = "label1";
+			label1.Size = new System.Drawing.Size(54, 15);
+			label1.TabIndex = 1;
+			label1.Text = "or select:";
 			// 
 			// frmMessage
 			// 
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			ClientSize = new System.Drawing.Size(269, 309);
+			ClientSize = new System.Drawing.Size(269, 287);
+			Controls.Add(pnlDropDown);
 			Controls.Add(lblSelectFromLabelsList);
 			Controls.Add(txtInput);
 			Controls.Add(pnlOk);
@@ -221,6 +254,8 @@ namespace myNotebooks.subforms
 			pnlYesNo.ResumeLayout(false);
 			pnlOkCancel.ResumeLayout(false);
 			pnlOk.ResumeLayout(false);
+			pnlDropDown.ResumeLayout(false);
+			pnlDropDown.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
@@ -242,5 +277,8 @@ namespace myNotebooks.subforms
 		private System.Windows.Forms.Button btnOk2;
 		private System.Windows.Forms.TextBox txtInput;
 		private System.Windows.Forms.Label lblSelectFromLabelsList;
+		private System.Windows.Forms.Panel pnlDropDown;
+		private System.Windows.Forms.ComboBox ddlItemsToSelect;
+		private System.Windows.Forms.Label label1;
 	}
 }

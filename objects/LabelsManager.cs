@@ -219,7 +219,7 @@ namespace myNotebooks.objects
 			await SaveLabelsToFile(lbls);
 		}
 
-		private static async Task RemoveLabelInFile(string labelName)
+		private static async Task	RemoveLabelInFile(string labelName)
 		{
 			await SaveLabelsToFile(File.ReadAllLines(Program.AppRoot + 
 				ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Where(c => c != labelName).ToArray().SkipLast(1).ToList());

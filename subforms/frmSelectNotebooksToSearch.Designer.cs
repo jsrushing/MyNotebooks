@@ -37,18 +37,22 @@ namespace myNotebooks.subforms
 			label2 = new System.Windows.Forms.Label();
 			txtPIN = new System.Windows.Forms.TextBox();
 			lstNotebookPINs = new System.Windows.Forms.CheckedListBox();
-			chkSelectAll = new System.Windows.Forms.CheckBox();
 			mnuPINFileTop = new System.Windows.Forms.ContextMenuStrip(components);
 			mnuImportPinFile = new System.Windows.Forms.ToolStripMenuItem();
 			mnuExportPinFile = new System.Windows.Forms.ToolStripMenuItem();
+			chkSelectAll = new System.Windows.Forms.CheckBox();
+			lblExport = new System.Windows.Forms.Label();
+			lblImport = new System.Windows.Forms.Label();
+			label1 = new System.Windows.Forms.Label();
+			label3 = new System.Windows.Forms.Label();
 			mnuPINFileTop.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// btnDone
 			// 
-			btnDone.Location = new System.Drawing.Point(65, 463);
+			btnDone.Location = new System.Drawing.Point(145, 463);
 			btnDone.Name = "btnDone";
-			btnDone.Size = new System.Drawing.Size(133, 23);
+			btnDone.Size = new System.Drawing.Size(103, 23);
 			btnDone.TabIndex = 49;
 			btnDone.Text = "&Done";
 			btnDone.UseVisualStyleBackColor = true;
@@ -67,7 +71,7 @@ namespace myNotebooks.subforms
 			// lblShowPIN
 			// 
 			lblShowPIN.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
-			lblShowPIN.Location = new System.Drawing.Point(62, 76);
+			lblShowPIN.Location = new System.Drawing.Point(112, 76);
 			lblShowPIN.Name = "lblShowPIN";
 			lblShowPIN.Size = new System.Drawing.Size(35, 13);
 			lblShowPIN.TabIndex = 46;
@@ -115,17 +119,6 @@ namespace myNotebooks.subforms
 			lstNotebookPINs.TabIndex = 51;
 			lstNotebookPINs.SelectedIndexChanged += this.lstJournalPINs_SelectedIndexChanged;
 			// 
-			// chkSelectAll
-			// 
-			chkSelectAll.AutoSize = true;
-			chkSelectAll.Location = new System.Drawing.Point(155, 88);
-			chkSelectAll.Name = "chkSelectAll";
-			chkSelectAll.Size = new System.Drawing.Size(71, 19);
-			chkSelectAll.TabIndex = 52;
-			chkSelectAll.Text = "select all";
-			chkSelectAll.UseVisualStyleBackColor = true;
-			chkSelectAll.CheckedChanged += this.chkSelectAll_CheckedChanged;
-			// 
 			// mnuPINFileTop
 			// 
 			mnuPINFileTop.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuImportPinFile, mnuExportPinFile });
@@ -146,12 +139,77 @@ namespace myNotebooks.subforms
 			mnuExportPinFile.Text = "Export PIN File";
 			mnuExportPinFile.Click += this.ManagePinFile;
 			// 
+			// chkSelectAll
+			// 
+			chkSelectAll.AutoSize = true;
+			chkSelectAll.Location = new System.Drawing.Point(155, 88);
+			chkSelectAll.Name = "chkSelectAll";
+			chkSelectAll.Size = new System.Drawing.Size(71, 19);
+			chkSelectAll.TabIndex = 52;
+			chkSelectAll.Text = "select all";
+			chkSelectAll.UseVisualStyleBackColor = true;
+			chkSelectAll.CheckedChanged += this.chkSelectAll_CheckedChanged;
+			// 
+			// lblExport
+			// 
+			lblExport.AutoSize = true;
+			lblExport.Cursor = System.Windows.Forms.Cursors.Hand;
+			lblExport.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+			lblExport.ForeColor = System.Drawing.SystemColors.Highlight;
+			lblExport.Location = new System.Drawing.Point(14, 473);
+			lblExport.Name = "lblExport";
+			lblExport.Size = new System.Drawing.Size(41, 15);
+			lblExport.TabIndex = 53;
+			lblExport.Text = "Export";
+			lblExport.Click += this.ManagePinFile;
+			// 
+			// lblImport
+			// 
+			lblImport.AutoSize = true;
+			lblImport.Cursor = System.Windows.Forms.Cursors.Hand;
+			lblImport.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+			lblImport.ForeColor = System.Drawing.SystemColors.Highlight;
+			lblImport.Location = new System.Drawing.Point(60, 473);
+			lblImport.Name = "lblImport";
+			lblImport.Size = new System.Drawing.Size(43, 15);
+			lblImport.TabIndex = 54;
+			lblImport.Text = "Import";
+			lblImport.Click += this.ManagePinFile;
+			// 
+			// label1
+			// 
+			label1.AutoSize = true;
+			label1.Cursor = System.Windows.Forms.Cursors.Hand;
+			label1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			label1.ForeColor = System.Drawing.SystemColors.Highlight;
+			label1.Location = new System.Drawing.Point(52, 473);
+			label1.Name = "label1";
+			label1.Size = new System.Drawing.Size(12, 15);
+			label1.TabIndex = 55;
+			label1.Text = "/";
+			// 
+			// label3
+			// 
+			label3.AutoSize = true;
+			label3.Cursor = System.Windows.Forms.Cursors.Hand;
+			label3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			label3.ForeColor = System.Drawing.SystemColors.Highlight;
+			label3.Location = new System.Drawing.Point(40, 459);
+			label3.Name = "label3";
+			label3.Size = new System.Drawing.Size(45, 15);
+			label3.TabIndex = 56;
+			label3.Text = "PIN file";
+			// 
 			// frmSelectNotebooksToSearch
 			// 
 			AcceptButton = btnAddPIN;
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			ClientSize = new System.Drawing.Size(260, 497);
+			Controls.Add(label3);
+			Controls.Add(lblImport);
+			Controls.Add(label1);
+			Controls.Add(lblExport);
 			Controls.Add(lstNotebookPINs);
 			Controls.Add(btnDone);
 			Controls.Add(txtPIN);
@@ -183,5 +241,9 @@ namespace myNotebooks.subforms
 		private System.Windows.Forms.ContextMenuStrip mnuPINFileTop;
 		private System.Windows.Forms.ToolStripMenuItem mnuImportPinFile;
 		private System.Windows.Forms.ToolStripMenuItem mnuExportPinFile;
+		private System.Windows.Forms.Label lblExport;
+		private System.Windows.Forms.Label lblImport;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label label3;
 	}
 }

@@ -83,7 +83,7 @@ namespace myNotebooks.objects
 			CloudFileClient		fileClient		= storageAccount.CreateCloudFileClient();
 			CloudFileShare		share			= fileClient.GetShareReference(shareName);
 			CloudFileDirectory	root			= share.GetRootDirectoryReference();
-			CloudFileDirectory	myDirectory		= root.GetDirectoryReference("notebooks");
+			CloudFileDirectory	myDirectory		= root.GetDirectoryReference(shareName);
 			FileRequestOptions	options			= new FileRequestOptions();
 			FileContinuationToken token			= null;
 			FileResultSegment	rsltSgmnt		= await root.ListFilesAndDirectoriesSegmentedAsync(Program.AzurePassword, null, token, options, null);
@@ -91,9 +91,11 @@ namespace myNotebooks.objects
 			Program.AzureNotebookNames.Clear();
 
 			foreach(CloudFile file in rsltSgmnt.Results) 
-			{ 
-				if (shareName == "notebooks") { Program.AzureNotebookNames.Add(scrubAzPwd ? file.Name.Replace(Program.AzurePassword, "") : file.Name); } 
-				else if(shareName == "notebooksrenamed") { Program.AzureRenameCommands.Add(scrubAzPwd ? file.Name.Replace(Program.AzurePassword, "") : file.Name); }
+			{
+				var name = file.Name;
+				if (shareName == "notebooks")				{ Program.AzureNotebookNames.Add(scrubAzPwd ? name.Replace(Program.AzurePassword, "") : name); }
+				else if (shareName == "notebooksrenamed")	{ Program.AzureRenameCommands.Add(scrubAzPwd ? name.Replace(Program.AzurePassword, "") : name); }
+				else if (shareName == "pinfiles")			{ Program.AzurePinFileNames.Add(scrubAzPwd ? name.Replace(Program.AzurePassword, "").Replace(".pin", "") : name); }
 			}
 		}
 

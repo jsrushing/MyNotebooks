@@ -301,7 +301,6 @@ namespace myNotebooks.subforms
 
 			if (Program.AzurePassword.Length > 0)
 			{
-				string s = EncryptDecrypt.Decrypt(Program.AzurePassword);
 				CloudSynchronizer cs = new CloudSynchronizer();
 				await cs.SynchWithCloud(false, null, true);
 			}
@@ -349,7 +348,7 @@ namespace myNotebooks.subforms
 			Program.PIN = txtJournalPIN.Text;
 			lblWrongPin.Visible = false;
 			if (CurrentNotebook != null && Program.DictCheckedNotebooks.Count == 1 && Program.DictCheckedNotebooks.Keys.Contains(CurrentNotebook.Name)) { Program.DictCheckedNotebooks.Clear(); }
-			Program.DictCheckedNotebooks.Add(ddlNotebooks.Text, txtJournalPIN.Text);
+			if (Program.DictCheckedNotebooks.Count == 0) { Program.DictCheckedNotebooks.Add(ddlNotebooks.Text, txtJournalPIN.Text); }
 			CurrentNotebook = new Notebook(ddlNotebooks.Text, null, this).Open();
 			var wrongPIN = true;
 
@@ -597,11 +596,8 @@ namespace myNotebooks.subforms
 				lb.SelectedIndexChanged -= new System.EventHandler(this.lstEntries_SelectEntry);
 				CurrentEntry = Entry.Select(rtb, lb, CurrentNotebook, FirstSelection, null, true);
 
-				try
-				{
-					createdEntry = CurrentNotebook.Entries.First(e => e.Title.Equals("created") & e.Text.Equals("-"));
-				}
-				catch (Exception ex) { }
+				try { createdEntry = CurrentNotebook.Entries.First(e => e.Title.Equals("created") & e.Text.Equals("-")); }
+				catch (Exception) { }
 
 				var currentId = createdEntry != null ? createdEntry.Id : "";
 
