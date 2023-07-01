@@ -14,7 +14,7 @@ namespace myNotebooks.subforms
 {
 	public partial class frmSearch : Form
 	{
-		private Dictionary<string, int> journalBoundaries = new Dictionary<string, int>();
+		private Dictionary<string, int> NotebookBoundariesDict = new Dictionary<string, int>();
 		private List<int> threeSelections = new List<int>();
 		private bool IgnoreCheckChange = false;
 		private List<Entry> FoundEntries = new List<Entry>();
@@ -76,7 +76,7 @@ namespace myNotebooks.subforms
 			List<Entry> foundEntries = new List<Entry>();
 			List<Entry> nbFound = null;
 
-			journalBoundaries.Clear();
+			NotebookBoundariesDict.Clear();
 			lstFoundEntries.Items.Clear();
 			FoundEntries.Clear();
 			for (var i = 0; i < lstLabelsForSearch.CheckedItems.Count; i++) { labels += lstLabelsForSearch.CheckedItems[i].ToString() + ","; }
@@ -90,13 +90,18 @@ namespace myNotebooks.subforms
 
 			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedNotebooks)
 			{
-				if(lastIndex == 0) { journalBoundaries.Add(kvp.Key, 0); }
+				if(lastIndex == 0) { NotebookBoundariesDict.Add(kvp.Key, 0); }
 				Utilities.SetProgramPIN(kvp.Key);
 				nbFound = new Notebook(kvp.Key.Replace(" (****)", ""), "", this).Open().Search(so);
 				await Utilities.PopulateEntries(lstFoundEntries, nbFound, "", "", "", false, 0, true);
-				lastIndex += nbFound.Count;
-				journalBoundaries.Add(kvp.Key.ToString(), lastIndex);
-				FoundEntries.AddRange(nbFound);
+
+				if(nbFound.Count > 0 )
+				{
+					lastIndex += nbFound.Count;
+					if(!NotebookBoundariesDict.Keys.Contains(kvp.Key)) NotebookBoundariesDict.Add(kvp.Key, lastIndex);
+					FoundEntries.AddRange(nbFound);
+				}
+
 				foundEntries.Clear();
 			}
 
@@ -120,7 +125,8 @@ namespace myNotebooks.subforms
 			KeyValuePair<string, int> kvp = new KeyValuePair<string, int>();
 			foreach (int i in lstFoundEntries.SelectedIndices) { selectedIndices.Add(i); }
 			if (selectedIndices.Count() > 1) { selectedIndices = selectedIndices.Except(threeSelections).ToList(); }
-			kvp = journalBoundaries.FirstOrDefault(p => p.Value > selectedIndices[0]);
+			kvp = NotebookBoundariesDict.FirstOrDefault(p => p.Value < selectedIndices[0]);
+			Utilities.SetProgramPIN(kvp.Key);
 			return kvp.Key == "" ? null : new Notebook(kvp.Key, "", this).Open();
 		}
 
@@ -144,30 +150,23 @@ namespace myNotebooks.subforms
 		{
 			ListBox lb = (ListBox)sender;
 			RichTextBox rtb = rtbSelectedEntry_Found;
-			lb.SelectedIndexChanged -= new System.EventHandler(this.lstFoundEntries_SelectedIndexChanged);
 
-			//while ((lstFoundEntries.SelectedIndex + lstFoundEntries.TopIndex) % 4 != 0) { lstFoundEntries.TopIndex++; }
-
-			try
+			if(lb.SelectedIndex > -1)
 			{
-				if (lb.SelectedIndex > -1)
-				{
-					Notebook nb = GetEntryNotebook();
-					Utilities.SetProgramPIN(nb.Name);
-					Entry currentEntry = Entry.Select(rtb, lb, nb, false, null, false);
-					GetCurrentSelections();
+				lb.SelectedIndexChanged -= new System.EventHandler(this.lstFoundEntries_SelectedIndexChanged);
+				Notebook nb = GetEntryNotebook();
+				Entry currentEntry = Entry.Select(rtb, lb, nb, false, null, false);
+				GetCurrentSelections();
 
-					if (currentEntry != null)
-					{
-						lblSelectionType.Visible = rtb.Text.Length > 0;
-						lblSeparator.Visible = rtb.Text.Length > 0;
-						Utilities.ResizeListsAndRTBs(lb, rtb, lblSeparator, lblSelectionType, this);
-					}
-					else { lstFoundEntries.SelectedIndices.Clear(); }
+				if (currentEntry != null)
+				{
+					lblSelectionType.Visible = rtb.Text.Length > 0;
+					lblSeparator.Visible = rtb.Text.Length > 0;
+					Utilities.ResizeListsAndRTBs(lb, rtb, lblSeparator, lblSelectionType, this);
 				}
+				else { lstFoundEntries.SelectedIndices.Clear(); }
 
 			}
-			catch (Exception) { lb.SelectedIndex = -1; }
 
 			lb.SelectedIndexChanged += new System.EventHandler(this.lstFoundEntries_SelectedIndexChanged);
 

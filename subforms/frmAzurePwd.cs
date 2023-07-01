@@ -23,7 +23,7 @@ namespace myNotebooks.subforms
 		}
 
 		List<Panel> panels = new List<Panel>();
-		List<TextBox> entries = new List<TextBox>();	
+		List<TextBox> entries = new List<TextBox>();
 		Form parentForm = null;
 
 		public frmAzurePwd(Form parent, Mode mode)
@@ -44,9 +44,9 @@ namespace myNotebooks.subforms
 				Utilities.SetStartPosition(this, parent);
 
 				foreach (Control c in this.Controls)
-				{ 
+				{
 					if (c.GetType() == typeof(Panel))
-					{ 
+					{
 						panel = (Panel)c;
 						panel.Location = pnlHaveKey.Location;
 						panels.Add(panel);
@@ -59,10 +59,10 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private void btnCancel_Click(object sender, EventArgs e) 
-		{ 
-			ClearAllText(); 
-			SetUpUI(Mode.AskingForKey); 
+		private void btnCancel_Click(object sender, EventArgs e)
+		{
+			ClearAllText();
+			SetUpUI(Mode.AskingForKey);
 		}
 
 		private void btnCancelChange_Click(object sender, EventArgs e) { Close(); }
@@ -125,25 +125,25 @@ namespace myNotebooks.subforms
 		private void btnHaveKeyYes_Click(object sender, EventArgs e) { SetUpUI(Mode.EnteringKey); }
 
 		private void ClearAllText() { foreach (TextBox tb in entries) { tb.Text = string.Empty; } }
-		
+
 		private void HideAllPanels() { foreach (Panel p in panels) { p.Visible = false; } }
 
 		private void SetUpUI(Mode mode)
 		{
 			HideAllPanels();
 
-			switch(mode)
+			switch (mode)
 			{
 				case Mode.AskingForKey:
 					this.Text = "Do you have an Azure key?";
 					pnlHaveKey.Visible = true;
 					break;
-				case Mode.EnteringKey: 
+				case Mode.EnteringKey:
 					this.Text = "Enter Azure Key";
 					pnlEnterKey.Visible = true;
 					txtEnterKey.Focus();
 					break;
-				case Mode.CreatingKey: 
+				case Mode.CreatingKey:
 					this.Text = "Create Azure Key";
 					pnlCreateKey.Visible = true;
 					txtCreateKey.Focus();
@@ -171,6 +171,11 @@ namespace myNotebooks.subforms
 			btnEnterKey.Enabled = tbx.TextLength > 7;
 			btnCreateKey.Enabled = tbx.TextLength > 7;
 			btnChangeKey.Enabled = tbx.TextLength > 7;
+		}
+
+		private void frmAzurePwd_Load(object sender, EventArgs e)
+		{
+
 		}
 	}
 }
