@@ -4,6 +4,7 @@
 using System;
 using System.Configuration;
 using System.Drawing;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Encryption;
@@ -29,10 +30,10 @@ namespace myNotebooks.subforms
 		public frmNewEntry(Form parent, Notebook notebook, Entry entryToEdit = null, bool disallowOriginalTextEdit = false)
 		{
 			InitializeComponent();
-			Entry					= entryToEdit;
-			IsEdit					= Entry != null;
-			PreserveOriginalText	= disallowOriginalTextEdit;
-			CurrentNotebook			= notebook;
+			Entry = entryToEdit;
+			IsEdit = Entry != null;
+			PreserveOriginalText = disallowOriginalTextEdit;
+			CurrentNotebook = notebook;
 			Utilities.SetStartPosition(this, parent);
 		}
 
@@ -121,10 +122,10 @@ namespace myNotebooks.subforms
 
 		private void lblSortType_Click(object sender, EventArgs e) { SortLabels(); }
 
-		private void lstLabels_SelectedIndexChanged(object sender, EventArgs e) 
+		private void lstLabels_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			lblNumLabelsSelected.Text = string.Format(LabelLabelsSelected, clbLabels.CheckedItems.Count);
-			SetIsDirty(true); 
+			SetIsDirty(true);
 		}
 
 		private void ModifyFontStyle(FontStyle style)
@@ -192,64 +193,70 @@ namespace myNotebooks.subforms
 
 		private async Task SaveEntry()
 		{
-			// Test title for a date surrounded by parentheses, which interferes with parsing the entry's date when necessary.
-			var openParen = txtNewEntryTitle.Text.IndexOf("(");
-			var closeParen = txtNewEntryTitle.Text.IndexOf(")");
-			var possibleDate = string.Empty;
-			var processEntry = true;
-
-			if (openParen > -1 && openParen - closeParen == 17)
+			if(!lblTitleExists.Visible)
 			{
-				possibleDate = txtNewEntryTitle.Text.Substring(openParen + 1, closeParen - openParen);
-				DateTime.TryParse(possibleDate, out DateTime date);
+				// Test title for a date surrounded by parentheses, which interferes with parsing the entry's date when necessary.
+				var openParen = txtNewEntryTitle.Text.IndexOf("(");
+				var closeParen = txtNewEntryTitle.Text.IndexOf(")");
+				var possibleDate = string.Empty;
+				var processEntry = true;
 
-				if (date > DateTime.MinValue)
+				if (openParen > -1 && openParen - closeParen == 17)
 				{
-					var sMsg = "Sorry, entry titles may not contain a date and time, formatted as you have, surrounded by parentheses. Edit the title accordingly.";
-					using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "Improperly Contstructed Title")) { ShowDialog(frm); }
-					processEntry = false;
-				}
-			}
+					possibleDate = txtNewEntryTitle.Text.Substring(openParen + 1, closeParen - openParen);
+					DateTime.TryParse(possibleDate, out DateTime date);
 
-			if (processEntry)
-			{
-				if(this.Entry != null)
-				{
-					this.Entry.Text		= rtbNewEntry.Text.Trim();  //  EncryptDecrypt.Encrypt(rtbNewEntry.Text.Trim());
-					this.Entry.Title	= txtNewEntryTitle.Text.Trim();    // EncryptDecrypt.Encrypt(txtNewEntryTitle.Text.Trim());
-					this.Entry.Labels	= LabelsManager.CheckedLabels_Get(clbLabels);
-					this.Entry.RTF		= rtbNewEntry.Rtf;
-					Entry.LastEditedOn	= DateTime.Now;
-
-				}
-				else
-				{
-					Entry newEntry = new Entry(txtNewEntryTitle.Text.Trim(), rtbNewEntry.Text.Trim(), rtbNewEntry.Rtf, LabelsManager.CheckedLabels_Get(clbLabels), CurrentNotebook.Name);
-					if (Entry == null) { CurrentNotebook.AddEntry(newEntry); } else { CurrentNotebook.ReplaceEntry(Entry, newEntry); }
-					Entry = newEntry;
+					if (date > DateTime.MinValue)
+					{
+						var sMsg = "Sorry, entry titles may not contain a date and time, formatted as you have, surrounded by parentheses. Edit the title accordingly.";
+						using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "Improperly Contstructed Title")) { ShowDialog(frm); }
+						processEntry = false;
+					}
 				}
 
-				Saved = true;
-				SetIsDirty(false);
+				if (processEntry)
+				{
+					if (this.Entry != null)
+					{
+						this.Entry.Text = rtbNewEntry.Text.Trim(); 
+						this.Entry.Title = txtNewEntryTitle.Text.Trim();
+						this.Entry.Labels = LabelsManager.CheckedLabels_Get(clbLabels);
+						this.Entry.RTF = rtbNewEntry.Rtf;
+						Entry.LastEditedOn = DateTime.Now;
+
+					}
+					else
+					{
+						Entry newEntry = new Entry(txtNewEntryTitle.Text.Trim(), rtbNewEntry.Text.Trim(), rtbNewEntry.Rtf, 
+							LabelsManager.CheckedLabels_Get(clbLabels), CurrentNotebook.Name);
+						if (Entry == null) { CurrentNotebook.AddEntry(newEntry); } else { CurrentNotebook.ReplaceEntry(Entry, newEntry); }
+						Entry = newEntry;
+					}
+
+					Saved = true;
+					SetIsDirty(false);
+				}
 			}
 		}
 
 		private void SetIsDirty(bool dirty)
 		{
-			if (txtNewEntryTitle.Text.Length > 0 & rtbNewEntry.Text.Length > 0)
-			{
-				IsDirty = dirty;
-				mnuSaveEntry.Enabled = IsDirty;
-				mnuSaveAndExit.Enabled = IsDirty;
-			}
+			var v = CurrentNotebook.Entries.ToArray().Where(e => e.Title == txtNewEntryTitle.Text);
+			lblTitleExists.Visible = v.Count() > 0;
 
-			if (this.Entry != null & CurrentNotebook != null)
+			if (!lblTitleExists.Visible)
 			{
-				this.Text = "editing '" + Entry.Title + "' in '" + CurrentNotebook.Name + "'";
-			}
-			else
-			{
-				this.Text = dirty ? OriginalTitle + "*" : OriginalTitle;
+				if (txtNewEntryTitle.Text.Length > 0 & rtbNewEntry.Text.Length > 0)
+				{
+					IsDirty = dirty;
+					mnuSaveEntry.Enabled = IsDirty;
+					mnuSaveAndExit.Enabled = IsDirty;
+				}
+
+				if (this.Entry != null & CurrentNotebook != null)
+				{ this.Text = "editing '" + Entry.Title + "' in '" + CurrentNotebook.Name + "'"; }
+				else
+				{ this.Text = dirty ? OriginalTitle + "*" : OriginalTitle; }
 			}
 		}
 

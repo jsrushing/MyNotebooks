@@ -31,6 +31,8 @@ namespace myNotebooks.subforms
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmNewEntry));
 			grpCreateEntry = new System.Windows.Forms.GroupBox();
+			lblTitleExists = new System.Windows.Forms.Label();
+			lblNumLabelsSelected = new System.Windows.Forms.Label();
 			pnlEntryDates = new System.Windows.Forms.Panel();
 			lblEditedOn = new System.Windows.Forms.Label();
 			lblCreatedOn = new System.Windows.Forms.Label();
@@ -70,7 +72,6 @@ namespace myNotebooks.subforms
 			mnuFind = new System.Windows.Forms.ToolStripMenuItem();
 			txtFind = new System.Windows.Forms.ToolStripTextBox();
 			mnuCancelExit = new System.Windows.Forms.ToolStripMenuItem();
-			lblNumLabelsSelected = new System.Windows.Forms.Label();
 			grpCreateEntry.SuspendLayout();
 			pnlEntryDates.SuspendLayout();
 			panel1.SuspendLayout();
@@ -81,6 +82,7 @@ namespace myNotebooks.subforms
 			// grpCreateEntry
 			// 
 			grpCreateEntry.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+			grpCreateEntry.Controls.Add(lblTitleExists);
 			grpCreateEntry.Controls.Add(lblNumLabelsSelected);
 			grpCreateEntry.Controls.Add(pnlEntryDates);
 			grpCreateEntry.Controls.Add(lblSortType);
@@ -102,6 +104,29 @@ namespace myNotebooks.subforms
 			grpCreateEntry.Size = new System.Drawing.Size(569, 484);
 			grpCreateEntry.TabIndex = 5;
 			grpCreateEntry.TabStop = false;
+			// 
+			// lblTitleExists
+			// 
+			lblTitleExists.AutoSize = true;
+			lblTitleExists.ForeColor = System.Drawing.Color.Red;
+			lblTitleExists.Location = new System.Drawing.Point(45, 3);
+			lblTitleExists.Name = "lblTitleExists";
+			lblTitleExists.Size = new System.Drawing.Size(188, 15);
+			lblTitleExists.TabIndex = 50;
+			lblTitleExists.Text = "Sorry, this entry title already exists.";
+			lblTitleExists.Visible = false;
+			// 
+			// lblNumLabelsSelected
+			// 
+			lblNumLabelsSelected.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+			lblNumLabelsSelected.AutoSize = true;
+			lblNumLabelsSelected.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point);
+			lblNumLabelsSelected.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			lblNumLabelsSelected.Location = new System.Drawing.Point(59, 327);
+			lblNumLabelsSelected.Name = "lblNumLabelsSelected";
+			lblNumLabelsSelected.Size = new System.Drawing.Size(75, 15);
+			lblNumLabelsSelected.TabIndex = 49;
+			lblNumLabelsSelected.Text = "({0} selected)";
 			// 
 			// pnlEntryDates
 			// 
@@ -504,18 +529,6 @@ namespace myNotebooks.subforms
 			mnuCancelExit.Text = "E&xit";
 			mnuCancelExit.Click += this.mnuCancelExit_Click;
 			// 
-			// lblNumLabelsSelected
-			// 
-			lblNumLabelsSelected.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
-			lblNumLabelsSelected.AutoSize = true;
-			lblNumLabelsSelected.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point);
-			lblNumLabelsSelected.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			lblNumLabelsSelected.Location = new System.Drawing.Point(59, 327);
-			lblNumLabelsSelected.Name = "lblNumLabelsSelected";
-			lblNumLabelsSelected.Size = new System.Drawing.Size(75, 15);
-			lblNumLabelsSelected.TabIndex = 49;
-			lblNumLabelsSelected.Text = "({0} selected)";
-			// 
 			// frmNewEntry
 			// 
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -586,5 +599,6 @@ namespace myNotebooks.subforms
 		private System.Windows.Forms.Panel pnlEntryDates;
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.Label lblNumLabelsSelected;
+		private System.Windows.Forms.Label lblTitleExists;
 	}
 }

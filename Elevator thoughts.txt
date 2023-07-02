@@ -11,6 +11,7 @@ after pin file import all books are checked
 	fixed
 
 I think I should force unique Entry titles ...
+	07/02/23 0100 Done. All on frmNewEntry. Simple. Uses lblTitleExists and a test on txtNewEntryTitle_TextChanged() to compare the entry w/ the notebook's Entry.Title's and show the label. To override, if desired, just set lblTitleExists.Text = "" and remove the trap for its visibility from SaveEntry().
 
 Why is security important?
 Corporations with many users might use MyNotebooks to communicate, plan, document, and deliver on hundreds of projects. The risk of exposure of company and personally identifiable data is significant.
@@ -24,6 +25,13 @@ Changes from other users are synchronized to your local cache when you access th
 We've built lots of logic to prevent accidental deletes - but that's not enough for a corportate environment. Corporate users will always have long-term backups available.
 
 Group your notebooks. Anyone who has the group name and password can access the group's notebooks.
+
+Azure 'passwords' are entered by user then encrypted with internal keys and stored on the local device.
+This encrypted string is then used as a prefix for any cloud notebooks you create (<prefix><bookname>), labels you save, and for other internal operations.
+
+A group might have notebooks which are only pertinent to certain staff, so you can select notebooks in the group (and enter PIN's where applicable), then export those selections to a PIN-protected file. You might save one or more selection files which you can then import to quickly select, and provide PIN's for, different 'sub-categories' within a group.
+
+
 
 
 
