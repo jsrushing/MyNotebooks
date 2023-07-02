@@ -24,35 +24,37 @@ namespace myNotebooks.objects
 			CloudNewer
 		}
 
-		public int NotebooksSynchd		{ get { return ItemsSynchd.Count; } }
-		public int NotebooksSkipped		{ get { return ItemsSkipped.Count; } }
-		public int NotebooksDownloaded	{ get { return ItemsDownloaded.Count; } }
-		public int NotebooksBackedUp	{ get { return ItemsBackedUp.Count; } }
-		public int NotebooksDeleted		{ get { return ItemsDeleted.Count; } }
+		//public int NotebooksSynchd		{ get { return ItemsSynchd.Count; } }
+		//public int NotebooksSkipped		{ get { return ItemsSkipped.Count; } }
+		//public int NotebooksDownloaded	{ get { return ItemsDownloaded.Count; } }
+		//public int NotebooksBackedUp		{ get { return ItemsBackedUp.Count; } }
+		//public int NotebooksDeleted		{ get { return ItemsDeleted.Count; } }
 
 		public string Err = string.Empty; 
 
-		private List<string> ItemsSynchd		= new List<string>();
-		private List<string> ItemsSkipped		= new List<string>();
-		private List<string> ItemsDownloaded	= new List<string>();
-		private List<string> ItemsBackedUp		= new List<string>();
-		private List<string> ItemsDeleted		= new List<string>();
+		//private List<string> ItemsSynchd		= new List<string>();
+		//private List<string> ItemsSkipped		= new List<string>();
+		//private List<string> ItemsDownloaded	= new List<string>();
+		//private List<string> ItemsBackedUp	= new List<string>();
+		//private List<string> ItemsDeleted		= new List<string>();
 		private ComparisonResult notebookComparisonResult { get; set; }
 
 		public CloudSynchronizer() { notebookComparisonResult = ComparisonResult.Same; }
 
 		private async Task			CheckForLocalOrCloudOnly(string tempFolder, string notebooksFolder)
 		{
-			return;
+			//return;
 
+			// Find Azure files which aren't in Program.DictCheckedNotebooks
 			if (Program.AzureNotebookNames.Count == 0) await AzureFileClient.GetAzureItemNames(true);
-			string[] booksOnAzureNotLocal = Program.AzureNotebookNames.Except(Program.AllNotebookNames).ToArray();
+
+			string[] booksOnAzureNotLocal = Program.AzureNotebookNames.Except(Program.DictCheckedNotebooks.Keys).ToArray();
 
 			if(booksOnAzureNotLocal.Count() > 0)
 			{
 				using (frmNotebooksInCloudNotLocal frm = new frmNotebooksInCloudNotLocal(booksOnAzureNotLocal))
 				{
-					frm.ShowDialog();
+					frm.ShowDialog();	// Handle any files on frmNotebooksInCloudNotLocal
 				}
 			}
 
@@ -60,9 +62,10 @@ namespace myNotebooks.objects
 
 
 
-			// check for cloud nb's which aren't local.
-			foreach (var sBookName in Program.AzureNotebookNames.Except(Program.AllNotebookNames))        // any journal on Azure not found locally
+			// check for cloud nb's which aren't in DictCheckedNotebooks
+			foreach (var sBookName in Program.AzureNotebookNames.Except(Program.DictCheckedNotebooks.Keys))  
 			{
+				// notify user
 
 				// For all found, notify user and ask for PIN to check the file.
 					// Must write a way for user to ignore the notebook. Keep a list of ignored items.
@@ -226,7 +229,6 @@ namespace myNotebooks.objects
 					else
 					{
 						book.Backup();
-						ItemsBackedUp.Add(book.Name + " (backed up locally)");
 					}
 				}
 				else
