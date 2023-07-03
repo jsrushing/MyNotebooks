@@ -28,8 +28,11 @@ namespace myNotebooks.objects
 			}
 			else
 			{
-				List<string> s = Directory.GetFiles(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"]).ToList();
-				Program.AllNotebookNames.AddRange(s.Select(s => s[(s.LastIndexOf("\\") + 1)..]));
+				List<string> s = Directory.GetFiles(Program.GroupsFolder + Program.GroupName_Encrypted).ToList();
+
+				Program.AllNotebookNames.AddRange(s.Select(s => EncryptDecrypt.Decrypt(s[(s.LastIndexOf("\\") + 1)..])));
+
+
 			}
 		} 
 

@@ -152,6 +152,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using myNotebooks;
 using System.Threading.Tasks;
 using Encryption;
+using myJournal.subforms;
 
 namespace myNotebooks.subforms
 {
@@ -190,10 +191,41 @@ namespace myNotebooks.subforms
 
 		private async void frmMain_Load(object sender, EventArgs e)
 		{
+			using(frmGroupLoginOrCreate frm = new frmGroupLoginOrCreate()) { frm.ShowDialog(); }
+
+			if(Program.AllNotebookNames.Count > 0)
+			{
+				using(frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch
+					(this, "Select notebooks to work with. Notebooks which are PIN-protected can't be synchronized unless you provide the PIN. You can Export and Import selections below.")) 
+				{ frm.ShowDialog(); }
+				// program.dictcheckednotebooks should be populated at this point.
+			}
+			else	// There are no notebooks in the Group.
+			{
+				using (frmNewNotebook frm = new frmNewNotebook(this))
+				{
+					frm.ShowDialog();
+
+					if (frm.Notebook != null)
+					{
+						await frm.Notebook.Create();
+						LoadNotebooks();
+					}
+					else
+					{
+						using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.Message, "At least one notebook must exist. " +
+							"Please re-open the program and create a notebook.", "One Notebook Must Exist", this))
+						{ frm2.ShowDialog(); this.Close(); }
+					}
+				}
+			}
+
+
+
 			this.Cursor = Cursors.WaitCursor;
 			System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
 			System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
-			this.Text = "myJournal " + Program.AppVersion + (fvi.FileName.ToLower().Contains("debug") ? " - DEBUG MODE" : "");
+			this.Text = "MyNotebooks " + Program.AppVersion + (fvi.FileName.ToLower().Contains("debug") ? " - DEBUG MODE" : "");
 
 			#region one-time code
 
@@ -284,49 +316,45 @@ namespace myNotebooks.subforms
 
 			CheckForSystemDirectories();    // am I keeping system directories now that the cloud is working? Why or why not?
 
-			using (frmAzurePwd frm = new frmAzurePwd(this, frmAzurePwd.Mode.AskingForKey))
-			{ if (Program.AzurePassword.Length > 0) { frm.Close(); } }
+			//using (frmAzurePwd frm = new frmAzurePwd(this, frmAzurePwd.Mode.AskingForKey))
+			//{ if (Program.AzurePassword.Length > 0) { frm.Close(); } }
 
 			//Program.AzurePassword = string.Empty;	// Kills the Azure synch process for debugging if desired.
 
 			// Populate Program.DictCheckedNotebooks
-			using(frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch
-				(this, "Select notebooks to work with. Notebooks which are PIN-protected can't be synchronized unless you provide the PIN.")) 
-			{ frm.ShowDialog(); }
-			// program.dictcheckednotebooks should be populated at this point.
 
 			pnlDateFilters.Left = pnlPin.Left - 11;
 			ShowHideMenusAndControls(SelectionState.HideAll);
 			await Utilities.PopulateAllNotebookNames();
 
-			if (Program.AzurePassword.Length > 0)
-			{
-				CloudSynchronizer cs = new CloudSynchronizer();
-				await cs.SynchWithCloud(false, null, true);
-			}
+			//if (Program.AzurePassword.Length > 0)
+			//{
+			//	CloudSynchronizer cs = new CloudSynchronizer();
+			//	await cs.SynchWithCloud(false, null, true);
+			//}
 
-			await Utilities.PopulateAllNotebookNames();
-			LoadNotebooks();
+			//await Utilities.PopulateAllNotebookNames();
+			//LoadNotebooks();
 
-			if (ddlNotebooks.Items.Count == 0)
-			{
-				using (frmNewNotebook frm = new frmNewNotebook(this))
-				{
-					frm.ShowDialog();
+			//if (ddlNotebooks.Items.Count == 0)
+			//{
+			//	using (frmNewNotebook frm = new frmNewNotebook(this))
+			//	{
+			//		frm.ShowDialog();
 
-					if (frm.Notebook != null)
-					{
-						await frm.Notebook.Create();
-						LoadNotebooks();
-					}
-					else
-					{
-						using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.Message, "At least one notebook must exist. " +
-							"Please re-open the program and create a notebook.", "One Notebook Must Exist", this))
-						{ frm2.ShowDialog(); this.Close(); }
-					}
-				}
-			}
+			//		if (frm.Notebook != null)
+			//		{
+			//			await frm.Notebook.Create();
+			//			LoadNotebooks();
+			//		}
+			//		else
+			//		{
+			//			using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.Message, "At least one notebook must exist. " +
+			//				"Please re-open the program and create a notebook.", "One Notebook Must Exist", this))
+			//			{ frm2.ShowDialog(); this.Close(); }
+			//		}
+			//	}
+			//}
 
 			this.Cursor = Cursors.Default;
 		}
@@ -349,12 +377,12 @@ namespace myNotebooks.subforms
 			lblWrongPin.Visible = false;
 			if (CurrentNotebook != null && Program.DictCheckedNotebooks.Count == 1 && Program.DictCheckedNotebooks.Keys.Contains(CurrentNotebook.Name)) { Program.DictCheckedNotebooks.Clear(); }
 			if (Program.DictCheckedNotebooks.Count == 0) { Program.DictCheckedNotebooks.Add(ddlNotebooks.Text, txtJournalPIN.Text); }
-			CurrentNotebook = new Notebook(ddlNotebooks.Text, null, this).Open();
+			CurrentNotebook = new Notebook(EncryptDecrypt.Encrypt(ddlNotebooks.Text).Replace("/", "_").Replace("+", "-"), null, this).Open(true);
 			var wrongPIN = true;
 
 			if (CurrentNotebook != null)
 			{
-				wrongPIN = CurrentNotebook.Name.Equals(" <decrypt failed> ") | !CurrentNotebook.FileName.Contains("\\");
+				wrongPIN = CurrentNotebook.Name.Equals(" <decrypt failed> ") | !CurrentNotebook.FolderName.Contains("\\");
 
 				if (!wrongPIN && !Program.AllNotebookNames.Contains(CurrentNotebook.Name))
 				{
@@ -371,11 +399,11 @@ namespace myNotebooks.subforms
 				{
 					if (CurrentNotebook.Settings.AllowCloud && Program.AzurePassword.Length > 0)
 					{
-						var nbPath = CurrentNotebook.FileName;
+						var nbPath = CurrentNotebook.FolderName;
 						var nbName = CurrentNotebook.Name;
 						CloudSynchronizer cs = new CloudSynchronizer();
 						await cs.SynchWithCloud(false, CurrentNotebook);
-						Notebook curNotebook = new Notebook(nbName, nbPath, this).Open();
+						Notebook curNotebook = new Notebook(nbName, nbPath, this).Open(true);
 
 						if (curNotebook == null)    // the sync deleted the file
 						{ ddlNotebooks.Items.Remove(nbName); }
@@ -566,7 +594,7 @@ namespace myNotebooks.subforms
 				if (ddlNotebooks.Items.Count == 1)
 				{
 					ddlNotebooks.SelectedIndex = 0;
-					ShowHideMenusAndControls(SelectionState.NotebookSelectedNotLoaded);
+					//ShowHideMenusAndControls(SelectionState.NotebookSelectedNotLoaded);
 					txtJournalPIN.Focus();
 				}
 
@@ -726,7 +754,7 @@ namespace myNotebooks.subforms
 				if (frm.Notebook != null && frm.Notebook.Name.Length > 0)
 				{
 					frm.Notebook.LastSaved = DateTime.Now;
-					frm.Notebook.FileName = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + frm.Notebook.Name;
+					frm.Notebook.FolderName = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + frm.Notebook.Name;
 					await frm.Notebook.Create();
 					//await Utilities.PopulateAllNotebookNames();
 					LoadNotebooks();

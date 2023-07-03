@@ -112,7 +112,7 @@ namespace myNotebooks.objects
 				if (j2.Settings.AllowCloud)
 				{
 					if (j2.Settings.IfLocalOnly_Delete) { j2.Delete(); }
-					else if (j2.Settings.IfLocalOnly_Upload) { await AzureFileClient.UploadFile(j2.FileName); }
+					else if (j2.Settings.IfLocalOnly_Upload) { await AzureFileClient.UploadFile(j2.FolderName); }
 					else if (j2.Settings.IfLocalOnly_DisallowCloud) { j2.Settings.AllowCloud = false; await j2.Save(); }
 				}
 			}
@@ -183,11 +183,11 @@ namespace myNotebooks.objects
 										//ItemsSkipped.Add(book.Name + " (files match)");
 										break;
 									case ComparisonResult.LocalNewer:
-										await AzureFileClient.UploadFile(book.FileName);
+										await AzureFileClient.UploadFile(book.FolderName);
 										//ItemsSynchd.Add(book.FileName + "up'd (newer)");
 										break;
 									case ComparisonResult.CloudNewer:
-										File.Move(cloudNotebook.FileName, book.FileName, true);
+										File.Move(cloudNotebook.FolderName, book.FolderName, true);
 										//ItemsDownloaded.Add(book.Name + " (syncd from cloud)");
 										break;
 								}
@@ -214,14 +214,14 @@ namespace myNotebooks.objects
 								// Get the cloud book. The local copy will have been saved so it's newer, but the cloud one is what we want since it has the latest updates.
 								await AzureFileClient.DownloadOrDeleteFile(tempFolder + book.Name, Program.AzurePassword + book.Name);
 								cloudNotebook = File.Exists(tempFolder + book.Name) ? new Notebook(book.Name, tempFolder + book.Name).Open(true) : null;
-								File.Move(cloudNotebook.FileName, book.FileName, true);
+								File.Move(cloudNotebook.FolderName, book.FolderName, true);
 
 								//await book.Save();
 							}
 							else
 							{
-								if (book.Settings.IfLocalOnly_Upload)			{ await AzureFileClient.UploadFile(book.FileName); }
-								if (book.Settings.IfLocalOnly_Delete)			{ File.Delete(book.FileName); }
+								if (book.Settings.IfLocalOnly_Upload)			{ await AzureFileClient.UploadFile(book.FolderName); }
+								if (book.Settings.IfLocalOnly_Delete)			{ File.Delete(book.FolderName); }
 								if (book.Settings.IfLocalOnly_DisallowCloud)	{ book.Settings.AllowCloud = false; }
 							}
 						}
@@ -257,11 +257,11 @@ namespace myNotebooks.objects
 			{
 				if (notebook != null)
 				{
-					if (notebook.FileName.EndsWith(" (local)") & notebook.Entries.Count == 1)
+					if (notebook.FolderName.EndsWith(" (local)") & notebook.Entries.Count == 1)
 					{
-						var sOldName = notebook.FileName;
-						var sNewName = notebook.FileName.Substring(0, notebook.FileName.LastIndexOf("\\") + 1) + notebook.Name;
-						notebook.FileName = sNewName;
+						var sOldName = notebook.FolderName;
+						var sNewName = notebook.FolderName.Substring(0, notebook.FolderName.LastIndexOf("\\") + 1) + notebook.Name;
+						notebook.FolderName = sNewName;
 						File.Move(sOldName, sNewName);
 						if (notebook.Settings.AllowCloud) { await AzureFileClient.UploadFile(notebooksFolder + notebook.Name); }
 						return;
