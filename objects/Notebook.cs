@@ -38,7 +38,7 @@ namespace myNotebooks
             {
 				this.Name = _name;
 				if (_fileName != null) { this.FolderName = _fileName; }
-				else { this.FolderName = Program.GroupsFolder + Program.GroupName_Encrypted + "\\" + this.Name; }	// Program.AppRoot + this.root + this.Name; }
+				else { this.FolderName = Program.GroupsFolder + Program.GroupName_Encrypted + "\\" + this.Name; }
 			}
 		}
 
@@ -172,13 +172,13 @@ namespace myNotebooks
 						BinaryFormatter formatter = new BinaryFormatter();
 						nbRtrn					= (Notebook)formatter.Deserialize(stream);
 						//nbRtrn.Name				= EncryptDecrypt			.Decrypt(nbRtrn.Name);
-						if(!nbRtrn.Name.Equals(" <decrypt failed> "))
+						if(!nbRtrn.Name.Equals(" <decrypt failed> "))		// This is obsolete. Find another way to trap.
 						{
-							//nbRtrn.FolderName ;	//		= EncryptDecrypt			.Decrypt(nbRtrn.FileName);
-							//nbRtrn.Entries.ForEach(e => e.Title		= EncryptDecrypt.Decrypt(e.Title));
-							//nbRtrn.Entries.ForEach(e => e.Text		= EncryptDecrypt.Decrypt(e.Text));
-							//nbRtrn.Entries.ForEach(e => e.Labels	= EncryptDecrypt.Decrypt(e.Labels));
-							//nbRtrn.Entries.ForEach(e => e.RTF		= EncryptDecrypt.Decrypt(e.RTF));
+							//nbRtrn.FolderName;  //		= EncryptDecrypt			.Decrypt(nbRtrn.FileName);
+							nbRtrn.Entries.ForEach(e => e.Title = EncryptDecrypt.Decrypt(e.Title));
+							nbRtrn.Entries.ForEach(e => e.Text = EncryptDecrypt.Decrypt(e.Text));
+							nbRtrn.Entries.ForEach(e => e.Labels = EncryptDecrypt.Decrypt(e.Labels));
+							nbRtrn.Entries.ForEach(e => e.RTF = EncryptDecrypt.Decrypt(e.RTF));
 							//nbRtrn.Entries.ForEach(e => e.NotebookName = EncryptDecrypt.Decrypt(e.NotebookName));
 						}
 					}
@@ -310,21 +310,21 @@ namespace myNotebooks
 
 		public async Task	Save(bool synchWithCloud = true)
 		{
-			var encryptedName = EncryptDecrypt.Encrypt(this.Name).Replace("/", "_").Replace("+", "-");
-			var fName = this.FolderName.Length > 0 ? this.FolderName : Program.GroupsFolder + encryptedName;
-			fName = fName.Contains("\\") ? fName + "\\" + encryptedName : Program.GroupsFolder + encryptedName;
+			var fName = this.FolderName;	// Program.GroupsFolder + Program.GroupName_Encrypted + "\\" + this.Name;	// this.FolderName.Length > 0 ? this.FolderName : Program.GroupsFolder + Program.GroupName_Encrypted + "\\" + encryptedName;
+
+			//fName = fName.Contains("\\") ? fName + "\\" + encryptedName : Program.GroupsFolder + encryptedName;
 
 			if(File.Exists(fName)) File.Delete(fName);
 
-			// Encrypt the notebook and entries to save to disk.
-			//this.LastSaved			= DateTime.Now;
-			//this.FileName			= EncryptDecrypt				.Encrypt(this.FileName);
-			//this.Name				= EncryptDecrypt				.Encrypt(this.Name);
-			//this.Entries.ForEach(e	=> e.Title	= EncryptDecrypt	.Encrypt(e.Title));
-			//this.Entries.ForEach(e	=> e.Text	= EncryptDecrypt	.Encrypt(e.Text));
-			//this.Entries.ForEach(e	=> e.Labels = EncryptDecrypt	.Encrypt(e.Labels));
-			//this.Entries.ForEach(e	=> e.RTF	= EncryptDecrypt	.Encrypt(e.RTF));
-			//this.Entries.ForEach(e	=> e.NotebookName = EncryptDecrypt.Encrypt(e.NotebookName));
+			//Encrypt the notebook and entries to save to disk.
+			this.LastSaved = DateTime.Now;
+			//this.FileName = EncryptDecrypt.Encrypt(this.FileName);
+			//this.Name				= EncryptDecrypt.Encrypt(this.Name);
+			this.Entries.ForEach(e	=> e.Title = EncryptDecrypt.Encrypt(e.Title));
+			this.Entries.ForEach(e	=> e.Text = EncryptDecrypt.Encrypt(e.Text));
+			this.Entries.ForEach(e	=> e.Labels = EncryptDecrypt.Encrypt(e.Labels));
+			this.Entries.ForEach(e	=> e.RTF = EncryptDecrypt.Encrypt(e.RTF));
+			this.Entries.ForEach(e	=> e.NotebookName = EncryptDecrypt.Encrypt(e.NotebookName));
 
 			using (Stream stream = File.Open(fName, FileMode.Create))
 			{

@@ -11,8 +11,10 @@ namespace Encryption
 {
     class EncryptDecrypt
     {
-        public static string Encrypt(string TextToEncrypt)
+        public static string Encrypt(string TextToEncrypt, bool UseGroupPin = false)
         {
+			var curPin = Program.PIN;
+			if (UseGroupPin) { Program.PIN = Program.GroupPIN; }
 			string encryptionKey = AESPin(Program.PIN) ;
 			byte[] clearBytes = Encoding.Unicode.GetBytes(TextToEncrypt);
 
@@ -32,7 +34,9 @@ namespace Encryption
 					TextToEncrypt = Convert.ToBase64String(ms.ToArray());
 				}
 			}
-			return TextToEncrypt;
+
+			Program.PIN = curPin;
+			return TextToEncrypt.Replace("/", "_").Replace("+", "-");
 
 			//string s = AESThenHMAC.SimpleEncryptWithPassword(TextToEncrypt, AESPin(Program.PIN));
 			//return s;
@@ -77,8 +81,10 @@ namespace Encryption
 			//        }
 		}
 
-        public static string Decrypt(string TextToDecrypt)
+        public static string Decrypt(string TextToDecrypt, bool UseGroupPin = false)
 		{
+			var curPin = Program.PIN;
+			if(UseGroupPin) { Program.PIN = Program.GroupPIN; }
 			if(TextToDecrypt.Contains("_") | TextToDecrypt.Contains("-")) { TextToDecrypt = TextToDecrypt.Replace("_", "/").Replace("-", "+"); }
 			string encryptionKey = AESPin(Program.PIN);
 			byte[] cipherBytes = Convert.FromBase64String(TextToDecrypt);
@@ -97,6 +103,8 @@ namespace Encryption
 					TextToDecrypt = Encoding.Unicode.GetString(ms.ToArray());
 				}
 			}
+
+			Program.PIN = curPin;
 			return TextToDecrypt;
 			//string s = AESThenHMAC.SimpleDecryptWithPassword(TextToDecrypt, AESPin(Program.PIN));
 			//return s;

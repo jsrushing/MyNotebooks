@@ -29,10 +29,10 @@ namespace myNotebooks.objects
 			else
 			{
 				List<string> s = Directory.GetFiles(Program.GroupsFolder + Program.GroupName_Encrypted).ToList();
-
+				var curPin = Program.PIN;
+				Program.PIN = Program.GroupPIN;
 				Program.AllNotebookNames.AddRange(s.Select(s => EncryptDecrypt.Decrypt(s[(s.LastIndexOf("\\") + 1)..])));
-
-
+				Program.PIN = curPin;
 			}
 		} 
 

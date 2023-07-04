@@ -66,7 +66,7 @@ namespace myNotebooks.subforms
 
 			lblMessage.Text = msg;
 			msg = msg.Replace("\\n", "  ");
-			var lineLength = 30;
+			var lineLength = 40;
 			lblMessage.Height = (int)Math.Ceiling((double)msg.Length / lineLength) <= 1 ? 25 : 25 * ((int)Math.Ceiling((double)msg.Length / lineLength));
 			lblSelectFromLabelsList.Visible = false;
 

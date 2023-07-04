@@ -48,7 +48,7 @@ namespace myNotebooks
 		public Entry(string _title, string _text, string _RTF, string _labels, string _notebookName = "", bool _edited = false)
         {
 			if(Date == DateTime.MinValue) { Date = DateTime.Now; }
-
+			 
 			Text			= _text.Trim();
 			Title			= _title.Trim();
 			RTF				= _RTF;

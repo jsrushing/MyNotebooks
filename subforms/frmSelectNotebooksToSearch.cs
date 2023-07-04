@@ -114,7 +114,6 @@ namespace myNotebooks.subforms
 			lstNotebookPINs.SetItemChecked(itemIndex, true);
 			lstNotebookPINs.SelectedItems.Add(s);
 			allowSelection = true;
-
 		}
 
 		private async void btnDone_Click(object sender, EventArgs e)
@@ -282,9 +281,11 @@ namespace myNotebooks.subforms
 		{
 			foreach (var checkedItem in lstNotebookPINs.CheckedItems.OfType<string>().ToList())
 			{
-				if (!Program.DictCheckedNotebooks.Keys.Contains(Scrubbed(checkedItem)) && !checkedItem.Equals(ShowMoreString))
+				var encryptedItem = EncryptDecrypt.Encrypt(Scrubbed(checkedItem));
+
+				if (!Program.DictCheckedNotebooks.Keys.Contains(encryptedItem) && !checkedItem.Equals(ShowMoreString))
 				{
-					Program.DictCheckedNotebooks.Add(checkedItem, "");
+					Program.DictCheckedNotebooks.Add(encryptedItem, "");
 				}
 			}
 		}

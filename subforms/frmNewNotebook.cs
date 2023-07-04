@@ -3,54 +3,49 @@
  */
 using System;
 using System.Windows.Forms;
+using Encryption;
 using myNotebooks.objects;
+using MyNotebooks.Properties;
 
 namespace myNotebooks.subforms
 {
 	public partial class frmNewNotebook : Form
 	{
-		public Notebook Notebook { get; private set; }
-
-		public frmNewNotebook(Form parent)
+		public Notebook WorkingNotebook { get; private set; }
+		public NotebookSettings WorkingSettings = new NotebookSettings { IfCloudOnly_Download = true, IfLocalOnly_Upload = true, AllowCloud = true };
+	public frmNewNotebook(Form parent)
 		{
 			InitializeComponent();
 			Utilities.SetStartPosition(this, parent);
-			this.Notebook = new Notebook("", "", this);
-			Notebook.Settings = new NotebookSettings { IfCloudOnly_Download = true, IfLocalOnly_Upload = true, AllowCloud = true };
+			this.WorkingNotebook = null;
 		}
 
 		private void btnSettings_Click(object sender, EventArgs e)
 		{
 			if (txtName.Text.Length > 0)
 			{
-				Notebook.Name = txtName.Text;
-				using (frmNotebookSettings nbs = new frmNotebookSettings(Notebook, this, false)) { nbs.ShowDialog(); }
+				WorkingNotebook = new Notebook(EncryptDecrypt.Encrypt(txtName.Text));
+				WorkingNotebook.Settings = WorkingSettings;
+				using (frmNotebookSettings nbs = new frmNotebookSettings(WorkingNotebook, this, false)) { nbs.ShowDialog(); }
 			}
 		}
 
-		private void frmNewJournal_Load(object sender, EventArgs e) { this.Size = this.MinimumSize; }
+		private void frmNewNotebook_Load(object sender, EventArgs e) { this.Size = this.MinimumSize; }
 
-		private void frmNewJournal_Activated(object sender, EventArgs e) { txtName.Focus(); }
+		private void frmNewNotebook_Activated(object sender, EventArgs e) { txtName.Focus(); }
 
-		private void btnCancel_Click(object sender, EventArgs e) { this.Hide(); }
+		private void btnCancel_Click(object sender, EventArgs e) 
+		{ 
+			WorkingNotebook = null; 
+			this.Hide(); 
+		}
 
 		private void btnOk_Click(object sender, EventArgs e)
 		{
-			//char[] c = System.IO.Path.GetInvalidFileNameChars();
-
-			//if (Utilities.FileNameIsValid(txtName.Text))
-			//{
-				NotebookSettings nbs	= Notebook.Settings;
-				this.Notebook			= new Notebook(txtName.Text, null, this);
-				Notebook.Settings		= nbs;
-				Program.PIN				= txtPIN.Text;
-				this.Hide();
-			//}
-			//else
-			//{
-			//	using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, Program.InvalidFileName, "", this))
-			//	{ frm.ShowDialog(); }
-			//}
+			this.WorkingNotebook = WorkingNotebook == null ?  new Notebook(EncryptDecrypt.Encrypt(txtName.Text, true), null, this) : WorkingNotebook;
+			WorkingNotebook.Settings = WorkingNotebook.Settings == null ? WorkingSettings : WorkingNotebook.Settings;
+			Program.PIN = txtPIN.Text;
+			this.Hide();
 		}
 
 		private void lblShowPIN_Click(object sender, EventArgs e)
@@ -76,5 +71,7 @@ namespace myNotebooks.subforms
 			}
 
 		}
+
+		private void frmNewNotebook_FormClosing(object sender, FormClosingEventArgs e) { } // Notebook = null; }
 	}
 }

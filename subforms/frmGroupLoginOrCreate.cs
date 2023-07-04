@@ -26,7 +26,7 @@ namespace myJournal.subforms
 		}
 
 		private void EnableDisableBtnOK(object sender, EventArgs e)
-		{ btnOK.Enabled = txtName.Text.Length > 0 & txtPwd.Text.Length > 0; }
+		{ btnOK.Enabled = txtName.Text.Length > 0; }
 
 		private void frmGroupLoginOrCreate_Load(object sender, EventArgs e)
 		{
@@ -75,7 +75,7 @@ namespace myJournal.subforms
 				if (Program.GroupName_Encrypted != null)
 				{
 					Program.GroupPIN = txtPwd.Text;
-					msg = "You are logged in to '" + txtName.Text + "'";
+					msg = "You are logged in to '" + txtName.Text + "'.";
 				}
 				else
 				{
@@ -92,7 +92,7 @@ namespace myJournal.subforms
 				// now save all nb's w/ their name encrypted with program.GroupPIN
 			}
 
-			using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, msg)) { frm.ShowDialog(); }
+			using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, msg, "Opersation Complete", this)) { frm.ShowDialog(); }
 			this.Close();
 		}
 
@@ -106,11 +106,6 @@ namespace myJournal.subforms
 		{
 			txtPwd.PasswordChar = txtPwd.PasswordChar == '*' ? '\0' : '*';
 			lblShowPIN.Text = lblShowPIN.Text == "show" ? "hide" : "show";
-		}
-
-		private void EnableDisableOKBtn(object sender, EventArgs e)
-		{
-			btnOK.Enabled = txtName.Text.Length > 0 & txtPwd.Text.Length > 0;
 		}
 	}
 }
