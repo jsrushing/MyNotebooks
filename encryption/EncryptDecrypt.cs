@@ -84,6 +84,11 @@ namespace Encryption
         public static string Decrypt(string TextToDecrypt, bool UseGroupPin = false)
 		{
 			if(TextToDecrypt.Contains("_") | TextToDecrypt.Contains("-")) { TextToDecrypt = TextToDecrypt.Replace("_", "/").Replace("-", "+"); }
+			var curPIN = Program.PIN;
+			if (UseGroupPin) { Program.PIN = Program.GroupPIN; }
+
+			var v = TextToDecrypt.Length;
+
 			string encryptionKey = AESPin(Program.PIN);
 			byte[] cipherBytes = Convert.FromBase64String(TextToDecrypt);
 			using (Aes encryptor = Aes.Create())
@@ -102,6 +107,7 @@ namespace Encryption
 				}
 			}
 
+			Program.PIN = curPIN;
 			return TextToDecrypt;
 
 			//string s = AESThenHMAC.SimpleDecryptWithPassword(TextToDecrypt, AESPin(Program.PIN));
