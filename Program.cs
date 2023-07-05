@@ -17,6 +17,7 @@ namespace myNotebooks
 		public static string			AppVersion				= string.Empty;
 		public static string			AzurePassword			= string.Empty;
 		public static string			GroupsFolder			= Program.AppRoot + "groups\\";
+		public static string			GroupFolder				= string.Empty;
 		public static string			GroupPIN				= string.Empty;
 		// add public static string s = configmgr[""] ... for all paths, etc. which are called out in app.config.
 		public static string			GroupName_Encrypted		= string.Empty; // reference to folder name (encrypted) in groups\ folder. Used for creating new nbooks & labels

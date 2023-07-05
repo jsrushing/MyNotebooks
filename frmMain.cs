@@ -191,7 +191,7 @@ namespace myNotebooks.subforms
 
 		private async void frmMain_Load(object sender, EventArgs e)
 		{
-			using(frmGroupLoginOrCreate frm = new frmGroupLoginOrCreate()) { frm.ShowDialog(); }
+			using(frmGroupLoginOrCreate frm = new frmGroupLoginOrCreate(false, this)) { frm.ShowDialog(); }
 
 			if(Program.AllNotebookNames.Count > 0)
 			{
@@ -226,6 +226,7 @@ namespace myNotebooks.subforms
 			System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
 			System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
 			this.Text = "MyNotebooks " + Program.AppVersion + (fvi.FileName.ToLower().Contains("debug") ? " - DEBUG MODE" : "");
+			mnuSwitchAccount.Text = "Current Group: '" + EncryptDecrypt.Decrypt(Program.GroupName_Encrypted, true) + "'";
 
 			#region one-time code
 
@@ -322,40 +323,16 @@ namespace myNotebooks.subforms
 			//Program.AzurePassword = string.Empty;	// Kills the Azure synch process for debugging if desired.
 
 			// Populate Program.DictCheckedNotebooks
-
 			pnlDateFilters.Left = pnlPin.Left - 11;
 			ShowHideMenusAndControls(SelectionState.HideAll);
 			await Utilities.PopulateAllNotebookNames();
 			if(ddlNotebooks.Items.Count == 0) { LoadNotebooks(); }
 
-			//if (Program.AzurePassword.Length > 0)
-			//{
-			//	CloudSynchronizer cs = new CloudSynchronizer();
-			//	await cs.SynchWithCloud(false, null, true);
-			//}
-
-			//await Utilities.PopulateAllNotebookNames();
-			//LoadNotebooks();
-
-			//if (ddlNotebooks.Items.Count == 0)
-			//{
-			//	using (frmNewNotebook frm = new frmNewNotebook(this))
-			//	{
-			//		frm.ShowDialog();
-
-			//		if (frm.Notebook != null)
-			//		{
-			//			await frm.Notebook.Create();
-			//			LoadNotebooks();
-			//		}
-			//		else
-			//		{
-			//			using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.Message, "At least one notebook must exist. " +
-			//				"Please re-open the program and create a notebook.", "One Notebook Must Exist", this))
-			//			{ frm2.ShowDialog(); this.Close(); }
-			//		}
-			//	}
-			//}
+			if (Program.AzurePassword.Length > 0)
+			{
+				//CloudSynchronizer cs = new CloudSynchronizer();
+				//await cs.SynchWithCloud(false, null, true);
+			}
 
 			this.Cursor = Cursors.Default;
 		}
@@ -889,18 +866,25 @@ namespace myNotebooks.subforms
 
 		private async void mnuSwitchAccount_Click(object sender, EventArgs e)
 		{
-			frmAzurePwd ap = new frmAzurePwd(this, frmAzurePwd.Mode.ChangingKey);
+			using(frmGroupLoginOrCreate frm = new frmGroupLoginOrCreate(true, this)) { frm.ShowDialog(); }
+			mnuSwitchAccount.Text = "Current Group: '" + EncryptDecrypt.Decrypt(Program.GroupName_Encrypted, true) + "'";
+			Program.AllNotebookNames.Clear();
+			Program.DictCheckedNotebooks.Clear();
+			using(frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(this)) { frm.ShowDialog(); }
+			LoadNotebooks();
 
-			if (ap.KeyChanged)
-			{
-				CheckForSystemDirectories(true);
+			//frmAzurePwd ap = new frmAzurePwd(this, frmAzurePwd.Mode.ChangingKey);
 
-				if (Program.AzurePassword.Length > 0)
-				{
-					CloudSynchronizer cs = new CloudSynchronizer();
-					await cs.SynchWithCloud();
-				}
-			}
+			//if (ap.KeyChanged)
+			//{
+			//	CheckForSystemDirectories(true);
+
+			//	if (Program.AzurePassword.Length > 0)
+			//	{
+			//		CloudSynchronizer cs = new CloudSynchronizer();
+			//		await cs.SynchWithCloud();
+			//	}
+			//}
 		}
 
 		private async Task PopulateLabelsSummary()
