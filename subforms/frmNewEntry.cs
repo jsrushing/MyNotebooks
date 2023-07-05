@@ -242,7 +242,7 @@ namespace myNotebooks.subforms
 		private void SetIsDirty(bool dirty)
 		{
 			var v = CurrentNotebook.Entries.ToArray().Where(e => e.Title == txtNewEntryTitle.Text);
-			lblTitleExists.Visible = v.Count() > 0;
+			lblTitleExists.Visible = !IsEdit && v.Count() > 0;
 
 			if (!lblTitleExists.Visible)
 			{
@@ -254,7 +254,7 @@ namespace myNotebooks.subforms
 				}
 
 				if (this.Entry != null & CurrentNotebook != null)
-				{ this.Text = "editing '" + Entry.Title + "' in '" + CurrentNotebook.Name + "'"; }
+				{ this.Text = "editing '" + Entry.Title + "' in '" + EncryptDecrypt.Decrypt(CurrentNotebook.Name) + "'"; }
 				else
 				{ this.Text = dirty ? OriginalTitle + "*" : OriginalTitle; }
 			}

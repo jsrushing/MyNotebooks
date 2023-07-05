@@ -171,15 +171,13 @@ namespace myNotebooks
 					{
 						BinaryFormatter formatter = new BinaryFormatter();
 						nbRtrn					= (Notebook)formatter.Deserialize(stream);
-						//nbRtrn.Name				= EncryptDecrypt			.Decrypt(nbRtrn.Name);
+
 						if(!nbRtrn.Name.Equals(" <decrypt failed> "))		// This is obsolete. Find another way to trap.
 						{
-							//nbRtrn.FolderName;  //		= EncryptDecrypt			.Decrypt(nbRtrn.FileName);
-							nbRtrn.Entries.ForEach(e => e.Title = EncryptDecrypt.Decrypt(e.Title));
-							nbRtrn.Entries.ForEach(e => e.Text = EncryptDecrypt.Decrypt(e.Text));
-							nbRtrn.Entries.ForEach(e => e.Labels = EncryptDecrypt.Decrypt(e.Labels));
-							nbRtrn.Entries.ForEach(e => e.RTF = EncryptDecrypt.Decrypt(e.RTF));
-							//nbRtrn.Entries.ForEach(e => e.NotebookName = EncryptDecrypt.Decrypt(e.NotebookName));
+							nbRtrn.Entries.ForEach(e => e.Title		= EncryptDecrypt.Decrypt(e.Title));
+							nbRtrn.Entries.ForEach(e => e.Text		= EncryptDecrypt.Decrypt(e.Text));
+							nbRtrn.Entries.ForEach(e => e.Labels	= EncryptDecrypt.Decrypt(e.Labels));
+							nbRtrn.Entries.ForEach(e => e.RTF		= EncryptDecrypt.Decrypt(e.RTF));
 						}
 					}
 				}	
@@ -318,13 +316,11 @@ namespace myNotebooks
 
 			//Encrypt the notebook and entries to save to disk.
 			this.LastSaved = DateTime.Now;
-			//this.FileName = EncryptDecrypt.Encrypt(this.FileName);
-			//this.Name				= EncryptDecrypt.Encrypt(this.Name);
-			this.Entries.ForEach(e	=> e.Title = EncryptDecrypt.Encrypt(e.Title));
-			this.Entries.ForEach(e	=> e.Text = EncryptDecrypt.Encrypt(e.Text));
-			this.Entries.ForEach(e	=> e.Labels = EncryptDecrypt.Encrypt(e.Labels));
-			this.Entries.ForEach(e	=> e.RTF = EncryptDecrypt.Encrypt(e.RTF));
-			this.Entries.ForEach(e	=> e.NotebookName = EncryptDecrypt.Encrypt(e.NotebookName));
+			this.Entries.ForEach(e	=> e.Title		= EncryptDecrypt.Encrypt(e.Title));
+			this.Entries.ForEach(e	=> e.Text		= EncryptDecrypt.Encrypt(e.Text));
+			this.Entries.ForEach(e	=> e.Labels		= EncryptDecrypt.Encrypt(e.Labels));
+			this.Entries.ForEach(e	=> e.RTF		= EncryptDecrypt.Encrypt(e.RTF));
+			//this.Entries.ForEach(e	=> e.NotebookName = EncryptDecrypt.Encrypt(e.NotebookName));
 
 			using (Stream stream = File.Open(fName, FileMode.Create))
 			{
@@ -342,13 +338,10 @@ namespace myNotebooks
 			//}
 
 			// Decrypt the notebook and entries to hold in memory.
-			//this.FileName			= EncryptDecrypt			.Decrypt(this.FileName);
-			//this.Name				= EncryptDecrypt			.Decrypt(this.Name);
-			//this.Entries.ForEach(e	=> e.Title	= EncryptDecrypt.Decrypt(e.Title));
-			//this.Entries.ForEach(e	=> e.Text	= EncryptDecrypt.Decrypt(e.Text));
-			//this.Entries.ForEach(e	=> e.Labels = EncryptDecrypt.Decrypt(e.Labels));=
-			//this.Entries.ForEach(e	=> e.RTF	= EncryptDecrypt.Decrypt(e.RTF));
-			//this.Entries.ForEach(e	=> e.NotebookName = EncryptDecrypt.Decrypt(e.NotebookName));
+			this.Entries.ForEach(e	=> e.Title		= EncryptDecrypt.Decrypt(e.Title));
+			this.Entries.ForEach(e	=> e.Text		= EncryptDecrypt.Decrypt(e.Text));
+			this.Entries.ForEach(e	=> e.Labels		= EncryptDecrypt.Decrypt(e.Labels));
+			this.Entries.ForEach(e	=> e.RTF		= EncryptDecrypt.Decrypt(e.RTF));
 
 			//Backup();
 			await Utilities.PopulateAllNotebookNames();
@@ -403,15 +396,6 @@ namespace myNotebooks
 				}
 			}
 			return allEntries;
-		}
-
-		protected struct EntryValues
-		{
-			public string title;
-			public string text;
-			public string labels;
-			public string RTF;
-			public string notebookName;
 		}
     }
 
