@@ -651,7 +651,7 @@ namespace myNotebooks.subforms
 
 			using (frmNewEntry frm = new frmNewEntry(this, CurrentNotebook))
 			{
-				frm.Text = "New entry in " + CurrentNotebook.Name;
+				frm.Text = "New entry in '" + EncryptDecrypt.Decrypt(CurrentNotebook.Name, true) + "'";
 
 				frm.ShowDialog(this);
 
