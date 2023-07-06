@@ -20,6 +20,7 @@ namespace myJournal.subforms
 		public bool Cancelled { get; private set; } = false;
 		private bool LoggingIn;
 		private string[] GroupDirectories = Directory.GetDirectories(Program.GroupsFolder);
+		public frmMessage.ReturnResult Result { get; private set; } = frmMessage.ReturnResult.Cancel;
 
 		public frmGroupLoginOrCreate(bool doAutoLogin, Form parent)
 		{
@@ -54,7 +55,7 @@ namespace myJournal.subforms
 
 		private void btnCancel_Click(object sender, EventArgs e)
 		{
-			Cancelled = true;
+			Result = frmMessage.ReturnResult.Cancel;
 			this.Hide();
 		}
 
@@ -66,6 +67,7 @@ namespace myJournal.subforms
 			var msg = "";
 			Program.GroupName_Encrypted = EncryptDecrypt.Encrypt(txtName.Text, Program.PIN_Master);
 			Program.GroupFolder = Program.GroupsFolder + Program.GroupName_Encrypted;
+			Result = frmMessage.ReturnResult.Ok;
 
 			if (LoggingIn)
 			{
@@ -81,6 +83,7 @@ namespace myJournal.subforms
 				else
 				{
 					msg = "No Group found with this name and PIN.";
+					Result = frmMessage.ReturnResult.Cancel;
 				}
 			}
 			else    // creating a new group

@@ -196,7 +196,7 @@ namespace myNotebooks.subforms
 			{ 
 				frm.ShowDialog();
 
-				if(frm.Result == frmMessage.ReturnResult.Cancel)
+				if(frm.Result != frmMessage.ReturnResult.Ok)
 				{
 					this.Close();
 					return;
@@ -214,7 +214,7 @@ namespace myNotebooks.subforms
 
 				if(curGroup.Length == 0) // Starting up. No group previously selected so close if Cancelled or form_closed.
 				{
-					if (frm.Cancelled && Program.GroupName_Encrypted.Length == 0)
+					if (frm.Result != frmMessage.ReturnResult.Ok)
 					{
 						this.Close();
 						return;
@@ -892,12 +892,11 @@ namespace myNotebooks.subforms
 		}
 
 		private async void mnuSwitchAccount_Click(object sender, EventArgs e)
-		{
-			using(frmGroupLoginOrCreate frm = new frmGroupLoginOrCreate(true, this)) 
+		{ using(frmGroupLoginOrCreate frm = new frmGroupLoginOrCreate(true, this)) 
 			{ 
 				frm.ShowDialog();
 
-				if (!frm.Cancelled)
+				if (frm.Result == frmMessage.ReturnResult.Ok)
 				{
 					mnuSwitchAccount.Text = "Current Group: '" + EncryptDecrypt.Decrypt(Program.GroupName_Encrypted, Program.PIN_Group) + "'";
 					Program.AllNotebookNames.Clear();
@@ -906,8 +905,7 @@ namespace myNotebooks.subforms
 					using(frmSelectNotebooksToSearch frm2 = new frmSelectNotebooksToSearch(this)) { frm2.ShowDialog(); }
 					LoadNotebooks();
 				}		
-			}
-		}
+			} }
 
 		private async Task PopulateLabelsSummary()
 		{
@@ -972,6 +970,7 @@ namespace myNotebooks.subforms
 
 		private void SetMnuSwitchAccountText()
 		{ mnuSwitchAccount.Text = "Current Group: '" + EncryptDecrypt.Decrypt(Program.GroupName_Encrypted, Program.PIN_Master) + "'"; }
+
 		private async void ShowHideMenusAndControls(SelectionState st)
 		{
 			if (st == SelectionState.NotebookSelectedNotLoaded)
