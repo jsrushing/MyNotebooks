@@ -191,9 +191,38 @@ namespace myNotebooks.subforms
 
 		private async void frmMain_Load(object sender, EventArgs e)
 		{
-			using(frmGroupLoginOrCreate frm = new frmGroupLoginOrCreate(false, this)) { frm.ShowDialog(); }
+			using(frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "What is the Master PIN?", "Enter PIN", this)) 
+			{ 
+				frm.ShowDialog();
+				if(frm.Result == frmMessage.ReturnResult.Cancel)
+				{
+					this.Close();
+					return;
+				}
 
-			if(Program.AllNotebookNames.Count > 0)
+				Program.PIN_Master = frm.ResultText;
+			}
+
+			// check for previous groups file - approot + settings + previousgroup
+			if (File.Exists(Program.AppRoot + "settings\\previousgroups"))
+			{
+				// read file, decrypting w/ master pin
+				foreach (string group in File.ReadAllLines(Program.AppRoot + "settings\\previousgroups"))
+				{ Program.PreviousGroups.Add(EncryptDecrypt.Decrypt(group, Program.PIN_Master)); }
+			}
+
+			using(frmGroupLoginOrCreate frm = new frmGroupLoginOrCreate(false, this)) 
+			{ 
+				frm.ShowDialog(); 
+
+				if(frm.GroupName == null) 
+				{ 
+					this.Close();
+					return;
+				}
+			}
+
+			if(Program.GroupFolder.Length > 0 & Program.AllNotebookNames.Count > 0)
 			{
 				using(frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch
 					(this, "Select notebooks to work with. Notebooks which are PIN-protected can't be synchronized unless you provide the PIN. You can Export and Import selections below.")) 
@@ -209,6 +238,7 @@ namespace myNotebooks.subforms
 					if (frm.WorkingNotebook != null)
 					{
 						await frm.WorkingNotebook.Create();
+						//Program.AllNotebookNames.Add(EncryptDecrypt.Decrypt(frm.WorkingNotebook.Name, Program.PIN_Group));
 						LoadNotebooks();
 					}
 					else
@@ -220,13 +250,11 @@ namespace myNotebooks.subforms
 				}
 			}
 
-
-
 			this.Cursor = Cursors.WaitCursor;
 			System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
 			System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
 			this.Text = "MyNotebooks " + Program.AppVersion + (fvi.FileName.ToLower().Contains("debug") ? " - DEBUG MODE" : "");
-			mnuSwitchAccount.Text = "Current Group: '" + EncryptDecrypt.Decrypt(Program.GroupName_Encrypted, true) + "'";
+			SetMnuSwitchAccountText();
 
 			#region one-time code
 
@@ -351,14 +379,14 @@ namespace myNotebooks.subforms
 			this.Cursor = Cursors.WaitCursor;
 			lstEntries.Items.Clear();
 			rtbSelectedEntry.Text = string.Empty;
-			Program.PIN = txtJournalPIN.Text;
+			Program.PIN_Notebooks = txtJournalPIN.Text;
 			lblWrongPin.Visible = false;
 
-			CurrentNotebook = CurrentNotebook == null ? new Notebook(EncryptDecrypt.Encrypt(ddlNotebooks.Text, true)).Open(true) : CurrentNotebook;
+			CurrentNotebook = CurrentNotebook == null ? new Notebook(EncryptDecrypt.Encrypt(ddlNotebooks.Text, Program.PIN_Group)).Open(true) : CurrentNotebook;
 
 			if (CurrentNotebook != null && Program.DictCheckedNotebooks.Count == 1 && Program.DictCheckedNotebooks.Keys.Contains(CurrentNotebook.Name)) { Program.DictCheckedNotebooks.Clear(); }
 
-			if (Program.DictCheckedNotebooks.Count == 0) { Program.DictCheckedNotebooks.Add(EncryptDecrypt.Encrypt(ddlNotebooks.Text, true), txtJournalPIN.Text); }
+			if (Program.DictCheckedNotebooks.Count == 0) { Program.DictCheckedNotebooks.Add(EncryptDecrypt.Encrypt(ddlNotebooks.Text, Program.PIN_Notebooks), txtJournalPIN.Text); }
 			var wrongPIN = true;
 
 			if (CurrentNotebook != null)
@@ -556,7 +584,7 @@ namespace myNotebooks.subforms
 				lvi = new ListViewItem();
 				lvi.Font = new Font(f.Name, 8);
 				lvi.Text = f.Name;
-				Program.lstFonts.Add(lvi);
+				//Program.lstFonts.Add(lvi);
 			}
 		}
 
@@ -651,7 +679,7 @@ namespace myNotebooks.subforms
 
 			using (frmNewEntry frm = new frmNewEntry(this, CurrentNotebook))
 			{
-				frm.Text = "New entry in '" + EncryptDecrypt.Decrypt(CurrentNotebook.Name, true) + "'";
+				frm.Text = "New entry in '" + EncryptDecrypt.Decrypt(CurrentNotebook.Name, Program.PIN_Group) + "'";
 
 				frm.ShowDialog(this);
 
@@ -867,9 +895,10 @@ namespace myNotebooks.subforms
 		private async void mnuSwitchAccount_Click(object sender, EventArgs e)
 		{
 			using(frmGroupLoginOrCreate frm = new frmGroupLoginOrCreate(true, this)) { frm.ShowDialog(); }
-			mnuSwitchAccount.Text = "Current Group: '" + EncryptDecrypt.Decrypt(Program.GroupName_Encrypted, true) + "'";
+			mnuSwitchAccount.Text = "Current Group: '" + EncryptDecrypt.Decrypt(Program.GroupName_Encrypted, Program.PIN_Group) + "'";
 			Program.AllNotebookNames.Clear();
 			Program.DictCheckedNotebooks.Clear();
+			SetMnuSwitchAccountText();
 			using(frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(this)) { frm.ShowDialog(); }
 			LoadNotebooks();
 
@@ -948,6 +977,8 @@ namespace myNotebooks.subforms
 			this.Text = CurrentNotebook != null ? CurrentNotebook.Settings.AllowCloud ? this.Text : this.Text + " (local)" : this.Text;
 		}
 
+		private void SetMnuSwitchAccountText()
+		{ mnuSwitchAccount.Text = "Current Group: '" + EncryptDecrypt.Decrypt(Program.GroupName_Encrypted, Program.PIN_Master) + "'"; }
 		private async void ShowHideMenusAndControls(SelectionState st)
 		{
 			if (st == SelectionState.NotebookSelectedNotLoaded)

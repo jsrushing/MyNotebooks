@@ -11,11 +11,11 @@ namespace Encryption
 {
     class EncryptDecrypt
     {
-        public static string Encrypt(string TextToEncrypt, bool UseGroupPin = false)
+        public static string Encrypt(string TextToEncrypt, string pin = "")
         {
-			var curPin = Program.PIN;
-			if (UseGroupPin) { Program.PIN = Program.GroupPIN; }
-			string encryptionKey = AESPin(Program.PIN) ;
+			var curPin = Program.PIN_Notebooks;
+			if (pin.Length == 0) { pin = Program.PIN_Notebooks; }
+			string encryptionKey = AESPin(pin) ;
 			byte[] clearBytes = Encoding.Unicode.GetBytes(TextToEncrypt);
 
 			using (Aes encryptor = Aes.Create())
@@ -35,7 +35,7 @@ namespace Encryption
 				}
 			}
 
-			Program.PIN = curPin;
+			Program.PIN_Notebooks = curPin;
 			return TextToEncrypt.Replace("/", "_").Replace("+", "-");
 
 			//string s = AESThenHMAC.SimpleEncryptWithPassword(TextToEncrypt, AESPin(Program.PIN));
@@ -81,18 +81,16 @@ namespace Encryption
 			//        }
 		}
 
-        public static string Decrypt(string TextToDecrypt, bool UseGroupPin = false)
+        public static string Decrypt(string TextToDecrypt, string pin = "")
 		{
-			var curPIN = Program.PIN;
-
 			try
 			{
 				if(TextToDecrypt.Contains("_") | TextToDecrypt.Contains("-")) { TextToDecrypt = TextToDecrypt.Replace("_", "/").Replace("-", "+"); }
-				if (UseGroupPin) { Program.PIN = Program.GroupPIN; }
+				if (pin.Length == 0) { pin = Program.PIN_Notebooks; }
 
 				var v = TextToDecrypt.Length;
 
-				string encryptionKey = AESPin(Program.PIN);
+				string encryptionKey = AESPin(pin);
 				byte[] cipherBytes = Convert.FromBase64String(TextToDecrypt);
 				using (Aes encryptor = Aes.Create())
 				{
@@ -113,7 +111,6 @@ namespace Encryption
 			}
 			catch(Exception e) { TextToDecrypt = string.Empty; }
 
-			Program.PIN = curPIN;
 			return TextToDecrypt;
 
 			//string s = AESThenHMAC.SimpleDecryptWithPassword(TextToDecrypt, AESPin(Program.PIN));
@@ -164,7 +161,7 @@ namespace Encryption
 
 		private static string AESPin(string pin)
 		{
-			while(pin.Length < 12) { pin += pin; }
+			if(pin.Length > 0) { while(pin.Length < 12) { pin += pin; } }
 			return pin;
 		}
 

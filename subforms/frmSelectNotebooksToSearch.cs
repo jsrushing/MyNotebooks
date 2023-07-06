@@ -181,7 +181,7 @@ namespace myNotebooks.subforms
 				{
 					frm.ShowDialog();
 					var pinFileName = frm.PINFileName != null ? frm.PINFileName.Replace(".pin", "") : null;
-					Program.PIN = frm.PIN != null ? frm.PIN : string.Empty;
+					Program.PIN_Notebooks = frm.PIN != null ? frm.PIN : string.Empty;
 
 					if (pinFileName != null && pinFileName.Length > 0)
 					{
@@ -243,14 +243,14 @@ namespace myNotebooks.subforms
 							using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "What's the PIN?", "", this))
 							{
 								frm.ShowDialog(this);
-								Program.PIN = frm.ResultText;
+								Program.PIN_Notebooks = frm.ResultText;
 							}
 
 							// encrypt Program.DictCheckedNotebooks
 							StringBuilder sb = new StringBuilder();
 
 							foreach (var v in Program.DictCheckedNotebooks)
-							{ sb.AppendLine(EncryptDecrypt.Encrypt(v.Key) + "," + EncryptDecrypt.Encrypt(v.Value)); }
+							{ sb.AppendLine(EncryptDecrypt.Encrypt(v.Key, Program.PIN_Group) + "," + EncryptDecrypt.Encrypt(v.Value, Program.PIN_Group)); }
 
 							// save to Program.AppRoot + <filename> + ".pin"	// trap for valid filename
 							File.WriteAllText(Program.AppRoot + newFileName, sb.ToString());
@@ -281,7 +281,7 @@ namespace myNotebooks.subforms
 		{
 			foreach (var checkedItem in lstNotebookPINs.CheckedItems.OfType<string>().ToList())
 			{
-				var encryptedItem = EncryptDecrypt.Encrypt(Scrubbed(checkedItem));
+				var encryptedItem = EncryptDecrypt.Encrypt(Scrubbed(checkedItem), Program.PIN_Group);
 
 				if (!Program.DictCheckedNotebooks.Keys.Contains(encryptedItem) && !checkedItem.Equals(ShowMoreString))
 				{
@@ -290,7 +290,7 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private async void PopulateNotebooksList(bool populateWithCheckedJournals, bool showMore, bool showAll)
+		private async void PopulateNotebooksList(bool populateWithCheckedNotebooks, bool showMore, bool showAll)
 		{
 			if (!showMore) lstNotebookPINs.Items.Clear();
 
@@ -302,11 +302,11 @@ namespace myNotebooks.subforms
 				lstNotebookPINs.Items.AddRange(Program.AllNotebookNames.ToArray());
 			}
 
-			if (populateWithCheckedJournals) { PopulateCheckedItems(); }
+			if (populateWithCheckedNotebooks) { PopulateCheckedItems(); }
 
 			if (showMore)
 			{
-				if (!populateWithCheckedJournals) PopulateCheckedItems();
+				if (!populateWithCheckedNotebooks) PopulateCheckedItems();
 				lstNotebookPINs.Items.Remove(ShowMoreString);
 				foreach (var name in Program.AllNotebookNames.Except(Program.DictCheckedNotebooks.Keys)) { lstNotebookPINs.Items.Add($"{name}"); }
 			}

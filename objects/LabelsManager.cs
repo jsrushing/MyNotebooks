@@ -156,7 +156,7 @@ namespace myNotebooks.objects
 
 			foreach(KeyValuePair<string, string> kvp in Program.DictCheckedNotebooks)
 			{
-				Program.PIN = kvp.Value;
+				Program.PIN_Notebooks = kvp.Value;
 				nbTemp = new Notebook(kvp.Key).Open();
 				if (nbTemp.Entries.Where(t => ("," + t.Labels + ",").Contains("," + labelName + ",")).ToList().Count > 0)
 				{
