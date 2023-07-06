@@ -27,7 +27,6 @@ namespace myNotebooks
 		public static string			GroupFolder				= string.Empty;
 		public static string			GroupName_Encrypted		= string.Empty; // reference to folder name (encrypted) in groups\ folder. Used for creating new nbooks & labels
 		public static string			InvalidFileName			= "Sorry, notebook names may not contain characters which are not allowed in file names, for example *, <, >, {, }, |, :, ?, /, \\ (and others).";
-		public static List<string>		PreviousGroups			= new List<string>();
 		public static string			PIN_Group				= string.Empty;
 		public static string			PIN_Notebooks			= string.Empty;
 		public static string			PIN_Master				= string.Empty;

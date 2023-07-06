@@ -191,9 +191,11 @@ namespace myNotebooks.subforms
 
 		private async void frmMain_Load(object sender, EventArgs e)
 		{
+			// Get the Master PIN.
 			using(frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "What is the Master PIN?", "Enter PIN", this)) 
 			{ 
 				frm.ShowDialog();
+
 				if(frm.Result == frmMessage.ReturnResult.Cancel)
 				{
 					this.Close();
@@ -203,31 +205,29 @@ namespace myNotebooks.subforms
 				Program.PIN_Master = frm.ResultText;
 			}
 
-			// check for previous groups file - approot + settings + previousgroup
-			if (File.Exists(Program.AppRoot + "settings\\previousgroups"))
-			{
-				// read file, decrypting w/ master pin
-				foreach (string group in File.ReadAllLines(Program.AppRoot + "settings\\previousgroups"))
-				{ Program.PreviousGroups.Add(EncryptDecrypt.Decrypt(group, Program.PIN_Master)); }
-			}
+			var curGroup = Program.GroupName_Encrypted;
 
+			// Create or Log into a Group.
 			using(frmGroupLoginOrCreate frm = new frmGroupLoginOrCreate(false, this)) 
 			{ 
 				frm.ShowDialog(); 
 
-				if(frm.GroupName == null) 
-				{ 
-					this.Close();
-					return;
+				if(curGroup.Length == 0) // Starting up. No group previously selected so close if Cancelled or form_closed.
+				{
+					if (frm.Cancelled && Program.GroupName_Encrypted.Length == 0)
+					{
+						this.Close();
+						return;
+					}
 				}
 			}
 
+			// Login was successful. Either list the Notebooks in the Group or prompt to create one (fatal fail on Cancel).
 			if(Program.GroupFolder.Length > 0 & Program.AllNotebookNames.Count > 0)
 			{
 				using(frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch
-					(this, "Select notebooks to work with. Notebooks which are PIN-protected can't be synchronized unless you provide the PIN. You can Export and Import selections below.")) 
-				{ frm.ShowDialog(); }
-				// program.dictcheckednotebooks should be populated at this point.
+					(this, "Select notebooks to work with. Notebooks which are PIN-protected can't be " +
+					"synchronized unless you provide the PIN. You can Export and Import selections below.")) { frm.ShowDialog(); }
 			}
 			else	// There are no notebooks in the Group.
 			{
@@ -238,7 +238,6 @@ namespace myNotebooks.subforms
 					if (frm.WorkingNotebook != null)
 					{
 						await frm.WorkingNotebook.Create();
-						//Program.AllNotebookNames.Add(EncryptDecrypt.Decrypt(frm.WorkingNotebook.Name, Program.PIN_Group));
 						LoadNotebooks();
 					}
 					else
@@ -894,26 +893,20 @@ namespace myNotebooks.subforms
 
 		private async void mnuSwitchAccount_Click(object sender, EventArgs e)
 		{
-			using(frmGroupLoginOrCreate frm = new frmGroupLoginOrCreate(true, this)) { frm.ShowDialog(); }
-			mnuSwitchAccount.Text = "Current Group: '" + EncryptDecrypt.Decrypt(Program.GroupName_Encrypted, Program.PIN_Group) + "'";
-			Program.AllNotebookNames.Clear();
-			Program.DictCheckedNotebooks.Clear();
-			SetMnuSwitchAccountText();
-			using(frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(this)) { frm.ShowDialog(); }
-			LoadNotebooks();
+			using(frmGroupLoginOrCreate frm = new frmGroupLoginOrCreate(true, this)) 
+			{ 
+				frm.ShowDialog();
 
-			//frmAzurePwd ap = new frmAzurePwd(this, frmAzurePwd.Mode.ChangingKey);
-
-			//if (ap.KeyChanged)
-			//{
-			//	CheckForSystemDirectories(true);
-
-			//	if (Program.AzurePassword.Length > 0)
-			//	{
-			//		CloudSynchronizer cs = new CloudSynchronizer();
-			//		await cs.SynchWithCloud();
-			//	}
-			//}
+				if (!frm.Cancelled)
+				{
+					mnuSwitchAccount.Text = "Current Group: '" + EncryptDecrypt.Decrypt(Program.GroupName_Encrypted, Program.PIN_Group) + "'";
+					Program.AllNotebookNames.Clear();
+					Program.DictCheckedNotebooks.Clear();
+					SetMnuSwitchAccountText();
+					using(frmSelectNotebooksToSearch frm2 = new frmSelectNotebooksToSearch(this)) { frm2.ShowDialog(); }
+					LoadNotebooks();
+				}		
+			}
 		}
 
 		private async Task PopulateLabelsSummary()
