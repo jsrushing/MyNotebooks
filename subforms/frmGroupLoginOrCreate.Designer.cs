@@ -197,8 +197,6 @@
 			MinimizeBox = false;
 			Name = "frmGroupLoginOrCreate";
 			Text = "Groups";
-			FormClosing += this.frmGroupLoginOrCreate_FormClosing;
-			FormClosed += this.frmGroupLoginOrCreate_FormClosed;
 			Load += this.frmGroupLoginOrCreate_Load;
 			pnl1.ResumeLayout(false);
 			pnl2.ResumeLayout(false);

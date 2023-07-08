@@ -220,7 +220,7 @@ namespace myNotebooks.subforms
 					var newFileName = string.Empty;
 
 					// ask for the new file name
-					using (frmMessage frm = new frmMessage(frmMessage.OperationType.PINFileInputBox, "File name?", null, this))
+					using (frmMessage frm = new frmMessage(frmMessage.OperationType.PasswordInputBox, "File name?", null, this))
 					{
 						frm.ShowDialog();
 						newFileName = frm.ResultText + ".pin";

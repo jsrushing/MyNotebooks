@@ -41,7 +41,7 @@ namespace myNotebooks.subforms
 			{
 				if (Program.DictCheckedNotebooks.Count == 0)
 				{
-					//var msg = "The labels in the deleted notebook will be deleted from all selected notebooks." + Environment.NewLine + "Specify a PIN for any protected notebooks you select.";
+					//var Msg = "The labels in the deleted notebook will be deleted from all selected notebooks." + Environment.NewLine + "Specify a PIN for any protected notebooks you select.";
 					using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(this)) { frm.ShowDialog(); }
 				}
 

@@ -17,31 +17,17 @@ namespace myJournal.subforms
 	public partial class frmGroupLoginOrCreate : Form
 	{
 		public string GroupName { get; private set; }
-		public bool Cancelled { get; private set; } = false;
 		private bool LoggingIn;
-		private string[] GroupDirectories = Directory.GetDirectories(Program.GroupsFolder);
+
 		public frmMessage.ReturnResult Result { get; private set; } = frmMessage.ReturnResult.Cancel;
 
 		public frmGroupLoginOrCreate(bool doAutoLogin, Form parent)
 		{
 			InitializeComponent();
-			btnLogin.Enabled = GroupDirectories.Count() > 0;
+			btnLogin.Enabled = Directory.GetDirectories(Program.GroupsFolder).Count() > 0;
 			Utilities.SetStartPosition(this, parent);
-			// for debugging
-			//txtName.Text = "Operations";
-			//txtPwd.Text = "ops";
 			PopulateExistingGroups();
 			if (doAutoLogin) { LoginOrCreate(btnLogin, null); }
-		}
-
-		private void frmGroupLoginOrCreate_FormClosed(object sender, FormClosedEventArgs e)
-		{ 
-			//Cancelled = true;
-			this.Hide();
-		}
-
-		private void frmGroupLoginOrCreate_FormClosing(object sender, FormClosingEventArgs e)
-		{
 		}
 
 		private void frmGroupLoginOrCreate_Load(object sender, EventArgs e)

@@ -47,6 +47,7 @@ namespace myNotebooks.subforms
 			pnlDropDown = new System.Windows.Forms.Panel();
 			ddlItemsToSelect = new System.Windows.Forms.ComboBox();
 			label1 = new System.Windows.Forms.Label();
+			lblShowPIN = new System.Windows.Forms.Label();
 			pnlYesNoCancel.SuspendLayout();
 			pnlYesNo.SuspendLayout();
 			pnlOkCancel.SuspendLayout();
@@ -232,11 +233,23 @@ namespace myNotebooks.subforms
 			label1.TabIndex = 1;
 			label1.Text = "or select:";
 			// 
+			// lblShowPIN
+			// 
+			lblShowPIN.AutoSize = true;
+			lblShowPIN.Location = new System.Drawing.Point(209, 11);
+			lblShowPIN.Name = "lblShowPIN";
+			lblShowPIN.Size = new System.Drawing.Size(35, 15);
+			lblShowPIN.TabIndex = 7;
+			lblShowPIN.Text = "show";
+			lblShowPIN.Visible = false;
+			lblShowPIN.Click += this.lblShowPin_Click;
+			// 
 			// frmMessage
 			// 
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			ClientSize = new System.Drawing.Size(269, 287);
+			Controls.Add(lblShowPIN);
 			Controls.Add(pnlDropDown);
 			Controls.Add(lblSelectFromLabelsList);
 			Controls.Add(txtInput);
@@ -280,5 +293,6 @@ namespace myNotebooks.subforms
 		private System.Windows.Forms.Panel pnlDropDown;
 		private System.Windows.Forms.ComboBox ddlItemsToSelect;
 		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label lblShowPIN;
 	}
 }
