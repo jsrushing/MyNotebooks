@@ -1,6 +1,6 @@
 ﻿namespace MyNotebooks.subforms
 {
-	partial class frmGroupsManager
+	partial class frmLogin_Corporate
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -28,10 +28,16 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(800, 450);
-			this.Text = "frmGroupsManager";
+			this.SuspendLayout();
+			// 
+			// frmLogin_Corporate
+			// 
+			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			ClientSize = new System.Drawing.Size(398, 450);
+			Name = "frmLogin_Corporate";
+			Text = "frmLogin_Corporate";
+			this.ResumeLayout(false);
 		}
 
 		#endregion

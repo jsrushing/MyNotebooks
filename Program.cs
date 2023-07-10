@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using myNotebooks.subforms;
 using System.Collections.Generic;
 using myNotebooks.objects;
+using MyNotebooks.objects;
 
 namespace myNotebooks
 {
@@ -11,6 +12,8 @@ namespace myNotebooks
 		/// <summary>
 		///  The main entry point for the application.allNotebooks
 		/// </summary>
+		public static string			AccountName				= string.Empty;
+		public static string[]			Accounts			= new string[1];
 		public static List<Notebook>	AllNotebooks			= new List<Notebook>();
 		public static List<string>		AllNotebookNames		= new List<string>();
 		public static string			AppRoot					= AppDomain.CurrentDomain.BaseDirectory;
@@ -21,16 +24,18 @@ namespace myNotebooks
 		public static string			AzurePassword			= string.Empty;
 		public static List<string>		AzurePinFileNames		= new List<string>();
 		public static List<string>		AzureRenameCommands		= new List<string>();
+		public static Account			CurrentAccount			= null;
+		public static Group				CurrentGroup			= null;	
 		// add public static string s = configmgr[""] ... for all paths, etc. which are called out in app.config.
 		public static string			GroupsFolder			= Program.AppRoot + "groups\\";
 		// ......................................................................................................
 		public static string			GroupFolder				= string.Empty;
 		public static string			GroupName_Encrypted		= string.Empty; // reference to folder name (encrypted) in groups\ folder. Used for creating new nbooks & labels
 		public static string			InvalidFileName			= "Sorry, notebook names may not contain characters which are not allowed in file names, for example *, <, >, {, }, |, :, ?, /, \\ (and others).";
-		public static string			PIN_Group				= string.Empty;
-		public static string			PIN_Notebooks			= string.Empty;
-		public static string			PIN_Master				= string.Empty;
 		public static string			PIN_Device				= string.Empty;
+		public static string			PIN_Group				= string.Empty;
+		public static string			PIN_Master				= string.Empty;
+		public static string			PIN_Notebook			= string.Empty;
 		public static bool				SkipFileSizeComparison	= false;
 		public static Dictionary<string, string> DictCheckedNotebooks	= new Dictionary<string, string>();
 		//public static List<ListViewItem> lstFonts = new List<ListViewItem>();

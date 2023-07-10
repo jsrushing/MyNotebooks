@@ -447,7 +447,7 @@ namespace myNotebooks.subforms
 				this.Cursor = Cursors.WaitCursor;
 				lstOccurrences.Items.Clear();
 				OccurenceTitleIndicies.Clear();
-				var currentPIN = Program.PIN_Notebooks;
+				var currentPIN = Program.PIN_Notebook;
 
 				List<Notebook> notebooksWithLabel = LabelsManager.NotebooksContainingLabel(labelName);
 
@@ -477,7 +477,7 @@ namespace myNotebooks.subforms
 				}
 
 				if (lstOccurrences.Items.Count == 0) { lstOccurrences.Items.Add("Nothing found (is a PIN missing?)"); }
-				Program.PIN_Notebooks = currentPIN;
+				Program.PIN_Notebook = currentPIN;
 			}
 			else { lstOccurrences.Items.Clear(); }
 

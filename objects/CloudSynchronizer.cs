@@ -24,19 +24,8 @@ namespace myNotebooks.objects
 			CloudNewer
 		}
 
-		//public int NotebooksSynchd		{ get { return ItemsSynchd.Count; } }
-		//public int NotebooksSkipped		{ get { return ItemsSkipped.Count; } }
-		//public int NotebooksDownloaded	{ get { return ItemsDownloaded.Count; } }
-		//public int NotebooksBackedUp		{ get { return ItemsBackedUp.Count; } }
-		//public int NotebooksDeleted		{ get { return ItemsDeleted.Count; } }
-
 		public string Err = string.Empty; 
 
-		//private List<string> ItemsSynchd		= new List<string>();
-		//private List<string> ItemsSkipped		= new List<string>();
-		//private List<string> ItemsDownloaded	= new List<string>();
-		//private List<string> ItemsBackedUp	= new List<string>();
-		//private List<string> ItemsDeleted		= new List<string>();
 		private ComparisonResult notebookComparisonResult { get; set; }
 
 		public CloudSynchronizer() { notebookComparisonResult = ComparisonResult.Same; }

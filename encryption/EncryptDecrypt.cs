@@ -13,8 +13,8 @@ namespace Encryption
     {
         public static string Encrypt(string TextToEncrypt, string pin = "")
         {
-			var curPin = Program.PIN_Notebooks;
-			if (pin.Length == 0) { pin = Program.PIN_Notebooks; }
+			var curPin = Program.PIN_Notebook;
+			if (pin.Length == 0) { pin = Program.PIN_Notebook; }
 			string encryptionKey = AESPin(pin) ;
 			byte[] clearBytes = Encoding.Unicode.GetBytes(TextToEncrypt);
 
@@ -35,7 +35,7 @@ namespace Encryption
 				}
 			}
 
-			Program.PIN_Notebooks = curPin;
+			Program.PIN_Notebook = curPin;
 			return TextToEncrypt.Replace("/", "_").Replace("+", "-");
 
 			//string s = AESThenHMAC.SimpleEncryptWithPassword(TextToEncrypt, AESPin(Program.PIN));
@@ -86,7 +86,7 @@ namespace Encryption
 			try
 			{
 				if(TextToDecrypt.Contains("_") | TextToDecrypt.Contains("-")) { TextToDecrypt = TextToDecrypt.Replace("_", "/").Replace("-", "+"); }
-				if (pin.Length == 0) { pin = Program.PIN_Notebooks; }
+				if (pin.Length == 0) { pin = Program.PIN_Notebook; }
 
 				var v = TextToDecrypt.Length;
 

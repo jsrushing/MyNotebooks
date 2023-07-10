@@ -181,7 +181,7 @@ namespace myNotebooks.subforms
 				{
 					frm.ShowDialog();
 					var pinFileName = frm.PINFileName != null ? frm.PINFileName.Replace(".pin", "") : null;
-					Program.PIN_Notebooks = frm.PIN != null ? frm.PIN : string.Empty;
+					Program.PIN_Notebook = frm.PIN != null ? frm.PIN : string.Empty;
 
 					if (pinFileName != null && pinFileName.Length > 0)
 					{
@@ -243,7 +243,7 @@ namespace myNotebooks.subforms
 							using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "What's the PIN?", "", this))
 							{
 								frm.ShowDialog(this);
-								Program.PIN_Notebooks = frm.ResultText;
+								Program.PIN_Notebook = frm.ResultText;
 							}
 
 							// encrypt Program.DictCheckedNotebooks
