@@ -6,7 +6,6 @@
  */
 
 using System;
-using System.Configuration;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -99,13 +98,14 @@ namespace Encryption
         /// Significantly less secure than using random binary keys.
         /// Adds additional non secret payload for key generation parameters.
         /// </remarks>
-        public static string SimpleEncryptWithPassword(string secretMessage, string password, byte[] nonSecretPayload = null)
+        public static string SimpleEncryptWithPassword(string secretMessage, string password,
+                                                       byte[] nonSecretPayload = null)
         {
             if (string.IsNullOrEmpty(secretMessage))
                 throw new ArgumentException("Secret Message Required!", "secretMessage");
 
             var plainText = Encoding.UTF8.GetBytes(secretMessage);
-            var cipherText = SimpleEncryptWithPassword(plainText, password, Encoding.UTF8.GetBytes(ConfigurationManager.AppSettings["PublicKey"]));
+            var cipherText = SimpleEncryptWithPassword(plainText, password, nonSecretPayload);
             return Convert.ToBase64String(cipherText);
         }
 
