@@ -83,7 +83,14 @@ namespace Encryption
 
         public static string Decrypt(string TextToDecrypt, string pin = "")
 		{
+<<<<<<< HEAD
 			try
+=======
+			if(TextToDecrypt.Contains("_") | TextToDecrypt.Contains("-")) { TextToDecrypt = TextToDecrypt.Replace("_", "/").Replace("-", "+"); }
+			string encryptionKey = AESPin(Program.PIN);
+			byte[] cipherBytes = Convert.FromBase64String(TextToDecrypt);
+			using (Aes encryptor = Aes.Create())
+>>>>>>> parent of 5871030 (saved)
 			{
 				if(TextToDecrypt.Contains("_") | TextToDecrypt.Contains("-")) { TextToDecrypt = TextToDecrypt.Replace("_", "/").Replace("-", "+"); }
 				if (pin.Length == 0) { pin = Program.PIN_Notebook; }

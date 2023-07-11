@@ -28,68 +28,95 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			checkedListBox1 = new System.Windows.Forms.CheckedListBox();
-			button1 = new System.Windows.Forms.Button();
-			button2 = new System.Windows.Forms.Button();
+			clbAzureItems = new System.Windows.Forms.CheckedListBox();
+			btnDownloadSelected = new System.Windows.Forms.Button();
+			btnIgnoreSelected = new System.Windows.Forms.Button();
 			label1 = new System.Windows.Forms.Label();
+			textBox1 = new System.Windows.Forms.TextBox();
+			btnAddPIN = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
-			// checkedListBox1
+			// clbAzureItems
 			// 
-			checkedListBox1.FormattingEnabled = true;
-			checkedListBox1.Location = new System.Drawing.Point(12, 120);
-			checkedListBox1.Name = "checkedListBox1";
-			checkedListBox1.Size = new System.Drawing.Size(120, 94);
-			checkedListBox1.TabIndex = 0;
+			clbAzureItems.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+			clbAzureItems.FormattingEnabled = true;
+			clbAzureItems.Location = new System.Drawing.Point(12, 117);
+			clbAzureItems.Name = "clbAzureItems";
+			clbAzureItems.Size = new System.Drawing.Size(223, 346);
+			clbAzureItems.TabIndex = 0;
 			// 
-			// button1
+			// btnDownloadSelected
 			// 
-			button1.Location = new System.Drawing.Point(7, 322);
-			button1.Name = "button1";
-			button1.Size = new System.Drawing.Size(75, 23);
-			button1.TabIndex = 1;
-			button1.Text = "button1";
-			button1.UseVisualStyleBackColor = true;
+			btnDownloadSelected.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+			btnDownloadSelected.Location = new System.Drawing.Point(27, 469);
+			btnDownloadSelected.Name = "btnDownloadSelected";
+			btnDownloadSelected.Size = new System.Drawing.Size(75, 23);
+			btnDownloadSelected.TabIndex = 1;
+			btnDownloadSelected.Text = "&Download";
+			btnDownloadSelected.UseVisualStyleBackColor = true;
 			// 
-			// button2
+			// btnIgnoreSelected
 			// 
-			button2.Location = new System.Drawing.Point(88, 322);
-			button2.Name = "button2";
-			button2.Size = new System.Drawing.Size(75, 23);
-			button2.TabIndex = 2;
-			button2.Text = "button2";
-			button2.UseVisualStyleBackColor = true;
+			btnIgnoreSelected.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+			btnIgnoreSelected.Location = new System.Drawing.Point(145, 469);
+			btnIgnoreSelected.Name = "btnIgnoreSelected";
+			btnIgnoreSelected.Size = new System.Drawing.Size(75, 23);
+			btnIgnoreSelected.TabIndex = 2;
+			btnIgnoreSelected.Text = "&Ignore";
+			btnIgnoreSelected.UseVisualStyleBackColor = true;
 			// 
 			// label1
 			// 
 			label1.Location = new System.Drawing.Point(12, 9);
 			label1.Name = "label1";
-			label1.Size = new System.Drawing.Size(198, 74);
+			label1.Size = new System.Drawing.Size(223, 51);
 			label1.TabIndex = 3;
 			label1.Text = "These Notebooks were found in the cloud but do not exist locally.";
+			// 
+			// textBox1
+			// 
+			textBox1.Location = new System.Drawing.Point(12, 89);
+			textBox1.Name = "textBox1";
+			textBox1.Size = new System.Drawing.Size(100, 23);
+			textBox1.TabIndex = 4;
+			// 
+			// btnAddPIN
+			// 
+			btnAddPIN.Location = new System.Drawing.Point(118, 88);
+			btnAddPIN.Name = "btnAddPIN";
+			btnAddPIN.Size = new System.Drawing.Size(75, 23);
+			btnAddPIN.TabIndex = 5;
+			btnAddPIN.Text = "Add &PIN";
+			btnAddPIN.UseVisualStyleBackColor = true;
 			// 
 			// frmNotebooksInCloudNotLocal
 			// 
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			ClientSize = new System.Drawing.Size(222, 401);
+			ClientSize = new System.Drawing.Size(246, 482);
+			Controls.Add(btnAddPIN);
+			Controls.Add(textBox1);
 			Controls.Add(label1);
-			Controls.Add(button2);
-			Controls.Add(button1);
-			Controls.Add(checkedListBox1);
+			Controls.Add(btnIgnoreSelected);
+			Controls.Add(btnDownloadSelected);
+			Controls.Add(clbAzureItems);
 			FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			MaximizeBox = false;
 			MinimizeBox = false;
+			MinimumSize = new System.Drawing.Size(262, 521);
 			Name = "frmNotebooksInCloudNotLocal";
 			Text = "Cloud Notebooks";
 			this.ResumeLayout(false);
+			this.PerformLayout();
 		}
 
 		#endregion
 
-		private System.Windows.Forms.CheckedListBox checkedListBox1;
-		private System.Windows.Forms.Button button1;
-		private System.Windows.Forms.Button button2;
+		private System.Windows.Forms.CheckedListBox clbAzureItems;
+		private System.Windows.Forms.Button btnDownloadSelected;
+		private System.Windows.Forms.Button btnIgnoreSelected;
 		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.TextBox textBox1;
+		private System.Windows.Forms.Button btnAddPIN;
 	}
 }

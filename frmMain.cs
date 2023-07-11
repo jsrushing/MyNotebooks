@@ -176,50 +176,50 @@ namespace myNotebooks.subforms
 
 		public frmMain() { InitializeComponent(); }
 
-		//private string GetRandomLabels()
-		//{
-		//	var rnd = new Random();
-		//	string[] labels = LabelsManager.GetLabels_NoFileDate();
-		//	string[] rtrn = { "", "" };
-		//	rtrn[0] = labels[rnd.Next(labels.Length)];
-		//	rtrn[1] = labels[rnd.Next(labels.Length)];
-		//	return string.Join(',', rtrn);
-		//}
+		private string GetRandomLabels()
+		{
+			var rnd = new Random();
+			string[] labels = LabelsManager.GetLabels_NoFileDate();
+			string[] rtrn = { "", "" };
+			rtrn[0] = labels[rnd.Next(labels.Length)];
+			rtrn[1] = labels[rnd.Next(labels.Length)];
+			return string.Join(',', rtrn);
+		}
 
 		private async void frmMain_Load(object sender, EventArgs e)
 		{
 
-			//// Get the device PIN which will be used to decrypt the 'already opened accounts' file.
-			//if (File.Exists(Program.AppRoot + "ap"))
-			//{
-			//	using (frmMessage frm = new frmMessage(frmMessage.OperationType.PasswordInputBox, "What is the device PIN?", "enter pin", this))
-			//	{
-			//		frm.ShowDialog();
-			//		Program.PIN_Device = frm.Result == frmMessage.ReturnResult.Ok ? frm.ResultText : null;
-			//	}
-			//}
+			// Get the device PIN which will be used to decrypt the 'already opened accounts' file.
+			if (File.Exists(Program.AppRoot + "ap"))
+			{
+				using (frmMessage frm = new frmMessage(frmMessage.OperationType.PasswordInputBox, "What is the device PIN?", "enter pin", this))
+				{
+					frm.ShowDialog();
+					Program.PIN_Device = frm.Result == frmMessage.ReturnResult.Ok ? frm.ResultText : null;
+				}
+			}
 
-			//using (frmManageGroupsAndAccounts frm = new frmManageGroupsAndAccounts(false, true))
-			//{
-			//	frm.ShowDialog(this);
-			//	if(Program.AccountName == null || Program.AccountName.Length == 0) { this.Close(); return; }
-			//}
+			using (frmManageGroupsAndAccounts frm = new frmManageGroupsAndAccounts(false, true))
+			{
+				frm.ShowDialog(this);
+				if(Program.AccountName == null || Program.AccountName.Length == 0) { this.Close(); return; }
+			}
 				
 			
 
-			//using(frmMessage frm = new frmMessage(frmMessage.OperationType.PasswordInputBox, "What's the Account PIN?", "PIN Required", this))
-			//{
-			//	frm.ShowDialog(this);
-			//	if(frm.Result == frmMessage.ReturnResult.Ok)
-			//	{
-			//		string[] dirs = Directory.GetDirectories(Program.AppRoot + "accounts\\");
+			using(frmMessage frm = new frmMessage(frmMessage.OperationType.PasswordInputBox, "What's the Account PIN?", "PIN Required", this))
+			{
+				frm.ShowDialog(this);
+				if(frm.Result == frmMessage.ReturnResult.Ok)
+				{
+					string[] dirs = Directory.GetDirectories(Program.AppRoot + "accounts\\");
 
-			//		foreach(string dir in dirs)
-			//		{
+					foreach(string dir in dirs)
+					{
 
-			//		}
-			//	}
-			//}
+					}
+				}
+			}
 
 			//if(Program.PIN_Device != null && File.Exists(Program.AppRoot + "mn"))	// There's a stored list of Accounts on the device.
 			//{
@@ -243,22 +243,22 @@ namespace myNotebooks.subforms
 			//	}
 			//}
 
-			//if(Program.PIN_Master.Length == 0) // Wasn't set above. Fatal fail on Cancel.
-			//{
-			//	// Get the Master PIN.
-			//	using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "What is the Master PIN?", "Enter PIN", this))
-			//	{
-			//		frm.ShowDialog();
+			if(Program.PIN_Master.Length == 0) // Wasn't set above. Fatal fail on Cancel.
+			{
+				// Get the Master PIN.
+				using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "What is the Master PIN?", "Enter PIN", this))
+				{
+					frm.ShowDialog();
 
-			//		if (frm.Result != frmMessage.ReturnResult.Ok)
-			//		{
-			//			this.Close();
-			//			return;
-			//		}
+					if (frm.Result != frmMessage.ReturnResult.Ok)
+					{
+						this.Close();
+						return;
+					}
 
-			//		Program.PIN_Master = frm.ResultText;
-			//	}
-			//}
+					Program.PIN_Master = frm.ResultText;
+				}
+			}
 
 			// If the account name is new, create it.
 			//if(accounts.Length > 0 && !accounts.Contains(Program.PIN_Master))
@@ -268,49 +268,49 @@ namespace myNotebooks.subforms
 			//}
 
 
-			//var curGroup = Program.GroupName_Encrypted;
+			var curGroup = Program.GroupName_Encrypted;
 
-			//// Create or Log into a Group. Fatal fail on Cancel.
-			//using (frmGroupLoginOrCreate frm = new frmGroupLoginOrCreate(false, this))
-			//{
-			//	frm.ShowDialog();
+			// Create or Log into a Group. Fatal fail on Cancel.
+			using (frmGroupLoginOrCreate frm = new frmGroupLoginOrCreate(false, this))
+			{
+				frm.ShowDialog();
 
-			//	if (curGroup.Length == 0) // Starting up. No group previously selected so close if Cancelled or form_closed.
-			//	{
-			//		if (frm.Result != frmMessage.ReturnResult.Ok)
-			//		{
-			//			this.Close();
-			//			return;
-			//		}
-			//	}
-			//}
+				if (curGroup.Length == 0) // Starting up. No group previously selected so close if Cancelled or form_closed.
+				{
+					if (frm.Result != frmMessage.ReturnResult.Ok)
+					{
+						this.Close();
+						return;
+					}
+				}
+			}
 
 			// Login was successful. Either list the Notebooks in the Group or prompt to create one. Fatal fail on Cancel.
-			//if (Program.GroupFolder.Length > 0 & Program.AllNotebookNames.Count > 0)
-			//{
-			//	using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch
-			//		(this, "Select notebooks to work with. Notebooks which are PIN-protected can't be " +
-			//		"synchronized unless you provide the PIN. You can Export and Import selections below.")) { frm.ShowDialog(); }
-			//}
-			//else    // There are no notebooks in the Group.
-			//{
-			//	using (frmNewNotebook frm = new frmNewNotebook(this))
-			//	{
-			//		frm.ShowDialog();
+			if (Program.GroupFolder.Length > 0 & Program.AllNotebookNames.Count > 0)
+			{
+				using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch
+					(this, "Select notebooks to work with. Notebooks which are PIN-protected can't be " +
+					"synchronized unless you provide the PIN. You can Export and Import selections below.")) { frm.ShowDialog(); }
+			}
+			else    // There are no notebooks in the Group.
+			{
+				using (frmNewNotebook frm = new frmNewNotebook(this))
+				{
+					frm.ShowDialog();
 
-			//		if (frm.WorkingNotebook != null)
-			//		{
-			//			await frm.WorkingNotebook.Create();
-			//			LoadNotebooks();
-			//		}
-			//		else
-			//		{
-			//			using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.Message, "At least one notebook must exist. " +
-			//				"Please re-open the program and create a notebook.", "One Notebook Must Exist", this))
-			//			{ frm2.ShowDialog(); this.Close(); }
-			//		}
-			//	}
-			//}
+					if (frm.WorkingNotebook != null)
+					{
+						await frm.WorkingNotebook.Create();
+						LoadNotebooks();
+					}
+					else
+					{
+						using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.Message, "At least one notebook must exist. " +
+							"Please re-open the program and create a notebook.", "One Notebook Must Exist", this))
+						{ frm2.ShowDialog(); this.Close(); }
+					}
+				}
+			}
 
 
 			this.Cursor = Cursors.WaitCursor;
@@ -408,9 +408,10 @@ namespace myNotebooks.subforms
 
 			CheckForSystemDirectories();    // am I keeping system directories now that the cloud is working? Why or why not?
 
-			using (frmAzurePwd frm = new frmAzurePwd(this, frmAzurePwd.Mode.AskingForKey))
-			{ if (Program.AzurePassword.Length > 0) { frm.Close(); } }
+			//using (frmAzurePwd frm = new frmAzurePwd(this, frmAzurePwd.Mode.AskingForKey))
+			//{ if (Program.AzurePassword.Length > 0) { frm.Close(); } }
 
+			Program.AzurePassword = Program.PIN_Master;
 			//Program.AzurePassword = string.Empty;	// Kills the Azure synch process for debugging if desired.
 
 			// Populate Program.DictCheckedNotebooks

@@ -10,6 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Encryption;
+using myJournal.subforms;
 using myNotebooks.subforms;
 
 namespace myNotebooks.objects
@@ -23,19 +24,8 @@ namespace myNotebooks.objects
 			CloudNewer
 		}
 
-		public int NotebooksSynchd		{ get { return ItemsSynchd.Count; } }
-		public int NotebooksSkipped		{ get { return ItemsSkipped.Count; } }
-		public int NotebooksDownloaded	{ get { return ItemsDownloaded.Count; } }
-		public int NotebooksBackedUp	{ get { return ItemsBackedUp.Count; } }
-		public int NotebooksDeleted		{ get { return ItemsDeleted.Count; } }
-
 		public string Err = string.Empty; 
 
-		private List<string> ItemsSynchd		= new List<string>();
-		private List<string> ItemsSkipped		= new List<string>();
-		private List<string> ItemsDownloaded	= new List<string>();
-		private List<string> ItemsBackedUp		= new List<string>();
-		private List<string> ItemsDeleted		= new List<string>();
 		private ComparisonResult notebookComparisonResult { get; set; }
 
 		public CloudSynchronizer() { notebookComparisonResult = ComparisonResult.Same; }
@@ -44,29 +34,27 @@ namespace myNotebooks.objects
 		{
 			//return;
 
+			// Find Azure files which aren't in Program.DictCheckedNotebooks
 			if (Program.AzureNotebookNames.Count == 0) await AzureFileClient.GetAzureItemNames(true);
 
-
-
-			// If a PIN is given,
-			// dl the book and try to decrypt.
-
-			// If Decrypt fails (wrong PIN) ...
-			// notify user
-			// else ...
-			// Do what its Settings tell you to do
-			// Notify user.
-
-			var booksOnAzureNotLocal = Program.AzureNotebookNames.Except(Program.AllNotebookNames);
+			string[] booksOnAzureNotLocal = Program.AzureNotebookNames.Except(Program.DictCheckedNotebooks.Keys).ToArray();
 
 			if(booksOnAzureNotLocal.Count() > 0)
 			{
-
+				using (frmNotebooksInCloudNotLocal frm = new frmNotebooksInCloudNotLocal(booksOnAzureNotLocal))
+				{
+					frm.ShowDialog();	// Handle any files on frmNotebooksInCloudNotLocal
+				}
 			}
 
-			// check for cloud nb's which aren't local.
-			foreach (var sBookName in Program.AzureNotebookNames.Except(Program.AllNotebookNames))        // any journal on Azure not found locally
+
+
+
+
+			// check for cloud nb's which aren't in DictCheckedNotebooks
+			foreach (var sBookName in Program.AzureNotebookNames.Except(Program.DictCheckedNotebooks.Keys))  
 			{
+				// notify user
 
 				// For all found, notify user and ask for PIN to check the file.
 					// Must write a way for user to ignore the notebook. Keep a list of ignored items.
@@ -113,7 +101,7 @@ namespace myNotebooks.objects
 				if (j2.Settings.AllowCloud)
 				{
 					if (j2.Settings.IfLocalOnly_Delete) { j2.Delete(); }
-					else if (j2.Settings.IfLocalOnly_Upload) { await AzureFileClient.UploadFile(j2.FileName); }
+					else if (j2.Settings.IfLocalOnly_Upload) { await AzureFileClient.UploadFile(j2.FolderName); }
 					else if (j2.Settings.IfLocalOnly_DisallowCloud) { j2.Settings.AllowCloud = false; await j2.Save(); }
 				}
 			}
@@ -184,11 +172,11 @@ namespace myNotebooks.objects
 										//ItemsSkipped.Add(book.Name + " (files match)");
 										break;
 									case ComparisonResult.LocalNewer:
-										await AzureFileClient.UploadFile(book.FileName);
+										await AzureFileClient.UploadFile(book.FolderName);
 										//ItemsSynchd.Add(book.FileName + "up'd (newer)");
 										break;
 									case ComparisonResult.CloudNewer:
-										File.Move(cloudNotebook.FileName, book.FileName, true);
+										File.Move(cloudNotebook.FolderName, book.FolderName, true);
 										//ItemsDownloaded.Add(book.Name + " (syncd from cloud)");
 										break;
 								}
@@ -215,14 +203,14 @@ namespace myNotebooks.objects
 								// Get the cloud book. The local copy will have been saved so it's newer, but the cloud one is what we want since it has the latest updates.
 								await AzureFileClient.DownloadOrDeleteFile(tempFolder + book.Name, Program.AzurePassword + book.Name);
 								cloudNotebook = File.Exists(tempFolder + book.Name) ? new Notebook(book.Name, tempFolder + book.Name).Open(true) : null;
-								File.Move(cloudNotebook.FileName, book.FileName, true);
+								File.Move(cloudNotebook.FolderName, book.FolderName, true);
 
 								//await book.Save();
 							}
 							else
 							{
-								if (book.Settings.IfLocalOnly_Upload)			{ await AzureFileClient.UploadFile(book.FileName); }
-								if (book.Settings.IfLocalOnly_Delete)			{ File.Delete(book.FileName); }
+								if (book.Settings.IfLocalOnly_Upload)			{ await AzureFileClient.UploadFile(book.FolderName); }
+								if (book.Settings.IfLocalOnly_Delete)			{ File.Delete(book.FolderName); }
 								if (book.Settings.IfLocalOnly_DisallowCloud)	{ book.Settings.AllowCloud = false; }
 							}
 						}
@@ -230,7 +218,6 @@ namespace myNotebooks.objects
 					else
 					{
 						book.Backup();
-						ItemsBackedUp.Add(book.Name + " (backed up locally)");
 					}
 				}
 				else
@@ -244,7 +231,7 @@ namespace myNotebooks.objects
 
 		public async Task			SynchWithCloud(bool alsoSynchSettings = false, Notebook notebook = null, bool checkCloudStatusOnly = false)
 		{
-			var notebooksFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"];
+			var notebooksFolder = Program.GroupsFolder;	// Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"];
 			var tempFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"];
 			List<string> allNotebooksNames = new List<string>();
 			await Utilities.PopulateAllNotebookNames();
@@ -259,11 +246,11 @@ namespace myNotebooks.objects
 			{
 				if (notebook != null)
 				{
-					if (notebook.FileName.EndsWith(" (local)") & notebook.Entries.Count == 1)
+					if (notebook.FolderName.EndsWith(" (local)") & notebook.Entries.Count == 1)
 					{
-						var sOldName = notebook.FileName;
-						var sNewName = notebook.FileName.Substring(0, notebook.FileName.LastIndexOf("\\") + 1) + notebook.Name;
-						notebook.FileName = sNewName;
+						var sOldName = notebook.FolderName;
+						var sNewName = notebook.FolderName.Substring(0, notebook.FolderName.LastIndexOf("\\") + 1) + notebook.Name;
+						notebook.FolderName = sNewName;
 						File.Move(sOldName, sNewName);
 						if (notebook.Settings.AllowCloud) { await AzureFileClient.UploadFile(notebooksFolder + notebook.Name); }
 						return;
