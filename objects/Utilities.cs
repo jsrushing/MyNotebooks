@@ -29,7 +29,7 @@ namespace myNotebooks.objects
 			else
 			{
 				List<string> s = Directory.GetFiles(Program.GroupsFolder + Program.GroupName_Encrypted).ToList();
-				Program.AllNotebookNames.AddRange(s.Select(s => EncryptDecrypt.Decrypt(s[(s.LastIndexOf("\\") + 1)..], Program.PIN_Group)));
+				Program.AllNotebookNames.AddRange(s.Select(s => EncryptDecrypt.Decrypt(s[(s.LastIndexOf("\\") + 1)..], true)));
 			}
 		} 
 
@@ -66,7 +66,7 @@ namespace myNotebooks.objects
 
 			foreach(var key in Program.DictCheckedNotebooks.Keys)
 			{
-				Program.PIN_Notebooks = Program.DictCheckedNotebooks[key];
+				Program.PIN = Program.DictCheckedNotebooks[key];
 				rtrn.Add(new Notebook(key).Open());
 			}
 
@@ -131,13 +131,13 @@ namespace myNotebooks.objects
 					{
 						frm2.ShowDialog();
 						ok2copy = frm2.Result == frmMessage.ReturnResult.Ok;
-						if (ok2copy) { Program.PIN_Notebooks = frm2.ResultText; }
+						if (ok2copy) { Program.PIN = frm2.ResultText; }
 					}
 
 					if (ok2copy)
 					{
 						File.Copy(fileName, target, true);
-						Program.DictCheckedNotebooks.Add(nbName, Program.PIN_Notebooks);
+						Program.DictCheckedNotebooks.Add(nbName, Program.PIN);
 						Program.AllNotebooks.Add(new Notebook(nbName).Open());
 						//filesCopied = true;
 						List<string> newLabels = LabelsManager.FindNewLabelsInOneSelectedJournal(null, nbName);
@@ -209,7 +209,7 @@ namespace myNotebooks.objects
 		}
 
 		public static void SetProgramPIN(string nb)
-		{ Program.PIN_Notebooks = Program.DictCheckedNotebooks[nb] == "" ? "" : Program.DictCheckedNotebooks[nb]; }
+		{ Program.PIN = Program.DictCheckedNotebooks[nb] == "" ? "" : Program.DictCheckedNotebooks[nb]; }
 
 		public static void SetStartPosition(Form formToInitialize, Form parentForm)
 		{ 

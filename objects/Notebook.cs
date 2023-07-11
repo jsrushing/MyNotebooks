@@ -82,7 +82,7 @@ namespace myNotebooks
 			if (Program.AzurePassword.Length > 0 && this.Settings.AllowCloud)
 			{ await AzureFileClient.DownloadOrDeleteFile(this.FolderName, Program.AzurePassword + this.Name, FileMode.Create, true);  }
 
-			Program.DictCheckedNotebooks.Add(this.Name, Program.PIN_Notebooks);
+			Program.DictCheckedNotebooks.Add(this.Name, Program.PIN);
 			List<string> labelsInBook = this.GetAllLabelsInNotebook();
 			List<Notebook> chkdBooks = Utilities.GetCheckedNotebooks();
 			List<Notebook> booksWithLabel = new List<Notebook>();
@@ -274,7 +274,7 @@ namespace myNotebooks
 		public async Task	ResetPIN(Form caller)
 		{
 			var newPIN		= string.Empty;
-			var currentPIN	= Program.PIN_Notebooks;
+			var currentPIN	= Program.PIN;
 			Saved = false;
 
 			// input current PIN
@@ -296,7 +296,7 @@ namespace myNotebooks
 
 						if (frmNewPIN.Result != frmMessage.ReturnResult.Cancel)
 						{
-							Program.PIN_Notebooks = newPIN;
+							Program.PIN = newPIN;
 							Saved = true;
 						}
 					}

@@ -11,29 +11,28 @@ namespace myNotebooks
 		/// <summary>
 		///  The main entry point for the application.allNotebooks
 		/// </summary>
-		public static List<Notebook>	AllNotebooks			= new List<Notebook>();
-		public static List<string>		AllNotebookNames		= new List<string>();
+		public static string PIN = string.Empty;
+		public static List<ListViewItem> lstFonts = new List<ListViewItem>();
 		public static string			AppRoot					= AppDomain.CurrentDomain.BaseDirectory;
 		public static string			AppVersion				= string.Empty;
-		public static string			AzureConnString			= "DefaultEndpointsProtocol=https;AccountName=container1a;AccountKey=4YNQFl9klH9bp8ieKKfhwiVgiKlZKWieBlyzvu8zlm2hyL0HaR/x3XpbpFYjJ5VF4YgtaAR9sN4F+ASttv59jA==;EndpointSuffix=core.windows.net";
-		public static bool				AzureFileExists			= false;
-		public static List<string>		AzureNotebookNames		= new List<string>();
 		public static string			AzurePassword			= string.Empty;
-		public static List<string>		AzurePinFileNames		= new List<string>();
-		public static List<string>		AzureRenameCommands		= new List<string>();
-		// add public static string s = configmgr[""] ... for all paths, etc. which are called out in app.config.
 		public static string			GroupsFolder			= Program.AppRoot + "groups\\";
-		// ......................................................................................................
 		public static string			GroupFolder				= string.Empty;
+		public static string			GroupPIN				= string.Empty;
+		// add public static string s = configmgr[""] ... for all paths, etc. which are called out in app.config.
 		public static string			GroupName_Encrypted		= string.Empty; // reference to folder name (encrypted) in groups\ folder. Used for creating new nbooks & labels
+		public static bool				AzureFileExists			= false;
+		public static string			AzureConnString			= "DefaultEndpointsProtocol=https;AccountName=container1a;AccountKey=4YNQFl9klH9bp8ieKKfhwiVgiKlZKWieBlyzvu8zlm2hyL0HaR/x3XpbpFYjJ5VF4YgtaAR9sN4F+ASttv59jA==;EndpointSuffix=core.windows.net";
 		public static string			InvalidFileName			= "Sorry, notebook names may not contain characters which are not allowed in file names, for example *, <, >, {, }, |, :, ?, /, \\ (and others).";
-		public static List<string>		PreviousGroups			= new List<string>();
-		public static string			PIN_Group				= string.Empty;
-		public static string			PIN_Notebooks			= string.Empty;
-		public static string			PIN_Master				= string.Empty;
 		public static bool				SkipFileSizeComparison	= false;
-		public static Dictionary<string, string> DictCheckedNotebooks	= new Dictionary<string, string>();
-		//public static List<ListViewItem> lstFonts = new List<ListViewItem>();
+		public static List<string>		AzureNotebookNames		= new List<string>();
+		public static List<string>		AzureRenameCommands		= new List<string>();
+		public static List<string>		AzurePinFileNames		= new List<string>();
+		public static List<Notebook>	AllNotebooks			= new List<Notebook>();
+		public static List<string> AllNotebookNames = new List<string>();
+		public static Dictionary<string, string> DictCheckedNotebooks = new Dictionary<string, string>();
+
+		//public static List<Journal> allJournals = new List<Journal>();
 
 		[STAThread]
         static void Main()

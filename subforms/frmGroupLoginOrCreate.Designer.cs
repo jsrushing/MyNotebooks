@@ -32,8 +32,6 @@
 			btnCreate = new System.Windows.Forms.Button();
 			btnLogin = new System.Windows.Forms.Button();
 			pnl2 = new System.Windows.Forms.Panel();
-			ddlExistingGroups = new System.Windows.Forms.ComboBox();
-			lblCreate = new System.Windows.Forms.Label();
 			lblShowPIN = new System.Windows.Forms.Label();
 			txtPwd = new System.Windows.Forms.TextBox();
 			label2 = new System.Windows.Forms.Label();
@@ -80,8 +78,6 @@
 			// 
 			// pnl2
 			// 
-			pnl2.Controls.Add(ddlExistingGroups);
-			pnl2.Controls.Add(lblCreate);
 			pnl2.Controls.Add(lblShowPIN);
 			pnl2.Controls.Add(txtPwd);
 			pnl2.Controls.Add(label2);
@@ -94,27 +90,6 @@
 			pnl2.Size = new System.Drawing.Size(277, 133);
 			pnl2.TabIndex = 12;
 			pnl2.Visible = false;
-			// 
-			// ddlExistingGroups
-			// 
-			ddlExistingGroups.FormattingEnabled = true;
-			ddlExistingGroups.Location = new System.Drawing.Point(87, 3);
-			ddlExistingGroups.Name = "ddlExistingGroups";
-			ddlExistingGroups.Size = new System.Drawing.Size(157, 23);
-			ddlExistingGroups.TabIndex = 13;
-			ddlExistingGroups.Visible = false;
-			ddlExistingGroups.SelectedIndexChanged += this.ddlPreviousGroups_SelectedIndexChanged;
-			ddlExistingGroups.TextChanged += this.ddlPreviousGroups_TextChanged;
-			// 
-			// lblCreate
-			// 
-			lblCreate.AutoSize = true;
-			lblCreate.Location = new System.Drawing.Point(231, 24);
-			lblCreate.Name = "lblCreate";
-			lblCreate.Size = new System.Drawing.Size(39, 15);
-			lblCreate.TabIndex = 42;
-			lblCreate.Text = "create";
-			lblCreate.Click += this.lblCreate_Click;
 			// 
 			// lblShowPIN
 			// 
@@ -149,7 +124,7 @@
 			// 
 			txtName.Location = new System.Drawing.Point(73, 16);
 			txtName.Name = "txtName";
-			txtName.Size = new System.Drawing.Size(157, 23);
+			txtName.Size = new System.Drawing.Size(193, 23);
 			txtName.TabIndex = 3;
 			txtName.TextChanged += this.EnableDisableBtnOK;
 			// 
@@ -189,7 +164,7 @@
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			CancelButton = btnCancel;
-			ClientSize = new System.Drawing.Size(280, 299);
+			ClientSize = new System.Drawing.Size(280, 304);
 			Controls.Add(pnl2);
 			Controls.Add(pnl1);
 			FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -217,7 +192,5 @@
 		private System.Windows.Forms.Button btnCancel;
 		private System.Windows.Forms.Button btnOK;
 		private System.Windows.Forms.Label lblShowPIN;
-		private System.Windows.Forms.Label lblCreate;
-		private System.Windows.Forms.ComboBox ddlExistingGroups;
 	}
 }

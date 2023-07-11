@@ -254,7 +254,7 @@ namespace myNotebooks.subforms
 				}
 
 				if (this.Entry != null & CurrentNotebook != null)
-				{ this.Text = "editing '" + Entry.Title + "' in '" + EncryptDecrypt.Decrypt(CurrentNotebook.Name) + "'"; }
+				{ this.Text = "editing '" + Entry.Title + "' in '" + EncryptDecrypt.Decrypt(CurrentNotebook.Name, true) + "'"; }
 				else
 				{ this.Text = dirty ? OriginalTitle + "*" : OriginalTitle; }
 			}
