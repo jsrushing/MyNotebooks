@@ -36,21 +36,21 @@ namespace myNotebooks.subforms
 
 		private void btnOk_Click(object sender, EventArgs e)
 		{
-			//char[] c = System.IO.Path.GetInvalidFileNameChars();
+			char[] c = System.IO.Path.GetInvalidFileNameChars();
 
-			//if (Utilities.FileNameIsValid(txtName.Text))
-			//{
+			if (Utilities.FileNameIsValid(txtName.Text))
+			{
 				NotebookSettings nbs	= Notebook.Settings;
 				this.Notebook			= new Notebook(txtName.Text, null, this);
 				Notebook.Settings		= nbs;
 				Program.PIN				= txtPIN.Text;
 				this.Hide();
-			//}
-			//else
-			//{
-			//	using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, Program.InvalidFileName, "", this))
-			//	{ frm.ShowDialog(); }
-			//}
+			}
+			else
+			{
+				using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, Program.InvalidFileName, "", this))
+				{ frm.ShowDialog(); }
+			}
 		}
 
 		private void lblShowPIN_Click(object sender, EventArgs e)

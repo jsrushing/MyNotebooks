@@ -25,7 +25,7 @@ namespace myNotebooks
 	{
 		public string				Name { get; set; }
 		public DateTime				LastSaved { get; set; }
-		public string				FolderName { get; set; }
+		public string				FileName { get; set; }
 		public List<Entry>			Entries = new List<Entry>();
 		public string root			= "notebooks\\";
 		public NotebookSettings		Settings;
@@ -37,8 +37,8 @@ namespace myNotebooks
             if(_name != null)
             {
 				this.Name = _name;
-				if (_fileName != null) { this.FolderName = _fileName; }
-				else { this.FolderName = Program.GroupsFolder + Program.GroupName_Encrypted + "\\" + this.Name; }	// Program.AppRoot + this.root + this.Name; }
+				if (_fileName != null) { this.FileName = _fileName; } 
+				else { this.FileName = Program.AppRoot + this.root + this.Name; }
 			}
 		}
 
@@ -49,8 +49,8 @@ namespace myNotebooks
 			string dir = ConfigurationManager.AppSettings["FolderStructure_NotebookIncrementalBackupsFolder"];
 			if (!System.IO.Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + dir))
 			{ System.IO.Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + dir); }
-			this.Name = FolderName.Substring(FolderName.LastIndexOf("\\") + 1);
-			File.Copy(this.FolderName, AppDomain.CurrentDomain.BaseDirectory + dir + this.Name, true);
+			this.Name = FileName.Substring(FileName.LastIndexOf("\\") + 1);
+			File.Copy(this.FileName, AppDomain.CurrentDomain.BaseDirectory + dir + this.Name, true);
 		}
 
 		public void			Backup_Forced()
@@ -60,7 +60,7 @@ namespace myNotebooks
 				string dir = AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_NotebookForcedBackupsFolder"];
 				if (!System.IO.Directory.Exists(dir))
 				{ System.IO.Directory.CreateDirectory(dir); }
-				File.Copy(this.FolderName, dir + this.Name);
+				File.Copy(this.FileName, dir + this.Name);
 				FileInfo fi = new FileInfo(dir + this.Name);
 				File.Move(dir + this.Name, dir + this.Name + " (" + fi.CreationTime.ToString(ConfigurationManager.AppSettings["DateFormat_ForcedBackupFileName"] + ")"), true);
 				BackupCompleted = true;
@@ -70,7 +70,7 @@ namespace myNotebooks
 
 		public async Task	Create(bool addCreatedOn = true)
         {
-			this.FolderName += this.Settings.AllowCloud ? "" : " (local)";
+			this.FileName += this.Settings.AllowCloud ? "" : " (local)";
 			if(addCreatedOn) Entries.Add(new Entry("created", "-", "-", "", this.Name));
 			Program.SkipFileSizeComparison = true;
 			await this.Save();
@@ -80,7 +80,7 @@ namespace myNotebooks
 		public async void	Delete()
 		{
 			if (Program.AzurePassword.Length > 0 && this.Settings.AllowCloud)
-			{ await AzureFileClient.DownloadOrDeleteFile(this.FolderName, Program.AzurePassword + this.Name, FileMode.Create, true);  }
+			{ await AzureFileClient.DownloadOrDeleteFile(this.FileName, Program.AzurePassword + this.Name, FileMode.Create, true);  }
 
 			Program.DictCheckedNotebooks.Add(this.Name, Program.PIN);
 			List<string> labelsInBook = this.GetAllLabelsInNotebook();
@@ -109,7 +109,7 @@ namespace myNotebooks
 				}
 			}
 
-			File.Delete(this.FolderName);
+			File.Delete(this.FileName);
 			DeleteBackups();
 		}
 		
@@ -158,28 +158,28 @@ namespace myNotebooks
         {
             Notebook nbRtrn = null;
 			var NotebookToOpen = "";
-			NotebookToOpen = useFileName ? this.FolderName : Program.GroupsFolder + this.Name;
+			NotebookToOpen = useFileName ? this.FileName : Program.AppRoot + this.root + this.Name;
 
 			try
             {
 				if(NotebookToOpen.Length > 0)
 				{
-					var nbName = NotebookToOpen.Contains("\\") ? Path.GetFileName(NotebookToOpen) : NotebookToOpen;
-						//NotebookToOpen.Substring(NotebookToOpen.LastIndexOf("\\") + 1, NotebookToOpen.Length - NotebookToOpen.LastIndexOf("\\") - 1) : NotebookToOpen;
+					var nbName = NotebookToOpen.Contains("\\") ?
+						NotebookToOpen.Substring(NotebookToOpen.LastIndexOf("\\") + 1, NotebookToOpen.Length - NotebookToOpen.LastIndexOf("\\") - 1) : NotebookToOpen;
 
 					using(Stream stream = File.Open(NotebookToOpen, FileMode.Open))
 					{
 						BinaryFormatter formatter = new BinaryFormatter();
 						nbRtrn					= (Notebook)formatter.Deserialize(stream);
-						//nbRtrn.Name				= EncryptDecrypt			.Decrypt(nbRtrn.Name);
+						nbRtrn.Name				= EncryptDecrypt			.Decrypt(nbRtrn.Name);
 						if(!nbRtrn.Name.Equals(" <decrypt failed> "))
 						{
-							//nbRtrn.FolderName ;	//		= EncryptDecrypt			.Decrypt(nbRtrn.FileName);
-							//nbRtrn.Entries.ForEach(e => e.Title		= EncryptDecrypt.Decrypt(e.Title));
-							//nbRtrn.Entries.ForEach(e => e.Text		= EncryptDecrypt.Decrypt(e.Text));
-							//nbRtrn.Entries.ForEach(e => e.Labels	= EncryptDecrypt.Decrypt(e.Labels));
-							//nbRtrn.Entries.ForEach(e => e.RTF		= EncryptDecrypt.Decrypt(e.RTF));
-							//nbRtrn.Entries.ForEach(e => e.NotebookName = EncryptDecrypt.Decrypt(e.NotebookName));
+							nbRtrn.FileName			= EncryptDecrypt			.Decrypt(nbRtrn.FileName);
+							nbRtrn.Entries.ForEach(e => e.Title		= EncryptDecrypt.Decrypt(e.Title));
+							nbRtrn.Entries.ForEach(e => e.Text		= EncryptDecrypt.Decrypt(e.Text));
+							nbRtrn.Entries.ForEach(e => e.Labels	= EncryptDecrypt.Decrypt(e.Labels));
+							nbRtrn.Entries.ForEach(e => e.RTF		= EncryptDecrypt.Decrypt(e.RTF));
+							nbRtrn.Entries.ForEach(e => e.NotebookName = EncryptDecrypt.Decrypt(e.NotebookName));
 						}
 					}
 				}	
@@ -231,9 +231,9 @@ namespace myNotebooks
 			//DeleteBackups();
 			var oldName		= this.Name;
 			var oldFileName = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + this.Name;
-			File.Move		(this.FolderName, this.FolderName.Substring(0, this.FolderName.LastIndexOf("\\")) + "\\" + newName);
+			File.Move		(this.FileName, this.FileName.Substring(0, this.FileName.LastIndexOf("\\")) + "\\" + newName);
 			Thread.Sleep	(500);
-			this.FolderName	= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + newName;
+			this.FileName	= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + newName;
 			this.Name		= newName;
 			this.Entries	.ForEach(e => e.NotebookName = newName);
 			await this.Save(false);
@@ -246,8 +246,8 @@ namespace myNotebooks
 				{ 
 					Program.AzureNotebookNames.Remove(Program.AzurePassword + oldName);
 					//await AzureFileClient.RenameFile($"notebooks/container1a.file.core.windows.net" + "//" + Program.AzurePassword + oldName, newName);
-					await AzureFileClient.DownloadOrDeleteFile(this.FolderName, Program.AzurePassword + oldName, FileMode.Create, true);
-					CloudSynchronizer cs = new CloudSynchronizer(); await AzureFileClient.UploadFile(this.FolderName);   // gets this newly renamed notebook to Azure
+					await AzureFileClient.DownloadOrDeleteFile(this.FileName, Program.AzurePassword + oldName, FileMode.Create, true);
+					CloudSynchronizer cs = new CloudSynchronizer(); await AzureFileClient.UploadFile(this.FileName);   // gets this newly renamed notebook to Azure
 
 				}
 				if (!Program.AzureNotebookNames.Contains(Program.AzurePassword + newName)) { Program.AzureNotebookNames.Add(Program.AzurePassword + newName); }
@@ -310,21 +310,20 @@ namespace myNotebooks
 
 		public async Task	Save(bool synchWithCloud = true)
 		{
-			var encryptedName = EncryptDecrypt.Encrypt(this.Name).Replace("/", "_").Replace("+", "-");
-			var fName = this.FolderName.Length > 0 ? this.FolderName : Program.GroupsFolder + encryptedName;
-			fName = fName.Contains("\\") ? fName + "\\" + encryptedName : Program.GroupsFolder + encryptedName;
+			var fName = this.FileName.Length > 0 ? this.FileName : Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + this.Name;
+			fName = fName.Contains("\\") ? fName :  Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + this.Name;
 
-			if(File.Exists(fName)) File.Delete(fName);
+			File.Delete(fName);
 
 			// Encrypt the notebook and entries to save to disk.
-			//this.LastSaved			= DateTime.Now;
-			//this.FileName			= EncryptDecrypt				.Encrypt(this.FileName);
-			//this.Name				= EncryptDecrypt				.Encrypt(this.Name);
-			//this.Entries.ForEach(e	=> e.Title	= EncryptDecrypt	.Encrypt(e.Title));
-			//this.Entries.ForEach(e	=> e.Text	= EncryptDecrypt	.Encrypt(e.Text));
-			//this.Entries.ForEach(e	=> e.Labels = EncryptDecrypt	.Encrypt(e.Labels));
-			//this.Entries.ForEach(e	=> e.RTF	= EncryptDecrypt	.Encrypt(e.RTF));
-			//this.Entries.ForEach(e	=> e.NotebookName = EncryptDecrypt.Encrypt(e.NotebookName));
+			this.LastSaved			= DateTime.Now;
+			this.FileName			= EncryptDecrypt				.Encrypt(this.FileName);
+			this.Name				= EncryptDecrypt				.Encrypt(this.Name);
+			this.Entries.ForEach(e	=> e.Title	= EncryptDecrypt	.Encrypt(e.Title));
+			this.Entries.ForEach(e	=> e.Text	= EncryptDecrypt	.Encrypt(e.Text));
+			this.Entries.ForEach(e	=> e.Labels = EncryptDecrypt	.Encrypt(e.Labels));
+			this.Entries.ForEach(e	=> e.RTF	= EncryptDecrypt	.Encrypt(e.RTF));
+			this.Entries.ForEach(e	=> e.NotebookName = EncryptDecrypt.Encrypt(e.NotebookName));
 
 			using (Stream stream = File.Open(fName, FileMode.Create))
 			{
@@ -332,23 +331,23 @@ namespace myNotebooks
 				formatter.Serialize(stream, this);
 			}
 
-			//if (Program.AzurePassword.Length > 0 && this.Settings.AllowCloud)
-			//{
-			//	if(synchWithCloud)
-			//	{
-			//		CloudSynchronizer cs = new CloudSynchronizer();	
-			//		await cs.SynchWithCloud(false, this);
-			//	}
-			//}
+			if (Program.AzurePassword.Length > 0 && this.Settings.AllowCloud)
+			{
+				if(synchWithCloud)
+				{
+					CloudSynchronizer cs = new CloudSynchronizer();	
+					await cs.SynchWithCloud(false, this);
+				}
+			}
 
 			// Decrypt the notebook and entries to hold in memory.
-			//this.FileName			= EncryptDecrypt			.Decrypt(this.FileName);
-			//this.Name				= EncryptDecrypt			.Decrypt(this.Name);
-			//this.Entries.ForEach(e	=> e.Title	= EncryptDecrypt.Decrypt(e.Title));
-			//this.Entries.ForEach(e	=> e.Text	= EncryptDecrypt.Decrypt(e.Text));
-			//this.Entries.ForEach(e	=> e.Labels = EncryptDecrypt.Decrypt(e.Labels));=
-			//this.Entries.ForEach(e	=> e.RTF	= EncryptDecrypt.Decrypt(e.RTF));
-			//this.Entries.ForEach(e	=> e.NotebookName = EncryptDecrypt.Decrypt(e.NotebookName));
+			this.FileName			= EncryptDecrypt			.Decrypt(this.FileName);
+			this.Name				= EncryptDecrypt			.Decrypt(this.Name);
+			this.Entries.ForEach(e	=> e.Title	= EncryptDecrypt.Decrypt(e.Title));
+			this.Entries.ForEach(e	=> e.Text	= EncryptDecrypt.Decrypt(e.Text));
+			this.Entries.ForEach(e	=> e.Labels = EncryptDecrypt.Decrypt(e.Labels));
+			this.Entries.ForEach(e	=> e.RTF	= EncryptDecrypt.Decrypt(e.RTF));
+			this.Entries.ForEach(e	=> e.NotebookName = EncryptDecrypt.Decrypt(e.NotebookName));
 
 			//Backup();
 			await Utilities.PopulateAllNotebookNames();

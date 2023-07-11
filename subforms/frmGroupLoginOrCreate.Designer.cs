@@ -32,7 +32,6 @@
 			btnCreate = new System.Windows.Forms.Button();
 			btnLogin = new System.Windows.Forms.Button();
 			pnl2 = new System.Windows.Forms.Panel();
-			lblShowPIN = new System.Windows.Forms.Label();
 			txtPwd = new System.Windows.Forms.TextBox();
 			label2 = new System.Windows.Forms.Label();
 			txtName = new System.Windows.Forms.TextBox();
@@ -78,7 +77,6 @@
 			// 
 			// pnl2
 			// 
-			pnl2.Controls.Add(lblShowPIN);
 			pnl2.Controls.Add(txtPwd);
 			pnl2.Controls.Add(label2);
 			pnl2.Controls.Add(txtName);
@@ -91,25 +89,13 @@
 			pnl2.TabIndex = 12;
 			pnl2.Visible = false;
 			// 
-			// lblShowPIN
-			// 
-			lblShowPIN.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
-			lblShowPIN.Location = new System.Drawing.Point(231, 55);
-			lblShowPIN.Name = "lblShowPIN";
-			lblShowPIN.Size = new System.Drawing.Size(35, 13);
-			lblShowPIN.TabIndex = 41;
-			lblShowPIN.Text = "show";
-			lblShowPIN.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			lblShowPIN.Click += this.lblShowPIN_Click;
-			// 
 			// txtPwd
 			// 
 			txtPwd.Location = new System.Drawing.Point(73, 45);
 			txtPwd.Name = "txtPwd";
 			txtPwd.PasswordChar = '*';
-			txtPwd.Size = new System.Drawing.Size(157, 23);
+			txtPwd.Size = new System.Drawing.Size(198, 23);
 			txtPwd.TabIndex = 5;
-			txtPwd.TextChanged += this.EnableDisableBtnOK;
 			// 
 			// label2
 			// 
@@ -124,10 +110,8 @@
 			// 
 			txtName.Location = new System.Drawing.Point(73, 16);
 			txtName.Name = "txtName";
-			txtName.Size = new System.Drawing.Size(193, 23);
+			txtName.Size = new System.Drawing.Size(198, 23);
 			txtName.TabIndex = 3;
-			txtName.Text = "Operations";
-			txtName.TextChanged += this.EnableDisableBtnOK;
 			// 
 			// label1
 			// 
@@ -161,11 +145,9 @@
 			// 
 			// frmGroupLoginOrCreate
 			// 
-			AcceptButton = btnOK;
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			CancelButton = btnCancel;
-			ClientSize = new System.Drawing.Size(280, 304);
+			ClientSize = new System.Drawing.Size(280, 285);
 			Controls.Add(pnl2);
 			Controls.Add(pnl1);
 			FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -192,6 +174,5 @@
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Button btnCancel;
 		private System.Windows.Forms.Button btnOK;
-		private System.Windows.Forms.Label lblShowPIN;
 	}
 }
