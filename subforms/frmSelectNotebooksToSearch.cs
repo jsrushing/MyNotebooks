@@ -105,7 +105,7 @@ namespace myNotebooks.subforms
 			Program.DictCheckedNotebooks[s] = txtPIN.Text;
 			await AddHasPINIndicators();
 			txtPIN.PasswordChar = '\0';
-			txtPIN.Text = "(select a notebook)";
+			txtPIN.Text = "(select a Journal)";
 			txtPIN.Enabled = false;
 			btnAddPIN.Enabled = false;
 			lblShowPIN.Visible = false;
