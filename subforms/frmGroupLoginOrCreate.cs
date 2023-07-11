@@ -23,9 +23,6 @@ namespace myJournal.subforms
 		{
 			InitializeComponent();
 			btnLogin.Enabled = GroupDirectories.Count() > 0;
-			// for debugging
-			txtName.Text = "Operations";
-			txtPwd.Text = "ops";
 		}
 
 		private void EnableDisableBtnOK(object sender, EventArgs e)

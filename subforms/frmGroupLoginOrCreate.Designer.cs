@@ -126,6 +126,7 @@
 			txtName.Name = "txtName";
 			txtName.Size = new System.Drawing.Size(193, 23);
 			txtName.TabIndex = 3;
+			txtName.Text = "Operations";
 			txtName.TextChanged += this.EnableDisableBtnOK;
 			// 
 			// label1
