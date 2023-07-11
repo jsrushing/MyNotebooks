@@ -82,7 +82,7 @@ namespace myNotebooks
 			if (Program.AzurePassword.Length > 0 && this.Settings.AllowCloud)
 			{ await AzureFileClient.DownloadOrDeleteFile(this.FolderName, Program.AzurePassword + this.Name, FileMode.Create, true);  }
 
-			Program.DictCheckedNotebooks.Add(this.Name, Program.PIN_Notebook);
+			Program.DictCheckedNotebooks.Add(this.Name, Program.PIN_Notebooks);
 			List<string> labelsInBook = this.GetAllLabelsInNotebook();
 			List<Notebook> chkdBooks = Utilities.GetCheckedNotebooks();
 			List<Notebook> booksWithLabel = new List<Notebook>();
@@ -174,10 +174,10 @@ namespace myNotebooks
 
 						if(!nbRtrn.Name.Equals(" <decrypt failed> "))		// This is obsolete. Find another way to trap.
 						{
-							nbRtrn.Entries.ForEach(e => e.Title		= EncryptDecrypt.Decrypt(e.Title, Program.PIN_Notebook));
-							nbRtrn.Entries.ForEach(e => e.Text		= EncryptDecrypt.Decrypt(e.Text, Program.PIN_Notebook));
-							nbRtrn.Entries.ForEach(e => e.Labels	= EncryptDecrypt.Decrypt(e.Labels, Program.PIN_Notebook));
-							nbRtrn.Entries.ForEach(e => e.RTF		= EncryptDecrypt.Decrypt(e.RTF, Program.PIN_Notebook));
+							nbRtrn.Entries.ForEach(e => e.Title		= EncryptDecrypt.Decrypt(e.Title));
+							nbRtrn.Entries.ForEach(e => e.Text		= EncryptDecrypt.Decrypt(e.Text));
+							nbRtrn.Entries.ForEach(e => e.Labels	= EncryptDecrypt.Decrypt(e.Labels));
+							nbRtrn.Entries.ForEach(e => e.RTF		= EncryptDecrypt.Decrypt(e.RTF));
 						}
 					}
 				}	
@@ -274,7 +274,7 @@ namespace myNotebooks
 		public async Task	ResetPIN(Form caller)
 		{
 			var newPIN		= string.Empty;
-			var currentPIN	= Program.PIN_Notebook;
+			var currentPIN	= Program.PIN_Notebooks;
 			Saved = false;
 
 			// input current PIN
@@ -296,7 +296,7 @@ namespace myNotebooks
 
 						if (frmNewPIN.Result != frmMessage.ReturnResult.Cancel)
 						{
-							Program.PIN_Notebook = newPIN;
+							Program.PIN_Notebooks = newPIN;
 							Saved = true;
 						}
 					}

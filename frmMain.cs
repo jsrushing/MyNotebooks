@@ -154,7 +154,6 @@ using System.Threading.Tasks;
 using Encryption;
 using myJournal.subforms;
 using System.DirectoryServices.ActiveDirectory;
-using MyNotebooks.subforms;
 
 namespace myNotebooks.subforms
 {
@@ -188,60 +187,28 @@ namespace myNotebooks.subforms
 
 		private async void frmMain_Load(object sender, EventArgs e)
 		{
-
-			// Get the device PIN which will be used to decrypt the 'already opened accounts' file.
-			if (File.Exists(Program.AppRoot + "ap"))
+			// Get the device PIN. This is used to decrypt the stored AzurePassword.
+			using(frmMessage frm = new frmMessage(frmMessage.OperationType.PasswordInputBox, "What is the device PIN?", "enter pin", this))
 			{
-				using (frmMessage frm = new frmMessage(frmMessage.OperationType.PasswordInputBox, "What is the device PIN?", "enter pin", this))
+				frm.ShowDialog();
+				Program.PIN_Device = frm.ResultText;
+			}
+
+			string[] accounts = new string[1];
+
+			// See if a master PIN file exists so user can select an account. 
+			if (File.Exists(Program.AppRoot + "mn"))
+			{
+				accounts = File.ReadAllLines(Program.AppRoot + "mn");
+				Array.ForEach(accounts, account => EncryptDecrypt.Decrypt(account, Program.PIN_Device));
+
+				// show in dropdown...
+				using(frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "", "Select An Account", this, accounts))
 				{
 					frm.ShowDialog();
-					Program.PIN_Device = frm.Result == frmMessage.ReturnResult.Ok ? frm.ResultText : null;
+					if (frm.Result == frmMessage.ReturnResult.Ok) { Program.PIN_Master = frm.ResultText; }
 				}
 			}
-
-			using (frmManageGroupsAndAccounts frm = new frmManageGroupsAndAccounts(false, true))
-			{
-				frm.ShowDialog(this);
-				if(Program.AccountName == null || Program.AccountName.Length == 0) { this.Close(); return; }
-			}
-				
-			
-
-			using(frmMessage frm = new frmMessage(frmMessage.OperationType.PasswordInputBox, "What's the Account PIN?", "PIN Required", this))
-			{
-				frm.ShowDialog(this);
-				if(frm.Result == frmMessage.ReturnResult.Ok)
-				{
-					string[] dirs = Directory.GetDirectories(Program.AppRoot + "accounts\\");
-
-					foreach(string dir in dirs)
-					{
-
-					}
-				}
-			}
-
-			//if(Program.PIN_Device != null && File.Exists(Program.AppRoot + "mn"))	// There's a stored list of Accounts on the device.
-			//{
-			//	string[] accounts =  File.ReadAllLines(Program.AppRoot + "mn");
-			//	Array.ForEach(accounts, account => EncryptDecrypt.Decrypt(account, Program.PIN_Device));
-
-			//}
-
-			// Now get the account ...
-
-			//string[] accounts = File.ReadAllLines(Program.AppRoot + "mn");
-
-			//// See if a master PIN file exists so user can select an account. 
-			//if (File.Exists(Program.AppRoot + "mn"))
-			//{
-			//	// show in dropdown...
-			//	using(frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "", "Select An Account", this, accounts))
-			//	{
-			//		frm.ShowDialog();
-			//		if (frm.Result == frmMessage.ReturnResult.Ok) { Program.PIN_Master = frm.ResultText; }
-			//	}
-			//}
 
 			if(Program.PIN_Master.Length == 0) // Wasn't set above. Fatal fail on Cancel.
 			{
@@ -261,11 +228,11 @@ namespace myNotebooks.subforms
 			}
 
 			// If the account name is new, create it.
-			//if(accounts.Length > 0 && !accounts.Contains(Program.PIN_Master))
-			//{
-			//	// it's a new group
+			if(accounts.Length > 0 && !accounts.Contains(Program.PIN_Master))
+			{
+				// it's a new group
 
-			//}
+			}
 
 
 			var curGroup = Program.GroupName_Encrypted;
@@ -443,14 +410,14 @@ namespace myNotebooks.subforms
 			this.Cursor = Cursors.WaitCursor;
 			lstEntries.Items.Clear();
 			rtbSelectedEntry.Text = string.Empty;
-			Program.PIN_Notebook = txtJournalPIN.Text;
+			Program.PIN_Notebooks = txtJournalPIN.Text;
 			lblWrongPin.Visible = false;
 
 			CurrentNotebook = CurrentNotebook == null ? new Notebook(EncryptDecrypt.Encrypt(ddlNotebooks.Text, Program.PIN_Group)).Open(true) : CurrentNotebook;
 
 			if (CurrentNotebook != null && Program.DictCheckedNotebooks.Count == 1 && Program.DictCheckedNotebooks.Keys.Contains(CurrentNotebook.Name)) { Program.DictCheckedNotebooks.Clear(); }
 
-			if (Program.DictCheckedNotebooks.Count == 0) { Program.DictCheckedNotebooks.Add(EncryptDecrypt.Encrypt(ddlNotebooks.Text, Program.PIN_Notebook), txtJournalPIN.Text); }
+			if (Program.DictCheckedNotebooks.Count == 0) { Program.DictCheckedNotebooks.Add(EncryptDecrypt.Encrypt(ddlNotebooks.Text, Program.PIN_Notebooks), txtJournalPIN.Text); }
 			var wrongPIN = true;
 
 			if (CurrentNotebook != null)

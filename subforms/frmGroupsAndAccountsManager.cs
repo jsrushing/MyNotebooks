@@ -8,9 +8,9 @@ using System.Windows.Forms;
 
 namespace MyNotebooks.subforms
 {
-	public partial class frmLogin_Corporate : Form
+	public partial class frmGroupsManager : Form
 	{
-		public frmLogin_Corporate()
+		public frmGroupsManager()
 		{
 			InitializeComponent();
 		}

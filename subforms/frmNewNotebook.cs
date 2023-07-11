@@ -24,7 +24,7 @@ namespace myNotebooks.subforms
 		{
 			if (txtName.Text.Length > 0)
 			{
-				WorkingNotebook = new Notebook(EncryptDecrypt.Encrypt(txtName.Text, Program.PIN_Notebook));
+				WorkingNotebook = new Notebook(EncryptDecrypt.Encrypt(txtName.Text, Program.PIN_Notebooks));
 				WorkingNotebook.Settings = WorkingSettings;
 				using (frmNotebookSettings nbs = new frmNotebookSettings(WorkingNotebook, this, false)) { nbs.ShowDialog(); }
 			}
@@ -45,7 +45,7 @@ namespace myNotebooks.subforms
 			//Program.AllNotebookNames.Clear();
 			this.WorkingNotebook = WorkingNotebook == null ?  new Notebook(EncryptDecrypt.Encrypt(txtName.Text, Program.PIN_Group), null, this) : WorkingNotebook;
 			WorkingNotebook.Settings = WorkingNotebook.Settings == null ? WorkingSettings : WorkingNotebook.Settings;
-			Program.PIN_Notebook = txtPIN.Text;
+			Program.PIN_Notebooks = txtPIN.Text;
 			Program.AllNotebookNames.Add(EncryptDecrypt.Decrypt(WorkingNotebook.Name, Program.PIN_Group));
 			this.Hide();
 		}

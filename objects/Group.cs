@@ -10,27 +10,18 @@ namespace MyNotebooks.objects
 {
 	internal class Group
 	{
-		public string[] NotebookNames { get; private set; }
+		public List<Notebook> Notebooks { get; private set; } = new List<Notebook>();
+		public string Name { get; private set; }
+		public string PIN { get; private set; }
 
-		public Group(string groupName)
+		public Group(string Name, string PIN)
 		{
-			groupName = Program.GroupFolder + "\\" + groupName;
-
-			if (Directory.Exists(groupName))
+			this.PIN = PIN;
+			this.Name = Name;
+			foreach (string nbName in Directory.GetDirectories(Program.GroupsFolder + this.Name))
 			{
-				NotebookNames = Directory.GetFiles(groupName);
-				Array.ForEach(NotebookNames, x => x = EncryptDecrypt.Decrypt(x, Program.PIN_Group));
+				Program.AllNotebookNames.Add(EncryptDecrypt.Decrypt(nbName, Program.PIN_Group));
 			}
-			else { CreateNew(groupName); }
-		}
-
-		public void CreateNew(string groupName)
-		{
-			var groupFolder = Program.AccountName + "\\" + groupName;
-			Directory.CreateDirectory(groupFolder);
-			Directory.CreateDirectory(groupFolder + "\\temp");
-			Directory.CreateDirectory(groupFolder + "\\settings");
-			Program.GroupFolder = groupFolder;
 		}
 	}
 }
