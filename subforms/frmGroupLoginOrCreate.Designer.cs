@@ -51,13 +51,13 @@
 			pnl1.Controls.Add(btnLogin);
 			pnl1.Location = new System.Drawing.Point(0, 0);
 			pnl1.Name = "pnl1";
-			pnl1.Size = new System.Drawing.Size(277, 118);
+			pnl1.Size = new System.Drawing.Size(277, 133);
 			pnl1.TabIndex = 11;
 			// 
 			// btnCreate
 			// 
 			btnCreate.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			btnCreate.Location = new System.Drawing.Point(60, 62);
+			btnCreate.Location = new System.Drawing.Point(60, 68);
 			btnCreate.Name = "btnCreate";
 			btnCreate.Size = new System.Drawing.Size(165, 46);
 			btnCreate.TabIndex = 1;
@@ -69,7 +69,7 @@
 			// btnLogin
 			// 
 			btnLogin.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			btnLogin.Location = new System.Drawing.Point(60, 10);
+			btnLogin.Location = new System.Drawing.Point(60, 16);
 			btnLogin.Name = "btnLogin";
 			btnLogin.Size = new System.Drawing.Size(165, 46);
 			btnLogin.TabIndex = 0;
@@ -89,9 +89,9 @@
 			pnl2.Controls.Add(label1);
 			pnl2.Controls.Add(btnCancel);
 			pnl2.Controls.Add(btnOK);
-			pnl2.Location = new System.Drawing.Point(0, 124);
+			pnl2.Location = new System.Drawing.Point(0, 151);
 			pnl2.Name = "pnl2";
-			pnl2.Size = new System.Drawing.Size(277, 108);
+			pnl2.Size = new System.Drawing.Size(277, 133);
 			pnl2.TabIndex = 12;
 			pnl2.Visible = false;
 			// 
@@ -189,7 +189,7 @@
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			CancelButton = btnCancel;
-			ClientSize = new System.Drawing.Size(280, 255);
+			ClientSize = new System.Drawing.Size(280, 299);
 			Controls.Add(pnl2);
 			Controls.Add(pnl1);
 			FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -197,8 +197,6 @@
 			MinimizeBox = false;
 			Name = "frmGroupLoginOrCreate";
 			Text = "Groups";
-			FormClosing += this.frmGroupLoginOrCreate_FormClosing;
-			FormClosed += this.frmGroupLoginOrCreate_FormClosed;
 			Load += this.frmGroupLoginOrCreate_Load;
 			pnl1.ResumeLayout(false);
 			pnl2.ResumeLayout(false);

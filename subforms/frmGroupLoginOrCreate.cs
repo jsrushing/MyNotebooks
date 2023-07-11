@@ -17,7 +17,6 @@ namespace myJournal.subforms
 	public partial class frmGroupLoginOrCreate : Form
 	{
 		public string GroupName { get; private set; }
-		public bool Cancelled { get; private set; } = false;
 		private bool LoggingIn;
 		private string[] GroupDirectories = Directory.GetDirectories(Program.GroupsFolder);
 
@@ -33,16 +32,6 @@ namespace myJournal.subforms
 			if (doAutoLogin) { LoginOrCreate(btnLogin, null); }
 		}
 
-		private void frmGroupLoginOrCreate_FormClosed(object sender, FormClosedEventArgs e)
-		{ 
-			//Cancelled = true;
-			this.Hide();
-		}
-
-		private void frmGroupLoginOrCreate_FormClosing(object sender, FormClosingEventArgs e)
-		{
-		}
-
 		private void frmGroupLoginOrCreate_Load(object sender, EventArgs e)
 		{
 			pnl1.Location = new Point(0, 0);
@@ -54,7 +43,7 @@ namespace myJournal.subforms
 
 		private void btnCancel_Click(object sender, EventArgs e)
 		{
-			Cancelled = true;
+			GroupName = null;
 			this.Hide();
 		}
 
@@ -69,6 +58,32 @@ namespace myJournal.subforms
 
 			if (LoggingIn)
 			{
+				//var v = Directory.GetCurrentDirectory().Select(n => EncryptDecrypt.Decrypt(n) == txtName.Text).ToList();
+
+
+
+				// use the group name and password to decrypt folder names in the group folder until a match is found.
+				//foreach (var dirName in Directory.GetDirectories(Program.GroupsFolder))
+				//{
+				//	var vNameNotBase64 = Path.GetFileName(dirName);
+				//	var decryptTry = EncryptDecrypt.Decrypt(vNameNotBase64, Program.PIN_Master);
+
+				//	if (decryptTry.Length > 0 && decryptTry.ToLower() == txtName.Text.ToLower())
+				//	{
+				//		Program.GroupName_Encrypted = vNameNotBase64;
+				//		var vPath = string.Empty;
+
+				//		// decrypt the notebook names in the group folder
+				//		foreach (var s in Directory.GetFiles(Program.GroupsFolder + vNameNotBase64))
+				//		{
+				//			vPath = EncryptDecrypt.Decrypt(Path.GetFileName(s), Program.PIN_Group);
+				//			Program.AllNotebookNames.Add(vPath);
+				//		}
+
+				//		if (!Program.PreviousGroups.Contains(decryptTry)) { Program.PreviousGroups.Add(decryptTry); }
+				//	}
+				//}
+
 				if (Program.GroupName_Encrypted != null)
 				{
 					foreach (var nbName in Directory.GetFiles(Program.GroupFolder))
@@ -76,11 +91,11 @@ namespace myJournal.subforms
 
 					GroupName = txtName.Text;
 					Program.PIN_Group = txtPwd.Text;
-					msg = "You are logged in to the '" + txtName.Text + "' group.";
+					msg = "You are logged in to '" + txtName.Text + "'.";
 				}
 				else
 				{
-					msg = "No Group found with this name and PIN.";
+					msg = "No group found";
 				}
 			}
 			else    // creating a new group
@@ -91,6 +106,7 @@ namespace myJournal.subforms
 				Directory.CreateDirectory(Program.GroupsFolder + Program.GroupName_Encrypted + "\\settings");
 				msg = "The group '" + txtName.Text + "' has been created.";
 				this.GroupName = txtName.Text;
+				//Program.PreviousGroups.Add(Program.GroupName_Encrypted);
 			}
 
 			using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, msg, "Operation Complete", this)) { frm.ShowDialog(); }
@@ -100,7 +116,7 @@ namespace myJournal.subforms
 		private void ddlPreviousGroups_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			txtName.Text = ddlExistingGroups.Text;
-			txtPwd.Text = string.Empty;
+			txtPwd.Text = string.Empty; 
 			txtPwd.Focus();
 		}
 
@@ -113,14 +129,14 @@ namespace myJournal.subforms
 		private void EnableDisableBtnOK(object sender, EventArgs e)
 		{ btnOK.Enabled = txtName.Text.Length > 0; }
 
-		private void lblCreate_Click(object sender, EventArgs e)
-		{ LoginOrCreate(btnCreate, null); }
-
 		private void lblShowPIN_Click(object sender, EventArgs e)
 		{
 			txtPwd.PasswordChar = txtPwd.PasswordChar == '*' ? '\0' : '*';
 			lblShowPIN.Text = lblShowPIN.Text == "show" ? "hide" : "show";
 		}
+
+		private void lblCreate_Click(object sender, EventArgs e)
+		{ LoginOrCreate(btnCreate, null); }
 
 		private void LoginOrCreate(object sender, EventArgs e)
 		{
@@ -129,13 +145,8 @@ namespace myJournal.subforms
 			pnl1.Visible = false;
 			pnl2.Visible = true;
 			txtName.Focus();
-
-			if (LoggingIn)
-			{
-				ddlExistingGroups.Visible = true;
-				ddlExistingGroups.Text = Program.GroupName_Encrypted.Length > 0 ? EncryptDecrypt.Decrypt(Program.GroupName_Encrypted, Program.PIN_Master) : ddlExistingGroups.Items[0].ToString();
-			}
-
+			ddlExistingGroups.Visible = LoggingIn;
+			ddlExistingGroups.SelectedIndex = 0;
 			txtPwd.Focus();
 			if (!LoggingIn) { txtName.Text = ""; txtName.Focus(); }
 		}
