@@ -206,9 +206,9 @@ namespace myNotebooks.subforms
 				{
 					frm.ShowDialog();
 
-					if (frm.WorkingNotebook != null)
+					if (frm.Notebook != null)
 					{
-						await frm.WorkingNotebook.Create();
+						await frm.Notebook.Create();
 						LoadNotebooks();
 					}
 					else
@@ -326,7 +326,6 @@ namespace myNotebooks.subforms
 			pnlDateFilters.Left = pnlPin.Left - 11;
 			ShowHideMenusAndControls(SelectionState.HideAll);
 			await Utilities.PopulateAllNotebookNames();
-			if(ddlNotebooks.Items.Count == 0) { LoadNotebooks(); }
 
 			//if (Program.AzurePassword.Length > 0)
 			//{
@@ -376,12 +375,9 @@ namespace myNotebooks.subforms
 			rtbSelectedEntry.Text = string.Empty;
 			Program.PIN = txtJournalPIN.Text;
 			lblWrongPin.Visible = false;
-
-			CurrentNotebook = CurrentNotebook == null ? new Notebook(EncryptDecrypt.Encrypt(ddlNotebooks.Text, true)).Open(true) : CurrentNotebook;
-
 			if (CurrentNotebook != null && Program.DictCheckedNotebooks.Count == 1 && Program.DictCheckedNotebooks.Keys.Contains(CurrentNotebook.Name)) { Program.DictCheckedNotebooks.Clear(); }
-
-			if (Program.DictCheckedNotebooks.Count == 0) { Program.DictCheckedNotebooks.Add(EncryptDecrypt.Encrypt(ddlNotebooks.Text, true), txtJournalPIN.Text); }
+			if (Program.DictCheckedNotebooks.Count == 0) { Program.DictCheckedNotebooks.Add(ddlNotebooks.Text, txtJournalPIN.Text); }
+			CurrentNotebook = new Notebook(EncryptDecrypt.Encrypt(ddlNotebooks.Text).Replace("/", "_").Replace("+", "-"), null, this).Open(true);
 			var wrongPIN = true;
 
 			if (CurrentNotebook != null)
@@ -401,18 +397,18 @@ namespace myNotebooks.subforms
 				}
 				else
 				{
-					//if (CurrentNotebook.Settings.AllowCloud && Program.AzurePassword.Length > 0)
-					//{
-					//	var nbPath = CurrentNotebook.FolderName;
-					//	var nbName = CurrentNotebook.Name;
-					//	CloudSynchronizer cs = new CloudSynchronizer();
-					//	await cs.SynchWithCloud(false, CurrentNotebook);
-					//	Notebook curNotebook = new Notebook(nbName, nbPath, this).Open(true);
+					if (CurrentNotebook.Settings.AllowCloud && Program.AzurePassword.Length > 0)
+					{
+						var nbPath = CurrentNotebook.FolderName;
+						var nbName = CurrentNotebook.Name;
+						CloudSynchronizer cs = new CloudSynchronizer();
+						await cs.SynchWithCloud(false, CurrentNotebook);
+						Notebook curNotebook = new Notebook(nbName, nbPath, this).Open(true);
 
-					//	if (curNotebook == null)    // the sync deleted the file
-					//	{ ddlNotebooks.Items.Remove(nbName); }
-					//	else { if (!curNotebook.Equals(CurrentNotebook)) { CurrentNotebook = curNotebook; } }// the synch dl'd a newer copy of the file
-					//}
+						if (curNotebook == null)    // the sync deleted the file
+						{ ddlNotebooks.Items.Remove(nbName); }
+						else { if (!curNotebook.Equals(CurrentNotebook)) { CurrentNotebook = curNotebook; } }// the synch dl'd a newer copy of the file
+					}
 
 					try
 					{
@@ -598,12 +594,12 @@ namespace myNotebooks.subforms
 				if (ddlNotebooks.Items.Count == 1)
 				{
 					ddlNotebooks.SelectedIndex = 0;
-					ShowHideMenusAndControls(SelectionState.NotebookSelectedNotLoaded);
+					//ShowHideMenusAndControls(SelectionState.NotebookSelectedNotLoaded);
 					txtJournalPIN.Focus();
 				}
-				else { ShowHideMenusAndControls(SelectionState.NotebookNotSelected); }
 
-				lstEntries.Visible = false;	
+				lstEntries.Visible = false;
+				ShowHideMenusAndControls(SelectionState.NotebookNotSelected);
 				txtJournalPIN.Focus();
 			}
 		}
@@ -755,10 +751,12 @@ namespace myNotebooks.subforms
 			{
 				frm.ShowDialog(this);
 
-				if (frm.WorkingNotebook != null)
+				if (frm.Notebook != null && frm.Notebook.Name.Length > 0)
 				{
-					frm.WorkingNotebook.LastSaved = DateTime.Now;
-					await frm.WorkingNotebook.Create();
+					frm.Notebook.LastSaved = DateTime.Now;
+					frm.Notebook.FolderName = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + frm.Notebook.Name;
+					await frm.Notebook.Create();
+					//await Utilities.PopulateAllNotebookNames();
 					LoadNotebooks();
 				}
 			}

@@ -9,8 +9,7 @@
     <UseWindowsForms>true</UseWindowsForms>	  
     <StartupObject>myNotebooks.Program</StartupObject>	  
     <SignAssembly>False</SignAssembly>	  
-    <UserSecretsId>dfb5f457-7b97-42bf-a325-9fb644e0cb5b</UserSecretsId>	  
-    <Description>Document management system capable of managing </Description>
+    <UserSecretsId>dfb5f457-7b97-42bf-a325-9fb644e0cb5b</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
