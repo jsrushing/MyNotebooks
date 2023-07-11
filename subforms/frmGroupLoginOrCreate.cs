@@ -9,7 +9,6 @@ using System.Text;
 using System.Windows.Forms;
 using Encryption;
 using myNotebooks;
-using myNotebooks.objects;
 using myNotebooks.subforms;
 
 namespace myJournal.subforms
@@ -20,16 +19,13 @@ namespace myJournal.subforms
 		private bool LoggingIn;
 		private string[] GroupDirectories = Directory.GetDirectories(Program.GroupsFolder);
 
-		public frmGroupLoginOrCreate(bool doAutoLogin, Form parent)
+		public frmGroupLoginOrCreate()
 		{
 			InitializeComponent();
 			btnLogin.Enabled = GroupDirectories.Count() > 0;
-			Utilities.SetStartPosition(this, parent);
 			// for debugging
 			txtName.Text = "Operations";
 			txtPwd.Text = "ops";
-			if (doAutoLogin) { LoginOrCreate(btnLogin, null); }
-
 		}
 
 		private void EnableDisableBtnOK(object sender, EventArgs e)
@@ -55,11 +51,8 @@ namespace myJournal.subforms
 		{
 			Program.PIN = txtPwd.Text;
 			Program.GroupName_Encrypted = null;
-			Program.AzurePassword = Program.PIN;
+			Program.AzurePassword = Program.GroupName_Encrypted;
 			var msg = "";
-			Program.GroupPIN = Program.PIN;
-			Program.GroupName_Encrypted = EncryptDecrypt.Encrypt(txtName.Text, true);
-			Program.GroupFolder = Program.GroupsFolder + Program.GroupName_Encrypted;
 
 			if (LoggingIn)
 			{
@@ -69,9 +62,8 @@ namespace myJournal.subforms
 				foreach (var dirName in Directory.GetDirectories(Program.GroupsFolder))
 				{
 					var vNameNotBase64 = Path.GetFileName(dirName);
-					var decryptTry = EncryptDecrypt.Decrypt(vNameNotBase64, true).ToLower();
 
-					if (decryptTry.Length > 0 && decryptTry == txtName.Text.ToLower())
+					if (EncryptDecrypt.Decrypt(Path.GetFileName(dirName)) == txtName.Text)
 					{
 						Program.GroupName_Encrypted = vNameNotBase64;
 
@@ -96,14 +88,14 @@ namespace myJournal.subforms
 			else    // creating a new group
 			{
 				// create the folder
+				Program.GroupName_Encrypted = EncryptDecrypt.Encrypt(txtName.Text).Replace("/", "_").Replace("+", "-");
+				Program.GroupPIN = Program.PIN;
 				Directory.CreateDirectory(Program.GroupsFolder + Program.GroupName_Encrypted);
-				Directory.CreateDirectory(Program.GroupsFolder + Program.GroupName_Encrypted + "\\temp");
-				Directory.CreateDirectory(Program.GroupsFolder + Program.GroupName_Encrypted + "\\settings");
 				msg = "The group '" + txtName.Text + "' has been created.";
 				// now save all nb's w/ their name encrypted with program.GroupPIN
 			}
 
-			using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, msg, "Operation Complete", this)) { frm.ShowDialog(); }
+			using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, msg, "Opersation Complete", this)) { frm.ShowDialog(); }
 			this.Close();
 		}
 

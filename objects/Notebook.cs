@@ -328,14 +328,14 @@ namespace myNotebooks
 				formatter.Serialize(stream, this);
 			}
 
-			if (Program.AzurePassword.Length > 0 && this.Settings.AllowCloud)
-			{
-				if (synchWithCloud)
-				{
-					//CloudSynchronizer cs = new CloudSynchronizer();
-					//await cs.SynchWithCloud(false, this);
-				}
-			}
+			//if (Program.AzurePassword.Length > 0 && this.Settings.AllowCloud)
+			//{
+			//	if(synchWithCloud)
+			//	{
+			//		CloudSynchronizer cs = new CloudSynchronizer();	
+			//		await cs.SynchWithCloud(false, this);
+			//	}
+			//}
 
 			// Decrypt the notebook and entries to hold in memory.
 			this.Entries.ForEach(e	=> e.Title		= EncryptDecrypt.Decrypt(e.Title));

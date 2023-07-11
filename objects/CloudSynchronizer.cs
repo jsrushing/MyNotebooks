@@ -242,7 +242,7 @@ namespace myNotebooks.objects
 
 		public async Task			SynchWithCloud(bool alsoSynchSettings = false, Notebook notebook = null, bool checkCloudStatusOnly = false)
 		{
-			var notebooksFolder = Program.GroupsFolder;	// Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"];
+			var notebooksFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"];
 			var tempFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"];
 			List<string> allNotebooksNames = new List<string>();
 			await Utilities.PopulateAllNotebookNames();
