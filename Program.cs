@@ -17,9 +17,6 @@ namespace myNotebooks
 		public static string			AppVersion				= string.Empty;
 		public static string			AzurePassword			= string.Empty;
 		public static string			GroupsFolder			= Program.AppRoot + "groups\\";
-		public static string			GroupPIN				= string.Empty;
-		// add public static string s = configmgr[""] ... for all paths, etc. which are called out in app.config.
-		public static string			GroupName_Encrypted		= string.Empty; // reference to folder name (encrypted) in groups\ folder. Used for creating new nbooks & labels
 		public static bool				AzureFileExists			= false;
 		public static string			AzureConnString			= "DefaultEndpointsProtocol=https;AccountName=container1a;AccountKey=4YNQFl9klH9bp8ieKKfhwiVgiKlZKWieBlyzvu8zlm2hyL0HaR/x3XpbpFYjJ5VF4YgtaAR9sN4F+ASttv59jA==;EndpointSuffix=core.windows.net";
 		public static string			InvalidFileName			= "Sorry, notebook names may not contain characters which are not allowed in file names, for example *, <, >, {, }, |, :, ?, /, \\ (and others).";
