@@ -10,9 +10,9 @@ namespace myNotebooks.subforms
 {
 	public partial class frmMessage : Form
 	{
-		OperationType OpType;
-		string Msg;
-		string DefaultText;
+		OperationType opType;
+		string msg;
+		string defaultText;
 		public ReturnResult Result = ReturnResult.Cancel;
 		public string ResultText { get; private set; }
 		public bool IsLocalFile { get; private set; }
@@ -25,7 +25,7 @@ namespace myNotebooks.subforms
 			YesNoQuestion,
 			InputBox,
 			LabelNameInputBox,
-			PasswordInputBox
+			PINFileInputBox
 		}
 
 		public enum ReturnResult
@@ -40,17 +40,15 @@ namespace myNotebooks.subforms
 		public frmMessage(OperationType type, string message = "", string defaultText = "", Form parent = null, string[] dropDownItems = null)
 		{
 			InitializeComponent();
-			OpType = type;
-			Msg = message;
-			this.DefaultText = defaultText;
+			opType = type;
+			msg = message;
+			this.defaultText = defaultText;
 			if (parent != null) { Utilities.SetStartPosition(this, parent); }
 
 			if (dropDownItems != null)
 			{
 				ddlItemsToSelect.Items.AddRange(dropDownItems);
-				ddlItemsToSelect.Location	= txtInput.Location;
-				ddlItemsToSelect.Size		= txtInput.Size;
-				ddlItemsToSelect.Visible	= true;
+				ddlItemsToSelect.Visible = true;
 			}
 		}
 
@@ -66,19 +64,19 @@ namespace myNotebooks.subforms
 				if (c.GetType() == typeof(Panel)) { c.Top = 28; }
 			}
 
-			lblMessage.Text = Msg;
-			Msg = Msg.Replace("\\n", "  ");
+			lblMessage.Text = msg;
+			msg = msg.Replace("\\n", "  ");
 			var lineLength = 45;
-			lblMessage.Height = (int)Math.Ceiling((double)Msg.Length / lineLength) <= 1 ? 25 : 25 * ((int)Math.Ceiling((double)Msg.Length / lineLength));
+			lblMessage.Height = (int)Math.Ceiling((double)msg.Length / lineLength) <= 1 ? 25 : 25 * ((int)Math.Ceiling((double)msg.Length / lineLength));
 			lblSelectFromLabelsList.Visible = false;
 
-			//if (Msg.Length > 45) { lblMessage.Height += 20; }
+			//if (msg.Length > 45) { lblMessage.Height += 20; }
 
-			switch (OpType)
+			switch (opType)
 			{
 				case OperationType.DeleteEntry:
 				case OperationType.DeleteNotebook:
-					lblMessage.Text = OpType == OperationType.DeleteNotebook ? "Delete notebook '" + Msg + "'?" : "Delete entry '" + Msg + "' ? ";
+					lblMessage.Text = opType == OperationType.DeleteNotebook ? "Delete notebook '" + msg + "'?" : "Delete entry '" + msg + "' ? ";
 					pnlYesNo.Top = lblMessage.Top + lblMessage.Height;
 					pnlYesNo.Visible = true;
 					this.AcceptButton = btnNo2;
@@ -92,20 +90,20 @@ namespace myNotebooks.subforms
 					this.AcceptButton = btnOk2;
 					shownPanel = pnlOk;
 					this.Height = pnlOk.Top + pnlOk.Height + 55;
-					this.Text = this.DefaultText;
+					this.Text = this.defaultText;
 					break;
 				case OperationType.YesNoQuestion:
 					pnlYesNoCancel.Top = lblMessage.Top + lblMessage.Height;
 					pnlYesNoCancel.Visible = true;
 					this.AcceptButton = btnCancel1;
 					shownPanel = pnlYesNoCancel;
-					this.Text = this.DefaultText;
+					this.Text = this.defaultText;
 					this.Height = pnlYesNoCancel.Top + pnlYesNoCancel.Height + 55;
 					break;
 				case OperationType.InputBox:
+				case OperationType.PINFileInputBox:
 				case OperationType.LabelNameInputBox:
-				case OperationType.PasswordInputBox:
-					txtInput.Text = DefaultText;
+					txtInput.Text = defaultText;
 					txtInput.Visible = true;
 					txtInput.Top = lblMessage.Top + lblMessage.Height;
 					pnlOkCancel.Top = txtInput.Top + txtInput.Height + 5;
@@ -115,19 +113,14 @@ namespace myNotebooks.subforms
 					shownPanel = pnlOkCancel;
 					this.Text = "Enter New Value";
 					this.Height = pnlOkCancel.Top + pnlOkCancel.Height + 55;
-					//lblSelectFromLabelsList.Visible = OpType != OperationType.InputBox;
-					if(OpType == OperationType.PasswordInputBox)
-					{
-						lblShowPIN.Visible = true;
-						txtInput.PasswordChar = '*';
-					}
+					lblSelectFromLabelsList.Visible = opType != OperationType.InputBox;
 					break;
 			}
 
 			if (lblSelectFromLabelsList.Visible)
 			{
 				lblSelectFromLabelsList.Top = lblSelectFromLabelsList.Visible ? txtInput.Top - lblSelectFromLabelsList.Height - 5 : 0;
-				lblSelectFromLabelsList.Text = "Select from " + (OpType == OperationType.LabelNameInputBox ? " Labels " : "PIN Files") + " list";
+				lblSelectFromLabelsList.Text = "Select from " + (opType == OperationType.LabelNameInputBox ? " Labels " : "PIN Files") + " list";
 			}
 
 			if (ddlItemsToSelect.Visible)
@@ -188,12 +181,6 @@ namespace myNotebooks.subforms
 					IsLocalFile = frm.IsLocalFile;
 				}
 			}
-		}
-
-		private void lblShowPin_Click(object sender, EventArgs e)
-		{
-			txtInput.PasswordChar = txtInput.PasswordChar == '*' ? '\0' : '*';
-			lblShowPIN.Text = lblShowPIN.Text == "show" ? "hide" : "show";
 		}
 	}
 }

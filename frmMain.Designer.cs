@@ -536,6 +536,7 @@ namespace myNotebooks.subforms
 			MainMenuStrip = menuStrip1;
 			Name = "frmMain";
 			Text = "MyJournal";
+			Activated += this.frmMain_Activated;
 			Load += this.frmMain_Load;
 			Resize += this.frmMain_Resize;
 			mnuEntryTop.ResumeLayout(false);

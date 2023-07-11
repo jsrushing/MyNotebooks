@@ -30,7 +30,6 @@ namespace myNotebooks
 		public static string			PIN_Group				= string.Empty;
 		public static string			PIN_Notebooks			= string.Empty;
 		public static string			PIN_Master				= string.Empty;
-		public static string			PIN_Device				= string.Empty;
 		public static bool				SkipFileSizeComparison	= false;
 		public static Dictionary<string, string> DictCheckedNotebooks	= new Dictionary<string, string>();
 		//public static List<ListViewItem> lstFonts = new List<ListViewItem>();

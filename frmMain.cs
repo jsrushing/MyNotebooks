@@ -153,7 +153,6 @@ using myNotebooks;
 using System.Threading.Tasks;
 using Encryption;
 using myJournal.subforms;
-using System.DirectoryServices.ActiveDirectory;
 
 namespace myNotebooks.subforms
 {
@@ -185,64 +184,35 @@ namespace myNotebooks.subforms
 			return string.Join(',', rtrn);
 		}
 
+		private async void frmMain_Activated(object sender, EventArgs e)
+		{
+			//if(Program.AllNotebooks.Count == 0) await Utilities.PopulateAllNotebooks();
+		}
+
 		private async void frmMain_Load(object sender, EventArgs e)
 		{
-			// Get the device PIN. This is used to decrypt the stored AzurePassword.
-			using(frmMessage frm = new frmMessage(frmMessage.OperationType.PasswordInputBox, "What is the device PIN?", "enter pin", this))
-			{
+			// Get the Master PIN.
+			using(frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "What is the Master PIN?", "Enter PIN", this)) 
+			{ 
 				frm.ShowDialog();
-				Program.PIN_Device = frm.ResultText;
-			}
 
-			string[] accounts = new string[1];
-
-			// See if a master PIN file exists so user can select an account. 
-			if (File.Exists(Program.AppRoot + "mn"))
-			{
-				accounts = File.ReadAllLines(Program.AppRoot + "mn");
-				Array.ForEach(accounts, account => EncryptDecrypt.Decrypt(account, Program.PIN_Device));
-
-				// show in dropdown...
-				using(frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "", "Select An Account", this, accounts))
+				if(frm.Result != frmMessage.ReturnResult.Ok)
 				{
-					frm.ShowDialog();
-					if (frm.Result == frmMessage.ReturnResult.Ok) { Program.PIN_Master = frm.ResultText; }
+					this.Close();
+					return;
 				}
+
+				Program.PIN_Master = frm.ResultText;
 			}
-
-			if(Program.PIN_Master.Length == 0) // Wasn't set above. Fatal fail on Cancel.
-			{
-				// Get the Master PIN.
-				using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "What is the Master PIN?", "Enter PIN", this))
-				{
-					frm.ShowDialog();
-
-					if (frm.Result != frmMessage.ReturnResult.Ok)
-					{
-						this.Close();
-						return;
-					}
-
-					Program.PIN_Master = frm.ResultText;
-				}
-			}
-
-			// If the account name is new, create it.
-			if(accounts.Length > 0 && !accounts.Contains(Program.PIN_Master))
-			{
-				// it's a new group
-
-			}
-
 
 			var curGroup = Program.GroupName_Encrypted;
 
-			// Create or Log into a Group. Fatal fail on Cancel.
-			using (frmGroupLoginOrCreate frm = new frmGroupLoginOrCreate(false, this))
-			{
-				frm.ShowDialog();
+			// Create or Log into a Group.
+			using(frmGroupLoginOrCreate frm = new frmGroupLoginOrCreate(false, this)) 
+			{ 
+				frm.ShowDialog(); 
 
-				if (curGroup.Length == 0) // Starting up. No group previously selected so close if Cancelled or form_closed.
+				if(curGroup.Length == 0) // Starting up. No group previously selected so close if Cancelled or form_closed.
 				{
 					if (frm.Result != frmMessage.ReturnResult.Ok)
 					{
@@ -252,14 +222,14 @@ namespace myNotebooks.subforms
 				}
 			}
 
-			// Login was successful. Either list the Notebooks in the Group or prompt to create one. Fatal fail on Cancel.
-			if (Program.GroupFolder.Length > 0 & Program.AllNotebookNames.Count > 0)
+			// Login was successful. Either list the Notebooks in the Group or prompt to create one (fatal fail on Cancel).
+			if(Program.GroupFolder.Length > 0 & Program.AllNotebookNames.Count > 0)
 			{
-				using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch
+				using(frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch
 					(this, "Select notebooks to work with. Notebooks which are PIN-protected can't be " +
 					"synchronized unless you provide the PIN. You can Export and Import selections below.")) { frm.ShowDialog(); }
 			}
-			else    // There are no notebooks in the Group.
+			else	// There are no notebooks in the Group.
 			{
 				using (frmNewNotebook frm = new frmNewNotebook(this))
 				{
@@ -278,7 +248,6 @@ namespace myNotebooks.subforms
 					}
 				}
 			}
-
 
 			this.Cursor = Cursors.WaitCursor;
 			System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
@@ -378,14 +347,13 @@ namespace myNotebooks.subforms
 			//using (frmAzurePwd frm = new frmAzurePwd(this, frmAzurePwd.Mode.AskingForKey))
 			//{ if (Program.AzurePassword.Length > 0) { frm.Close(); } }
 
-			Program.AzurePassword = Program.PIN_Master;
 			//Program.AzurePassword = string.Empty;	// Kills the Azure synch process for debugging if desired.
 
 			// Populate Program.DictCheckedNotebooks
 			pnlDateFilters.Left = pnlPin.Left - 11;
 			ShowHideMenusAndControls(SelectionState.HideAll);
 			await Utilities.PopulateAllNotebookNames();
-			if (ddlNotebooks.Items.Count == 0) { LoadNotebooks(); }
+			if(ddlNotebooks.Items.Count == 0) { LoadNotebooks(); }
 
 			if (Program.AzurePassword.Length > 0)
 			{
@@ -538,27 +506,27 @@ namespace myNotebooks.subforms
 		{
 			if (recreateAll)
 			{
-				Directory.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"]);
-				Directory.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebookIncrementalBackupsFolder"]);
-				Directory.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebookForcedBackupsFolder"]);
-				Directory.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFolder"]);
-				Directory.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"]);
-				Directory.Delete(Program.GroupsFolder);
-				File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]);
-				File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]);
+				Directory	.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"]);
+				Directory	.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebookIncrementalBackupsFolder"]);
+				Directory	.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebookForcedBackupsFolder"]);
+				Directory	.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFolder"]);
+				Directory	.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"]);
+				Directory	.Delete(Program.GroupsFolder);
+				File		.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]);
+				File		.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]);
 
 			}
 
 			if (!Directory.Exists(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"]))    // create system directories and files
 			{
-				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"]);
-				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebookIncrementalBackupsFolder"]);
-				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebookForcedBackupsFolder"]);
-				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFolder"]);
-				Directory.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"]);
-				Directory.CreateDirectory(Program.GroupsFolder);
-				File.Create(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFile"]).Close();
-				File.Create(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Close();
+				Directory	.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"]);
+				Directory	.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebookIncrementalBackupsFolder"]);
+				Directory	.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebookForcedBackupsFolder"]);
+				Directory	.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFolder"]);
+				Directory	.CreateDirectory(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_Temp"]);
+				Directory	.CreateDirectory(Program.GroupsFolder);
+				File		.Create(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFile"]).Close();
+				File		.Create(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]).Close();
 
 				using (StreamWriter sw = File.AppendText(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"]))
 				{ sw.WriteLine(DateTime.MinValue.ToString(ConfigurationManager.AppSettings["FileDate"])); }
@@ -639,7 +607,7 @@ namespace myNotebooks.subforms
 				}
 				else { ShowHideMenusAndControls(SelectionState.NotebookNotSelected); }
 
-				lstEntries.Visible = false;
+				lstEntries.Visible = false;	
 				txtJournalPIN.Focus();
 			}
 		}
@@ -924,9 +892,8 @@ namespace myNotebooks.subforms
 		}
 
 		private async void mnuSwitchAccount_Click(object sender, EventArgs e)
-		{
-			using (frmGroupLoginOrCreate frm = new frmGroupLoginOrCreate(true, this))
-			{
+		{ using(frmGroupLoginOrCreate frm = new frmGroupLoginOrCreate(true, this)) 
+			{ 
 				frm.ShowDialog();
 
 				if (frm.Result == frmMessage.ReturnResult.Ok)
@@ -935,11 +902,10 @@ namespace myNotebooks.subforms
 					Program.AllNotebookNames.Clear();
 					Program.DictCheckedNotebooks.Clear();
 					SetMnuSwitchAccountText();
-					using (frmSelectNotebooksToSearch frm2 = new frmSelectNotebooksToSearch(this)) { frm2.ShowDialog(); }
+					using(frmSelectNotebooksToSearch frm2 = new frmSelectNotebooksToSearch(this)) { frm2.ShowDialog(); }
 					LoadNotebooks();
-				}
-			}
-		}
+				}		
+			} }
 
 		private async Task PopulateLabelsSummary()
 		{
@@ -1090,8 +1056,10 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		protected override CreateParams CreateParams {
-			get {
+		protected override CreateParams CreateParams
+		{
+			get
+			{
 				CreateParams cp = base.CreateParams;
 				cp.ExStyle |= 0x02000000;  // Turn on WS_EX_COMPOSITED
 				return cp;
