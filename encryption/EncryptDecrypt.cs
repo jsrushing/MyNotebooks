@@ -13,29 +13,35 @@ namespace Encryption
     {
         public static string Encrypt(string TextToEncrypt, string pin = "")
         {
-			var curPin = Program.PIN_Notebooks;
-			if (pin.Length == 0) { pin = Program.PIN_Notebooks; }
-			string encryptionKey = AESPin(pin) ;
-			byte[] clearBytes = Encoding.Unicode.GetBytes(TextToEncrypt);
 
-			using (Aes encryptor = Aes.Create())
+			if(pin.Length > 0)
 			{
-				Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(encryptionKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
-				encryptor.Key = pdb.GetBytes(32);
-				encryptor.IV = pdb.GetBytes(16);
-				using (MemoryStream ms = new MemoryStream())
-				{
-					using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateEncryptor(), CryptoStreamMode.Write))
-					{
-						cs.Write(clearBytes, 0, clearBytes.Length);
-						cs.Close();
-					}
+				var curPin = Program.PIN;
+				Program.PIN = pin;
+				string encryptionKey = AESPin(pin) ;
 
-					TextToEncrypt = Convert.ToBase64String(ms.ToArray());
+				byte[] clearBytes = Encoding.Unicode.GetBytes(TextToEncrypt);
+
+				using (Aes encryptor = Aes.Create())
+				{
+					Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(encryptionKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
+					encryptor.Key = pdb.GetBytes(32);
+					encryptor.IV = pdb.GetBytes(16);
+					using (MemoryStream ms = new MemoryStream())
+					{
+						using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateEncryptor(), CryptoStreamMode.Write))
+						{
+							cs.Write(clearBytes, 0, clearBytes.Length);
+							cs.Close();
+						}
+
+						TextToEncrypt = Convert.ToBase64String(ms.ToArray());
+					}
 				}
+
+				Program.PIN = curPin;	
 			}
 
-			Program.PIN_Notebooks = curPin;
 			return TextToEncrypt.Replace("/", "_").Replace("+", "-");
 
 			//string s = AESThenHMAC.SimpleEncryptWithPassword(TextToEncrypt, AESPin(Program.PIN));
@@ -83,40 +89,41 @@ namespace Encryption
 
         public static string Decrypt(string TextToDecrypt, string pin = "")
 		{
-<<<<<<< HEAD
-			try
-=======
-			if(TextToDecrypt.Contains("_") | TextToDecrypt.Contains("-")) { TextToDecrypt = TextToDecrypt.Replace("_", "/").Replace("-", "+"); }
-			string encryptionKey = AESPin(Program.PIN);
-			byte[] cipherBytes = Convert.FromBase64String(TextToDecrypt);
-			using (Aes encryptor = Aes.Create())
->>>>>>> parent of 5871030 (saved)
-			{
-				if(TextToDecrypt.Contains("_") | TextToDecrypt.Contains("-")) { TextToDecrypt = TextToDecrypt.Replace("_", "/").Replace("-", "+"); }
-				if (pin.Length == 0) { pin = Program.PIN_Notebooks; }
+			//if(TextToDecrypt.Contains("_") | TextToDecrypt.Contains("-")) { TextToDecrypt = TextToDecrypt.Replace("_", "/").Replace("-", "+"); }
+			//string encryptionKey = AESPin(Program.PIN);
+			//byte[] cipherBytes = Convert.FromBase64String(TextToDecrypt);
+			//using (Aes encryptor = Aes.Create())
 
-				var v = TextToDecrypt.Length;
-
-				string encryptionKey = AESPin(pin);
-				byte[] cipherBytes = Convert.FromBase64String(TextToDecrypt);
-				using (Aes encryptor = Aes.Create())
+			//if(pin.Length > 0)
+			//{
+				try
 				{
-					Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(encryptionKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
-					encryptor.Key = pdb.GetBytes(32);
-					encryptor.IV = pdb.GetBytes(16);
-					using (MemoryStream ms = new MemoryStream())
-					{
-						using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateDecryptor(), CryptoStreamMode.Write))
-						{
-							cs.Write(cipherBytes, 0, cipherBytes.Length);
-							cs.Close();
-						}
-						TextToDecrypt = Encoding.Unicode.GetString(ms.ToArray());
-					}
-				}
+					if(TextToDecrypt.Contains("_") | TextToDecrypt.Contains("-")) { TextToDecrypt = TextToDecrypt.Replace("_", "/").Replace("-", "+"); }
+					if (pin.Length == 0) { pin = Program.PIN; }
 
-			}
-			catch(Exception e) { TextToDecrypt = string.Empty; }
+					//var v = TextToDecrypt.Length;
+
+					string encryptionKey = AESPin(pin);
+					byte[] cipherBytes = Convert.FromBase64String(TextToDecrypt);
+					using (Aes encryptor = Aes.Create())
+					{
+						Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(encryptionKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
+						encryptor.Key = pdb.GetBytes(32);
+						encryptor.IV = pdb.GetBytes(16);
+						using (MemoryStream ms = new MemoryStream())
+						{
+							using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateDecryptor(), CryptoStreamMode.Write))
+							{
+								cs.Write(cipherBytes, 0, cipherBytes.Length);
+								cs.Close();
+							}
+							TextToDecrypt = Encoding.Unicode.GetString(ms.ToArray());
+						}
+					}
+
+				}
+				catch(Exception e) { TextToDecrypt = string.Empty; }
+			//}
 
 			return TextToDecrypt;
 

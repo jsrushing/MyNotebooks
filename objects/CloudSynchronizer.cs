@@ -43,7 +43,7 @@ namespace myNotebooks.objects
 
 		private async Task			CheckForLocalOrCloudOnly(string tempFolder, string notebooksFolder)
 		{
-			//return;
+			return;
 
 			// Find Azure files which aren't in Program.DictCheckedNotebooks
 			if (Program.AzureNotebookNames.Count == 0) await AzureFileClient.GetAzureItemNames(true);

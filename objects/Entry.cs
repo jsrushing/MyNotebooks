@@ -49,13 +49,13 @@ namespace myNotebooks
         {
 			if(Date == DateTime.MinValue) { Date = DateTime.Now; }
 
-			Text			= _text.Trim();
-			Title			= _title.Trim();
-			RTF				= _RTF;
-			Labels			= _labels;
-			NotebookName	= _notebookName;
-            Id				= Guid.NewGuid().ToString();
-			isEdited		= _edited;	
+			Text		= _text.Trim();
+			Title		= _title.Trim();
+			RTF			= _RTF;
+			Labels		= _labels;
+            Id			= Guid.NewGuid().ToString();
+			isEdited	= _edited;	
+			NotebookName = _notebookName;
 		}
 
 		string				GetTextDisplayText()

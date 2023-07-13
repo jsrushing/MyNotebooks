@@ -17,48 +17,13 @@ namespace myNotebooks.objects
 {
 	public static class Utilities
 	{
-		public static async Task PopulateAllNotebookNames(List<string> notebookNames = null)
+		public static Entry CreateEntry(string title, string text, string RTF, string labels, string notebookName, string PIN)
 		{
-			Program.AllNotebookNames.Clear();	
-			
-			if(notebookNames != null)
-			{
-				//Program.AllNotebookNames.AddRange(notebookNames); << DOESN'T WORK ??	
-				foreach(string notebookName in notebookNames) { Program.AllNotebookNames.Add(notebookName); }
-			}
-			else
-			{
-				List<string> s = Directory.GetFiles(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"]).ToList();
-				Program.AllNotebookNames.AddRange(s.Select(s => s[(s.LastIndexOf("\\") + 1)..]));
-			}
-		} 
-
-		public static async Task PopulateAllNotebooks(List<string> notebookNames = null)
-		{
-			Program.AllNotebooks.Clear();
-			await PopulateAllNotebookNames(notebookNames);
-			//if(notebookNames == null) { await PopulateAllNotebookNames(); } else { await PopulateAllNotebookNames(notebookNames); }
-			foreach (var notebookName in Program.AllNotebookNames) { Program.AllNotebooks.Add(new Notebook(notebookName).Open()); }
+			return new Entry(EncryptDecrypt.Encrypt(title, PIN), EncryptDecrypt.Encrypt(text, PIN), 
+				EncryptDecrypt.Encrypt(RTF, PIN), EncryptDecrypt.Encrypt(labels, PIN), EncryptDecrypt.Encrypt(notebookName, PIN));
 		}
 
-		// one-time code to convert Journal objects to Notebook objects
-		//public static List<Journal> AllJournals()
-		//{
-		//	List<Journal> jrnlReturn = new List<Journal>();
-		//	var sJournalsFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"];
-		//	foreach (var s in Directory.GetFiles(sJournalsFolder)) { jrnlReturn.Add(new Journal(s.Replace(sJournalsFolder, "")).Open()); }  // (new Journal(s.Replace(sJournalsFolder, "")).Open()); }
-		//	return jrnlReturn;
-		//}
-
-		public static void PopulateDictCheckedNotebooks(string name)
-		{
-			var items = name.Split(",");
-
-			if (Program.AllNotebookNames.Contains(EncryptDecrypt.Decrypt(items[0])))
-			{
-				Program.DictCheckedNotebooks.Add(EncryptDecrypt.Decrypt(items[0]), EncryptDecrypt.Decrypt(items[1]));
-			}
-		}
+		public static bool FileNameIsValid(string proposedFileName) { return proposedFileName.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) == -1; }
 
 		public static List<Notebook> GetCheckedNotebooks()
 		{
@@ -162,6 +127,49 @@ namespace myNotebooks.objects
 			//return filesCopied;
 		}
 
+		public static async Task PopulateAllNotebookNames(List<string> notebookNames = null)
+		{
+			Program.AllNotebookNames.Clear();	
+			
+			if(notebookNames != null)
+			{
+				//Program.AllNotebookNames.AddRange(notebookNames); << DOESN'T WORK ??	
+				foreach(string notebookName in notebookNames) { Program.AllNotebookNames.Add(notebookName); }
+			}
+			else
+			{
+				List<string> s = Directory.GetFiles(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"]).ToList();
+				Program.AllNotebookNames.AddRange(s.Select(s => s[(s.LastIndexOf("\\") + 1)..]));
+			}
+		} 
+
+		public static async Task PopulateAllNotebooks(List<string> notebookNames = null)
+		{
+			Program.AllNotebooks.Clear();
+			await PopulateAllNotebookNames(notebookNames);
+			//if(notebookNames == null) { await PopulateAllNotebookNames(); } else { await PopulateAllNotebookNames(notebookNames); }
+			foreach (var notebookName in Program.AllNotebookNames) { Program.AllNotebooks.Add(new Notebook(notebookName).Open()); }
+		}
+
+		// one-time code to convert Journal objects to Notebook objects
+		//public static List<Journal> AllJournals()
+		//{
+		//	List<Journal> jrnlReturn = new List<Journal>();
+		//	var sJournalsFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"];
+		//	foreach (var s in Directory.GetFiles(sJournalsFolder)) { jrnlReturn.Add(new Journal(s.Replace(sJournalsFolder, "")).Open()); }  // (new Journal(s.Replace(sJournalsFolder, "")).Open()); }
+		//	return jrnlReturn;
+		//}
+
+		public static void PopulateDictCheckedNotebooks(string name)
+		{
+			var items = name.Split(",");
+
+			if (Program.AllNotebookNames.Contains(EncryptDecrypt.Decrypt(items[0])))
+			{
+				Program.DictCheckedNotebooks.Add(EncryptDecrypt.Decrypt(items[0]), EncryptDecrypt.Decrypt(items[1]));
+			}
+		}
+
 		public static async Task PopulateEntries(ListBox lbxToPopulate, List<Entry> entries, string notebookName = "", string startDate = "", 
 			string endDate = "", bool clearPrevious = true, int SortBy = 0, bool includeJrnlName = false, int maxWidth = 0, string labelFilter = "")
 		{
@@ -216,7 +224,5 @@ namespace myNotebooks.objects
 			formToInitialize.StartPosition = FormStartPosition.Manual;	
 			formToInitialize.Location = new System.Drawing.Point(parentForm.Location.X + 25, parentForm.Location.Y + 25); 
 		}
-
-		public static bool FileNameIsValid(string proposedFileName) { return proposedFileName.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) == -1; }
 	}
 }

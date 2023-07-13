@@ -1,0 +1,17 @@
+Plesk
+db - 'BP'
+P3NWPLSK12SQL-v06.shr.prod.phx3.secureserver.net
+
+admin user
+auserextravaganza / extra1!
+
+aUser / mypleskaUser1!
+
+adminUser / mypleskAdminUser1!
+
+bp_ftp / mybpFTP1!
+
+Plesk login
+ph20623089978 / myPlesk1!
+
+rocket lawyer

@@ -211,30 +211,31 @@ namespace myNotebooks.subforms
 			//	//jRtrn.Name = journalToOpen.Substring(journalToOpen.LastIndexOf("\\") + 1);
 			//}
 
-			// one-time code to create 50 notebooks
+			//one - time code to create test notebooks
 			//Notebook newNotebook;
 			//Entry newEntry;
 
-			//for (var i = 1; i < 500; i++)
+			//for (var i = 0; i < 10; i++)
 			//{
-			//	Program.PIN = "";
-			//	newNotebook = new Notebook();
-			//	newNotebook.Name = "Project " + i.ToString();   // EncryptDecrypt.Encrypt("Project " + i.ToString());
+			//	Program.PIN = "1111";
+			//	newNotebook = new Notebook("Project " + i.ToString());
 			//	newNotebook.LastSaved = DateTime.Now;
-			//	newNotebook.FileName = AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + newNotebook.Name;
+			//	//newNotebook.FileName = AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + newNotebook.Name;
 			//	var rnd = new Random(Guid.NewGuid().GetHashCode());
 
-			//	Entry newEntry1 = new Entry("created", "-", "-", "", newNotebook.Name);
+			//	Entry newEntry1 = new Entry("created", "-", "-", "", newNotebook.Name);	// Utilities.CreateEntry("created", "-", "-", "", newNotebook.Name, Program.PIN);
 			//	newEntry1.Date = DateTime.Parse("01/01/23 1:00 AM");
-			//	newEntry1.RTF = "{rtf";
 			//	newNotebook.Entries.Add(newEntry1);
 
-			//	for (var j = 0; j < 100; j++)
+			//	for (var j = 0; j < 5; j++)
 			//	{
-			//		newEntry = new Entry("Entry " + j + 1.ToString() + " in " + newNotebook.Name,
-			//			"This is the entry text for entry " + rnd.Next(1, 150), "", GetRandomLabels(), newNotebook.Name);
+			//		newEntry = new Entry("Entry " + j + 1.ToString() + " in " + newNotebook.Name, 
+			//			"This is the entry text for entry " + rnd.Next(1, 150), "{rtf", GetRandomLabels(), newNotebook.Name);
+
+			//		//newEntry = Utilities.CreateEntry("Entry " + j + 1.ToString() + " in " + newNotebook.Name,
+			//		//	"This is the entry text for entry " + rnd.Next(1, 150), "{rtf", GetRandomLabels(), newNotebook.Name, Program.PIN);
+
 			//		newEntry.Date = DateTime.Now.AddDays(-Convert.ToDouble(rnd.Next(1, 150)));
-			//		newEntry.RTF = "{rtf";
 			//		newNotebook.Entries.Add(newEntry);
 			//	}
 
@@ -287,7 +288,7 @@ namespace myNotebooks.subforms
 			using (frmAzurePwd frm = new frmAzurePwd(this, frmAzurePwd.Mode.AskingForKey))
 			{ if (Program.AzurePassword.Length > 0) { frm.Close(); } }
 
-			//Program.AzurePassword = string.Empty;	// Kills the Azure synch process for debugging if desired.
+			Program.AzurePassword = string.Empty;	// Kills the Azure synch process for debugging if desired.
 
 			// Populate Program.DictCheckedNotebooks
 			using(frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch
@@ -301,8 +302,8 @@ namespace myNotebooks.subforms
 
 			if (Program.AzurePassword.Length > 0)
 			{
-				CloudSynchronizer cs = new CloudSynchronizer();
-				await cs.SynchWithCloud(false, null, true);
+				//CloudSynchronizer cs = new CloudSynchronizer();
+				//await cs.SynchWithCloud(false, null, true);
 			}
 
 			await Utilities.PopulateAllNotebookNames();
@@ -349,12 +350,12 @@ namespace myNotebooks.subforms
 			lblWrongPin.Visible = false;
 			if (CurrentNotebook != null && Program.DictCheckedNotebooks.Count == 1 && Program.DictCheckedNotebooks.Keys.Contains(CurrentNotebook.Name)) { Program.DictCheckedNotebooks.Clear(); }
 			if (Program.DictCheckedNotebooks.Count == 0) { Program.DictCheckedNotebooks.Add(ddlNotebooks.Text, txtJournalPIN.Text); }
-			CurrentNotebook = new Notebook(ddlNotebooks.Text, null, this).Open();
+			CurrentNotebook = new Notebook(ddlNotebooks.Text, null, this).Open(true);
 			var wrongPIN = true;
 
 			if (CurrentNotebook != null)
 			{
-				wrongPIN = CurrentNotebook.Name.Equals(" <decrypt failed> ") | !CurrentNotebook.FileName.Contains("\\");
+				wrongPIN = CurrentNotebook.WrongPIN;	//  CurrentNotebook.Name.Equals("") | !CurrentNotebook.FileName.Contains("\\");
 
 				if (!wrongPIN && !Program.AllNotebookNames.Contains(CurrentNotebook.Name))
 				{
@@ -498,8 +499,6 @@ namespace myNotebooks.subforms
 				using (StreamWriter sw = File.AppendText(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_SettingsFile"]))
 				{ sw.WriteLine(DateTime.MinValue.ToString(ConfigurationManager.AppSettings["FileDate"])); }
 			}
-
-
 		}
 
 		private void ddlNotebooks_SelectedIndexChanged(object sender, EventArgs e)
@@ -642,7 +641,7 @@ namespace myNotebooks.subforms
 
 			using (frmNewEntry frm = new frmNewEntry(this, CurrentNotebook))
 			{
-				frm.Text = "New entry in " + CurrentNotebook.Name;
+				frm.Text = "New entry in '" + CurrentNotebook.Name + "'";
 
 				frm.ShowDialog(this);
 

@@ -292,7 +292,7 @@ namespace myNotebooks.subforms
 		private async void PopulateNotebooksList(bool populateWithCheckedJournals, bool showMore, bool showAll)
 		{
 			if (!showMore) lstNotebookPINs.Items.Clear();
-
+			
 			lstNotebookPINs.Items.Clear();
 
 			if (showAll)
