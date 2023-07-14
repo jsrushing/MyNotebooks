@@ -172,9 +172,6 @@ namespace myNotebooks
 
 					using(Stream stream = File.Open(NotebookToOpen, FileMode.Open))
 					{
-						//BinaryFormatter formatter = new BinaryFormatter();
-						//nbRtrn					= (Notebook)formatter.Deserialize(stream);
-
 						DataContractSerializer serializer = new DataContractSerializer(typeof(Notebook));
 						nbRtrn = (Notebook)serializer.ReadObject(stream);
 
@@ -183,8 +180,6 @@ namespace myNotebooks
 						if(nbRtrn.Name.Length > 0)
 						{
 							nbRtrn.FileName							= EncryptDecrypt.Decrypt(nbRtrn.FileName, Program.PIN);
-
-							//var testTitle = EncryptDecrypt.Decrypt(nbRtrn.Entries[0].Title, Program.PIN);
 
 							if(EncryptDecrypt.Decrypt(nbRtrn.Entries[0].Title, Program.PIN).Length > 0)
 							{
@@ -329,6 +324,7 @@ namespace myNotebooks
 			fName = fName.Contains("\\") ? fName :  Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + this.Name;
 
 			File.Delete(fName);
+			Notebook nTmp = this;
 
 			// Encrypt the notebook and entries to save to disk.
 			this.LastSaved			= DateTime.Now;
@@ -344,9 +340,6 @@ namespace myNotebooks
 			{
 				DataContractSerializer dcs = new DataContractSerializer(typeof(Notebook));
 				dcs.WriteObject(stream, this);
-
-				//BinaryFormatter formatter = new BinaryFormatter();
-				//formatter.Serialize(stream, this);
 			}
 
 			//if (Program.AzurePassword.Length > 0 && this.Settings.AllowCloud)
@@ -358,14 +351,17 @@ namespace myNotebooks
 			//	}
 			//}
 
+			// switch back to the original notebook
+			this.FileName = nTmp.FileName;  // EncryptDecrypt.Decrypt(this.FileName, Program.PIN);
+			this.Name = nTmp.Name;	// EncryptDecrypt.Decrypt(this.Name, Program.PIN);
+			this.Entries = nTmp.Entries;
+
 			// Decrypt the notebook and entries to hold in memory.
-			this.FileName			= EncryptDecrypt.Decrypt(this.FileName, Program.PIN);
-			this.Name				= EncryptDecrypt.Decrypt(this.Name, Program.PIN);
-			this.Entries.ForEach(e	=> e.Title	= EncryptDecrypt.Decrypt(e.Title, Program.PIN));
-			this.Entries.ForEach(e	=> e.Text	= EncryptDecrypt.Decrypt(e.Text, Program.PIN));
-			this.Entries.ForEach(e	=> e.Labels = EncryptDecrypt.Decrypt(e.Labels, Program.PIN));
-			this.Entries.ForEach(e	=> e.RTF	= EncryptDecrypt.Decrypt(e.RTF, Program.PIN));
-			this.Entries.ForEach(e	=> e.NotebookName = EncryptDecrypt.Decrypt(e.NotebookName, Program.PIN));
+			//this.Entries.ForEach(e	=> e.Title	= EncryptDecrypt.Decrypt(e.Title, Program.PIN));
+			//this.Entries.ForEach(e	=> e.Text	= EncryptDecrypt.Decrypt(e.Text, Program.PIN));
+			//this.Entries.ForEach(e	=> e.Labels = EncryptDecrypt.Decrypt(e.Labels, Program.PIN));
+			//this.Entries.ForEach(e	=> e.RTF	= EncryptDecrypt.Decrypt(e.RTF, Program.PIN));
+			//this.Entries.ForEach(e	=> e.NotebookName = EncryptDecrypt.Decrypt(e.NotebookName, Program.PIN));
 
 			//Backup();
 			await Utilities.PopulateAllNotebookNames();

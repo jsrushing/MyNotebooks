@@ -14,7 +14,7 @@ namespace Encryption
         public static string Encrypt(string TextToEncrypt, string pin = "")
         {
 
-			if(pin.Length > 0)
+			if(pin != null && pin.Length > 0)
 			{
 				var curPin = Program.PIN;
 				Program.PIN = pin;

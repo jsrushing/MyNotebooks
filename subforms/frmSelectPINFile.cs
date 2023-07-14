@@ -42,7 +42,7 @@ namespace myJournal.subforms
 			lstLocalFileNames.Items.AddRange(pinFiles.ToArray());
 
 			// populate the azure PIN file names
-			await AzureFileClient.GetAzureItemNames(true, "pinfiles");
+			//await AzureFileClient.GetAzureItemNames(true, "pinfiles");
 			lstAzureFileNames.Items.AddRange(Program.AzurePinFileNames.ToArray());
 		}
 

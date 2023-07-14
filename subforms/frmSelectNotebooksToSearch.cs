@@ -251,7 +251,7 @@ namespace myNotebooks.subforms
 							StringBuilder sb = new StringBuilder();
 
 							foreach (var v in Program.DictCheckedNotebooks)
-							{ sb.AppendLine(EncryptDecrypt.Encrypt(v.Key) + "," + EncryptDecrypt.Encrypt(v.Value)); }
+							{ sb.AppendLine(EncryptDecrypt.Encrypt(v.Key, Program.PIN) + "," + EncryptDecrypt.Encrypt(v.Value, Program.PIN)); }
 
 							// save to Program.AppRoot + <filename> + ".pin"	// trap for valid filename
 							File.WriteAllText(Program.AppRoot + newFileName, sb.ToString());
