@@ -1,0 +1,79 @@
+﻿/* Handle access to Azure Db.
+ * created 07/12/23
+ * - jsr
+ */
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Data.SqlClient;
+using System.Data;
+using Encryption;
+using System.Threading.Tasks;
+using MyNotebooks.objects;
+using System.Reflection;
+
+namespace MyNotebooks.DataAccess
+{
+	internal class DbAccess
+	{
+		private static string connString = "Server=mynotebooksserver.database.windows.net;Database=MyNotebooks;user id=mydb_admin;password=cloud_Bringer1!";
+
+		public static DataSet GetUser(string userId, string password)
+		{
+			DataSet ds = new();
+
+			using(SqlConnection conn = new(connString))
+			{
+				conn.Open();
+
+				using(SqlCommand cmd = new("sp_GetUser", conn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					cmd.Parameters.AddWithValue("@userId", EncryptDecrypt.Encrypt(userId, password)));
+					cmd.Parameters.AddWithValue("@password", EncryptDecrypt.Encrypt(password, password));
+					SqlDataAdapter adapter = new() { SelectCommand = cmd } ;
+					adapter.Fill(ds);
+				}
+			}
+			return ds;
+		}
+
+		public static int CreateUser(string userId, string password, Permissions permissions)
+		{
+			int iRtrn = -1;
+
+			using (SqlConnection conn = new(connString))
+			{
+				conn.Open();
+
+				using (SqlCommand cmd = new("sp_GetUser", conn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					cmd.Parameters.AddWithValue("@userId", EncryptDecrypt.Encrypt(userId, password));
+					cmd.Parameters.AddWithValue("@password", EncryptDecrypt.Encrypt(password, password));
+
+					foreach(PropertyInfo sPropertyName in typeof(Permissions).GetProperties())
+					{
+						cmd.Parameters.AddWithValue
+							(
+								"@" + sPropertyName,
+								// from https://stackoverflow.com/questions/1196991/get-property-value-from-string-using-reflection
+								permissions.GetType().GetProperty(sPropertyName.Name).GetValue(permissions, null)
+							);
+					}
+
+
+
+					cmd.Parameters.Add("@retVal");
+					cmd.Parameters["@retVal"].Direction = ParameterDirection.ReturnValue;
+					cmd.ExecuteNonQuery();
+					iRtrn = Convert.ToInt32(cmd.Parameters["@retVal"].Value.ToString());
+				}
+			}
+
+			return iRtrn;
+
+		}
+	}
+}

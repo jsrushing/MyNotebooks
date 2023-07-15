@@ -152,6 +152,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using myNotebooks;
 using System.Threading.Tasks;
 using Encryption;
+using System.Xml.Linq;
 
 namespace myNotebooks.subforms
 {
@@ -285,10 +286,20 @@ namespace myNotebooks.subforms
 
 			CheckForSystemDirectories();    // am I keeping system directories now that the cloud is working? Why or why not?
 
-			using (frmAzurePwd frm = new frmAzurePwd(this, frmAzurePwd.Mode.AskingForKey))
-			{ if (Program.AzurePassword.Length > 0) { frm.Close(); } }
+			//using (frmAzurePwd frm = new frmAzurePwd(this, frmAzurePwd.Mode.AskingForKey))
+			//{ if (Program.AzurePassword.Length > 0) { frm.Close(); } }
 
-			Program.AzurePassword = string.Empty;	// Kills the Azure synch process for debugging if desired.
+			Program.AzurePassword = string.Empty;   // Kills the Azure synch process for debugging if desired.
+
+			using (frmMessage frm = new(frmMessage.OperationType.YesNoQuestion, "Is this a synchronized account?", "", this))
+			{
+				if(frm.Result == frmMessage.ReturnResult.Yes)
+				{
+					// get the user id
+
+				}
+			}
+
 
 			// Populate Program.DictCheckedNotebooks
 			using(frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch
