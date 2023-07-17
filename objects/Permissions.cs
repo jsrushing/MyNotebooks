@@ -25,6 +25,7 @@ namespace MyNotebooks.objects
 		public bool EditedOn { get; set; }
 		public bool ManageUsers { get; set; }
 		public bool ManageUserPermissions { get; set; }
+		public bool Synch { get; set; }
 		public bool ViewNotebooks { get; set; }
 
 		public Permissions() { }

@@ -323,8 +323,7 @@ namespace myNotebooks
 			var fName = this.FileName.Length > 0 ? this.FileName : Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + this.Name;
 			fName = fName.Contains("\\") ? fName :  Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + this.Name;
 
-			File.Delete(fName);
-			Notebook nTmp = this;
+			Notebook nTmp = (Notebook)this.MemberwiseClone();
 
 			// Encrypt the notebook and entries to save to disk.
 			this.LastSaved			= DateTime.Now;
@@ -335,6 +334,7 @@ namespace myNotebooks
 			this.Entries.ForEach(e	=> e.Labels = EncryptDecrypt	.Encrypt(e.Labels, Program.PIN));
 			this.Entries.ForEach(e	=> e.RTF	= EncryptDecrypt	.Encrypt(e.RTF, Program.PIN));
 			this.Entries.ForEach(e	=> e.NotebookName = EncryptDecrypt.Encrypt(e.NotebookName, Program.PIN));
+			File.Delete(fName);
 
 			using (Stream stream = File.Open(fName, FileMode.Create))
 			{
@@ -352,16 +352,20 @@ namespace myNotebooks
 			//}
 
 			// switch back to the original notebook
-			this.FileName = nTmp.FileName;  // EncryptDecrypt.Decrypt(this.FileName, Program.PIN);
-			this.Name = nTmp.Name;	// EncryptDecrypt.Decrypt(this.Name, Program.PIN);
-			this.Entries = nTmp.Entries;
+			this.FileName	= nTmp.FileName;  // EncryptDecrypt.Decrypt(this.FileName, Program.PIN);
+			this.Name		= nTmp.Name;	// EncryptDecrypt.Decrypt(this.Name, Program.PIN);
+			//this.Entries	= nTmp.Entries;
 
-			// Decrypt the notebook and entries to hold in memory.
-			//this.Entries.ForEach(e	=> e.Title	= EncryptDecrypt.Decrypt(e.Title, Program.PIN));
-			//this.Entries.ForEach(e	=> e.Text	= EncryptDecrypt.Decrypt(e.Text, Program.PIN));
-			//this.Entries.ForEach(e	=> e.Labels = EncryptDecrypt.Decrypt(e.Labels, Program.PIN));
-			//this.Entries.ForEach(e	=> e.RTF	= EncryptDecrypt.Decrypt(e.RTF, Program.PIN));
-			//this.Entries.ForEach(e	=> e.NotebookName = EncryptDecrypt.Decrypt(e.NotebookName, Program.PIN));
+			if(Program.PIN.Length > 0)
+			{
+				this.Entries.ForEach(e => e.Title = EncryptDecrypt.Decrypt(e.Title, Program.PIN));
+				this.Entries.ForEach(e => e.Text = EncryptDecrypt.Decrypt(e.Text, Program.PIN));
+				this.Entries.ForEach(e => e.Labels = EncryptDecrypt.Decrypt(e.Labels, Program.PIN));
+				this.Entries.ForEach(e => e.RTF = EncryptDecrypt.Decrypt(e.RTF, Program.PIN));
+				this.Entries.ForEach(e => e.NotebookName = EncryptDecrypt.Decrypt(e.NotebookName, Program.PIN));
+
+			}
+
 
 			//Backup();
 			await Utilities.PopulateAllNotebookNames();

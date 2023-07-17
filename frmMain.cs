@@ -153,6 +153,7 @@ using myNotebooks;
 using System.Threading.Tasks;
 using Encryption;
 using System.Xml.Linq;
+using MyNotebooks.subforms;
 
 namespace myNotebooks.subforms
 {
@@ -191,6 +192,11 @@ namespace myNotebooks.subforms
 
 		private async void frmMain_Load(object sender, EventArgs e)
 		{
+			using(frmUserLogin frm = new frmUserLogin()) { frm.ShowDialog(); }
+
+			// if we don't have a user, stop
+			//if(Program.User == null) { this.Close(); return; }
+
 			this.Cursor = Cursors.WaitCursor;
 			System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
 			System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
@@ -218,19 +224,19 @@ namespace myNotebooks.subforms
 
 			//for (var i = 0; i < 10; i++)
 			//{
-			//	Program.PIN = "1111";
-			//	newNotebook = new Notebook("Project " + i.ToString());
+			//	Program.PIN = "";
+			//	newNotebook = new("Project " + i.ToString());
 			//	newNotebook.LastSaved = DateTime.Now;
 			//	//newNotebook.FileName = AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + newNotebook.Name;
 			//	var rnd = new Random(Guid.NewGuid().GetHashCode());
 
-			//	Entry newEntry1 = new Entry("created", "-", "-", "", newNotebook.Name);	// Utilities.CreateEntry("created", "-", "-", "", newNotebook.Name, Program.PIN);
+			//	Entry newEntry1 = new Entry("created", "-", "-", "", newNotebook.Name); // Utilities.CreateEntry("created", "-", "-", "", newNotebook.Name, Program.PIN);
 			//	newEntry1.Date = DateTime.Parse("01/01/23 1:00 AM");
 			//	newNotebook.Entries.Add(newEntry1);
 
 			//	for (var j = 0; j < 5; j++)
 			//	{
-			//		newEntry = new Entry("Entry " + j + 1.ToString() + " in " + newNotebook.Name, 
+			//		newEntry = new Entry("Entry " + j + 1.ToString() + " in " + newNotebook.Name,
 			//			"This is the entry text for entry " + rnd.Next(1, 150), "{rtf", GetRandomLabels(), newNotebook.Name);
 
 			//		//newEntry = Utilities.CreateEntry("Entry " + j + 1.ToString() + " in " + newNotebook.Name,
@@ -290,15 +296,6 @@ namespace myNotebooks.subforms
 			//{ if (Program.AzurePassword.Length > 0) { frm.Close(); } }
 
 			Program.AzurePassword = string.Empty;   // Kills the Azure synch process for debugging if desired.
-
-			using (frmMessage frm = new(frmMessage.OperationType.YesNoQuestion, "Is this a synchronized account?", "", this))
-			{
-				if(frm.Result == frmMessage.ReturnResult.Yes)
-				{
-					// get the user id
-
-				}
-			}
 
 
 			// Populate Program.DictCheckedNotebooks

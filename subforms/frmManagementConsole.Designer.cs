@@ -30,12 +30,12 @@
 		{
 			this.SuspendLayout();
 			// 
-			// ManagementConsole
+			// frmManagementConsole
 			// 
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			ClientSize = new System.Drawing.Size(832, 796);
-			Name = "ManagementConsole";
+			ClientSize = new System.Drawing.Size(460, 595);
+			Name = "frmManagementConsole";
 			Text = "ManagementConsole";
 			this.ResumeLayout(false);
 		}

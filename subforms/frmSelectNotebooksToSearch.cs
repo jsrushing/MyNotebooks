@@ -239,8 +239,8 @@ namespace myNotebooks.subforms
 
 					if (newFileName != null && newFileName.Length > 0)
 					{
-						if (Utilities.FileNameIsValid(newFileName))
-						{
+						//if (Utilities.FileNameIsValid(newFileName))
+						//{
 							using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "What's the PIN?", "", this))
 							{
 								frm.ShowDialog(this);
@@ -267,12 +267,12 @@ namespace myNotebooks.subforms
 									await AzureFileClient.UploadFile(Program.AppRoot + newFileName + ".pin", "pinfiles");
 								}
 							}
-						}
-						else
-						{
-							using (frmMessage frm4 = new frmMessage(frmMessage.OperationType.Message, Program.InvalidFileName, "", this))
-							{ frm4.ShowDialog(); }
-						}
+						//}
+						//else
+						//{
+						//	//using (frmMessage frm4 = new frmMessage(frmMessage.OperationType.Message, Program.InvalidFileName, "", this))
+						//	//{ frm4.ShowDialog(); }
+						//}
 					}
 				}
 			}
