@@ -37,13 +37,6 @@ namespace myNotebooks.subforms
 			Utilities.SetStartPosition(this, parent);
 		}
 
-		private void ddlFonts_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			lblSelectedFont.Font = new Font(ddlFonts.Text, 10);
-			lblSelectedFont.Text = lblSelectedFont.Font.Name;
-			Application.DoEvents();
-		}
-
 		private void frmNewEntry_Load(object sender, EventArgs e)
 		{
 			OriginalTitle = this.Text;
@@ -53,6 +46,11 @@ namespace myNotebooks.subforms
 			SortLabels();
 			lblCreatedOn.Visible = false;
 			lblEditedOn.Visible = false;
+
+			if (this.Entry != null & CurrentNotebook != null)
+			{ this.Text = "editing '" + Entry.Title + "' in '" + CurrentNotebook.Name + "'"; }
+			else
+			{ this.Text = this.IsDirty ? OriginalTitle + "*" : OriginalTitle; }
 
 			if (IsEdit)
 			{
@@ -93,13 +91,11 @@ namespace myNotebooks.subforms
 			//	mnuCancelExit_Click(null, null);
 		}
 
-		private void GrayOriginalText()
+		private void ddlFonts_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			rtbNewEntry.SelectionStart = 1;
-			rtbNewEntry.SelectionLength = OriginalText_Full.Length + 1;
-			rtbNewEntry.SelectionColor = Color.Gray;
-			rtbNewEntry.SelectionLength = 0;
-			rtbNewEntry.SelectionStart = 0;
+			lblSelectedFont.Font = new Font(ddlFonts.Text, 10);
+			lblSelectedFont.Text = lblSelectedFont.Font.Name;
+			Application.DoEvents();
 		}
 
 		private void InNoTypeArea(bool clicked = false)
@@ -128,8 +124,14 @@ namespace myNotebooks.subforms
 			SetIsDirty(true);
 		}
 
-		private void ModifyFontStyle(FontStyle style)
-		{ rtbNewEntry.SelectionFont = new Font(rtbNewEntry.SelectionFont, rtbNewEntry.SelectionFont.Style ^ style); }
+		private void GrayOriginalText()
+		{
+			rtbNewEntry.SelectionStart = 1;
+			rtbNewEntry.SelectionLength = OriginalText_Full.Length + 1;
+			rtbNewEntry.SelectionColor = Color.Gray;
+			rtbNewEntry.SelectionLength = 0;
+			rtbNewEntry.SelectionStart = 0;
+		}
 
 		private async void mnuCancelExit_Click(object sender, EventArgs e)
 		{
@@ -184,6 +186,9 @@ namespace myNotebooks.subforms
 				frm.ShowDialog(this);
 			}
 		}
+
+		private void ModifyFontStyle(FontStyle style)
+		{ rtbNewEntry.SelectionFont = new Font(rtbNewEntry.SelectionFont, rtbNewEntry.SelectionFont.Style ^ style); }
 
 		private void rtbNewEntry_KeyDown(object sender, KeyEventArgs e) { if (e.KeyCode == Keys.Right || e.KeyCode == Keys.Down) { InNoTypeArea(); } }
 
@@ -252,11 +257,6 @@ namespace myNotebooks.subforms
 					mnuSaveEntry.Enabled = IsDirty;
 					mnuSaveAndExit.Enabled = IsDirty;
 				}
-
-				if (this.Entry != null & CurrentNotebook != null)
-				{ this.Text = "editing '" + Entry.Title + "' in '" + CurrentNotebook.Name + "'"; }
-				else
-				{ this.Text = dirty ? OriginalTitle + "*" : OriginalTitle; }
 			}
 		}
 

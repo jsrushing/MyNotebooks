@@ -175,7 +175,7 @@ namespace myNotebooks
 						DataContractSerializer serializer = new DataContractSerializer(typeof(Notebook));
 						nbRtrn = (Notebook)serializer.ReadObject(stream);
 
-						nbRtrn.Name				= EncryptDecrypt.Decrypt(nbRtrn.Name, Program.PIN);
+						//nbRtrn.Name				= EncryptDecrypt.Decrypt(nbRtrn.Name, Program.PIN);
 
 						if(nbRtrn.Name.Length > 0)
 						{

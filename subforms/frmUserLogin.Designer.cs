@@ -74,7 +74,7 @@
 			// 
 			// txtPwd
 			// 
-			txtPwd.Location = new System.Drawing.Point(77, 39);
+			txtPwd.Location = new System.Drawing.Point(76, 39);
 			txtPwd.Name = "txtPwd";
 			txtPwd.Size = new System.Drawing.Size(184, 23);
 			txtPwd.TabIndex = 3;
