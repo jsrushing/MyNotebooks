@@ -232,7 +232,7 @@ namespace myNotebooks.subforms
 					}
 					else
 					{
-						Entry newEntry = new Entry(txtNewEntryTitle.Text.Trim(), rtbNewEntry.Text.Trim(), rtbNewEntry.Rtf, 
+						Entry newEntry = new(txtNewEntryTitle.Text.Trim(), rtbNewEntry.Text.Trim(), rtbNewEntry.Rtf, 
 							LabelsManager.CheckedLabels_Get(clbLabels), CurrentNotebook.Name);
 						if (Entry == null) { CurrentNotebook.AddEntry(newEntry); } else { CurrentNotebook.ReplaceEntry(Entry, newEntry); }
 						Entry = newEntry;
