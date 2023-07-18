@@ -12,7 +12,6 @@ namespace MyNotebooks.objects
 {
 	internal class User
 	{
-		// test
 		public string		AccessLevel { get; set; }
 		public string		UserId { get; set; }
 		public string		Name { get; set; }
