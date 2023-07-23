@@ -13,20 +13,22 @@ namespace MyNotebooks.objects
 		public int	CompanyId { get; set; }
 		public bool CreateCompany { get; set; }
 		public bool CreateAccount { get; set; }
+		public bool CreateDepartment { get; set; }
 		public bool CreateGroup { get; set; }
-		public bool CreatedOn { get; set; }
 		public bool CreateSimpleUser { get; set; }
+		public bool CreateMasterUser { get; set; }
 		public bool DeleteRenameCompany { get; set; }
 		public bool DeleteRenameAccount { get; set; }
+		public bool DeleteRenameDepartment { get; set; }
 		public bool DeleteRenameGroup { get; set; }
 		public bool DeleteRenameNotebooks { get; set; }
 		public bool EditNotebookValues { get; set; }
 		public bool EditNotebookSettings { get; set; }
-		public bool EditedOn { get; set; }
 		public bool ManageUsers { get; set; }
 		public bool ManageUserPermissions { get; set; }
-		public bool Synch { get; set; }
 		public bool ViewNotebooks { get; set; }
+		public bool CreatedOn { get; set; }
+		public bool EditedOn { get; set; }
 
 		public Permissions() { }
 

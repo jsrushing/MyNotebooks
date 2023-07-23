@@ -48,9 +48,6 @@ namespace MyNotebooks.subforms
 					treeOrg.Nodes.Add(Program.Company.Name);
 				}
 
-
-
-
 				// populate the permissions list
 				foreach (PropertyInfo sPropertyName in typeof(Permissions).GetProperties())
 				{
@@ -76,7 +73,7 @@ namespace MyNotebooks.subforms
 			User user = new();
 
 			// create the user
-			user = new(ddlAccessLevels.SelectedValue.ToString(), txtUserName.Text, txtPwd.Text, "0", DateTime.Now, null);
+			user = new(ddlAccessLevels.SelectedValue.ToString(), txtUserName.Text, txtPwd.Text, "0", "0", "0", "0", "0", DateTime.Now, null);
 			user.Permissions = GetPermissions();
 			Program.User = user;
 		}

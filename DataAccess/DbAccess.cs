@@ -48,7 +48,7 @@ namespace MyNotebooks.DataAccess
 			{
 				conn.Open();
 
-				using (SqlCommand cmd = new("sp_GetUser", conn))
+				using (SqlCommand cmd = new("sp_CreateUser", conn))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 					cmd.Parameters.AddWithValue("@userName", userId);

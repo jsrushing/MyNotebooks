@@ -64,6 +64,7 @@ namespace myNotebooks.subforms
 			helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
 			mnuSwitchAccount = new System.Windows.Forms.ToolStripMenuItem();
+			mnuAdministratorConsole = new System.Windows.Forms.ToolStripMenuItem();
 			lblWrongPin = new System.Windows.Forms.Label();
 			lblEntries = new System.Windows.Forms.Label();
 			lblShowPIN = new System.Windows.Forms.Label();
@@ -238,7 +239,7 @@ namespace myNotebooks.subforms
 			// 
 			// menuStrip1
 			// 
-			menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuNotebook, mnuLabels, helpToolStripMenuItem, mnuSwitchAccount });
+			menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuNotebook, mnuLabels, helpToolStripMenuItem, mnuSwitchAccount, mnuAdministratorConsole });
 			menuStrip1.Location = new System.Drawing.Point(0, 0);
 			menuStrip1.Name = "menuStrip1";
 			menuStrip1.Size = new System.Drawing.Size(830, 24);
@@ -370,6 +371,13 @@ namespace myNotebooks.subforms
 			mnuSwitchAccount.Size = new System.Drawing.Size(102, 20);
 			mnuSwitchAccount.Text = "Switch Account";
 			mnuSwitchAccount.Click += this.mnuSwitchAccount_Click;
+			// 
+			// mnuAdministratorConsole
+			// 
+			mnuAdministratorConsole.Name = "mnuAdministratorConsole";
+			mnuAdministratorConsole.Size = new System.Drawing.Size(138, 20);
+			mnuAdministratorConsole.Text = "Administrator Console";
+			mnuAdministratorConsole.Click += this.mnuAdministratorConsole_Click;
 			// 
 			// lblWrongPin
 			// 
@@ -597,5 +605,6 @@ namespace myNotebooks.subforms
 		private System.Windows.Forms.ToolStripMenuItem mnuNotebooks_Select;
 		private System.Windows.Forms.ToolStripMenuItem mnuLabelsSummary;
 		private System.Windows.Forms.Button btnResetLabelFilter;
+		private System.Windows.Forms.ToolStripMenuItem mnuAdministratorConsole;
 	}
 }

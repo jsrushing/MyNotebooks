@@ -17,21 +17,30 @@ namespace MyNotebooks.objects
 		public string		Name { get; set; }
 		public string		Password { get; set; }	
 		public string		CompanyId { get; set; }
+		public string		AccountId { get; set; }
+		public string		DepartmentId { get; set; }
+		public string		GroupId { get; set; }
+		public bool			IsEnterprise { get; set; }
 		public DateTime		CreatedOn { get; set; }
 		public DateTime?	EditedOn { get; set; }
 		public Permissions	Permissions { get; set; }
 
 		public User() { }
 
-		public User(string accessLevel, string name, string password, string companyId, DateTime createdOn, DateTime? editedOn, string userId = "" ) 
+		public User(string accessLevel, string name, string password, string userId, string companyId, 
+			string accountId, string departmentId, string groupId, DateTime createdOn, DateTime? editedOn = null, bool isEnterprise = false) 
 		{ 
 			AccessLevel	= accessLevel; 
-			UserId		= userId;
-			Name		= name;
-			Password	= password;
-			CompanyId	= companyId;
-			CreatedOn	= createdOn;
-			EditedOn	= editedOn;
+			UserId			= userId;
+			Name			= name;
+			Password		= password;
+			CompanyId		= companyId;
+			AccountId		= accountId;
+			DepartmentId	= departmentId;
+			GroupId			= groupId;
+			IsEnterprise	= isEnterprise;
+			CreatedOn		= createdOn;
+			EditedOn		= editedOn;
 		}
 
 		public User(DataTable dt) 

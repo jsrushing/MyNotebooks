@@ -290,7 +290,7 @@
 			// 
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			ClientSize = new System.Drawing.Size(573, 551);
+			ClientSize = new System.Drawing.Size(928, 551);
 			Controls.Add(panel1);
 			Controls.Add(pnlCreateUser);
 			Controls.Add(pnlSelectGroup);
