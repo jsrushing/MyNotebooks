@@ -42,7 +42,7 @@ namespace MyNotebooks.subforms
 
 				if (Convert.ToInt32(Program.User.AccessLevel) > 2)  // 1 and 2 don't have companies, accounts, or groups.
 				{
-					Program.Company = DbAccess.GetCompany(Program.User.CompanyId);
+					//Program.Company = DbAccess.GetCompany(Program.User.CompanyId);
 
 					// populate the tree
 					treeOrg.Nodes.Add(Program.Company.Name);
@@ -70,12 +70,12 @@ namespace MyNotebooks.subforms
 
 		private void btnCreateUser_Click(object sender, EventArgs e)
 		{
-			User user = new();
+			//User user = new();
 
-			// create the user
-			user = new(ddlAccessLevels.SelectedValue.ToString(), txtUserName.Text, txtPwd.Text, "0", "0", "0", "0", "0", DateTime.Now, null);
-			user.Permissions = GetPermissions();
-			Program.User = user;
+			//// create the user
+			//user = new(ddlAccessLevels.SelectedValue.ToString(), txtUserName.Text, txtPwd.Text, "0", "0", "0", "0", "0", DateTime.Now, null);
+			//user.Permissions = GetPermissions();
+			//Program.User = user;
 		}
 
 		private void btnCancelNewUser_Click(object sender, EventArgs e) { ShowHidePanels(pnlLogin); }

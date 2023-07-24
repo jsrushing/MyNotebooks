@@ -40,7 +40,7 @@ namespace MyNotebooks.DataAccess
 			return ds;
 		}
 
-		public static int CreateUser(string userId, string password, Permissions permissions)
+		public static int CreateUser(MyNotebooks.objects.User usr)
 		{
 			int iRtrn = -1;
 
@@ -51,8 +51,14 @@ namespace MyNotebooks.DataAccess
 				using (SqlCommand cmd = new("sp_CreateUser", conn))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@userName", userId);
-					cmd.Parameters.AddWithValue("@password", EncryptDecrypt.Encrypt(password, password));
+					cmd.Parameters.AddWithValue("@AccessLevel", usr.AccessLevel);
+					cmd.Parameters.AddWithValue("@Name", usr.Name);
+					cmd.Parameters.AddWithValue("@CompanyId", usr.CompanyId);
+					cmd.Parameters.AddWithValue("@AccountId", usr.AccountId);
+					cmd.Parameters.AddWithValue("@DepartmentId", usr.DepartmentId);
+					cmd.Parameters.AddWithValue("@GroupId", usr.GroupId);
+					cmd.Parameters.AddWithValue("@IsEnterprise", usr.IsEnterprise);
+					cmd.Parameters.AddWithValue("@password", EncryptDecrypt.Encrypt(usr.Password, usr.Password));
 
 					foreach(PropertyInfo sPropertyName in typeof(Permissions).GetProperties())
 					{
@@ -60,7 +66,7 @@ namespace MyNotebooks.DataAccess
 							(
 								"@" + sPropertyName,
 								// from https://stackoverflow.com/questions/1196991/get-property-value-from-string-using-reflection
-								permissions.GetType().GetProperty(sPropertyName.Name).GetValue(permissions, null)
+								usr.Permissions.GetType().GetProperty(sPropertyName.Name).GetValue(usr.Permissions, null)
 							);
 					}
 

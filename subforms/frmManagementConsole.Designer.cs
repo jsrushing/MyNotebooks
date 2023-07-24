@@ -1,4 +1,6 @@
-﻿namespace MyNotebooks.subforms
+﻿using System.Security.Cryptography.Xml;
+
+namespace MyNotebooks.subforms
 {
 	partial class frmManagementConsole
 	{
@@ -28,6 +30,18 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Name: <name>");
+			System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Details", new System.Windows.Forms.TreeNode[] { treeNode1 });
+			System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Permission 1 ...");
+			System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Permissions", new System.Windows.Forms.TreeNode[] { treeNode3 });
+			System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Company 1 ...");
+			System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Companies", new System.Windows.Forms.TreeNode[] { treeNode5 });
+			System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Account 1 ...");
+			System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Accounts", new System.Windows.Forms.TreeNode[] { treeNode7 });
+			System.Windows.Forms.TreeNode treeNode9 = new System.Windows.Forms.TreeNode("Department 1 ...");
+			System.Windows.Forms.TreeNode treeNode10 = new System.Windows.Forms.TreeNode("Departments", new System.Windows.Forms.TreeNode[] { treeNode9 });
+			System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("Group 1 ...");
+			System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("Groups", new System.Windows.Forms.TreeNode[] { treeNode11 });
 			grpUsers = new System.Windows.Forms.GroupBox();
 			pnlCreateUser = new System.Windows.Forms.Panel();
 			label3 = new System.Windows.Forms.Label();
@@ -46,34 +60,64 @@
 			txtPwd = new System.Windows.Forms.TextBox();
 			groupBox2 = new System.Windows.Forms.GroupBox();
 			panel1 = new System.Windows.Forms.Panel();
-			statusStrip1 = new System.Windows.Forms.StatusStrip();
 			toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
 			groupBox3 = new System.Windows.Forms.GroupBox();
-			groupBox4 = new System.Windows.Forms.GroupBox();
-			groupBox5 = new System.Windows.Forms.GroupBox();
+			checkBox1 = new System.Windows.Forms.CheckBox();
+			button2 = new System.Windows.Forms.Button();
+			button1 = new System.Windows.Forms.Button();
+			btnAssignCompanies = new System.Windows.Forms.Button();
+			clbCompanies = new System.Windows.Forms.CheckedListBox();
 			grpGroups = new System.Windows.Forms.GroupBox();
-			pnlSelectGroup = new System.Windows.Forms.Panel();
+			button9 = new System.Windows.Forms.Button();
+			button10 = new System.Windows.Forms.Button();
+			checkedListBox3 = new System.Windows.Forms.CheckedListBox();
+			button11 = new System.Windows.Forms.Button();
 			label7 = new System.Windows.Forms.Label();
 			lblAddCurrentTreeSelection = new System.Windows.Forms.Label();
 			comboBox1 = new System.Windows.Forms.ComboBox();
 			label5 = new System.Windows.Forms.Label();
+			groupBox5 = new System.Windows.Forms.GroupBox();
+			treeUser = new System.Windows.Forms.TreeView();
 			label4 = new System.Windows.Forms.Label();
-			treeOrg = new System.Windows.Forms.TreeView();
+			comboBox2 = new System.Windows.Forms.ComboBox();
+			label8 = new System.Windows.Forms.Label();
+			label9 = new System.Windows.Forms.Label();
+			label10 = new System.Windows.Forms.Label();
+			label11 = new System.Windows.Forms.Label();
+			comboBox3 = new System.Windows.Forms.ComboBox();
+			comboBox4 = new System.Windows.Forms.ComboBox();
+			comboBox5 = new System.Windows.Forms.ComboBox();
+			comboBox6 = new System.Windows.Forms.ComboBox();
+			groupBox6 = new System.Windows.Forms.GroupBox();
+			button3 = new System.Windows.Forms.Button();
+			button4 = new System.Windows.Forms.Button();
+			button5 = new System.Windows.Forms.Button();
+			checkBox2 = new System.Windows.Forms.CheckBox();
+			checkedListBox4 = new System.Windows.Forms.CheckedListBox();
+			groupBox1 = new System.Windows.Forms.GroupBox();
+			button6 = new System.Windows.Forms.Button();
+			button7 = new System.Windows.Forms.Button();
+			button8 = new System.Windows.Forms.Button();
+			checkBox3 = new System.Windows.Forms.CheckBox();
+			checkedListBox1 = new System.Windows.Forms.CheckedListBox();
 			grpUsers.SuspendLayout();
 			pnlCreateUser.SuspendLayout();
 			pnlLogin.SuspendLayout();
 			toolStripContainer1.SuspendLayout();
+			groupBox3.SuspendLayout();
 			grpGroups.SuspendLayout();
-			pnlSelectGroup.SuspendLayout();
+			groupBox5.SuspendLayout();
+			groupBox6.SuspendLayout();
+			groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// grpUsers
 			// 
 			grpUsers.Controls.Add(pnlCreateUser);
 			grpUsers.Controls.Add(pnlLogin);
-			grpUsers.Location = new System.Drawing.Point(12, 27);
+			grpUsers.Location = new System.Drawing.Point(8, 0);
 			grpUsers.Name = "grpUsers";
-			grpUsers.Size = new System.Drawing.Size(286, 543);
+			grpUsers.Size = new System.Drawing.Size(286, 549);
 			grpUsers.TabIndex = 20;
 			grpUsers.TabStop = false;
 			grpUsers.Text = "Users";
@@ -87,9 +131,9 @@
 			pnlCreateUser.Controls.Add(btnCreateUser);
 			pnlCreateUser.Controls.Add(clbPermissions);
 			pnlCreateUser.Controls.Add(label6);
-			pnlCreateUser.Location = new System.Drawing.Point(4, 127);
+			pnlCreateUser.Location = new System.Drawing.Point(4, 126);
 			pnlCreateUser.Name = "pnlCreateUser";
-			pnlCreateUser.Size = new System.Drawing.Size(272, 410);
+			pnlCreateUser.Size = new System.Drawing.Size(272, 415);
 			pnlCreateUser.TabIndex = 12;
 			pnlCreateUser.Visible = false;
 			// 
@@ -105,12 +149,13 @@
 			// 
 			// btnCancelNewUser
 			// 
-			btnCancelNewUser.Location = new System.Drawing.Point(144, 373);
+			btnCancelNewUser.Location = new System.Drawing.Point(144, 383);
 			btnCancelNewUser.Name = "btnCancelNewUser";
 			btnCancelNewUser.Size = new System.Drawing.Size(91, 23);
 			btnCancelNewUser.TabIndex = 19;
 			btnCancelNewUser.Text = "&Cancel";
 			btnCancelNewUser.UseVisualStyleBackColor = true;
+			btnCancelNewUser.Click += this.btnCancelNewUser_Click;
 			// 
 			// ddlAccessLevels
 			// 
@@ -132,12 +177,13 @@
 			// 
 			// btnCreateUser
 			// 
-			btnCreateUser.Location = new System.Drawing.Point(31, 373);
+			btnCreateUser.Location = new System.Drawing.Point(31, 383);
 			btnCreateUser.Name = "btnCreateUser";
 			btnCreateUser.Size = new System.Drawing.Size(91, 23);
 			btnCreateUser.TabIndex = 15;
 			btnCreateUser.Text = "Create &User";
 			btnCreateUser.UseVisualStyleBackColor = true;
+			btnCreateUser.Click += this.btnCreateUser_Click;
 			// 
 			// clbPermissions
 			// 
@@ -185,6 +231,7 @@
 			btnCancel.TabIndex = 5;
 			btnCancel.Text = "&Cancel";
 			btnCancel.UseVisualStyleBackColor = true;
+			btnCancel.Click += this.btnCancel_Click;
 			// 
 			// label1
 			// 
@@ -203,6 +250,7 @@
 			btnOk_Login.TabIndex = 4;
 			btnOk_Login.Text = "&Ok";
 			btnOk_Login.UseVisualStyleBackColor = true;
+			btnOk_Login.Click += this.btnOk_Click;
 			// 
 			// label2
 			// 
@@ -222,7 +270,7 @@
 			// 
 			// groupBox2
 			// 
-			groupBox2.Location = new System.Drawing.Point(771, 470);
+			groupBox2.Location = new System.Drawing.Point(1029, 328);
 			groupBox2.Name = "groupBox2";
 			groupBox2.Size = new System.Drawing.Size(200, 100);
 			groupBox2.TabIndex = 21;
@@ -231,18 +279,10 @@
 			// 
 			// panel1
 			// 
-			panel1.Location = new System.Drawing.Point(869, 431);
+			panel1.Location = new System.Drawing.Point(1029, 177);
 			panel1.Name = "panel1";
 			panel1.Size = new System.Drawing.Size(200, 100);
 			panel1.TabIndex = 20;
-			// 
-			// statusStrip1
-			// 
-			statusStrip1.Location = new System.Drawing.Point(0, 573);
-			statusStrip1.Name = "statusStrip1";
-			statusStrip1.Size = new System.Drawing.Size(1107, 22);
-			statusStrip1.TabIndex = 23;
-			statusStrip1.Text = "statusStrip1";
 			// 
 			// toolStripContainer1
 			// 
@@ -258,54 +298,118 @@
 			// 
 			// groupBox3
 			// 
-			groupBox3.Location = new System.Drawing.Point(673, 125);
+			groupBox3.Controls.Add(checkBox1);
+			groupBox3.Controls.Add(button2);
+			groupBox3.Controls.Add(button1);
+			groupBox3.Controls.Add(btnAssignCompanies);
+			groupBox3.Controls.Add(clbCompanies);
+			groupBox3.Location = new System.Drawing.Point(300, 0);
 			groupBox3.Name = "groupBox3";
-			groupBox3.Size = new System.Drawing.Size(200, 100);
+			groupBox3.Size = new System.Drawing.Size(227, 179);
 			groupBox3.TabIndex = 25;
 			groupBox3.TabStop = false;
 			groupBox3.Text = "Companies";
 			// 
-			// groupBox4
+			// checkBox1
 			// 
-			groupBox4.Location = new System.Drawing.Point(879, 56);
-			groupBox4.Name = "groupBox4";
-			groupBox4.Size = new System.Drawing.Size(200, 100);
-			groupBox4.TabIndex = 22;
-			groupBox4.TabStop = false;
-			groupBox4.Text = "Accounts";
+			checkBox1.AutoSize = true;
+			checkBox1.Location = new System.Drawing.Point(135, 10);
+			checkBox1.Name = "checkBox1";
+			checkBox1.Size = new System.Drawing.Size(71, 19);
+			checkBox1.TabIndex = 21;
+			checkBox1.Text = "select all";
+			checkBox1.UseVisualStyleBackColor = true;
 			// 
-			// groupBox5
+			// button2
 			// 
-			groupBox5.Location = new System.Drawing.Point(660, 276);
-			groupBox5.Name = "groupBox5";
-			groupBox5.Size = new System.Drawing.Size(200, 100);
-			groupBox5.TabIndex = 22;
-			groupBox5.TabStop = false;
-			groupBox5.Text = "Departments";
+			button2.Location = new System.Drawing.Point(150, 149);
+			button2.Name = "button2";
+			button2.Size = new System.Drawing.Size(66, 23);
+			button2.TabIndex = 20;
+			button2.Text = "Manage";
+			button2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			button2.UseVisualStyleBackColor = true;
+			// 
+			// button1
+			// 
+			button1.Location = new System.Drawing.Point(78, 149);
+			button1.Name = "button1";
+			button1.Size = new System.Drawing.Size(66, 23);
+			button1.TabIndex = 19;
+			button1.Text = "Remove";
+			button1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			button1.UseVisualStyleBackColor = true;
+			// 
+			// btnAssignCompanies
+			// 
+			btnAssignCompanies.Location = new System.Drawing.Point(6, 149);
+			btnAssignCompanies.Name = "btnAssignCompanies";
+			btnAssignCompanies.Size = new System.Drawing.Size(66, 23);
+			btnAssignCompanies.TabIndex = 18;
+			btnAssignCompanies.Text = "Assign";
+			btnAssignCompanies.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			btnAssignCompanies.UseVisualStyleBackColor = true;
+			// 
+			// clbCompanies
+			// 
+			clbCompanies.CheckOnClick = true;
+			clbCompanies.FormattingEnabled = true;
+			clbCompanies.Location = new System.Drawing.Point(6, 31);
+			clbCompanies.Name = "clbCompanies";
+			clbCompanies.Size = new System.Drawing.Size(210, 112);
+			clbCompanies.TabIndex = 17;
 			// 
 			// grpGroups
 			// 
-			grpGroups.Controls.Add(pnlSelectGroup);
-			grpGroups.Location = new System.Drawing.Point(321, 27);
+			grpGroups.Controls.Add(button9);
+			grpGroups.Controls.Add(button10);
+			grpGroups.Controls.Add(checkedListBox3);
+			grpGroups.Controls.Add(button11);
+			grpGroups.Location = new System.Drawing.Point(533, 0);
 			grpGroups.Name = "grpGroups";
-			grpGroups.Size = new System.Drawing.Size(282, 519);
+			grpGroups.Size = new System.Drawing.Size(224, 269);
 			grpGroups.TabIndex = 22;
 			grpGroups.TabStop = false;
 			grpGroups.Text = "Groups";
 			// 
-			// pnlSelectGroup
+			// button9
 			// 
-			pnlSelectGroup.Controls.Add(label7);
-			pnlSelectGroup.Controls.Add(lblAddCurrentTreeSelection);
-			pnlSelectGroup.Controls.Add(comboBox1);
-			pnlSelectGroup.Controls.Add(label5);
-			pnlSelectGroup.Controls.Add(label4);
-			pnlSelectGroup.Controls.Add(treeOrg);
-			pnlSelectGroup.Location = new System.Drawing.Point(3, 22);
-			pnlSelectGroup.Name = "pnlSelectGroup";
-			pnlSelectGroup.Size = new System.Drawing.Size(272, 492);
-			pnlSelectGroup.TabIndex = 9;
-			pnlSelectGroup.Visible = false;
+			button9.Location = new System.Drawing.Point(150, 229);
+			button9.Name = "button9";
+			button9.Size = new System.Drawing.Size(66, 23);
+			button9.TabIndex = 33;
+			button9.Text = "Manage";
+			button9.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			button9.UseVisualStyleBackColor = true;
+			// 
+			// button10
+			// 
+			button10.Location = new System.Drawing.Point(78, 229);
+			button10.Name = "button10";
+			button10.Size = new System.Drawing.Size(66, 23);
+			button10.TabIndex = 32;
+			button10.Text = "Remove";
+			button10.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			button10.UseVisualStyleBackColor = true;
+			// 
+			// checkedListBox3
+			// 
+			checkedListBox3.CheckOnClick = true;
+			checkedListBox3.FormattingEnabled = true;
+			checkedListBox3.Location = new System.Drawing.Point(6, 21);
+			checkedListBox3.Name = "checkedListBox3";
+			checkedListBox3.Size = new System.Drawing.Size(210, 202);
+			checkedListBox3.TabIndex = 21;
+			// 
+			// button11
+			// 
+			button11.Location = new System.Drawing.Point(6, 229);
+			button11.Name = "button11";
+			button11.Size = new System.Drawing.Size(66, 23);
+			button11.TabIndex = 31;
+			button11.Text = "Assign";
+			button11.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			button11.UseVisualStyleBackColor = true;
 			// 
 			// label7
 			// 
@@ -313,7 +417,7 @@
 			label7.Cursor = System.Windows.Forms.Cursors.Hand;
 			label7.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
 			label7.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			label7.Location = new System.Drawing.Point(169, 470);
+			label7.Location = new System.Drawing.Point(1082, 493);
 			label7.Name = "label7";
 			label7.Size = new System.Drawing.Size(94, 15);
 			label7.TabIndex = 5;
@@ -325,7 +429,7 @@
 			lblAddCurrentTreeSelection.Cursor = System.Windows.Forms.Cursors.Hand;
 			lblAddCurrentTreeSelection.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
 			lblAddCurrentTreeSelection.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			lblAddCurrentTreeSelection.Location = new System.Drawing.Point(148, 15);
+			lblAddCurrentTreeSelection.Location = new System.Drawing.Point(1061, 38);
 			lblAddCurrentTreeSelection.Name = "lblAddCurrentTreeSelection";
 			lblAddCurrentTreeSelection.Size = new System.Drawing.Size(116, 15);
 			lblAddCurrentTreeSelection.TabIndex = 4;
@@ -334,7 +438,7 @@
 			// comboBox1
 			// 
 			comboBox1.FormattingEnabled = true;
-			comboBox1.Location = new System.Drawing.Point(78, 33);
+			comboBox1.Location = new System.Drawing.Point(1141, 58);
 			comboBox1.Name = "comboBox1";
 			comboBox1.Size = new System.Drawing.Size(185, 23);
 			comboBox1.TabIndex = 3;
@@ -342,42 +446,298 @@
 			// label5
 			// 
 			label5.AutoSize = true;
-			label5.Location = new System.Drawing.Point(7, 36);
+			label5.Location = new System.Drawing.Point(1070, 61);
 			label5.Name = "label5";
 			label5.Size = new System.Drawing.Size(69, 15);
 			label5.TabIndex = 2;
 			label5.Text = "Bookmarks:";
 			// 
+			// groupBox5
+			// 
+			groupBox5.Controls.Add(treeUser);
+			groupBox5.Location = new System.Drawing.Point(533, 275);
+			groupBox5.Name = "groupBox5";
+			groupBox5.Size = new System.Drawing.Size(224, 274);
+			groupBox5.TabIndex = 28;
+			groupBox5.TabStop = false;
+			groupBox5.Text = "Current User";
+			// 
+			// treeUser
+			// 
+			treeUser.Location = new System.Drawing.Point(7, 19);
+			treeUser.Name = "treeUser";
+			treeNode1.Name = "Node1";
+			treeNode1.Text = "Name: <name>";
+			treeNode2.Name = "Node0";
+			treeNode2.Text = "Details";
+			treeNode3.Name = "Node3";
+			treeNode3.Text = "Permission 1 ...";
+			treeNode4.Name = "Node2";
+			treeNode4.Text = "Permissions";
+			treeNode5.Name = "Node5";
+			treeNode5.Text = "Company 1 ...";
+			treeNode6.Name = "Node4";
+			treeNode6.Text = "Companies";
+			treeNode7.Name = "Node7";
+			treeNode7.Text = "Account 1 ...";
+			treeNode8.Name = "Node6";
+			treeNode8.Text = "Accounts";
+			treeNode9.Name = "Node9";
+			treeNode9.Text = "Department 1 ...";
+			treeNode10.Name = "Node8";
+			treeNode10.Text = "Departments";
+			treeNode11.Name = "Node11";
+			treeNode11.Text = "Group 1 ...";
+			treeNode12.Name = "Node10";
+			treeNode12.Text = "Groups";
+			treeUser.Nodes.AddRange(new System.Windows.Forms.TreeNode[] { treeNode2, treeNode4, treeNode6, treeNode8, treeNode10, treeNode12 });
+			treeUser.Size = new System.Drawing.Size(209, 244);
+			treeUser.TabIndex = 0;
+			treeUser.Text = "tree";
+			// 
 			// label4
 			// 
 			label4.AutoSize = true;
-			label4.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-			label4.Location = new System.Drawing.Point(6, 6);
+			label4.Location = new System.Drawing.Point(1010, 540);
 			label4.Name = "label4";
-			label4.Size = new System.Drawing.Size(89, 15);
+			label4.Size = new System.Drawing.Size(70, 15);
 			label4.TabIndex = 1;
-			label4.Text = "Select a Group";
+			label4.Text = "Permissions";
 			// 
-			// treeOrg
+			// comboBox2
 			// 
-			treeOrg.Location = new System.Drawing.Point(7, 62);
-			treeOrg.Name = "treeOrg";
-			treeOrg.Size = new System.Drawing.Size(256, 403);
-			treeOrg.TabIndex = 0;
+			comboBox2.FormattingEnabled = true;
+			comboBox2.Items.AddRange(new object[] { "Free 30-day trial" });
+			comboBox2.Location = new System.Drawing.Point(1082, 536);
+			comboBox2.Name = "comboBox2";
+			comboBox2.Size = new System.Drawing.Size(188, 23);
+			comboBox2.TabIndex = 20;
+			// 
+			// label8
+			// 
+			label8.AutoSize = true;
+			label8.Location = new System.Drawing.Point(1013, 569);
+			label8.Name = "label8";
+			label8.Size = new System.Drawing.Size(67, 15);
+			label8.TabIndex = 21;
+			label8.Text = "Companies";
+			// 
+			// label9
+			// 
+			label9.AutoSize = true;
+			label9.Location = new System.Drawing.Point(1023, 598);
+			label9.Name = "label9";
+			label9.Size = new System.Drawing.Size(57, 15);
+			label9.TabIndex = 22;
+			label9.Text = "Accounts";
+			// 
+			// label10
+			// 
+			label10.AutoSize = true;
+			label10.Location = new System.Drawing.Point(1005, 627);
+			label10.Name = "label10";
+			label10.Size = new System.Drawing.Size(75, 15);
+			label10.TabIndex = 23;
+			label10.Text = "Departments";
+			// 
+			// label11
+			// 
+			label11.AutoSize = true;
+			label11.Location = new System.Drawing.Point(1035, 656);
+			label11.Name = "label11";
+			label11.Size = new System.Drawing.Size(45, 15);
+			label11.TabIndex = 24;
+			label11.Text = "Groups";
+			// 
+			// comboBox3
+			// 
+			comboBox3.FormattingEnabled = true;
+			comboBox3.Items.AddRange(new object[] { "Free 30-day trial" });
+			comboBox3.Location = new System.Drawing.Point(1082, 565);
+			comboBox3.Name = "comboBox3";
+			comboBox3.Size = new System.Drawing.Size(188, 23);
+			comboBox3.TabIndex = 25;
+			// 
+			// comboBox4
+			// 
+			comboBox4.FormattingEnabled = true;
+			comboBox4.Items.AddRange(new object[] { "Free 30-day trial" });
+			comboBox4.Location = new System.Drawing.Point(1082, 594);
+			comboBox4.Name = "comboBox4";
+			comboBox4.Size = new System.Drawing.Size(188, 23);
+			comboBox4.TabIndex = 26;
+			// 
+			// comboBox5
+			// 
+			comboBox5.FormattingEnabled = true;
+			comboBox5.Items.AddRange(new object[] { "Free 30-day trial" });
+			comboBox5.Location = new System.Drawing.Point(1082, 652);
+			comboBox5.Name = "comboBox5";
+			comboBox5.Size = new System.Drawing.Size(188, 23);
+			comboBox5.TabIndex = 27;
+			// 
+			// comboBox6
+			// 
+			comboBox6.FormattingEnabled = true;
+			comboBox6.Items.AddRange(new object[] { "Free 30-day trial" });
+			comboBox6.Location = new System.Drawing.Point(1082, 623);
+			comboBox6.Name = "comboBox6";
+			comboBox6.Size = new System.Drawing.Size(188, 23);
+			comboBox6.TabIndex = 28;
+			// 
+			// groupBox6
+			// 
+			groupBox6.Controls.Add(button3);
+			groupBox6.Controls.Add(button4);
+			groupBox6.Controls.Add(button5);
+			groupBox6.Controls.Add(checkBox2);
+			groupBox6.Controls.Add(checkedListBox4);
+			groupBox6.Location = new System.Drawing.Point(300, 185);
+			groupBox6.Name = "groupBox6";
+			groupBox6.Size = new System.Drawing.Size(227, 179);
+			groupBox6.TabIndex = 29;
+			groupBox6.TabStop = false;
+			groupBox6.Text = "Accounts";
+			// 
+			// button3
+			// 
+			button3.Location = new System.Drawing.Point(150, 149);
+			button3.Name = "button3";
+			button3.Size = new System.Drawing.Size(66, 23);
+			button3.TabIndex = 24;
+			button3.Text = "Manage";
+			button3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			button3.UseVisualStyleBackColor = true;
+			// 
+			// button4
+			// 
+			button4.Location = new System.Drawing.Point(78, 149);
+			button4.Name = "button4";
+			button4.Size = new System.Drawing.Size(66, 23);
+			button4.TabIndex = 23;
+			button4.Text = "Remove";
+			button4.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			button4.UseVisualStyleBackColor = true;
+			// 
+			// button5
+			// 
+			button5.Location = new System.Drawing.Point(6, 149);
+			button5.Name = "button5";
+			button5.Size = new System.Drawing.Size(66, 23);
+			button5.TabIndex = 22;
+			button5.Text = "Assign";
+			button5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			button5.UseVisualStyleBackColor = true;
+			// 
+			// checkBox2
+			// 
+			checkBox2.AutoSize = true;
+			checkBox2.Location = new System.Drawing.Point(135, 10);
+			checkBox2.Name = "checkBox2";
+			checkBox2.Size = new System.Drawing.Size(71, 19);
+			checkBox2.TabIndex = 21;
+			checkBox2.Text = "select all";
+			checkBox2.UseVisualStyleBackColor = true;
+			// 
+			// checkedListBox4
+			// 
+			checkedListBox4.CheckOnClick = true;
+			checkedListBox4.FormattingEnabled = true;
+			checkedListBox4.Location = new System.Drawing.Point(6, 31);
+			checkedListBox4.Name = "checkedListBox4";
+			checkedListBox4.Size = new System.Drawing.Size(210, 112);
+			checkedListBox4.TabIndex = 17;
+			// 
+			// groupBox1
+			// 
+			groupBox1.Controls.Add(button6);
+			groupBox1.Controls.Add(button7);
+			groupBox1.Controls.Add(button8);
+			groupBox1.Controls.Add(checkBox3);
+			groupBox1.Controls.Add(checkedListBox1);
+			groupBox1.Location = new System.Drawing.Point(300, 370);
+			groupBox1.Name = "groupBox1";
+			groupBox1.Size = new System.Drawing.Size(227, 179);
+			groupBox1.TabIndex = 30;
+			groupBox1.TabStop = false;
+			groupBox1.Text = "Departments";
+			// 
+			// button6
+			// 
+			button6.Location = new System.Drawing.Point(150, 149);
+			button6.Name = "button6";
+			button6.Size = new System.Drawing.Size(66, 23);
+			button6.TabIndex = 24;
+			button6.Text = "Manage";
+			button6.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			button6.UseVisualStyleBackColor = true;
+			// 
+			// button7
+			// 
+			button7.Location = new System.Drawing.Point(78, 149);
+			button7.Name = "button7";
+			button7.Size = new System.Drawing.Size(66, 23);
+			button7.TabIndex = 23;
+			button7.Text = "Remove";
+			button7.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			button7.UseVisualStyleBackColor = true;
+			// 
+			// button8
+			// 
+			button8.Location = new System.Drawing.Point(6, 149);
+			button8.Name = "button8";
+			button8.Size = new System.Drawing.Size(66, 23);
+			button8.TabIndex = 22;
+			button8.Text = "Assign";
+			button8.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			button8.UseVisualStyleBackColor = true;
+			// 
+			// checkBox3
+			// 
+			checkBox3.AutoSize = true;
+			checkBox3.Location = new System.Drawing.Point(135, 10);
+			checkBox3.Name = "checkBox3";
+			checkBox3.Size = new System.Drawing.Size(71, 19);
+			checkBox3.TabIndex = 21;
+			checkBox3.Text = "select all";
+			checkBox3.UseVisualStyleBackColor = true;
+			// 
+			// checkedListBox1
+			// 
+			checkedListBox1.CheckOnClick = true;
+			checkedListBox1.FormattingEnabled = true;
+			checkedListBox1.Location = new System.Drawing.Point(6, 31);
+			checkedListBox1.Name = "checkedListBox1";
+			checkedListBox1.Size = new System.Drawing.Size(210, 112);
+			checkedListBox1.TabIndex = 17;
 			// 
 			// frmManagementConsole
 			// 
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			ClientSize = new System.Drawing.Size(1107, 595);
+			ClientSize = new System.Drawing.Size(769, 558);
+			Controls.Add(comboBox6);
+			Controls.Add(groupBox1);
+			Controls.Add(comboBox5);
+			Controls.Add(groupBox6);
+			Controls.Add(comboBox4);
 			Controls.Add(groupBox5);
-			Controls.Add(groupBox4);
+			Controls.Add(comboBox3);
+			Controls.Add(label7);
+			Controls.Add(label11);
+			Controls.Add(lblAddCurrentTreeSelection);
+			Controls.Add(label10);
+			Controls.Add(comboBox1);
+			Controls.Add(label9);
+			Controls.Add(label5);
+			Controls.Add(label8);
 			Controls.Add(grpGroups);
+			Controls.Add(comboBox2);
+			Controls.Add(label4);
 			Controls.Add(groupBox3);
 			Controls.Add(groupBox2);
 			Controls.Add(grpUsers);
 			Controls.Add(panel1);
-			Controls.Add(statusStrip1);
 			Name = "frmManagementConsole";
 			Text = "ManagementConsole";
 			Load += this.frmManagementConsole_Load;
@@ -388,9 +748,14 @@
 			pnlLogin.PerformLayout();
 			toolStripContainer1.ResumeLayout(false);
 			toolStripContainer1.PerformLayout();
+			groupBox3.ResumeLayout(false);
+			groupBox3.PerformLayout();
 			grpGroups.ResumeLayout(false);
-			pnlSelectGroup.ResumeLayout(false);
-			pnlSelectGroup.PerformLayout();
+			groupBox5.ResumeLayout(false);
+			groupBox6.ResumeLayout(false);
+			groupBox6.PerformLayout();
+			groupBox1.ResumeLayout(false);
+			groupBox1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
@@ -401,11 +766,8 @@
 		private System.Windows.Forms.GroupBox groupBox2;
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-		private System.Windows.Forms.StatusStrip statusStrip1;
 		private System.Windows.Forms.ToolStripContainer toolStripContainer1;
 		private System.Windows.Forms.GroupBox groupBox3;
-		private System.Windows.Forms.GroupBox groupBox4;
-		private System.Windows.Forms.GroupBox groupBox5;
 		private System.Windows.Forms.GroupBox grpGroups;
 		private System.Windows.Forms.Panel pnlCreateUser;
 		private System.Windows.Forms.Label label3;
@@ -422,12 +784,43 @@
 		private System.Windows.Forms.Button btnOk_Login;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.TextBox txtPwd;
-		private System.Windows.Forms.Panel pnlSelectGroup;
 		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.Label lblAddCurrentTreeSelection;
 		private System.Windows.Forms.ComboBox comboBox1;
 		private System.Windows.Forms.Label label5;
+		private System.Windows.Forms.Button btnAssignCompanies;
+		private System.Windows.Forms.CheckedListBox clbCompanies;
+		private System.Windows.Forms.Button button2;
+		private System.Windows.Forms.Button button1;
+		private System.Windows.Forms.CheckedListBox checkedListBox3;
+		private System.Windows.Forms.GroupBox groupBox5;
 		private System.Windows.Forms.Label label4;
-		private System.Windows.Forms.TreeView treeOrg;
+		private System.Windows.Forms.ComboBox comboBox6;
+		private System.Windows.Forms.ComboBox comboBox5;
+		private System.Windows.Forms.ComboBox comboBox4;
+		private System.Windows.Forms.ComboBox comboBox3;
+		private System.Windows.Forms.Label label11;
+		private System.Windows.Forms.Label label10;
+		private System.Windows.Forms.Label label9;
+		private System.Windows.Forms.Label label8;
+		private System.Windows.Forms.ComboBox comboBox2;
+		private System.Windows.Forms.CheckBox checkBox1;
+		private System.Windows.Forms.GroupBox groupBox6;
+		private System.Windows.Forms.CheckBox checkBox2;
+		private System.Windows.Forms.CheckedListBox checkedListBox4;
+		private System.Windows.Forms.GroupBox groupBox1;
+		private System.Windows.Forms.CheckBox checkBox3;
+		private System.Windows.Forms.CheckedListBox checkedListBox1;
+		private System.Windows.Forms.TreeView treeUser
+			;
+		private System.Windows.Forms.Button button9;
+		private System.Windows.Forms.Button button10;
+		private System.Windows.Forms.Button button11;
+		private System.Windows.Forms.Button button3;
+		private System.Windows.Forms.Button button4;
+		private System.Windows.Forms.Button button5;
+		private System.Windows.Forms.Button button6;
+		private System.Windows.Forms.Button button7;
+		private System.Windows.Forms.Button button8;
 	}
 }
