@@ -18,14 +18,16 @@ namespace MyNotebooks.subforms
 {
 	public partial class frmManagementConsole : Form
 	{
-		private Size SmallSize = new Size(100, 100);
-		private Size FullSize = new Size(100, 100);
+		private Size SmallSize = new Size();
+		private Size MediumSize = new Size();
+		private Size FullSize = new Size();
 		public frmManagementConsole(Form parent)
 		{
 			InitializeComponent();
 			Utilities.SetStartPosition(this, parent);
 			SmallSize = new Size(pnlLogin.Width + 25, pnlLogin.Height + pnlLogin.Top + grpUsers.Top + 35);
 			FullSize = new Size(785, 597);
+			MediumSize = new Size(SmallSize.Width, FullSize.Height);
 
 			//this.Width = this.grpUsers.Width + grpUsers.Left + 25;
 			//this.Height = pnlLogin.Height + pnlLogin.Top + 50;
@@ -36,7 +38,7 @@ namespace MyNotebooks.subforms
 			ddlAccessLevels.SelectedIndex = 0;
 
 			// populate the permissions list
-			foreach (PropertyInfo sPropertyName in typeof(Permissions).GetProperties())
+			foreach (PropertyInfo sPropertyName in typeof(UserPermissions).GetProperties())
 			{
 				if (!sPropertyName.Name.ToLower().Equals("companyid") & !sPropertyName.Name.ToLower().Equals("createdon") & !sPropertyName.Name.ToLower().Equals("editedon"))
 				{ clbPermissions.Items.Add(sPropertyName.Name); }
@@ -66,7 +68,7 @@ namespace MyNotebooks.subforms
 				}
 
 
-				// check items in the permissions list based on Program.User.Permissions
+				// check items in the permissions list based on Program.User.UserPermissions
 
 
 				//ShowHidePanels(pnlSelectGroup);
@@ -75,19 +77,20 @@ namespace MyNotebooks.subforms
 			else
 			{
 				pnlCreateUser.Visible = true;
-				this.Size = FullSize;
+				this.Size = MediumSize;
 			}
 		}
 
 		private void btnCreateUser_Click(object sender, EventArgs e)
 		{
-			User user = new();
+			this.Size = FullSize;
+			//User user = new();
 
-			// create the user
-			user = new(Convert.ToInt32(ddlAccessLevels.SelectedValue.ToString()), txtUserName.Text, txtPwd.Text, 0, 0, 0, 0, 0, DateTime.Now, null);
-			user.Permissions = GetPermissions();
-			user.Save();
-			Program.User = user;
+			//// create the user
+			//user = new(Convert.ToInt32(ddlAccessLevels.SelectedValue.ToString()), txtUserName.Text, txtPwd.Text, 0, 0, 0, 0, 0, DateTime.Now, null);
+			//user.UserPermissions = GetPermissions();
+			//user.Save();
+			//Program.User = user;
 		}
 
 		private void btnCancelNewUser_Click(object sender, EventArgs e)
@@ -99,7 +102,7 @@ namespace MyNotebooks.subforms
 
 		private void btnCancel_Click(object sender, EventArgs e) { this.Close(); }
 
-		private Permissions GetPermissions()
+		private UserPermissions GetPermissions()
 		{
 			DataTable dt = new();
 
@@ -108,7 +111,7 @@ namespace MyNotebooks.subforms
 				dt.Rows.Add(v.ToString());
 			}
 
-			return new Permissions(dt);
+			return new UserPermissions(dt);
 		}
 
 	}

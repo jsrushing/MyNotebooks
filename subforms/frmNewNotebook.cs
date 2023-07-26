@@ -36,10 +36,10 @@ namespace myNotebooks.subforms
 
 		private void btnOk_Click(object sender, EventArgs e)
 		{
-			NotebookSettings nbs	= Notebook.Settings;
-			this.Notebook			= new Notebook(txtName.Text, null, this);
-			Notebook.Settings		= nbs;
-			Program.PIN				= txtPIN.Text;
+			NotebookSettings nbs = Notebook.Settings;
+			this.Notebook = new Notebook(txtName.Text, null, this);
+			Notebook.Settings = nbs;
+			Program.PIN = txtPIN.Text;
 			this.Hide();
 		}
 

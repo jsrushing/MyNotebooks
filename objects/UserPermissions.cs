@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MyNotebooks.objects
 {
-	internal class Permissions
+	internal class UserPermissions
 	{
 		public int	CompanyId { get; set; }
 		public bool CreateCompany { get; set; }
@@ -26,17 +26,16 @@ namespace MyNotebooks.objects
 		public bool EditNotebookSettings { get; set; }
 		public bool ManageUsers { get; set; }
 		public bool ManageUserPermissions { get; set; }
-		public bool ViewNotebooks { get; set; }
 		public bool CreatedOn { get; set; }
 		public bool EditedOn { get; set; }
 
-		public Permissions() { }
+		public UserPermissions() { }
 
-		public Permissions(DataTable dataTable) { PopulateFromDataTable(dataTable); }
+		public UserPermissions(DataTable dataTable) { PopulateFromDataTable(dataTable); }
 
 		private void PopulateFromDataTable(DataTable dt)
 		{
-			foreach (PropertyInfo sPropertyName in typeof(Permissions).GetProperties())
+			foreach (PropertyInfo sPropertyName in typeof(UserPermissions).GetProperties())
 			{
 				this.GetType().GetProperty(sPropertyName.Name).SetValue(this, dt.Columns[sPropertyName.Name]);
 			}

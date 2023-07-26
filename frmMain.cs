@@ -192,7 +192,7 @@ namespace myNotebooks.subforms
 
 		private async void frmMain_Load(object sender, EventArgs e)
 		{
-			//using(frmUserLogin frm = new frmUserLogin()) { frm.ShowDialog(); }
+			using (frmUserLogin frm = new frmUserLogin()) { frm.ShowDialog(); }
 
 			// if we don't have a user, stop
 			//if(Program.User == null) { this.Close(); return; }

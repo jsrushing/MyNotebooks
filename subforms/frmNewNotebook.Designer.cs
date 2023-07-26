@@ -45,6 +45,7 @@ namespace myNotebooks.subforms
 			// txtName
 			// 
 			txtName.Location = new System.Drawing.Point(103, 25);
+			txtName.MaxLength = 50;
 			txtName.Name = "txtName";
 			txtName.Size = new System.Drawing.Size(138, 23);
 			txtName.TabIndex = 0;
