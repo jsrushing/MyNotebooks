@@ -21,6 +21,8 @@ namespace MyNotebooks.subforms
 		private Size SmallSize = new Size();
 		private Size MediumSize = new Size();
 		private Size FullSize = new Size();
+		private User CurrentUser = null;
+
 		public frmManagementConsole(Form parent)
 		{
 			InitializeComponent();
@@ -29,8 +31,7 @@ namespace MyNotebooks.subforms
 			FullSize = new Size(785, 597);
 			MediumSize = new Size(SmallSize.Width, FullSize.Height);
 
-			//this.Width = this.grpUsers.Width + grpUsers.Left + 25;
-			//this.Height = pnlLogin.Height + pnlLogin.Top + 50;
+			txtUserName.Text = Program.User.Name;
 
 			this.Size = SmallSize;
 
@@ -47,7 +48,7 @@ namespace MyNotebooks.subforms
 
 		private void frmManagementConsole_Load(object sender, EventArgs e)
 		{
-
+			txtPwd.Focus();
 		}
 
 		private void btnOk_Click(object sender, EventArgs e)
@@ -57,20 +58,68 @@ namespace MyNotebooks.subforms
 
 			if (ds.Tables.Count > 0)    // the user was found
 			{
-				Program.User = new(ds.Tables[0]) { Permissions = new(ds.Tables[1]), Assignments = new(ds.Tables[2]) };
+				TreeNode tn = null;
 
-				if (Convert.ToInt32(Program.User.AccessLevel) > 2)  // 1 and 2 don't have companies, accounts, or groups.
+				treeUser.Nodes.Clear();
+
+
+				tn = new TreeNode("User Details");
+				tn.Nodes.Add("Name: " + Program.User.Name);
+				tn.Nodes.Add("Access Level: " + Program.User.AccessLevel.ToString());
+				treeUser.Nodes.Add(tn);
+
+
+				tn = new TreeNode("User Permissions");
+				List<string> allPerms = Program.User.Permissions.GetAllPermissions();
+				List<string> grantedPerms = Program.User.Permissions.GetGrantedPermissions();
+
+				foreach (string s in allPerms)
 				{
-					//Program.Company = DbAccess.GetCompany(Program.User.UserId);
+					TreeNode tnPerm = new(s) { ForeColor = grantedPerms.Contains(s) ? Color.Black : SystemColors.GrayText };
+					tn.Nodes.Add(tnPerm);
+				}
+				treeUser.Nodes.Add(tn);
 
-					// populate the tree
-					//treeOrg.Nodes.Add(Program.Company.Name);
+				tn = new TreeNode("Companies");
+				tn.ForeColor = SystemColors.GrayText;
+				treeUser.Nodes.Add(tn);
+				tn = new TreeNode("Accounts");
+				tn.ForeColor = SystemColors.GrayText;
+				treeUser.Nodes.Add(tn);
+				tn = new TreeNode("Departments");
+				tn.ForeColor = SystemColors.GrayText;
+				treeUser.Nodes.Add(tn);
+				tn = new TreeNode("Groups");
+				tn.ForeColor = SystemColors.GrayText;
+				treeUser.Nodes.Add(tn);
+
+				CurrentUser = new(ds.Tables[0]) { Permissions = new(ds.Tables[1]), Assignments = new(ds.Tables[2]) };
+
+				if (CurrentUser.AccessLevel >= 2)  // 1 and 2 don't have companies, accounts, or groups.
+				{
+					SetNodeEnabled_Disabled("Groups");
+					// populate the groups the user has access to. for master users this will be all groups. For sub user may be many groups.
+				}
+				if (CurrentUser.AccessLevel >= 3)  // 1 and 2 don't have companies, accounts, or groups.
+				{
+					SetNodeEnabled_Disabled("Departments");
+					// populate the groups the user has access to. for master users this will be all groups. For sub user may be many groups.
+				}
+				if (CurrentUser.AccessLevel >= 4)  // 1 and 2 don't have companies, accounts, or groups.
+				{
+					SetNodeEnabled_Disabled("Accounts");
+					// populate the groups the user has access to. for master users this will be all groups. For sub user may be many groups.
+				}
+				if (CurrentUser.AccessLevel >= 5)  // 1 and 2 don't have companies, accounts, or groups.
+				{
+					SetNodeEnabled_Disabled("Companies");
+					// populate the groups the user has access to. for master users this will be all groups. For sub user may be many groups.
 				}
 
 
 				// check items in the permissions list based on Program.User.UserPermissions
 
-
+				this.Size = FullSize;
 				//ShowHidePanels(pnlSelectGroup);
 				//this.Hide();
 			}
@@ -78,6 +127,14 @@ namespace MyNotebooks.subforms
 			{
 				pnlCreateUser.Visible = true;
 				this.Size = MediumSize;
+			}
+		}
+
+		private void SetNodeEnabled_Disabled(string nodeName, bool setEnabled = true)
+		{
+			foreach (TreeNode tn in treeUser.Nodes)
+			{
+				if (tn.Text == nodeName) { tn.ForeColor = setEnabled ? Color.Black : SystemColors.GrayText; }
 			}
 		}
 
@@ -114,5 +171,9 @@ namespace MyNotebooks.subforms
 			return new UserPermissions(dt);
 		}
 
+		private void treeUser_BeforeSelect(object sender, TreeViewCancelEventArgs e)
+		{
+			e.Cancel = e.Node.ForeColor == SystemColors.GrayText;
+		}
 	}
 }

@@ -494,6 +494,7 @@ namespace MyNotebooks.subforms
 			treeUser.Size = new System.Drawing.Size(209, 262);
 			treeUser.TabIndex = 0;
 			treeUser.Text = "tree";
+			treeUser.BeforeSelect += this.treeUser_BeforeSelect;
 			// 
 			// label4
 			// 
@@ -713,6 +714,7 @@ namespace MyNotebooks.subforms
 			// 
 			// frmManagementConsole
 			// 
+			AcceptButton = btnOk_Login;
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			ClientSize = new System.Drawing.Size(768, 559);

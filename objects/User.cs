@@ -14,9 +14,9 @@ namespace MyNotebooks.objects
 {
 	internal class User
 	{
-		public string	AccessLevel { get; set; }
+		public int		AccessLevel { get; set; }
 		public string	Name { get; set; }
-		public string	UserId { get; set; }
+		public int		UserId { get; set; }
 		public DateTime CreatedOn { get; set; }
 		public DateTime? EditedOn { get; set; }
 		public UserAssignments Assignments { get; set; }
@@ -28,11 +28,11 @@ namespace MyNotebooks.objects
 		{
 			//AccessLevel		= accessLevel;
 			//UserId			= userId;
-			Name			= name;
-			//Password		= password;
-			//IsEnterprise	= isEnterprise;
-			CreatedOn		= createdOn;
-			EditedOn		= editedOn;
+			//Name			= name;
+			////Password		= password;
+			////IsEnterprise	= isEnterprise;
+			//CreatedOn		= createdOn;
+			//EditedOn		= editedOn;
 		}
 
 		public User(DataTable dt)
@@ -52,7 +52,9 @@ namespace MyNotebooks.objects
 						}
 						else if (dt.Columns[sPropertyName.Name].DataType == typeof(Int32))
 						{
-							value = dt.Rows[0].Field<Int32>(sPropertyName.Name).ToString();
+							int iVal = dt.Rows[0].Field<Int32>(sPropertyName.Name);
+							this.GetType().GetProperty(sPropertyName.Name).SetValue(this, iVal);
+							setProp = false;
 						}
 						else if (dt.Columns[sPropertyName.Name].DataType == typeof(DateTime))
 						{

@@ -34,6 +34,33 @@ namespace MyNotebooks.objects
 
 		public UserPermissions(DataTable dataTable) { PopulateFromDataTable(dataTable); }
 
+		public List<string> GetAllPermissions()
+		{
+			var list = new List<string>();
+
+			foreach (PropertyInfo property in typeof(UserPermissions).GetProperties())
+			{
+				if (property.PropertyType == typeof(bool)) { list.Add(property.Name); }
+			}
+			return list;
+		}
+
+		public List<string> GetGrantedPermissions()
+		{
+			var list = new List<string>();
+
+			foreach(PropertyInfo property in typeof(UserPermissions).GetProperties())
+			{
+				if(property.PropertyType == typeof(bool))
+				{
+					//var v = (bool)property.GetValue(this, null);
+					if (Convert.ToBoolean(property.GetValue(this, null))) { list.Add(property.Name); }
+				}
+			}
+
+			return list;
+		}
+
 		private void PopulateFromDataTable(DataTable dt)
 		{
 			var value = "";

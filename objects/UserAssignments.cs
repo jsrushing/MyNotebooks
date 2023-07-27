@@ -22,15 +22,18 @@ namespace MyNotebooks.objects
 		{
 			foreach (PropertyInfo sPropertyName in typeof(UserAssignments).GetProperties())
 			{
-				try
+				if(dt.Rows.Count > 0)
 				{
-					var value = dt.Rows[0].Field<string>(sPropertyName.Name);
-					this.GetType().GetProperty(sPropertyName.Name).SetValue(this, value);
-				}
-				catch (Exception ex)
-				{
-					using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The error '" + ex.Message + "' occurred while processing the " +
-						"property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
+					try
+					{
+						var value = dt.Rows[0].Field<int>(sPropertyName.Name);
+						this.GetType().GetProperty(sPropertyName.Name).SetValue(this, value);
+					}
+					catch (Exception ex)
+					{
+						using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The error '" + ex.Message + "' occurred while processing the " +
+							"property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
+					}
 				}
 			}
 		}

@@ -154,6 +154,7 @@ using System.Threading.Tasks;
 using Encryption;
 using System.Xml.Linq;
 using MyNotebooks.subforms;
+using Org.BouncyCastle.Asn1.Cms;
 
 namespace myNotebooks.subforms
 {
@@ -191,7 +192,7 @@ namespace myNotebooks.subforms
 		}
 
 		private async void frmMain_Load(object sender, EventArgs e)
-		{
+		{		
 			using (frmUserLogin frm = new frmUserLogin()) { frm.ShowDialog(); }
 
 			// if we don't have a user, stop
@@ -297,11 +298,19 @@ namespace myNotebooks.subforms
 
 			Program.AzurePassword = string.Empty;   // Kills the Azure synch process for debugging if desired.
 
+			if(Program.User.AccessLevel < 2)
+			{
+				using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch
+					(this, "Select notebooks to work with. Notebooks which are PIN-protected can't be synchronized unless you provide the PIN."))
+				{ frm.ShowDialog(); }
+			}
+			else
+			{
+				// navigate to the user's notebooks in their assigned group.
+			}
 
 			// Populate Program.DictCheckedNotebooks
-			using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch
-				(this, "Select notebooks to work with. Notebooks which are PIN-protected can't be synchronized unless you provide the PIN."))
-			{ frm.ShowDialog(); }
+
 			// program.dictcheckednotebooks should be populated at this point.
 
 			pnlDateFilters.Left = pnlPin.Left - 11;
