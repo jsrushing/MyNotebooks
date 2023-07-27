@@ -148,7 +148,7 @@
 //        /// </remarks>
 //        public static byte[] SimpleEncrypt(byte[] secretMessage, byte[] key, byte[] nonSecretPayload = null)
 //        {
-//            //User Error Checks
+//            //MNUser Error Checks
 //            if (key == null || key.Length != KeyBitSize / 8)
 //                throw new ArgumentException(String.Format("Key needs to be {0} bit!", KeyBitSize), "key");
 
@@ -196,7 +196,7 @@
 //        /// <returns>Decrypted Message</returns>
 //        public static byte[] SimpleDecrypt(byte[] encryptedMessage, byte[] key, int nonSecretPayloadLength = 0)
 //        {
-//            //User Error Checks
+//            //MNUser Error Checks
 //            if (key == null || key.Length != KeyBitSize / 8)
 //                throw new ArgumentException(String.Format("Key needs to be {0} bit!", KeyBitSize), "key");
 
@@ -256,7 +256,7 @@
 //        {
 //            nonSecretPayload = nonSecretPayload ?? new byte[] {};
 
-//            //User Error Checks
+//            //MNUser Error Checks
 //            if (string.IsNullOrWhiteSpace(password) || password.Length < MinPasswordLength)
 //                throw new ArgumentException(String.Format("Must have a password of at least {0} characters!", MinPasswordLength), "password");
 
@@ -301,7 +301,7 @@
 //        /// </remarks>
 //        public static byte[] SimpleDecryptWithPassword(byte[] encryptedMessage, string password, int nonSecretPayloadLength = 0)
 //        {
-//            //User Error Checks
+//            //MNUser Error Checks
 //            if (string.IsNullOrWhiteSpace(password) || password.Length < MinPasswordLength)
 //                throw new ArgumentException(String.Format("Must have a password of at least {0} characters!", MinPasswordLength), "password");
 

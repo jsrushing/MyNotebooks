@@ -13,10 +13,12 @@ using Org.BouncyCastle.Asn1.X509.Qualified;
 
 namespace MyNotebooks.objects
 {
-	internal class User
+	internal class MNUser
+
 	{
 		public int		AccessLevel { get; set; }
 		public string	Name { get; set; }
+		public string	Password { get; set; }
 		public int		UserId { get; set; }
 		public int		CreatedBy { get; set; }
 		public DateTime CreatedOn { get; set; }
@@ -24,9 +26,9 @@ namespace MyNotebooks.objects
 		public UserAssignments Assignments { get; set; }
 		public UserPermissions Permissions { get; set; }
 
-		public User() { }
+		public MNUser() { }
 
-		public User(int accessLevel, string name, string password, int userId, DateTime createdOn, DateTime? editedOn = null, bool isEnterprise = false)
+		public MNUser(int accessLevel, string name, string password, int userId, DateTime createdOn, DateTime? editedOn = null, bool isEnterprise = false)
 		{
 			AccessLevel = accessLevel;
 			UserId = userId;
@@ -37,12 +39,12 @@ namespace MyNotebooks.objects
 			EditedOn = editedOn;
 		}
 
-		public User(DataTable dt)
+		public MNUser(DataTable dt)
 		{
 			var value = "";
 			var setProp = true;
 
-			foreach (PropertyInfo sPropertyName in typeof(User).GetProperties())
+			foreach (PropertyInfo sPropertyName in typeof(MNUser).GetProperties())
 			{
 				try
 				{

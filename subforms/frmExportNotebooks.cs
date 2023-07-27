@@ -271,7 +271,7 @@ namespace myNotebooks.subforms
 		}
 
 		readonly string[] errors = new string[] {
-		"OK [0]", "User abort [1]", "General MAPI failure [2]",
+		"OK [0]", "MNUser abort [1]", "General MAPI failure [2]",
 				"MAPI login failure [3]", "Disk full [4]",
 				"Insufficient memory [5]", "Access denied [6]",
 				"-unknown- [7]", "Too many sessions [8]",

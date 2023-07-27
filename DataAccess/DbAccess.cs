@@ -20,6 +20,87 @@ namespace MyNotebooks.DataAccess
 	{
 		private static string connString = "Server=mynotebooksserver.database.windows.net;Database=MyNotebooks;user id=mydb_admin;password=cloud_Bringer1!";
 
+		public static int CreateMNUser(string userName, string password, int accessLevel)
+		{
+			int iRtrn = 0;
+			try
+			{
+				using (SqlConnection conn = new SqlConnection(connString))
+				{
+					conn.Open();
+					using (SqlCommand cmd = new SqlCommand("sp_CreateUser", conn))
+					{
+						cmd.CommandType = CommandType.StoredProcedure;
+						cmd.Parameters.AddWithValue("@userName", userName);
+						cmd.Parameters.AddWithValue("@password", password);
+						cmd.Parameters.AddWithValue("@accessLevel", accessLevel);
+						cmd.Parameters.AddWithValue("@createdBy", 0);
+						cmd.Parameters.Add("@retVal", SqlDbType.Int);
+						cmd.Parameters["@retVal"].Direction = ParameterDirection.ReturnValue;
+						cmd.ExecuteNonQuery();
+						iRtrn = Convert.ToInt32(cmd.Parameters["@retVal"].Value.ToString());
+					}
+				}
+			}
+			catch (Exception ex) { var v = ex.Message; }
+
+			return iRtrn;
+		}
+		public static int CreateMNUserAssignments(int userId, int companyId, int accountId, int departmentId, int groupId)
+		{
+			int iRtrn = 0;
+
+			using (SqlConnection conn = new SqlConnection(connMN_Azure))
+			{
+				conn.Open();
+				using (SqlCommand cmd = new SqlCommand("sp_CreateUserAssignments", conn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					cmd.Parameters.AddWithValue("@userId", userId);
+					cmd.Parameters.AddWithValue("@companyId", companyId);
+					cmd.Parameters.AddWithValue("@accountId", accountId);
+					cmd.Parameters.AddWithValue("@departmentId", departmentId);
+					cmd.Parameters.AddWithValue("@groupId", groupId);
+					cmd.Parameters.Add("@retVal");
+					cmd.Parameters["@retVal"].Direction = ParameterDirection.ReturnValue;
+					cmd.ExecuteNonQuery();
+					iRtrn = Convert.ToInt32(cmd.Parameters["@retVal"].Value.ToString());
+				}
+			}
+			return iRtrn;
+		}
+
+		public static int CreateMNUserPermissions(MNUser user)
+		{
+			int iRtrn = 0;
+
+			try
+			{
+				using (SqlConnection conn = new SqlConnection(connString))
+				{
+					conn.Open();
+					using (SqlCommand cmd = new SqlCommand("sp_CreateUserPermissions", conn))
+					{
+						cmd.CommandType = CommandType.StoredProcedure;
+						cmd.Parameters.AddWithValue("@userId", user.UserId);
+
+						foreach(string sPerm in user.Permissions.GetGrantedPermissions()) 
+						{
+							cmd.Parameters.AddWithValue("@" + sPerm, 1);
+						}
+
+						cmd.Parameters.Add("@retVal", SqlDbType.Int);
+						cmd.Parameters["@retVal"].Direction = ParameterDirection.ReturnValue;
+						cmd.ExecuteNonQuery();
+						iRtrn = Convert.ToInt32(cmd.Parameters["@retVal"].Value.ToString());
+					}
+				}
+			}
+			catch (Exception ex) { var v = ex.Message; }
+
+			return iRtrn;
+		}
+
 		public static string GetAccessLevelName(int accessLevel)
 		{
 			string sRtrn = string.Empty;
@@ -44,6 +125,7 @@ namespace MyNotebooks.DataAccess
 				return sRtrn;
 			}
 		}
+
 		public static List<string> GetAccessLevels()
 		{
 			List<string> list = new List<string>();
@@ -87,7 +169,7 @@ namespace MyNotebooks.DataAccess
 			return ds;
 		}
 
-		//public static int CreateUser(MyNotebooks.objects.User usr)
+		//public static int CreateUser(MyNotebooks.objects.MNUser usr)
 		//{
 		//	int iRtrn = -1;
 

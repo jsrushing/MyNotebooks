@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Encryption;
 using Microsoft.Extensions.Azure;
 using myNotebooks;
 using myNotebooks.objects;
@@ -22,7 +23,7 @@ namespace MyNotebooks.subforms
 		private Size SmallSize = new Size();
 		private Size MediumSize = new Size();
 		private Size FullSize = new Size();
-		private User CurrentUser = null;
+		private MNUser CurrentUser = null;
 		private Color enabledColor = Color.Black;
 		private Color disabledColor = Color.LightGray;
 
@@ -76,7 +77,7 @@ namespace MyNotebooks.subforms
 				return;
 			}
 
-			CurrentUser = new User(Convert.ToInt16(ddlAccessLevels.SelectedIndex), txtUserName.Text, "", 0, DateTime.Now);
+			CurrentUser = new MNUser(Convert.ToInt16(ddlAccessLevels.SelectedIndex), txtUserName.Text, "", 0, DateTime.Now);
 			CurrentUser.Permissions = GetPermissions();
 			PopulateBaseTree();
 
@@ -86,13 +87,13 @@ namespace MyNotebooks.subforms
 		private void btnCreateUser_Click(object sender, EventArgs e)
 		{
 			this.Size = FullSize;
-			//User user = new();
+			//MNUser user = new();
 
 			//// create the user
 			//user = new(Convert.ToInt32(ddlAccessLevels.SelectedValue.ToString()), txtUserName.Text, txtPwd.Text, 0, 0, 0, 0, 0, DateTime.Now, null);
 			//user.UserPermissions = GetPermissions();
 			//user.Save();
-			//Program.User = user;
+			//Program.MNUser = user;
 		}
 
 		private void btnOk_Click(object sender, EventArgs e)
@@ -121,7 +122,7 @@ namespace MyNotebooks.subforms
 		private void PopulateBaseTree()
 		{
 			treeUser.Nodes.Clear();
-			TreeNode tnUser = new("User Details");
+			TreeNode tnUser = new("MNUser Details");
 			TreeNode tnPerms = new("Permissions");
 
 			if (CurrentUser != null)
@@ -170,7 +171,6 @@ namespace MyNotebooks.subforms
 				}
 			}
 			treeUser.ExpandAll();
-
 		}
 
 		private void SetNodeEnabled_Disabled(string nodeName, bool setEnabled = true)
@@ -203,6 +203,22 @@ namespace MyNotebooks.subforms
 		private void frmManagementConsole_Activated(object sender, EventArgs e)
 		{
 			txtPwd.Focus();
+		}
+
+		private void treeUser_MouseUp(object sender, MouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Right)
+			{
+				var v = treeUser.SelectedNode;
+			}
+		}
+
+		private void btnCreateUser_Click_1(object sender, EventArgs e)
+		{
+			CurrentUser.Name = txtUserName.Text;
+			CurrentUser.Password = EncryptDecrypt.Encrypt(txtPwd.Text, txtPwd.Text);
+			CurrentUser.UserId = DbAccess.CreateMNUser(txtUserName.Text, txtPwd.Text, ddlAccessLevels.SelectedIndex);
+			DbAccess.CreateMNUserPermissions(CurrentUser);
 		}
 	}
 }

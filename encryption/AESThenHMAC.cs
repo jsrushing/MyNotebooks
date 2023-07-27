@@ -149,7 +149,7 @@ namespace Encryption
         /// </remarks>
         public static byte[] SimpleEncrypt(byte[] secretMessage, byte[] cryptKey, byte[] authKey, byte[] nonSecretPayload = null)
         {
-            //User Error Checks
+            //MNUser Error Checks
             if (cryptKey == null || cryptKey.Length != KeyBitSize / 8)
                 throw new ArgumentException(String.Format("Key needs to be {0} bit!", KeyBitSize), "cryptKey");
 
@@ -313,7 +313,7 @@ namespace Encryption
         {
             nonSecretPayload = nonSecretPayload ?? new byte[] {};
 
-            //User Error Checks
+            //MNUser Error Checks
             if (string.IsNullOrWhiteSpace(password) || password.Length < MinPasswordLength)
                 throw new ArgumentException(String.Format("Must have a password of at least {0} characters!", MinPasswordLength), "password");
 
@@ -372,7 +372,7 @@ namespace Encryption
         /// </remarks>
         public static byte[] SimpleDecryptWithPassword(byte[] encryptedMessage, string password, int nonSecretPayloadLength = 0)
         {
-            //User Error Checks
+            //MNUser Error Checks
             if (string.IsNullOrWhiteSpace(password) || password.Length < MinPasswordLength)
                 throw new ArgumentException(String.Format("Must have a password of at least {0} characters!", MinPasswordLength), "password");
 

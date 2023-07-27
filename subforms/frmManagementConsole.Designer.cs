@@ -163,7 +163,7 @@ namespace MyNotebooks.subforms
 			label3.Name = "label3";
 			label3.Size = new System.Drawing.Size(73, 15);
 			label3.TabIndex = 20;
-			label3.Text = "Create User";
+			label3.Text = "Create MNUser";
 			// 
 			// ddlAccessLevels
 			// 
@@ -246,7 +246,7 @@ namespace MyNotebooks.subforms
 			btnOk_Login.Name = "btnOk_Login";
 			btnOk_Login.Size = new System.Drawing.Size(137, 23);
 			btnOk_Login.TabIndex = 4;
-			btnOk_Login.Text = "&Lookup Or Create User";
+			btnOk_Login.Text = "&Lookup Or Create MNUser";
 			btnOk_Login.UseVisualStyleBackColor = true;
 			btnOk_Login.Click += this.btnOk_Click;
 			// 
@@ -458,14 +458,14 @@ namespace MyNotebooks.subforms
 			groupBox5.Controls.Add(treeUser);
 			groupBox5.Location = new System.Drawing.Point(300, 0);
 			groupBox5.Name = "groupBox5";
-			groupBox5.Size = new System.Drawing.Size(224, 540);
+			groupBox5.Size = new System.Drawing.Size(224, 549);
 			groupBox5.TabIndex = 28;
 			groupBox5.TabStop = false;
-			groupBox5.Text = "Current User";
+			groupBox5.Text = "Current MNUser";
 			// 
 			// btnCancelNewUser
 			// 
-			btnCancelNewUser.Location = new System.Drawing.Point(123, 500);
+			btnCancelNewUser.Location = new System.Drawing.Point(123, 516);
 			btnCancelNewUser.Name = "btnCancelNewUser";
 			btnCancelNewUser.Size = new System.Drawing.Size(91, 23);
 			btnCancelNewUser.TabIndex = 21;
@@ -474,22 +474,24 @@ namespace MyNotebooks.subforms
 			// 
 			// btnCreateUser
 			// 
-			btnCreateUser.Location = new System.Drawing.Point(10, 500);
+			btnCreateUser.Location = new System.Drawing.Point(10, 516);
 			btnCreateUser.Name = "btnCreateUser";
 			btnCreateUser.Size = new System.Drawing.Size(91, 23);
 			btnCreateUser.TabIndex = 20;
-			btnCreateUser.Text = "Create &User";
+			btnCreateUser.Text = "Create &MNUser";
 			btnCreateUser.UseVisualStyleBackColor = true;
+			btnCreateUser.Click += this.btnCreateUser_Click_1;
 			// 
 			// treeUser
 			// 
 			treeUser.ContextMenuStrip = mnuContextTree;
 			treeUser.Location = new System.Drawing.Point(5, 22);
 			treeUser.Name = "treeUser";
-			treeUser.Size = new System.Drawing.Size(209, 472);
+			treeUser.Size = new System.Drawing.Size(209, 486);
 			treeUser.TabIndex = 0;
 			treeUser.Text = "tree";
 			treeUser.BeforeSelect += this.treeUser_BeforeSelect;
+			treeUser.MouseUp += this.treeUser_MouseUp;
 			// 
 			// mnuContextTree
 			// 
@@ -501,7 +503,7 @@ namespace MyNotebooks.subforms
 			// 
 			mnuAssignUser.Name = "mnuAssignUser";
 			mnuAssignUser.Size = new System.Drawing.Size(135, 22);
-			mnuAssignUser.Text = "A&ssign User";
+			mnuAssignUser.Text = "A&ssign MNUser";
 			// 
 			// mnuAdd
 			// 

@@ -54,10 +54,7 @@ namespace MyNotebooks.objects
 			foreach(PropertyInfo property in typeof(UserPermissions).GetProperties())
 			{
 				if(property.PropertyType == typeof(bool))
-				{
-					//var v = (bool)property.GetValue(this, null);
-					if (Convert.ToBoolean(property.GetValue(this, null))) { list.Add(property.Name); }
-				}
+				{ if(Convert.ToBoolean(property.GetValue(this, null))) { list.Add(property.Name); } }
 			}
 
 			return list;
