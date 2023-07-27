@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using Microsoft.Extensions.Azure;
 using myNotebooks;
 using myNotebooks.objects;
+using myNotebooks.subforms;
 using MyNotebooks.DataAccess;
 using MyNotebooks.objects;
 
@@ -38,7 +39,6 @@ namespace MyNotebooks.subforms
 			this.Size = SmallSize;
 
 			//ShowHidePanels(pnlLogin);
-			ddlAccessLevels.SelectedIndex = 0;
 
 			// populate the permissions list
 			foreach (PropertyInfo sPropertyName in typeof(UserPermissions).GetProperties())
@@ -54,88 +54,33 @@ namespace MyNotebooks.subforms
 		{
 		}
 
-		private void btnOk_Click(object sender, EventArgs e)
+		private void btnCancel_Click(object sender, EventArgs e) { this.Close(); }
+
+		private void btnCancelContinue_Click(object sender, EventArgs e)
 		{
-			// look up the user
-			DataSet ds = DbAccess.GetUser(txtUserName.Text, txtPwd.Text);
-
-			if (ds.Tables.Count > 0)    // the user was found
-			{
-				TreeNode tn = null;
-				treeUser.Nodes.Clear();
-				CurrentUser = new(ds.Tables[0]) { Permissions = new(ds.Tables[1]), Assignments = new(ds.Tables[2]) };
-
-				tn = new TreeNode("User Details");
-				tn.Nodes.Add("Name: " + CurrentUser.Name);
-				tn.Nodes.Add("Access Level: " + CurrentUser.AccessLevel.ToString());
-				treeUser.Nodes.Add(tn);
-
-
-				tn = new TreeNode("User Permissions");
-				List<string> allPerms = CurrentUser.Permissions.GetAllPermissions();
-				List<string> grantedPerms = CurrentUser.Permissions.GetGrantedPermissions();
-
-				foreach (string s in allPerms)
-				{
-					TreeNode tnPerm = new(s) { ForeColor = grantedPerms.Contains(s) ? Color.Black : SystemColors.GrayText, BackColor = grantedPerms.Contains(s) ? Color.White : Color.White };
-					tn.Nodes.Add(tnPerm);
-				}
-				treeUser.Nodes.Add(tn);
-
-				treeUser.Nodes.Add("Companies");
-				treeUser.Nodes.Add("Accounts");
-				treeUser.Nodes.Add("Departments");
-				treeUser.Nodes.Add("Groups");
-
-				SetNodeEnabled_Disabled("Companies", false);
-				SetNodeEnabled_Disabled("Accounts", false);
-				SetNodeEnabled_Disabled("Departments", false);
-				SetNodeEnabled_Disabled("Groups", false);
-
-
-				if (CurrentUser.AccessLevel >= 2)  // 1 and 2 don't have companies, accounts, or groups.
-				{
-					SetNodeEnabled_Disabled("Groups");
-					// populate the Groups the user has access to. for master users this will be all groups. For sub user may be many groups.
-				}
-				if (CurrentUser.AccessLevel >= 3)  // 1 and 2 don't have companies, accounts, or groups.
-				{
-					SetNodeEnabled_Disabled("Departments");
-					// populate the Groups the user has access to. for master users this will be all groups. For sub user may be many groups.
-				}
-				if (CurrentUser.AccessLevel >= 4)  // 1 and 2 don't have companies, accounts, or groups.
-				{
-					SetNodeEnabled_Disabled("Accounts");
-					// populate the Departments the user has access to. for master users this will be all groups. For sub user may be many groups.
-				}
-				if (CurrentUser.AccessLevel >= 5)  // 1 and 2 don't have companies, accounts, or groups.
-				{
-					SetNodeEnabled_Disabled("Companies");
-					// populate the Accounts the user has access to. for master users this will be all groups. For sub user may be many groups.
-				}
-
-				// check items in the permissions list based on Program.User.UserPermissions
-
-				this.Size = FullSize;
-
-			}
-			else
-			{
-				pnlCreateUser.Visible = true;
-				this.Size = MediumSize;
-			}
+			this.Size = SmallSize;
 		}
 
-		private void SetNodeEnabled_Disabled(string nodeName, bool setEnabled = true)
+		private void btnCancelNewUser_Click(object sender, EventArgs e)
 		{
-			foreach (TreeNode tn in treeUser.Nodes)
+			clbPermissions.ClearSelected();
+			pnlCreateUser.Visible = false;
+			this.Size = SmallSize;
+		}
+
+		private void btnContinue_Click(object sender, EventArgs e)
+		{
+			if (ddlAccessLevels.SelectedIndex == -1)
 			{
-				if (tn.Text == nodeName) 
-				{ 
-					tn.ForeColor = setEnabled ? enabledColor : disabledColor;
-					tn.BackColor = setEnabled ? Color.White : Color.White;
-				}
+				using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "You must select an Access Level.", "Input Necessary", this)) { frm.ShowDialog(); }
+				return;
 			}
+
+			CurrentUser = new User(Convert.ToInt16(ddlAccessLevels.SelectedIndex), txtUserName.Text, "", 0, DateTime.Now);
+			CurrentUser.Permissions = GetPermissions();
+			PopulateBaseTree();
+
+			this.Size = FullSize;
 		}
 
 		private void btnCreateUser_Click(object sender, EventArgs e)
@@ -150,30 +95,114 @@ namespace MyNotebooks.subforms
 			//Program.User = user;
 		}
 
-		private void btnCancelNewUser_Click(object sender, EventArgs e)
+		private void btnOk_Click(object sender, EventArgs e)
 		{
-			clbPermissions.ClearSelected();
-			pnlCreateUser.Visible = false;
-			this.Size = SmallSize;
+			// look up the user
+			DataSet ds = DbAccess.GetUser(txtUserName.Text, txtPwd.Text);
+
+			if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)    // the user was found
+			{
+				TreeNode tn = null;
+				treeUser.Nodes.Clear();
+				CurrentUser = new(ds.Tables[0]) { Permissions = new(ds.Tables[1]), Assignments = new(ds.Tables[2]) };
+				PopulateBaseTree();
+				this.Size = FullSize;
+			}
+			else
+			{
+				pnlCreateUser.Visible = true;
+				ddlAccessLevels.Items.AddRange(DbAccess.GetAccessLevels().ToArray());
+				CurrentUser = null;
+				PopulateBaseTree();
+				this.Size = MediumSize;
+			}
 		}
 
-		private void btnCancel_Click(object sender, EventArgs e) { this.Close(); }
+		private void PopulateBaseTree()
+		{
+			treeUser.Nodes.Clear();
+			TreeNode tnUser = new("User Details");
+			TreeNode tnPerms = new("Permissions");
+
+			if (CurrentUser != null)
+			{
+				tnUser.Nodes.Add("Name: " + CurrentUser.Name);
+				tnUser.Nodes.Add("Access Level: " + CurrentUser.AccessLevel.ToString() + " (" + DbAccess.GetAccessLevelName(CurrentUser.AccessLevel) + ")");
+
+				List<string> allPerms = CurrentUser.Permissions.GetAllPermissions();
+				List<string> grantedPerms = CurrentUser.Permissions.GetGrantedPermissions();
+
+				foreach (string s in allPerms)
+				{
+					TreeNode tnPerm = new(s) { ForeColor = grantedPerms.Contains(s) ? Color.Black : SystemColors.GrayText, BackColor = grantedPerms.Contains(s) ? Color.White : Color.White };
+					tnPerms.Nodes.Add(tnPerm);
+				}
+			}
+			treeUser.Nodes.Add(tnUser);
+			treeUser.Nodes.Add(tnPerms);
+			treeUser.Nodes.Add("Companies");
+			treeUser.Nodes.Add("Accounts");
+			treeUser.Nodes.Add("Departments");
+			treeUser.Nodes.Add("Groups");
+
+			if (CurrentUser != null)
+			{
+				SetNodeEnabled_Disabled("Companies", false);
+				SetNodeEnabled_Disabled("Accounts", false);
+				SetNodeEnabled_Disabled("Departments", false);
+				SetNodeEnabled_Disabled("Groups", false);
+
+				if (CurrentUser.AccessLevel >= 2)  // 1 and 2 don't have companies, accounts, or groups.
+				{
+					SetNodeEnabled_Disabled("Groups");
+				}
+				if (CurrentUser.AccessLevel >= 3)  // 1 and 2 don't have companies, accounts, or groups.
+				{
+					SetNodeEnabled_Disabled("Departments");
+				}
+				if (CurrentUser.AccessLevel >= 4)  // 1 and 2 don't have companies, accounts, or groups.
+				{
+					SetNodeEnabled_Disabled("Accounts");
+				}
+				if (CurrentUser.AccessLevel >= 5)  // 1 and 2 don't have companies, accounts, or groups.
+				{
+					SetNodeEnabled_Disabled("Companies");
+				}
+			}
+			treeUser.ExpandAll();
+
+		}
+
+		private void SetNodeEnabled_Disabled(string nodeName, bool setEnabled = true)
+		{
+			foreach (TreeNode tn in treeUser.Nodes)
+			{
+				if (tn.Text == nodeName)
+				{
+					tn.ForeColor = setEnabled ? enabledColor : disabledColor;
+					tn.BackColor = setEnabled ? Color.White : Color.White;
+				}
+			}
+		}
 
 		private UserPermissions GetPermissions()
 		{
-			DataTable dt = new();
+			List<string> permissions = new List<string>();
 
 			foreach (var v in clbPermissions.CheckedItems)
 			{
-				dt.Rows.Add(v.ToString());
+				permissions.Add(v.ToString());
 			}
 
-			return new UserPermissions(dt);
+			return new UserPermissions(permissions);
 		}
 
 		private void treeUser_BeforeSelect(object sender, TreeViewCancelEventArgs e)
+		{ e.Cancel = e.Node.ForeColor == SystemColors.GrayText; }
+
+		private void frmManagementConsole_Activated(object sender, EventArgs e)
 		{
-			e.Cancel = e.Node.ForeColor == SystemColors.GrayText;
+			txtPwd.Focus();
 		}
 	}
 }

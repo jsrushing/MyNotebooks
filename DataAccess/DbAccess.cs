@@ -20,6 +20,52 @@ namespace MyNotebooks.DataAccess
 	{
 		private static string connString = "Server=mynotebooksserver.database.windows.net;Database=MyNotebooks;user id=mydb_admin;password=cloud_Bringer1!";
 
+		public static string GetAccessLevelName(int accessLevel)
+		{
+			string sRtrn = string.Empty;
+			using(SqlConnection conn = new SqlConnection(connString)) 
+			{ 
+				conn.Open();
+				using(SqlCommand cmd = new("sp_GetAccessLevels", conn)) 
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					using(SqlDataReader reader = cmd.ExecuteReader())
+					{
+						while(reader.Read())
+						{
+							if (reader[0].Equals(accessLevel + 1)) 
+							{ 
+								sRtrn = reader[1].ToString();
+								break;
+							}
+						}
+					}
+				}
+				return sRtrn;
+			}
+		}
+		public static List<string> GetAccessLevels()
+		{
+			List<string> list = new List<string>();
+
+			using (SqlConnection conn = new SqlConnection(connString))
+			{
+				conn.Open();
+				using (SqlCommand cmd = new("sp_GetAccessLevels", conn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					using (SqlDataReader reader = cmd.ExecuteReader())
+					{
+						while (reader.Read())
+						{
+							list.Add(reader[1].ToString());
+						}
+					}
+				}
+				return list;
+			}
+		}
+
 		public static DataSet GetUser(string userName, string password)
 		{
 			DataSet ds = new();

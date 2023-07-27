@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography.Xml;
+using System.Windows.Forms;
 
 namespace MyNotebooks.subforms
 {
@@ -30,76 +31,72 @@ namespace MyNotebooks.subforms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Name: <name>");
-			System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Details", new System.Windows.Forms.TreeNode[] { treeNode1 });
-			System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Permission 1 ...");
-			System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("UserPermissions", new System.Windows.Forms.TreeNode[] { treeNode3 });
-			System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Company 1 ...");
-			System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Companies", new System.Windows.Forms.TreeNode[] { treeNode5 });
-			System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Account 1 ...");
-			System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Accounts", new System.Windows.Forms.TreeNode[] { treeNode7 });
-			System.Windows.Forms.TreeNode treeNode9 = new System.Windows.Forms.TreeNode("Department 1 ...");
-			System.Windows.Forms.TreeNode treeNode10 = new System.Windows.Forms.TreeNode("Departments", new System.Windows.Forms.TreeNode[] { treeNode9 });
-			System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("Group 1 ...");
-			System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("Groups", new System.Windows.Forms.TreeNode[] { treeNode11 });
-			grpUsers = new System.Windows.Forms.GroupBox();
-			pnlCreateUser = new System.Windows.Forms.Panel();
-			label3 = new System.Windows.Forms.Label();
-			ddlAccessLevels = new System.Windows.Forms.ComboBox();
-			label19 = new System.Windows.Forms.Label();
-			clbPermissions = new System.Windows.Forms.CheckedListBox();
-			label6 = new System.Windows.Forms.Label();
-			pnlLogin = new System.Windows.Forms.Panel();
-			txtUserName = new System.Windows.Forms.TextBox();
-			btnCancel = new System.Windows.Forms.Button();
-			label1 = new System.Windows.Forms.Label();
-			btnOk_Login = new System.Windows.Forms.Button();
-			label2 = new System.Windows.Forms.Label();
-			txtPwd = new System.Windows.Forms.TextBox();
-			groupBox2 = new System.Windows.Forms.GroupBox();
-			panel1 = new System.Windows.Forms.Panel();
-			toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
-			groupBox3 = new System.Windows.Forms.GroupBox();
-			checkBox1 = new System.Windows.Forms.CheckBox();
-			button2 = new System.Windows.Forms.Button();
-			button1 = new System.Windows.Forms.Button();
-			btnAssignCompanies = new System.Windows.Forms.Button();
-			clbCompanies = new System.Windows.Forms.CheckedListBox();
-			grpGroups = new System.Windows.Forms.GroupBox();
-			button9 = new System.Windows.Forms.Button();
-			button10 = new System.Windows.Forms.Button();
-			clbGroups = new System.Windows.Forms.CheckedListBox();
-			button11 = new System.Windows.Forms.Button();
-			label7 = new System.Windows.Forms.Label();
-			lblAddCurrentTreeSelection = new System.Windows.Forms.Label();
-			comboBox1 = new System.Windows.Forms.ComboBox();
-			label5 = new System.Windows.Forms.Label();
-			groupBox5 = new System.Windows.Forms.GroupBox();
-			btnCancelNewUser = new System.Windows.Forms.Button();
-			btnCreateUser = new System.Windows.Forms.Button();
-			treeUser = new System.Windows.Forms.TreeView();
-			label4 = new System.Windows.Forms.Label();
-			comboBox2 = new System.Windows.Forms.ComboBox();
-			label8 = new System.Windows.Forms.Label();
-			label9 = new System.Windows.Forms.Label();
-			label10 = new System.Windows.Forms.Label();
-			label11 = new System.Windows.Forms.Label();
-			comboBox3 = new System.Windows.Forms.ComboBox();
-			comboBox4 = new System.Windows.Forms.ComboBox();
-			comboBox5 = new System.Windows.Forms.ComboBox();
-			comboBox6 = new System.Windows.Forms.ComboBox();
-			groupBox6 = new System.Windows.Forms.GroupBox();
-			button3 = new System.Windows.Forms.Button();
-			button4 = new System.Windows.Forms.Button();
-			button5 = new System.Windows.Forms.Button();
-			checkBox2 = new System.Windows.Forms.CheckBox();
-			clbAccounts = new System.Windows.Forms.CheckedListBox();
-			groupBox1 = new System.Windows.Forms.GroupBox();
-			button6 = new System.Windows.Forms.Button();
-			button7 = new System.Windows.Forms.Button();
-			button8 = new System.Windows.Forms.Button();
-			checkBox3 = new System.Windows.Forms.CheckBox();
-			clbDepartments = new System.Windows.Forms.CheckedListBox();
+			components = new System.ComponentModel.Container();
+			grpUsers = new GroupBox();
+			pnlCreateUser = new Panel();
+			btnCancelContinue = new Button();
+			btnContinue = new Button();
+			label3 = new Label();
+			ddlAccessLevels = new ComboBox();
+			label19 = new Label();
+			clbPermissions = new CheckedListBox();
+			label6 = new Label();
+			pnlLogin = new Panel();
+			txtUserName = new TextBox();
+			btnCancel = new Button();
+			label1 = new Label();
+			btnOk_Login = new Button();
+			label2 = new Label();
+			txtPwd = new TextBox();
+			groupBox2 = new GroupBox();
+			panel1 = new Panel();
+			toolStripContainer1 = new ToolStripContainer();
+			groupBox3 = new GroupBox();
+			checkBox1 = new CheckBox();
+			button2 = new Button();
+			button1 = new Button();
+			btnAssignCompanies = new Button();
+			clbCompanies = new CheckedListBox();
+			grpGroups = new GroupBox();
+			button9 = new Button();
+			button10 = new Button();
+			clbGroups = new CheckedListBox();
+			button11 = new Button();
+			label7 = new Label();
+			lblAddCurrentTreeSelection = new Label();
+			comboBox1 = new ComboBox();
+			label5 = new Label();
+			groupBox5 = new GroupBox();
+			btnCancelNewUser = new Button();
+			btnCreateUser = new Button();
+			treeUser = new TreeView();
+			mnuContextTree = new ContextMenuStrip(components);
+			mnuAssignUser = new ToolStripMenuItem();
+			mnuAdd = new ToolStripMenuItem();
+			mnuEdit = new ToolStripMenuItem();
+			mnuDelete = new ToolStripMenuItem();
+			label4 = new Label();
+			comboBox2 = new ComboBox();
+			label8 = new Label();
+			label9 = new Label();
+			label10 = new Label();
+			label11 = new Label();
+			comboBox3 = new ComboBox();
+			comboBox4 = new ComboBox();
+			comboBox5 = new ComboBox();
+			comboBox6 = new ComboBox();
+			groupBox6 = new GroupBox();
+			button3 = new Button();
+			button4 = new Button();
+			button5 = new Button();
+			checkBox2 = new CheckBox();
+			clbAccounts = new CheckedListBox();
+			groupBox1 = new GroupBox();
+			button6 = new Button();
+			button7 = new Button();
+			button8 = new Button();
+			checkBox3 = new CheckBox();
+			clbDepartments = new CheckedListBox();
 			grpUsers.SuspendLayout();
 			pnlCreateUser.SuspendLayout();
 			pnlLogin.SuspendLayout();
@@ -107,6 +104,7 @@ namespace MyNotebooks.subforms
 			groupBox3.SuspendLayout();
 			grpGroups.SuspendLayout();
 			groupBox5.SuspendLayout();
+			mnuContextTree.SuspendLayout();
 			groupBox6.SuspendLayout();
 			groupBox1.SuspendLayout();
 			this.SuspendLayout();
@@ -124,6 +122,8 @@ namespace MyNotebooks.subforms
 			// 
 			// pnlCreateUser
 			// 
+			pnlCreateUser.Controls.Add(btnCancelContinue);
+			pnlCreateUser.Controls.Add(btnContinue);
 			pnlCreateUser.Controls.Add(label3);
 			pnlCreateUser.Controls.Add(ddlAccessLevels);
 			pnlCreateUser.Controls.Add(label19);
@@ -135,20 +135,39 @@ namespace MyNotebooks.subforms
 			pnlCreateUser.TabIndex = 12;
 			pnlCreateUser.Visible = false;
 			// 
+			// btnCancelContinue
+			// 
+			btnCancelContinue.Location = new System.Drawing.Point(136, 392);
+			btnCancelContinue.Name = "btnCancelContinue";
+			btnCancelContinue.Size = new System.Drawing.Size(91, 23);
+			btnCancelContinue.TabIndex = 23;
+			btnCancelContinue.Text = "&Cancel";
+			btnCancelContinue.UseVisualStyleBackColor = true;
+			btnCancelContinue.Click += this.btnCancelContinue_Click;
+			// 
+			// btnContinue
+			// 
+			btnContinue.Location = new System.Drawing.Point(23, 392);
+			btnContinue.Name = "btnContinue";
+			btnContinue.Size = new System.Drawing.Size(91, 23);
+			btnContinue.TabIndex = 22;
+			btnContinue.Text = "C&ontinue";
+			btnContinue.UseVisualStyleBackColor = true;
+			btnContinue.Click += this.btnContinue_Click;
+			// 
 			// label3
 			// 
 			label3.AutoSize = true;
 			label3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			label3.Location = new System.Drawing.Point(3, 4);
 			label3.Name = "label3";
-			label3.Size = new System.Drawing.Size(33, 15);
+			label3.Size = new System.Drawing.Size(73, 15);
 			label3.TabIndex = 20;
-			label3.Text = "User";
+			label3.Text = "Create User";
 			// 
 			// ddlAccessLevels
 			// 
 			ddlAccessLevels.FormattingEnabled = true;
-			ddlAccessLevels.Items.AddRange(new object[] { "Free 30-day trial" });
 			ddlAccessLevels.Location = new System.Drawing.Point(95, 24);
 			ddlAccessLevels.Name = "ddlAccessLevels";
 			ddlAccessLevels.Size = new System.Drawing.Size(165, 23);
@@ -169,7 +188,7 @@ namespace MyNotebooks.subforms
 			clbPermissions.FormattingEnabled = true;
 			clbPermissions.Location = new System.Drawing.Point(6, 75);
 			clbPermissions.Name = "clbPermissions";
-			clbPermissions.Size = new System.Drawing.Size(254, 328);
+			clbPermissions.Size = new System.Drawing.Size(254, 310);
 			clbPermissions.TabIndex = 16;
 			// 
 			// label6
@@ -283,7 +302,7 @@ namespace MyNotebooks.subforms
 			groupBox3.Controls.Add(button1);
 			groupBox3.Controls.Add(btnAssignCompanies);
 			groupBox3.Controls.Add(clbCompanies);
-			groupBox3.Location = new System.Drawing.Point(300, 0);
+			groupBox3.Location = new System.Drawing.Point(763, 12);
 			groupBox3.Name = "groupBox3";
 			groupBox3.Size = new System.Drawing.Size(227, 179);
 			groupBox3.TabIndex = 25;
@@ -394,7 +413,7 @@ namespace MyNotebooks.subforms
 			// label7
 			// 
 			label7.AutoSize = true;
-			label7.Cursor = System.Windows.Forms.Cursors.Hand;
+			label7.Cursor = Cursors.Hand;
 			label7.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
 			label7.ForeColor = System.Drawing.SystemColors.MenuHighlight;
 			label7.Location = new System.Drawing.Point(1082, 493);
@@ -406,7 +425,7 @@ namespace MyNotebooks.subforms
 			// lblAddCurrentTreeSelection
 			// 
 			lblAddCurrentTreeSelection.AutoSize = true;
-			lblAddCurrentTreeSelection.Cursor = System.Windows.Forms.Cursors.Hand;
+			lblAddCurrentTreeSelection.Cursor = Cursors.Hand;
 			lblAddCurrentTreeSelection.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
 			lblAddCurrentTreeSelection.ForeColor = System.Drawing.SystemColors.MenuHighlight;
 			lblAddCurrentTreeSelection.Location = new System.Drawing.Point(1061, 38);
@@ -437,16 +456,16 @@ namespace MyNotebooks.subforms
 			groupBox5.Controls.Add(btnCancelNewUser);
 			groupBox5.Controls.Add(btnCreateUser);
 			groupBox5.Controls.Add(treeUser);
-			groupBox5.Location = new System.Drawing.Point(533, 220);
+			groupBox5.Location = new System.Drawing.Point(300, 0);
 			groupBox5.Name = "groupBox5";
-			groupBox5.Size = new System.Drawing.Size(224, 329);
+			groupBox5.Size = new System.Drawing.Size(224, 540);
 			groupBox5.TabIndex = 28;
 			groupBox5.TabStop = false;
 			groupBox5.Text = "Current User";
 			// 
 			// btnCancelNewUser
 			// 
-			btnCancelNewUser.Location = new System.Drawing.Point(123, 294);
+			btnCancelNewUser.Location = new System.Drawing.Point(123, 500);
 			btnCancelNewUser.Name = "btnCancelNewUser";
 			btnCancelNewUser.Size = new System.Drawing.Size(91, 23);
 			btnCancelNewUser.TabIndex = 21;
@@ -455,7 +474,7 @@ namespace MyNotebooks.subforms
 			// 
 			// btnCreateUser
 			// 
-			btnCreateUser.Location = new System.Drawing.Point(10, 294);
+			btnCreateUser.Location = new System.Drawing.Point(10, 500);
 			btnCreateUser.Name = "btnCreateUser";
 			btnCreateUser.Size = new System.Drawing.Size(91, 23);
 			btnCreateUser.TabIndex = 20;
@@ -464,37 +483,43 @@ namespace MyNotebooks.subforms
 			// 
 			// treeUser
 			// 
+			treeUser.ContextMenuStrip = mnuContextTree;
 			treeUser.Location = new System.Drawing.Point(5, 22);
 			treeUser.Name = "treeUser";
-			treeNode1.Name = "Node1";
-			treeNode1.Text = "Name: <name>";
-			treeNode2.Name = "Node0";
-			treeNode2.Text = "Details";
-			treeNode3.Name = "Node3";
-			treeNode3.Text = "Permission 1 ...";
-			treeNode4.Name = "Node2";
-			treeNode4.Text = "UserPermissions";
-			treeNode5.Name = "Node5";
-			treeNode5.Text = "Company 1 ...";
-			treeNode6.Name = "Node4";
-			treeNode6.Text = "Companies";
-			treeNode7.Name = "Node7";
-			treeNode7.Text = "Account 1 ...";
-			treeNode8.Name = "Node6";
-			treeNode8.Text = "Accounts";
-			treeNode9.Name = "Node9";
-			treeNode9.Text = "Department 1 ...";
-			treeNode10.Name = "Node8";
-			treeNode10.Text = "Departments";
-			treeNode11.Name = "Node11";
-			treeNode11.Text = "Group 1 ...";
-			treeNode12.Name = "Node10";
-			treeNode12.Text = "Groups";
-			treeUser.Nodes.AddRange(new System.Windows.Forms.TreeNode[] { treeNode2, treeNode4, treeNode6, treeNode8, treeNode10, treeNode12 });
-			treeUser.Size = new System.Drawing.Size(209, 262);
+			treeUser.Size = new System.Drawing.Size(209, 472);
 			treeUser.TabIndex = 0;
 			treeUser.Text = "tree";
 			treeUser.BeforeSelect += this.treeUser_BeforeSelect;
+			// 
+			// mnuContextTree
+			// 
+			mnuContextTree.Items.AddRange(new ToolStripItem[] { mnuAssignUser, mnuAdd, mnuEdit, mnuDelete });
+			mnuContextTree.Name = "mnuContextTree";
+			mnuContextTree.Size = new System.Drawing.Size(136, 92);
+			// 
+			// mnuAssignUser
+			// 
+			mnuAssignUser.Name = "mnuAssignUser";
+			mnuAssignUser.Size = new System.Drawing.Size(135, 22);
+			mnuAssignUser.Text = "A&ssign User";
+			// 
+			// mnuAdd
+			// 
+			mnuAdd.Name = "mnuAdd";
+			mnuAdd.Size = new System.Drawing.Size(135, 22);
+			mnuAdd.Text = "&Add";
+			// 
+			// mnuEdit
+			// 
+			mnuEdit.Name = "mnuEdit";
+			mnuEdit.Size = new System.Drawing.Size(135, 22);
+			mnuEdit.Text = "&Edit";
+			// 
+			// mnuDelete
+			// 
+			mnuDelete.Name = "mnuDelete";
+			mnuDelete.Size = new System.Drawing.Size(135, 22);
+			mnuDelete.Text = "&Delete";
 			// 
 			// label4
 			// 
@@ -593,7 +618,7 @@ namespace MyNotebooks.subforms
 			groupBox6.Controls.Add(button5);
 			groupBox6.Controls.Add(checkBox2);
 			groupBox6.Controls.Add(clbAccounts);
-			groupBox6.Location = new System.Drawing.Point(300, 185);
+			groupBox6.Location = new System.Drawing.Point(763, 197);
 			groupBox6.Name = "groupBox6";
 			groupBox6.Size = new System.Drawing.Size(227, 179);
 			groupBox6.TabIndex = 29;
@@ -656,7 +681,7 @@ namespace MyNotebooks.subforms
 			groupBox1.Controls.Add(button8);
 			groupBox1.Controls.Add(checkBox3);
 			groupBox1.Controls.Add(clbDepartments);
-			groupBox1.Location = new System.Drawing.Point(300, 370);
+			groupBox1.Location = new System.Drawing.Point(763, 382);
 			groupBox1.Name = "groupBox1";
 			groupBox1.Size = new System.Drawing.Size(227, 179);
 			groupBox1.TabIndex = 30;
@@ -716,8 +741,8 @@ namespace MyNotebooks.subforms
 			// 
 			AcceptButton = btnOk_Login;
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			ClientSize = new System.Drawing.Size(768, 559);
+			AutoScaleMode = AutoScaleMode.Font;
+			ClientSize = new System.Drawing.Size(1086, 829);
 			Controls.Add(comboBox6);
 			Controls.Add(groupBox1);
 			Controls.Add(comboBox5);
@@ -742,7 +767,7 @@ namespace MyNotebooks.subforms
 			Controls.Add(panel1);
 			Name = "frmManagementConsole";
 			Text = "ManagementConsole";
-			Load += this.frmManagementConsole_Load;
+			Activated += this.frmManagementConsole_Activated;
 			grpUsers.ResumeLayout(false);
 			pnlCreateUser.ResumeLayout(false);
 			pnlCreateUser.PerformLayout();
@@ -754,6 +779,7 @@ namespace MyNotebooks.subforms
 			groupBox3.PerformLayout();
 			grpGroups.ResumeLayout(false);
 			groupBox5.ResumeLayout(false);
+			mnuContextTree.ResumeLayout(false);
 			groupBox6.ResumeLayout(false);
 			groupBox6.PerformLayout();
 			groupBox1.ResumeLayout(false);
@@ -764,65 +790,71 @@ namespace MyNotebooks.subforms
 
 		#endregion
 
-		private System.Windows.Forms.GroupBox grpUsers;
-		private System.Windows.Forms.GroupBox groupBox2;
-		private System.Windows.Forms.Panel panel1;
-		private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-		private System.Windows.Forms.ToolStripContainer toolStripContainer1;
-		private System.Windows.Forms.GroupBox groupBox3;
-		private System.Windows.Forms.GroupBox grpGroups;
-		private System.Windows.Forms.Panel pnlCreateUser;
-		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.ComboBox ddlAccessLevels;
-		private System.Windows.Forms.Label label19;
-		private System.Windows.Forms.CheckedListBox clbPermissions;
-		private System.Windows.Forms.Label label6;
-		private System.Windows.Forms.Panel pnlLogin;
-		private System.Windows.Forms.TextBox txtUserName;
-		private System.Windows.Forms.Button btnCancel;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.Button btnOk_Login;
-		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.TextBox txtPwd;
-		private System.Windows.Forms.Label label7;
-		private System.Windows.Forms.Label lblAddCurrentTreeSelection;
-		private System.Windows.Forms.ComboBox comboBox1;
-		private System.Windows.Forms.Label label5;
-		private System.Windows.Forms.Button btnAssignCompanies;
-		private System.Windows.Forms.CheckedListBox clbCompanies;
-		private System.Windows.Forms.Button button2;
-		private System.Windows.Forms.Button button1;
-		private System.Windows.Forms.CheckedListBox clbGroups;
-		private System.Windows.Forms.GroupBox groupBox5;
-		private System.Windows.Forms.Label label4;
-		private System.Windows.Forms.ComboBox comboBox6;
-		private System.Windows.Forms.ComboBox comboBox5;
-		private System.Windows.Forms.ComboBox comboBox4;
-		private System.Windows.Forms.ComboBox comboBox3;
-		private System.Windows.Forms.Label label11;
-		private System.Windows.Forms.Label label10;
-		private System.Windows.Forms.Label label9;
-		private System.Windows.Forms.Label label8;
-		private System.Windows.Forms.ComboBox comboBox2;
-		private System.Windows.Forms.CheckBox checkBox1;
-		private System.Windows.Forms.GroupBox groupBox6;
-		private System.Windows.Forms.CheckBox checkBox2;
-		private System.Windows.Forms.CheckedListBox clbAccounts;
-		private System.Windows.Forms.GroupBox groupBox1;
-		private System.Windows.Forms.CheckBox checkBox3;
-		private System.Windows.Forms.CheckedListBox clbDepartments;
-		private System.Windows.Forms.TreeView treeUser
+		private GroupBox grpUsers;
+		private GroupBox groupBox2;
+		private Panel panel1;
+		private ContextMenuStrip mnuContextTree;
+		private ToolStripContainer toolStripContainer1;
+		private GroupBox groupBox3;
+		private GroupBox grpGroups;
+		private Panel pnlCreateUser;
+		private Label label3;
+		private ComboBox ddlAccessLevels;
+		private Label label19;
+		private CheckedListBox clbPermissions;
+		private Label label6;
+		private Panel pnlLogin;
+		private TextBox txtUserName;
+		private Button btnCancel;
+		private Label label1;
+		private Button btnOk_Login;
+		private Label label2;
+		private TextBox txtPwd;
+		private Label label7;
+		private Label lblAddCurrentTreeSelection;
+		private ComboBox comboBox1;
+		private Label label5;
+		private Button btnAssignCompanies;
+		private CheckedListBox clbCompanies;
+		private Button button2;
+		private Button button1;
+		private CheckedListBox clbGroups;
+		private GroupBox groupBox5;
+		private Label label4;
+		private ComboBox comboBox6;
+		private ComboBox comboBox5;
+		private ComboBox comboBox4;
+		private ComboBox comboBox3;
+		private Label label11;
+		private Label label10;
+		private Label label9;
+		private Label label8;
+		private ComboBox comboBox2;
+		private CheckBox checkBox1;
+		private GroupBox groupBox6;
+		private CheckBox checkBox2;
+		private CheckedListBox clbAccounts;
+		private GroupBox groupBox1;
+		private CheckBox checkBox3;
+		private CheckedListBox clbDepartments;
+		private TreeView treeUser
 			;
-		private System.Windows.Forms.Button button9;
-		private System.Windows.Forms.Button button10;
-		private System.Windows.Forms.Button button11;
-		private System.Windows.Forms.Button button3;
-		private System.Windows.Forms.Button button4;
-		private System.Windows.Forms.Button button5;
-		private System.Windows.Forms.Button button6;
-		private System.Windows.Forms.Button button7;
-		private System.Windows.Forms.Button button8;
-		private System.Windows.Forms.Button btnCancelNewUser;
-		private System.Windows.Forms.Button btnCreateUser;
+		private Button button9;
+		private Button button10;
+		private Button button11;
+		private Button button3;
+		private Button button4;
+		private Button button5;
+		private Button button6;
+		private Button button7;
+		private Button button8;
+		private Button btnCancelNewUser;
+		private Button btnCreateUser;
+		private ToolStripMenuItem mnuAssignUser;
+		private ToolStripMenuItem mnuAdd;
+		private ToolStripMenuItem mnuEdit;
+		private ToolStripMenuItem mnuDelete;
+		private Button btnCancelContinue;
+		private Button btnContinue;
 	}
 }

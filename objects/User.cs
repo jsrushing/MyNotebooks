@@ -28,13 +28,13 @@ namespace MyNotebooks.objects
 
 		public User(int accessLevel, string name, string password, int userId, DateTime createdOn, DateTime? editedOn = null, bool isEnterprise = false)
 		{
-			//AccessLevel		= accessLevel;
-			//UserId			= userId;
-			//Name			= name;
-			////Password		= password;
-			////IsEnterprise	= isEnterprise;
-			//CreatedOn		= createdOn;
-			//EditedOn		= editedOn;
+			AccessLevel = accessLevel;
+			UserId = userId;
+			Name = name;
+			//Password = password;
+			//IsEnterprise = isEnterprise;
+			CreatedOn = createdOn;
+			EditedOn = editedOn;
 		}
 
 		public User(DataTable dt)

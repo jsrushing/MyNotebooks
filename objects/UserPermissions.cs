@@ -34,6 +34,8 @@ namespace MyNotebooks.objects
 
 		public UserPermissions(DataTable dataTable) { PopulateFromDataTable(dataTable); }
 
+		public UserPermissions(List<string> list) { PopulateFromListOfStrings(list); }
+
 		public List<string> GetAllPermissions()
 		{
 			var list = new List<string>();
@@ -59,6 +61,14 @@ namespace MyNotebooks.objects
 			}
 
 			return list;
+		}
+
+		private void PopulateFromListOfStrings(List<string> list)
+		{
+			foreach (var item in list)
+			{
+				this.GetType().GetProperty(item).SetValue(this, true);
+			}
 		}
 
 		private void PopulateFromDataTable(DataTable dt)
