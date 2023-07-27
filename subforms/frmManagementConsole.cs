@@ -57,11 +57,11 @@ namespace MyNotebooks.subforms
 
 			if (ds.Tables.Count > 0)    // the user was found
 			{
-				Program.User = new(ds.Tables[0]) { Permissions = new(ds.Tables[1]) };
+				Program.User = new(ds.Tables[0]) { Permissions = new(ds.Tables[1]), Assignments = new(ds.Tables[2]) };
 
 				if (Convert.ToInt32(Program.User.AccessLevel) > 2)  // 1 and 2 don't have companies, accounts, or groups.
 				{
-					//Program.Company = DbAccess.GetCompany(Program.User.CompanyId);
+					//Program.Company = DbAccess.GetCompany(Program.User.UserId);
 
 					// populate the tree
 					//treeOrg.Nodes.Add(Program.Company.Name);

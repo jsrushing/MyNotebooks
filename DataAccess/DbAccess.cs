@@ -54,7 +54,7 @@ namespace MyNotebooks.DataAccess
 		//			cmd.CommandType = CommandType.StoredProcedure;
 		//			cmd.Parameters.AddWithValue("@AccessLevel", usr.AccessLevel);
 		//			cmd.Parameters.AddWithValue("@Name", usr.Name);
-		//			//cmd.Parameters.AddWithValue("@CompanyId", usr.CompanyId);
+		//			//cmd.Parameters.AddWithValue("@UserId", usr.UserId);
 		//			//cmd.Parameters.AddWithValue("@AccountId", usr.AccountId);
 		//			//cmd.Parameters.AddWithValue("@DepartmentId", usr.DepartmentId);
 		//			//cmd.Parameters.AddWithValue("@GroupId", usr.GroupId);

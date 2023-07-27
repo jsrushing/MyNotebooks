@@ -31,6 +31,7 @@ namespace MyNotebooks.subforms
 			if (ds.Tables.Count > 0)    // the user was found
 			{
 				Program.User = new(ds.Tables[0]) { Permissions = new(ds.Tables[1]) };
+				if (Program.User != null) { this.Hide(); }
 			}
 			else
 			{

@@ -1,0 +1,43 @@
+Website collects user name / password
+THEN ...
+collects Company, Account, Department, or Group id, depending on access level. Get ONLY the highest-level item. Others can be added on first login.
+
+THEN ...
+creates a master user (permissions depending on access level)
+
+user logs in
+Adds CADG, as permissions permit. Must add a Group before users can be assigned and begin to create Notebooks.
+
+Is added to the CADG (UserAssignments rows created)
+
+Can then create users and add to any created Groups.
+
+Add user to Group ...
+row created in UserAssignments w/ Group Id
+
+
+
+can add company, account, department, or group - depending on access level.
+
+can create users and assign (limited) permissions and CADG 
+
+If you were added to a Group (by a MU) you may:
+	see all unencrypted Notebooks in the Group
+	see any encrypted Notebooks by providing a PIN
+
+If you were added to a Department you may:
+	see all Groups in the Department
+		Groups into which you haven't been added (by a MU) are greyed out
+	administer the Department according to
+		CreateGroup
+		DeleteRenameGroup (applies to selected Group)
+
+If you were added to an Account you may:
+	see all Departments in the Account
+		Accounts into which you haven't been added (by a MU) are greyed out
+	administer the Account according to
+		CreateDepartment
+		DeleteRenameDepartment (applies to selected Department)		
+
+	
+

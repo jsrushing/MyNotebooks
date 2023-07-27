@@ -5,12 +5,13 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using myNotebooks.subforms;
+using Newtonsoft.Json.Linq;
 
 namespace MyNotebooks.objects
 {
 	internal class UserPermissions
 	{
-		public int	CompanyId { get; set; }
 		public bool CreateCompany { get; set; }
 		public bool CreateAccount { get; set; }
 		public bool CreateDepartment { get; set; }
@@ -26,8 +27,8 @@ namespace MyNotebooks.objects
 		public bool EditNotebookSettings { get; set; }
 		public bool ManageUsers { get; set; }
 		public bool ManageUserPermissions { get; set; }
-		public bool CreatedOn { get; set; }
-		public bool EditedOn { get; set; }
+		public DateTime CreatedOn { get; set; }
+		public DateTime EditedOn { get; set; }
 
 		public UserPermissions() { }
 
@@ -35,11 +36,33 @@ namespace MyNotebooks.objects
 
 		private void PopulateFromDataTable(DataTable dt)
 		{
+			var value = "";
+
 			foreach (PropertyInfo sPropertyName in typeof(UserPermissions).GetProperties())
 			{
-				this.GetType().GetProperty(sPropertyName.Name).SetValue(this, dt.Columns[sPropertyName.Name]);
+				try
+				{
+					if (dt.Columns[sPropertyName.Name].DataType == typeof(bool))
+					{
+						value = dt.Rows[0].Field<bool>(sPropertyName.Name).ToString();
+						this.GetType().GetProperty(sPropertyName.Name).SetValue(this, Convert.ToBoolean(value));
+					}
+					else if (dt.Columns[sPropertyName.Name].DataType == typeof(DateTime))
+					{
+						DateTime dtime = Convert.ToDateTime(dt.Rows[0].Field<DateTime>(sPropertyName.Name));
+						this.GetType().GetProperty(sPropertyName.Name).SetValue(this, dtime);
+					}
+
+				}
+				catch (Exception ex)
+				{
+					if (ex.GetType() != typeof(InvalidCastException))
+					{
+						using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The error '" + ex.Message +
+						"' occurred while processing the property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
+					}
+				}
 			}
 		}
-
 	}
 }
