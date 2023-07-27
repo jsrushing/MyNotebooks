@@ -22,6 +22,8 @@ namespace MyNotebooks.subforms
 		private Size MediumSize = new Size();
 		private Size FullSize = new Size();
 		private User CurrentUser = null;
+		private Color enabledColor = Color.Black;
+		private Color disabledColor = Color.LightGray;
 
 		public frmManagementConsole(Form parent)
 		{
@@ -44,11 +46,12 @@ namespace MyNotebooks.subforms
 				if (!sPropertyName.Name.ToLower().Equals("companyid") & !sPropertyName.Name.ToLower().Equals("createdon") & !sPropertyName.Name.ToLower().Equals("editedon"))
 				{ clbPermissions.Items.Add(sPropertyName.Name); }
 			}
+
+			txtPwd.Focus();
 		}
 
 		private void frmManagementConsole_Load(object sender, EventArgs e)
 		{
-			txtPwd.Focus();
 		}
 
 		private void btnOk_Click(object sender, EventArgs e)
@@ -59,69 +62,62 @@ namespace MyNotebooks.subforms
 			if (ds.Tables.Count > 0)    // the user was found
 			{
 				TreeNode tn = null;
-
 				treeUser.Nodes.Clear();
-
+				CurrentUser = new(ds.Tables[0]) { Permissions = new(ds.Tables[1]), Assignments = new(ds.Tables[2]) };
 
 				tn = new TreeNode("User Details");
-				tn.Nodes.Add("Name: " + Program.User.Name);
-				tn.Nodes.Add("Access Level: " + Program.User.AccessLevel.ToString());
+				tn.Nodes.Add("Name: " + CurrentUser.Name);
+				tn.Nodes.Add("Access Level: " + CurrentUser.AccessLevel.ToString());
 				treeUser.Nodes.Add(tn);
 
 
 				tn = new TreeNode("User Permissions");
-				List<string> allPerms = Program.User.Permissions.GetAllPermissions();
-				List<string> grantedPerms = Program.User.Permissions.GetGrantedPermissions();
+				List<string> allPerms = CurrentUser.Permissions.GetAllPermissions();
+				List<string> grantedPerms = CurrentUser.Permissions.GetGrantedPermissions();
 
 				foreach (string s in allPerms)
 				{
-					TreeNode tnPerm = new(s) { ForeColor = grantedPerms.Contains(s) ? Color.Black : SystemColors.GrayText };
+					TreeNode tnPerm = new(s) { ForeColor = grantedPerms.Contains(s) ? Color.Black : SystemColors.GrayText, BackColor = grantedPerms.Contains(s) ? Color.White : Color.White };
 					tn.Nodes.Add(tnPerm);
 				}
 				treeUser.Nodes.Add(tn);
 
-				tn = new TreeNode("Companies");
-				tn.ForeColor = SystemColors.GrayText;
-				treeUser.Nodes.Add(tn);
-				tn = new TreeNode("Accounts");
-				tn.ForeColor = SystemColors.GrayText;
-				treeUser.Nodes.Add(tn);
-				tn = new TreeNode("Departments");
-				tn.ForeColor = SystemColors.GrayText;
-				treeUser.Nodes.Add(tn);
-				tn = new TreeNode("Groups");
-				tn.ForeColor = SystemColors.GrayText;
-				treeUser.Nodes.Add(tn);
+				treeUser.Nodes.Add("Companies");
+				treeUser.Nodes.Add("Accounts");
+				treeUser.Nodes.Add("Departments");
+				treeUser.Nodes.Add("Groups");
 
-				CurrentUser = new(ds.Tables[0]) { Permissions = new(ds.Tables[1]), Assignments = new(ds.Tables[2]) };
+				SetNodeEnabled_Disabled("Companies", false);
+				SetNodeEnabled_Disabled("Accounts", false);
+				SetNodeEnabled_Disabled("Departments", false);
+				SetNodeEnabled_Disabled("Groups", false);
+
 
 				if (CurrentUser.AccessLevel >= 2)  // 1 and 2 don't have companies, accounts, or groups.
 				{
 					SetNodeEnabled_Disabled("Groups");
-					// populate the groups the user has access to. for master users this will be all groups. For sub user may be many groups.
+					// populate the Groups the user has access to. for master users this will be all groups. For sub user may be many groups.
 				}
 				if (CurrentUser.AccessLevel >= 3)  // 1 and 2 don't have companies, accounts, or groups.
 				{
 					SetNodeEnabled_Disabled("Departments");
-					// populate the groups the user has access to. for master users this will be all groups. For sub user may be many groups.
+					// populate the Groups the user has access to. for master users this will be all groups. For sub user may be many groups.
 				}
 				if (CurrentUser.AccessLevel >= 4)  // 1 and 2 don't have companies, accounts, or groups.
 				{
 					SetNodeEnabled_Disabled("Accounts");
-					// populate the groups the user has access to. for master users this will be all groups. For sub user may be many groups.
+					// populate the Departments the user has access to. for master users this will be all groups. For sub user may be many groups.
 				}
 				if (CurrentUser.AccessLevel >= 5)  // 1 and 2 don't have companies, accounts, or groups.
 				{
 					SetNodeEnabled_Disabled("Companies");
-					// populate the groups the user has access to. for master users this will be all groups. For sub user may be many groups.
+					// populate the Accounts the user has access to. for master users this will be all groups. For sub user may be many groups.
 				}
-
 
 				// check items in the permissions list based on Program.User.UserPermissions
 
 				this.Size = FullSize;
-				//ShowHidePanels(pnlSelectGroup);
-				//this.Hide();
+
 			}
 			else
 			{
@@ -134,7 +130,11 @@ namespace MyNotebooks.subforms
 		{
 			foreach (TreeNode tn in treeUser.Nodes)
 			{
-				if (tn.Text == nodeName) { tn.ForeColor = setEnabled ? Color.Black : SystemColors.GrayText; }
+				if (tn.Text == nodeName) 
+				{ 
+					tn.ForeColor = setEnabled ? enabledColor : disabledColor;
+					tn.BackColor = setEnabled ? Color.White : Color.White;
+				}
 			}
 		}
 

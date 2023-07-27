@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -17,6 +18,7 @@ namespace MyNotebooks.objects
 		public int		AccessLevel { get; set; }
 		public string	Name { get; set; }
 		public int		UserId { get; set; }
+		public int		CreatedBy { get; set; }
 		public DateTime CreatedOn { get; set; }
 		public DateTime? EditedOn { get; set; }
 		public UserAssignments Assignments { get; set; }

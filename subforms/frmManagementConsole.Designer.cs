@@ -246,7 +246,7 @@ namespace MyNotebooks.subforms
 			txtPwd.MaxLength = 50;
 			txtPwd.Name = "txtPwd";
 			txtPwd.Size = new System.Drawing.Size(184, 23);
-			txtPwd.TabIndex = 3;
+			txtPwd.TabIndex = 1;
 			// 
 			// groupBox2
 			// 
