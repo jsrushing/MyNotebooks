@@ -161,7 +161,7 @@ namespace MyNotebooks.subforms
 			label3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			label3.Location = new System.Drawing.Point(3, 4);
 			label3.Name = "label3";
-			label3.Size = new System.Drawing.Size(73, 15);
+			label3.Size = new System.Drawing.Size(93, 15);
 			label3.TabIndex = 20;
 			label3.Text = "Create MNUser";
 			// 
@@ -491,36 +491,36 @@ namespace MyNotebooks.subforms
 			treeUser.TabIndex = 0;
 			treeUser.Text = "tree";
 			treeUser.BeforeSelect += this.treeUser_BeforeSelect;
-			treeUser.MouseUp += this.treeUser_MouseUp;
+			treeUser.NodeMouseClick += this.treeUser_NodeMouseClick;
 			// 
 			// mnuContextTree
 			// 
 			mnuContextTree.Items.AddRange(new ToolStripItem[] { mnuAssignUser, mnuAdd, mnuEdit, mnuDelete });
 			mnuContextTree.Name = "mnuContextTree";
-			mnuContextTree.Size = new System.Drawing.Size(136, 92);
+			mnuContextTree.Size = new System.Drawing.Size(156, 92);
 			// 
 			// mnuAssignUser
 			// 
 			mnuAssignUser.Name = "mnuAssignUser";
-			mnuAssignUser.Size = new System.Drawing.Size(135, 22);
+			mnuAssignUser.Size = new System.Drawing.Size(155, 22);
 			mnuAssignUser.Text = "A&ssign MNUser";
 			// 
 			// mnuAdd
 			// 
 			mnuAdd.Name = "mnuAdd";
-			mnuAdd.Size = new System.Drawing.Size(135, 22);
+			mnuAdd.Size = new System.Drawing.Size(155, 22);
 			mnuAdd.Text = "&Add";
 			// 
 			// mnuEdit
 			// 
 			mnuEdit.Name = "mnuEdit";
-			mnuEdit.Size = new System.Drawing.Size(135, 22);
+			mnuEdit.Size = new System.Drawing.Size(155, 22);
 			mnuEdit.Text = "&Edit";
 			// 
 			// mnuDelete
 			// 
 			mnuDelete.Name = "mnuDelete";
-			mnuDelete.Size = new System.Drawing.Size(135, 22);
+			mnuDelete.Size = new System.Drawing.Size(155, 22);
 			mnuDelete.Text = "&Delete";
 			// 
 			// label4

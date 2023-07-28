@@ -28,12 +28,13 @@ namespace myNotebooks
 		public string				Name { get; set; }
 		public DateTime				LastSaved { get; set; }
 		public string				FileName { get; set; }
+
 		public List<Entry>			Entries = new List<Entry>();
 		public string root			= "notebooks\\";
 		public NotebookSettings		Settings;
 		public bool					WrongPIN { get; set; } = false;
-		public bool BackupCompleted { get; private set; }
-		public bool Saved { get; private set; }
+		public bool					BackupCompleted { get; private set; }
+		public bool					Saved { get; private set; }
 
 		public Notebook(string _name = null, string _fileName = null, Form thisParent = null) 
         {

@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using MyNotebooks.objects;
 using System.Reflection;
 using Microsoft.VisualBasic.ApplicationServices;
+using myNotebooks;
 
 namespace MyNotebooks.DataAccess
 {
@@ -20,7 +21,7 @@ namespace MyNotebooks.DataAccess
 	{
 		private static string connString = "Server=mynotebooksserver.database.windows.net;Database=MyNotebooks;user id=mydb_admin;password=cloud_Bringer1!";
 
-		public static int CreateMNUser(string userName, string password, int accessLevel)
+		public static int CreateMNUser(MNUser user)
 		{
 			int iRtrn = 0;
 			try
@@ -31,10 +32,10 @@ namespace MyNotebooks.DataAccess
 					using (SqlCommand cmd = new SqlCommand("sp_CreateUser", conn))
 					{
 						cmd.CommandType = CommandType.StoredProcedure;
-						cmd.Parameters.AddWithValue("@userName", userName);
-						cmd.Parameters.AddWithValue("@password", password);
-						cmd.Parameters.AddWithValue("@accessLevel", accessLevel);
-						cmd.Parameters.AddWithValue("@createdBy", 0);
+						cmd.Parameters.AddWithValue("@userName", user.Name);
+						cmd.Parameters.AddWithValue("@password", user.Password);
+						cmd.Parameters.AddWithValue("@accessLevel", user.AccessLevel);
+						cmd.Parameters.AddWithValue("@createdBy", user.CreatedBy);
 						cmd.Parameters.Add("@retVal", SqlDbType.Int);
 						cmd.Parameters["@retVal"].Direction = ParameterDirection.ReturnValue;
 						cmd.ExecuteNonQuery();
@@ -46,11 +47,12 @@ namespace MyNotebooks.DataAccess
 
 			return iRtrn;
 		}
+
 		public static int CreateMNUserAssignments(int userId, int companyId, int accountId, int departmentId, int groupId)
 		{
 			int iRtrn = 0;
 
-			using (SqlConnection conn = new SqlConnection(connMN_Azure))
+			using (SqlConnection conn = new SqlConnection(connString))
 			{
 				conn.Open();
 				using (SqlCommand cmd = new SqlCommand("sp_CreateUserAssignments", conn))
@@ -230,5 +232,7 @@ namespace MyNotebooks.DataAccess
 			
 			return cRtrn;
 		}
+
+		
 	}
 }

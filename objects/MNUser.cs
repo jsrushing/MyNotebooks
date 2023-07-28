@@ -48,7 +48,7 @@ namespace MyNotebooks.objects
 			{
 				try
 				{
-					if (sPropertyName.Name != "Assignments" &&  sPropertyName.Name != "Permissions")
+					if (sPropertyName.Name != "Assignments" &  sPropertyName.Name != "Permissions" & dt.Columns[sPropertyName.Name] != null)
 					{
 						if (dt.Columns[sPropertyName.Name].DataType == typeof(string))
 						{

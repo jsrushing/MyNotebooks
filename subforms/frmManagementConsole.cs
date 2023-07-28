@@ -26,6 +26,7 @@ namespace MyNotebooks.subforms
 		private MNUser CurrentUser = null;
 		private Color enabledColor = Color.Black;
 		private Color disabledColor = Color.LightGray;
+		private int CurrentTreePosition = 0;
 
 		public frmManagementConsole(Form parent)
 		{
@@ -108,6 +109,7 @@ namespace MyNotebooks.subforms
 				CurrentUser = new(ds.Tables[0]) { Permissions = new(ds.Tables[1]), Assignments = new(ds.Tables[2]) };
 				PopulateBaseTree();
 				this.Size = FullSize;
+				pnlCreateUser.Visible = false;
 			}
 			else
 			{
@@ -122,13 +124,14 @@ namespace MyNotebooks.subforms
 		private void PopulateBaseTree()
 		{
 			treeUser.Nodes.Clear();
-			TreeNode tnUser = new("MNUser Details");
+			TreeNode tnUser = new("User Details");
 			TreeNode tnPerms = new("Permissions");
 
 			if (CurrentUser != null)
 			{
 				tnUser.Nodes.Add("Name: " + CurrentUser.Name);
 				tnUser.Nodes.Add("Access Level: " + CurrentUser.AccessLevel.ToString() + " (" + DbAccess.GetAccessLevelName(CurrentUser.AccessLevel) + ")");
+				tnUser.Nodes.Add("Created By: " + Program.User.Name);
 
 				List<string> allPerms = CurrentUser.Permissions.GetAllPermissions();
 				List<string> grantedPerms = CurrentUser.Permissions.GetGrantedPermissions();
@@ -205,20 +208,34 @@ namespace MyNotebooks.subforms
 			txtPwd.Focus();
 		}
 
-		private void treeUser_MouseUp(object sender, MouseEventArgs e)
-		{
-			if (e.Button == MouseButtons.Right)
-			{
-				var v = treeUser.SelectedNode;
-			}
-		}
-
 		private void btnCreateUser_Click_1(object sender, EventArgs e)
 		{
-			CurrentUser.Name = txtUserName.Text;
-			CurrentUser.Password = EncryptDecrypt.Encrypt(txtPwd.Text, txtPwd.Text);
-			CurrentUser.UserId = DbAccess.CreateMNUser(txtUserName.Text, txtPwd.Text, ddlAccessLevels.SelectedIndex);
-			DbAccess.CreateMNUserPermissions(CurrentUser);
+			var msg = string.Empty;
+
+			try
+			{
+				CurrentUser.Name = txtUserName.Text;
+				CurrentUser.Password = EncryptDecrypt.Encrypt(txtPwd.Text, txtPwd.Text);
+				CurrentUser.CreatedBy = Program.User.UserId;
+				CurrentUser.UserId = DbAccess.CreateMNUser(CurrentUser);
+				DbAccess.CreateMNUserPermissions(CurrentUser);
+				msg = "The User '" + CurrentUser.Name + "' was created.";
+			}
+			catch (Exception ex)
+			{
+				msg = "An error occurred: " + ex.Message + ". The User was not created.";
+			}
+			using (frmMessage frm = new(frmMessage.OperationType.Message, msg)) { frm.ShowDialog(this); }
+		}
+
+		private void treeUser_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+		{
+			if(e.Button == MouseButtons.Right) 
+			{ 
+				treeUser.SelectedNode = e.Node; 
+			
+			}
+
 		}
 	}
 }

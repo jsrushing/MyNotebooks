@@ -28,14 +28,14 @@ namespace MyNotebooks.subforms
 			// look up the user
 			DataSet ds = DbAccess.GetUser(txtUserName.Text, txtPwd.Text);
 
-			if (ds.Tables.Count > 0)    // the user was found
+			if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)    // the user was found
 			{
 				Program.User = new(ds.Tables[0]) { Permissions = new(ds.Tables[1]) };
 				if (Program.User != null) { this.Hide(); }
 			}
 			else
 			{
-				using (frmMessage frm = new(frmMessage.OperationType.Message, "No MNUser Found.", "", this))
+				using (frmMessage frm = new(frmMessage.OperationType.Message, "No MyNotebooks User Found.", "No Such User", this))
 				{ frm.ShowDialog(); }
 				txtUserName.Text = "";
 				txtPwd.Text = "";
