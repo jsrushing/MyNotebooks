@@ -9,18 +9,18 @@ using myNotebooks.subforms;
 
 namespace MyNotebooks.objects
 {
-	internal class UserAssignments
+	internal class UserAssignment
 	{
-		public int Companyid { get; set; }
+		public int CompanyId { get; set; }
 		public int AccountId { get; set; }
 		public int DepartmentId { get; set; }
 		public int GroupId { get; set; }
 
-		public UserAssignments() { }
+		public UserAssignment() { }
 
-		public UserAssignments(DataTable dt) 
+		public UserAssignment(DataTable dt) 
 		{
-			foreach (PropertyInfo sPropertyName in typeof(UserAssignments).GetProperties())
+			foreach (PropertyInfo sPropertyName in typeof(UserAssignment).GetProperties())
 			{
 				if(dt.Rows.Count > 0)
 				{
@@ -34,6 +34,23 @@ namespace MyNotebooks.objects
 						using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The error '" + ex.Message + 
 							"' occurred while processing the property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
 					}
+				}
+			}
+		}
+
+		public UserAssignment(DataRow dr)
+		{
+			foreach (PropertyInfo sPropertyName in typeof(UserAssignment).GetProperties())
+			{
+				try
+				{
+					var value = dr.Field<int>(sPropertyName.Name);
+					this.GetType().GetProperty(sPropertyName.Name).SetValue(this, value);
+				}
+				catch (Exception ex)
+				{
+					using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The error '" + ex.Message +
+						"' occurred while processing the property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
 				}
 			}
 		}

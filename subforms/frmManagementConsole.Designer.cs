@@ -34,9 +34,6 @@ namespace MyNotebooks.subforms
 			components = new System.ComponentModel.Container();
 			grpUsers = new GroupBox();
 			pnlCreateUser = new Panel();
-			btnCancelContinue = new Button();
-			btnContinue = new Button();
-			label3 = new Label();
 			ddlAccessLevels = new ComboBox();
 			label19 = new Label();
 			clbPermissions = new CheckedListBox();
@@ -45,7 +42,7 @@ namespace MyNotebooks.subforms
 			txtUserName = new TextBox();
 			btnCancel = new Button();
 			label1 = new Label();
-			btnOk_Login = new Button();
+			btnLogin = new Button();
 			label2 = new Label();
 			txtPwd = new TextBox();
 			groupBox2 = new GroupBox();
@@ -66,7 +63,7 @@ namespace MyNotebooks.subforms
 			lblAddCurrentTreeSelection = new Label();
 			comboBox1 = new ComboBox();
 			label5 = new Label();
-			groupBox5 = new GroupBox();
+			grpTree = new GroupBox();
 			btnCancelNewUser = new Button();
 			btnCreateUser = new Button();
 			treeUser = new TreeView();
@@ -75,6 +72,7 @@ namespace MyNotebooks.subforms
 			mnuAdd = new ToolStripMenuItem();
 			mnuEdit = new ToolStripMenuItem();
 			mnuDelete = new ToolStripMenuItem();
+			mnuCreateNew = new ToolStripMenuItem();
 			label4 = new Label();
 			comboBox2 = new ComboBox();
 			label8 = new Label();
@@ -103,7 +101,7 @@ namespace MyNotebooks.subforms
 			toolStripContainer1.SuspendLayout();
 			groupBox3.SuspendLayout();
 			grpGroups.SuspendLayout();
-			groupBox5.SuspendLayout();
+			grpTree.SuspendLayout();
 			mnuContextTree.SuspendLayout();
 			groupBox6.SuspendLayout();
 			groupBox1.SuspendLayout();
@@ -115,60 +113,27 @@ namespace MyNotebooks.subforms
 			grpUsers.Controls.Add(pnlLogin);
 			grpUsers.Location = new System.Drawing.Point(8, 0);
 			grpUsers.Name = "grpUsers";
-			grpUsers.Size = new System.Drawing.Size(286, 549);
+			grpUsers.Size = new System.Drawing.Size(286, 461);
 			grpUsers.TabIndex = 20;
 			grpUsers.TabStop = false;
 			grpUsers.Text = "Users";
 			// 
 			// pnlCreateUser
 			// 
-			pnlCreateUser.Controls.Add(btnCancelContinue);
-			pnlCreateUser.Controls.Add(btnContinue);
-			pnlCreateUser.Controls.Add(label3);
 			pnlCreateUser.Controls.Add(ddlAccessLevels);
 			pnlCreateUser.Controls.Add(label19);
 			pnlCreateUser.Controls.Add(clbPermissions);
 			pnlCreateUser.Controls.Add(label6);
 			pnlCreateUser.Location = new System.Drawing.Point(4, 125);
 			pnlCreateUser.Name = "pnlCreateUser";
-			pnlCreateUser.Size = new System.Drawing.Size(272, 415);
+			pnlCreateUser.Size = new System.Drawing.Size(270, 336);
 			pnlCreateUser.TabIndex = 12;
 			pnlCreateUser.Visible = false;
-			// 
-			// btnCancelContinue
-			// 
-			btnCancelContinue.Location = new System.Drawing.Point(136, 392);
-			btnCancelContinue.Name = "btnCancelContinue";
-			btnCancelContinue.Size = new System.Drawing.Size(91, 23);
-			btnCancelContinue.TabIndex = 23;
-			btnCancelContinue.Text = "&Cancel";
-			btnCancelContinue.UseVisualStyleBackColor = true;
-			btnCancelContinue.Click += this.btnCancelContinue_Click;
-			// 
-			// btnContinue
-			// 
-			btnContinue.Location = new System.Drawing.Point(23, 392);
-			btnContinue.Name = "btnContinue";
-			btnContinue.Size = new System.Drawing.Size(91, 23);
-			btnContinue.TabIndex = 22;
-			btnContinue.Text = "C&ontinue";
-			btnContinue.UseVisualStyleBackColor = true;
-			btnContinue.Click += this.btnContinue_Click;
-			// 
-			// label3
-			// 
-			label3.AutoSize = true;
-			label3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-			label3.Location = new System.Drawing.Point(3, 4);
-			label3.Name = "label3";
-			label3.Size = new System.Drawing.Size(93, 15);
-			label3.TabIndex = 20;
-			label3.Text = "Create MNUser";
 			// 
 			// ddlAccessLevels
 			// 
 			ddlAccessLevels.FormattingEnabled = true;
-			ddlAccessLevels.Location = new System.Drawing.Point(95, 24);
+			ddlAccessLevels.Location = new System.Drawing.Point(95, 9);
 			ddlAccessLevels.Name = "ddlAccessLevels";
 			ddlAccessLevels.Size = new System.Drawing.Size(165, 23);
 			ddlAccessLevels.TabIndex = 18;
@@ -176,7 +141,7 @@ namespace MyNotebooks.subforms
 			// label19
 			// 
 			label19.AutoSize = true;
-			label19.Location = new System.Drawing.Point(20, 27);
+			label19.Location = new System.Drawing.Point(20, 12);
 			label19.Name = "label19";
 			label19.Size = new System.Drawing.Size(73, 15);
 			label19.TabIndex = 17;
@@ -186,31 +151,31 @@ namespace MyNotebooks.subforms
 			// 
 			clbPermissions.CheckOnClick = true;
 			clbPermissions.FormattingEnabled = true;
-			clbPermissions.Location = new System.Drawing.Point(6, 75);
+			clbPermissions.Location = new System.Drawing.Point(6, 56);
 			clbPermissions.Name = "clbPermissions";
-			clbPermissions.Size = new System.Drawing.Size(254, 310);
+			clbPermissions.Size = new System.Drawing.Size(260, 274);
 			clbPermissions.TabIndex = 16;
 			// 
 			// label6
 			// 
 			label6.AutoSize = true;
-			label6.Location = new System.Drawing.Point(6, 57);
+			label6.Location = new System.Drawing.Point(6, 39);
 			label6.Name = "label6";
-			label6.Size = new System.Drawing.Size(93, 15);
+			label6.Size = new System.Drawing.Size(70, 15);
 			label6.TabIndex = 15;
-			label6.Text = "UserPermissions";
+			label6.Text = "Permissions";
 			// 
 			// pnlLogin
 			// 
 			pnlLogin.Controls.Add(txtUserName);
 			pnlLogin.Controls.Add(btnCancel);
 			pnlLogin.Controls.Add(label1);
-			pnlLogin.Controls.Add(btnOk_Login);
+			pnlLogin.Controls.Add(btnLogin);
 			pnlLogin.Controls.Add(label2);
 			pnlLogin.Controls.Add(txtPwd);
 			pnlLogin.Location = new System.Drawing.Point(4, 16);
 			pnlLogin.Name = "pnlLogin";
-			pnlLogin.Size = new System.Drawing.Size(272, 110);
+			pnlLogin.Size = new System.Drawing.Size(266, 110);
 			pnlLogin.TabIndex = 11;
 			// 
 			// txtUserName
@@ -240,15 +205,15 @@ namespace MyNotebooks.subforms
 			label1.TabIndex = 0;
 			label1.Text = "Name:";
 			// 
-			// btnOk_Login
+			// btnLogin
 			// 
-			btnOk_Login.Location = new System.Drawing.Point(20, 73);
-			btnOk_Login.Name = "btnOk_Login";
-			btnOk_Login.Size = new System.Drawing.Size(137, 23);
-			btnOk_Login.TabIndex = 4;
-			btnOk_Login.Text = "&Lookup Or Create MNUser";
-			btnOk_Login.UseVisualStyleBackColor = true;
-			btnOk_Login.Click += this.btnOk_Click;
+			btnLogin.Location = new System.Drawing.Point(20, 73);
+			btnLogin.Name = "btnLogin";
+			btnLogin.Size = new System.Drawing.Size(137, 23);
+			btnLogin.TabIndex = 4;
+			btnLogin.Text = "&Lookup Or Create MNUser";
+			btnLogin.UseVisualStyleBackColor = true;
+			btnLogin.Click += this.btnLogin_Click;
 			// 
 			// label2
 			// 
@@ -364,7 +329,7 @@ namespace MyNotebooks.subforms
 			grpGroups.Controls.Add(button10);
 			grpGroups.Controls.Add(clbGroups);
 			grpGroups.Controls.Add(button11);
-			grpGroups.Location = new System.Drawing.Point(533, 0);
+			grpGroups.Location = new System.Drawing.Point(755, 581);
 			grpGroups.Name = "grpGroups";
 			grpGroups.Size = new System.Drawing.Size(224, 214);
 			grpGroups.TabIndex = 22;
@@ -451,43 +416,44 @@ namespace MyNotebooks.subforms
 			label5.TabIndex = 2;
 			label5.Text = "Bookmarks:";
 			// 
-			// groupBox5
+			// grpTree
 			// 
-			groupBox5.Controls.Add(btnCancelNewUser);
-			groupBox5.Controls.Add(btnCreateUser);
-			groupBox5.Controls.Add(treeUser);
-			groupBox5.Location = new System.Drawing.Point(300, 0);
-			groupBox5.Name = "groupBox5";
-			groupBox5.Size = new System.Drawing.Size(224, 549);
-			groupBox5.TabIndex = 28;
-			groupBox5.TabStop = false;
-			groupBox5.Text = "Current MNUser";
+			grpTree.Controls.Add(btnCancelNewUser);
+			grpTree.Controls.Add(btnCreateUser);
+			grpTree.Controls.Add(treeUser);
+			grpTree.Location = new System.Drawing.Point(288, 0);
+			grpTree.Name = "grpTree";
+			grpTree.Size = new System.Drawing.Size(221, 461);
+			grpTree.TabIndex = 28;
+			grpTree.TabStop = false;
+			grpTree.Text = "Current User";
 			// 
 			// btnCancelNewUser
 			// 
-			btnCancelNewUser.Location = new System.Drawing.Point(123, 516);
+			btnCancelNewUser.Location = new System.Drawing.Point(123, 425);
 			btnCancelNewUser.Name = "btnCancelNewUser";
 			btnCancelNewUser.Size = new System.Drawing.Size(91, 23);
 			btnCancelNewUser.TabIndex = 21;
 			btnCancelNewUser.Text = "&Cancel";
 			btnCancelNewUser.UseVisualStyleBackColor = true;
+			btnCancelNewUser.Click += this.btnCancelNewUser_Click;
 			// 
 			// btnCreateUser
 			// 
-			btnCreateUser.Location = new System.Drawing.Point(10, 516);
+			btnCreateUser.Location = new System.Drawing.Point(6, 425);
 			btnCreateUser.Name = "btnCreateUser";
 			btnCreateUser.Size = new System.Drawing.Size(91, 23);
 			btnCreateUser.TabIndex = 20;
-			btnCreateUser.Text = "Create &MNUser";
+			btnCreateUser.Text = "Create &User";
 			btnCreateUser.UseVisualStyleBackColor = true;
-			btnCreateUser.Click += this.btnCreateUser_Click_1;
+			btnCreateUser.Click += this.btnCreateUser_Click;
 			// 
 			// treeUser
 			// 
 			treeUser.ContextMenuStrip = mnuContextTree;
-			treeUser.Location = new System.Drawing.Point(5, 22);
+			treeUser.Location = new System.Drawing.Point(3, 22);
 			treeUser.Name = "treeUser";
-			treeUser.Size = new System.Drawing.Size(209, 486);
+			treeUser.Size = new System.Drawing.Size(209, 389);
 			treeUser.TabIndex = 0;
 			treeUser.Text = "tree";
 			treeUser.BeforeSelect += this.treeUser_BeforeSelect;
@@ -495,33 +461,40 @@ namespace MyNotebooks.subforms
 			// 
 			// mnuContextTree
 			// 
-			mnuContextTree.Items.AddRange(new ToolStripItem[] { mnuAssignUser, mnuAdd, mnuEdit, mnuDelete });
+			mnuContextTree.Items.AddRange(new ToolStripItem[] { mnuAssignUser, mnuAdd, mnuEdit, mnuDelete, mnuCreateNew });
 			mnuContextTree.Name = "mnuContextTree";
-			mnuContextTree.Size = new System.Drawing.Size(156, 92);
+			mnuContextTree.Size = new System.Drawing.Size(181, 136);
 			// 
 			// mnuAssignUser
 			// 
 			mnuAssignUser.Name = "mnuAssignUser";
-			mnuAssignUser.Size = new System.Drawing.Size(155, 22);
+			mnuAssignUser.Size = new System.Drawing.Size(180, 22);
 			mnuAssignUser.Text = "A&ssign MNUser";
 			// 
 			// mnuAdd
 			// 
 			mnuAdd.Name = "mnuAdd";
-			mnuAdd.Size = new System.Drawing.Size(155, 22);
+			mnuAdd.Size = new System.Drawing.Size(180, 22);
 			mnuAdd.Text = "&Add";
 			// 
 			// mnuEdit
 			// 
 			mnuEdit.Name = "mnuEdit";
-			mnuEdit.Size = new System.Drawing.Size(155, 22);
+			mnuEdit.Size = new System.Drawing.Size(180, 22);
 			mnuEdit.Text = "&Edit";
 			// 
 			// mnuDelete
 			// 
 			mnuDelete.Name = "mnuDelete";
-			mnuDelete.Size = new System.Drawing.Size(155, 22);
+			mnuDelete.Size = new System.Drawing.Size(180, 22);
 			mnuDelete.Text = "&Delete";
+			// 
+			// mnuCreateNew
+			// 
+			mnuCreateNew.Name = "mnuCreateNew";
+			mnuCreateNew.Size = new System.Drawing.Size(180, 22);
+			mnuCreateNew.Text = "Create New";
+			mnuCreateNew.Click += this.mnuCreateNew_Click;
 			// 
 			// label4
 			// 
@@ -741,16 +714,16 @@ namespace MyNotebooks.subforms
 			// 
 			// frmManagementConsole
 			// 
-			AcceptButton = btnOk_Login;
+			AcceptButton = btnLogin;
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new System.Drawing.Size(1086, 829);
+			ClientSize = new System.Drawing.Size(518, 469);
 			Controls.Add(comboBox6);
 			Controls.Add(groupBox1);
 			Controls.Add(comboBox5);
 			Controls.Add(groupBox6);
 			Controls.Add(comboBox4);
-			Controls.Add(groupBox5);
+			Controls.Add(grpTree);
 			Controls.Add(comboBox3);
 			Controls.Add(label7);
 			Controls.Add(label11);
@@ -780,7 +753,7 @@ namespace MyNotebooks.subforms
 			groupBox3.ResumeLayout(false);
 			groupBox3.PerformLayout();
 			grpGroups.ResumeLayout(false);
-			groupBox5.ResumeLayout(false);
+			grpTree.ResumeLayout(false);
 			mnuContextTree.ResumeLayout(false);
 			groupBox6.ResumeLayout(false);
 			groupBox6.PerformLayout();
@@ -800,7 +773,6 @@ namespace MyNotebooks.subforms
 		private GroupBox groupBox3;
 		private GroupBox grpGroups;
 		private Panel pnlCreateUser;
-		private Label label3;
 		private ComboBox ddlAccessLevels;
 		private Label label19;
 		private CheckedListBox clbPermissions;
@@ -809,7 +781,7 @@ namespace MyNotebooks.subforms
 		private TextBox txtUserName;
 		private Button btnCancel;
 		private Label label1;
-		private Button btnOk_Login;
+		private Button btnLogin;
 		private Label label2;
 		private TextBox txtPwd;
 		private Label label7;
@@ -821,7 +793,7 @@ namespace MyNotebooks.subforms
 		private Button button2;
 		private Button button1;
 		private CheckedListBox clbGroups;
-		private GroupBox groupBox5;
+		private GroupBox grpTree;
 		private Label label4;
 		private ComboBox comboBox6;
 		private ComboBox comboBox5;
@@ -856,7 +828,6 @@ namespace MyNotebooks.subforms
 		private ToolStripMenuItem mnuAdd;
 		private ToolStripMenuItem mnuEdit;
 		private ToolStripMenuItem mnuDelete;
-		private Button btnCancelContinue;
-		private Button btnContinue;
+		private ToolStripMenuItem mnuCreateNew;
 	}
 }

@@ -21,34 +21,23 @@ namespace MyNotebooks.subforms
 	public partial class frmManagementConsole : Form
 	{
 		private Size SmallSize = new Size();
-		private Size MediumSize = new Size();
+		//private Size MediumSize = new Size();
 		private Size FullSize = new Size();
 		private MNUser CurrentUser = null;
-		private Color enabledColor = Color.Black;
-		private Color disabledColor = Color.LightGray;
-		private int CurrentTreePosition = 0;
+		private Color EnabledColor = Color.Black;
+		private Color DisabledColor = Color.LightGray;
 
 		public frmManagementConsole(Form parent)
 		{
 			InitializeComponent();
 			Utilities.SetStartPosition(this, parent);
-			SmallSize = new Size(pnlLogin.Width + 25, pnlLogin.Height + pnlLogin.Top + grpUsers.Top + 35);
-			FullSize = new Size(785, 597);
-			MediumSize = new Size(SmallSize.Width, FullSize.Height);
-
+			SmallSize = new Size(pnlLogin.Width + 40, pnlLogin.Height + pnlLogin.Top + grpUsers.Top + 35);
+			FullSize = new Size(grpTree.Left + grpTree.Width + 30, pnlCreateUser.Top + pnlCreateUser.Height + 50);
+			//MediumSize = new Size(SmallSize.Width, FullSize.Height);
+			ddlAccessLevels.Items.AddRange(DbAccess.GetAccessLevels().ToArray());
 			txtUserName.Text = Program.User.Name;
-
 			this.Size = SmallSize;
-
-			//ShowHidePanels(pnlLogin);
-
-			// populate the permissions list
-			foreach (PropertyInfo sPropertyName in typeof(UserPermissions).GetProperties())
-			{
-				if (!sPropertyName.Name.ToLower().Equals("companyid") & !sPropertyName.Name.ToLower().Equals("createdon") & !sPropertyName.Name.ToLower().Equals("editedon"))
-				{ clbPermissions.Items.Add(sPropertyName.Name); }
-			}
-
+			PopulatePermissions();
 			txtPwd.Focus();
 		}
 
@@ -58,9 +47,26 @@ namespace MyNotebooks.subforms
 
 		private void btnCancel_Click(object sender, EventArgs e) { this.Close(); }
 
-		private void btnCancelContinue_Click(object sender, EventArgs e)
+		private void btnCancelContinue_Click(object sender, EventArgs e) { this.Size = SmallSize; }
+
+		private void btnCreateUser_Click(object sender, EventArgs e)
 		{
-			this.Size = SmallSize;
+			var msg = string.Empty;
+
+			try
+			{
+				CurrentUser.Name = txtUserName.Text;
+				CurrentUser.Password = EncryptDecrypt.Encrypt(txtPwd.Text, txtPwd.Text);
+				CurrentUser.CreatedBy = Program.User.UserId;
+				CurrentUser.UserId = DbAccess.CreateMNUser(CurrentUser);
+				DbAccess.CreateMNUserPermissions(CurrentUser);
+				msg = "The User '" + CurrentUser.Name + "' was created.";
+			}
+			catch (Exception ex)
+			{
+				msg = "An error occurred: " + ex.Message + ". The User was not created.";
+			}
+			using (frmMessage frm = new(frmMessage.OperationType.Message, msg)) { frm.ShowDialog(this); }
 		}
 
 		private void btnCancelNewUser_Click(object sender, EventArgs e)
@@ -70,62 +76,85 @@ namespace MyNotebooks.subforms
 			this.Size = SmallSize;
 		}
 
-		private void btnContinue_Click(object sender, EventArgs e)
+		private void btnLogin_Click(object sender, EventArgs e)
 		{
-			if (ddlAccessLevels.SelectedIndex == -1)
-			{
-				using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "You must select an Access Level.", "Input Necessary", this)) { frm.ShowDialog(); }
-				return;
-			}
-
-			CurrentUser = new MNUser(Convert.ToInt16(ddlAccessLevels.SelectedIndex), txtUserName.Text, "", 0, DateTime.Now);
-			CurrentUser.Permissions = GetPermissions();
-			PopulateBaseTree();
-
-			this.Size = FullSize;
-		}
-
-		private void btnCreateUser_Click(object sender, EventArgs e)
-		{
-			this.Size = FullSize;
-			//MNUser user = new();
-
-			//// create the user
-			//user = new(Convert.ToInt32(ddlAccessLevels.SelectedValue.ToString()), txtUserName.Text, txtPwd.Text, 0, 0, 0, 0, 0, DateTime.Now, null);
-			//user.UserPermissions = GetPermissions();
-			//user.Save();
-			//Program.MNUser = user;
-		}
-
-		private void btnOk_Click(object sender, EventArgs e)
-		{
-			// look up the user
 			DataSet ds = DbAccess.GetUser(txtUserName.Text, txtPwd.Text);
 
-			if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)    // the user was found
+			CurrentUser = ds.Tables.Count > 0 & ds.Tables[0].Rows.Count > 0 ? new(ds.Tables[0]) { Permissions = new(ds.Tables[1]) } : null;
+
+			if (CurrentUser != null)
 			{
-				TreeNode tn = null;
-				treeUser.Nodes.Clear();
-				CurrentUser = new(ds.Tables[0]) { Permissions = new(ds.Tables[1]), Assignments = new(ds.Tables[2]) };
-				PopulateBaseTree();
-				this.Size = FullSize;
-				pnlCreateUser.Visible = false;
+				foreach (DataRow dr in ds.Tables[2].Rows) { CurrentUser.Assignments.Add(new UserAssignment(dr)); }
+			}
+
+			if (CurrentUser != null)
+			{
+				ddlAccessLevels.SelectedIndex = CurrentUser.AccessLevel;
+				ddlAccessLevels.Enabled = false;
+				// Get their groups, departments, accounts, and/or companies
+				// If the user hasn't set up org. levels up to their top level, force creation now.
+				var sMsg = string.Empty;
+				var sMsg2 = string.Empty;
+
+				switch (Program.User.AccessLevel + 1)
+				{
+					case 7:
+					case 6:
+						if (!Program.User.Assignments.Where(e => e.CompanyId > 0).Any())
+						{ sMsg += "Company, one Account, one Department, and one Group "; sMsg2 = "Companies"; }
+						break;
+					case 5:
+						if (!Program.User.Assignments.Where(e => e.AccountId > 0).Any())
+						{ sMsg += "Account, one Department, and one Group "; sMsg2 = "Accounts"; }
+						break;
+					case 4:
+						if (!Program.User.Assignments.Where(e => e.DepartmentId > 0).Any())
+						{ sMsg += "Department and one Group "; sMsg2 = "Departments"; }
+						break;
+					case 3:
+						if (!Program.User.Assignments.Where(e => e.GroupId > 0).Any())
+						{ sMsg += "Group "; sMsg2 = "Groups"; }
+						break;
+				}
+
+				if (sMsg.Length > 0)
+				{
+					sMsg = "You must create one " + sMsg + "before you can create new users. Right-click '" + sMsg2 + "' and click 'Create New'" +
+						Environment.NewLine + "You will automatically be added to the level you create.";
+					using (frmMessage frm = new(frmMessage.OperationType.Message, sMsg, "Organizationl Level Missing", this)) { frm.ShowDialog(); }
+				}
 			}
 			else
 			{
-				pnlCreateUser.Visible = true;
-				ddlAccessLevels.Items.AddRange(DbAccess.GetAccessLevels().ToArray());
-				CurrentUser = null;
-				PopulateBaseTree();
-				this.Size = MediumSize;
+				ddlAccessLevels.SelectedIndex = 0;
+				ddlAccessLevels.Enabled = true;
 			}
+
+			this.Size = CurrentUser != null ? FullSize : SmallSize;
+			PopulateBaseTree();
+			PopulatePermissions();
+			pnlCreateUser.Visible = true;
+		}
+
+		private UserPermissions GetPermissions()
+		{
+			List<string> permissions = new List<string>();
+
+			foreach (var v in clbPermissions.CheckedItems)
+			{
+				permissions.Add(v.ToString());
+			}
+
+			return new UserPermissions(permissions);
 		}
 
 		private void PopulateBaseTree()
 		{
 			treeUser.Nodes.Clear();
 			TreeNode tnUser = new("User Details");
-			TreeNode tnPerms = new("Permissions");
+			//TreeNode tnPerms = new("Permissions");
+			tnUser.Tag = "UserDetails";
+			//tnPerms.Tag = "Permissions";
 
 			if (CurrentUser != null)
 			{
@@ -133,17 +162,17 @@ namespace MyNotebooks.subforms
 				tnUser.Nodes.Add("Access Level: " + CurrentUser.AccessLevel.ToString() + " (" + DbAccess.GetAccessLevelName(CurrentUser.AccessLevel) + ")");
 				tnUser.Nodes.Add("Created By: " + Program.User.Name);
 
-				List<string> allPerms = CurrentUser.Permissions.GetAllPermissions();
-				List<string> grantedPerms = CurrentUser.Permissions.GetGrantedPermissions();
+				//List<string> allPerms = CurrentUser.Permissions.GetAllPermissions();
+				//List<string> grantedPerms = CurrentUser.Permissions.GetGrantedPermissions();
 
-				foreach (string s in allPerms)
-				{
-					TreeNode tnPerm = new(s) { ForeColor = grantedPerms.Contains(s) ? Color.Black : SystemColors.GrayText, BackColor = grantedPerms.Contains(s) ? Color.White : Color.White };
-					tnPerms.Nodes.Add(tnPerm);
-				}
+				//foreach (string s in allPerms)
+				//{
+				//	TreeNode tnPerm = new(s) { ForeColor = grantedPerms.Contains(s) ? Color.Black : SystemColors.GrayText, BackColor = grantedPerms.Contains(s) ? Color.White : Color.White };
+				//	tnPerms.Nodes.Add(tnPerm);
+				//}
 			}
 			treeUser.Nodes.Add(tnUser);
-			treeUser.Nodes.Add(tnPerms);
+			//treeUser.Nodes.Add(tnPerms);
 			treeUser.Nodes.Add("Companies");
 			treeUser.Nodes.Add("Accounts");
 			treeUser.Nodes.Add("Departments");
@@ -176,65 +205,96 @@ namespace MyNotebooks.subforms
 			treeUser.ExpandAll();
 		}
 
+		private void PopulatePermissions()
+		{
+			clbPermissions.Items.Clear();
+
+			if (CurrentUser != null)
+			{
+				List<string> allPerms = CurrentUser.Permissions.GetAllPermissions();
+				List<string> grantedPerms = CurrentUser.Permissions.GetGrantedPermissions();
+				foreach (string perm in allPerms) { clbPermissions.Items.Add(perm, grantedPerms.Contains(perm)); }
+			}
+			else
+			{
+				foreach (PropertyInfo sPropertyName in typeof(UserPermissions).GetProperties())
+				{
+					if (!sPropertyName.Name.ToLower().Equals("companyid") & !sPropertyName.Name.ToLower().Equals("createdon") & !sPropertyName.Name.ToLower().Equals("editedon"))
+					{ clbPermissions.Items.Add(sPropertyName.Name); }
+				}
+			}
+		}
+
 		private void SetNodeEnabled_Disabled(string nodeName, bool setEnabled = true)
 		{
 			foreach (TreeNode tn in treeUser.Nodes)
 			{
 				if (tn.Text == nodeName)
 				{
-					tn.ForeColor = setEnabled ? enabledColor : disabledColor;
+					tn.ForeColor = setEnabled ? EnabledColor : DisabledColor;
 					tn.BackColor = setEnabled ? Color.White : Color.White;
 				}
 			}
 		}
 
-		private UserPermissions GetPermissions()
-		{
-			List<string> permissions = new List<string>();
-
-			foreach (var v in clbPermissions.CheckedItems)
-			{
-				permissions.Add(v.ToString());
-			}
-
-			return new UserPermissions(permissions);
-		}
-
 		private void treeUser_BeforeSelect(object sender, TreeViewCancelEventArgs e)
-		{ e.Cancel = e.Node.ForeColor == SystemColors.GrayText; }
+		{ e.Cancel = e.Node.ForeColor == DisabledColor; }
 
 		private void frmManagementConsole_Activated(object sender, EventArgs e)
 		{
 			txtPwd.Focus();
 		}
 
-		private void btnCreateUser_Click_1(object sender, EventArgs e)
-		{
-			var msg = string.Empty;
-
-			try
-			{
-				CurrentUser.Name = txtUserName.Text;
-				CurrentUser.Password = EncryptDecrypt.Encrypt(txtPwd.Text, txtPwd.Text);
-				CurrentUser.CreatedBy = Program.User.UserId;
-				CurrentUser.UserId = DbAccess.CreateMNUser(CurrentUser);
-				DbAccess.CreateMNUserPermissions(CurrentUser);
-				msg = "The User '" + CurrentUser.Name + "' was created.";
-			}
-			catch (Exception ex)
-			{
-				msg = "An error occurred: " + ex.Message + ". The User was not created.";
-			}
-			using (frmMessage frm = new(frmMessage.OperationType.Message, msg)) { frm.ShowDialog(this); }
-		}
-
 		private void treeUser_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
 		{
-			if(e.Button == MouseButtons.Right) 
-			{ 
-				treeUser.SelectedNode = e.Node; 
-			
+			if (e.Button == MouseButtons.Right)
+			{
+				treeUser.SelectedNode = e.Node;
+				SetContextMenus(e.Node);
 			}
+		}
+
+		private void SetContextMenus(TreeNode tn)
+		{
+			mnuAssignUser.Visible = false;
+			mnuAdd.Visible = false;
+			mnuEdit.Visible = false;
+			mnuDelete.Visible = false;
+			mnuCreateNew.Visible = false;
+
+			if (tn.Parent != null)
+			{
+				if (!tn.Parent.Tag.ToString().ToLower().Equals("permissions") & !tn.Parent.Tag.ToString().ToLower().Equals("userdetails"))
+				{
+					mnuAssignUser.Visible = true;
+					mnuEdit.Visible = true;
+					mnuDelete.Visible = true;
+				}
+			}
+			else
+			{
+				switch (tn.Text.ToLower())
+				{
+					case "user details":
+						mnuEdit.Visible = true;
+						mnuDelete.Visible = true;
+						break;
+					case "permissions":
+						mnuEdit.Visible = true;
+						break;
+					case "accounts":
+					case "departments":
+					case "groups":
+					case "companies":
+						mnuCreateNew.Visible = true;
+						break;
+				}
+			}
+		}
+
+		private void mnuCreateNew_Click(object sender, EventArgs e)
+		{
+			var v = treeUser.SelectedNode;
 
 		}
 	}

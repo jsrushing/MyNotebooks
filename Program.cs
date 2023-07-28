@@ -26,7 +26,7 @@ namespace myNotebooks
 		public static List<string>		AzureNotebookNames		= new List<string>();
 		public static List<string>		AzureRenameCommands		= new List<string>();
 		public static List<string>		AzurePinFileNames		= new List<string>();
-		public static MNUser				User					= null;
+		public static MNUser			User					= null;
 		public static List<Notebook>	AllNotebooks			= new List<Notebook>();
 		public static List<string>		AllNotebookNames		= new List<string>();
 		public static Dictionary<string, string> DictCheckedNotebooks = new Dictionary<string, string>();

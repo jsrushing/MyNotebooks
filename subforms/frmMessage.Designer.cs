@@ -58,7 +58,7 @@ namespace myNotebooks.subforms
 			// 
 			lblMessage.Location = new System.Drawing.Point(5, 5);
 			lblMessage.Name = "lblMessage";
-			lblMessage.Size = new System.Drawing.Size(251, 56);
+			lblMessage.Size = new System.Drawing.Size(379, 56);
 			lblMessage.TabIndex = 0;
 			lblMessage.Text = "Delete entry 'this is the entry'?";
 			// 
@@ -69,13 +69,13 @@ namespace myNotebooks.subforms
 			pnlYesNoCancel.Controls.Add(btnYes1);
 			pnlYesNoCancel.Location = new System.Drawing.Point(3, 64);
 			pnlYesNoCancel.Name = "pnlYesNoCancel";
-			pnlYesNoCancel.Size = new System.Drawing.Size(253, 32);
+			pnlYesNoCancel.Size = new System.Drawing.Size(381, 32);
 			pnlYesNoCancel.TabIndex = 1;
 			pnlYesNoCancel.Visible = false;
 			// 
 			// btnNo1
 			// 
-			btnNo1.Location = new System.Drawing.Point(91, 4);
+			btnNo1.Location = new System.Drawing.Point(152, 4);
 			btnNo1.Name = "btnNo1";
 			btnNo1.Size = new System.Drawing.Size(75, 23);
 			btnNo1.TabIndex = 2;
@@ -85,7 +85,7 @@ namespace myNotebooks.subforms
 			// 
 			// btnCancel1
 			// 
-			btnCancel1.Location = new System.Drawing.Point(172, 4);
+			btnCancel1.Location = new System.Drawing.Point(233, 4);
 			btnCancel1.Name = "btnCancel1";
 			btnCancel1.Size = new System.Drawing.Size(75, 23);
 			btnCancel1.TabIndex = 1;
@@ -95,7 +95,7 @@ namespace myNotebooks.subforms
 			// 
 			// btnYes1
 			// 
-			btnYes1.Location = new System.Drawing.Point(10, 4);
+			btnYes1.Location = new System.Drawing.Point(71, 4);
 			btnYes1.Name = "btnYes1";
 			btnYes1.Size = new System.Drawing.Size(75, 23);
 			btnYes1.TabIndex = 0;
@@ -109,13 +109,13 @@ namespace myNotebooks.subforms
 			pnlYesNo.Controls.Add(btnYes2);
 			pnlYesNo.Location = new System.Drawing.Point(3, 102);
 			pnlYesNo.Name = "pnlYesNo";
-			pnlYesNo.Size = new System.Drawing.Size(253, 32);
+			pnlYesNo.Size = new System.Drawing.Size(381, 32);
 			pnlYesNo.TabIndex = 2;
 			pnlYesNo.Visible = false;
 			// 
 			// btnNo2
 			// 
-			btnNo2.Location = new System.Drawing.Point(142, 4);
+			btnNo2.Location = new System.Drawing.Point(203, 4);
 			btnNo2.Name = "btnNo2";
 			btnNo2.Size = new System.Drawing.Size(75, 23);
 			btnNo2.TabIndex = 2;
@@ -125,7 +125,7 @@ namespace myNotebooks.subforms
 			// 
 			// btnYes2
 			// 
-			btnYes2.Location = new System.Drawing.Point(37, 4);
+			btnYes2.Location = new System.Drawing.Point(98, 4);
 			btnYes2.Name = "btnYes2";
 			btnYes2.Size = new System.Drawing.Size(75, 23);
 			btnYes2.TabIndex = 0;
@@ -139,13 +139,13 @@ namespace myNotebooks.subforms
 			pnlOkCancel.Controls.Add(btnOk1);
 			pnlOkCancel.Location = new System.Drawing.Point(3, 140);
 			pnlOkCancel.Name = "pnlOkCancel";
-			pnlOkCancel.Size = new System.Drawing.Size(253, 32);
+			pnlOkCancel.Size = new System.Drawing.Size(381, 32);
 			pnlOkCancel.TabIndex = 3;
 			pnlOkCancel.Visible = false;
 			// 
 			// btnCancel2
 			// 
-			btnCancel2.Location = new System.Drawing.Point(142, 4);
+			btnCancel2.Location = new System.Drawing.Point(204, 4);
 			btnCancel2.Name = "btnCancel2";
 			btnCancel2.Size = new System.Drawing.Size(75, 23);
 			btnCancel2.TabIndex = 2;
@@ -155,7 +155,7 @@ namespace myNotebooks.subforms
 			// 
 			// btnOk1
 			// 
-			btnOk1.Location = new System.Drawing.Point(37, 4);
+			btnOk1.Location = new System.Drawing.Point(99, 4);
 			btnOk1.Name = "btnOk1";
 			btnOk1.Size = new System.Drawing.Size(75, 23);
 			btnOk1.TabIndex = 0;
@@ -168,13 +168,13 @@ namespace myNotebooks.subforms
 			pnlOk.Controls.Add(btnOk2);
 			pnlOk.Location = new System.Drawing.Point(3, 178);
 			pnlOk.Name = "pnlOk";
-			pnlOk.Size = new System.Drawing.Size(253, 32);
+			pnlOk.Size = new System.Drawing.Size(381, 32);
 			pnlOk.TabIndex = 4;
 			pnlOk.Visible = false;
 			// 
 			// btnOk2
 			// 
-			btnOk2.Location = new System.Drawing.Point(91, 4);
+			btnOk2.Location = new System.Drawing.Point(156, 4);
 			btnOk2.Name = "btnOk2";
 			btnOk2.Size = new System.Drawing.Size(75, 23);
 			btnOk2.TabIndex = 0;
@@ -186,7 +186,7 @@ namespace myNotebooks.subforms
 			// 
 			txtInput.Location = new System.Drawing.Point(13, 28);
 			txtInput.Name = "txtInput";
-			txtInput.Size = new System.Drawing.Size(237, 23);
+			txtInput.Size = new System.Drawing.Size(365, 23);
 			txtInput.TabIndex = 0;
 			txtInput.Visible = false;
 			// 
@@ -210,7 +210,7 @@ namespace myNotebooks.subforms
 			pnlDropDown.Controls.Add(label1);
 			pnlDropDown.Location = new System.Drawing.Point(8, 244);
 			pnlDropDown.Name = "pnlDropDown";
-			pnlDropDown.Size = new System.Drawing.Size(253, 32);
+			pnlDropDown.Size = new System.Drawing.Size(381, 32);
 			pnlDropDown.TabIndex = 6;
 			pnlDropDown.Visible = false;
 			// 
@@ -236,7 +236,7 @@ namespace myNotebooks.subforms
 			// 
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			ClientSize = new System.Drawing.Size(269, 287);
+			ClientSize = new System.Drawing.Size(400, 287);
 			Controls.Add(pnlDropDown);
 			Controls.Add(lblSelectFromLabelsList);
 			Controls.Add(txtInput);

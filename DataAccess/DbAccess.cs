@@ -185,7 +185,7 @@ namespace MyNotebooks.DataAccess
 		//			cmd.Parameters.AddWithValue("@AccessLevel", usr.AccessLevel);
 		//			cmd.Parameters.AddWithValue("@Name", usr.Name);
 		//			//cmd.Parameters.AddWithValue("@UserId", usr.UserId);
-		//			//cmd.Parameters.AddWithValue("@AccountId", usr.AccountId);
+		//			//cmd.Parameters.AddWithValue("@DepartmentId", usr.DepartmentId);
 		//			//cmd.Parameters.AddWithValue("@DepartmentId", usr.DepartmentId);
 		//			//cmd.Parameters.AddWithValue("@GroupId", usr.GroupId);
 		//			//cmd.Parameters.AddWithValue("@IsEnterprise", usr.IsEnterprise);

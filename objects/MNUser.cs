@@ -23,8 +23,8 @@ namespace MyNotebooks.objects
 		public int		CreatedBy { get; set; }
 		public DateTime CreatedOn { get; set; }
 		public DateTime? EditedOn { get; set; }
-		public UserAssignments Assignments { get; set; }
-		public UserPermissions Permissions { get; set; }
+		public UserPermissions		Permissions { get; set; } = new();
+		public List<UserAssignment> Assignments { get; set; } = new();
 
 		public MNUser() { }
 
