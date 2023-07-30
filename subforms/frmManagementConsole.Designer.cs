@@ -458,41 +458,42 @@ namespace MyNotebooks.subforms
 			treeUser.Text = "tree";
 			treeUser.BeforeSelect += this.treeUser_BeforeSelect;
 			treeUser.NodeMouseClick += this.treeUser_NodeMouseClick;
+			treeUser.DoubleClick += this.treeUser_DoubleClick;
 			// 
 			// mnuContextTree
 			// 
 			mnuContextTree.Items.AddRange(new ToolStripItem[] { mnuAssignUser, mnuAdd, mnuEdit, mnuDelete, mnuCreateNew });
 			mnuContextTree.Name = "mnuContextTree";
-			mnuContextTree.Size = new System.Drawing.Size(181, 136);
+			mnuContextTree.Size = new System.Drawing.Size(156, 114);
 			// 
 			// mnuAssignUser
 			// 
 			mnuAssignUser.Name = "mnuAssignUser";
-			mnuAssignUser.Size = new System.Drawing.Size(180, 22);
+			mnuAssignUser.Size = new System.Drawing.Size(155, 22);
 			mnuAssignUser.Text = "A&ssign MNUser";
 			// 
 			// mnuAdd
 			// 
 			mnuAdd.Name = "mnuAdd";
-			mnuAdd.Size = new System.Drawing.Size(180, 22);
+			mnuAdd.Size = new System.Drawing.Size(155, 22);
 			mnuAdd.Text = "&Add";
 			// 
 			// mnuEdit
 			// 
 			mnuEdit.Name = "mnuEdit";
-			mnuEdit.Size = new System.Drawing.Size(180, 22);
+			mnuEdit.Size = new System.Drawing.Size(155, 22);
 			mnuEdit.Text = "&Edit";
 			// 
 			// mnuDelete
 			// 
 			mnuDelete.Name = "mnuDelete";
-			mnuDelete.Size = new System.Drawing.Size(180, 22);
+			mnuDelete.Size = new System.Drawing.Size(155, 22);
 			mnuDelete.Text = "&Delete";
 			// 
 			// mnuCreateNew
 			// 
 			mnuCreateNew.Name = "mnuCreateNew";
-			mnuCreateNew.Size = new System.Drawing.Size(180, 22);
+			mnuCreateNew.Size = new System.Drawing.Size(155, 22);
 			mnuCreateNew.Text = "Create New";
 			mnuCreateNew.Click += this.mnuCreateNew_Click;
 			// 

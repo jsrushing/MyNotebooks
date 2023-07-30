@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MyNotebooks.objects
 {
-	internal class Department
+	public class Department
 	{
 		public string Id { get; set; }
 		public string AccountId { get; set; }
@@ -19,13 +19,13 @@ namespace MyNotebooks.objects
 
 		public Department() { }
 
-		public Department(DataTable table) { PopulateFromDataTable(table); }
+		public Department(DataRow dr) { PopulateFromDataRow(dr); }
 
-		private void PopulateFromDataTable(DataTable dt)
+		private void PopulateFromDataRow(DataRow dr)
 		{
-			foreach (PropertyInfo sPropertyName in typeof(Department).GetProperties())
+			foreach (PropertyInfo sPropertyName in typeof(Group).GetProperties())
 			{
-				this.GetType().GetProperty(sPropertyName.Name).SetValue(this, dt.Columns[sPropertyName.Name]);
+				this.GetType().GetProperty(sPropertyName.Name).SetValue(this, dr[sPropertyName.Name]);
 			}
 		}
 	}

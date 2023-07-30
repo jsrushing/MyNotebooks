@@ -14,6 +14,7 @@ using MyNotebooks.objects;
 using System.Reflection;
 using Microsoft.VisualBasic.ApplicationServices;
 using myNotebooks;
+using System.Windows.Forms;
 
 namespace MyNotebooks.DataAccess
 {
@@ -58,7 +59,7 @@ namespace MyNotebooks.DataAccess
 				using (SqlCommand cmd = new SqlCommand("sp_CreateUserAssignments", conn))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@userId", userId);
+					cmd.Parameters.AddWithValue("@orgLevelId", userId);
 					cmd.Parameters.AddWithValue("@companyId", companyId);
 					cmd.Parameters.AddWithValue("@accountId", accountId);
 					cmd.Parameters.AddWithValue("@departmentId", departmentId);
@@ -84,7 +85,7 @@ namespace MyNotebooks.DataAccess
 					using (SqlCommand cmd = new SqlCommand("sp_CreateUserPermissions", conn))
 					{
 						cmd.CommandType = CommandType.StoredProcedure;
-						cmd.Parameters.AddWithValue("@userId", user.UserId);
+						cmd.Parameters.AddWithValue("@orgLevelId", user.UserId);
 
 						foreach(string sPerm in user.Permissions.GetGrantedPermissions()) 
 						{
@@ -150,6 +151,159 @@ namespace MyNotebooks.DataAccess
 			}
 		}
 
+		public static List<Group> GetGroups(int userId)
+		{
+			List<Group> lstRtrn = new List<Group>();
+			DataTable dt = new DataTable();
+
+			using (SqlConnection conn = new SqlConnection(connString))
+			{
+				conn.Open();
+				using (SqlCommand cmd = new("sp_GetGroups"))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					cmd.Parameters.AddWithValue("@orgLevelId", userId);
+					using (SqlDataReader reader = cmd.ExecuteReader())
+					{
+						foreach (DataRow row in reader)
+						{
+							lstRtrn.Add(new(row));
+						}
+					}
+				}
+			}
+			return lstRtrn;
+		}
+
+		public static List<Department> GetDepartments(int userId)
+		{
+			List<Department> lstRtrn = new List<Department>();
+			DataTable dt = new DataTable();
+
+			using (SqlConnection conn = new SqlConnection(connString))
+			{
+				conn.Open();
+				using (SqlCommand cmd = new("sp_GetDepartments"))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					cmd.Parameters.AddWithValue("@orgLevelId", userId);
+					using (SqlDataReader reader = cmd.ExecuteReader())
+					{
+						foreach (DataRow row in reader)
+						{
+							lstRtrn.Add(new(row));
+						}
+					}
+				}
+			}
+			return lstRtrn;
+		}
+
+		public static List<Account> GetAccounts(int userId)
+		{
+			List<Account> lstRtrn = new List<Account>();
+			DataTable dt = new DataTable();
+
+			using (SqlConnection conn = new SqlConnection(connString))
+			{
+				conn.Open();
+				using (SqlCommand cmd = new("sp_GetAccounts"))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					cmd.Parameters.AddWithValue("@orgLevelId", userId);
+					using (SqlDataReader reader = cmd.ExecuteReader())
+					{
+						foreach (DataRow row in reader)
+						{
+							lstRtrn.Add(new(row));
+						}
+					}
+				}
+			}
+			return lstRtrn;
+		}
+
+		public static List<Company> GetCompanies(int userId)
+		{
+			List<Company> lstRtrn = new List<Company>();
+			DataTable dt = new DataTable();
+
+			using (SqlConnection conn = new SqlConnection(connString))
+			{
+				conn.Open();
+				using (SqlCommand cmd = new("sp_GetCompanies"))
+				{
+					cmd.CommandType=CommandType.StoredProcedure;
+					cmd.Parameters.AddWithValue("@orgLevelId", userId);
+					using(SqlDataReader reader = cmd.ExecuteReader())
+					{
+						foreach (DataRow row in reader)
+						{
+							lstRtrn.Add(new(row));
+						}
+					}
+				}
+			}
+			return lstRtrn;
+		}
+
+		public static List<TreeNode> GetHighestNodeItemsForUser(int userId)
+		{
+			List<TreeNode> lst = new List<TreeNode>();
+			TreeNode node;
+			DataTable dt = new DataTable();
+
+			using (SqlConnection conn = new SqlConnection(connString))
+			{
+				conn.Open();
+				using (SqlCommand cmd = new("sp_GetOrgLevelItems", conn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					cmd.Parameters.AddWithValue("@orgLevelId", userId);
+
+					SqlDataAdapter adapter = new SqlDataAdapter() { SelectCommand = cmd };
+					adapter.Fill(dt);
+
+					foreach(DataRow row in dt.Rows)
+					{
+						node = new() { Tag = row["Id"].ToString(), Text = row["Name"].ToString().Trim(), ToolTipText = row["Description"].ToString() };
+						lst.Add(node);
+					}
+				}
+			}
+
+			return lst;
+		}
+
+		public static List<TreeNode> GetOrgLevelChildren(int orgLevelId, int parentId) 
+		{
+			List<TreeNode> lst = new List<TreeNode>();
+			TreeNode node;
+			DataTable dt = new DataTable();
+
+			using (SqlConnection conn = new SqlConnection(connString))
+			{
+				conn.Open();
+				using (SqlCommand cmd = new("sp_GetOrgLevelChildren", conn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					cmd.Parameters.AddWithValue("@orgLevelId", orgLevelId);
+					cmd.Parameters.AddWithValue("parentId", parentId);
+
+					SqlDataAdapter adapter = new SqlDataAdapter() { SelectCommand = cmd };
+					adapter.Fill(dt);
+
+					foreach (DataRow row in dt.Rows)
+					{
+						node = new() { Tag = row["Id"].ToString(), Text = row["Name"].ToString().Trim(), ToolTipText = row["Description"].ToString() };
+						lst.Add(node);
+					}
+				}
+			}
+
+			return lst;
+		}
+
 		public static DataSet GetUser(string userName, string password)
 		{
 			DataSet ds = new();
@@ -211,27 +365,27 @@ namespace MyNotebooks.DataAccess
 		//	return iRtrn;
 		//}
 
-		public static Company GetCompany(string companyId)
-		{
-			Company cRtrn = null;
-			DataTable dt = new();
+		//public static Company GetCompany(string companyId)
+		//{
+		//	Company cRtrn = null;
+		//	DataTable dt = new();
 
-			using (SqlConnection conn = new(connString))
-			{
-				conn.Open();
+		//	using (SqlConnection conn = new(connString))
+		//	{
+		//		conn.Open();
 
-				using (SqlCommand cmd = new("sp_GetCompany", conn))
-				{
-					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@companyId", Convert.ToInt32(companyId));
-					SqlDataAdapter adapter = new() { SelectCommand = cmd };
-					adapter.Fill(dt);
-					cRtrn = new Company(dt);
-				}
-			}
+		//		using (SqlCommand cmd = new("sp_GetCompany", conn))
+		//		{
+		//			cmd.CommandType = CommandType.StoredProcedure;
+		//			cmd.Parameters.AddWithValue("@companyId", Convert.ToInt32(companyId));
+		//			SqlDataAdapter adapter = new() { SelectCommand = cmd };
+		//			adapter.Fill(dt);
+		//			cRtrn = new Company(dt);
+		//		}
+		//	}
 			
-			return cRtrn;
-		}
+		//	return cRtrn;
+		//}
 
 		
 	}

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MyNotebooks.objects
 {
-	internal class Group
+	public class Group
 	{
 		public string Id { get; set; }
 		public string DepartmentId { get; set; }
@@ -19,16 +19,13 @@ namespace MyNotebooks.objects
 
 		public Group() { }
 
-		public Group(DataTable table) { PopulateFromDataTable(table); }
+		public Group(DataRow dr) { PopulateFromDataRow(dr); }
 
-		private void PopulateFromDataTable(DataTable dt)
+		private void PopulateFromDataRow(DataRow dr)
 		{
 			foreach (PropertyInfo sPropertyName in typeof(Group).GetProperties())
 			{
-				foreach(DataRow row in dt.Rows)
-				{
-					this.GetType().GetProperty(sPropertyName.Name).SetValue(this, row[sPropertyName.Name]);
-				}
+				this.GetType().GetProperty(sPropertyName.Name).SetValue(this, dr[sPropertyName.Name]);
 			}
 		}
 	}

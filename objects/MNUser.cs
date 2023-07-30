@@ -10,21 +10,28 @@ using Microsoft.VisualBasic.ApplicationServices;
 using myNotebooks.subforms;
 using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.Asn1.X509.Qualified;
+using MyNotebooks.objects;
+using MyNotebooks.DataAccess;
+using System.Windows.Forms;
 
 namespace MyNotebooks.objects
 {
-	internal class MNUser
+	public class MNUser
 
 	{
-		public int		AccessLevel { get; set; }
-		public string	Name { get; set; }
-		public string	Password { get; set; }
-		public int		UserId { get; set; }
-		public int		CreatedBy { get; set; }
-		public DateTime CreatedOn { get; set; }
-		public DateTime? EditedOn { get; set; }
-		public UserPermissions		Permissions { get; set; } = new();
+		public int				AccessLevel { get; set; }
+		public string			Name { get; set; }
+		public string			Password { get; set; }
+		public int				UserId { get; set; }
+		public int				CreatedBy { get; set; }
+		public DateTime			CreatedOn { get; set; }
+		public DateTime?		EditedOn { get; set; }
+		public List<Group>		Groups { get { return GetGroups(); } }
+		public List<Department>	Departments { get { return GetDepartments(); } }
+		public List<Account>	Accounts { get { return GetAccounts(); } }
+		public List<Company>	Companies { get { return GetCompanies(); } }
 		public List<UserAssignment> Assignments { get; set; } = new();
+		public UserPermissions		Permissions { get; set; } = new();
 
 		public MNUser() { }
 
@@ -83,6 +90,19 @@ namespace MyNotebooks.objects
 					}
 				}
 			}
+		}
+
+		private List<Group> GetGroups() { return DbAccess.GetGroups(this.UserId); }
+
+		private List<Department> GetDepartments() { return DbAccess.GetDepartments(this.UserId); }
+
+		private List<Account> GetAccounts() { return DbAccess.GetAccounts(this.UserId); }
+
+		private List<Company> GetCompanies() { return DbAccess.GetCompanies(this.UserId); }
+
+		public List<TreeNode> GetHighestNodeItems()
+		{
+			return DbAccess.GetHighestNodeItemsForUser(this.UserId);
 		}
 
 		public void Save()

@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -43,6 +44,11 @@ namespace MyNotebooks.subforms
 
 		private void frmManagementConsole_Load(object sender, EventArgs e)
 		{
+		}
+
+		private void frmManagementConsole_Activated(object sender, EventArgs e)
+		{
+			txtPwd.Focus();
 		}
 
 		private void btnCancel_Click(object sender, EventArgs e) { this.Close(); }
@@ -85,44 +91,49 @@ namespace MyNotebooks.subforms
 			if (CurrentUser != null)
 			{
 				foreach (DataRow dr in ds.Tables[2].Rows) { CurrentUser.Assignments.Add(new UserAssignment(dr)); }
+
+				TreeNode topNode = new TreeNode();
+				PopulateBaseTree();
+				PopulatePermissions();
+				var vOrgLevelName = string.Empty;
+
+				ddlAccessLevels.SelectedIndex = CurrentUser.AccessLevel;
+				ddlAccessLevels.Enabled = false;
+
+				switch (CurrentUser.AccessLevel)
+				{
+
+					case 3:
+						vOrgLevelName = "Groups";
+						break;
+					case 4:
+						vOrgLevelName = "Departments";
+						break;
+					case 5:
+						vOrgLevelName = "Accounts";
+						break;
+					case 6:
+					case 7:
+						vOrgLevelName = "Companies";
+						break;
+				}
+
+				treeUser.Nodes.Cast<TreeNode>().Where(e => e.Text == vOrgLevelName).First().Nodes.AddRange(CurrentUser.GetHighestNodeItems().ToArray());
+				treeUser.ExpandAll();
 			}
+			else
+			{
+				using (frmMessage frm = new(frmMessage.OperationType.Message, "User not found.", "Invalid Credentials", this)) { frm.ShowDialog(this); }
+			}
+
 
 			if (CurrentUser != null)
 			{
-				ddlAccessLevels.SelectedIndex = CurrentUser.AccessLevel;
-				ddlAccessLevels.Enabled = false;
-				// Get their groups, departments, accounts, and/or companies
-				// If the user hasn't set up org. levels up to their top level, force creation now.
-				var sMsg = string.Empty;
-				var sMsg2 = string.Empty;
 
-				switch (Program.User.AccessLevel + 1)
-				{
-					case 7:
-					case 6:
-						if (!Program.User.Assignments.Where(e => e.CompanyId > 0).Any())
-						{ sMsg += "Company, one Account, one Department, and one Group "; sMsg2 = "Companies"; }
-						break;
-					case 5:
-						if (!Program.User.Assignments.Where(e => e.AccountId > 0).Any())
-						{ sMsg += "Account, one Department, and one Group "; sMsg2 = "Accounts"; }
-						break;
-					case 4:
-						if (!Program.User.Assignments.Where(e => e.DepartmentId > 0).Any())
-						{ sMsg += "Department and one Group "; sMsg2 = "Departments"; }
-						break;
-					case 3:
-						if (!Program.User.Assignments.Where(e => e.GroupId > 0).Any())
-						{ sMsg += "Group "; sMsg2 = "Groups"; }
-						break;
-				}
 
-				if (sMsg.Length > 0)
-				{
-					sMsg = "You must create one " + sMsg + "before you can create new users. Right-click '" + sMsg2 + "' and click 'Create New'" +
-						Environment.NewLine + "You will automatically be added to the level you create.";
-					using (frmMessage frm = new(frmMessage.OperationType.Message, sMsg, "Organizationl Level Missing", this)) { frm.ShowDialog(); }
-				}
+
+				// populate org. level names in tree - ONLY THE HIGHEST LEVEL
+
 			}
 			else
 			{
@@ -131,8 +142,6 @@ namespace MyNotebooks.subforms
 			}
 
 			this.Size = CurrentUser != null ? FullSize : SmallSize;
-			PopulateBaseTree();
-			PopulatePermissions();
 			pnlCreateUser.Visible = true;
 		}
 
@@ -159,24 +168,15 @@ namespace MyNotebooks.subforms
 			if (CurrentUser != null)
 			{
 				tnUser.Nodes.Add("Name: " + CurrentUser.Name);
-				tnUser.Nodes.Add("Access Level: " + CurrentUser.AccessLevel.ToString() + " (" + DbAccess.GetAccessLevelName(CurrentUser.AccessLevel) + ")");
+				//tnUser.Nodes.Add("Access Level: " + CurrentUser.AccessLevel.ToString() + " (" + DbAccess.GetAccessLevelName(CurrentUser.AccessLevel - 1) + ")");
+				tnUser.Nodes.Add("Access Level: " + DbAccess.GetAccessLevelName(CurrentUser.AccessLevel - 1));
 				tnUser.Nodes.Add("Created By: " + Program.User.Name);
-
-				//List<string> allPerms = CurrentUser.Permissions.GetAllPermissions();
-				//List<string> grantedPerms = CurrentUser.Permissions.GetGrantedPermissions();
-
-				//foreach (string s in allPerms)
-				//{
-				//	TreeNode tnPerm = new(s) { ForeColor = grantedPerms.Contains(s) ? Color.Black : SystemColors.GrayText, BackColor = grantedPerms.Contains(s) ? Color.White : Color.White };
-				//	tnPerms.Nodes.Add(tnPerm);
-				//}
 			}
 			treeUser.Nodes.Add(tnUser);
-			//treeUser.Nodes.Add(tnPerms);
-			treeUser.Nodes.Add("Companies");
-			treeUser.Nodes.Add("Accounts");
-			treeUser.Nodes.Add("Departments");
-			treeUser.Nodes.Add("Groups");
+			treeUser.Nodes.Add(new TreeNode() { Text = "Companies", Tag = "Companies" });
+			treeUser.Nodes.Add(new TreeNode() { Text = "Accounts", Tag = "Accounts" });
+			treeUser.Nodes.Add(new TreeNode() { Text = "Departments", Tag = "Departments" });
+			treeUser.Nodes.Add(new TreeNode() { Text = "Groups", Tag = "Groups" });
 
 			if (CurrentUser != null)
 			{
@@ -240,11 +240,6 @@ namespace MyNotebooks.subforms
 		private void treeUser_BeforeSelect(object sender, TreeViewCancelEventArgs e)
 		{ e.Cancel = e.Node.ForeColor == DisabledColor; }
 
-		private void frmManagementConsole_Activated(object sender, EventArgs e)
-		{
-			txtPwd.Focus();
-		}
-
 		private void treeUser_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
 		{
 			if (e.Button == MouseButtons.Right)
@@ -279,9 +274,6 @@ namespace MyNotebooks.subforms
 						mnuEdit.Visible = true;
 						mnuDelete.Visible = true;
 						break;
-					case "permissions":
-						mnuEdit.Visible = true;
-						break;
 					case "accounts":
 					case "departments":
 					case "groups":
@@ -295,6 +287,51 @@ namespace MyNotebooks.subforms
 		private void mnuCreateNew_Click(object sender, EventArgs e)
 		{
 			var v = treeUser.SelectedNode;
+
+		}
+
+		private void treeUser_DoubleClick(object sender, EventArgs e)
+		{
+			//TreeNode topNode = null;
+			string nextRootNodeName = string.Empty;
+
+			int level = -1;
+
+			TreeNode tn = treeUser.SelectedNode;
+
+			var vId = tn.Tag;   // the id of a dbl-clicked tree item
+			TreeNode vParent = tn.Parent;
+			
+
+			switch(treeUser.SelectedNode.Parent.Tag.ToString().ToLower())
+			{
+				case "user details":
+					// reserved for later
+					break;
+				case "companies":
+					// populate accounts for company
+					nextRootNodeName = "Accounts";
+					level = CurrentUser.AccessLevel + 1;
+					// 
+					break;
+				case "accounts":
+					nextRootNodeName = "Departments";
+					level = CurrentUser.AccessLevel;
+					//var v = treeUser.SelectedNode;
+					//var tag = v.Tag;
+
+					break;
+				case "departments":
+					nextRootNodeName = "Groups";
+					level = CurrentUser.AccessLevel - 1;
+					break;
+				case "groups":
+					nextRootNodeName = "Notebooks";
+					level = CurrentUser.AccessLevel - 2;
+					break;
+			}
+
+			treeUser.Nodes.Cast<TreeNode>().Where(e => e.Text == nextRootNodeName).First().Nodes.AddRange(DbAccess.GetOrgLevelChildren(Convert.ToInt32(vId), level ).ToArray());
 
 		}
 	}

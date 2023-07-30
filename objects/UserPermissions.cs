@@ -10,7 +10,7 @@ using Newtonsoft.Json.Linq;
 
 namespace MyNotebooks.objects
 {
-	internal class UserPermissions
+	public class UserPermissions
 	{
 		public bool CreateCompany { get; set; }
 		public bool CreateAccount { get; set; }
