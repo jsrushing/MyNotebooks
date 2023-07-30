@@ -259,7 +259,7 @@ namespace MyNotebooks.DataAccess
 				using (SqlCommand cmd = new("sp_GetOrgLevelItems", conn))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@orgLevelId", userId);
+					cmd.Parameters.AddWithValue("@userId", userId);
 
 					SqlDataAdapter adapter = new SqlDataAdapter() { SelectCommand = cmd };
 					adapter.Fill(dt);
@@ -287,15 +287,15 @@ namespace MyNotebooks.DataAccess
 				using (SqlCommand cmd = new("sp_GetOrgLevelChildren", conn))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@orgLevelId", orgLevelId);
-					cmd.Parameters.AddWithValue("parentId", parentId);
+					cmd.Parameters.AddWithValue("@orgLevelId", parentId);
+					cmd.Parameters.AddWithValue("parentId", orgLevelId);
 
 					SqlDataAdapter adapter = new SqlDataAdapter() { SelectCommand = cmd };
 					adapter.Fill(dt);
 
 					foreach (DataRow row in dt.Rows)
 					{
-						node = new() { Tag = row["Id"].ToString(), Text = row["Name"].ToString().Trim(), ToolTipText = row["Description"].ToString() };
+						node = new() { Tag = row["Id"].ToString(), Text = row["Name"].ToString().Trim(), Name = row["Name"].ToString().Trim(), ToolTipText = row["Description"].ToString() };
 						lst.Add(node);
 					}
 				}

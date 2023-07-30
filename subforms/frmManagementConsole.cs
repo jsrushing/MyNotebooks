@@ -162,7 +162,7 @@ namespace MyNotebooks.subforms
 			treeUser.Nodes.Clear();
 			TreeNode tnUser = new("User Details");
 			//TreeNode tnPerms = new("Permissions");
-			tnUser.Tag = "UserDetails";
+			tnUser.Name = "UserDetails";
 			//tnPerms.Tag = "Permissions";
 
 			if (CurrentUser != null)
@@ -173,10 +173,10 @@ namespace MyNotebooks.subforms
 				tnUser.Nodes.Add("Created By: " + Program.User.Name);
 			}
 			treeUser.Nodes.Add(tnUser);
-			treeUser.Nodes.Add(new TreeNode() { Text = "Companies", Tag = "Companies" });
-			treeUser.Nodes.Add(new TreeNode() { Text = "Accounts", Tag = "Accounts" });
-			treeUser.Nodes.Add(new TreeNode() { Text = "Departments", Tag = "Departments" });
-			treeUser.Nodes.Add(new TreeNode() { Text = "Groups", Tag = "Groups" });
+			treeUser.Nodes.Add(new TreeNode() { Text = "Companies", Name = "Companies" });
+			treeUser.Nodes.Add(new TreeNode() { Text = "Accounts", Name = "Accounts" });
+			treeUser.Nodes.Add(new TreeNode() { Text = "Departments", Name = "Departments" });
+			treeUser.Nodes.Add(new TreeNode() { Text = "Groups", Name = "Groups" });
 
 			if (CurrentUser != null)
 			{
@@ -292,46 +292,63 @@ namespace MyNotebooks.subforms
 
 		private void treeUser_DoubleClick(object sender, EventArgs e)
 		{
-			//TreeNode topNode = null;
-			string nextRootNodeName = string.Empty;
+			try
+			{
+				//TreeNode topNode = null;
+				string nextRootNodeName = string.Empty;
 
-			int level = -1;
+				int level = -1;
 
-			TreeNode tn = treeUser.SelectedNode;
+				TreeNode tn = treeUser.SelectedNode;
 
-			var vId = tn.Tag;   // the id of a dbl-clicked tree item
-			TreeNode vParent = tn.Parent;
+				var vId = tn.Tag;   // the id of a dbl-clicked tree item
+				TreeNode vParent = tn.Parent;
 			
 
-			switch(treeUser.SelectedNode.Parent.Tag.ToString().ToLower())
-			{
-				case "user details":
-					// reserved for later
-					break;
-				case "companies":
-					// populate accounts for company
-					nextRootNodeName = "Accounts";
-					level = CurrentUser.AccessLevel + 1;
-					// 
-					break;
-				case "accounts":
-					nextRootNodeName = "Departments";
-					level = CurrentUser.AccessLevel;
-					//var v = treeUser.SelectedNode;
-					//var tag = v.Tag;
+				switch(treeUser.SelectedNode.Parent.Name.ToString().ToLower())
+				{
+					case "user details":
+						// reserved for later
+						break;
+					case "companies":
+						// populate accounts for company
+						nextRootNodeName = "Accounts";
+						level = CurrentUser.AccessLevel + 1;
+						// 
+						break;
+					case "accounts":
+						nextRootNodeName = "Departments";
+						level = CurrentUser.AccessLevel;
+						//var v = treeUser.SelectedNode;
+						//var tag = v.Tag;
 
-					break;
-				case "departments":
-					nextRootNodeName = "Groups";
-					level = CurrentUser.AccessLevel - 1;
-					break;
-				case "groups":
-					nextRootNodeName = "Notebooks";
-					level = CurrentUser.AccessLevel - 2;
-					break;
+						break;
+					case "departments":
+						nextRootNodeName = "Groups";
+						level = CurrentUser.AccessLevel - 1;
+						break;
+					case "groups":
+						nextRootNodeName = "Notebooks";
+						level = CurrentUser.AccessLevel - 2;
+						break;
+				}
+
+				TreeNode nextNode = treeUser.Nodes.Cast<TreeNode>().Where(e => e.Text == nextRootNodeName).First();
+
+				foreach(TreeNode node in DbAccess.GetOrgLevelChildren(Convert.ToInt32(vId), level))
+				{
+					if (!nextNode.Nodes.ContainsKey(node.Text))
+					{
+						nextNode.Nodes.Add(node);
+					}
+				}
+
+				//nextNode.Nodes.AddRange(DbAccess.GetOrgLevelChildren(Convert.ToInt32(vId), level ).ToArray());
+
+				treeUser.ExpandAll();	
 			}
+			catch { }
 
-			treeUser.Nodes.Cast<TreeNode>().Where(e => e.Text == nextRootNodeName).First().Nodes.AddRange(DbAccess.GetOrgLevelChildren(Convert.ToInt32(vId), level ).ToArray());
 
 		}
 	}
