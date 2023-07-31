@@ -95,6 +95,8 @@ namespace MyNotebooks.subforms
 			button8 = new Button();
 			checkBox3 = new CheckBox();
 			clbDepartments = new CheckedListBox();
+			label3 = new Label();
+			lblTreePath = new Label();
 			grpUsers.SuspendLayout();
 			pnlCreateUser.SuspendLayout();
 			pnlLogin.SuspendLayout();
@@ -430,7 +432,7 @@ namespace MyNotebooks.subforms
 			// 
 			// btnCancelNewUser
 			// 
-			btnCancelNewUser.Location = new System.Drawing.Point(123, 425);
+			btnCancelNewUser.Location = new System.Drawing.Point(123, 429);
 			btnCancelNewUser.Name = "btnCancelNewUser";
 			btnCancelNewUser.Size = new System.Drawing.Size(91, 23);
 			btnCancelNewUser.TabIndex = 21;
@@ -440,7 +442,7 @@ namespace MyNotebooks.subforms
 			// 
 			// btnCreateUser
 			// 
-			btnCreateUser.Location = new System.Drawing.Point(6, 425);
+			btnCreateUser.Location = new System.Drawing.Point(6, 429);
 			btnCreateUser.Name = "btnCreateUser";
 			btnCreateUser.Size = new System.Drawing.Size(91, 23);
 			btnCreateUser.TabIndex = 20;
@@ -451,9 +453,9 @@ namespace MyNotebooks.subforms
 			// treeUser
 			// 
 			treeUser.ContextMenuStrip = mnuContextTree;
-			treeUser.Location = new System.Drawing.Point(3, 22);
+			treeUser.Location = new System.Drawing.Point(3, 18);
 			treeUser.Name = "treeUser";
-			treeUser.Size = new System.Drawing.Size(209, 389);
+			treeUser.Size = new System.Drawing.Size(209, 401);
 			treeUser.TabIndex = 0;
 			treeUser.Text = "tree";
 			treeUser.BeforeSelect += this.treeUser_BeforeSelect;
@@ -713,12 +715,35 @@ namespace MyNotebooks.subforms
 			clbDepartments.Size = new System.Drawing.Size(210, 112);
 			clbDepartments.TabIndex = 17;
 			// 
+			// label3
+			// 
+			label3.AutoSize = true;
+			label3.ForeColor = System.Drawing.Color.SteelBlue;
+			label3.Location = new System.Drawing.Point(8, 469);
+			label3.Name = "label3";
+			label3.Size = new System.Drawing.Size(34, 15);
+			label3.TabIndex = 31;
+			label3.Text = "Path:";
+			// 
+			// lblTreePath
+			// 
+			lblTreePath.AutoSize = true;
+			lblTreePath.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point);
+			lblTreePath.ForeColor = System.Drawing.Color.SteelBlue;
+			lblTreePath.Location = new System.Drawing.Point(39, 469);
+			lblTreePath.Name = "lblTreePath";
+			lblTreePath.Size = new System.Drawing.Size(238, 15);
+			lblTreePath.TabIndex = 32;
+			lblTreePath.Text = "Company > Account > Department > Group";
+			// 
 			// frmManagementConsole
 			// 
 			AcceptButton = btnLogin;
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new System.Drawing.Size(518, 469);
+			ClientSize = new System.Drawing.Size(518, 491);
+			Controls.Add(lblTreePath);
+			Controls.Add(label3);
 			Controls.Add(comboBox6);
 			Controls.Add(groupBox1);
 			Controls.Add(comboBox5);
@@ -830,5 +855,7 @@ namespace MyNotebooks.subforms
 		private ToolStripMenuItem mnuEdit;
 		private ToolStripMenuItem mnuDelete;
 		private ToolStripMenuItem mnuCreateNew;
+		private Label label3;
+		private Label lblTreePath;
 	}
 }

@@ -27,6 +27,7 @@ namespace MyNotebooks.subforms
 		private MNUser CurrentUser = null;
 		private Color EnabledColor = Color.Black;
 		private Color DisabledColor = Color.LightGray;
+		private List<NodeInfo> NodesInPath = new List<NodeInfo>();
 
 		public frmManagementConsole(Form parent)
 		{
@@ -157,6 +158,13 @@ namespace MyNotebooks.subforms
 			return new UserPermissions(permissions);
 		}
 
+		private void mnuCreateNew_Click(object sender, EventArgs e)
+		{
+			var v = treeUser.SelectedNode;
+
+
+		}
+
 		private void PopulateBaseTree()
 		{
 			treeUser.Nodes.Clear();
@@ -225,30 +233,6 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void SetNodeEnabled_Disabled(string nodeName, bool setEnabled = true)
-		{
-			foreach (TreeNode tn in treeUser.Nodes)
-			{
-				if (tn.Text == nodeName)
-				{
-					tn.ForeColor = setEnabled ? EnabledColor : DisabledColor;
-					tn.BackColor = setEnabled ? Color.White : Color.White;
-				}
-			}
-		}
-
-		private void treeUser_BeforeSelect(object sender, TreeViewCancelEventArgs e)
-		{ e.Cancel = e.Node.ForeColor == DisabledColor; }
-
-		private void treeUser_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
-		{
-			if (e.Button == MouseButtons.Right)
-			{
-				treeUser.SelectedNode = e.Node;
-				SetContextMenus(e.Node);
-			}
-		}
-
 		private void SetContextMenus(TreeNode tn)
 		{
 			mnuAssignUser.Visible = false;
@@ -284,11 +268,20 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void mnuCreateNew_Click(object sender, EventArgs e)
+		private void SetNodeEnabled_Disabled(string nodeName, bool setEnabled = true)
 		{
-			var v = treeUser.SelectedNode;
-
+			foreach (TreeNode tn in treeUser.Nodes)
+			{
+				if (tn.Text == nodeName)
+				{
+					tn.ForeColor = setEnabled ? EnabledColor : DisabledColor;
+					tn.BackColor = setEnabled ? Color.White : Color.White;
+				}
+			}
 		}
+
+		private void treeUser_BeforeSelect(object sender, TreeViewCancelEventArgs e)
+		{ e.Cancel = e.Node.ForeColor == DisabledColor; }
 
 		private void treeUser_DoubleClick(object sender, EventArgs e)
 		{
@@ -300,56 +293,107 @@ namespace MyNotebooks.subforms
 				int level = -1;
 
 				TreeNode tn = treeUser.SelectedNode;
-
 				var vId = tn.Tag;   // the id of a dbl-clicked tree item
 				TreeNode vParent = tn.Parent;
-			
+				NodeInfo info = new();
 
-				switch(treeUser.SelectedNode.Parent.Name.ToString().ToLower())
+				if (treeUser.SelectedNode.Parent != null)
 				{
-					case "user details":
-						// reserved for later
-						break;
-					case "companies":
-						// populate accounts for company
-						nextRootNodeName = "Accounts";
-						level = CurrentUser.AccessLevel + 1;
-						// 
-						break;
-					case "accounts":
-						nextRootNodeName = "Departments";
-						level = CurrentUser.AccessLevel;
-						//var v = treeUser.SelectedNode;
-						//var tag = v.Tag;
-
-						break;
-					case "departments":
-						nextRootNodeName = "Groups";
-						level = CurrentUser.AccessLevel - 1;
-						break;
-					case "groups":
-						nextRootNodeName = "Notebooks";
-						level = CurrentUser.AccessLevel - 2;
-						break;
-				}
-
-				TreeNode nextNode = treeUser.Nodes.Cast<TreeNode>().Where(e => e.Text == nextRootNodeName).First();
-
-				foreach(TreeNode node in DbAccess.GetOrgLevelChildren(Convert.ToInt32(vId), level))
-				{
-					if (!nextNode.Nodes.ContainsKey(node.Text))
+					switch (treeUser.SelectedNode.Parent.Name.ToString().ToLower())
 					{
-						nextNode.Nodes.Add(node);
+						case "user details":
+							// reserved for later
+							break;
+						case "companies":
+							nextRootNodeName = "Accounts";
+							level = CurrentUser.AccessLevel + 1;
+							info = new NodeInfo() { NodeId = Convert.ToInt16(tn.Tag), NodeName = tn.Text, NodeType = frmMain.OrgLevelTypes.Company };
+							break;
+						case "accounts":
+							nextRootNodeName = "Departments";
+							level = CurrentUser.AccessLevel;
+							info = new NodeInfo() { NodeId = Convert.ToInt16(tn.Tag), NodeName = tn.Text, NodeType = frmMain.OrgLevelTypes.Account };
+							break;
+						case "departments":
+							nextRootNodeName = "Groups";
+							level = CurrentUser.AccessLevel - 1;
+							info = new NodeInfo() { NodeId = Convert.ToInt16(tn.Tag), NodeName = tn.Text, NodeType = frmMain.OrgLevelTypes.Department };
+							break;
+						case "groups":
+							nextRootNodeName = "Notebooks";
+							level = CurrentUser.AccessLevel - 2;
+							info = new NodeInfo() { NodeId = Convert.ToInt16(tn.Tag), NodeName = tn.Text, NodeType = frmMain.OrgLevelTypes.Group };
+							break;
 					}
+
+					NodesInPath.Add(info);
+					UpdatePath();
+
+					TreeNode nextNode = treeUser.Nodes.Cast<TreeNode>().Where(e => e.Text == nextRootNodeName).First();
+
+					foreach (TreeNode node in DbAccess.GetOrgLevelChildren(Convert.ToInt32(vId), level))
+					{
+						if (!nextNode.Nodes.ContainsKey(node.Text))
+						{
+							nextNode.Nodes.Add(node);
+						}
+					}
+
+					treeUser.ExpandAll();
+
 				}
+			}
+			catch { }
+		}
 
-				//nextNode.Nodes.AddRange(DbAccess.GetOrgLevelChildren(Convert.ToInt32(vId), level ).ToArray());
+		private void treeUser_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+		{
+			if (e.Button == MouseButtons.Right)
+			{
+				treeUser.SelectedNode = e.Node;
+				SetContextMenus(e.Node);
+			}
+		}
 
-				treeUser.ExpandAll();	
+		private void UpdatePath()
+		{
+			lblTreePath.Text = string.Empty;
+			NodeInfo info = new NodeInfo();
+			string seperator = " > ";
+			try
+			{
+				info = NodesInPath.Where(e => e.NodeType == frmMain.OrgLevelTypes.Company).First();
+				lblTreePath.Text += info.NodeName + seperator;
+			}
+			catch { }
+			try
+			{
+				info = NodesInPath.Where(e => e.NodeType == frmMain.OrgLevelTypes.Account).First();
+				lblTreePath.Text += info.NodeName + seperator;
+			}
+			catch { }
+			try
+			{
+				info = NodesInPath.Where(e => e.NodeType == frmMain.OrgLevelTypes.Department).First();
+				lblTreePath.Text += info.NodeName + seperator;
+			}
+			catch { }
+			try
+			{
+				info = NodesInPath.Where(e => e.NodeType == frmMain.OrgLevelTypes.Group).First();
+				lblTreePath.Text += info.NodeName;
 			}
 			catch { }
 
+			if (lblTreePath.Text.Length > 0) { this.Height = lblTreePath.Top + lblTreePath.Height + 50; }
 
 		}
+	}
+
+	public struct NodeInfo
+	{
+		public int NodeId;
+		public string NodeName;
+		public frmMain.OrgLevelTypes NodeType;
 	}
 }

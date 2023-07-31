@@ -165,6 +165,7 @@ namespace myNotebooks.subforms
 		private bool FirstSelection = true;
 		bool SuppressDateClick = false;
 		string FoundCountString = "showing {0} of {1} entries";
+
 		private enum SelectionState
 		{
 			NotebookSelectedNotLoaded,
@@ -172,6 +173,13 @@ namespace myNotebooks.subforms
 			EntrySelected,
 			HideAll,
 			NotebookNotSelected
+		}
+		public enum OrgLevelTypes
+		{
+			Group = 1,
+			Department = 2,
+			Account = 3,
+			Company = 4
 		}
 
 		public frmMain() { InitializeComponent(); }

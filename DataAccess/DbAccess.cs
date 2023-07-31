@@ -15,6 +15,7 @@ using System.Reflection;
 using Microsoft.VisualBasic.ApplicationServices;
 using myNotebooks;
 using System.Windows.Forms;
+using myNotebooks.subforms;
 
 namespace MyNotebooks.DataAccess
 {
@@ -59,7 +60,7 @@ namespace MyNotebooks.DataAccess
 				using (SqlCommand cmd = new SqlCommand("sp_CreateUserAssignments", conn))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@orgLevelId", userId);
+					cmd.Parameters.AddWithValue("@orgLevlelType", userId);
 					cmd.Parameters.AddWithValue("@companyId", companyId);
 					cmd.Parameters.AddWithValue("@accountId", accountId);
 					cmd.Parameters.AddWithValue("@departmentId", departmentId);
@@ -85,7 +86,7 @@ namespace MyNotebooks.DataAccess
 					using (SqlCommand cmd = new SqlCommand("sp_CreateUserPermissions", conn))
 					{
 						cmd.CommandType = CommandType.StoredProcedure;
-						cmd.Parameters.AddWithValue("@orgLevelId", user.UserId);
+						cmd.Parameters.AddWithValue("@orgLevlelType", user.UserId);
 
 						foreach(string sPerm in user.Permissions.GetGrantedPermissions()) 
 						{
@@ -151,6 +152,33 @@ namespace MyNotebooks.DataAccess
 			}
 		}
 
+		public static bool CreatedOrgLevel(int creatorId, string orgLevelDescription, frmMain.OrgLevelTypes orgLevelType)
+		{
+			bool bRtrn = false;
+
+			try
+			{
+				using (SqlConnection conn = new SqlConnection(connString))
+				{
+					conn.Open();
+					using (SqlCommand cmd = new SqlCommand("sp_CreateOrgLevel", conn))
+					{
+						cmd.CommandType = CommandType.StoredProcedure;
+						cmd.Parameters.AddWithValue("@createdBy", creatorId);
+						cmd.Parameters.AddWithValue("@orgLevelDescription", orgLevelDescription);
+						cmd.Parameters.AddWithValue("@orgLevelType", (int)orgLevelType);
+						cmd.Parameters.Add("@retVal", SqlDbType.Int);
+						cmd.Parameters["@retVal"].Direction = ParameterDirection.ReturnValue;
+						cmd.ExecuteNonQuery();
+						bRtrn = cmd.Parameters["@retVal"].Value.ToString() == "1";
+					}
+				}
+			}
+			catch (Exception ex) { var v = ex.Message; }
+
+			return bRtrn;
+		}
+
 		public static List<Group> GetGroups(int userId)
 		{
 			List<Group> lstRtrn = new List<Group>();
@@ -162,7 +190,7 @@ namespace MyNotebooks.DataAccess
 				using (SqlCommand cmd = new("sp_GetGroups"))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@orgLevelId", userId);
+					cmd.Parameters.AddWithValue("@orgLevlelType", userId);
 					using (SqlDataReader reader = cmd.ExecuteReader())
 					{
 						foreach (DataRow row in reader)
@@ -186,7 +214,7 @@ namespace MyNotebooks.DataAccess
 				using (SqlCommand cmd = new("sp_GetDepartments"))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@orgLevelId", userId);
+					cmd.Parameters.AddWithValue("@orgLevlelType", userId);
 					using (SqlDataReader reader = cmd.ExecuteReader())
 					{
 						foreach (DataRow row in reader)
@@ -210,7 +238,7 @@ namespace MyNotebooks.DataAccess
 				using (SqlCommand cmd = new("sp_GetAccounts"))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@orgLevelId", userId);
+					cmd.Parameters.AddWithValue("@orgLevlelType", userId);
 					using (SqlDataReader reader = cmd.ExecuteReader())
 					{
 						foreach (DataRow row in reader)
@@ -234,7 +262,7 @@ namespace MyNotebooks.DataAccess
 				using (SqlCommand cmd = new("sp_GetCompanies"))
 				{
 					cmd.CommandType=CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@orgLevelId", userId);
+					cmd.Parameters.AddWithValue("@orgLevlelType", userId);
 					using(SqlDataReader reader = cmd.ExecuteReader())
 					{
 						foreach (DataRow row in reader)

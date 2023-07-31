@@ -12,6 +12,7 @@ namespace myNotebooks
 		/// <summary>
 		///  The main entry point for the application.allNotebooks
 		/// </summary>
+
 		public static string PIN = string.Empty;
 		public static List<ListViewItem> lstFonts = new List<ListViewItem>();
 		public static string			AppRoot					= AppDomain.CurrentDomain.BaseDirectory;
