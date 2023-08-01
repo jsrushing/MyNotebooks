@@ -153,7 +153,7 @@ using myNotebooks;
 using System.Threading.Tasks;
 using Encryption;
 using System.Xml.Linq;
-using MyNotebooks.subforms;
+using myNotebooks.subforms;
 using Org.BouncyCastle.Asn1.Cms;
 
 namespace myNotebooks.subforms
@@ -176,10 +176,10 @@ namespace myNotebooks.subforms
 		}
 		public enum OrgLevelTypes
 		{
-			Group = 1,
-			Department = 2,
-			Account = 3,
-			Company = 4
+			Groups = 3,
+			Departments = 4,
+			Accounts = 5,
+			Companies = 6
 		}
 
 		public frmMain() { InitializeComponent(); }

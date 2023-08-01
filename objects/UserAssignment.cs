@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using myNotebooks.subforms;
 
-namespace MyNotebooks.objects
+namespace myNotebooks.objects
 {
 	public class UserAssignment
 	{

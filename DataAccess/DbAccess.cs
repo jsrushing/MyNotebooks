@@ -10,18 +10,19 @@ using System.Data.SqlClient;
 using System.Data;
 using Encryption;
 using System.Threading.Tasks;
-using MyNotebooks.objects;
+using myNotebooks.objects;
 using System.Reflection;
 using Microsoft.VisualBasic.ApplicationServices;
 using myNotebooks;
 using System.Windows.Forms;
 using myNotebooks.subforms;
+using MyNotebooks.objects;
 
-namespace MyNotebooks.DataAccess
+namespace myNotebooks.DataAccess
 {
 	internal class DbAccess
 	{
-		private static string connString = "Server=mynotebooksserver.database.windows.net;Database=MyNotebooks;user id=mydb_admin;password=cloud_Bringer1!";
+		private static string connString = "Server=mynotebooksserver.database.windows.net;Database=myNotebooks;user id=mydb_admin;password=cloud_Bringer1!";
 
 		public static int CreateMNUser(MNUser user)
 		{
@@ -152,7 +153,7 @@ namespace MyNotebooks.DataAccess
 			}
 		}
 
-		public static bool CreatedOrgLevel(int creatorId, string orgLevelDescription, frmMain.OrgLevelTypes orgLevelType)
+		public static bool CreateOrgLevel(int creatorId, string orgLevelDescription, frmMain.OrgLevelTypes orgLevelType, string orgLevelName, int parentId)
 		{
 			bool bRtrn = false;
 
@@ -166,7 +167,10 @@ namespace MyNotebooks.DataAccess
 						cmd.CommandType = CommandType.StoredProcedure;
 						cmd.Parameters.AddWithValue("@createdBy", creatorId);
 						cmd.Parameters.AddWithValue("@orgLevelDescription", orgLevelDescription);
+						var v = (int)orgLevelType;
 						cmd.Parameters.AddWithValue("@orgLevelType", (int)orgLevelType);
+						cmd.Parameters.AddWithValue("@orgLevelName", orgLevelName);
+						cmd.Parameters.AddWithValue("@parentId", parentId);
 						cmd.Parameters.Add("@retVal", SqlDbType.Int);
 						cmd.Parameters["@retVal"].Direction = ParameterDirection.ReturnValue;
 						cmd.ExecuteNonQuery();
@@ -275,11 +279,12 @@ namespace MyNotebooks.DataAccess
 			return lstRtrn;
 		}
 
-		public static List<TreeNode> GetHighestNodeItemsForUser(int userId)
+		public static List<ListItem> GetHighestNodeItemsForUser(int userId)
 		{
-			List<TreeNode> lst = new List<TreeNode>();
-			TreeNode node;
+			//List<TreeNode> lstRtrn = new List<TreeNode>();	
+			//TreeNode node;
 			DataTable dt = new DataTable();
+			List<ListItem> lstRtrn = new List<ListItem>();
 
 			using (SqlConnection conn = new SqlConnection(connString))
 			{
@@ -294,18 +299,22 @@ namespace MyNotebooks.DataAccess
 
 					foreach(DataRow row in dt.Rows)
 					{
-						node = new() { Tag = row["Id"].ToString(), Text = row["Name"].ToString().Trim(), ToolTipText = row["Description"].ToString() };
-						lst.Add(node);
+						//lstBox.Items.Add(new ListItem() { Id = (int)row["Id"], Name = row["Name"].ToString() });
+						lstRtrn.Add(new ListItem() { Id = (int)row["Id"], Name = row["Name"].ToString() });
+
+						//node = new() { Tag = row["Id"].ToString(), Text = row["Name"].ToString().Trim(), ToolTipText = row["Description"].ToString() };
+						//lstRtrn.Add(node);
 					}
 				}
 			}
 
-			return lst;
+			return lstRtrn;
 		}
 
-		public static List<TreeNode> GetOrgLevelChildren(int orgLevelId, int parentId) 
+
+		public static List<ListItem> GetOrgLevelChildren(int orgLevelId, int parentId) 
 		{
-			List<TreeNode> lst = new List<TreeNode>();
+			List<ListItem> lstRtrn = new List<ListItem>();
 			TreeNode node;
 			DataTable dt = new DataTable();
 
@@ -323,14 +332,46 @@ namespace MyNotebooks.DataAccess
 
 					foreach (DataRow row in dt.Rows)
 					{
-						node = new() { Tag = row["Id"].ToString(), Text = row["Name"].ToString().Trim(), Name = row["Name"].ToString().Trim(), ToolTipText = row["Description"].ToString() };
-						lst.Add(node);
+						lstRtrn.Add(new ListItem() { Id = (int)row["Id"], Name = row["Name"].ToString()});
+
+						//node = new() { Tag = row["Id"].ToString(), Text = row["Name"].ToString().Trim(), Name = row["Name"].ToString().Trim(), ToolTipText = row["Description"].ToString() };
+						//lstRtrn.Add(node);
 					}
 				}
 			}
 
-			return lst;
+			return lstRtrn;
 		}
+
+		//public static List<NodeInfo> GetOrgLevelChildNodes(int orgLevelId, int parentId)
+		//{
+		//	List<NodeInfo> lstRtrn = new List<NodeInfo>();
+		//	TreeNode node;
+		//	DataTable dt = new DataTable();
+
+		//	using (SqlConnection conn = new SqlConnection(connString))
+		//	{
+		//		conn.Open();
+		//		using (SqlCommand cmd = new("sp_GetOrgLevelChildren", conn))
+		//		{
+		//			cmd.CommandType = CommandType.StoredProcedure;
+		//			cmd.Parameters.AddWithValue("@orgLevelId", parentId);
+		//			cmd.Parameters.AddWithValue("parentId", orgLevelId);
+
+		//			SqlDataAdapter adapter = new SqlDataAdapter() { SelectCommand = cmd };
+		//			adapter.Fill(dt);
+
+		//			foreach (DataRow row in dt.Rows)
+		//			{
+		//				node = new() { Tag = row["Id"].ToString(), Text = row["Name"].ToString().Trim(), Name = row["Name"].ToString().Trim(), ToolTipText = row["Description"].ToString() };
+		//				lstRtrn.Add(node);
+		//			}
+		//		}
+		//	}
+
+		//	return lstRtrn;
+		//}
+
 
 		public static DataSet GetUser(string userName, string password)
 		{
@@ -353,7 +394,7 @@ namespace MyNotebooks.DataAccess
 			return ds;
 		}
 
-		//public static int CreateUser(MyNotebooks.objects.MNUser usr)
+		//public static int CreateUser(myNotebooks.objects.MNUser usr)
 		//{
 		//	int iRtrn = -1;
 
@@ -393,9 +434,9 @@ namespace MyNotebooks.DataAccess
 		//	return iRtrn;
 		//}
 
-		//public static Company GetCompany(string companyId)
+		//public static Companies GetCompany(string companyId)
 		//{
-		//	Company cRtrn = null;
+		//	Companies cRtrn = null;
 		//	DataTable dt = new();
 
 		//	using (SqlConnection conn = new(connString))
@@ -408,7 +449,7 @@ namespace MyNotebooks.DataAccess
 		//			cmd.Parameters.AddWithValue("@companyId", Convert.ToInt32(companyId));
 		//			SqlDataAdapter adapter = new() { SelectCommand = cmd };
 		//			adapter.Fill(dt);
-		//			cRtrn = new Company(dt);
+		//			cRtrn = new Companies(dt);
 		//		}
 		//	}
 			

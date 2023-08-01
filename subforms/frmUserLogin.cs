@@ -8,13 +8,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MyNotebooks.DataAccess;
-using MyNotebooks.objects;
+using myNotebooks.DataAccess;
+using myNotebooks.objects;
 using myNotebooks;
 using System.Reflection;
 using myNotebooks.subforms;
 
-namespace MyNotebooks.subforms
+namespace myNotebooks.subforms
 {
 	public partial class frmUserLogin : Form
 	{
@@ -35,7 +35,7 @@ namespace MyNotebooks.subforms
 			}
 			else
 			{
-				using (frmMessage frm = new(frmMessage.OperationType.Message, "No MyNotebooks User Found.", "No Such User", this))
+				using (frmMessage frm = new(frmMessage.OperationType.Message, "No myNotebooks User Found.", "No Such User", this))
 				{ frm.ShowDialog(); }
 				txtUserName.Text = "";
 				txtPwd.Text = "";

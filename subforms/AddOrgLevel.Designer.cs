@@ -1,6 +1,6 @@
-﻿namespace MyNotebooks.subforms
+﻿namespace myNotebooks.subforms
 {
-	partial class AddOrgLevel
+	partial class frmAddOrgLevel
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -91,7 +91,7 @@
 			btnCancel.UseVisualStyleBackColor = true;
 			btnCancel.Click += this.btnCancel_Click;
 			// 
-			// AddOrgLevel
+			// frmAddOrgLevel
 			// 
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -105,7 +105,7 @@
 			FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			MaximizeBox = false;
 			MinimizeBox = false;
-			Name = "AddOrgLevel";
+			Name = "frmAddOrgLevel";
 			Text = "Add ";
 			this.ResumeLayout(false);
 			this.PerformLayout();

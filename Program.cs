@@ -3,7 +3,7 @@ using System.Windows.Forms;
 using myNotebooks.subforms;
 using System.Collections.Generic;
 using myNotebooks.objects;
-using MyNotebooks.objects;
+using myNotebooks.objects;
 
 namespace myNotebooks
 {

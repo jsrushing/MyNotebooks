@@ -369,7 +369,7 @@ namespace myNotebooks.subforms
 			// 
 			mnuSwitchAccount.Name = "mnuSwitchAccount";
 			mnuSwitchAccount.Size = new System.Drawing.Size(102, 20);
-			mnuSwitchAccount.Text = "Switch Account";
+			mnuSwitchAccount.Text = "Switch Accounts";
 			mnuSwitchAccount.Click += this.mnuSwitchAccount_Click;
 			// 
 			// mnuAdministratorConsole

@@ -10,11 +10,11 @@ using Microsoft.VisualBasic.ApplicationServices;
 using myNotebooks.subforms;
 using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.Asn1.X509.Qualified;
-using MyNotebooks.objects;
-using MyNotebooks.DataAccess;
+using myNotebooks.objects;
+using myNotebooks.DataAccess;
 using System.Windows.Forms;
 
-namespace MyNotebooks.objects
+namespace myNotebooks.objects
 {
 	public class MNUser
 
@@ -100,10 +100,10 @@ namespace MyNotebooks.objects
 
 		private List<Company> GetCompanies() { return DbAccess.GetCompanies(this.UserId); }
 
-		public List<TreeNode> GetHighestNodeItems()
-		{
-			return DbAccess.GetHighestNodeItemsForUser(this.UserId);
-		}
+		//public List<TreeNode> GetHighestNodeItems()
+		//{
+		//	return DbAccess.GetHighestNodeItemsForUser(this.UserId);
+		//}
 
 		public void Save()
 		{

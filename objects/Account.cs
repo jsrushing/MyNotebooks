@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyNotebooks.objects
+namespace myNotebooks.objects
 {
 	public class Account
 	{

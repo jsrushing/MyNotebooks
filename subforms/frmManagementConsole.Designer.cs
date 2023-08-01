@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography.Xml;
 using System.Windows.Forms;
 
-namespace MyNotebooks.subforms
+namespace myNotebooks.subforms
 {
 	partial class frmManagementConsole
 	{
@@ -33,6 +33,8 @@ namespace MyNotebooks.subforms
 		{
 			components = new System.ComponentModel.Container();
 			grpUsers = new GroupBox();
+			btnCancelNewUser = new Button();
+			btnCreateUser = new Button();
 			pnlCreateUser = new Panel();
 			ddlAccessLevels = new ComboBox();
 			label19 = new Label();
@@ -48,12 +50,6 @@ namespace MyNotebooks.subforms
 			groupBox2 = new GroupBox();
 			panel1 = new Panel();
 			toolStripContainer1 = new ToolStripContainer();
-			groupBox3 = new GroupBox();
-			checkBox1 = new CheckBox();
-			button2 = new Button();
-			button1 = new Button();
-			btnAssignCompanies = new Button();
-			clbCompanies = new CheckedListBox();
 			grpGroups = new GroupBox();
 			button9 = new Button();
 			button10 = new Button();
@@ -64,8 +60,6 @@ namespace MyNotebooks.subforms
 			comboBox1 = new ComboBox();
 			label5 = new Label();
 			grpTree = new GroupBox();
-			btnCancelNewUser = new Button();
-			btnCreateUser = new Button();
 			treeUser = new TreeView();
 			mnuContextTree = new ContextMenuStrip(components);
 			mnuAssignUser = new ToolStripMenuItem();
@@ -83,12 +77,6 @@ namespace MyNotebooks.subforms
 			comboBox4 = new ComboBox();
 			comboBox5 = new ComboBox();
 			comboBox6 = new ComboBox();
-			groupBox6 = new GroupBox();
-			button3 = new Button();
-			button4 = new Button();
-			button5 = new Button();
-			checkBox2 = new CheckBox();
-			clbAccounts = new CheckedListBox();
 			groupBox1 = new GroupBox();
 			button6 = new Button();
 			button7 = new Button();
@@ -97,28 +85,72 @@ namespace MyNotebooks.subforms
 			clbDepartments = new CheckedListBox();
 			label3 = new Label();
 			lblTreePath = new Label();
+			grpCompanies = new GroupBox();
+			lstCompanies = new ListBox();
+			button1 = new Button();
+			button2 = new Button();
+			button12 = new Button();
+			grpAccounts = new GroupBox();
+			lstAccounts = new ListBox();
+			button3 = new Button();
+			button4 = new Button();
+			button5 = new Button();
+			grpDepartments = new GroupBox();
+			lstDepartments = new ListBox();
+			button13 = new Button();
+			button14 = new Button();
+			button15 = new Button();
+			groupBox6 = new GroupBox();
+			lstGroups = new ListBox();
+			button16 = new Button();
+			button17 = new Button();
+			button18 = new Button();
 			grpUsers.SuspendLayout();
 			pnlCreateUser.SuspendLayout();
 			pnlLogin.SuspendLayout();
 			toolStripContainer1.SuspendLayout();
-			groupBox3.SuspendLayout();
 			grpGroups.SuspendLayout();
 			grpTree.SuspendLayout();
 			mnuContextTree.SuspendLayout();
-			groupBox6.SuspendLayout();
 			groupBox1.SuspendLayout();
+			grpCompanies.SuspendLayout();
+			grpAccounts.SuspendLayout();
+			grpDepartments.SuspendLayout();
+			groupBox6.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// grpUsers
 			// 
+			grpUsers.Controls.Add(btnCancelNewUser);
+			grpUsers.Controls.Add(btnCreateUser);
 			grpUsers.Controls.Add(pnlCreateUser);
 			grpUsers.Controls.Add(pnlLogin);
-			grpUsers.Location = new System.Drawing.Point(8, 0);
+			grpUsers.Location = new System.Drawing.Point(8, 12);
 			grpUsers.Name = "grpUsers";
-			grpUsers.Size = new System.Drawing.Size(286, 461);
+			grpUsers.Size = new System.Drawing.Size(280, 522);
 			grpUsers.TabIndex = 20;
 			grpUsers.TabStop = false;
 			grpUsers.Text = "Users";
+			// 
+			// btnCancelNewUser
+			// 
+			btnCancelNewUser.Location = new System.Drawing.Point(151, 477);
+			btnCancelNewUser.Name = "btnCancelNewUser";
+			btnCancelNewUser.Size = new System.Drawing.Size(91, 23);
+			btnCancelNewUser.TabIndex = 21;
+			btnCancelNewUser.Text = "&Cancel";
+			btnCancelNewUser.UseVisualStyleBackColor = true;
+			btnCancelNewUser.Click += this.btnCancelNewUser_Click;
+			// 
+			// btnCreateUser
+			// 
+			btnCreateUser.Location = new System.Drawing.Point(34, 477);
+			btnCreateUser.Name = "btnCreateUser";
+			btnCreateUser.Size = new System.Drawing.Size(91, 23);
+			btnCreateUser.TabIndex = 20;
+			btnCreateUser.Text = "Create &User";
+			btnCreateUser.UseVisualStyleBackColor = true;
+			btnCreateUser.Click += this.btnCreateUser_Click;
 			// 
 			// pnlCreateUser
 			// 
@@ -262,76 +294,13 @@ namespace MyNotebooks.subforms
 			toolStripContainer1.TabIndex = 25;
 			toolStripContainer1.Text = "toolStripContainer1";
 			// 
-			// groupBox3
-			// 
-			groupBox3.Controls.Add(checkBox1);
-			groupBox3.Controls.Add(button2);
-			groupBox3.Controls.Add(button1);
-			groupBox3.Controls.Add(btnAssignCompanies);
-			groupBox3.Controls.Add(clbCompanies);
-			groupBox3.Location = new System.Drawing.Point(763, 12);
-			groupBox3.Name = "groupBox3";
-			groupBox3.Size = new System.Drawing.Size(227, 179);
-			groupBox3.TabIndex = 25;
-			groupBox3.TabStop = false;
-			groupBox3.Text = "Companies";
-			// 
-			// checkBox1
-			// 
-			checkBox1.AutoSize = true;
-			checkBox1.Location = new System.Drawing.Point(135, 10);
-			checkBox1.Name = "checkBox1";
-			checkBox1.Size = new System.Drawing.Size(71, 19);
-			checkBox1.TabIndex = 21;
-			checkBox1.Text = "select all";
-			checkBox1.UseVisualStyleBackColor = true;
-			// 
-			// button2
-			// 
-			button2.Location = new System.Drawing.Point(150, 149);
-			button2.Name = "button2";
-			button2.Size = new System.Drawing.Size(66, 23);
-			button2.TabIndex = 20;
-			button2.Text = "Manage";
-			button2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			button2.UseVisualStyleBackColor = true;
-			// 
-			// button1
-			// 
-			button1.Location = new System.Drawing.Point(78, 149);
-			button1.Name = "button1";
-			button1.Size = new System.Drawing.Size(66, 23);
-			button1.TabIndex = 19;
-			button1.Text = "Remove";
-			button1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			button1.UseVisualStyleBackColor = true;
-			// 
-			// btnAssignCompanies
-			// 
-			btnAssignCompanies.Location = new System.Drawing.Point(6, 149);
-			btnAssignCompanies.Name = "btnAssignCompanies";
-			btnAssignCompanies.Size = new System.Drawing.Size(66, 23);
-			btnAssignCompanies.TabIndex = 18;
-			btnAssignCompanies.Text = "Assign";
-			btnAssignCompanies.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			btnAssignCompanies.UseVisualStyleBackColor = true;
-			// 
-			// clbCompanies
-			// 
-			clbCompanies.CheckOnClick = true;
-			clbCompanies.FormattingEnabled = true;
-			clbCompanies.Location = new System.Drawing.Point(6, 31);
-			clbCompanies.Name = "clbCompanies";
-			clbCompanies.Size = new System.Drawing.Size(210, 112);
-			clbCompanies.TabIndex = 17;
-			// 
 			// grpGroups
 			// 
 			grpGroups.Controls.Add(button9);
 			grpGroups.Controls.Add(button10);
 			grpGroups.Controls.Add(clbGroups);
 			grpGroups.Controls.Add(button11);
-			grpGroups.Location = new System.Drawing.Point(755, 581);
+			grpGroups.Location = new System.Drawing.Point(779, 63);
 			grpGroups.Name = "grpGroups";
 			grpGroups.Size = new System.Drawing.Size(224, 214);
 			grpGroups.TabIndex = 22;
@@ -420,35 +389,13 @@ namespace MyNotebooks.subforms
 			// 
 			// grpTree
 			// 
-			grpTree.Controls.Add(btnCancelNewUser);
-			grpTree.Controls.Add(btnCreateUser);
 			grpTree.Controls.Add(treeUser);
-			grpTree.Location = new System.Drawing.Point(288, 0);
+			grpTree.Location = new System.Drawing.Point(536, 12);
 			grpTree.Name = "grpTree";
 			grpTree.Size = new System.Drawing.Size(221, 461);
 			grpTree.TabIndex = 28;
 			grpTree.TabStop = false;
 			grpTree.Text = "Current User";
-			// 
-			// btnCancelNewUser
-			// 
-			btnCancelNewUser.Location = new System.Drawing.Point(123, 429);
-			btnCancelNewUser.Name = "btnCancelNewUser";
-			btnCancelNewUser.Size = new System.Drawing.Size(91, 23);
-			btnCancelNewUser.TabIndex = 21;
-			btnCancelNewUser.Text = "&Cancel";
-			btnCancelNewUser.UseVisualStyleBackColor = true;
-			btnCancelNewUser.Click += this.btnCancelNewUser_Click;
-			// 
-			// btnCreateUser
-			// 
-			btnCreateUser.Location = new System.Drawing.Point(6, 429);
-			btnCreateUser.Name = "btnCreateUser";
-			btnCreateUser.Size = new System.Drawing.Size(91, 23);
-			btnCreateUser.TabIndex = 20;
-			btnCreateUser.Text = "Create &User";
-			btnCreateUser.UseVisualStyleBackColor = true;
-			btnCreateUser.Click += this.btnCreateUser_Click;
 			// 
 			// treeUser
 			// 
@@ -460,7 +407,9 @@ namespace MyNotebooks.subforms
 			treeUser.Text = "tree";
 			treeUser.BeforeSelect += this.treeUser_BeforeSelect;
 			treeUser.NodeMouseClick += this.treeUser_NodeMouseClick;
+			treeUser.Click += this.treeUser_Click;
 			treeUser.DoubleClick += this.treeUser_DoubleClick;
+			treeUser.MouseMove += this.treeUser_MouseMove;
 			// 
 			// mnuContextTree
 			// 
@@ -589,69 +538,6 @@ namespace MyNotebooks.subforms
 			comboBox6.Size = new System.Drawing.Size(188, 23);
 			comboBox6.TabIndex = 28;
 			// 
-			// groupBox6
-			// 
-			groupBox6.Controls.Add(button3);
-			groupBox6.Controls.Add(button4);
-			groupBox6.Controls.Add(button5);
-			groupBox6.Controls.Add(checkBox2);
-			groupBox6.Controls.Add(clbAccounts);
-			groupBox6.Location = new System.Drawing.Point(763, 197);
-			groupBox6.Name = "groupBox6";
-			groupBox6.Size = new System.Drawing.Size(227, 179);
-			groupBox6.TabIndex = 29;
-			groupBox6.TabStop = false;
-			groupBox6.Text = "Accounts";
-			// 
-			// button3
-			// 
-			button3.Location = new System.Drawing.Point(150, 149);
-			button3.Name = "button3";
-			button3.Size = new System.Drawing.Size(66, 23);
-			button3.TabIndex = 24;
-			button3.Text = "Manage";
-			button3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			button3.UseVisualStyleBackColor = true;
-			// 
-			// button4
-			// 
-			button4.Location = new System.Drawing.Point(78, 149);
-			button4.Name = "button4";
-			button4.Size = new System.Drawing.Size(66, 23);
-			button4.TabIndex = 23;
-			button4.Text = "Remove";
-			button4.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			button4.UseVisualStyleBackColor = true;
-			// 
-			// button5
-			// 
-			button5.Location = new System.Drawing.Point(6, 149);
-			button5.Name = "button5";
-			button5.Size = new System.Drawing.Size(66, 23);
-			button5.TabIndex = 22;
-			button5.Text = "Assign";
-			button5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			button5.UseVisualStyleBackColor = true;
-			// 
-			// checkBox2
-			// 
-			checkBox2.AutoSize = true;
-			checkBox2.Location = new System.Drawing.Point(135, 10);
-			checkBox2.Name = "checkBox2";
-			checkBox2.Size = new System.Drawing.Size(71, 19);
-			checkBox2.TabIndex = 21;
-			checkBox2.Text = "select all";
-			checkBox2.UseVisualStyleBackColor = true;
-			// 
-			// clbAccounts
-			// 
-			clbAccounts.CheckOnClick = true;
-			clbAccounts.FormattingEnabled = true;
-			clbAccounts.Location = new System.Drawing.Point(6, 31);
-			clbAccounts.Name = "clbAccounts";
-			clbAccounts.Size = new System.Drawing.Size(210, 112);
-			clbAccounts.TabIndex = 17;
-			// 
 			// groupBox1
 			// 
 			groupBox1.Controls.Add(button6);
@@ -719,7 +605,7 @@ namespace MyNotebooks.subforms
 			// 
 			label3.AutoSize = true;
 			label3.ForeColor = System.Drawing.Color.SteelBlue;
-			label3.Location = new System.Drawing.Point(8, 469);
+			label3.Location = new System.Drawing.Point(39, 565);
 			label3.Name = "label3";
 			label3.Size = new System.Drawing.Size(34, 15);
 			label3.TabIndex = 31;
@@ -730,24 +616,251 @@ namespace MyNotebooks.subforms
 			lblTreePath.AutoSize = true;
 			lblTreePath.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point);
 			lblTreePath.ForeColor = System.Drawing.Color.SteelBlue;
-			lblTreePath.Location = new System.Drawing.Point(39, 469);
+			lblTreePath.Location = new System.Drawing.Point(39, 580);
 			lblTreePath.Name = "lblTreePath";
-			lblTreePath.Size = new System.Drawing.Size(238, 15);
+			lblTreePath.Size = new System.Drawing.Size(261, 15);
 			lblTreePath.TabIndex = 32;
-			lblTreePath.Text = "Company > Account > Department > Group";
+			lblTreePath.Text = "Companies > Accounts > Departments > Groups";
+			// 
+			// grpCompanies
+			// 
+			grpCompanies.Controls.Add(lstCompanies);
+			grpCompanies.Controls.Add(button1);
+			grpCompanies.Controls.Add(button2);
+			grpCompanies.Controls.Add(button12);
+			grpCompanies.Location = new System.Drawing.Point(300, 12);
+			grpCompanies.Name = "grpCompanies";
+			grpCompanies.Size = new System.Drawing.Size(227, 126);
+			grpCompanies.TabIndex = 33;
+			grpCompanies.TabStop = false;
+			grpCompanies.Tag = "6";
+			grpCompanies.Text = "Companies";
+			// 
+			// lstCompanies
+			// 
+			lstCompanies.FormattingEnabled = true;
+			lstCompanies.ItemHeight = 15;
+			lstCompanies.Location = new System.Drawing.Point(0, 21);
+			lstCompanies.Name = "lstCompanies";
+			lstCompanies.Size = new System.Drawing.Size(221, 64);
+			lstCompanies.TabIndex = 25;
+			lstCompanies.Tag = "6";
+			lstCompanies.SelectedIndexChanged += this.OrgLevelList_SelectedIndexChanged;
+			lstCompanies.MouseDoubleClick += this.OrgLevelList_MouseDoubleClick;
+			// 
+			// button1
+			// 
+			button1.Location = new System.Drawing.Point(150, 91);
+			button1.Name = "button1";
+			button1.Size = new System.Drawing.Size(66, 23);
+			button1.TabIndex = 24;
+			button1.Text = "Manage";
+			button1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			button1.UseVisualStyleBackColor = true;
+			// 
+			// button2
+			// 
+			button2.Location = new System.Drawing.Point(78, 91);
+			button2.Name = "button2";
+			button2.Size = new System.Drawing.Size(66, 23);
+			button2.TabIndex = 23;
+			button2.Text = "Remove";
+			button2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			button2.UseVisualStyleBackColor = true;
+			// 
+			// button12
+			// 
+			button12.Location = new System.Drawing.Point(6, 91);
+			button12.Name = "button12";
+			button12.Size = new System.Drawing.Size(66, 23);
+			button12.TabIndex = 22;
+			button12.Text = "Assign";
+			button12.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			button12.UseVisualStyleBackColor = true;
+			// 
+			// grpAccounts
+			// 
+			grpAccounts.Controls.Add(lstAccounts);
+			grpAccounts.Controls.Add(button3);
+			grpAccounts.Controls.Add(button4);
+			grpAccounts.Controls.Add(button5);
+			grpAccounts.Location = new System.Drawing.Point(300, 144);
+			grpAccounts.Name = "grpAccounts";
+			grpAccounts.Size = new System.Drawing.Size(227, 126);
+			grpAccounts.TabIndex = 34;
+			grpAccounts.TabStop = false;
+			grpAccounts.Tag = "5";
+			grpAccounts.Text = "Accounts";
+			// 
+			// lstAccounts
+			// 
+			lstAccounts.FormattingEnabled = true;
+			lstAccounts.ItemHeight = 15;
+			lstAccounts.Location = new System.Drawing.Point(0, 21);
+			lstAccounts.Name = "lstAccounts";
+			lstAccounts.Size = new System.Drawing.Size(221, 64);
+			lstAccounts.TabIndex = 25;
+			lstAccounts.Tag = "5";
+			lstAccounts.SelectedIndexChanged += this.OrgLevelList_SelectedIndexChanged;
+			lstAccounts.MouseDoubleClick += this.OrgLevelList_MouseDoubleClick;
+			// 
+			// button3
+			// 
+			button3.Location = new System.Drawing.Point(150, 91);
+			button3.Name = "button3";
+			button3.Size = new System.Drawing.Size(66, 23);
+			button3.TabIndex = 24;
+			button3.Text = "Manage";
+			button3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			button3.UseVisualStyleBackColor = true;
+			// 
+			// button4
+			// 
+			button4.Location = new System.Drawing.Point(78, 91);
+			button4.Name = "button4";
+			button4.Size = new System.Drawing.Size(66, 23);
+			button4.TabIndex = 23;
+			button4.Text = "Remove";
+			button4.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			button4.UseVisualStyleBackColor = true;
+			// 
+			// button5
+			// 
+			button5.Location = new System.Drawing.Point(6, 91);
+			button5.Name = "button5";
+			button5.Size = new System.Drawing.Size(66, 23);
+			button5.TabIndex = 22;
+			button5.Text = "Assign";
+			button5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			button5.UseVisualStyleBackColor = true;
+			// 
+			// grpDepartments
+			// 
+			grpDepartments.Controls.Add(lstDepartments);
+			grpDepartments.Controls.Add(button13);
+			grpDepartments.Controls.Add(button14);
+			grpDepartments.Controls.Add(button15);
+			grpDepartments.Location = new System.Drawing.Point(294, 276);
+			grpDepartments.Name = "grpDepartments";
+			grpDepartments.Size = new System.Drawing.Size(227, 126);
+			grpDepartments.TabIndex = 34;
+			grpDepartments.TabStop = false;
+			grpDepartments.Tag = "4";
+			grpDepartments.Text = "Departments";
+			// 
+			// lstDepartments
+			// 
+			lstDepartments.FormattingEnabled = true;
+			lstDepartments.ItemHeight = 15;
+			lstDepartments.Location = new System.Drawing.Point(0, 21);
+			lstDepartments.Name = "lstDepartments";
+			lstDepartments.Size = new System.Drawing.Size(221, 64);
+			lstDepartments.TabIndex = 25;
+			lstDepartments.Tag = "4";
+			lstDepartments.SelectedIndexChanged += this.OrgLevelList_SelectedIndexChanged;
+			lstDepartments.MouseDoubleClick += this.OrgLevelList_MouseDoubleClick;
+			// 
+			// button13
+			// 
+			button13.Location = new System.Drawing.Point(150, 91);
+			button13.Name = "button13";
+			button13.Size = new System.Drawing.Size(66, 23);
+			button13.TabIndex = 24;
+			button13.Text = "Manage";
+			button13.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			button13.UseVisualStyleBackColor = true;
+			// 
+			// button14
+			// 
+			button14.Location = new System.Drawing.Point(78, 91);
+			button14.Name = "button14";
+			button14.Size = new System.Drawing.Size(66, 23);
+			button14.TabIndex = 23;
+			button14.Text = "Remove";
+			button14.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			button14.UseVisualStyleBackColor = true;
+			// 
+			// button15
+			// 
+			button15.Location = new System.Drawing.Point(6, 91);
+			button15.Name = "button15";
+			button15.Size = new System.Drawing.Size(66, 23);
+			button15.TabIndex = 22;
+			button15.Text = "Assign";
+			button15.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			button15.UseVisualStyleBackColor = true;
+			// 
+			// groupBox6
+			// 
+			groupBox6.Controls.Add(lstGroups);
+			groupBox6.Controls.Add(button16);
+			groupBox6.Controls.Add(button17);
+			groupBox6.Controls.Add(button18);
+			groupBox6.Location = new System.Drawing.Point(294, 408);
+			groupBox6.Name = "groupBox6";
+			groupBox6.Size = new System.Drawing.Size(227, 126);
+			groupBox6.TabIndex = 34;
+			groupBox6.TabStop = false;
+			groupBox6.Tag = "3";
+			groupBox6.Text = "Groups";
+			// 
+			// lstGroups
+			// 
+			lstGroups.FormattingEnabled = true;
+			lstGroups.ItemHeight = 15;
+			lstGroups.Location = new System.Drawing.Point(0, 21);
+			lstGroups.Name = "lstGroups";
+			lstGroups.Size = new System.Drawing.Size(221, 64);
+			lstGroups.TabIndex = 25;
+			lstGroups.Tag = "3";
+			lstGroups.SelectedIndexChanged += this.OrgLevelList_SelectedIndexChanged;
+			lstGroups.MouseDoubleClick += this.OrgLevelList_MouseDoubleClick;
+			// 
+			// button16
+			// 
+			button16.Location = new System.Drawing.Point(150, 91);
+			button16.Name = "button16";
+			button16.Size = new System.Drawing.Size(66, 23);
+			button16.TabIndex = 24;
+			button16.Text = "Manage";
+			button16.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			button16.UseVisualStyleBackColor = true;
+			// 
+			// button17
+			// 
+			button17.Location = new System.Drawing.Point(78, 91);
+			button17.Name = "button17";
+			button17.Size = new System.Drawing.Size(66, 23);
+			button17.TabIndex = 23;
+			button17.Text = "Remove";
+			button17.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			button17.UseVisualStyleBackColor = true;
+			// 
+			// button18
+			// 
+			button18.Location = new System.Drawing.Point(6, 91);
+			button18.Name = "button18";
+			button18.Size = new System.Drawing.Size(66, 23);
+			button18.TabIndex = 22;
+			button18.Text = "Assign";
+			button18.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			button18.UseVisualStyleBackColor = true;
 			// 
 			// frmManagementConsole
 			// 
 			AcceptButton = btnLogin;
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new System.Drawing.Size(518, 491);
+			ClientSize = new System.Drawing.Size(1124, 619);
+			Controls.Add(groupBox6);
+			Controls.Add(grpDepartments);
+			Controls.Add(grpAccounts);
+			Controls.Add(grpCompanies);
 			Controls.Add(lblTreePath);
 			Controls.Add(label3);
 			Controls.Add(comboBox6);
 			Controls.Add(groupBox1);
 			Controls.Add(comboBox5);
-			Controls.Add(groupBox6);
 			Controls.Add(comboBox4);
 			Controls.Add(grpTree);
 			Controls.Add(comboBox3);
@@ -762,10 +875,10 @@ namespace MyNotebooks.subforms
 			Controls.Add(grpGroups);
 			Controls.Add(comboBox2);
 			Controls.Add(label4);
-			Controls.Add(groupBox3);
 			Controls.Add(groupBox2);
 			Controls.Add(grpUsers);
 			Controls.Add(panel1);
+			FormBorderStyle = FormBorderStyle.FixedSingle;
 			Name = "frmManagementConsole";
 			Text = "ManagementConsole";
 			Activated += this.frmManagementConsole_Activated;
@@ -776,15 +889,15 @@ namespace MyNotebooks.subforms
 			pnlLogin.PerformLayout();
 			toolStripContainer1.ResumeLayout(false);
 			toolStripContainer1.PerformLayout();
-			groupBox3.ResumeLayout(false);
-			groupBox3.PerformLayout();
 			grpGroups.ResumeLayout(false);
 			grpTree.ResumeLayout(false);
 			mnuContextTree.ResumeLayout(false);
-			groupBox6.ResumeLayout(false);
-			groupBox6.PerformLayout();
 			groupBox1.ResumeLayout(false);
 			groupBox1.PerformLayout();
+			grpCompanies.ResumeLayout(false);
+			grpAccounts.ResumeLayout(false);
+			grpDepartments.ResumeLayout(false);
+			groupBox6.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
@@ -796,7 +909,6 @@ namespace MyNotebooks.subforms
 		private Panel panel1;
 		private ContextMenuStrip mnuContextTree;
 		private ToolStripContainer toolStripContainer1;
-		private GroupBox groupBox3;
 		private GroupBox grpGroups;
 		private Panel pnlCreateUser;
 		private ComboBox ddlAccessLevels;
@@ -814,10 +926,6 @@ namespace MyNotebooks.subforms
 		private Label lblAddCurrentTreeSelection;
 		private ComboBox comboBox1;
 		private Label label5;
-		private Button btnAssignCompanies;
-		private CheckedListBox clbCompanies;
-		private Button button2;
-		private Button button1;
 		private CheckedListBox clbGroups;
 		private GroupBox grpTree;
 		private Label label4;
@@ -830,10 +938,6 @@ namespace MyNotebooks.subforms
 		private Label label9;
 		private Label label8;
 		private ComboBox comboBox2;
-		private CheckBox checkBox1;
-		private GroupBox groupBox6;
-		private CheckBox checkBox2;
-		private CheckedListBox clbAccounts;
 		private GroupBox groupBox1;
 		private CheckBox checkBox3;
 		private CheckedListBox clbDepartments;
@@ -842,9 +946,6 @@ namespace MyNotebooks.subforms
 		private Button button9;
 		private Button button10;
 		private Button button11;
-		private Button button3;
-		private Button button4;
-		private Button button5;
 		private Button button6;
 		private Button button7;
 		private Button button8;
@@ -857,5 +958,25 @@ namespace MyNotebooks.subforms
 		private ToolStripMenuItem mnuCreateNew;
 		private Label label3;
 		private Label lblTreePath;
+		private GroupBox grpCompanies;
+		private ListBox lstCompanies;
+		private Button button1;
+		private Button button2;
+		private Button button12;
+		private GroupBox grpAccounts;
+		private ListBox lstAccounts;
+		private Button button3;
+		private Button button4;
+		private Button button5;
+		private GroupBox grpDepartments;
+		private ListBox lstDepartments;
+		private Button button13;
+		private Button button14;
+		private Button button15;
+		private GroupBox groupBox6;
+		private ListBox lstGroups;
+		private Button button16;
+		private Button button17;
+		private Button button18;
 	}
 }

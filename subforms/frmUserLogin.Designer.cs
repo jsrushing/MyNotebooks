@@ -1,4 +1,4 @@
-﻿namespace MyNotebooks.subforms
+﻿namespace myNotebooks.subforms
 {
 	partial class frmUserLogin
 	{

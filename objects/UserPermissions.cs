@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using myNotebooks.subforms;
 using Newtonsoft.Json.Linq;
 
-namespace MyNotebooks.objects
+namespace myNotebooks.objects
 {
 	public class UserPermissions
 	{
