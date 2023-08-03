@@ -47,76 +47,53 @@ namespace myNotebooks.subforms
 			btnLogin = new Button();
 			label2 = new Label();
 			txtPwd = new TextBox();
-			groupBox2 = new GroupBox();
-			panel1 = new Panel();
-			toolStripContainer1 = new ToolStripContainer();
-			grpGroups = new GroupBox();
-			button9 = new Button();
-			button10 = new Button();
-			clbGroups = new CheckedListBox();
-			button11 = new Button();
-			label7 = new Label();
-			lblAddCurrentTreeSelection = new Label();
-			comboBox1 = new ComboBox();
-			label5 = new Label();
-			grpTree = new GroupBox();
-			treeUser = new TreeView();
+			grpMasterUser = new GroupBox();
+			grpCompanies_MU = new GroupBox();
+			lstCompanies_MU = new ListBox();
 			mnuContextTree = new ContextMenuStrip(components);
 			mnuAssignUser = new ToolStripMenuItem();
 			mnuAdd = new ToolStripMenuItem();
 			mnuEdit = new ToolStripMenuItem();
 			mnuDelete = new ToolStripMenuItem();
 			mnuCreateNew = new ToolStripMenuItem();
-			label4 = new Label();
-			comboBox2 = new ComboBox();
-			label8 = new Label();
-			label9 = new Label();
-			label10 = new Label();
-			label11 = new Label();
-			comboBox3 = new ComboBox();
-			comboBox4 = new ComboBox();
-			comboBox5 = new ComboBox();
-			comboBox6 = new ComboBox();
-			groupBox1 = new GroupBox();
-			button6 = new Button();
-			button7 = new Button();
-			button8 = new Button();
-			checkBox3 = new CheckBox();
-			clbDepartments = new CheckedListBox();
+			grpGroups_MU = new GroupBox();
+			lstGroups_MU = new ListBox();
+			grpDepartments_MU = new GroupBox();
+			lstDepartments_MU = new ListBox();
+			grpAccounts_MU = new GroupBox();
+			lstAccounts_MU = new ListBox();
+			toolStripContainer1 = new ToolStripContainer();
+			grpTree = new GroupBox();
+			treeUser = new TreeView();
 			label3 = new Label();
 			lblTreePath = new Label();
-			grpCompanies = new GroupBox();
-			lstCompanies = new ListBox();
-			button1 = new Button();
-			button2 = new Button();
-			button12 = new Button();
-			grpAccounts = new GroupBox();
-			lstAccounts = new ListBox();
-			button3 = new Button();
-			button4 = new Button();
-			button5 = new Button();
-			grpDepartments = new GroupBox();
-			lstDepartments = new ListBox();
-			button13 = new Button();
-			button14 = new Button();
-			button15 = new Button();
-			groupBox6 = new GroupBox();
-			lstGroups = new ListBox();
-			button16 = new Button();
-			button17 = new Button();
-			button18 = new Button();
+			panel2 = new Panel();
+			groupBox1 = new GroupBox();
+			grpCurrentUser = new GroupBox();
+			grpCompanies_CU = new GroupBox();
+			lstCompanies_CU = new ListBox();
+			grpGroups_CU = new GroupBox();
+			lstGroups_CU = new ListBox();
+			grpDepartments_CU = new GroupBox();
+			lstDepartments_CU = new ListBox();
+			grpAccounts_CU = new GroupBox();
+			lstAccounts_CU = new ListBox();
 			grpUsers.SuspendLayout();
 			pnlCreateUser.SuspendLayout();
 			pnlLogin.SuspendLayout();
-			toolStripContainer1.SuspendLayout();
-			grpGroups.SuspendLayout();
-			grpTree.SuspendLayout();
+			grpMasterUser.SuspendLayout();
+			grpCompanies_MU.SuspendLayout();
 			mnuContextTree.SuspendLayout();
-			groupBox1.SuspendLayout();
-			grpCompanies.SuspendLayout();
-			grpAccounts.SuspendLayout();
-			grpDepartments.SuspendLayout();
-			groupBox6.SuspendLayout();
+			grpGroups_MU.SuspendLayout();
+			grpDepartments_MU.SuspendLayout();
+			grpAccounts_MU.SuspendLayout();
+			toolStripContainer1.SuspendLayout();
+			grpTree.SuspendLayout();
+			grpCurrentUser.SuspendLayout();
+			grpCompanies_CU.SuspendLayout();
+			grpGroups_CU.SuspendLayout();
+			grpDepartments_CU.SuspendLayout();
+			grpAccounts_CU.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// grpUsers
@@ -125,9 +102,9 @@ namespace myNotebooks.subforms
 			grpUsers.Controls.Add(btnCreateUser);
 			grpUsers.Controls.Add(pnlCreateUser);
 			grpUsers.Controls.Add(pnlLogin);
-			grpUsers.Location = new System.Drawing.Point(8, 12);
+			grpUsers.Location = new System.Drawing.Point(8, 3);
 			grpUsers.Name = "grpUsers";
-			grpUsers.Size = new System.Drawing.Size(280, 522);
+			grpUsers.Size = new System.Drawing.Size(280, 516);
 			grpUsers.TabIndex = 20;
 			grpUsers.TabStop = false;
 			grpUsers.Text = "Users";
@@ -266,150 +243,42 @@ namespace myNotebooks.subforms
 			txtPwd.Size = new System.Drawing.Size(184, 23);
 			txtPwd.TabIndex = 1;
 			// 
-			// groupBox2
+			// grpMasterUser
 			// 
-			groupBox2.Location = new System.Drawing.Point(1029, 328);
-			groupBox2.Name = "groupBox2";
-			groupBox2.Size = new System.Drawing.Size(200, 100);
-			groupBox2.TabIndex = 21;
-			groupBox2.TabStop = false;
-			groupBox2.Text = "groupBox2";
+			grpMasterUser.Controls.Add(grpCompanies_MU);
+			grpMasterUser.Controls.Add(grpGroups_MU);
+			grpMasterUser.Controls.Add(grpDepartments_MU);
+			grpMasterUser.Controls.Add(grpAccounts_MU);
+			grpMasterUser.Location = new System.Drawing.Point(294, 3);
+			grpMasterUser.Name = "grpMasterUser";
+			grpMasterUser.Size = new System.Drawing.Size(242, 516);
+			grpMasterUser.TabIndex = 21;
+			grpMasterUser.TabStop = false;
+			grpMasterUser.Text = "Available Organization Levels";
 			// 
-			// panel1
+			// grpCompanies_MU
 			// 
-			panel1.Location = new System.Drawing.Point(1029, 177);
-			panel1.Name = "panel1";
-			panel1.Size = new System.Drawing.Size(200, 100);
-			panel1.TabIndex = 20;
+			grpCompanies_MU.Controls.Add(lstCompanies_MU);
+			grpCompanies_MU.Location = new System.Drawing.Point(6, 19);
+			grpCompanies_MU.Name = "grpCompanies_MU";
+			grpCompanies_MU.Size = new System.Drawing.Size(227, 123);
+			grpCompanies_MU.TabIndex = 33;
+			grpCompanies_MU.TabStop = false;
+			grpCompanies_MU.Tag = "6";
+			grpCompanies_MU.Text = "Companies";
 			// 
-			// toolStripContainer1
+			// lstCompanies_MU
 			// 
-			// 
-			// toolStripContainer1.ContentPanel
-			// 
-			toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(150, 150);
-			toolStripContainer1.Location = new System.Drawing.Point(12, 263);
-			toolStripContainer1.Name = "toolStripContainer1";
-			toolStripContainer1.Size = new System.Drawing.Size(150, 175);
-			toolStripContainer1.TabIndex = 25;
-			toolStripContainer1.Text = "toolStripContainer1";
-			// 
-			// grpGroups
-			// 
-			grpGroups.Controls.Add(button9);
-			grpGroups.Controls.Add(button10);
-			grpGroups.Controls.Add(clbGroups);
-			grpGroups.Controls.Add(button11);
-			grpGroups.Location = new System.Drawing.Point(779, 63);
-			grpGroups.Name = "grpGroups";
-			grpGroups.Size = new System.Drawing.Size(224, 214);
-			grpGroups.TabIndex = 22;
-			grpGroups.TabStop = false;
-			grpGroups.Text = "Groups";
-			// 
-			// button9
-			// 
-			button9.Location = new System.Drawing.Point(150, 178);
-			button9.Name = "button9";
-			button9.Size = new System.Drawing.Size(66, 23);
-			button9.TabIndex = 33;
-			button9.Text = "Manage";
-			button9.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			button9.UseVisualStyleBackColor = true;
-			// 
-			// button10
-			// 
-			button10.Location = new System.Drawing.Point(78, 178);
-			button10.Name = "button10";
-			button10.Size = new System.Drawing.Size(66, 23);
-			button10.TabIndex = 32;
-			button10.Text = "Remove";
-			button10.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			button10.UseVisualStyleBackColor = true;
-			// 
-			// clbGroups
-			// 
-			clbGroups.CheckOnClick = true;
-			clbGroups.FormattingEnabled = true;
-			clbGroups.Location = new System.Drawing.Point(6, 21);
-			clbGroups.Name = "clbGroups";
-			clbGroups.Size = new System.Drawing.Size(210, 148);
-			clbGroups.TabIndex = 21;
-			// 
-			// button11
-			// 
-			button11.Location = new System.Drawing.Point(6, 178);
-			button11.Name = "button11";
-			button11.Size = new System.Drawing.Size(66, 23);
-			button11.TabIndex = 31;
-			button11.Text = "Assign";
-			button11.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			button11.UseVisualStyleBackColor = true;
-			// 
-			// label7
-			// 
-			label7.AutoSize = true;
-			label7.Cursor = Cursors.Hand;
-			label7.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
-			label7.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			label7.Location = new System.Drawing.Point(1082, 493);
-			label7.Name = "label7";
-			label7.Size = new System.Drawing.Size(94, 15);
-			label7.TabIndex = 5;
-			label7.Text = "delete bookmark";
-			// 
-			// lblAddCurrentTreeSelection
-			// 
-			lblAddCurrentTreeSelection.AutoSize = true;
-			lblAddCurrentTreeSelection.Cursor = Cursors.Hand;
-			lblAddCurrentTreeSelection.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
-			lblAddCurrentTreeSelection.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			lblAddCurrentTreeSelection.Location = new System.Drawing.Point(1061, 38);
-			lblAddCurrentTreeSelection.Name = "lblAddCurrentTreeSelection";
-			lblAddCurrentTreeSelection.Size = new System.Drawing.Size(116, 15);
-			lblAddCurrentTreeSelection.TabIndex = 4;
-			lblAddCurrentTreeSelection.Text = "add current selection";
-			// 
-			// comboBox1
-			// 
-			comboBox1.FormattingEnabled = true;
-			comboBox1.Location = new System.Drawing.Point(1141, 58);
-			comboBox1.Name = "comboBox1";
-			comboBox1.Size = new System.Drawing.Size(185, 23);
-			comboBox1.TabIndex = 3;
-			// 
-			// label5
-			// 
-			label5.AutoSize = true;
-			label5.Location = new System.Drawing.Point(1070, 61);
-			label5.Name = "label5";
-			label5.Size = new System.Drawing.Size(69, 15);
-			label5.TabIndex = 2;
-			label5.Text = "Bookmarks:";
-			// 
-			// grpTree
-			// 
-			grpTree.Controls.Add(treeUser);
-			grpTree.Location = new System.Drawing.Point(536, 12);
-			grpTree.Name = "grpTree";
-			grpTree.Size = new System.Drawing.Size(221, 461);
-			grpTree.TabIndex = 28;
-			grpTree.TabStop = false;
-			grpTree.Text = "Current User";
-			// 
-			// treeUser
-			// 
-			treeUser.ContextMenuStrip = mnuContextTree;
-			treeUser.Location = new System.Drawing.Point(3, 18);
-			treeUser.Name = "treeUser";
-			treeUser.Size = new System.Drawing.Size(209, 401);
-			treeUser.TabIndex = 0;
-			treeUser.Text = "tree";
-			treeUser.BeforeSelect += this.treeUser_BeforeSelect;
-			treeUser.NodeMouseClick += this.treeUser_NodeMouseClick;
-			treeUser.Click += this.treeUser_Click;
-			treeUser.DoubleClick += this.treeUser_DoubleClick;
-			treeUser.MouseMove += this.treeUser_MouseMove;
+			lstCompanies_MU.ContextMenuStrip = mnuContextTree;
+			lstCompanies_MU.FormattingEnabled = true;
+			lstCompanies_MU.ItemHeight = 15;
+			lstCompanies_MU.Location = new System.Drawing.Point(0, 21);
+			lstCompanies_MU.Name = "lstCompanies_MU";
+			lstCompanies_MU.Size = new System.Drawing.Size(227, 94);
+			lstCompanies_MU.TabIndex = 25;
+			lstCompanies_MU.Tag = "6";
+			lstCompanies_MU.SelectedIndexChanged += this.OrgLevelList_SelectedIndexChanged;
+			lstCompanies_MU.MouseDoubleClick += this.OrgLevelList_MouseDoubleClick;
 			// 
 			// mnuContextTree
 			// 
@@ -448,158 +317,113 @@ namespace myNotebooks.subforms
 			mnuCreateNew.Text = "Create New";
 			mnuCreateNew.Click += this.mnuCreateNew_Click;
 			// 
-			// label4
+			// grpGroups_MU
 			// 
-			label4.AutoSize = true;
-			label4.Location = new System.Drawing.Point(1010, 540);
-			label4.Name = "label4";
-			label4.Size = new System.Drawing.Size(93, 15);
-			label4.TabIndex = 1;
-			label4.Text = "UserPermissions";
+			grpGroups_MU.Controls.Add(lstGroups_MU);
+			grpGroups_MU.Location = new System.Drawing.Point(6, 388);
+			grpGroups_MU.Name = "grpGroups_MU";
+			grpGroups_MU.Size = new System.Drawing.Size(227, 123);
+			grpGroups_MU.TabIndex = 34;
+			grpGroups_MU.TabStop = false;
+			grpGroups_MU.Tag = "3";
+			grpGroups_MU.Text = "Groups";
 			// 
-			// comboBox2
+			// lstGroups_MU
 			// 
-			comboBox2.FormattingEnabled = true;
-			comboBox2.Items.AddRange(new object[] { "Free 30-day trial" });
-			comboBox2.Location = new System.Drawing.Point(1082, 536);
-			comboBox2.Name = "comboBox2";
-			comboBox2.Size = new System.Drawing.Size(188, 23);
-			comboBox2.TabIndex = 20;
+			lstGroups_MU.ContextMenuStrip = mnuContextTree;
+			lstGroups_MU.FormattingEnabled = true;
+			lstGroups_MU.ItemHeight = 15;
+			lstGroups_MU.Location = new System.Drawing.Point(0, 21);
+			lstGroups_MU.Name = "lstGroups_MU";
+			lstGroups_MU.Size = new System.Drawing.Size(221, 94);
+			lstGroups_MU.TabIndex = 25;
+			lstGroups_MU.Tag = "3";
+			lstGroups_MU.SelectedIndexChanged += this.OrgLevelList_SelectedIndexChanged;
+			lstGroups_MU.MouseDoubleClick += this.OrgLevelList_MouseDoubleClick;
 			// 
-			// label8
+			// grpDepartments_MU
 			// 
-			label8.AutoSize = true;
-			label8.Location = new System.Drawing.Point(1013, 569);
-			label8.Name = "label8";
-			label8.Size = new System.Drawing.Size(67, 15);
-			label8.TabIndex = 21;
-			label8.Text = "Companies";
+			grpDepartments_MU.Controls.Add(lstDepartments_MU);
+			grpDepartments_MU.Location = new System.Drawing.Point(6, 265);
+			grpDepartments_MU.Name = "grpDepartments_MU";
+			grpDepartments_MU.Size = new System.Drawing.Size(227, 123);
+			grpDepartments_MU.TabIndex = 34;
+			grpDepartments_MU.TabStop = false;
+			grpDepartments_MU.Tag = "4";
+			grpDepartments_MU.Text = "Departments";
 			// 
-			// label9
+			// lstDepartments_MU
 			// 
-			label9.AutoSize = true;
-			label9.Location = new System.Drawing.Point(1023, 598);
-			label9.Name = "label9";
-			label9.Size = new System.Drawing.Size(57, 15);
-			label9.TabIndex = 22;
-			label9.Text = "Accounts";
+			lstDepartments_MU.ContextMenuStrip = mnuContextTree;
+			lstDepartments_MU.FormattingEnabled = true;
+			lstDepartments_MU.ItemHeight = 15;
+			lstDepartments_MU.Location = new System.Drawing.Point(0, 21);
+			lstDepartments_MU.Name = "lstDepartments_MU";
+			lstDepartments_MU.Size = new System.Drawing.Size(227, 94);
+			lstDepartments_MU.TabIndex = 25;
+			lstDepartments_MU.Tag = "4";
+			lstDepartments_MU.SelectedIndexChanged += this.OrgLevelList_SelectedIndexChanged;
+			lstDepartments_MU.MouseDoubleClick += this.OrgLevelList_MouseDoubleClick;
 			// 
-			// label10
+			// grpAccounts_MU
 			// 
-			label10.AutoSize = true;
-			label10.Location = new System.Drawing.Point(1005, 627);
-			label10.Name = "label10";
-			label10.Size = new System.Drawing.Size(75, 15);
-			label10.TabIndex = 23;
-			label10.Text = "Departments";
+			grpAccounts_MU.Controls.Add(lstAccounts_MU);
+			grpAccounts_MU.Location = new System.Drawing.Point(6, 142);
+			grpAccounts_MU.Name = "grpAccounts_MU";
+			grpAccounts_MU.Size = new System.Drawing.Size(227, 123);
+			grpAccounts_MU.TabIndex = 34;
+			grpAccounts_MU.TabStop = false;
+			grpAccounts_MU.Tag = "5";
+			grpAccounts_MU.Text = "Accounts";
 			// 
-			// label11
+			// lstAccounts_MU
 			// 
-			label11.AutoSize = true;
-			label11.Location = new System.Drawing.Point(1035, 656);
-			label11.Name = "label11";
-			label11.Size = new System.Drawing.Size(45, 15);
-			label11.TabIndex = 24;
-			label11.Text = "Groups";
+			lstAccounts_MU.ContextMenuStrip = mnuContextTree;
+			lstAccounts_MU.FormattingEnabled = true;
+			lstAccounts_MU.ItemHeight = 15;
+			lstAccounts_MU.Location = new System.Drawing.Point(0, 21);
+			lstAccounts_MU.Name = "lstAccounts_MU";
+			lstAccounts_MU.Size = new System.Drawing.Size(227, 94);
+			lstAccounts_MU.TabIndex = 25;
+			lstAccounts_MU.Tag = "5";
+			lstAccounts_MU.SelectedIndexChanged += this.OrgLevelList_SelectedIndexChanged;
+			lstAccounts_MU.MouseDoubleClick += this.OrgLevelList_MouseDoubleClick;
 			// 
-			// comboBox3
+			// toolStripContainer1
 			// 
-			comboBox3.FormattingEnabled = true;
-			comboBox3.Items.AddRange(new object[] { "Free 30-day trial" });
-			comboBox3.Location = new System.Drawing.Point(1082, 565);
-			comboBox3.Name = "comboBox3";
-			comboBox3.Size = new System.Drawing.Size(188, 23);
-			comboBox3.TabIndex = 25;
 			// 
-			// comboBox4
+			// toolStripContainer1.ContentPanel
 			// 
-			comboBox4.FormattingEnabled = true;
-			comboBox4.Items.AddRange(new object[] { "Free 30-day trial" });
-			comboBox4.Location = new System.Drawing.Point(1082, 594);
-			comboBox4.Name = "comboBox4";
-			comboBox4.Size = new System.Drawing.Size(188, 23);
-			comboBox4.TabIndex = 26;
+			toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(150, 150);
+			toolStripContainer1.Location = new System.Drawing.Point(12, 263);
+			toolStripContainer1.Name = "toolStripContainer1";
+			toolStripContainer1.Size = new System.Drawing.Size(150, 175);
+			toolStripContainer1.TabIndex = 25;
+			toolStripContainer1.Text = "toolStripContainer1";
 			// 
-			// comboBox5
+			// grpTree
 			// 
-			comboBox5.FormattingEnabled = true;
-			comboBox5.Items.AddRange(new object[] { "Free 30-day trial" });
-			comboBox5.Location = new System.Drawing.Point(1082, 652);
-			comboBox5.Name = "comboBox5";
-			comboBox5.Size = new System.Drawing.Size(188, 23);
-			comboBox5.TabIndex = 27;
+			grpTree.Controls.Add(treeUser);
+			grpTree.Location = new System.Drawing.Point(1089, 22);
+			grpTree.Name = "grpTree";
+			grpTree.Size = new System.Drawing.Size(221, 461);
+			grpTree.TabIndex = 28;
+			grpTree.TabStop = false;
+			grpTree.Text = "Current User";
 			// 
-			// comboBox6
+			// treeUser
 			// 
-			comboBox6.FormattingEnabled = true;
-			comboBox6.Items.AddRange(new object[] { "Free 30-day trial" });
-			comboBox6.Location = new System.Drawing.Point(1082, 623);
-			comboBox6.Name = "comboBox6";
-			comboBox6.Size = new System.Drawing.Size(188, 23);
-			comboBox6.TabIndex = 28;
-			// 
-			// groupBox1
-			// 
-			groupBox1.Controls.Add(button6);
-			groupBox1.Controls.Add(button7);
-			groupBox1.Controls.Add(button8);
-			groupBox1.Controls.Add(checkBox3);
-			groupBox1.Controls.Add(clbDepartments);
-			groupBox1.Location = new System.Drawing.Point(763, 382);
-			groupBox1.Name = "groupBox1";
-			groupBox1.Size = new System.Drawing.Size(227, 179);
-			groupBox1.TabIndex = 30;
-			groupBox1.TabStop = false;
-			groupBox1.Text = "Departments";
-			// 
-			// button6
-			// 
-			button6.Location = new System.Drawing.Point(150, 149);
-			button6.Name = "button6";
-			button6.Size = new System.Drawing.Size(66, 23);
-			button6.TabIndex = 24;
-			button6.Text = "Manage";
-			button6.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			button6.UseVisualStyleBackColor = true;
-			// 
-			// button7
-			// 
-			button7.Location = new System.Drawing.Point(78, 149);
-			button7.Name = "button7";
-			button7.Size = new System.Drawing.Size(66, 23);
-			button7.TabIndex = 23;
-			button7.Text = "Remove";
-			button7.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			button7.UseVisualStyleBackColor = true;
-			// 
-			// button8
-			// 
-			button8.Location = new System.Drawing.Point(6, 149);
-			button8.Name = "button8";
-			button8.Size = new System.Drawing.Size(66, 23);
-			button8.TabIndex = 22;
-			button8.Text = "Assign";
-			button8.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			button8.UseVisualStyleBackColor = true;
-			// 
-			// checkBox3
-			// 
-			checkBox3.AutoSize = true;
-			checkBox3.Location = new System.Drawing.Point(135, 10);
-			checkBox3.Name = "checkBox3";
-			checkBox3.Size = new System.Drawing.Size(71, 19);
-			checkBox3.TabIndex = 21;
-			checkBox3.Text = "select all";
-			checkBox3.UseVisualStyleBackColor = true;
-			// 
-			// clbDepartments
-			// 
-			clbDepartments.CheckOnClick = true;
-			clbDepartments.FormattingEnabled = true;
-			clbDepartments.Location = new System.Drawing.Point(6, 31);
-			clbDepartments.Name = "clbDepartments";
-			clbDepartments.Size = new System.Drawing.Size(210, 112);
-			clbDepartments.TabIndex = 17;
+			treeUser.ContextMenuStrip = mnuContextTree;
+			treeUser.Location = new System.Drawing.Point(3, 18);
+			treeUser.Name = "treeUser";
+			treeUser.Size = new System.Drawing.Size(209, 401);
+			treeUser.TabIndex = 0;
+			treeUser.Text = "tree";
+			treeUser.BeforeSelect += this.treeUser_BeforeSelect;
+			treeUser.NodeMouseClick += this.treeUser_NodeMouseClick;
+			treeUser.Click += this.treeUser_Click;
+			treeUser.DoubleClick += this.treeUser_DoubleClick;
+			treeUser.MouseMove += this.treeUser_MouseMove;
 			// 
 			// label3
 			// 
@@ -622,263 +446,140 @@ namespace myNotebooks.subforms
 			lblTreePath.TabIndex = 32;
 			lblTreePath.Text = "Companies > Accounts > Departments > Groups";
 			// 
-			// grpCompanies
+			// panel2
 			// 
-			grpCompanies.Controls.Add(lstCompanies);
-			grpCompanies.Controls.Add(button1);
-			grpCompanies.Controls.Add(button2);
-			grpCompanies.Controls.Add(button12);
-			grpCompanies.Location = new System.Drawing.Point(300, 12);
-			grpCompanies.Name = "grpCompanies";
-			grpCompanies.Size = new System.Drawing.Size(227, 126);
-			grpCompanies.TabIndex = 33;
-			grpCompanies.TabStop = false;
-			grpCompanies.Tag = "6";
-			grpCompanies.Text = "Companies";
+			panel2.Location = new System.Drawing.Point(972, 521);
+			panel2.Name = "panel2";
+			panel2.Size = new System.Drawing.Size(125, 117);
+			panel2.TabIndex = 22;
 			// 
-			// lstCompanies
+			// groupBox1
 			// 
-			lstCompanies.FormattingEnabled = true;
-			lstCompanies.ItemHeight = 15;
-			lstCompanies.Location = new System.Drawing.Point(0, 21);
-			lstCompanies.Name = "lstCompanies";
-			lstCompanies.Size = new System.Drawing.Size(221, 64);
-			lstCompanies.TabIndex = 25;
-			lstCompanies.Tag = "6";
-			lstCompanies.SelectedIndexChanged += this.OrgLevelList_SelectedIndexChanged;
-			lstCompanies.MouseDoubleClick += this.OrgLevelList_MouseDoubleClick;
+			groupBox1.Location = new System.Drawing.Point(1106, 521);
+			groupBox1.Name = "groupBox1";
+			groupBox1.Size = new System.Drawing.Size(114, 94);
+			groupBox1.TabIndex = 35;
+			groupBox1.TabStop = false;
+			groupBox1.Text = "groupBox2";
 			// 
-			// button1
+			// grpCurrentUser
 			// 
-			button1.Location = new System.Drawing.Point(150, 91);
-			button1.Name = "button1";
-			button1.Size = new System.Drawing.Size(66, 23);
-			button1.TabIndex = 24;
-			button1.Text = "Manage";
-			button1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			button1.UseVisualStyleBackColor = true;
+			grpCurrentUser.Controls.Add(grpCompanies_CU);
+			grpCurrentUser.Controls.Add(grpGroups_CU);
+			grpCurrentUser.Controls.Add(grpDepartments_CU);
+			grpCurrentUser.Controls.Add(grpAccounts_CU);
+			grpCurrentUser.Location = new System.Drawing.Point(544, 3);
+			grpCurrentUser.Name = "grpCurrentUser";
+			grpCurrentUser.Size = new System.Drawing.Size(242, 516);
+			grpCurrentUser.TabIndex = 36;
+			grpCurrentUser.TabStop = false;
+			grpCurrentUser.Text = "Current User Organization Levels";
 			// 
-			// button2
+			// grpCompanies_CU
 			// 
-			button2.Location = new System.Drawing.Point(78, 91);
-			button2.Name = "button2";
-			button2.Size = new System.Drawing.Size(66, 23);
-			button2.TabIndex = 23;
-			button2.Text = "Remove";
-			button2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			button2.UseVisualStyleBackColor = true;
+			grpCompanies_CU.Controls.Add(lstCompanies_CU);
+			grpCompanies_CU.Location = new System.Drawing.Point(6, 19);
+			grpCompanies_CU.Name = "grpCompanies_CU";
+			grpCompanies_CU.Size = new System.Drawing.Size(227, 123);
+			grpCompanies_CU.TabIndex = 33;
+			grpCompanies_CU.TabStop = false;
+			grpCompanies_CU.Tag = "6";
+			grpCompanies_CU.Text = "Companies";
 			// 
-			// button12
+			// lstCompanies_CU
 			// 
-			button12.Location = new System.Drawing.Point(6, 91);
-			button12.Name = "button12";
-			button12.Size = new System.Drawing.Size(66, 23);
-			button12.TabIndex = 22;
-			button12.Text = "Assign";
-			button12.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			button12.UseVisualStyleBackColor = true;
+			lstCompanies_CU.ContextMenuStrip = mnuContextTree;
+			lstCompanies_CU.FormattingEnabled = true;
+			lstCompanies_CU.ItemHeight = 15;
+			lstCompanies_CU.Location = new System.Drawing.Point(0, 21);
+			lstCompanies_CU.Name = "lstCompanies_CU";
+			lstCompanies_CU.Size = new System.Drawing.Size(227, 94);
+			lstCompanies_CU.TabIndex = 25;
+			lstCompanies_CU.Tag = "6";
 			// 
-			// grpAccounts
+			// grpGroups_CU
 			// 
-			grpAccounts.Controls.Add(lstAccounts);
-			grpAccounts.Controls.Add(button3);
-			grpAccounts.Controls.Add(button4);
-			grpAccounts.Controls.Add(button5);
-			grpAccounts.Location = new System.Drawing.Point(300, 144);
-			grpAccounts.Name = "grpAccounts";
-			grpAccounts.Size = new System.Drawing.Size(227, 126);
-			grpAccounts.TabIndex = 34;
-			grpAccounts.TabStop = false;
-			grpAccounts.Tag = "5";
-			grpAccounts.Text = "Accounts";
+			grpGroups_CU.Controls.Add(lstGroups_CU);
+			grpGroups_CU.Location = new System.Drawing.Point(6, 388);
+			grpGroups_CU.Name = "grpGroups_CU";
+			grpGroups_CU.Size = new System.Drawing.Size(227, 123);
+			grpGroups_CU.TabIndex = 34;
+			grpGroups_CU.TabStop = false;
+			grpGroups_CU.Tag = "3";
+			grpGroups_CU.Text = "Groups";
 			// 
-			// lstAccounts
+			// lstGroups_CU
 			// 
-			lstAccounts.FormattingEnabled = true;
-			lstAccounts.ItemHeight = 15;
-			lstAccounts.Location = new System.Drawing.Point(0, 21);
-			lstAccounts.Name = "lstAccounts";
-			lstAccounts.Size = new System.Drawing.Size(221, 64);
-			lstAccounts.TabIndex = 25;
-			lstAccounts.Tag = "5";
-			lstAccounts.SelectedIndexChanged += this.OrgLevelList_SelectedIndexChanged;
-			lstAccounts.MouseDoubleClick += this.OrgLevelList_MouseDoubleClick;
+			lstGroups_CU.ContextMenuStrip = mnuContextTree;
+			lstGroups_CU.FormattingEnabled = true;
+			lstGroups_CU.ItemHeight = 15;
+			lstGroups_CU.Location = new System.Drawing.Point(0, 21);
+			lstGroups_CU.Name = "lstGroups_CU";
+			lstGroups_CU.Size = new System.Drawing.Size(221, 94);
+			lstGroups_CU.TabIndex = 25;
+			lstGroups_CU.Tag = "3";
 			// 
-			// button3
+			// grpDepartments_CU
 			// 
-			button3.Location = new System.Drawing.Point(150, 91);
-			button3.Name = "button3";
-			button3.Size = new System.Drawing.Size(66, 23);
-			button3.TabIndex = 24;
-			button3.Text = "Manage";
-			button3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			button3.UseVisualStyleBackColor = true;
+			grpDepartments_CU.Controls.Add(lstDepartments_CU);
+			grpDepartments_CU.Location = new System.Drawing.Point(6, 265);
+			grpDepartments_CU.Name = "grpDepartments_CU";
+			grpDepartments_CU.Size = new System.Drawing.Size(227, 123);
+			grpDepartments_CU.TabIndex = 34;
+			grpDepartments_CU.TabStop = false;
+			grpDepartments_CU.Tag = "4";
+			grpDepartments_CU.Text = "Departments";
 			// 
-			// button4
+			// lstDepartments_CU
 			// 
-			button4.Location = new System.Drawing.Point(78, 91);
-			button4.Name = "button4";
-			button4.Size = new System.Drawing.Size(66, 23);
-			button4.TabIndex = 23;
-			button4.Text = "Remove";
-			button4.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			button4.UseVisualStyleBackColor = true;
+			lstDepartments_CU.ContextMenuStrip = mnuContextTree;
+			lstDepartments_CU.FormattingEnabled = true;
+			lstDepartments_CU.ItemHeight = 15;
+			lstDepartments_CU.Location = new System.Drawing.Point(0, 21);
+			lstDepartments_CU.Name = "lstDepartments_CU";
+			lstDepartments_CU.Size = new System.Drawing.Size(227, 94);
+			lstDepartments_CU.TabIndex = 25;
+			lstDepartments_CU.Tag = "4";
 			// 
-			// button5
+			// grpAccounts_CU
 			// 
-			button5.Location = new System.Drawing.Point(6, 91);
-			button5.Name = "button5";
-			button5.Size = new System.Drawing.Size(66, 23);
-			button5.TabIndex = 22;
-			button5.Text = "Assign";
-			button5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			button5.UseVisualStyleBackColor = true;
+			grpAccounts_CU.Controls.Add(lstAccounts_CU);
+			grpAccounts_CU.Location = new System.Drawing.Point(6, 142);
+			grpAccounts_CU.Name = "grpAccounts_CU";
+			grpAccounts_CU.Size = new System.Drawing.Size(227, 123);
+			grpAccounts_CU.TabIndex = 34;
+			grpAccounts_CU.TabStop = false;
+			grpAccounts_CU.Tag = "5";
+			grpAccounts_CU.Text = "Accounts";
 			// 
-			// grpDepartments
+			// lstAccounts_CU
 			// 
-			grpDepartments.Controls.Add(lstDepartments);
-			grpDepartments.Controls.Add(button13);
-			grpDepartments.Controls.Add(button14);
-			grpDepartments.Controls.Add(button15);
-			grpDepartments.Location = new System.Drawing.Point(294, 276);
-			grpDepartments.Name = "grpDepartments";
-			grpDepartments.Size = new System.Drawing.Size(227, 126);
-			grpDepartments.TabIndex = 34;
-			grpDepartments.TabStop = false;
-			grpDepartments.Tag = "4";
-			grpDepartments.Text = "Departments";
-			// 
-			// lstDepartments
-			// 
-			lstDepartments.FormattingEnabled = true;
-			lstDepartments.ItemHeight = 15;
-			lstDepartments.Location = new System.Drawing.Point(0, 21);
-			lstDepartments.Name = "lstDepartments";
-			lstDepartments.Size = new System.Drawing.Size(221, 64);
-			lstDepartments.TabIndex = 25;
-			lstDepartments.Tag = "4";
-			lstDepartments.SelectedIndexChanged += this.OrgLevelList_SelectedIndexChanged;
-			lstDepartments.MouseDoubleClick += this.OrgLevelList_MouseDoubleClick;
-			// 
-			// button13
-			// 
-			button13.Location = new System.Drawing.Point(150, 91);
-			button13.Name = "button13";
-			button13.Size = new System.Drawing.Size(66, 23);
-			button13.TabIndex = 24;
-			button13.Text = "Manage";
-			button13.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			button13.UseVisualStyleBackColor = true;
-			// 
-			// button14
-			// 
-			button14.Location = new System.Drawing.Point(78, 91);
-			button14.Name = "button14";
-			button14.Size = new System.Drawing.Size(66, 23);
-			button14.TabIndex = 23;
-			button14.Text = "Remove";
-			button14.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			button14.UseVisualStyleBackColor = true;
-			// 
-			// button15
-			// 
-			button15.Location = new System.Drawing.Point(6, 91);
-			button15.Name = "button15";
-			button15.Size = new System.Drawing.Size(66, 23);
-			button15.TabIndex = 22;
-			button15.Text = "Assign";
-			button15.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			button15.UseVisualStyleBackColor = true;
-			// 
-			// groupBox6
-			// 
-			groupBox6.Controls.Add(lstGroups);
-			groupBox6.Controls.Add(button16);
-			groupBox6.Controls.Add(button17);
-			groupBox6.Controls.Add(button18);
-			groupBox6.Location = new System.Drawing.Point(294, 408);
-			groupBox6.Name = "groupBox6";
-			groupBox6.Size = new System.Drawing.Size(227, 126);
-			groupBox6.TabIndex = 34;
-			groupBox6.TabStop = false;
-			groupBox6.Tag = "3";
-			groupBox6.Text = "Groups";
-			// 
-			// lstGroups
-			// 
-			lstGroups.FormattingEnabled = true;
-			lstGroups.ItemHeight = 15;
-			lstGroups.Location = new System.Drawing.Point(0, 21);
-			lstGroups.Name = "lstGroups";
-			lstGroups.Size = new System.Drawing.Size(221, 64);
-			lstGroups.TabIndex = 25;
-			lstGroups.Tag = "3";
-			lstGroups.SelectedIndexChanged += this.OrgLevelList_SelectedIndexChanged;
-			lstGroups.MouseDoubleClick += this.OrgLevelList_MouseDoubleClick;
-			// 
-			// button16
-			// 
-			button16.Location = new System.Drawing.Point(150, 91);
-			button16.Name = "button16";
-			button16.Size = new System.Drawing.Size(66, 23);
-			button16.TabIndex = 24;
-			button16.Text = "Manage";
-			button16.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			button16.UseVisualStyleBackColor = true;
-			// 
-			// button17
-			// 
-			button17.Location = new System.Drawing.Point(78, 91);
-			button17.Name = "button17";
-			button17.Size = new System.Drawing.Size(66, 23);
-			button17.TabIndex = 23;
-			button17.Text = "Remove";
-			button17.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			button17.UseVisualStyleBackColor = true;
-			// 
-			// button18
-			// 
-			button18.Location = new System.Drawing.Point(6, 91);
-			button18.Name = "button18";
-			button18.Size = new System.Drawing.Size(66, 23);
-			button18.TabIndex = 22;
-			button18.Text = "Assign";
-			button18.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			button18.UseVisualStyleBackColor = true;
+			lstAccounts_CU.ContextMenuStrip = mnuContextTree;
+			lstAccounts_CU.FormattingEnabled = true;
+			lstAccounts_CU.ItemHeight = 15;
+			lstAccounts_CU.Location = new System.Drawing.Point(0, 21);
+			lstAccounts_CU.Name = "lstAccounts_CU";
+			lstAccounts_CU.Size = new System.Drawing.Size(227, 94);
+			lstAccounts_CU.TabIndex = 25;
+			lstAccounts_CU.Tag = "5";
 			// 
 			// frmManagementConsole
 			// 
 			AcceptButton = btnLogin;
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new System.Drawing.Size(1124, 619);
-			Controls.Add(groupBox6);
-			Controls.Add(grpDepartments);
-			Controls.Add(grpAccounts);
-			Controls.Add(grpCompanies);
+			ClientSize = new System.Drawing.Size(796, 525);
+			Controls.Add(grpCurrentUser);
+			Controls.Add(groupBox1);
+			Controls.Add(panel2);
 			Controls.Add(lblTreePath);
 			Controls.Add(label3);
-			Controls.Add(comboBox6);
-			Controls.Add(groupBox1);
-			Controls.Add(comboBox5);
-			Controls.Add(comboBox4);
 			Controls.Add(grpTree);
-			Controls.Add(comboBox3);
-			Controls.Add(label7);
-			Controls.Add(label11);
-			Controls.Add(lblAddCurrentTreeSelection);
-			Controls.Add(label10);
-			Controls.Add(comboBox1);
-			Controls.Add(label9);
-			Controls.Add(label5);
-			Controls.Add(label8);
-			Controls.Add(grpGroups);
-			Controls.Add(comboBox2);
-			Controls.Add(label4);
-			Controls.Add(groupBox2);
+			Controls.Add(grpMasterUser);
 			Controls.Add(grpUsers);
-			Controls.Add(panel1);
 			FormBorderStyle = FormBorderStyle.FixedSingle;
+			MaximizeBox = false;
+			MinimizeBox = false;
 			Name = "frmManagementConsole";
 			Text = "ManagementConsole";
 			Activated += this.frmManagementConsole_Activated;
@@ -887,17 +588,20 @@ namespace myNotebooks.subforms
 			pnlCreateUser.PerformLayout();
 			pnlLogin.ResumeLayout(false);
 			pnlLogin.PerformLayout();
+			grpMasterUser.ResumeLayout(false);
+			grpCompanies_MU.ResumeLayout(false);
+			mnuContextTree.ResumeLayout(false);
+			grpGroups_MU.ResumeLayout(false);
+			grpDepartments_MU.ResumeLayout(false);
+			grpAccounts_MU.ResumeLayout(false);
 			toolStripContainer1.ResumeLayout(false);
 			toolStripContainer1.PerformLayout();
-			grpGroups.ResumeLayout(false);
 			grpTree.ResumeLayout(false);
-			mnuContextTree.ResumeLayout(false);
-			groupBox1.ResumeLayout(false);
-			groupBox1.PerformLayout();
-			grpCompanies.ResumeLayout(false);
-			grpAccounts.ResumeLayout(false);
-			grpDepartments.ResumeLayout(false);
-			groupBox6.ResumeLayout(false);
+			grpCurrentUser.ResumeLayout(false);
+			grpCompanies_CU.ResumeLayout(false);
+			grpGroups_CU.ResumeLayout(false);
+			grpDepartments_CU.ResumeLayout(false);
+			grpAccounts_CU.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
@@ -905,11 +609,9 @@ namespace myNotebooks.subforms
 		#endregion
 
 		private GroupBox grpUsers;
-		private GroupBox groupBox2;
-		private Panel panel1;
+		private GroupBox grpMasterUser;
 		private ContextMenuStrip mnuContextTree;
 		private ToolStripContainer toolStripContainer1;
-		private GroupBox grpGroups;
 		private Panel pnlCreateUser;
 		private ComboBox ddlAccessLevels;
 		private Label label19;
@@ -922,33 +624,9 @@ namespace myNotebooks.subforms
 		private Button btnLogin;
 		private Label label2;
 		private TextBox txtPwd;
-		private Label label7;
-		private Label lblAddCurrentTreeSelection;
-		private ComboBox comboBox1;
-		private Label label5;
-		private CheckedListBox clbGroups;
 		private GroupBox grpTree;
-		private Label label4;
-		private ComboBox comboBox6;
-		private ComboBox comboBox5;
-		private ComboBox comboBox4;
-		private ComboBox comboBox3;
-		private Label label11;
-		private Label label10;
-		private Label label9;
-		private Label label8;
-		private ComboBox comboBox2;
-		private GroupBox groupBox1;
-		private CheckBox checkBox3;
-		private CheckedListBox clbDepartments;
 		private TreeView treeUser
 			;
-		private Button button9;
-		private Button button10;
-		private Button button11;
-		private Button button6;
-		private Button button7;
-		private Button button8;
 		private Button btnCancelNewUser;
 		private Button btnCreateUser;
 		private ToolStripMenuItem mnuAssignUser;
@@ -958,25 +636,24 @@ namespace myNotebooks.subforms
 		private ToolStripMenuItem mnuCreateNew;
 		private Label label3;
 		private Label lblTreePath;
-		private GroupBox grpCompanies;
-		private ListBox lstCompanies;
-		private Button button1;
-		private Button button2;
-		private Button button12;
-		private GroupBox grpAccounts;
-		private ListBox lstAccounts;
-		private Button button3;
-		private Button button4;
-		private Button button5;
-		private GroupBox grpDepartments;
-		private ListBox lstDepartments;
-		private Button button13;
-		private Button button14;
-		private Button button15;
-		private GroupBox groupBox6;
-		private ListBox lstGroups;
-		private Button button16;
-		private Button button17;
-		private Button button18;
+		private GroupBox grpCompanies_MU;
+		private ListBox lstCompanies_MU;
+		private GroupBox grpAccounts_MU;
+		private ListBox lstAccounts_MU;
+		private GroupBox grpDepartments_MU;
+		private ListBox lstDepartments_MU;
+		private GroupBox grpGroups_MU;
+		private ListBox lstGroups_MU;
+		private Panel panel2;
+		private GroupBox groupBox1;
+		private GroupBox grpCurrentUser;
+		private GroupBox grpCompanies_CU;
+		private ListBox lstCompanies_CU;
+		private GroupBox grpGroups_CU;
+		private ListBox lstGroups_CU;
+		private GroupBox grpDepartments_CU;
+		private ListBox lstDepartments_CU;
+		private GroupBox grpAccounts_CU;
+		private ListBox lstAccounts_CU;
 	}
 }

@@ -24,23 +24,28 @@ namespace myNotebooks.subforms
 		private List<NodeInfo> NodesInPath = new List<NodeInfo>();
 		private TreeNode HoverNode = null;
 		private TreeNode LastClickedNode = null;
-		private List<GroupBox> OrgLevelGroups = new List<GroupBox>();
-		private List<ListBox> OrgLevelLists = new List<ListBox>();
+		private List<GroupBox> OrgLevelGroups_MU = new List<GroupBox>();
+		private List<ListBox> OrgLevelLists_MU = new List<ListBox>();
+		private List<GroupBox> OrgLevelGroups_CU = new List<GroupBox>();
+		private List<ListBox> OrgLevelLists_CU = new List<ListBox>();
 
 		public frmManagementConsole(Form parent)
 		{
 			InitializeComponent();
 			Utilities.SetStartPosition(this, parent);
 			SmallSize = new Size(pnlLogin.Width + 40, pnlLogin.Height + pnlLogin.Top + grpUsers.Top + 35);
-			FullSize = new Size(grpCompanies.Left + grpCompanies.Width + 30, grpUsers.Top + grpUsers.Height + 50);
+			FullSize = new Size(grpCurrentUser.Left + grpCurrentUser.Width + 30, grpUsers.Top + grpUsers.Height + 50);
 			//FullSize = new Size(grpTree.Left + grpTree.Width + 30, pnlCreateUser.Top + pnlCreateUser.Height + 50);
 			//MediumSize = new Size(SmallSize.Width, FullSize.Height);
 			ddlAccessLevels.Items.AddRange(DbAccess.GetAccessLevels().ToArray());
 			txtUserName.Text = Program.User.Name;
 			this.Size = SmallSize;
 			PopulatePermissions();
-			OrgLevelGroups.AddRange(new GroupBox[] { grpCompanies, grpAccounts, grpDepartments, grpGroups });
-			OrgLevelLists.AddRange(new ListBox[] { lstGroups, lstAccounts, lstDepartments, lstGroups });
+			OrgLevelGroups_MU.AddRange(new GroupBox[] { grpCompanies_MU, grpAccounts_MU, grpDepartments_MU, grpGroups_MU });
+			OrgLevelLists_MU.AddRange(new ListBox[] { lstCompanies_MU, lstAccounts_MU, lstDepartments_MU, lstGroups_MU });
+			OrgLevelGroups_CU.AddRange(new GroupBox[] { grpCompanies_CU, grpAccounts_CU, grpDepartments_CU, grpGroups_CU });
+			OrgLevelLists_CU.AddRange(new ListBox[] { lstCompanies_CU, lstAccounts_CU, lstDepartments_CU, lstGroups_CU });
+
 			txtPwd.Focus();
 		}
 
@@ -90,7 +95,7 @@ namespace myNotebooks.subforms
 
 			if (CurrentUser != null)
 			{
-				foreach (DataRow dr in ds.Tables[2].Rows) { CurrentUser.Assignments.Add(new UserAssignment(dr)); }
+				foreach (DataRow dr in ds.Tables[2].Rows) { Program.User.Assignments.Add(new UserAssignment(dr)); }
 
 				TreeNode topNode = new TreeNode();
 				PopulateBaseTree();
@@ -101,9 +106,8 @@ namespace myNotebooks.subforms
 				ddlAccessLevels.SelectedIndex = CurrentUser.AccessLevel - 1;
 				ddlAccessLevels.Enabled = false;
 
-				switch (CurrentUser.AccessLevel)
+				switch (Program.User.AccessLevel)
 				{
-
 					case 3:
 						vOrgLevelName = "Groups";
 						break;
@@ -119,11 +123,13 @@ namespace myNotebooks.subforms
 						break;
 				}
 
-				ListBox lb = OrgLevelLists.Where(box => box.Name == "lst" + vOrgLevelName).FirstOrDefault();
+				ListBox lbMU = OrgLevelLists_MU.Where(box => box.Name == "lst" + vOrgLevelName + "_MU").FirstOrDefault();
+				ListBox lbCU = OrgLevelLists_CU.Where(box => box.Name == "lst" + vOrgLevelName + "_CU").FirstOrDefault();
 
-				foreach (ListItem li in (DbAccess.GetHighestNodeItemsForUser(CurrentUser.UserId))) { lb.Items.Add(li); }
+				foreach (ListItem li in (DbAccess.GetHighestNodeItemsForUser(Program.User.UserId))) { lbMU.Items.Add(li); }
+				foreach (ListItem li in (DbAccess.GetHighestNodeItemsForUser(CurrentUser.UserId))) { lbCU.Items.Add(li); }
 
-				//treeUser.Nodes.Cast<TreeNode>().Where(e => e.Text == vOrgLevelName).First().Nodes.AddRange(CurrentUser.GetHighestNodeItems().ToArray());
+				//treeUser.Nodes.Cast<TreeNode>().Where(e => e.Text == vOrgLevelName).First().Nodes.AddRange(Program.User.GetHighestNodeItems().ToArray());
 				//treeUser.ExpandAll();
 			}
 			else
@@ -198,26 +204,26 @@ namespace myNotebooks.subforms
 			//treeUser.Nodes.Add(new TreeNode() { Text = "Departments", Name = "Departments" });
 			//treeUser.Nodes.Add(new TreeNode() { Text = "Groups", Name = "Groups" });
 
-			if (CurrentUser != null)
+			if (Program.User != null)
 			{
 				SetNodeEnabled_Disabled("Companies", false);
 				SetNodeEnabled_Disabled("Accounts", false);
 				SetNodeEnabled_Disabled("Departments", false);
 				SetNodeEnabled_Disabled("Groups", false);
 
-				if (CurrentUser.AccessLevel >= 3)
+				if (Program.User.AccessLevel >= 3)
 				{
 					SetNodeEnabled_Disabled("Groups");
 				}
-				if (CurrentUser.AccessLevel >= 4)
+				if (Program.User.AccessLevel >= 4)
 				{
 					SetNodeEnabled_Disabled("Departments");
 				}
-				if (CurrentUser.AccessLevel >= 5)
+				if (Program.User.AccessLevel >= 5)
 				{
 					SetNodeEnabled_Disabled("Accounts");
 				}
-				if (CurrentUser.AccessLevel >= 6)
+				if (Program.User.AccessLevel >= 6)
 				{
 					SetNodeEnabled_Disabled("Companies");
 				}
@@ -285,7 +291,9 @@ namespace myNotebooks.subforms
 
 		private void SetNodeEnabled_Disabled(string nodeName, bool setEnabled = true)
 		{
-			GroupBox gb2 = OrgLevelGroups.Where(box => box.Name == "grp" + nodeName).FirstOrDefault();
+			GroupBox gb2 = OrgLevelGroups_MU.Where(box => box.Name == "grp" + nodeName + "_MU").FirstOrDefault();
+			gb2.Enabled = setEnabled;
+			gb2 = OrgLevelGroups_CU.Where(box => box.Name == "grp" + nodeName + "_CU").FirstOrDefault();
 			gb2.Enabled = setEnabled;
 
 			//foreach (TreeNode tn in treeUser.Nodes)
@@ -437,13 +445,13 @@ namespace myNotebooks.subforms
 					// lbNext = ??
 					break;
 				case "Departments":
-					lbNext = lstGroups;
+					lbNext = lstGroups_MU;
 					break;
 				case "Accounts":
-					lbNext = lstDepartments;
+					lbNext = lstDepartments_MU;
 					break;
 				case "Companies":
-					lbNext = lstAccounts;
+					lbNext = lstAccounts_MU;
 					break;
 			}
 
@@ -477,13 +485,13 @@ namespace myNotebooks.subforms
 					// lbNext = ??
 					break;
 				case "Departments":
-					lbNext = lstGroups;
+					lbNext = lstGroups_MU;
 					break;
 				case "Accounts":
-					lbNext = lstDepartments;
+					lbNext = lstDepartments_MU;
 					break;
 				case "Companies":
-					lbNext = lstAccounts;
+					lbNext = lstAccounts_MU;
 					break;
 			}
 			return lbNext;

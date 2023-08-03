@@ -137,24 +137,14 @@
 
  */
 using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Collections.Generic;
-using System.Configuration;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using myNotebooks.objects;
-using System.Text;
-using System.Threading;
-using myNotebooks.subforms;
-using System.Diagnostics;
-using System.Runtime.Serialization.Formatters.Binary;
-using myNotebooks;
-using System.Threading.Tasks;
-using Encryption;
-using System.Xml.Linq;
-using myNotebooks.subforms;
-using Org.BouncyCastle.Asn1.Cms;
 
 namespace myNotebooks.subforms
 {

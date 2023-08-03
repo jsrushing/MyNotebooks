@@ -22,7 +22,8 @@ namespace myNotebooks.DataAccess
 {
 	internal class DbAccess
 	{
-		private static string connString = "Server=mynotebooksserver.database.windows.net;Database=myNotebooks;user id=mydb_admin;password=cloud_Bringer1!";
+//		private static string connString = "Server=mynotebooksserver.database.windows.net;Database=myNotebooks;user id=mydb_admin;password=cloud_Bringer1!";
+		private static string connString = "Server=FORRESTSTNW;Database=MyNotebooks;Trusted_Connection = true";
 
 		public static int CreateMNUser(MNUser user)
 		{
@@ -324,8 +325,8 @@ namespace myNotebooks.DataAccess
 				using (SqlCommand cmd = new("sp_GetOrgLevelChildren", conn))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@orgLevelId", parentId);
-					cmd.Parameters.AddWithValue("parentId", orgLevelId);
+					cmd.Parameters.AddWithValue("@orgLevelId", orgLevelId);
+					cmd.Parameters.AddWithValue("parentId", parentId);
 
 					SqlDataAdapter adapter = new SqlDataAdapter() { SelectCommand = cmd };
 					adapter.Fill(dt);
