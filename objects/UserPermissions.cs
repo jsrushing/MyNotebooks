@@ -16,6 +16,7 @@ namespace myNotebooks.objects
 		public bool CreateAccount { get; set; }
 		public bool CreateDepartment { get; set; }
 		public bool CreateGroup { get; set; }
+		public bool CreateNotebook { get; set; }
 		public bool CreateSimpleUser { get; set; }
 		public bool CreateMasterUser { get; set; }
 		public bool DeleteRenameCompany { get; set; }

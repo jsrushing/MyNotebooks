@@ -72,8 +72,8 @@ namespace myNotebooks.DataAccess
 							if (ua.orgType == UserAssignments.OrgType.Account)		cmd.Parameters.AddWithValue("@accountId",		ua.AccountId);
 							if (ua.orgType == UserAssignments.OrgType.Department)	cmd.Parameters.AddWithValue("@departmentId",	ua.DepartmentId);
 							if (ua.orgType == UserAssignments.OrgType.Group)		cmd.Parameters.AddWithValue("@groupId",			ua.GroupId);
-							cmd.Parameters.Add("@retVal");
-							cmd.Parameters["@retVal"].Direction = ParameterDirection.ReturnValue;
+							//cmd.Parameters.Add("@retVal");
+							//cmd.Parameters["@retVal"].Direction = ParameterDirection.ReturnValue;
 							cmd.ExecuteNonQuery();
 							bRtrn = true;
 						}
@@ -124,6 +124,7 @@ namespace myNotebooks.DataAccess
 			{
 				using(SqlConnection conn = new(connString))
 				{
+					conn.Open();
 					using(SqlCommand cmd = new SqlCommand("sp_DeleteUser", conn)) 
 					{ 
 						cmd.CommandType = CommandType.StoredProcedure;

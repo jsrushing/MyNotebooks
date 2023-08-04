@@ -53,13 +53,16 @@ namespace myNotebooks.objects
 				{
 					try
 					{
-						var value = dr.Field<int>(sPropertyName.Name);
-						this.GetType().GetProperty(sPropertyName.Name).SetValue(this, value);
+						//if(dr.Field<int>(sPropertyName.Name).GetType() != typeof(DBNull))
+						//{
+							var value = dr.Field<int>(sPropertyName.Name);
+							this.GetType().GetProperty(sPropertyName.Name).SetValue(this, value);
+						//}
 					}
 					catch (Exception ex)
 					{
-						using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The error '" + ex.Message +
-							"' occurred while processing the property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
+						//using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The error '" + ex.Message +
+						//	"' occurred while processing the property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
 					}
 				}
 			}

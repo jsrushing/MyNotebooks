@@ -32,8 +32,8 @@ namespace myNotebooks.subforms
 		private List<GroupBox> OrgLevelGroups_CU = new List<GroupBox>();
 		private List<ListBox> OrgLevelLists_CU = new List<ListBox>();
 		private ListItem DraggedItem = null;
-		private const string CreateUserButton_CreateUser = "Create &User";
-		private const string CreateUserButton_UpdateUser = "&Assign Organizations";
+		private const string CreateUserButton_CreateUser = "Create User";
+		private const string CreateUserButton_UpdateUser = "Assign Organizations";
 		private ListBox CurrentMouseListBox;
 		private GroupBox CurrentMouseGroupBox;
 
@@ -74,7 +74,7 @@ namespace myNotebooks.subforms
 
 			try
 			{
-				if (btnCreateUser.Text == CreateUserButton_CreateUser)
+				if (btnCreateUser.Text == CreateUserButton_CreateUser)  // adding base user with permissions
 				{
 					if (ddlAccessLevels.SelectedIndex == -1)
 					{
@@ -97,9 +97,12 @@ namespace myNotebooks.subforms
 						this.Size = FullSize;
 						btnCreateUser.Text = CreateUserButton_UpdateUser;
 						PopulateBaseOrgLevels();
+						GroupBox box = OrgLevelGroups_MU.Where(e => e.Enabled).FirstOrDefault();
+						List<ListBox> lstBoxes = box.Controls.Cast<ListBox>().ToList();
+						lstBoxes[0].Items.AddRange(DbAccess.GetHighestNodeItemsForUser(Program.User.UserId).ToArray());
 					}
 				}
-				else if (btnCreateUser.Text == CreateUserButton_UpdateUser)
+				else if (btnCreateUser.Text == CreateUserButton_UpdateUser) // updating created user with assignments
 				{
 					CurrentUser.Assignments = GetAssignments();
 					CurrentUser.SaveAssignments();
@@ -144,7 +147,7 @@ namespace myNotebooks.subforms
 
 			if (CurrentUser != null)
 			{
-				foreach (DataRow dr in ds.Tables[2].Rows) { Program.User.Assignments.Add(new UserAssignments(dr)); }
+				foreach (DataRow dr in ds.Tables[2].Rows) { CurrentUser.Assignments.Add(new UserAssignments(dr)); }
 
 				TreeNode topNode = new TreeNode();
 				PopulateBaseOrgLevels();
@@ -172,11 +175,16 @@ namespace myNotebooks.subforms
 						break;
 				}
 
-				ListBox lbMU = OrgLevelLists_MU.Where(box => box.Name == "lst" + vOrgLevelName + "_MU").FirstOrDefault();
-				ListBox lbCU = OrgLevelLists_CU.Where(box => box.Name == "lst" + vOrgLevelName + "_CU").FirstOrDefault();
+				GroupBox box = new();
+				List<ListBox> lstBoxes = new();
 
-				foreach (ListItem li in (DbAccess.GetHighestNodeItemsForUser(Program.User.UserId))) { lbMU.Items.Add(li); }
-				foreach (ListItem li in (DbAccess.GetHighestNodeItemsForUser(CurrentUser.UserId))) { lbCU.Items.Add(li); }
+				box = OrgLevelGroups_MU.Where(e => e.Enabled).FirstOrDefault();
+				lstBoxes = box.Controls.Cast<ListBox>().ToList();
+				lstBoxes[0].Items.AddRange(DbAccess.GetHighestNodeItemsForUser(Program.User.UserId).ToArray());
+
+				box = OrgLevelGroups_CU.Where(e => e.Enabled).FirstOrDefault();
+				lstBoxes = box.Controls.Cast<ListBox>().ToList();
+				lstBoxes[0].Items.AddRange(DbAccess.GetHighestNodeItemsForUser(CurrentUser.UserId).ToArray());
 
 				//treeUser.Nodes.Cast<TreeNode>().Where(e => e.Text == vOrgLevelName).First().Nodes.AddRange(Program.User.GetHighestNodeItems().ToArray());
 				//treeUser.ExpandAll();
@@ -196,6 +204,8 @@ namespace myNotebooks.subforms
 						CurrentUser = null;
 						this.Size = MediumSize;
 						ddlAccessLevels.Enabled = true;
+						ddlAccessLevels.SelectedIndex = -1;
+						btnCreateUser.Visible = true;
 						btnCreateUser.Text = CreateUserButton_CreateUser;
 						PopulatePermissions();
 					}
@@ -208,6 +218,7 @@ namespace myNotebooks.subforms
 		private ListBox GetNextListBox(ListBox lb)
 		{
 			ListBox lbNext = new ListBox();
+			var isMU = lb.Name.Substring(lb.Name.Length - 3) == "_MU";
 
 			switch (lb.Parent.Text)
 			{
@@ -215,13 +226,13 @@ namespace myNotebooks.subforms
 					// lbNext = ??
 					break;
 				case "Departments":
-					lbNext = lstGroups_MU;
+					lbNext = isMU ? lstGroups_MU : lstGroups_CU;
 					break;
 				case "Accounts":
-					lbNext = lstDepartments_MU;
+					lbNext = isMU ? lstDepartments_MU : lstDepartments_CU;
 					break;
 				case "Companies":
-					lbNext = lstAccounts_MU;
+					lbNext = isMU ? lstAccounts_MU : lstAccounts_CU;
 					break;
 			}
 			return lbNext;
@@ -282,7 +293,7 @@ namespace myNotebooks.subforms
 
 		}
 
-		private void lstMU_MouseDoubleClick(object sender, MouseEventArgs e)
+		private void lstMUCU_MouseDoubleClick(object sender, MouseEventArgs e)
 		{
 			ListBox lb = (ListBox)sender;
 
@@ -314,31 +325,26 @@ namespace myNotebooks.subforms
 				GroupBox v3 = OrgLevelGroups_CU.Where(e => e.Name == v2.Name.Replace("_MU", "_CU")).FirstOrDefault();
 				mnuAssignUser.Enabled = v3.Enabled;
 			}
-			//ListBox lb = (ListBox)sender;
+			//ListBox gb = (ListBox)sender;
 
 			//DraggedItem = null;
 
-			//int index = lb.IndexFromPoint(e.X, e.Y);
+			//int index = gb.IndexFromPoint(e.X, e.Y);
 
 			//if (index > -1)
 			//{
-			//	ListItem li = (ListItem)lb.Items[index];
+			//	ListItem li = (ListItem)gb.Items[index];
 			//	DragDropEffects dde1 = DoDragDrop(li, DragDropEffects.Move);
 			//}
 		}
 
-		private void lstMU_MouseMove(object sender, MouseEventArgs e)
-		{
-			CurrentMouseListBox = (ListBox)sender;
-		}
-
+		private void lstMU_MouseMove(object sender, MouseEventArgs e) { CurrentMouseListBox = (ListBox)sender; }
 
 		private void mnuAssignUser_Click(object sender, EventArgs e)
 		{
-
-
-
-
+			var v = CurrentMouseListBox.SelectedItem as ListItem;
+			ListBox lbTarget = OrgLevelLists_CU.Where(e => e.Name == CurrentMouseListBox.Name.Replace("_MU", "_CU")).FirstOrDefault();
+			if (!lbTarget.Items.Contains(v)) lbTarget.Items.Add(v);
 		}
 
 		private void mnuCreateNew_Click(object sender, EventArgs e)
@@ -392,10 +398,7 @@ namespace myNotebooks.subforms
 
 			if (Program.User != null)
 			{
-				SetGroupEnabled_Disabled("Companies_MU", false);
-				SetGroupEnabled_Disabled("Accounts_MU", false);
-				SetGroupEnabled_Disabled("Departments_MU", false);
-				SetGroupEnabled_Disabled("Groups_MU", false);
+				foreach (GroupBox gb in OrgLevelGroups_MU) { SetGroupEnabled_Disabled(gb.Name.Replace("grp", ""), false); }
 
 				if (Program.User.AccessLevel >= 3)
 				{
@@ -417,10 +420,7 @@ namespace myNotebooks.subforms
 
 			if (CurrentUser != null)
 			{
-				SetGroupEnabled_Disabled("Companies_CU", false);
-				SetGroupEnabled_Disabled("Accounts_CU", false);
-				SetGroupEnabled_Disabled("Departments_CU", false);
-				SetGroupEnabled_Disabled("Groups_CU", false);
+				foreach (GroupBox gb in OrgLevelGroups_CU) { SetGroupEnabled_Disabled(gb.Name.Replace("grp", ""), false); }
 
 				if (CurrentUser.AccessLevel >= 3)
 				{
@@ -439,7 +439,6 @@ namespace myNotebooks.subforms
 					SetGroupEnabled_Disabled("Companies_CU");
 				}
 			}
-
 
 			//treeUser.ExpandAll();
 		}
@@ -516,6 +515,7 @@ namespace myNotebooks.subforms
 		private void SetGroupEnabled_Disabled(string groupName, bool setEnabled = true)
 		{
 			GroupBox gb2;
+
 			if (groupName.EndsWith("_MU"))
 			{
 				gb2 = OrgLevelGroups_MU.Where(box => box.Name == "grp" + groupName).FirstOrDefault();

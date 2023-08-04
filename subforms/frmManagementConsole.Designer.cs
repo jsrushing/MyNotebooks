@@ -110,7 +110,7 @@ namespace myNotebooks.subforms
 			// 
 			// btnCancelNewUser
 			// 
-			btnCancelNewUser.Location = new System.Drawing.Point(183, 477);
+			btnCancelNewUser.Location = new System.Drawing.Point(183, 486);
 			btnCancelNewUser.Name = "btnCancelNewUser";
 			btnCancelNewUser.Size = new System.Drawing.Size(91, 23);
 			btnCancelNewUser.TabIndex = 21;
@@ -120,7 +120,7 @@ namespace myNotebooks.subforms
 			// 
 			// btnCreateUser
 			// 
-			btnCreateUser.Location = new System.Drawing.Point(4, 477);
+			btnCreateUser.Location = new System.Drawing.Point(4, 486);
 			btnCreateUser.Name = "btnCreateUser";
 			btnCreateUser.Size = new System.Drawing.Size(157, 23);
 			btnCreateUser.TabIndex = 20;
@@ -136,7 +136,7 @@ namespace myNotebooks.subforms
 			pnlCreateUser.Controls.Add(label6);
 			pnlCreateUser.Location = new System.Drawing.Point(4, 125);
 			pnlCreateUser.Name = "pnlCreateUser";
-			pnlCreateUser.Size = new System.Drawing.Size(270, 336);
+			pnlCreateUser.Size = new System.Drawing.Size(270, 355);
 			pnlCreateUser.TabIndex = 12;
 			pnlCreateUser.Visible = false;
 			// 
@@ -163,7 +163,7 @@ namespace myNotebooks.subforms
 			clbPermissions.FormattingEnabled = true;
 			clbPermissions.Location = new System.Drawing.Point(6, 56);
 			clbPermissions.Name = "clbPermissions";
-			clbPermissions.Size = new System.Drawing.Size(260, 274);
+			clbPermissions.Size = new System.Drawing.Size(260, 292);
 			clbPermissions.TabIndex = 16;
 			// 
 			// label6
@@ -279,7 +279,7 @@ namespace myNotebooks.subforms
 			lstCompanies_MU.TabIndex = 25;
 			lstCompanies_MU.Tag = "6";
 			lstCompanies_MU.DragLeave += this.lstMU_DragLeave;
-			lstCompanies_MU.MouseDoubleClick += this.lstMU_MouseDoubleClick;
+			lstCompanies_MU.MouseDoubleClick += this.lstMUCU_MouseDoubleClick;
 			lstCompanies_MU.MouseDown += this.lstMU_MouseDown;
 			lstCompanies_MU.MouseMove += this.lstMU_MouseMove;
 			// 
@@ -339,7 +339,7 @@ namespace myNotebooks.subforms
 			lstGroups_MU.TabIndex = 25;
 			lstGroups_MU.Tag = "3";
 			lstGroups_MU.DragLeave += this.lstMU_DragLeave;
-			lstGroups_MU.MouseDoubleClick += this.lstMU_MouseDoubleClick;
+			lstGroups_MU.MouseDoubleClick += this.lstMUCU_MouseDoubleClick;
 			lstGroups_MU.MouseDown += this.lstMU_MouseDown;
 			lstGroups_MU.MouseMove += this.lstMU_MouseMove;
 			// 
@@ -365,7 +365,7 @@ namespace myNotebooks.subforms
 			lstDepartments_MU.TabIndex = 25;
 			lstDepartments_MU.Tag = "4";
 			lstDepartments_MU.DragLeave += this.lstMU_DragLeave;
-			lstDepartments_MU.MouseDoubleClick += this.lstMU_MouseDoubleClick;
+			lstDepartments_MU.MouseDoubleClick += this.lstMUCU_MouseDoubleClick;
 			lstDepartments_MU.MouseDown += this.lstMU_MouseDown;
 			lstDepartments_MU.MouseMove += this.lstMU_MouseMove;
 			// 
@@ -391,7 +391,7 @@ namespace myNotebooks.subforms
 			lstAccounts_MU.TabIndex = 25;
 			lstAccounts_MU.Tag = "5";
 			lstAccounts_MU.DragLeave += this.lstMU_DragLeave;
-			lstAccounts_MU.MouseDoubleClick += this.lstMU_MouseDoubleClick;
+			lstAccounts_MU.MouseDoubleClick += this.lstMUCU_MouseDoubleClick;
 			lstAccounts_MU.MouseDown += this.lstMU_MouseDown;
 			lstAccounts_MU.MouseMove += this.lstMU_MouseMove;
 			// 
@@ -494,6 +494,7 @@ namespace myNotebooks.subforms
 			// 
 			// lstCompanies_CU
 			// 
+			lstCompanies_CU.AllowDrop = true;
 			lstCompanies_CU.FormattingEnabled = true;
 			lstCompanies_CU.ItemHeight = 15;
 			lstCompanies_CU.Location = new System.Drawing.Point(0, 21);
@@ -502,6 +503,7 @@ namespace myNotebooks.subforms
 			lstCompanies_CU.TabIndex = 25;
 			lstCompanies_CU.Tag = "6";
 			lstCompanies_CU.DragEnter += this.lstCU_DragEnter;
+			lstCompanies_CU.MouseDoubleClick += this.lstMUCU_MouseDoubleClick;
 			// 
 			// grpGroups_CU
 			// 
@@ -516,6 +518,7 @@ namespace myNotebooks.subforms
 			// 
 			// lstGroups_CU
 			// 
+			lstGroups_CU.AllowDrop = true;
 			lstGroups_CU.FormattingEnabled = true;
 			lstGroups_CU.ItemHeight = 15;
 			lstGroups_CU.Location = new System.Drawing.Point(0, 21);
@@ -524,6 +527,7 @@ namespace myNotebooks.subforms
 			lstGroups_CU.TabIndex = 25;
 			lstGroups_CU.Tag = "3";
 			lstGroups_CU.DragEnter += this.lstCU_DragEnter;
+			lstGroups_CU.MouseDoubleClick += this.lstMUCU_MouseDoubleClick;
 			// 
 			// grpDepartments_CU
 			// 
@@ -538,6 +542,7 @@ namespace myNotebooks.subforms
 			// 
 			// lstDepartments_CU
 			// 
+			lstDepartments_CU.AllowDrop = true;
 			lstDepartments_CU.FormattingEnabled = true;
 			lstDepartments_CU.ItemHeight = 15;
 			lstDepartments_CU.Location = new System.Drawing.Point(0, 21);
@@ -546,6 +551,7 @@ namespace myNotebooks.subforms
 			lstDepartments_CU.TabIndex = 25;
 			lstDepartments_CU.Tag = "4";
 			lstDepartments_CU.DragEnter += this.lstCU_DragEnter;
+			lstDepartments_CU.MouseDoubleClick += this.lstMUCU_MouseDoubleClick;
 			// 
 			// grpAccounts_CU
 			// 
@@ -560,6 +566,7 @@ namespace myNotebooks.subforms
 			// 
 			// lstAccounts_CU
 			// 
+			lstAccounts_CU.AllowDrop = true;
 			lstAccounts_CU.FormattingEnabled = true;
 			lstAccounts_CU.ItemHeight = 15;
 			lstAccounts_CU.Location = new System.Drawing.Point(0, 21);
@@ -568,6 +575,7 @@ namespace myNotebooks.subforms
 			lstAccounts_CU.TabIndex = 25;
 			lstAccounts_CU.Tag = "5";
 			lstAccounts_CU.DragEnter += this.lstCU_DragEnter;
+			lstAccounts_CU.MouseDoubleClick += this.lstMUCU_MouseDoubleClick;
 			// 
 			// frmManagementConsole
 			// 
