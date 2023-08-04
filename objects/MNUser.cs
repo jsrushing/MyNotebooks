@@ -92,6 +92,15 @@ namespace myNotebooks.objects
 			}
 		}
 
+		public void CreateSimpleUser() { this.UserId = DbAccess.CreateMNUser(this); }
+
+		public void Delete() { DbAccess.DeleteUser(this.UserId); }
+
+		public bool Equals(MNUser userToCompare)
+		{
+			return this.UserId == userToCompare.UserId;
+		}
+
 		private List<Group> GetGroups() { return DbAccess.GetGroups(this.UserId); }
 
 		private List<Department> GetDepartments() { return DbAccess.GetDepartments(this.UserId); }
@@ -105,12 +114,16 @@ namespace myNotebooks.objects
 		//	return DbAccess.GetHighestNodeItemsForUser(this.UserId);
 		//}
 
-		public void Save()
-		{
-			this.UserId = DbAccess.CreateMNUser(this);
-			DbAccess.CreateMNUserPermissions(this);
-			DbAccess.CreateMNUserAssignments(this);
+		public void SaveAssignments() { DbAccess.CreateMNUserAssignments(this); }
 
-		}
+		public void SavePermissions() { DbAccess.CreateMNUserPermissions(this); }
+
+		//public void Save()
+		//{
+		//	this.UserId = DbAccess.CreateMNUser(this);
+		//	DbAccess.CreateMNUserPermissions(this);
+		//	DbAccess.CreateMNUserAssignments(this);
+
+		//}
 	}
 }

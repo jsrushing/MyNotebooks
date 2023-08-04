@@ -97,7 +97,7 @@ namespace myNotebooks.DataAccess
 					using (SqlCommand cmd = new SqlCommand("sp_CreateUserPermissions", conn))
 					{
 						cmd.CommandType = CommandType.StoredProcedure;
-						cmd.Parameters.AddWithValue("@orgLevlelType", user.UserId);
+						cmd.Parameters.AddWithValue("@userId", user.UserId);
 
 						foreach(string sPerm in user.Permissions.GetGrantedPermissions()) 
 						{
@@ -114,6 +114,28 @@ namespace myNotebooks.DataAccess
 			catch (Exception ex) { var v = ex.Message; }
 
 			return iRtrn;
+		}
+
+		public static bool DeleteUser(int userId)
+		{
+			bool bRtrn = false;
+
+			try
+			{
+				using(SqlConnection conn = new(connString))
+				{
+					using(SqlCommand cmd = new SqlCommand("sp_DeleteUser", conn)) 
+					{ 
+						cmd.CommandType = CommandType.StoredProcedure;
+						cmd.Parameters.AddWithValue("@userId", userId);
+						cmd.ExecuteNonQuery ();
+					}
+				}
+				bRtrn = true;
+			}
+			catch { }
+
+			return bRtrn;
 		}
 
 		public static string GetAccessLevelName(int accessLevel)
@@ -321,7 +343,6 @@ namespace myNotebooks.DataAccess
 			return lstRtrn;
 		}
 
-
 		public static List<ListItem> GetOrgLevelChildren(int orgLevelId, int parentId) 
 		{
 			List<ListItem> lstRtrn = new List<ListItem>();
@@ -353,36 +374,6 @@ namespace myNotebooks.DataAccess
 			return lstRtrn;
 		}
 
-		//public static List<NodeInfo> GetOrgLevelChildNodes(int orgLevelId, int parentId)
-		//{
-		//	List<NodeInfo> lstRtrn = new List<NodeInfo>();
-		//	TreeNode node;
-		//	DataTable dt = new DataTable();
-
-		//	using (SqlConnection conn = new(connString))
-		//	{
-		//		conn.Open();
-		//		using (SqlCommand cmd = new("sp_GetOrgLevelChildren", conn))
-		//		{
-		//			cmd.CommandType = CommandType.StoredProcedure;
-		//			cmd.Parameters.AddWithValue("@orgLevelId", parentId);
-		//			cmd.Parameters.AddWithValue("parentId", orgLevelId);
-
-		//			SqlDataAdapter adapter = new SqlDataAdapter() { SelectCommand = cmd };
-		//			adapter.Fill(dt);
-
-		//			foreach (DataRow row in dt.Rows)
-		//			{
-		//				node = new() { Tag = row["Id"].ToString(), Text = row["Name"].ToString().Trim(), Name = row["Name"].ToString().Trim(), ToolTipText = row["Description"].ToString() };
-		//				lstRtrn.Add(node);
-		//			}
-		//		}
-		//	}
-
-		//	return lstRtrn;
-		//}
-
-
 		public static DataSet GetUser(string userName, string password)
 		{
 			DataSet ds = new();
@@ -403,69 +394,5 @@ namespace myNotebooks.DataAccess
 			}
 			return ds;
 		}
-
-		//public static int CreateUser(myNotebooks.objects.MNUser usr)
-		//{
-		//	int iRtrn = -1;
-
-		//	using (SqlConnection conn = new(connString))
-		//	{
-		//		conn.Open();
-
-		//		using (SqlCommand cmd = new("sp_CreateUser", conn))
-		//		{
-		//			cmd.CommandType = CommandType.StoredProcedure;
-		//			cmd.Parameters.AddWithValue("@AccessLevel", usr.AccessLevel);
-		//			cmd.Parameters.AddWithValue("@Name", usr.Name);
-		//			//cmd.Parameters.AddWithValue("@UserId", usr.UserId);
-		//			//cmd.Parameters.AddWithValue("@DepartmentId", usr.DepartmentId);
-		//			//cmd.Parameters.AddWithValue("@DepartmentId", usr.DepartmentId);
-		//			//cmd.Parameters.AddWithValue("@GroupId", usr.GroupId);
-		//			//cmd.Parameters.AddWithValue("@IsEnterprise", usr.IsEnterprise);
-		//			cmd.Parameters.AddWithValue("@password", EncryptDecrypt.Encrypt(usr.Password, usr.Password));
-
-		//			foreach(PropertyInfo sPropertyName in typeof(UserPermissions).GetProperties())
-		//			{
-		//				cmd.Parameters.AddWithValue
-		//					(
-		//						"@" + sPropertyName,
-		//						// from https://stackoverflow.com/questions/1196991/get-property-value-from-string-using-reflection
-		//						usr.Permissions.GetType().GetProperty(sPropertyName.Name).GetValue(usr.Permissions, null)
-		//					);
-		//			}
-
-		//			cmd.Parameters.Add("@retVal");
-		//			cmd.Parameters["@retVal"].Direction = ParameterDirection.ReturnValue;
-		//			cmd.ExecuteNonQuery();
-		//			iRtrn = Convert.ToInt32(cmd.Parameters["@retVal"].Value.ToString());
-		//		}
-		//	}
-
-		//	return iRtrn;
-		//}
-
-		//public static Companies GetCompany(string companyId)
-		//{
-		//	Companies cRtrn = null;
-		//	DataTable dt = new();
-
-		//	using (SqlConnection conn = new(connString))
-		//	{
-		//		conn.Open();
-
-		//		using (SqlCommand cmd = new("sp_GetCompany", conn))
-		//		{
-		//			cmd.CommandType = CommandType.StoredProcedure;
-		//			cmd.Parameters.AddWithValue("@companyId", Convert.ToInt32(companyId));
-		//			SqlDataAdapter adapter = new() { SelectCommand = cmd };
-		//			adapter.Fill(dt);
-		//			cRtrn = new Companies(dt);
-		//		}
-		//	}
-			
-		//	return cRtrn;
-		//}
-
-		
 	}
 }

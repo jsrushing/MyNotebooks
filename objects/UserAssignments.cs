@@ -49,15 +49,18 @@ namespace myNotebooks.objects
 		{
 			foreach (PropertyInfo sPropertyName in typeof(UserAssignments).GetProperties())
 			{
-				try
+				if(sPropertyName.Name.ToLower() != "orgtype")
 				{
-					var value = dr.Field<int>(sPropertyName.Name);
-					this.GetType().GetProperty(sPropertyName.Name).SetValue(this, value);
-				}
-				catch (Exception ex)
-				{
-					using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The error '" + ex.Message +
-						"' occurred while processing the property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
+					try
+					{
+						var value = dr.Field<int>(sPropertyName.Name);
+						this.GetType().GetProperty(sPropertyName.Name).SetValue(this, value);
+					}
+					catch (Exception ex)
+					{
+						using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The error '" + ex.Message +
+							"' occurred while processing the property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
+					}
 				}
 			}
 		}
