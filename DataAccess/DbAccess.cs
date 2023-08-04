@@ -200,7 +200,7 @@ namespace myNotebooks.DataAccess
 						cmd.CommandType = CommandType.StoredProcedure;
 						cmd.Parameters.AddWithValue("@createdBy", creatorId);
 						cmd.Parameters.AddWithValue("@orgLevelDescription", orgLevelDescription);
-						var v = (int)orgLevelType;
+						//var v = (int)orgLevelType;
 						cmd.Parameters.AddWithValue("@orgLevelType", (int)orgLevelType);
 						cmd.Parameters.AddWithValue("@orgLevelName", orgLevelName);
 						cmd.Parameters.AddWithValue("@parentId", parentId);

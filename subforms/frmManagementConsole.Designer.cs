@@ -48,18 +48,18 @@ namespace myNotebooks.subforms
 			label2 = new Label();
 			txtPwd = new TextBox();
 			grpMasterUser = new GroupBox();
-			grpCompanies_MU = new GroupBox();
+			grpCompany_MU = new GroupBox();
 			lstCompanies_MU = new ListBox();
 			mnuContextTree = new ContextMenuStrip(components);
 			mnuAssignUser = new ToolStripMenuItem();
 			mnuCreateNew = new ToolStripMenuItem();
 			mnuEdit = new ToolStripMenuItem();
 			mnuDelete = new ToolStripMenuItem();
-			grpGroups_MU = new GroupBox();
+			grpGroup_MU = new GroupBox();
 			lstGroups_MU = new ListBox();
-			grpDepartments_MU = new GroupBox();
+			grpDepartment_MU = new GroupBox();
 			lstDepartments_MU = new ListBox();
-			grpAccounts_MU = new GroupBox();
+			grpAccount_MU = new GroupBox();
 			lstAccounts_MU = new ListBox();
 			toolStripContainer1 = new ToolStripContainer();
 			grpTree = new GroupBox();
@@ -69,30 +69,30 @@ namespace myNotebooks.subforms
 			panel2 = new Panel();
 			groupBox1 = new GroupBox();
 			grpCurrentUser = new GroupBox();
-			grpCompanies_CU = new GroupBox();
+			grpCompany_CU = new GroupBox();
 			lstCompanies_CU = new ListBox();
-			grpGroups_CU = new GroupBox();
+			grpGroup_CU = new GroupBox();
 			lstGroups_CU = new ListBox();
-			grpDepartments_CU = new GroupBox();
+			grpDepartment_CU = new GroupBox();
 			lstDepartments_CU = new ListBox();
-			grpAccounts_CU = new GroupBox();
+			grpAccount_CU = new GroupBox();
 			lstAccounts_CU = new ListBox();
 			grpUsers.SuspendLayout();
 			pnlCreateUser.SuspendLayout();
 			pnlLogin.SuspendLayout();
 			grpMasterUser.SuspendLayout();
-			grpCompanies_MU.SuspendLayout();
+			grpCompany_MU.SuspendLayout();
 			mnuContextTree.SuspendLayout();
-			grpGroups_MU.SuspendLayout();
-			grpDepartments_MU.SuspendLayout();
-			grpAccounts_MU.SuspendLayout();
+			grpGroup_MU.SuspendLayout();
+			grpDepartment_MU.SuspendLayout();
+			grpAccount_MU.SuspendLayout();
 			toolStripContainer1.SuspendLayout();
 			grpTree.SuspendLayout();
 			grpCurrentUser.SuspendLayout();
-			grpCompanies_CU.SuspendLayout();
-			grpGroups_CU.SuspendLayout();
-			grpDepartments_CU.SuspendLayout();
-			grpAccounts_CU.SuspendLayout();
+			grpCompany_CU.SuspendLayout();
+			grpGroup_CU.SuspendLayout();
+			grpDepartment_CU.SuspendLayout();
+			grpAccount_CU.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// grpUsers
@@ -246,10 +246,10 @@ namespace myNotebooks.subforms
 			// 
 			// grpMasterUser
 			// 
-			grpMasterUser.Controls.Add(grpCompanies_MU);
-			grpMasterUser.Controls.Add(grpGroups_MU);
-			grpMasterUser.Controls.Add(grpDepartments_MU);
-			grpMasterUser.Controls.Add(grpAccounts_MU);
+			grpMasterUser.Controls.Add(grpCompany_MU);
+			grpMasterUser.Controls.Add(grpGroup_MU);
+			grpMasterUser.Controls.Add(grpDepartment_MU);
+			grpMasterUser.Controls.Add(grpAccount_MU);
 			grpMasterUser.Location = new System.Drawing.Point(294, 3);
 			grpMasterUser.Name = "grpMasterUser";
 			grpMasterUser.Size = new System.Drawing.Size(242, 516);
@@ -257,16 +257,16 @@ namespace myNotebooks.subforms
 			grpMasterUser.TabStop = false;
 			grpMasterUser.Text = "Available Organization Levels";
 			// 
-			// grpCompanies_MU
+			// grpCompany_MU
 			// 
-			grpCompanies_MU.Controls.Add(lstCompanies_MU);
-			grpCompanies_MU.Location = new System.Drawing.Point(6, 19);
-			grpCompanies_MU.Name = "grpCompanies_MU";
-			grpCompanies_MU.Size = new System.Drawing.Size(227, 123);
-			grpCompanies_MU.TabIndex = 33;
-			grpCompanies_MU.TabStop = false;
-			grpCompanies_MU.Tag = "6";
-			grpCompanies_MU.Text = "Companies";
+			grpCompany_MU.Controls.Add(lstCompanies_MU);
+			grpCompany_MU.Location = new System.Drawing.Point(6, 19);
+			grpCompany_MU.Name = "grpCompany_MU";
+			grpCompany_MU.Size = new System.Drawing.Size(227, 123);
+			grpCompany_MU.TabIndex = 33;
+			grpCompany_MU.TabStop = false;
+			grpCompany_MU.Tag = "6";
+			grpCompany_MU.Text = "Companies";
 			// 
 			// lstCompanies_MU
 			// 
@@ -317,16 +317,16 @@ namespace myNotebooks.subforms
 			mnuDelete.Text = "&Delete";
 			mnuDelete.Click += this.mnuDelete_Click;
 			// 
-			// grpGroups_MU
+			// grpGroup_MU
 			// 
-			grpGroups_MU.Controls.Add(lstGroups_MU);
-			grpGroups_MU.Location = new System.Drawing.Point(6, 388);
-			grpGroups_MU.Name = "grpGroups_MU";
-			grpGroups_MU.Size = new System.Drawing.Size(227, 123);
-			grpGroups_MU.TabIndex = 34;
-			grpGroups_MU.TabStop = false;
-			grpGroups_MU.Tag = "3";
-			grpGroups_MU.Text = "Groups";
+			grpGroup_MU.Controls.Add(lstGroups_MU);
+			grpGroup_MU.Location = new System.Drawing.Point(6, 388);
+			grpGroup_MU.Name = "grpGroup_MU";
+			grpGroup_MU.Size = new System.Drawing.Size(227, 123);
+			grpGroup_MU.TabIndex = 34;
+			grpGroup_MU.TabStop = false;
+			grpGroup_MU.Tag = "3";
+			grpGroup_MU.Text = "Groups";
 			// 
 			// lstGroups_MU
 			// 
@@ -343,16 +343,16 @@ namespace myNotebooks.subforms
 			lstGroups_MU.MouseDown += this.lstMU_MouseDown;
 			lstGroups_MU.MouseMove += this.lstMU_MouseMove;
 			// 
-			// grpDepartments_MU
+			// grpDepartment_MU
 			// 
-			grpDepartments_MU.Controls.Add(lstDepartments_MU);
-			grpDepartments_MU.Location = new System.Drawing.Point(6, 265);
-			grpDepartments_MU.Name = "grpDepartments_MU";
-			grpDepartments_MU.Size = new System.Drawing.Size(227, 123);
-			grpDepartments_MU.TabIndex = 34;
-			grpDepartments_MU.TabStop = false;
-			grpDepartments_MU.Tag = "4";
-			grpDepartments_MU.Text = "Departments";
+			grpDepartment_MU.Controls.Add(lstDepartments_MU);
+			grpDepartment_MU.Location = new System.Drawing.Point(6, 265);
+			grpDepartment_MU.Name = "grpDepartment_MU";
+			grpDepartment_MU.Size = new System.Drawing.Size(227, 123);
+			grpDepartment_MU.TabIndex = 34;
+			grpDepartment_MU.TabStop = false;
+			grpDepartment_MU.Tag = "4";
+			grpDepartment_MU.Text = "Departments";
 			// 
 			// lstDepartments_MU
 			// 
@@ -369,16 +369,16 @@ namespace myNotebooks.subforms
 			lstDepartments_MU.MouseDown += this.lstMU_MouseDown;
 			lstDepartments_MU.MouseMove += this.lstMU_MouseMove;
 			// 
-			// grpAccounts_MU
+			// grpAccount_MU
 			// 
-			grpAccounts_MU.Controls.Add(lstAccounts_MU);
-			grpAccounts_MU.Location = new System.Drawing.Point(6, 142);
-			grpAccounts_MU.Name = "grpAccounts_MU";
-			grpAccounts_MU.Size = new System.Drawing.Size(227, 123);
-			grpAccounts_MU.TabIndex = 34;
-			grpAccounts_MU.TabStop = false;
-			grpAccounts_MU.Tag = "5";
-			grpAccounts_MU.Text = "Accounts";
+			grpAccount_MU.Controls.Add(lstAccounts_MU);
+			grpAccount_MU.Location = new System.Drawing.Point(6, 142);
+			grpAccount_MU.Name = "grpAccount_MU";
+			grpAccount_MU.Size = new System.Drawing.Size(227, 123);
+			grpAccount_MU.TabIndex = 34;
+			grpAccount_MU.TabStop = false;
+			grpAccount_MU.Tag = "5";
+			grpAccount_MU.Text = "Accounts";
 			// 
 			// lstAccounts_MU
 			// 
@@ -470,10 +470,10 @@ namespace myNotebooks.subforms
 			// 
 			// grpCurrentUser
 			// 
-			grpCurrentUser.Controls.Add(grpCompanies_CU);
-			grpCurrentUser.Controls.Add(grpGroups_CU);
-			grpCurrentUser.Controls.Add(grpDepartments_CU);
-			grpCurrentUser.Controls.Add(grpAccounts_CU);
+			grpCurrentUser.Controls.Add(grpCompany_CU);
+			grpCurrentUser.Controls.Add(grpGroup_CU);
+			grpCurrentUser.Controls.Add(grpDepartment_CU);
+			grpCurrentUser.Controls.Add(grpAccount_CU);
 			grpCurrentUser.Location = new System.Drawing.Point(544, 3);
 			grpCurrentUser.Name = "grpCurrentUser";
 			grpCurrentUser.Size = new System.Drawing.Size(242, 516);
@@ -481,16 +481,16 @@ namespace myNotebooks.subforms
 			grpCurrentUser.TabStop = false;
 			grpCurrentUser.Text = "Current User Organization Levels";
 			// 
-			// grpCompanies_CU
+			// grpCompany_CU
 			// 
-			grpCompanies_CU.Controls.Add(lstCompanies_CU);
-			grpCompanies_CU.Location = new System.Drawing.Point(6, 19);
-			grpCompanies_CU.Name = "grpCompanies_CU";
-			grpCompanies_CU.Size = new System.Drawing.Size(227, 123);
-			grpCompanies_CU.TabIndex = 33;
-			grpCompanies_CU.TabStop = false;
-			grpCompanies_CU.Tag = "6";
-			grpCompanies_CU.Text = "Companies";
+			grpCompany_CU.Controls.Add(lstCompanies_CU);
+			grpCompany_CU.Location = new System.Drawing.Point(6, 19);
+			grpCompany_CU.Name = "grpCompany_CU";
+			grpCompany_CU.Size = new System.Drawing.Size(227, 123);
+			grpCompany_CU.TabIndex = 33;
+			grpCompany_CU.TabStop = false;
+			grpCompany_CU.Tag = "6";
+			grpCompany_CU.Text = "Companies";
 			// 
 			// lstCompanies_CU
 			// 
@@ -505,16 +505,16 @@ namespace myNotebooks.subforms
 			lstCompanies_CU.DragEnter += this.lstCU_DragEnter;
 			lstCompanies_CU.MouseDoubleClick += this.lstMUCU_MouseDoubleClick;
 			// 
-			// grpGroups_CU
+			// grpGroup_CU
 			// 
-			grpGroups_CU.Controls.Add(lstGroups_CU);
-			grpGroups_CU.Location = new System.Drawing.Point(6, 388);
-			grpGroups_CU.Name = "grpGroups_CU";
-			grpGroups_CU.Size = new System.Drawing.Size(227, 123);
-			grpGroups_CU.TabIndex = 34;
-			grpGroups_CU.TabStop = false;
-			grpGroups_CU.Tag = "3";
-			grpGroups_CU.Text = "Groups";
+			grpGroup_CU.Controls.Add(lstGroups_CU);
+			grpGroup_CU.Location = new System.Drawing.Point(6, 388);
+			grpGroup_CU.Name = "grpGroup_CU";
+			grpGroup_CU.Size = new System.Drawing.Size(227, 123);
+			grpGroup_CU.TabIndex = 34;
+			grpGroup_CU.TabStop = false;
+			grpGroup_CU.Tag = "3";
+			grpGroup_CU.Text = "Groups";
 			// 
 			// lstGroups_CU
 			// 
@@ -529,16 +529,16 @@ namespace myNotebooks.subforms
 			lstGroups_CU.DragEnter += this.lstCU_DragEnter;
 			lstGroups_CU.MouseDoubleClick += this.lstMUCU_MouseDoubleClick;
 			// 
-			// grpDepartments_CU
+			// grpDepartment_CU
 			// 
-			grpDepartments_CU.Controls.Add(lstDepartments_CU);
-			grpDepartments_CU.Location = new System.Drawing.Point(6, 265);
-			grpDepartments_CU.Name = "grpDepartments_CU";
-			grpDepartments_CU.Size = new System.Drawing.Size(227, 123);
-			grpDepartments_CU.TabIndex = 34;
-			grpDepartments_CU.TabStop = false;
-			grpDepartments_CU.Tag = "4";
-			grpDepartments_CU.Text = "Departments";
+			grpDepartment_CU.Controls.Add(lstDepartments_CU);
+			grpDepartment_CU.Location = new System.Drawing.Point(6, 265);
+			grpDepartment_CU.Name = "grpDepartment_CU";
+			grpDepartment_CU.Size = new System.Drawing.Size(227, 123);
+			grpDepartment_CU.TabIndex = 34;
+			grpDepartment_CU.TabStop = false;
+			grpDepartment_CU.Tag = "4";
+			grpDepartment_CU.Text = "Departments";
 			// 
 			// lstDepartments_CU
 			// 
@@ -553,16 +553,16 @@ namespace myNotebooks.subforms
 			lstDepartments_CU.DragEnter += this.lstCU_DragEnter;
 			lstDepartments_CU.MouseDoubleClick += this.lstMUCU_MouseDoubleClick;
 			// 
-			// grpAccounts_CU
+			// grpAccount_CU
 			// 
-			grpAccounts_CU.Controls.Add(lstAccounts_CU);
-			grpAccounts_CU.Location = new System.Drawing.Point(6, 142);
-			grpAccounts_CU.Name = "grpAccounts_CU";
-			grpAccounts_CU.Size = new System.Drawing.Size(227, 123);
-			grpAccounts_CU.TabIndex = 34;
-			grpAccounts_CU.TabStop = false;
-			grpAccounts_CU.Tag = "5";
-			grpAccounts_CU.Text = "Accounts";
+			grpAccount_CU.Controls.Add(lstAccounts_CU);
+			grpAccount_CU.Location = new System.Drawing.Point(6, 142);
+			grpAccount_CU.Name = "grpAccount_CU";
+			grpAccount_CU.Size = new System.Drawing.Size(227, 123);
+			grpAccount_CU.TabIndex = 34;
+			grpAccount_CU.TabStop = false;
+			grpAccount_CU.Tag = "5";
+			grpAccount_CU.Text = "Accounts";
 			// 
 			// lstAccounts_CU
 			// 
@@ -603,19 +603,19 @@ namespace myNotebooks.subforms
 			pnlLogin.ResumeLayout(false);
 			pnlLogin.PerformLayout();
 			grpMasterUser.ResumeLayout(false);
-			grpCompanies_MU.ResumeLayout(false);
+			grpCompany_MU.ResumeLayout(false);
 			mnuContextTree.ResumeLayout(false);
-			grpGroups_MU.ResumeLayout(false);
-			grpDepartments_MU.ResumeLayout(false);
-			grpAccounts_MU.ResumeLayout(false);
+			grpGroup_MU.ResumeLayout(false);
+			grpDepartment_MU.ResumeLayout(false);
+			grpAccount_MU.ResumeLayout(false);
 			toolStripContainer1.ResumeLayout(false);
 			toolStripContainer1.PerformLayout();
 			grpTree.ResumeLayout(false);
 			grpCurrentUser.ResumeLayout(false);
-			grpCompanies_CU.ResumeLayout(false);
-			grpGroups_CU.ResumeLayout(false);
-			grpDepartments_CU.ResumeLayout(false);
-			grpAccounts_CU.ResumeLayout(false);
+			grpCompany_CU.ResumeLayout(false);
+			grpGroup_CU.ResumeLayout(false);
+			grpDepartment_CU.ResumeLayout(false);
+			grpAccount_CU.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
@@ -649,24 +649,24 @@ namespace myNotebooks.subforms
 		private ToolStripMenuItem mnuCreateNew;
 		private Label label3;
 		private Label lblTreePath;
-		private GroupBox grpCompanies_MU;
+		private GroupBox grpCompany_MU;
 		private ListBox lstCompanies_MU;
-		private GroupBox grpAccounts_MU;
+		private GroupBox grpAccount_MU;
 		private ListBox lstAccounts_MU;
-		private GroupBox grpDepartments_MU;
+		private GroupBox grpDepartment_MU;
 		private ListBox lstDepartments_MU;
-		private GroupBox grpGroups_MU;
+		private GroupBox grpGroup_MU;
 		private ListBox lstGroups_MU;
 		private Panel panel2;
 		private GroupBox groupBox1;
 		private GroupBox grpCurrentUser;
-		private GroupBox grpCompanies_CU;
+		private GroupBox grpCompany_CU;
 		private ListBox lstCompanies_CU;
-		private GroupBox grpGroups_CU;
+		private GroupBox grpGroup_CU;
 		private ListBox lstGroups_CU;
-		private GroupBox grpDepartments_CU;
+		private GroupBox grpDepartment_CU;
 		private ListBox lstDepartments_CU;
-		private GroupBox grpAccounts_CU;
+		private GroupBox grpAccount_CU;
 		private ListBox lstAccounts_CU;
 	}
 }

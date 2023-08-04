@@ -36,6 +36,7 @@ namespace myNotebooks.subforms
 		private const string CreateUserButton_UpdateUser = "Assign Organizations";
 		private ListBox CurrentMouseListBox;
 		private GroupBox CurrentMouseGroupBox;
+		private frmMain.OrgLevelTypes CurrentType;
 
 		public frmManagementConsole(Form parent)
 		{
@@ -49,9 +50,9 @@ namespace myNotebooks.subforms
 			txtUserName.Text = Program.User.Name;
 			this.Size = SmallSize;
 			PopulatePermissions();
-			OrgLevelGroups_MU.AddRange(new GroupBox[] { grpCompanies_MU, grpAccounts_MU, grpDepartments_MU, grpGroups_MU });
+			OrgLevelGroups_MU.AddRange(new GroupBox[] { grpCompany_MU, grpAccount_MU, grpDepartment_MU, grpGroup_MU });
 			OrgLevelLists_MU.AddRange(new ListBox[] { lstCompanies_MU, lstAccounts_MU, lstDepartments_MU, lstGroups_MU });
-			OrgLevelGroups_CU.AddRange(new GroupBox[] { grpCompanies_CU, grpAccounts_CU, grpDepartments_CU, grpGroups_CU });
+			OrgLevelGroups_CU.AddRange(new GroupBox[] { grpCompany_CU, grpAccount_CU, grpDepartment_CU, grpGroup_CU });
 			OrgLevelLists_CU.AddRange(new ListBox[] { lstCompanies_CU, lstAccounts_CU, lstDepartments_CU, lstGroups_CU });
 
 			txtPwd.Focus();
@@ -86,7 +87,7 @@ namespace myNotebooks.subforms
 						{
 							Name = txtUserName.Text,
 							Password = EncryptDecrypt.Encrypt(txtPwd.Text, txtPwd.Text),
-							AccessLevel = ddlAccessLevels.SelectedIndex,
+							AccessLevel = ddlAccessLevels.SelectedIndex + 1,
 							CreatedBy = Program.User.UserId,
 							Permissions = GetPermissions()
 						};
@@ -117,7 +118,7 @@ namespace myNotebooks.subforms
 
 			if (msg.Length > 0)
 			{
-				using (frmMessage frm = new(frmMessage.OperationType.Message, msg)) { frm.ShowDialog(this); }
+				using (frmMessage frm = new(frmMessage.OperationType.Message, msg, "Operation Complete", this)) { frm.ShowDialog(this); }
 			}
 		}
 
@@ -152,36 +153,14 @@ namespace myNotebooks.subforms
 				TreeNode topNode = new TreeNode();
 				PopulateBaseOrgLevels();
 				PopulatePermissions();
-				var vOrgLevelName = string.Empty;
 				ListBox lb2Populate = new ListBox();
-
 				ddlAccessLevels.SelectedIndex = CurrentUser.AccessLevel - 1;
 				ddlAccessLevels.Enabled = false;
-
-				switch (Program.User.AccessLevel)
-				{
-					case 3:
-						vOrgLevelName = "Groups";
-						break;
-					case 4:
-						vOrgLevelName = "Departments";
-						break;
-					case 5:
-						vOrgLevelName = "Accounts";
-						break;
-					case 6:
-					case 7:
-						vOrgLevelName = "Companies";
-						break;
-				}
-
 				GroupBox box = new();
 				List<ListBox> lstBoxes = new();
-
 				box = OrgLevelGroups_MU.Where(e => e.Enabled).FirstOrDefault();
 				lstBoxes = box.Controls.Cast<ListBox>().ToList();
 				lstBoxes[0].Items.AddRange(DbAccess.GetHighestNodeItemsForUser(Program.User.UserId).ToArray());
-
 				box = OrgLevelGroups_CU.Where(e => e.Enabled).FirstOrDefault();
 				lstBoxes = box.Controls.Cast<ListBox>().ToList();
 				lstBoxes[0].Items.AddRange(DbAccess.GetHighestNodeItemsForUser(CurrentUser.UserId).ToArray());
@@ -324,6 +303,7 @@ namespace myNotebooks.subforms
 				GroupBox v2 = (GroupBox)CurrentMouseListBox.Parent;
 				GroupBox v3 = OrgLevelGroups_CU.Where(e => e.Name == v2.Name.Replace("_MU", "_CU")).FirstOrDefault();
 				mnuAssignUser.Enabled = v3.Enabled;
+				mnuAssignUser.Visible = this.Size == FullSize;
 			}
 			//ListBox gb = (ListBox)sender;
 
@@ -338,7 +318,11 @@ namespace myNotebooks.subforms
 			//}
 		}
 
-		private void lstMU_MouseMove(object sender, MouseEventArgs e) { CurrentMouseListBox = (ListBox)sender; }
+		private void lstMU_MouseMove(object sender, MouseEventArgs e) 
+		{ 
+			CurrentMouseListBox = (ListBox)sender; 
+			CurrentMouseGroupBox = (GroupBox)CurrentMouseListBox.Parent;
+		}
 
 		private void mnuAssignUser_Click(object sender, EventArgs e)
 		{
@@ -350,16 +334,23 @@ namespace myNotebooks.subforms
 		private void mnuCreateNew_Click(object sender, EventArgs e)
 		{
 			// get the clicked level
-			var v = treeUser.SelectedNode;
+			//var v = treeUser.SelectedNode;
 
-			var v2 = v.PrevNode;
+			//var v2 = v.PrevNode;
 
-			var v3 = NodesInPath[0];
+			//var v3 = NodesInPath[0];
 
-			frmMain.OrgLevelTypes type = (frmMain.OrgLevelTypes)Enum.Parse(typeof(frmMain.OrgLevelTypes), v.Name);
+			var v4 = (ListItem)CurrentMouseListBox.SelectedItem;
 
-			using (frmAddOrgLevel frm = new frmAddOrgLevel(CurrentUser.UserId, type, Convert.ToInt32(v.Tag))) { frm.ShowDialog(); }
+			var v5 = CurrentMouseGroupBox.Name.Replace("grp", "").Replace("_MU", "");
+			//var v6 = CurrentMouseGroupBox.Name.
 
+
+			frmMain.OrgLevelTypes itemType = (frmMain.OrgLevelTypes)Enum.Parse(typeof(frmMain.OrgLevelTypes), v5);
+
+			using (frmAddOrgLevel frm = new frmAddOrgLevel(CurrentUser.UserId, itemType, Convert.ToInt32(v4.Id))) { frm.ShowDialog(); }
+			ResetForm(false);
+			PopulateBaseOrgLevels();
 
 			// get its parent level and id
 
@@ -402,19 +393,19 @@ namespace myNotebooks.subforms
 
 				if (Program.User.AccessLevel >= 3)
 				{
-					SetGroupEnabled_Disabled("Groups_MU");
+					SetGroupEnabled_Disabled("Group_MU");
 				}
 				if (Program.User.AccessLevel >= 4)
 				{
-					SetGroupEnabled_Disabled("Departments_MU");
+					SetGroupEnabled_Disabled("Department_MU");
 				}
 				if (Program.User.AccessLevel >= 5)
 				{
-					SetGroupEnabled_Disabled("Accounts_MU");
+					SetGroupEnabled_Disabled("Account_MU");
 				}
 				if (Program.User.AccessLevel >= 6)
 				{
-					SetGroupEnabled_Disabled("Companies_MU");
+					SetGroupEnabled_Disabled("Company_MU");
 				}
 			}
 
@@ -424,19 +415,19 @@ namespace myNotebooks.subforms
 
 				if (CurrentUser.AccessLevel >= 3)
 				{
-					SetGroupEnabled_Disabled("Groups_CU");
+					SetGroupEnabled_Disabled("Group_CU");
 				}
 				if (CurrentUser.AccessLevel >= 4)
 				{
-					SetGroupEnabled_Disabled("Departments_CU");
+					SetGroupEnabled_Disabled("Department_CU");
 				}
 				if (CurrentUser.AccessLevel >= 5)
 				{
-					SetGroupEnabled_Disabled("Accounts_CU");
+					SetGroupEnabled_Disabled("Account_CU");
 				}
 				if (CurrentUser.AccessLevel >= 6)
 				{
-					SetGroupEnabled_Disabled("Companies_CU");
+					SetGroupEnabled_Disabled("Company_CU");
 				}
 			}
 
@@ -463,9 +454,9 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private void ResetForm()
+		private void ResetForm(bool resize = true)
 		{
-			this.Size = SmallSize;
+			if(resize) this.Size = SmallSize;
 			foreach (ListBox lb in OrgLevelLists_CU) { lb.Items.Clear(); }
 			foreach (ListBox lb in OrgLevelLists_MU) { lb.Items.Clear(); }
 			clbPermissions.Items.Clear();
@@ -643,25 +634,25 @@ namespace myNotebooks.subforms
 			string seperator = " > ";
 			try
 			{
-				info = NodesInPath.Where(e => e.NodeType == frmMain.OrgLevelTypes.Companies).First();
+				info = NodesInPath.Where(e => e.NodeType == frmMain.OrgLevelTypes.Company).First();
 				lblTreePath.Text += info.NodeName + seperator;
 			}
 			catch { }
 			try
 			{
-				info = NodesInPath.Where(e => e.NodeType == frmMain.OrgLevelTypes.Accounts).First();
+				info = NodesInPath.Where(e => e.NodeType == frmMain.OrgLevelTypes.Account).First();
 				lblTreePath.Text += info.NodeName + seperator;
 			}
 			catch { }
 			try
 			{
-				info = NodesInPath.Where(e => e.NodeType == frmMain.OrgLevelTypes.Departments).First();
+				info = NodesInPath.Where(e => e.NodeType == frmMain.OrgLevelTypes.Department).First();
 				lblTreePath.Text += info.NodeName + seperator;
 			}
 			catch { }
 			try
 			{
-				info = NodesInPath.Where(e => e.NodeType == frmMain.OrgLevelTypes.Groups).First();
+				info = NodesInPath.Where(e => e.NodeType == frmMain.OrgLevelTypes.Group).First();
 				lblTreePath.Text += info.NodeName;
 			}
 			catch { }

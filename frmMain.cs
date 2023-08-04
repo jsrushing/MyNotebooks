@@ -164,12 +164,13 @@ namespace myNotebooks.subforms
 			HideAll,
 			NotebookNotSelected
 		}
+
 		public enum OrgLevelTypes
 		{
-			Groups = 3,
-			Departments = 4,
-			Accounts = 5,
-			Companies = 6
+			Group = 3,
+			Department = 4,
+			Account = 5,
+			Company = 6
 		}
 
 		public frmMain() { InitializeComponent(); }

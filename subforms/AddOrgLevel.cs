@@ -33,8 +33,7 @@ namespace myNotebooks.subforms
 
 				using(frmMessage frm = new(frmMessage.OperationType.Message, msg, msg2, this)) { frm.ShowDialog(this); }
 
-				// if level created, add currentuser to new level
-
+				this.Close();
 			}
 			else
 			{ using (frmMessage frm = new(frmMessage.OperationType.Message, "Name is required.", "Input Missing", this)) { frm.ShowDialog(); } }
