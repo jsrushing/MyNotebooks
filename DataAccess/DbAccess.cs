@@ -30,7 +30,7 @@ namespace myNotebooks.DataAccess
 			int iRtrn = 0;
 			try
 			{
-				using (SqlConnection conn = new SqlConnection(connString))
+				using (SqlConnection conn = new(connString))
 				{
 					conn.Open();
 					using (SqlCommand cmd = new SqlCommand("sp_CreateUser", conn))
@@ -52,28 +52,37 @@ namespace myNotebooks.DataAccess
 			return iRtrn;
 		}
 
-		public static int CreateMNUserAssignments(int userId, int companyId, int accountId, int departmentId, int groupId)
+		public static bool CreateMNUserAssignments(MNUser user)
 		{
-			int iRtrn = 0;
+			var bRtrn = false;
 
-			using (SqlConnection conn = new SqlConnection(connString))
+			using (SqlConnection conn = new(connString))
 			{
 				conn.Open();
-				using (SqlCommand cmd = new SqlCommand("sp_CreateUserAssignments", conn))
+
+				try
 				{
-					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@orgLevlelType", userId);
-					cmd.Parameters.AddWithValue("@companyId", companyId);
-					cmd.Parameters.AddWithValue("@accountId", accountId);
-					cmd.Parameters.AddWithValue("@departmentId", departmentId);
-					cmd.Parameters.AddWithValue("@groupId", groupId);
-					cmd.Parameters.Add("@retVal");
-					cmd.Parameters["@retVal"].Direction = ParameterDirection.ReturnValue;
-					cmd.ExecuteNonQuery();
-					iRtrn = Convert.ToInt32(cmd.Parameters["@retVal"].Value.ToString());
+					foreach(UserAssignments ua in user.Assignments)
+					{
+						using (SqlCommand cmd = new SqlCommand("sp_CreateUserAssignments", conn))
+						{
+							cmd.CommandType = CommandType.StoredProcedure;
+							cmd.Parameters.AddWithValue("@userId", ua.UserId);
+							if (ua.orgType == UserAssignments.OrgType.Company)		cmd.Parameters.AddWithValue("@companyId",		ua.CompanyId);
+							if (ua.orgType == UserAssignments.OrgType.Account)		cmd.Parameters.AddWithValue("@accountId",		ua.AccountId);
+							if (ua.orgType == UserAssignments.OrgType.Department)	cmd.Parameters.AddWithValue("@departmentId",	ua.DepartmentId);
+							if (ua.orgType == UserAssignments.OrgType.Group)		cmd.Parameters.AddWithValue("@groupId",			ua.GroupId);
+							cmd.Parameters.Add("@retVal");
+							cmd.Parameters["@retVal"].Direction = ParameterDirection.ReturnValue;
+							cmd.ExecuteNonQuery();
+							bRtrn = true;
+						}
+					}
 				}
+				catch { bRtrn = false; }
+
 			}
-			return iRtrn;
+			return bRtrn;
 		}
 
 		public static int CreateMNUserPermissions(MNUser user)
@@ -82,7 +91,7 @@ namespace myNotebooks.DataAccess
 
 			try
 			{
-				using (SqlConnection conn = new SqlConnection(connString))
+				using (SqlConnection conn = new(connString))
 				{
 					conn.Open();
 					using (SqlCommand cmd = new SqlCommand("sp_CreateUserPermissions", conn))
@@ -110,7 +119,7 @@ namespace myNotebooks.DataAccess
 		public static string GetAccessLevelName(int accessLevel)
 		{
 			string sRtrn = string.Empty;
-			using(SqlConnection conn = new SqlConnection(connString)) 
+			using(SqlConnection conn = new(connString)) 
 			{ 
 				conn.Open();
 				using(SqlCommand cmd = new("sp_GetAccessLevels", conn)) 
@@ -136,7 +145,7 @@ namespace myNotebooks.DataAccess
 		{
 			List<string> list = new List<string>();
 
-			using (SqlConnection conn = new SqlConnection(connString))
+			using (SqlConnection conn = new(connString))
 			{
 				conn.Open();
 				using (SqlCommand cmd = new("sp_GetAccessLevels", conn))
@@ -160,7 +169,7 @@ namespace myNotebooks.DataAccess
 
 			try
 			{
-				using (SqlConnection conn = new SqlConnection(connString))
+				using (SqlConnection conn = new(connString))
 				{
 					conn.Open();
 					using (SqlCommand cmd = new SqlCommand("sp_CreateOrgLevel", conn))
@@ -189,7 +198,7 @@ namespace myNotebooks.DataAccess
 			List<Group> lstRtrn = new List<Group>();
 			DataTable dt = new DataTable();
 
-			using (SqlConnection conn = new SqlConnection(connString))
+			using (SqlConnection conn = new(connString))
 			{
 				conn.Open();
 				using (SqlCommand cmd = new("sp_GetGroups"))
@@ -213,7 +222,7 @@ namespace myNotebooks.DataAccess
 			List<Department> lstRtrn = new List<Department>();
 			DataTable dt = new DataTable();
 
-			using (SqlConnection conn = new SqlConnection(connString))
+			using (SqlConnection conn = new(connString))
 			{
 				conn.Open();
 				using (SqlCommand cmd = new("sp_GetDepartments"))
@@ -237,7 +246,7 @@ namespace myNotebooks.DataAccess
 			List<Account> lstRtrn = new List<Account>();
 			DataTable dt = new DataTable();
 
-			using (SqlConnection conn = new SqlConnection(connString))
+			using (SqlConnection conn = new(connString))
 			{
 				conn.Open();
 				using (SqlCommand cmd = new("sp_GetAccounts"))
@@ -261,7 +270,7 @@ namespace myNotebooks.DataAccess
 			List<Company> lstRtrn = new List<Company>();
 			DataTable dt = new DataTable();
 
-			using (SqlConnection conn = new SqlConnection(connString))
+			using (SqlConnection conn = new(connString))
 			{
 				conn.Open();
 				using (SqlCommand cmd = new("sp_GetCompanies"))
@@ -287,7 +296,7 @@ namespace myNotebooks.DataAccess
 			DataTable dt = new DataTable();
 			List<ListItem> lstRtrn = new List<ListItem>();
 
-			using (SqlConnection conn = new SqlConnection(connString))
+			using (SqlConnection conn = new(connString))
 			{
 				conn.Open();
 				using (SqlCommand cmd = new("sp_GetOrgLevelItems", conn))
@@ -319,7 +328,7 @@ namespace myNotebooks.DataAccess
 			TreeNode node;
 			DataTable dt = new DataTable();
 
-			using (SqlConnection conn = new SqlConnection(connString))
+			using (SqlConnection conn = new(connString))
 			{
 				conn.Open();
 				using (SqlCommand cmd = new("sp_GetOrgLevelChildren", conn))
@@ -350,7 +359,7 @@ namespace myNotebooks.DataAccess
 		//	TreeNode node;
 		//	DataTable dt = new DataTable();
 
-		//	using (SqlConnection conn = new SqlConnection(connString))
+		//	using (SqlConnection conn = new(connString))
 		//	{
 		//		conn.Open();
 		//		using (SqlCommand cmd = new("sp_GetOrgLevelChildren", conn))

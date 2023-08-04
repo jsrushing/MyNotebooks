@@ -9,25 +9,32 @@ using myNotebooks.subforms;
 
 namespace myNotebooks.objects
 {
-	public class UserAssignment
+	public class UserAssignments
 	{
+		public int UserId { get; set; }
 		public int CompanyId { get; set; }
 		public int AccountId { get; set; }
 		public int DepartmentId { get; set; }
 		public int GroupId { get; set; }
+		public OrgType orgType { get; set; }
 
-		public UserAssignment() { }
+		public enum OrgType { Company, Account, Department, Group }
 
-		public UserAssignment(DataTable dt) 
+		public UserAssignments() { }
+
+		public UserAssignments(DataTable dt) 
 		{
-			foreach (PropertyInfo sPropertyName in typeof(UserAssignment).GetProperties())
+			foreach (PropertyInfo sPropertyName in typeof(UserAssignments).GetProperties())
 			{
 				if(dt.Rows.Count > 0)
 				{
 					try
 					{
-						var value = dt.Rows[0].Field<int>(sPropertyName.Name);
-						this.GetType().GetProperty(sPropertyName.Name).SetValue(this, value);
+						foreach(DataRow row in dt.Rows)
+						{
+							var value = row.Field<int>(sPropertyName.Name);
+							this.GetType().GetProperty(sPropertyName.Name).SetValue(this, value);
+						}
 					}
 					catch (Exception ex)
 					{
@@ -38,23 +45,19 @@ namespace myNotebooks.objects
 			}
 		}
 
-		public UserAssignment(DataRow dr)
+		public UserAssignments(DataRow dr)
 		{
-			foreach (PropertyInfo sPropertyName in typeof(UserAssignment).GetProperties())
+			foreach (PropertyInfo sPropertyName in typeof(UserAssignments).GetProperties())
 			{
 				try
 				{
-					//if(!dr.Field<int>(sPropertyName.Name) == null)
-					//{
-
-					//}
 					var value = dr.Field<int>(sPropertyName.Name);
 					this.GetType().GetProperty(sPropertyName.Name).SetValue(this, value);
 				}
 				catch (Exception ex)
 				{
-					//using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The error '" + ex.Message +
-					//	"' occurred while processing the property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
+					using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The error '" + ex.Message +
+						"' occurred while processing the property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
 				}
 			}
 		}

@@ -17,12 +17,16 @@ namespace myNotebooks.subforms
 		public string ResultText { get; private set; }
 		public bool IsLocalFile { get; private set; }
 
+		private const int SmallWidth = 258;
+		private const int RegularWidth = 394;
+
 		public enum OperationType
 		{
 			Message,
 			DeleteNotebook,
 			DeleteEntry,
 			YesNoQuestion,
+			YesNoCancelQuestion,
 			InputBox,
 			LabelNameInputBox,
 			PINFileInputBox
@@ -93,6 +97,14 @@ namespace myNotebooks.subforms
 					this.Text = this.defaultText;
 					break;
 				case OperationType.YesNoQuestion:
+					pnlYesNo.Top = lblMessage.Top + lblMessage.Height;
+					pnlYesNo.Visible = true;
+					this.AcceptButton = btnNo2;
+					shownPanel = pnlYesNo;
+					this.Text = this.defaultText;
+					this.Height = pnlYesNo.Top + pnlYesNo.Height + 55;
+					break;
+				case OperationType.YesNoCancelQuestion:
 					pnlYesNoCancel.Top = lblMessage.Top + lblMessage.Height;
 					pnlYesNoCancel.Visible = true;
 					this.AcceptButton = btnCancel1;
@@ -129,7 +141,11 @@ namespace myNotebooks.subforms
 				pnlOkCancel.Top += pnlDropDown.Top + pnlDropDown.Height + 5;
 			}
 
-			if (shownPanel != null) { this.Height = shownPanel.Height + shownPanel.Top + 50 + (pnlDropDown.Visible ? pnlDropDown.Height + 5 : 0); }
+			if (shownPanel != null) 
+			{ 
+				this.Height = shownPanel.Height + shownPanel.Top + 50 + (pnlDropDown.Visible ? pnlDropDown.Height + 5 : 0); 
+				if(msg.Length < 45) { SetSmallWidth(opType); };
+			}
 		}
 
 		private void btnYes_Click(object sender, EventArgs e)
@@ -180,6 +196,28 @@ namespace myNotebooks.subforms
 					txtInput.Text = frm.PINFileName;
 					IsLocalFile = frm.IsLocalFile;
 				}
+			}
+		}
+
+		private void SetSmallWidth(OperationType opType)
+		{
+			this.Width = SmallWidth;
+			if(pnlOk.Visible) { btnOk2.Left = pnlOk.Width / 2 - btnOk2.Width / 2; }
+			if(pnlOkCancel.Visible)
+			{
+				btnOk1.Left = pnlOkCancel.Width / 2 - btnOk1.Width - 30;
+				btnCancel2.Left = pnlOkCancel.Width / 2 + 30;
+			}
+			if (pnlYesNo.Visible)
+			{
+				btnYes2.Left = pnlYesNo.Width / 2 - btnYes2.Width - 30;
+				btnNo2.Left = pnlYesNo.Width / 2 + 30;
+			}
+			if (pnlYesNoCancel.Visible)
+			{
+				btnOk1.Left = pnlYesNoCancel.Width / 2 - btnOk1.Width / 2;
+				btnCancel1.Left = btnOk1.Left + btnOk1.Width + 10;
+				btnYes1.Left = btnOk1.Left - btnYes1.Width - 10;
 			}
 		}
 	}

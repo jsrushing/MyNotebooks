@@ -222,7 +222,7 @@ namespace myNotebooks.subforms
 			btnLogin.Name = "btnLogin";
 			btnLogin.Size = new System.Drawing.Size(137, 23);
 			btnLogin.TabIndex = 4;
-			btnLogin.Text = "&Lookup Or Create MNUser";
+			btnLogin.Text = "&Lookup User";
 			btnLogin.UseVisualStyleBackColor = true;
 			btnLogin.Click += this.btnLogin_Click;
 			// 
@@ -278,7 +278,9 @@ namespace myNotebooks.subforms
 			lstCompanies_MU.TabIndex = 25;
 			lstCompanies_MU.Tag = "6";
 			lstCompanies_MU.SelectedIndexChanged += this.OrgLevelList_SelectedIndexChanged;
+			lstCompanies_MU.DragLeave += this.lstCompanies_MU_DragLeave;
 			lstCompanies_MU.MouseDoubleClick += this.OrgLevelList_MouseDoubleClick;
+			lstCompanies_MU.MouseDown += this.lstCompanies_MU_MouseDown;
 			// 
 			// mnuContextTree
 			// 
@@ -339,7 +341,9 @@ namespace myNotebooks.subforms
 			lstGroups_MU.TabIndex = 25;
 			lstGroups_MU.Tag = "3";
 			lstGroups_MU.SelectedIndexChanged += this.OrgLevelList_SelectedIndexChanged;
+			lstGroups_MU.DragLeave += this.lstCompanies_MU_DragLeave;
 			lstGroups_MU.MouseDoubleClick += this.OrgLevelList_MouseDoubleClick;
+			lstGroups_MU.MouseDown += this.lstCompanies_MU_MouseDown;
 			// 
 			// grpDepartments_MU
 			// 
@@ -363,7 +367,9 @@ namespace myNotebooks.subforms
 			lstDepartments_MU.TabIndex = 25;
 			lstDepartments_MU.Tag = "4";
 			lstDepartments_MU.SelectedIndexChanged += this.OrgLevelList_SelectedIndexChanged;
+			lstDepartments_MU.DragLeave += this.lstCompanies_MU_DragLeave;
 			lstDepartments_MU.MouseDoubleClick += this.OrgLevelList_MouseDoubleClick;
+			lstDepartments_MU.MouseDown += this.lstCompanies_MU_MouseDown;
 			// 
 			// grpAccounts_MU
 			// 
@@ -387,7 +393,9 @@ namespace myNotebooks.subforms
 			lstAccounts_MU.TabIndex = 25;
 			lstAccounts_MU.Tag = "5";
 			lstAccounts_MU.SelectedIndexChanged += this.OrgLevelList_SelectedIndexChanged;
+			lstAccounts_MU.DragLeave += this.lstCompanies_MU_DragLeave;
 			lstAccounts_MU.MouseDoubleClick += this.OrgLevelList_MouseDoubleClick;
+			lstAccounts_MU.MouseDown += this.lstCompanies_MU_MouseDown;
 			// 
 			// toolStripContainer1
 			// 
@@ -496,6 +504,7 @@ namespace myNotebooks.subforms
 			lstCompanies_CU.Size = new System.Drawing.Size(227, 94);
 			lstCompanies_CU.TabIndex = 25;
 			lstCompanies_CU.Tag = "6";
+			lstCompanies_CU.DragEnter += this.lstCompanies_CU_DragEnter;
 			// 
 			// grpGroups_CU
 			// 
@@ -518,6 +527,7 @@ namespace myNotebooks.subforms
 			lstGroups_CU.Size = new System.Drawing.Size(221, 94);
 			lstGroups_CU.TabIndex = 25;
 			lstGroups_CU.Tag = "3";
+			lstGroups_CU.DragEnter += this.lstCompanies_CU_DragEnter;
 			// 
 			// grpDepartments_CU
 			// 
@@ -540,6 +550,7 @@ namespace myNotebooks.subforms
 			lstDepartments_CU.Size = new System.Drawing.Size(227, 94);
 			lstDepartments_CU.TabIndex = 25;
 			lstDepartments_CU.Tag = "4";
+			lstDepartments_CU.DragEnter += this.lstCompanies_CU_DragEnter;
 			// 
 			// grpAccounts_CU
 			// 
@@ -562,6 +573,7 @@ namespace myNotebooks.subforms
 			lstAccounts_CU.Size = new System.Drawing.Size(227, 94);
 			lstAccounts_CU.TabIndex = 25;
 			lstAccounts_CU.Tag = "5";
+			lstAccounts_CU.DragEnter += this.lstCompanies_CU_DragEnter;
 			// 
 			// frmManagementConsole
 			// 

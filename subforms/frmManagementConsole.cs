@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Encryption;
+using Microsoft.VisualBasic.ApplicationServices;
 using myNotebooks.DataAccess;
 using myNotebooks.objects;
 using MyNotebooks.objects;
@@ -28,6 +29,7 @@ namespace myNotebooks.subforms
 		private List<ListBox> OrgLevelLists_MU = new List<ListBox>();
 		private List<GroupBox> OrgLevelGroups_CU = new List<GroupBox>();
 		private List<ListBox> OrgLevelLists_CU = new List<ListBox>();
+		private ListItem draggedItem = null;
 
 		public frmManagementConsole(Form parent)
 		{
@@ -66,11 +68,20 @@ namespace myNotebooks.subforms
 
 			try
 			{
-				CurrentUser.Name = txtUserName.Text;
-				CurrentUser.Password = EncryptDecrypt.Encrypt(txtPwd.Text, txtPwd.Text);
-				CurrentUser.CreatedBy = Program.User.UserId;
-				CurrentUser.UserId = DbAccess.CreateMNUser(CurrentUser);
+				CurrentUser = new()
+				{
+					Name = txtUserName.Text,
+					Password = EncryptDecrypt.Encrypt(txtPwd.Text, txtPwd.Text),
+					AccessLevel = ddlAccessLevels.SelectedIndex,
+					CreatedBy = Program.User.UserId,
+					UserId = DbAccess.CreateMNUser(CurrentUser),
+					Permissions = GetPermissions(),
+					Assignments = GetAssignments()
+				};
+
 				DbAccess.CreateMNUserPermissions(CurrentUser);
+				DbAccess.CreateMNUserAssignments(CurrentUser);
+
 				msg = "The User '" + CurrentUser.Name + "' was created.";
 			}
 			catch (Exception ex)
@@ -95,7 +106,7 @@ namespace myNotebooks.subforms
 
 			if (CurrentUser != null)
 			{
-				foreach (DataRow dr in ds.Tables[2].Rows) { Program.User.Assignments.Add(new UserAssignment(dr)); }
+				foreach (DataRow dr in ds.Tables[2].Rows) { Program.User.Assignments.Add(new UserAssignments(dr)); }
 
 				TreeNode topNode = new TreeNode();
 				PopulateBaseTree();
@@ -134,23 +145,38 @@ namespace myNotebooks.subforms
 			}
 			else
 			{
-				using (frmMessage frm = new(frmMessage.OperationType.Message, "User not found.", "Invalid Credentials", this)) { frm.ShowDialog(this); }
+				using (frmMessage frm = new(frmMessage.OperationType.YesNoQuestion,
+					"User not found. Would you like to create the user '" + txtPwd.Text + "'?", "Invalid Credentials", this))
+				{
+					frm.ShowDialog(this);
+					if (frm.Result == frmMessage.ReturnResult.Yes) {this.Height = FullSize.Height; ddlAccessLevels.Enabled = true; }
+				}
 			}
 
-
-
-
-			if (CurrentUser != null)
-			{
-			}
-			else
-			{
-				ddlAccessLevels.SelectedIndex = 0;
-				ddlAccessLevels.Enabled = true;
-			}
-
-			this.Size = CurrentUser != null ? FullSize : SmallSize;
+			//this.Size = CurrentUser != null ? FullSize : SmallSize;
 			pnlCreateUser.Visible = true;
+		}
+
+		private ListBox GetNextListBox(ListBox lb)
+		{
+			ListBox lbNext = new ListBox();
+
+			switch (lb.Parent.Text)
+			{
+				case "Groups":
+					// lbNext = ??
+					break;
+				case "Departments":
+					lbNext = lstGroups_MU;
+					break;
+				case "Accounts":
+					lbNext = lstDepartments_MU;
+					break;
+				case "Companies":
+					lbNext = lstAccounts_MU;
+					break;
+			}
+			return lbNext;
 		}
 
 		private UserPermissions GetPermissions()
@@ -163,6 +189,82 @@ namespace myNotebooks.subforms
 			}
 
 			return new UserPermissions(permissions);
+		}
+
+		private List<UserAssignments> GetAssignments()
+		{
+			List<UserAssignments> lRtrn = new();
+			UserAssignments ua = new();
+
+			foreach (ListItem li in lstCompanies_CU.Items)
+			{ ua = new() { UserId = CurrentUser.UserId, CompanyId = li.Id, orgType = UserAssignments.OrgType.Company } ; lRtrn.Add(ua); }
+			foreach (ListItem li in lstAccounts_CU.Items)
+			{ ua = new() { UserId = CurrentUser.UserId, AccountId = li.Id, orgType = UserAssignments.OrgType.Account }; lRtrn.Add(ua); }
+			foreach (ListItem li in lstDepartments_CU.Items)
+			{ ua = new() { UserId = CurrentUser.UserId, DepartmentId = li.Id, orgType = UserAssignments.OrgType.Department }; lRtrn.Add(ua); }
+			foreach (ListItem li in lstGroups_CU.Items)
+			{ ua = new() { UserId = CurrentUser.UserId, GroupId = li.Id, orgType = UserAssignments.OrgType.Group }; lRtrn.Add(ua); }
+
+			return lRtrn;
+		}
+
+		private void lstCompanies_MU_DragLeave(object sender, EventArgs e)
+		{
+			ListBox lb = (ListBox)sender;
+
+			draggedItem = (ListItem)lb.SelectedItem;
+		}
+
+		private void lstCompanies_CU_DragEnter(object sender, DragEventArgs e)
+		{
+			ListBox lb = (ListBox)sender;
+
+			if(draggedItem != null)
+			{
+				lb.Items.Add(draggedItem);
+			}
+		}
+
+		private void lstCompanies_MU_MouseDown(object sender, MouseEventArgs e)
+		{
+			ListBox lb = (ListBox)sender;
+
+			draggedItem = null;
+
+			int index = lb.IndexFromPoint(e.Location);
+			if(index > 0)
+			{
+				ListItem li = (ListItem)lb.Items[index];
+				DragDropEffects dde1 = DoDragDrop(li, DragDropEffects.All);
+			}
+		}
+
+		private void OrgLevelList_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			ListBox lb = (ListBox)sender;
+			ListBox lbNext = new ListBox();
+
+			switch (lb.Parent.Text)
+			{
+				case "Groups":
+					// lbNext = ??
+					break;
+				case "Departments":
+					lbNext = lstGroups_MU;
+					break;
+				case "Accounts":
+					lbNext = lstDepartments_MU;
+					break;
+				case "Companies":
+					lbNext = lstAccounts_MU;
+					break;
+			}
+
+			//foreach (NodeInfo node in DbAccess.GetOrgLevelChildren(Convert.ToInt16(lbNext.Tag), )
+
+
+
+
 		}
 
 		private void mnuCreateNew_Click(object sender, EventArgs e)
@@ -181,6 +283,19 @@ namespace myNotebooks.subforms
 
 			// get its parent level and id
 
+		}
+
+		private void OrgLevelList_MouseDoubleClick(object sender, MouseEventArgs e)
+		{
+			ListBox lb = (ListBox)sender;
+
+			var v2 = ((ListItem)lb.SelectedItem).Id;
+			ListBox lbToPopulate = GetNextListBox((ListBox)sender);
+
+			foreach (ListItem li in DbAccess.GetOrgLevelChildren(Convert.ToInt16(lbToPopulate.Tag), v2))
+			{
+				lbToPopulate.Items.Add(li);
+			}
 		}
 
 		private void PopulateBaseTree()
@@ -390,6 +505,16 @@ namespace myNotebooks.subforms
 			//}		
 		}
 
+		private void treeUser_MouseMove(object sender, MouseEventArgs e)
+		{
+			HoverNode = treeUser.GetNodeAt(e.X, e.Y);
+		}
+
+		private void treeUser_Click(object sender, EventArgs e)
+		{
+
+		}
+
 		private void UpdatePath()
 		{
 			lblTreePath.Text = string.Empty;
@@ -422,79 +547,6 @@ namespace myNotebooks.subforms
 
 			if (lblTreePath.Text.Length > 0) { this.Height = lblTreePath.Top + lblTreePath.Height + 50; }
 
-		}
-
-		private void treeUser_MouseMove(object sender, MouseEventArgs e)
-		{
-			HoverNode = treeUser.GetNodeAt(e.X, e.Y);
-		}
-
-		private void treeUser_Click(object sender, EventArgs e)
-		{
-
-		}
-
-		private void OrgLevelList_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			ListBox lb = (ListBox)sender;
-			ListBox lbNext = new ListBox();
-
-			switch (lb.Parent.Text)
-			{
-				case "Groups":
-					// lbNext = ??
-					break;
-				case "Departments":
-					lbNext = lstGroups_MU;
-					break;
-				case "Accounts":
-					lbNext = lstDepartments_MU;
-					break;
-				case "Companies":
-					lbNext = lstAccounts_MU;
-					break;
-			}
-
-			//foreach (NodeInfo node in DbAccess.GetOrgLevelChildren(Convert.ToInt16(lbNext.Tag), )
-
-
-
-
-		}
-
-		private void OrgLevelList_MouseDoubleClick(object sender, MouseEventArgs e)
-		{
-			ListBox lb = (ListBox)sender;
-
-			var v2 = ((ListItem)lb.SelectedItem).Id;
-			ListBox lbToPopulate = GetNextListBox((ListBox)sender);
-
-			foreach (ListItem li in DbAccess.GetOrgLevelChildren(Convert.ToInt16(lbToPopulate.Tag), v2))
-			{
-				lbToPopulate.Items.Add(li);
-			}
-		}
-
-		private ListBox GetNextListBox(ListBox lb)
-		{
-			ListBox lbNext = new ListBox();
-
-			switch (lb.Parent.Text)
-			{
-				case "Groups":
-					// lbNext = ??
-					break;
-				case "Departments":
-					lbNext = lstGroups_MU;
-					break;
-				case "Accounts":
-					lbNext = lstDepartments_MU;
-					break;
-				case "Companies":
-					lbNext = lstAccounts_MU;
-					break;
-			}
-			return lbNext;
 		}
 	}
 

@@ -30,7 +30,7 @@ namespace myNotebooks.objects
 		public List<Department>	Departments { get { return GetDepartments(); } }
 		public List<Account>	Accounts { get { return GetAccounts(); } }
 		public List<Company>	Companies { get { return GetCompanies(); } }
-		public List<UserAssignment> Assignments { get; set; } = new();
+		public List<UserAssignments> Assignments { get; set; } = new();
 		public UserPermissions		Permissions { get; set; } = new();
 
 		public MNUser() { }
@@ -107,6 +107,9 @@ namespace myNotebooks.objects
 
 		public void Save()
 		{
+			this.UserId = DbAccess.CreateMNUser(this);
+			DbAccess.CreateMNUserPermissions(this);
+			DbAccess.CreateMNUserAssignments(this);
 
 		}
 	}
