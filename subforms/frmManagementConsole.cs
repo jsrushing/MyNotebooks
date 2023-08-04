@@ -34,6 +34,8 @@ namespace myNotebooks.subforms
 		private ListItem DraggedItem = null;
 		private const string CreateUserButton_CreateUser = "Create &User";
 		private const string CreateUserButton_UpdateUser = "&Assign Organizations";
+		private ListBox CurrentMouseListBox;
+		private GroupBox CurrentMouseGroupBox;
 
 		public frmManagementConsole(Form parent)
 		{
@@ -124,10 +126,10 @@ namespace myNotebooks.subforms
 			if (CurrentUser != null && !CurrentUser.Equals(Program.User))
 			{
 				var msg = "The user '" + CurrentUser.Name + "' will be deleted. Do you want to continue?";
-				using (frmMessage frm = new(frmMessage.OperationType.YesNoQuestion, msg, "User Will Be Deleted!", this)) 
-				{ 
-					frm.ShowDialog(); 
-					if(frm.Result == frmMessage.ReturnResult.Yes) { CurrentUser.Delete(); CurrentUser = null; }
+				using (frmMessage frm = new(frmMessage.OperationType.YesNoQuestion, msg, "User Will Be Deleted!", this))
+				{
+					frm.ShowDialog();
+					if (frm.Result == frmMessage.ReturnResult.Yes) { CurrentUser.Delete(); CurrentUser = null; }
 				}
 			}
 
@@ -254,6 +256,15 @@ namespace myNotebooks.subforms
 			return lRtrn;
 		}
 
+		private void lstCU_DragEnter(object sender, DragEventArgs e)
+		{
+			ListBox lb = (ListBox)sender;
+
+			if (DraggedItem != null)
+			{
+				lb.Items.Add(DraggedItem);
+			}
+		}
 
 		private void lstMU_DragLeave(object sender, EventArgs e)
 		{
@@ -271,18 +282,38 @@ namespace myNotebooks.subforms
 
 		}
 
-		private void lstCU_DragEnter(object sender, DragEventArgs e)
+		private void lstMU_MouseDoubleClick(object sender, MouseEventArgs e)
 		{
 			ListBox lb = (ListBox)sender;
 
-			if (DraggedItem != null)
+			if (lb.SelectedItem != null)
 			{
-				lb.Items.Add(DraggedItem);
+				var bExists = false;
+
+				var v2 = ((ListItem)lb.SelectedItem).Id;
+				ListBox lbToPopulate = GetNextListBox((ListBox)sender);
+
+				foreach (ListItem li in DbAccess.GetOrgLevelChildren(Convert.ToInt16(lbToPopulate.Tag), v2))
+				{
+					foreach (ListItem li2 in lbToPopulate.Items)
+					{
+						if (li.Name.Trim() == li2.Name.Trim()) { bExists = true; break; }
+					}
+
+					if (!bExists) { lbToPopulate.Items.Add(li); }
+				}
 			}
 		}
 
 		private void lstMU_MouseDown(object sender, MouseEventArgs e)
 		{
+			if (e.Button == MouseButtons.Right)
+			{
+				var v = CurrentMouseListBox.SelectedItem as ListItem;
+				GroupBox v2 = (GroupBox)CurrentMouseListBox.Parent;
+				GroupBox v3 = OrgLevelGroups_CU.Where(e => e.Name == v2.Name.Replace("_MU", "_CU")).FirstOrDefault();
+				mnuAssignUser.Enabled = v3.Enabled;
+			}
 			//ListBox lb = (ListBox)sender;
 
 			//DraggedItem = null;
@@ -294,6 +325,20 @@ namespace myNotebooks.subforms
 			//	ListItem li = (ListItem)lb.Items[index];
 			//	DragDropEffects dde1 = DoDragDrop(li, DragDropEffects.Move);
 			//}
+		}
+
+		private void lstMU_MouseMove(object sender, MouseEventArgs e)
+		{
+			CurrentMouseListBox = (ListBox)sender;
+		}
+
+
+		private void mnuAssignUser_Click(object sender, EventArgs e)
+		{
+
+
+
+
 		}
 
 		private void mnuCreateNew_Click(object sender, EventArgs e)
@@ -311,6 +356,16 @@ namespace myNotebooks.subforms
 
 
 			// get its parent level and id
+
+		}
+
+		private void mnuEdit_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void mnuDelete_Click(object sender, EventArgs e)
+		{
 
 		}
 
@@ -424,7 +479,6 @@ namespace myNotebooks.subforms
 		private void SetContextMenus(TreeNode tn)
 		{
 			mnuAssignUser.Visible = false;
-			mnuAdd.Visible = false;
 			mnuEdit.Visible = false;
 			mnuDelete.Visible = false;
 			mnuCreateNew.Visible = false;
@@ -461,10 +515,17 @@ namespace myNotebooks.subforms
 
 		private void SetGroupEnabled_Disabled(string groupName, bool setEnabled = true)
 		{
-			GroupBox gb2 = OrgLevelGroups_MU.Where(box => box.Name == "grp" + groupName).FirstOrDefault();
-			gb2.Enabled = setEnabled;
-			gb2 = OrgLevelGroups_CU.Where(box => box.Name == "grp" + groupName).FirstOrDefault();
-			gb2.Enabled = setEnabled;
+			GroupBox gb2;
+			if (groupName.EndsWith("_MU"))
+			{
+				gb2 = OrgLevelGroups_MU.Where(box => box.Name == "grp" + groupName).FirstOrDefault();
+				gb2.Enabled = setEnabled;
+			}
+			else
+			{
+				gb2 = OrgLevelGroups_CU.Where(box => box.Name == "grp" + groupName).FirstOrDefault();
+				gb2.Enabled = setEnabled;
+			}
 		}
 
 		private void SetNodeEnabled_Disabled(string nodeName, bool setEnabled = true)
@@ -607,29 +668,10 @@ namespace myNotebooks.subforms
 
 			if (lblTreePath.Text.Length > 0) { this.Height = lblTreePath.Top + lblTreePath.Height + 50; }
 
-		} 
+		}
 		#endregion
 
 		private void txtCredentials_TextChanged(object sender, EventArgs e) { if (this.Size != SmallSize) { ResetForm(); } }
-
-		private void lstCompanies_MU_MouseDoubleClick(object sender, MouseEventArgs e)
-		{
-			ListBox lb = (ListBox)sender;
-			var bExists = false;
-
-			var v2 = ((ListItem)lb.SelectedItem).Id;
-			ListBox lbToPopulate = GetNextListBox((ListBox)sender);
-
-			foreach (ListItem li in DbAccess.GetOrgLevelChildren(Convert.ToInt16(lbToPopulate.Tag), v2))
-			{
-				foreach(ListItem li2 in lbToPopulate.Items)
-				{
-					if(li.Name.Trim() == li2.Name.Trim()) { bExists = true; break; }
-				}
-
-				if (!bExists) { lbToPopulate.Items.Add(li); }
-			}
-		}
 	}
 
 	public struct NodeInfo

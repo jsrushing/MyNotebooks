@@ -52,10 +52,9 @@ namespace myNotebooks.subforms
 			lstCompanies_MU = new ListBox();
 			mnuContextTree = new ContextMenuStrip(components);
 			mnuAssignUser = new ToolStripMenuItem();
-			mnuAdd = new ToolStripMenuItem();
+			mnuCreateNew = new ToolStripMenuItem();
 			mnuEdit = new ToolStripMenuItem();
 			mnuDelete = new ToolStripMenuItem();
-			mnuCreateNew = new ToolStripMenuItem();
 			grpGroups_MU = new GroupBox();
 			lstGroups_MU = new ListBox();
 			grpDepartments_MU = new GroupBox();
@@ -280,44 +279,43 @@ namespace myNotebooks.subforms
 			lstCompanies_MU.TabIndex = 25;
 			lstCompanies_MU.Tag = "6";
 			lstCompanies_MU.DragLeave += this.lstMU_DragLeave;
-			lstCompanies_MU.MouseDoubleClick += this.lstCompanies_MU_MouseDoubleClick;
+			lstCompanies_MU.MouseDoubleClick += this.lstMU_MouseDoubleClick;
+			lstCompanies_MU.MouseDown += this.lstMU_MouseDown;
+			lstCompanies_MU.MouseMove += this.lstMU_MouseMove;
 			// 
 			// mnuContextTree
 			// 
-			mnuContextTree.Items.AddRange(new ToolStripItem[] { mnuAssignUser, mnuAdd, mnuEdit, mnuDelete, mnuCreateNew });
+			mnuContextTree.Items.AddRange(new ToolStripItem[] { mnuAssignUser, mnuCreateNew, mnuEdit, mnuDelete });
 			mnuContextTree.Name = "mnuContextTree";
-			mnuContextTree.Size = new System.Drawing.Size(156, 114);
+			mnuContextTree.Size = new System.Drawing.Size(150, 92);
 			// 
 			// mnuAssignUser
 			// 
 			mnuAssignUser.Name = "mnuAssignUser";
-			mnuAssignUser.Size = new System.Drawing.Size(155, 22);
-			mnuAssignUser.Text = "A&ssign MNUser";
-			// 
-			// mnuAdd
-			// 
-			mnuAdd.Name = "mnuAdd";
-			mnuAdd.Size = new System.Drawing.Size(155, 22);
-			mnuAdd.Text = "&Add";
-			// 
-			// mnuEdit
-			// 
-			mnuEdit.Name = "mnuEdit";
-			mnuEdit.Size = new System.Drawing.Size(155, 22);
-			mnuEdit.Text = "&Edit";
-			// 
-			// mnuDelete
-			// 
-			mnuDelete.Name = "mnuDelete";
-			mnuDelete.Size = new System.Drawing.Size(155, 22);
-			mnuDelete.Text = "&Delete";
+			mnuAssignUser.Size = new System.Drawing.Size(149, 22);
+			mnuAssignUser.Text = "A&ssign to User";
+			mnuAssignUser.Click += this.mnuAssignUser_Click;
 			// 
 			// mnuCreateNew
 			// 
 			mnuCreateNew.Name = "mnuCreateNew";
-			mnuCreateNew.Size = new System.Drawing.Size(155, 22);
+			mnuCreateNew.Size = new System.Drawing.Size(149, 22);
 			mnuCreateNew.Text = "Create New";
 			mnuCreateNew.Click += this.mnuCreateNew_Click;
+			// 
+			// mnuEdit
+			// 
+			mnuEdit.Name = "mnuEdit";
+			mnuEdit.Size = new System.Drawing.Size(149, 22);
+			mnuEdit.Text = "&Edit";
+			mnuEdit.Click += this.mnuEdit_Click;
+			// 
+			// mnuDelete
+			// 
+			mnuDelete.Name = "mnuDelete";
+			mnuDelete.Size = new System.Drawing.Size(149, 22);
+			mnuDelete.Text = "&Delete";
+			mnuDelete.Click += this.mnuDelete_Click;
 			// 
 			// grpGroups_MU
 			// 
@@ -341,7 +339,9 @@ namespace myNotebooks.subforms
 			lstGroups_MU.TabIndex = 25;
 			lstGroups_MU.Tag = "3";
 			lstGroups_MU.DragLeave += this.lstMU_DragLeave;
-			lstGroups_MU.MouseDoubleClick += this.lstCompanies_MU_MouseDoubleClick;
+			lstGroups_MU.MouseDoubleClick += this.lstMU_MouseDoubleClick;
+			lstGroups_MU.MouseDown += this.lstMU_MouseDown;
+			lstGroups_MU.MouseMove += this.lstMU_MouseMove;
 			// 
 			// grpDepartments_MU
 			// 
@@ -365,7 +365,9 @@ namespace myNotebooks.subforms
 			lstDepartments_MU.TabIndex = 25;
 			lstDepartments_MU.Tag = "4";
 			lstDepartments_MU.DragLeave += this.lstMU_DragLeave;
-			lstDepartments_MU.MouseDoubleClick += this.lstCompanies_MU_MouseDoubleClick;
+			lstDepartments_MU.MouseDoubleClick += this.lstMU_MouseDoubleClick;
+			lstDepartments_MU.MouseDown += this.lstMU_MouseDown;
+			lstDepartments_MU.MouseMove += this.lstMU_MouseMove;
 			// 
 			// grpAccounts_MU
 			// 
@@ -389,7 +391,9 @@ namespace myNotebooks.subforms
 			lstAccounts_MU.TabIndex = 25;
 			lstAccounts_MU.Tag = "5";
 			lstAccounts_MU.DragLeave += this.lstMU_DragLeave;
-			lstAccounts_MU.MouseDoubleClick += this.lstCompanies_MU_MouseDoubleClick;
+			lstAccounts_MU.MouseDoubleClick += this.lstMU_MouseDoubleClick;
+			lstAccounts_MU.MouseDown += this.lstMU_MouseDown;
+			lstAccounts_MU.MouseMove += this.lstMU_MouseMove;
 			// 
 			// toolStripContainer1
 			// 
@@ -490,7 +494,6 @@ namespace myNotebooks.subforms
 			// 
 			// lstCompanies_CU
 			// 
-			lstCompanies_CU.ContextMenuStrip = mnuContextTree;
 			lstCompanies_CU.FormattingEnabled = true;
 			lstCompanies_CU.ItemHeight = 15;
 			lstCompanies_CU.Location = new System.Drawing.Point(0, 21);
@@ -513,7 +516,6 @@ namespace myNotebooks.subforms
 			// 
 			// lstGroups_CU
 			// 
-			lstGroups_CU.ContextMenuStrip = mnuContextTree;
 			lstGroups_CU.FormattingEnabled = true;
 			lstGroups_CU.ItemHeight = 15;
 			lstGroups_CU.Location = new System.Drawing.Point(0, 21);
@@ -536,7 +538,6 @@ namespace myNotebooks.subforms
 			// 
 			// lstDepartments_CU
 			// 
-			lstDepartments_CU.ContextMenuStrip = mnuContextTree;
 			lstDepartments_CU.FormattingEnabled = true;
 			lstDepartments_CU.ItemHeight = 15;
 			lstDepartments_CU.Location = new System.Drawing.Point(0, 21);
@@ -559,7 +560,6 @@ namespace myNotebooks.subforms
 			// 
 			// lstAccounts_CU
 			// 
-			lstAccounts_CU.ContextMenuStrip = mnuContextTree;
 			lstAccounts_CU.FormattingEnabled = true;
 			lstAccounts_CU.ItemHeight = 15;
 			lstAccounts_CU.Location = new System.Drawing.Point(0, 21);
@@ -636,7 +636,6 @@ namespace myNotebooks.subforms
 		private Button btnCancelNewUser;
 		private Button btnCreateUser;
 		private ToolStripMenuItem mnuAssignUser;
-		private ToolStripMenuItem mnuAdd;
 		private ToolStripMenuItem mnuEdit;
 		private ToolStripMenuItem mnuDelete;
 		private ToolStripMenuItem mnuCreateNew;
