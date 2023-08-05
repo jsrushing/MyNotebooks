@@ -33,7 +33,7 @@ namespace myNotebooks.subforms
 		private List<ListBox> OrgLevelLists_CU = new List<ListBox>();
 		private ListItem DraggedItem = null;
 		private const string CreateUserButton_CreateUser = "Create User";
-		private const string CreateUserButton_UpdateUser = "Assign Organizations";
+		private const string CreateUserButton_UpdateUser = "Update User";
 		private ListBox CurrentMouseListBox;
 		private GroupBox CurrentMouseGroupBox;
 		private frmMain.OrgLevelTypes CurrentType;
@@ -75,7 +75,7 @@ namespace myNotebooks.subforms
 
 			try
 			{
-				if (btnCreateUser.Text == CreateUserButton_CreateUser)  // adding base user with permissions
+				if (btnCreateUser.Text == CreateUserButton_CreateUser)  // adding base user
 				{
 					if (ddlAccessLevels.SelectedIndex == -1)
 					{
@@ -88,26 +88,26 @@ namespace myNotebooks.subforms
 							Name = txtUserName.Text,
 							Password = EncryptDecrypt.Encrypt(txtPwd.Text, txtPwd.Text),
 							AccessLevel = ddlAccessLevels.SelectedIndex + 1,
-							CreatedBy = Program.User.UserId,
-							Permissions = GetPermissions()
+							CreatedBy = Program.User.UserId
 						};
 
 						CurrentUser.UserId = DbAccess.CreateMNUser(CurrentUser);
-						CurrentUser.SavePermissions();
-						msg = "The User '" + CurrentUser.Name + "' was created. Now add organizationl levels and click 'Assign Organizations'.";
+						msg = "The User '" + CurrentUser.Name + "' was created. Now choose permissions and organizationl levels and click '" + CreateUserButton_UpdateUser + "'.";
 						this.Size = FullSize;
 						btnCreateUser.Text = CreateUserButton_UpdateUser;
 						PopulateBaseOrgLevels();
-						GroupBox box = OrgLevelGroups_MU.Where(e => e.Enabled).FirstOrDefault();
-						List<ListBox> lstBoxes = box.Controls.Cast<ListBox>().ToList();
-						lstBoxes[0].Items.AddRange(DbAccess.GetHighestNodeItemsForUser(Program.User.UserId).ToArray());
+						PopulateTopLevels(true, false);
+						clbPermissions.Enabled = true;
 					}
 				}
-				else if (btnCreateUser.Text == CreateUserButton_UpdateUser) // updating created user with assignments
+				else if (btnCreateUser.Text == CreateUserButton_UpdateUser) // updating created user with permissions and assignments
 				{
+					CurrentUser.Permissions = GetPermissions();
 					CurrentUser.Assignments = GetAssignments();
 					CurrentUser.SaveAssignments();
+					CurrentUser.SavePermissions();
 					msg = "The organization levels for '" + CurrentUser.Name + "' were updated.";
+					PopulateTopLevels(true, this.Size == FullSize);
 				}
 
 			}
@@ -122,23 +122,7 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private void btnCancelNewUser_Click(object sender, EventArgs e)
-		{
-			clbPermissions.ClearSelected();
-			pnlCreateUser.Visible = false;
-
-			if (CurrentUser != null && !CurrentUser.Equals(Program.User))
-			{
-				var msg = "The user '" + CurrentUser.Name + "' will be deleted. Do you want to continue?";
-				using (frmMessage frm = new(frmMessage.OperationType.YesNoQuestion, msg, "User Will Be Deleted!", this))
-				{
-					frm.ShowDialog();
-					if (frm.Result == frmMessage.ReturnResult.Yes) { CurrentUser.Delete(); CurrentUser = null; }
-				}
-			}
-
-			ResetForm();
-		}
+		private void btnCancelNewUser_Click(object sender, EventArgs e) { ResetForm(); }
 
 		private void btnLogin_Click(object sender, EventArgs e)
 		{
@@ -153,22 +137,18 @@ namespace myNotebooks.subforms
 				TreeNode topNode = new TreeNode();
 				PopulateBaseOrgLevels();
 				PopulatePermissions();
+				clbPermissions.Enabled = false;
 				ListBox lb2Populate = new ListBox();
 				ddlAccessLevels.SelectedIndex = CurrentUser.AccessLevel - 1;
-				ddlAccessLevels.Enabled = false;
-				GroupBox box = new();
-				List<ListBox> lstBoxes = new();
-				box = OrgLevelGroups_MU.Where(e => e.Enabled).FirstOrDefault();
-				lstBoxes = box.Controls.Cast<ListBox>().ToList();
-				lstBoxes[0].Items.AddRange(DbAccess.GetHighestNodeItemsForUser(Program.User.UserId).ToArray());
-				box = OrgLevelGroups_CU.Where(e => e.Enabled).FirstOrDefault();
-				lstBoxes = box.Controls.Cast<ListBox>().ToList();
-				lstBoxes[0].Items.AddRange(DbAccess.GetHighestNodeItemsForUser(CurrentUser.UserId).ToArray());
+				btnCreateUser.Text = CreateUserButton_UpdateUser;
+				//ddlAccessLevels.Enabled = false;
+				PopulateTopLevels();
 
 				//treeUser.Nodes.Cast<TreeNode>().Where(e => e.Text == vOrgLevelName).First().Nodes.AddRange(Program.User.GetHighestNodeItems().ToArray());
 				//treeUser.ExpandAll();
 
 				btnCreateUser.Visible = !CurrentUser.Equals(Program.User);
+				clbPermissions.Enabled = true;
 				this.Size = CurrentUser.Equals(Program.User) ? OneUserSize : FullSize;
 				btnLogin.Enabled = false;
 			}
@@ -282,6 +262,7 @@ namespace myNotebooks.subforms
 
 				var v2 = ((ListItem)lb.SelectedItem).Id;
 				ListBox lbToPopulate = GetNextListBox((ListBox)sender);
+				lbToPopulate.Items.Clear();
 
 				foreach (ListItem li in DbAccess.GetOrgLevelChildren(Convert.ToInt16(lbToPopulate.Tag), v2))
 				{
@@ -297,14 +278,21 @@ namespace myNotebooks.subforms
 
 		private void lstMU_MouseDown(object sender, MouseEventArgs e)
 		{
-			if (e.Button == MouseButtons.Right)
+			CurrentMouseListBox.SelectedIndex = CurrentMouseListBox.IndexFromPoint(e.X, e.Y);
+
+			if(CurrentMouseListBox.SelectedIndex != -1)
 			{
-				var v = CurrentMouseListBox.SelectedItem as ListItem;
-				GroupBox v2 = (GroupBox)CurrentMouseListBox.Parent;
-				GroupBox v3 = OrgLevelGroups_CU.Where(e => e.Name == v2.Name.Replace("_MU", "_CU")).FirstOrDefault();
-				mnuAssignUser.Enabled = v3.Enabled;
-				mnuAssignUser.Visible = this.Size == FullSize;
+				if (e.Button == MouseButtons.Right)
+				{
+					var v = CurrentMouseListBox.SelectedItem as ListItem;
+					GroupBox v2 = (GroupBox)CurrentMouseListBox.Parent;
+					GroupBox v3 = OrgLevelGroups_CU.Where(e => e.Name == v2.Name.Replace("_MU", "_CU")).FirstOrDefault();
+					mnuAssignUser.Enabled = v3.Enabled;
+					mnuAssignUser.Visible = this.Size == FullSize;
+				}
 			}
+			else { mnuContextTree.Visible = false; }
+
 			//ListBox gb = (ListBox)sender;
 
 			//DraggedItem = null;
@@ -333,27 +321,11 @@ namespace myNotebooks.subforms
 
 		private void mnuCreateNew_Click(object sender, EventArgs e)
 		{
-			// get the clicked level
-			//var v = treeUser.SelectedNode;
-
-			//var v2 = v.PrevNode;
-
-			//var v3 = NodesInPath[0];
-
-			var v4 = (ListItem)CurrentMouseListBox.SelectedItem;
-
-			var v5 = CurrentMouseGroupBox.Name.Replace("grp", "").Replace("_MU", "");
-			//var v6 = CurrentMouseGroupBox.Name.
-
-
-			frmMain.OrgLevelTypes itemType = (frmMain.OrgLevelTypes)Enum.Parse(typeof(frmMain.OrgLevelTypes), v5);
-
-			using (frmAddOrgLevel frm = new frmAddOrgLevel(CurrentUser.UserId, itemType, Convert.ToInt32(v4.Id))) { frm.ShowDialog(); }
-			ResetForm(false);
-			PopulateBaseOrgLevels();
-
-			// get its parent level and id
-
+			var vSelectedItem = (ListItem)CurrentMouseListBox.SelectedItem;
+			var vGroupBoxName = CurrentMouseGroupBox.Name.Replace("grp", "").Replace("_MU", "");
+			frmMain.OrgLevelTypes itemType = (frmMain.OrgLevelTypes)Enum.Parse(typeof(frmMain.OrgLevelTypes), vGroupBoxName);
+			using (frmAddOrgLevel frm = new frmAddOrgLevel(CurrentUser.UserId, itemType, Convert.ToInt32(vSelectedItem.Id))) { frm.ShowDialog(); }
+			PopulateTopLevels(true, CurrentUser != null && CurrentUser.UserId != Program.User.UserId);
 		}
 
 		private void mnuEdit_Click(object sender, EventArgs e)
@@ -454,6 +426,28 @@ namespace myNotebooks.subforms
 			}
 		}
 
+		private void PopulateTopLevels(bool populateMU = true, bool populateCU = true)
+		{
+			GroupBox box = new();
+			List<ListBox> lstBoxes = new();
+
+			if (populateMU)
+			{
+				foreach(ListBox lb in OrgLevelLists_MU) { lb.Items.Clear(); }
+				box = OrgLevelGroups_MU.Where(e => e.Enabled).FirstOrDefault();
+				lstBoxes = box.Controls.Cast<ListBox>().ToList();
+				lstBoxes[0].Items.AddRange(DbAccess.GetHighestNodeItemsForUser(Program.User.UserId).ToArray());
+			}
+			
+			if(populateCU)
+			{
+				foreach (ListBox lb in OrgLevelLists_CU) { lb.Items.Clear(); }
+				box = OrgLevelGroups_CU.Where(e => e.Enabled).FirstOrDefault();
+				lstBoxes = box.Controls.Cast<ListBox>().ToList();
+				lstBoxes[0].Items.AddRange(DbAccess.GetHighestNodeItemsForUser(CurrentUser.UserId).ToArray());
+			}
+		}
+
 		private void ResetForm(bool resize = true)
 		{
 			if(resize) this.Size = SmallSize;
@@ -462,6 +456,7 @@ namespace myNotebooks.subforms
 			clbPermissions.Items.Clear();
 			//txtUserName.Text = string.Empty;
 			//txtPwd.Text = string.Empty;
+			pnlCreateUser.Visible = false;
 			txtUserName.Focus();
 			btnLogin.Enabled = true;
 		}
