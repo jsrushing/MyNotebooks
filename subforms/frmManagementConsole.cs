@@ -35,6 +35,7 @@ namespace myNotebooks.subforms
 		private const string CreateUserButton_CreateUser = "Create User";
 		private const string CreateUserButton_UpdateUser = "Update User";
 		private ListBox CurrentMouseListBox;
+		private ListBox LastClickedListBox;
 		private GroupBox CurrentMouseGroupBox;
 		private frmMain.OrgLevelTypes CurrentType;
 
@@ -280,18 +281,21 @@ namespace myNotebooks.subforms
 		{
 			CurrentMouseListBox.SelectedIndex = CurrentMouseListBox.IndexFromPoint(e.X, e.Y);
 
-			if(CurrentMouseListBox.SelectedIndex != -1)
-			{
+			//if(CurrentMouseListBox.SelectedIndex != -1)
+			//{
 				if (e.Button == MouseButtons.Right)
 				{
 					var v = CurrentMouseListBox.SelectedItem as ListItem;
 					GroupBox v2 = (GroupBox)CurrentMouseListBox.Parent;
 					GroupBox v3 = OrgLevelGroups_CU.Where(e => e.Name == v2.Name.Replace("_MU", "_CU")).FirstOrDefault();
+					mnuCreateNew.Text = "Create New " + v2.Name.Replace("grp", "").Replace("_MU", "");
 					mnuAssignUser.Enabled = v3.Enabled;
 					mnuAssignUser.Visible = this.Size == FullSize;
 				}
-			}
-			else { mnuContextTree.Visible = false; }
+			//}
+			//else { mnuContextTree.Visible = false; }
+
+			LastClickedListBox = (ListBox)sender;
 
 			//ListBox gb = (ListBox)sender;
 
@@ -321,11 +325,40 @@ namespace myNotebooks.subforms
 
 		private void mnuCreateNew_Click(object sender, EventArgs e)
 		{
-			var vSelectedItem = (ListItem)CurrentMouseListBox.SelectedItem;
 			var vGroupBoxName = CurrentMouseGroupBox.Name.Replace("grp", "").Replace("_MU", "");
-			frmMain.OrgLevelTypes itemType = (frmMain.OrgLevelTypes)Enum.Parse(typeof(frmMain.OrgLevelTypes), vGroupBoxName);
-			using (frmAddOrgLevel frm = new frmAddOrgLevel(CurrentUser.UserId, itemType, Convert.ToInt32(vSelectedItem.Id))) { frm.ShowDialog(); }
-			PopulateTopLevels(true, CurrentUser != null && CurrentUser.UserId != Program.User.UserId);
+			var vLastListBoxName = LastClickedListBox.Name.Replace("lst", "").Replace("_MU", "").Replace("s", "");
+			frmMain.OrgLevelTypes newItemType = (frmMain.OrgLevelTypes)Enum.Parse(typeof(frmMain.OrgLevelTypes), vGroupBoxName);
+			frmMain.OrgLevelTypes lastClickedItemType = (frmMain.OrgLevelTypes)Enum.Parse(typeof(frmMain.OrgLevelTypes), vLastListBoxName);
+			var msg = string.Empty;
+			string sMsg = "A{0} must be selected before adding a{1}.";
+			var parentListBox = lstCompanies_MU;
+
+			switch (newItemType)
+			{
+				case frmMain.OrgLevelTypes.Account:
+					parentListBox = lstCompanies_MU;
+					if(parentListBox.SelectedIndex == -1) { msg = string.Format(sMsg, " Company", "n Account"); }
+					break;
+				case frmMain.OrgLevelTypes.Department:
+					parentListBox = lstAccounts_MU;
+					if (parentListBox.SelectedIndex == -1) { msg = string.Format(sMsg, "n Account", " Department"); }
+					break;
+				case frmMain.OrgLevelTypes.Group:
+					parentListBox = lstDepartments_MU;
+					if (parentListBox.SelectedIndex == -1) { msg = string.Format(sMsg, " Department", " Group"); }
+					break;
+			}
+
+			if(msg.Length > 0)
+			{
+				using(frmMessage frm = new(frmMessage.OperationType.Message, msg, "", this)) { frm.ShowDialog(); }
+			}
+			else
+			{
+				var vSelectedParentItem = (ListItem)parentListBox.SelectedItem;
+				using (frmAddOrgLevel frm = new frmAddOrgLevel(CurrentUser.UserId, newItemType, Convert.ToInt32(vSelectedParentItem.Id))) { frm.ShowDialog(); }
+				PopulateTopLevels(true, CurrentUser != null && CurrentUser.UserId != Program.User.UserId);
+			}
 		}
 
 		private void mnuEdit_Click(object sender, EventArgs e)
