@@ -111,6 +111,11 @@ namespace myNotebooks.subforms
 					msg = "The organization levels for '" + CurrentUser.Name + "' were updated.";
 					PopulateTopLevels(true, this.Size == FullSize);
 				}
+				else if(btnCreateUser.Text == CreateUserButton_UpdatePermissions)
+				{
+					CurrentUser.Permissions = GetPermissions();
+					CurrentUser.SavePermissions();
+				}
 
 			}
 			catch (Exception ex)
