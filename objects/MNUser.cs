@@ -116,7 +116,7 @@ namespace myNotebooks.objects
 
 		public void SaveAssignments() { DbAccess.CreateMNUserAssignments(this); }
 
-		public void SavePermissions() { DbAccess.CreateMNUserPermissions(this); }
+		public void SavePermissions() { DbAccess.CreateMNUserPermissions(this);  }
 
 		//public void Save()
 		//{

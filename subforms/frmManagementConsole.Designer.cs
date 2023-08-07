@@ -165,6 +165,7 @@ namespace myNotebooks.subforms
 			clbPermissions.Name = "clbPermissions";
 			clbPermissions.Size = new System.Drawing.Size(260, 292);
 			clbPermissions.TabIndex = 16;
+			clbPermissions.SelectedIndexChanged += this.clbPermissions_SelectedIndexChanged;
 			// 
 			// label6
 			// 
