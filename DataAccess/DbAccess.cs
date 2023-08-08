@@ -198,12 +198,12 @@ namespace myNotebooks.DataAccess
 					using (SqlCommand cmd = new SqlCommand("sp_CreateOrgLevel", conn))
 					{
 						cmd.CommandType = CommandType.StoredProcedure;
-						cmd.Parameters.AddWithValue("@createdBy", creatorId);
-						cmd.Parameters.AddWithValue("@orgLevelDescription", orgLevelDescription);
+						cmd.Parameters.AddWithValue("@parentId",			parentId);
+						cmd.Parameters.AddWithValue("@createdBy",			creatorId);
 						//var v = (int)orgLevelType;
-						cmd.Parameters.AddWithValue("@orgLevelType", (int)orgLevelType);
-						cmd.Parameters.AddWithValue("@orgLevelName", orgLevelName);
-						cmd.Parameters.AddWithValue("@parentId", parentId);
+						cmd.Parameters.AddWithValue("@orgLevelType",		(int)orgLevelType);
+						cmd.Parameters.AddWithValue("@orgLevelName",		orgLevelName.Trim());
+						cmd.Parameters.AddWithValue("@orgLevelDescription", orgLevelDescription.Trim());
 						cmd.Parameters.Add("@retVal", SqlDbType.Int);
 						cmd.Parameters["@retVal"].Direction = ParameterDirection.ReturnValue;
 						cmd.ExecuteNonQuery();
@@ -216,101 +216,101 @@ namespace myNotebooks.DataAccess
 			return bRtrn;
 		}
 
-		public static List<Group> GetGroups(int userId)
-		{
-			List<Group> lstRtrn = new List<Group>();
-			DataTable dt = new DataTable();
+		//public static List<Group> GetGroups(int userId)
+		//{
+		//	List<Group> lstRtrn = new List<Group>();
+		//	DataTable dt = new DataTable();
 
-			using (SqlConnection conn = new(connString))
-			{
-				conn.Open();
-				using (SqlCommand cmd = new("sp_GetGroups"))
-				{
-					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@orgLevlelType", userId);
-					using (SqlDataReader reader = cmd.ExecuteReader())
-					{
-						foreach (DataRow row in reader)
-						{
-							lstRtrn.Add(new(row));
-						}
-					}
-				}
-			}
-			return lstRtrn;
-		}
+		//	using (SqlConnection conn = new(connString))
+		//	{
+		//		conn.Open();
+		//		using (SqlCommand cmd = new("sp_GetGroups"))
+		//		{
+		//			cmd.CommandType = CommandType.StoredProcedure;
+		//			cmd.Parameters.AddWithValue("@orgLevlelType", userId);
+		//			using (SqlDataReader reader = cmd.ExecuteReader())
+		//			{
+		//				foreach (DataRow row in reader)
+		//				{
+		//					lstRtrn.Add(new(row));
+		//				}
+		//			}
+		//		}
+		//	}
+		//	return lstRtrn;
+		//}
 
-		public static List<Department> GetDepartments(int userId)
-		{
-			List<Department> lstRtrn = new List<Department>();
-			DataTable dt = new DataTable();
+		//public static List<Department> GetDepartments(int userId)
+		//{
+		//	List<Department> lstRtrn = new List<Department>();
+		//	DataTable dt = new DataTable();
 
-			using (SqlConnection conn = new(connString))
-			{
-				conn.Open();
-				using (SqlCommand cmd = new("sp_GetDepartments"))
-				{
-					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@orgLevlelType", userId);
-					using (SqlDataReader reader = cmd.ExecuteReader())
-					{
-						foreach (DataRow row in reader)
-						{
-							lstRtrn.Add(new(row));
-						}
-					}
-				}
-			}
-			return lstRtrn;
-		}
+		//	using (SqlConnection conn = new(connString))
+		//	{
+		//		conn.Open();
+		//		using (SqlCommand cmd = new("sp_GetDepartments"))
+		//		{
+		//			cmd.CommandType = CommandType.StoredProcedure;
+		//			cmd.Parameters.AddWithValue("@orgLevlelType", userId);
+		//			using (SqlDataReader reader = cmd.ExecuteReader())
+		//			{
+		//				foreach (DataRow row in reader)
+		//				{
+		//					lstRtrn.Add(new(row));
+		//				}
+		//			}
+		//		}
+		//	}
+		//	return lstRtrn;
+		//}
 
-		public static List<Account> GetAccounts(int userId)
-		{
-			List<Account> lstRtrn = new List<Account>();
-			DataTable dt = new DataTable();
+		//public static List<Account> GetAccounts(int userId)
+		//{
+		//	List<Account> lstRtrn = new List<Account>();
+		//	DataTable dt = new DataTable();
 
-			using (SqlConnection conn = new(connString))
-			{
-				conn.Open();
-				using (SqlCommand cmd = new("sp_GetAccounts"))
-				{
-					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@orgLevlelType", userId);
-					using (SqlDataReader reader = cmd.ExecuteReader())
-					{
-						foreach (DataRow row in reader)
-						{
-							lstRtrn.Add(new(row));
-						}
-					}
-				}
-			}
-			return lstRtrn;
-		}
+		//	using (SqlConnection conn = new(connString))
+		//	{
+		//		conn.Open();
+		//		using (SqlCommand cmd = new("sp_GetAccounts"))
+		//		{
+		//			cmd.CommandType = CommandType.StoredProcedure;
+		//			cmd.Parameters.AddWithValue("@orgLevlelType", userId);
+		//			using (SqlDataReader reader = cmd.ExecuteReader())
+		//			{
+		//				foreach (DataRow row in reader)
+		//				{
+		//					lstRtrn.Add(new(row));
+		//				}
+		//			}
+		//		}
+		//	}
+		//	return lstRtrn;
+		//}
 
-		public static List<Company> GetCompanies(int userId)
-		{
-			List<Company> lstRtrn = new List<Company>();
-			DataTable dt = new DataTable();
+		//public static List<Company> GetCompanies(int userId)
+		//{
+		//	List<Company> lstRtrn = new List<Company>();
+		//	DataTable dt = new DataTable();
 
-			using (SqlConnection conn = new(connString))
-			{
-				conn.Open();
-				using (SqlCommand cmd = new("sp_GetCompanies"))
-				{
-					cmd.CommandType=CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@orgLevlelType", userId);
-					using(SqlDataReader reader = cmd.ExecuteReader())
-					{
-						foreach (DataRow row in reader)
-						{
-							lstRtrn.Add(new(row));
-						}
-					}
-				}
-			}
-			return lstRtrn;
-		}
+		//	using (SqlConnection conn = new(connString))
+		//	{
+		//		conn.Open();
+		//		using (SqlCommand cmd = new("sp_GetCompanies"))
+		//		{
+		//			cmd.CommandType=CommandType.StoredProcedure;
+		//			cmd.Parameters.AddWithValue("@orgLevlelType", userId);
+		//			using(SqlDataReader reader = cmd.ExecuteReader())
+		//			{
+		//				foreach (DataRow row in reader)
+		//				{
+		//					lstRtrn.Add(new(row));
+		//				}
+		//			}
+		//		}
+		//	}
+		//	return lstRtrn;
+		//}
 
 		public static List<ListItem> GetHighestNodeItemsForUser(int userId)
 		{

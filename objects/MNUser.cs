@@ -17,7 +17,6 @@ using System.Windows.Forms;
 namespace myNotebooks.objects
 {
 	public class MNUser
-
 	{
 		public int				AccessLevel { get; set; }
 		public string			Name { get; set; }
@@ -26,10 +25,10 @@ namespace myNotebooks.objects
 		public int				CreatedBy { get; set; }
 		public DateTime			CreatedOn { get; set; }
 		public DateTime?		EditedOn { get; set; }
-		public List<Group>		Groups { get { return GetGroups(); } }
-		public List<Department>	Departments { get { return GetDepartments(); } }
-		public List<Account>	Accounts { get { return GetAccounts(); } }
-		public List<Company>	Companies { get { return GetCompanies(); } }
+		//public List<Group>		Groups { get { return GetGroups(); } }
+		//public List<Department>	Departments { get { return GetDepartments(); } }
+		//public List<Account>	Accounts { get { return GetAccounts(); } }
+		//public List<Company>	Companies { get { return GetCompanies(); } }
 		public List<UserAssignments> Assignments { get; set; } = new();
 		public UserPermissions		Permissions { get; set; } = new();
 
@@ -101,29 +100,16 @@ namespace myNotebooks.objects
 			return this.UserId == userToCompare.UserId;
 		}
 
-		private List<Group> GetGroups() { return DbAccess.GetGroups(this.UserId); }
+		//private List<Group> GetGroups() { return DbAccess.GetGroups(this.UserId); }
 
-		private List<Department> GetDepartments() { return DbAccess.GetDepartments(this.UserId); }
+		//private List<Department> GetDepartments() { return DbAccess.GetDepartments(this.UserId); }
 
-		private List<Account> GetAccounts() { return DbAccess.GetAccounts(this.UserId); }
+		//private List<Account> GetAccounts() { return DbAccess.GetAccounts(this.UserId); }
 
-		private List<Company> GetCompanies() { return DbAccess.GetCompanies(this.UserId); }
-
-		//public List<TreeNode> GetHighestNodeItems()
-		//{
-		//	return DbAccess.GetHighestNodeItemsForUser(this.UserId);
-		//}
+		//private List<Company> GetCompanies() { return DbAccess.GetCompanies(this.UserId); }
 
 		public void SaveAssignments() { DbAccess.CreateMNUserAssignments(this); }
 
 		public void SavePermissions() { DbAccess.CreateMNUserPermissions(this);  }
-
-		//public void Save()
-		//{
-		//	this.UserId = DbAccess.CreateMNUser(this);
-		//	DbAccess.CreateMNUserPermissions(this);
-		//	DbAccess.CreateMNUserAssignments(this);
-
-		//}
 	}
 }

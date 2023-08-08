@@ -191,11 +191,11 @@ namespace myNotebooks.subforms
 		}
 
 		private async void frmMain_Load(object sender, EventArgs e)
-		{		
+		{
 			using (frmUserLogin frm = new frmUserLogin()) { frm.ShowDialog(); }
 
 			// if we don't have a user, stop
-			if(Program.User == null) { this.Close(); return; }
+			if (Program.User == null) { this.Close(); return; }
 
 			this.Cursor = Cursors.WaitCursor;
 			System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
@@ -297,7 +297,7 @@ namespace myNotebooks.subforms
 
 			Program.AzurePassword = string.Empty;   // Kills the Azure synch process for debugging if desired.
 
-			if(Program.User.AccessLevel < 2)
+			if (Program.User.AccessLevel < 2)
 			{
 				using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch
 					(this, "Select notebooks to work with. Notebooks which are PIN-protected can't be synchronized unless you provide the PIN."))
@@ -1036,7 +1036,7 @@ namespace myNotebooks.subforms
 
 		private void mnuAdministratorConsole_Click(object sender, EventArgs e)
 		{
-			using(frmManagementConsole frm = new frmManagementConsole(this))
+			using (frmManagementConsole frm = new frmManagementConsole(this))
 			{
 				frm.ShowDialog();
 			}

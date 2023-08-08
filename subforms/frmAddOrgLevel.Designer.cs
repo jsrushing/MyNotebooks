@@ -41,7 +41,7 @@
 			txtOrgLevelName.Location = new System.Drawing.Point(56, 12);
 			txtOrgLevelName.MaxLength = 50;
 			txtOrgLevelName.Name = "txtOrgLevelName";
-			txtOrgLevelName.Size = new System.Drawing.Size(132, 23);
+			txtOrgLevelName.Size = new System.Drawing.Size(246, 23);
 			txtOrgLevelName.TabIndex = 0;
 			// 
 			// label1
@@ -68,12 +68,12 @@
 			txtOrgLevelDescription.MaxLength = 200;
 			txtOrgLevelDescription.Multiline = true;
 			txtOrgLevelDescription.Name = "txtOrgLevelDescription";
-			txtOrgLevelDescription.Size = new System.Drawing.Size(176, 58);
+			txtOrgLevelDescription.Size = new System.Drawing.Size(290, 58);
 			txtOrgLevelDescription.TabIndex = 3;
 			// 
 			// btnOk
 			// 
-			btnOk.Location = new System.Drawing.Point(12, 121);
+			btnOk.Location = new System.Drawing.Point(65, 121);
 			btnOk.Name = "btnOk";
 			btnOk.Size = new System.Drawing.Size(75, 23);
 			btnOk.TabIndex = 4;
@@ -83,7 +83,7 @@
 			// 
 			// btnCancel
 			// 
-			btnCancel.Location = new System.Drawing.Point(113, 121);
+			btnCancel.Location = new System.Drawing.Point(175, 121);
 			btnCancel.Name = "btnCancel";
 			btnCancel.Size = new System.Drawing.Size(75, 23);
 			btnCancel.TabIndex = 5;
@@ -95,7 +95,7 @@
 			// 
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			ClientSize = new System.Drawing.Size(203, 155);
+			ClientSize = new System.Drawing.Size(314, 155);
 			Controls.Add(btnCancel);
 			Controls.Add(btnOk);
 			Controls.Add(txtOrgLevelDescription);
@@ -106,7 +106,7 @@
 			MaximizeBox = false;
 			MinimizeBox = false;
 			Name = "frmAddOrgLevel";
-			Text = "Add ";
+			Text = "Create ";
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}

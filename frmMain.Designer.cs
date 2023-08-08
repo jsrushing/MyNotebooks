@@ -348,7 +348,7 @@ namespace myNotebooks.subforms
 			// 
 			mnuLabels.Name = "mnuLabels";
 			mnuLabels.Size = new System.Drawing.Size(52, 20);
-			mnuLabels.Text = "Labels";
+			mnuLabels.Text = "&Labels";
 			mnuLabels.Click += this.mnuLabels_Click;
 			// 
 			// helpToolStripMenuItem
@@ -356,27 +356,27 @@ namespace myNotebooks.subforms
 			helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuAbout });
 			helpToolStripMenuItem.Name = "helpToolStripMenuItem";
 			helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-			helpToolStripMenuItem.Text = "Help";
+			helpToolStripMenuItem.Text = "&Help";
 			// 
 			// mnuAbout
 			// 
 			mnuAbout.Name = "mnuAbout";
-			mnuAbout.Size = new System.Drawing.Size(165, 22);
+			mnuAbout.Size = new System.Drawing.Size(180, 22);
 			mnuAbout.Text = "About MyJournal";
 			mnuAbout.Click += this.mnuAbout_Click;
 			// 
 			// mnuSwitchAccount
 			// 
 			mnuSwitchAccount.Name = "mnuSwitchAccount";
-			mnuSwitchAccount.Size = new System.Drawing.Size(102, 20);
-			mnuSwitchAccount.Text = "Switch Accounts";
+			mnuSwitchAccount.Size = new System.Drawing.Size(107, 20);
+			mnuSwitchAccount.Text = "&Switch Accounts";
 			mnuSwitchAccount.Click += this.mnuSwitchAccount_Click;
 			// 
 			// mnuAdministratorConsole
 			// 
 			mnuAdministratorConsole.Name = "mnuAdministratorConsole";
 			mnuAdministratorConsole.Size = new System.Drawing.Size(138, 20);
-			mnuAdministratorConsole.Text = "Administrator Console";
+			mnuAdministratorConsole.Text = "&Administrator Console";
 			mnuAdministratorConsole.Click += this.mnuAdministratorConsole_Click;
 			// 
 			// lblWrongPin
