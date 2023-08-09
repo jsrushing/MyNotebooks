@@ -100,9 +100,7 @@ namespace myNotebooks.DataAccess
 						cmd.Parameters.AddWithValue("@userId", user.UserId);
 
 						foreach(string sPerm in user.Permissions.GetGrantedPermissions()) 
-						{
-							cmd.Parameters.AddWithValue("@" + sPerm, 1);
-						}
+						{ cmd.Parameters.AddWithValue("@" + sPerm, 1); }
 
 						cmd.Parameters.Add("@retVal", SqlDbType.Int);
 						cmd.Parameters["@retVal"].Direction = ParameterDirection.ReturnValue;

@@ -19,6 +19,8 @@ namespace myNotebooks.objects
 	public class MNUser
 	{
 		public int				AccessLevel { get; set; }
+		public bool				IsOriginator { get; private set; }
+		public bool				IsActive { get; private set; }
 		public string			Name { get; set; }
 		public string			Password { get; set; }
 		public int				UserId { get; set; }
@@ -72,13 +74,16 @@ namespace myNotebooks.objects
 							this.GetType().GetProperty(sPropertyName.Name).SetValue(this, dtime);
 							setProp = false;
 						}
+						else if (dt.Columns[sPropertyName.Name].DataType == typeof(bool))
+						{
+							bool b = dt.Rows[0].Field< bool>(sPropertyName.Name);
+							this.GetType().GetProperty(sPropertyName.Name).SetValue(this, b.ToString() == "1");
+							setProp = false;
+						}
 
 						if (setProp) { this.GetType().GetProperty(sPropertyName.Name).SetValue(this, value); }
 						setProp = true;
 					}
-					//Type type = dt.Columns[sPropertyName.Name].DataType;
-
-
 				}
 				catch (Exception ex) 
 				{
@@ -95,10 +100,7 @@ namespace myNotebooks.objects
 
 		public void Delete() { DbAccess.DeleteUser(this.UserId); }
 
-		public bool Equals(MNUser userToCompare)
-		{
-			return this.UserId == userToCompare.UserId;
-		}
+		public bool Equals(MNUser userToCompare) { return this.UserId == userToCompare.UserId; }
 
 		//private List<Group> GetGroups() { return DbAccess.GetGroups(this.UserId); }
 

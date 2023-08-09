@@ -103,11 +103,14 @@ namespace myNotebooks.subforms
 				else if (btnCreateUser.Text == CreateUserButton_UpdateUser) // updating created user with permissions and assignments
 				{
 					msg = string.Empty;
-					UserPermissions permissions = GetPermissions();
+					UserPermissions permissions = GetCheckedPermissions();
 
-					if (CurrentUser.Permissions != permissions)
+					if (!CurrentUser.Permissions.GetGrantedPermissions().Equals(permissions.GetGrantedPermissions()))
 					{
+						var dtCreatedOn = CurrentUser.Permissions.CreatedOn;
 						CurrentUser.Permissions = permissions;
+						CurrentUser.Permissions.CreatedOn = dtCreatedOn;
+						CurrentUser.Permissions.EditedOn = DateTime.Now;
 						CurrentUser.SavePermissions();
 						msg = "The permissions for '" + CurrentUser.Name + "' were updated.";
 						using (frmMessage frm = new(frmMessage.OperationType.Message, msg, "Operation Complete", this)) { frm.ShowDialog(this); }
@@ -124,7 +127,7 @@ namespace myNotebooks.subforms
 				}
 				else if (btnCreateUser.Text == CreateUserButton_UpdatePermissions)
 				{
-					CurrentUser.Permissions = GetPermissions();
+					CurrentUser.Permissions = GetCheckedPermissions();
 					CurrentUser.SavePermissions();
 					msg = "The permissions for '" + CurrentUser.Name + "' were updated.";
 					using (frmMessage frm = new(frmMessage.OperationType.Message, msg, "Operation Complete", this)) { frm.ShowDialog(this); }
@@ -223,7 +226,7 @@ namespace myNotebooks.subforms
 			return lbNext;
 		}
 
-		private UserPermissions GetPermissions()
+		private UserPermissions GetCheckedPermissions()
 		{
 			List<string> permissions = new List<string>();
 
@@ -356,23 +359,27 @@ namespace myNotebooks.subforms
 			var msg								= string.Empty;
 			string sMsgTemplate					= "A{0} must be selected before adding a{1}.";
 			var parentListBox					= lstCompanies_MU;
+			var parentGroupBox					= grpCompany_CU;
 
 			switch (newItemType)
 			{
 				case frmMain.OrgLevelTypes.Account:
 					parentListBox = lstCompanies_MU;
+					parentGroupBox = (GroupBox)parentListBox.Parent;
 					if(parentListBox.Items.Count == 1) parentListBox.SelectedIndex = 0;
-					if (parentListBox.SelectedIndex == -1) { msg = string.Format(sMsgTemplate, " Company", "n Account"); }
+					if (parentGroupBox.Enabled && parentListBox.SelectedIndex == -1 ) { msg = string.Format(sMsgTemplate, " Company", "n Account"); }
 					break;
 				case frmMain.OrgLevelTypes.Department:
 					parentListBox = lstAccounts_MU;
+					parentGroupBox = (GroupBox)parentListBox.Parent;
 					if (parentListBox.Items.Count == 1) parentListBox.SelectedIndex = 0;
-					if (parentListBox.SelectedIndex == -1) { msg = string.Format(sMsgTemplate, "n Account", " Department"); }
+					if (parentGroupBox.Enabled && parentListBox.SelectedIndex == -1) { msg = string.Format(sMsgTemplate, "n Account", " Department"); }
 					break;
 				case frmMain.OrgLevelTypes.Group:
 					parentListBox = lstDepartments_MU;
+					parentGroupBox = (GroupBox)parentListBox.Parent;
 					if (parentListBox.Items.Count == 1) parentListBox.SelectedIndex = 0;
-					if (parentListBox.SelectedIndex == -1) { msg = string.Format(sMsgTemplate, " Department", " Group"); }
+					if (parentGroupBox.Enabled && parentListBox.SelectedIndex == -1) { msg = string.Format(sMsgTemplate, " Department", " Group"); }
 					break;
 			}
 
@@ -383,10 +390,10 @@ namespace myNotebooks.subforms
 			else
 			{
 				var vSelectedParentItem = (ListItem)parentListBox.SelectedItem;
-				var parentId = CurrentMouseListBox == lstCompanies_MU ? 0 : Convert.ToInt32(vSelectedParentItem.Id);
+				var parentId = CurrentMouseListBox == lstCompanies_MU ? 0 : vSelectedParentItem != null ? Convert.ToInt32(vSelectedParentItem.Id) : 0;
 
 				using (frmAddOrgLevel frm = new frmAddOrgLevel(CurrentUser.UserId, newItemType, 
-					vSelectedParentItem != null ? vSelectedParentItem.Name : "Company", this, parentId))
+					vSelectedParentItem != null ? vSelectedParentItem.Name : vCurrentGroupBoxName , this, parentId))
 				{
 					frm.ShowDialog();
 					if (frm.WasCreated) 

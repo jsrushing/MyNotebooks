@@ -37,6 +37,25 @@ namespace myNotebooks.objects
 
 		public UserPermissions(List<string> list) { PopulateFromListOfStrings(list); }
 
+		public bool Equals(UserPermissions permsToCompare)
+		{
+			bool bRtrn = true;
+
+			foreach(PropertyInfo sPropertyName in typeof(UserPermissions).GetProperties())
+			{
+				if(!sPropertyName.Name.ToLower().Equals("createdon") & !sPropertyName.Name.ToLower().Equals("editedon"))
+				{
+					if(this.GetType().GetProperty(sPropertyName.Name) != permsToCompare.GetType().GetProperty(sPropertyName.Name))
+					{
+						bRtrn = false;
+						break;
+					}
+				}
+			}
+
+			return bRtrn;
+		}
+
 		public List<string> GetAllPermissions()
 		{
 			var list = new List<string>();
