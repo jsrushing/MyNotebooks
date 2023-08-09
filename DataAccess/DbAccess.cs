@@ -25,7 +25,7 @@ namespace myNotebooks.DataAccess
 //		private static string connString = "Server=mynotebooksserver.database.windows.net;Database=myNotebooks;user id=mydb_admin;password=cloud_Bringer1!";
 		private static string connString = "Server=FORRESTSTNW;Database=MyNotebooks;Trusted_Connection = true";
 
-		public static int CreateMNUser(MNUser user)
+		public static int			CreateMNUser(MNUser user)
 		{
 			int iRtrn = 0;
 			try
@@ -52,7 +52,7 @@ namespace myNotebooks.DataAccess
 			return iRtrn;
 		}
 
-		public static bool CreateMNUserAssignments(MNUser user)
+		public static bool			CreateMNUserAssignments(MNUser user)
 		{
 			var bRtrn = false;
 
@@ -85,7 +85,7 @@ namespace myNotebooks.DataAccess
 			return bRtrn;
 		}
 
-		public static int CreateMNUserPermissions(MNUser user)
+		public static int			CreateMNUserPermissions(MNUser user)
 		{
 			int iRtrn = 0;
 
@@ -114,7 +114,7 @@ namespace myNotebooks.DataAccess
 			return iRtrn;
 		}
 
-		public static bool DeleteUser(int userId)
+		public static bool			DeleteUser(int userId)
 		{
 			bool bRtrn = false;
 
@@ -137,7 +137,7 @@ namespace myNotebooks.DataAccess
 			return bRtrn;
 		}
 
-		public static string GetAccessLevelName(int accessLevel)
+		public static string		GetAccessLevelName(int accessLevel)
 		{
 			string sRtrn = string.Empty;
 			using(SqlConnection conn = new(connString)) 
@@ -162,7 +162,7 @@ namespace myNotebooks.DataAccess
 			}
 		}
 
-		public static List<string> GetAccessLevels()
+		public static List<string>	GetAccessLevels()
 		{
 			List<string> list = new List<string>();
 
@@ -184,7 +184,7 @@ namespace myNotebooks.DataAccess
 			}
 		}
 
-		public static bool CreateOrgLevel(int creatorId, string orgLevelDescription, frmMain.OrgLevelTypes orgLevelType, string orgLevelName, int parentId)
+		public static bool			CreateOrgLevel(int creatorId, string orgLevelDescription, frmMain.OrgLevelTypes orgLevelType, string orgLevelName, int parentId)
 		{
 			bool bRtrn = false;
 
@@ -342,10 +342,106 @@ namespace myNotebooks.DataAccess
 			return lstRtrn;
 		}
 
+		public static List<Company> GetCompanies(int userId)
+		{
+			List<Company> lstReturn = new List<Company>();
+
+			using (SqlConnection conn = new(connString))
+			{
+				conn.Open();
+				using (SqlCommand cmd = new("sp_GetCompanies"))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					cmd.Parameters.AddWithValue("@userId", userId);
+					using (SqlDataReader reader = cmd.ExecuteReader())
+					{
+						while (reader.Read())
+						{
+
+						}
+					}
+				}
+			}
+
+			return lstReturn;
+		}
+
+		public static List<Account> GetAccounts(int userId)
+		{
+			List<Account>lstReturn = new List<Account>();
+
+			using (SqlConnection conn = new(connString))
+			{
+				conn.Open();
+				using(SqlCommand cmd = new("sp_GetCompanies"))
+				{
+					cmd.CommandType= CommandType.StoredProcedure;
+					cmd.Parameters.AddWithValue("@userId", userId);
+					using(SqlDataReader reader = cmd.ExecuteReader())
+					{
+						while (reader.Read())
+						{
+
+						}
+					}
+				}
+			}
+
+			return lstReturn;
+		}
+
+		public static List<Department> GetDepartments(int userId)
+		{
+			List<Department> lstReturn = new List<Department>();
+
+			using (SqlConnection conn = new(connString))
+			{
+				conn.Open();
+				using (SqlCommand cmd = new("sp_GetDepartments"))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					cmd.Parameters.AddWithValue("@userId", userId);
+					using (SqlDataReader reader = cmd.ExecuteReader())
+					{
+						while (reader.Read())
+						{
+
+						}
+					}
+				}
+			}
+
+			return lstReturn;
+		}
+
+		public static List<Group> GetGroups(int userId)
+		{
+			List<Group> lstReturn = new List<Group>();
+
+			using (SqlConnection conn = new(connString))
+			{
+				conn.Open();
+				using (SqlCommand cmd = new("sp_GetGroups"))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					cmd.Parameters.AddWithValue("@userId", userId);
+					using (SqlDataReader reader = cmd.ExecuteReader())
+					{
+						while (reader.Read())
+						{
+
+						}
+					}
+				}
+			}
+
+			return lstReturn;
+		}
+
 		public static List<ListItem> GetOrgLevelChildren(int orgLevelId, int parentId) 
 		{
 			List<ListItem> lstRtrn = new List<ListItem>();
-			TreeNode node;
+			//TreeNode node;
 			DataTable dt = new DataTable();
 
 			using (SqlConnection conn = new(connString))
@@ -373,7 +469,7 @@ namespace myNotebooks.DataAccess
 			return lstRtrn;
 		}
 
-		public static DataSet GetUser(string userName, string password)
+		public static DataSet		GetUser(string userName, string password)
 		{
 			DataSet ds = new();
 

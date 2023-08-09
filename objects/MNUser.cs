@@ -27,10 +27,12 @@ namespace myNotebooks.objects
 		public int				CreatedBy { get; set; }
 		public DateTime			CreatedOn { get; set; }
 		public DateTime?		EditedOn { get; set; }
-		//public List<Group>		Groups { get { return GetGroups(); } }
-		//public List<Department>	Departments { get { return GetDepartments(); } }
-		//public List<Account>	Accounts { get { return GetAccounts(); } }
-		//public List<Company>	Companies { get { return GetCompanies(); } }
+
+		public List<Group>		Groups = new();
+		public List<Department> Departments = new();
+		public List<Account>	Accounts = new();
+		public List<Company>	Companies = new();
+
 		public List<UserAssignments> Assignments { get; set; } = new();
 		public UserPermissions		Permissions { get; set; } = new();
 
@@ -102,13 +104,15 @@ namespace myNotebooks.objects
 
 		public bool Equals(MNUser userToCompare) { return this.UserId == userToCompare.UserId; }
 
-		//private List<Group> GetGroups() { return DbAccess.GetGroups(this.UserId); }
 
-		//private List<Department> GetDepartments() { return DbAccess.GetDepartments(this.UserId); }
 
-		//private List<Account> GetAccounts() { return DbAccess.GetAccounts(this.UserId); }
+		private List<Group> GetGroups() { return DbAccess.GetGroups(this.UserId); }
 
-		//private List<Company> GetCompanies() { return DbAccess.GetCompanies(this.UserId); }
+		private List<Department> GetDepartments() { return DbAccess.GetDepartments(this.UserId); }
+
+		private List<Account> GetAccounts() { return DbAccess.GetAccounts(this.UserId); }
+
+		private List<Company> GetCompanies() { return DbAccess.GetCompanies(this.UserId); }
 
 		public void SaveAssignments() { DbAccess.CreateMNUserAssignments(this); }
 

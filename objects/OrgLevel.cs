@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using myNotebooks.subforms;
 
-namespace myNotebooks.objects
+namespace MyNotebooks.objects
 {
-	internal interface IOrgLevel
+	public abstract class OrgLevel
 	{
-		public frmMain.OrgLevelTypes OrgLevelTypes { get; }
+		frmMain.OrgLevelTypes OrgLevelType { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 		public string		Id { get; set; }
 		public string		ParentId { get; set; }
 		public string		Name { get; set; }

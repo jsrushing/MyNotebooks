@@ -151,10 +151,14 @@ namespace myNotebooks.subforms
 		{
 			DataSet ds = DbAccess.GetUser(txtUserName.Text, txtPwd.Text);
 
-			CurrentUser = ds.Tables.Count > 0 & ds.Tables[0].Rows.Count > 0 ? new(ds.Tables[0]) { Permissions = new(ds.Tables[1]) } : null;
+			CurrentUser = ds.Tables.Count > 0 & ds.Tables[0].Rows.Count > 0 ? new(ds.Tables[0]) : null;
 
 			if (CurrentUser != null)
 			{
+				CurrentUser.Permissions = new(ds.Tables[1]);
+
+
+
 				foreach (DataRow dr in ds.Tables[2].Rows) { CurrentUser.Assignments.Add(new UserAssignments(dr)); }
 
 				TreeNode topNode = new TreeNode();
