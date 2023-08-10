@@ -1,4 +1,9 @@
-﻿using System;
+﻿/* 
+ * User Permissions object.
+ * created 08/01/23
+ * - jsr
+ */
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;

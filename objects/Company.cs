@@ -9,7 +9,7 @@ using MyNotebooks.objects;
 
 namespace myNotebooks.objects
 {
-	public class Company : OrgLevel
+	public class Company : IOrgLevel
 	{
 		//public string Id { get; set; }
 		//public string ParentId { get; set; }
@@ -22,7 +22,9 @@ namespace myNotebooks.objects
 
 		private void PopulateFromDataRow(DataRow dr)
 		{
-			foreach (PropertyInfo sPropertyName in typeof(Group).GetProperties())
+			this.OrgLevelType = subforms.frmMain.OrgLevelTypes.Company;
+
+			foreach (PropertyInfo sPropertyName in typeof(Company).GetProperties())
 			{
 				this.GetType().GetProperty(sPropertyName.Name).SetValue(this, dr[sPropertyName.Name]);
 			}

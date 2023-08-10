@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿/* 
+ * OrgLevelType interface.
+ * created 08/09/23
+ * - jsr
+ */
+using System;
 using myNotebooks.subforms;
 
-namespace myNotebooks.objects
+namespace MyNotebooks.objects
 {
-	internal interface IOrgLevel
+	public abstract class IOrgLevel
 	{
-		public frmMain.OrgLevelTypes OrgLevelTypes { get; }
+		public frmMain.OrgLevelTypes OrgLevelType { get; set; }
 		public string		Id { get; set; }
 		public string		ParentId { get; set; }
 		public string		Name { get; set; }

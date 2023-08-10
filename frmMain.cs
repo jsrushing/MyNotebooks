@@ -165,7 +165,7 @@ namespace myNotebooks.subforms
 			NotebookNotSelected
 		}
 
-		public enum OrgLevelTypes
+		public enum OrgLevelTypes : uint
 		{
 			Group = 3,
 			Department = 4,

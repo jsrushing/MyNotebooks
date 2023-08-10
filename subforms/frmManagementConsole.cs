@@ -1,18 +1,20 @@
-﻿using System;
-using System.CodeDom.Compiler;
+﻿/* 
+ * Console for users to select CADG's or for Top Level Users to manage users and CADG's.
+ * created 07/23/23
+ * - jsr
+ */
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using Azure.Core.Extensions;
 using Encryption;
-using Microsoft.VisualBasic.ApplicationServices;
 using myNotebooks.DataAccess;
 using myNotebooks.objects;
 using MyNotebooks.objects;
+using Org.BouncyCastle.Asn1;
 
 namespace myNotebooks.subforms
 {
@@ -158,10 +160,9 @@ namespace myNotebooks.subforms
 				CurrentUser.Permissions = new(ds.Tables[1]);
 
 
-
 				foreach (DataRow dr in ds.Tables[2].Rows) { CurrentUser.Assignments.Add(new UserAssignments(dr)); }
 
-				TreeNode topNode = new TreeNode();
+				//TreeNode topNode = new TreeNode();
 				PopulateBaseOrgLevels();
 				PopulatePermissions();
 				clbPermissions.Enabled = false;
@@ -337,6 +338,10 @@ namespace myNotebooks.subforms
 		{
 			CurrentMouseListBox = (ListBox)sender;
 			CurrentMouseGroupBox = (GroupBox)CurrentMouseListBox.Parent;
+			frmMain.OrgLevelTypes choice;
+			var typeName = CurrentMouseGroupBox.Name.Replace("grp", "").Replace("_MU", "").Replace("_CU", "");
+			if(Enum.TryParse(typeName, out choice)) { CurrentType = choice; }
+
 		}
 
 		private void mnuAssignUser_Click(object sender, EventArgs e)
@@ -517,7 +522,17 @@ namespace myNotebooks.subforms
 				foreach (ListBox lb in OrgLevelLists_MU) { lb.Items.Clear(); }
 				box = OrgLevelGroups_MU.Where(e => e.Enabled).FirstOrDefault();
 				lstBoxes = box.Controls.Cast<ListBox>().ToList();
-				lstBoxes[0].Items.AddRange(DbAccess.GetHighestNodeItemsForUser(Program.User.UserId).ToArray());
+				//var highestLevel = CurrentUser.Companies;
+				//if(highestLevel == null) { highestLevel = CurrentUser.Accounts; }
+				//if(highestLevel == null) { highestLevel = CurrentUser.Departments; }
+				//if(!highestLevel) { highestLevel = CurrentUser.Groups}
+
+				//Type type = null;
+				//type = 
+
+				//var listItems = CurrentUser.Companies;
+
+				lstBoxes[0].Items.AddRange(DbAccess.GetTopLevelItemsForUser(Program.User.UserId).ToArray());
 			}
 
 			if (populateCU)
@@ -525,7 +540,7 @@ namespace myNotebooks.subforms
 				foreach (ListBox lb in OrgLevelLists_CU) { lb.Items.Clear(); }
 				box = OrgLevelGroups_CU.Where(e => e.Enabled).FirstOrDefault();
 				lstBoxes = box.Controls.Cast<ListBox>().ToList();
-				lstBoxes[0].Items.AddRange(DbAccess.GetHighestNodeItemsForUser(CurrentUser.UserId).ToArray());
+				lstBoxes[0].Items.AddRange(DbAccess.GetTopLevelItemsForUser(CurrentUser.UserId).ToArray());
 			}
 		}
 
@@ -655,22 +670,22 @@ namespace myNotebooks.subforms
 			//			case "companies":
 			//				nextRootNodeName = "Accounts";
 			//				level = CurrentUser.AccessLevel + 1;
-			//				info = new NodeInfo() { NodeId = Convert.ToInt16(tn.Tag), NodeName = tn.Text, NodeType = frmMain.OrgLevelTypes.Companies };
+			//				info = new NodeInfo() { NodeId = Convert.ToInt16(tn.Tag), NodeName = tn.Text, NodeType = frmMain.OrgLevelType.Companies };
 			//				break;
 			//			case "accounts":
 			//				nextRootNodeName = "Departments";
 			//				level = CurrentUser.AccessLevel;
-			//				info = new NodeInfo() { NodeId = Convert.ToInt16(tn.Tag), NodeName = tn.Text, NodeType = frmMain.OrgLevelTypes.Accounts };
+			//				info = new NodeInfo() { NodeId = Convert.ToInt16(tn.Tag), NodeName = tn.Text, NodeType = frmMain.OrgLevelType.Accounts };
 			//				break;
 			//			case "departments":
 			//				nextRootNodeName = "Groups";
 			//				level = CurrentUser.AccessLevel - 1;
-			//				info = new NodeInfo() { NodeId = Convert.ToInt16(tn.Tag), NodeName = tn.Text, NodeType = frmMain.OrgLevelTypes.Departments };
+			//				info = new NodeInfo() { NodeId = Convert.ToInt16(tn.Tag), NodeName = tn.Text, NodeType = frmMain.OrgLevelType.Departments };
 			//				break;
 			//			case "groups":
 			//				nextRootNodeName = "Notebooks";
 			//				level = CurrentUser.AccessLevel - 2;
-			//				info = new NodeInfo() { NodeId = Convert.ToInt16(tn.Tag), NodeName = tn.Text, NodeType = frmMain.OrgLevelTypes.Groups };
+			//				info = new NodeInfo() { NodeId = Convert.ToInt16(tn.Tag), NodeName = tn.Text, NodeType = frmMain.OrgLevelType.Groups };
 			//				break;
 			//		}
 

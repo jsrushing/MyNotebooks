@@ -1,18 +1,14 @@
-﻿using System;
+﻿/* 
+ * Main user class. Guessing that ...
+ * created 05/25/23
+ * - jsr
+ */
+using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.VisualBasic.ApplicationServices;
-using myNotebooks.subforms;
-using Org.BouncyCastle.Asn1;
-using Org.BouncyCastle.Asn1.X509.Qualified;
-using myNotebooks.objects;
 using myNotebooks.DataAccess;
-using System.Windows.Forms;
+using myNotebooks.subforms;
 
 namespace myNotebooks.objects
 {
@@ -85,7 +81,13 @@ namespace myNotebooks.objects
 
 						if (setProp) { this.GetType().GetProperty(sPropertyName.Name).SetValue(this, value); }
 						setProp = true;
+
 					}
+
+					//this.GetGroups();
+					//this.GetAccounts();
+					//this.GetDepartments();
+					//this.GetCompanies();
 				}
 				catch (Exception ex) 
 				{
@@ -104,15 +106,13 @@ namespace myNotebooks.objects
 
 		public bool Equals(MNUser userToCompare) { return this.UserId == userToCompare.UserId; }
 
+		private void GetGroups() { this.Groups = DbAccess.GetGroups(this.UserId); }
 
+		private void GetDepartments() { this.Departments = DbAccess.GetDepartments(this.UserId); }
 
-		private List<Group> GetGroups() { return DbAccess.GetGroups(this.UserId); }
+		private void GetAccounts() { this.Accounts = DbAccess.GetAccounts(this.UserId); }
 
-		private List<Department> GetDepartments() { return DbAccess.GetDepartments(this.UserId); }
-
-		private List<Account> GetAccounts() { return DbAccess.GetAccounts(this.UserId); }
-
-		private List<Company> GetCompanies() { return DbAccess.GetCompanies(this.UserId); }
+		private void GetCompanies() { this.Companies = DbAccess.GetCompanies(this.UserId); }
 
 		public void SaveAssignments() { DbAccess.CreateMNUserAssignments(this); }
 

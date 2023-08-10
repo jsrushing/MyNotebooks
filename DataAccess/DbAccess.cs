@@ -1,4 +1,4 @@
-﻿/* Handle access to Azure Db.
+﻿/* Handle Db access.
  * created 07/12/23
  * - jsr
  */
@@ -175,9 +175,7 @@ namespace myNotebooks.DataAccess
 					using (SqlDataReader reader = cmd.ExecuteReader())
 					{
 						while (reader.Read())
-						{
-							list.Add(reader[1].ToString());
-						}
+						{ list.Add(reader[1].ToString()); }
 					}
 				}
 				return list;
@@ -214,107 +212,11 @@ namespace myNotebooks.DataAccess
 			return bRtrn;
 		}
 
-		//public static List<Group> GetGroups(int userId)
-		//{
-		//	List<Group> lstRtrn = new List<Group>();
-		//	DataTable dt = new DataTable();
-
-		//	using (SqlConnection conn = new(connString))
-		//	{
-		//		conn.Open();
-		//		using (SqlCommand cmd = new("sp_GetGroups"))
-		//		{
-		//			cmd.CommandType = CommandType.StoredProcedure;
-		//			cmd.Parameters.AddWithValue("@orgLevlelType", userId);
-		//			using (SqlDataReader reader = cmd.ExecuteReader())
-		//			{
-		//				foreach (DataRow row in reader)
-		//				{
-		//					lstRtrn.Add(new(row));
-		//				}
-		//			}
-		//		}
-		//	}
-		//	return lstRtrn;
-		//}
-
-		//public static List<Department> GetDepartments(int userId)
-		//{
-		//	List<Department> lstRtrn = new List<Department>();
-		//	DataTable dt = new DataTable();
-
-		//	using (SqlConnection conn = new(connString))
-		//	{
-		//		conn.Open();
-		//		using (SqlCommand cmd = new("sp_GetDepartments"))
-		//		{
-		//			cmd.CommandType = CommandType.StoredProcedure;
-		//			cmd.Parameters.AddWithValue("@orgLevlelType", userId);
-		//			using (SqlDataReader reader = cmd.ExecuteReader())
-		//			{
-		//				foreach (DataRow row in reader)
-		//				{
-		//					lstRtrn.Add(new(row));
-		//				}
-		//			}
-		//		}
-		//	}
-		//	return lstRtrn;
-		//}
-
-		//public static List<Account> GetAccounts(int userId)
-		//{
-		//	List<Account> lstRtrn = new List<Account>();
-		//	DataTable dt = new DataTable();
-
-		//	using (SqlConnection conn = new(connString))
-		//	{
-		//		conn.Open();
-		//		using (SqlCommand cmd = new("sp_GetAccounts"))
-		//		{
-		//			cmd.CommandType = CommandType.StoredProcedure;
-		//			cmd.Parameters.AddWithValue("@orgLevlelType", userId);
-		//			using (SqlDataReader reader = cmd.ExecuteReader())
-		//			{
-		//				foreach (DataRow row in reader)
-		//				{
-		//					lstRtrn.Add(new(row));
-		//				}
-		//			}
-		//		}
-		//	}
-		//	return lstRtrn;
-		//}
-
-		//public static List<Company> GetCompanies(int userId)
-		//{
-		//	List<Company> lstRtrn = new List<Company>();
-		//	DataTable dt = new DataTable();
-
-		//	using (SqlConnection conn = new(connString))
-		//	{
-		//		conn.Open();
-		//		using (SqlCommand cmd = new("sp_GetCompanies"))
-		//		{
-		//			cmd.CommandType=CommandType.StoredProcedure;
-		//			cmd.Parameters.AddWithValue("@orgLevlelType", userId);
-		//			using(SqlDataReader reader = cmd.ExecuteReader())
-		//			{
-		//				foreach (DataRow row in reader)
-		//				{
-		//					lstRtrn.Add(new(row));
-		//				}
-		//			}
-		//		}
-		//	}
-		//	return lstRtrn;
-		//}
-
-		public static List<ListItem> GetHighestNodeItemsForUser(int userId)
+		public static List<ListItem> GetTopLevelItemsForUser(int userId)
 		{
 			//List<TreeNode> lstRtrn = new List<TreeNode>();	
 			//TreeNode node;
-			DataTable dt = new DataTable();
+			DataTable dt = new();
 			List<ListItem> lstRtrn = new List<ListItem>();
 
 			using (SqlConnection conn = new(connString))
@@ -325,14 +227,11 @@ namespace myNotebooks.DataAccess
 					cmd.CommandType = CommandType.StoredProcedure;
 					cmd.Parameters.AddWithValue("@userId", userId);
 
-					SqlDataAdapter adapter = new SqlDataAdapter() { SelectCommand = cmd };
-					adapter.Fill(dt);
+					using (SqlDataAdapter da = new() { SelectCommand = cmd }) { da.Fill(dt); }
 
-					foreach(DataRow row in dt.Rows)
+					foreach (DataRow row in dt.Rows)
 					{
-						//lstBox.Items.Add(new ListItem() { Id = (int)row["Id"], Name = row["Name"].ToString() });
 						lstRtrn.Add(new ListItem() { Id = (int)row["Id"], Name = row["Name"].ToString() });
-
 						//node = new() { Tag = row["Id"].ToString(), Text = row["Name"].ToString().Trim(), ToolTipText = row["Description"].ToString() };
 						//lstRtrn.Add(node);
 					}
@@ -345,6 +244,7 @@ namespace myNotebooks.DataAccess
 		public static List<Company> GetCompanies(int userId)
 		{
 			List<Company> lstReturn = new List<Company>();
+			DataTable dt = new();
 
 			using (SqlConnection conn = new(connString))
 			{
@@ -353,13 +253,8 @@ namespace myNotebooks.DataAccess
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 					cmd.Parameters.AddWithValue("@userId", userId);
-					using (SqlDataReader reader = cmd.ExecuteReader())
-					{
-						while (reader.Read())
-						{
-
-						}
-					}
+					using (SqlDataAdapter da = new() { SelectCommand = cmd }) { da.Fill(dt); }
+					foreach(DataRow row in dt.Rows) { lstReturn.Add(new(row)); }
 				}
 			}
 
@@ -369,21 +264,17 @@ namespace myNotebooks.DataAccess
 		public static List<Account> GetAccounts(int userId)
 		{
 			List<Account>lstReturn = new List<Account>();
+			DataTable dt = new();
 
 			using (SqlConnection conn = new(connString))
 			{
 				conn.Open();
-				using(SqlCommand cmd = new("sp_GetCompanies"))
+				using(SqlCommand cmd = new("sp_GetAccounts"))
 				{
 					cmd.CommandType= CommandType.StoredProcedure;
 					cmd.Parameters.AddWithValue("@userId", userId);
-					using(SqlDataReader reader = cmd.ExecuteReader())
-					{
-						while (reader.Read())
-						{
-
-						}
-					}
+					using (SqlDataAdapter da = new() { SelectCommand = cmd }) { da.Fill(dt); }
+					foreach (DataRow row in dt.Rows) { lstReturn.Add(new(row)); }
 				}
 			}
 
@@ -393,6 +284,7 @@ namespace myNotebooks.DataAccess
 		public static List<Department> GetDepartments(int userId)
 		{
 			List<Department> lstReturn = new List<Department>();
+			DataTable dt = new();
 
 			using (SqlConnection conn = new(connString))
 			{
@@ -401,13 +293,8 @@ namespace myNotebooks.DataAccess
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 					cmd.Parameters.AddWithValue("@userId", userId);
-					using (SqlDataReader reader = cmd.ExecuteReader())
-					{
-						while (reader.Read())
-						{
-
-						}
-					}
+					using (SqlDataAdapter da = new() { SelectCommand = cmd }) { da.Fill(dt); }
+					foreach (DataRow row in dt.Rows) { lstReturn.Add(new(row)); }
 				}
 			}
 
@@ -417,6 +304,7 @@ namespace myNotebooks.DataAccess
 		public static List<Group> GetGroups(int userId)
 		{
 			List<Group> lstReturn = new List<Group>();
+			DataTable dt = new();
 
 			using (SqlConnection conn = new(connString))
 			{
@@ -425,13 +313,8 @@ namespace myNotebooks.DataAccess
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 					cmd.Parameters.AddWithValue("@userId", userId);
-					using (SqlDataReader reader = cmd.ExecuteReader())
-					{
-						while (reader.Read())
-						{
-
-						}
-					}
+					using (SqlDataAdapter da = new() { SelectCommand = cmd }) { da.Fill(dt); }
+					foreach (DataRow row in dt.Rows) { lstReturn.Add(new(row)); }
 				}
 			}
 
@@ -442,7 +325,7 @@ namespace myNotebooks.DataAccess
 		{
 			List<ListItem> lstRtrn = new List<ListItem>();
 			//TreeNode node;
-			DataTable dt = new DataTable();
+			DataTable dt = new();
 
 			using (SqlConnection conn = new(connString))
 			{
@@ -452,10 +335,8 @@ namespace myNotebooks.DataAccess
 					cmd.CommandType = CommandType.StoredProcedure;
 					cmd.Parameters.AddWithValue("@orgLevelId", orgLevelId);
 					cmd.Parameters.AddWithValue("parentId", parentId);
-
 					SqlDataAdapter adapter = new SqlDataAdapter() { SelectCommand = cmd };
 					adapter.Fill(dt);
-
 					foreach (DataRow row in dt.Rows)
 					{
 						lstRtrn.Add(new ListItem() { Id = (int)row["Id"], Name = row["Name"].ToString()});

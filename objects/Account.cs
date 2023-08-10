@@ -5,25 +5,26 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using MyNotebooks.objects;
 
 namespace myNotebooks.objects
 {
-	public class Account
+	public class Account : IOrgLevel
 	{
-		public string Id { get; set; }
-		public string CompanyId { get; set; }
-		public string Name { get; set; }
-		public string Description { get; set; }
-		public DateTime CreatedOn { get; set; }
-		public DateTime? EditedOn { get; set; }
-
-		public Account() { }
+		//public string Id { get; set; }
+		//public string ParentId { get; set; }
+		//public string Name { get; set; }
+		//public string Description { get; set; }
+		//public DateTime CreatedOn { get; set; }
+		//public DateTime? EditedOn { get; set; }
 
 		public Account(DataRow dr) { PopulateFromDataRow(dr); }
 
 		private void PopulateFromDataRow(DataRow dr)
 		{
-			foreach (PropertyInfo sPropertyName in typeof(Group).GetProperties())
+			this.OrgLevelType = subforms.frmMain.OrgLevelTypes.Account;
+
+			foreach (PropertyInfo sPropertyName in typeof(Account).GetProperties())
 			{
 				this.GetType().GetProperty(sPropertyName.Name).SetValue(this, dr[sPropertyName.Name]);
 			}
