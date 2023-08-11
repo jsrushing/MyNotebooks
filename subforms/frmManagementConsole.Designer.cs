@@ -55,6 +55,7 @@ namespace myNotebooks.subforms
 			mnuCreateNew = new ToolStripMenuItem();
 			mnuEdit = new ToolStripMenuItem();
 			mnuDelete = new ToolStripMenuItem();
+			mnuManageNotebooks = new ToolStripMenuItem();
 			grpGroup_MU = new GroupBox();
 			lstGroups_MU = new ListBox();
 			grpDepartment_MU = new GroupBox();
@@ -285,37 +286,44 @@ namespace myNotebooks.subforms
 			// 
 			// mnuContextTree
 			// 
-			mnuContextTree.Items.AddRange(new ToolStripItem[] { mnuAssignUser, mnuCreateNew, mnuEdit, mnuDelete });
+			mnuContextTree.Items.AddRange(new ToolStripItem[] { mnuAssignUser, mnuCreateNew, mnuEdit, mnuDelete, mnuManageNotebooks });
 			mnuContextTree.Name = "mnuContextTree";
-			mnuContextTree.Size = new System.Drawing.Size(150, 92);
+			mnuContextTree.Size = new System.Drawing.Size(181, 136);
 			// 
 			// mnuAssignUser
 			// 
 			mnuAssignUser.Name = "mnuAssignUser";
-			mnuAssignUser.Size = new System.Drawing.Size(149, 22);
-			mnuAssignUser.Text = "A&ssign to User";
+			mnuAssignUser.Size = new System.Drawing.Size(180, 22);
+			mnuAssignUser.Text = "&Assign to User";
 			mnuAssignUser.Click += this.mnuAssignUser_Click;
 			// 
 			// mnuCreateNew
 			// 
 			mnuCreateNew.Name = "mnuCreateNew";
-			mnuCreateNew.Size = new System.Drawing.Size(149, 22);
-			mnuCreateNew.Text = "Create New";
+			mnuCreateNew.Size = new System.Drawing.Size(180, 22);
+			mnuCreateNew.Text = "Create &New";
 			mnuCreateNew.Click += this.mnuCreateNew_Click;
 			// 
 			// mnuEdit
 			// 
 			mnuEdit.Name = "mnuEdit";
-			mnuEdit.Size = new System.Drawing.Size(149, 22);
+			mnuEdit.Size = new System.Drawing.Size(180, 22);
 			mnuEdit.Text = "&Edit";
 			mnuEdit.Click += this.mnuEdit_Click;
 			// 
 			// mnuDelete
 			// 
 			mnuDelete.Name = "mnuDelete";
-			mnuDelete.Size = new System.Drawing.Size(149, 22);
+			mnuDelete.Size = new System.Drawing.Size(180, 22);
 			mnuDelete.Text = "&Delete";
 			mnuDelete.Click += this.mnuDelete_Click;
+			// 
+			// mnuManageNotebooks
+			// 
+			mnuManageNotebooks.Name = "mnuManageNotebooks";
+			mnuManageNotebooks.Size = new System.Drawing.Size(180, 22);
+			mnuManageNotebooks.Text = "&Manage Notebooks";
+			mnuManageNotebooks.Visible = false;
 			// 
 			// grpGroup_MU
 			// 
@@ -673,5 +681,6 @@ namespace myNotebooks.subforms
 		private ListBox lstDepartments_CU;
 		private GroupBox grpAccount_CU;
 		private ListBox lstAccounts_CU;
+		private ToolStripMenuItem mnuManageNotebooks;
 	}
 }

@@ -40,6 +40,7 @@ namespace myNotebooks.DataAccess
 						cmd.Parameters.AddWithValue("@password", user.Password);
 						cmd.Parameters.AddWithValue("@accessLevel", user.AccessLevel);
 						cmd.Parameters.AddWithValue("@createdBy", user.CreatedBy);
+						cmd.Parameters.AddWithValue("@email", user.Email);
 						cmd.Parameters.Add("@retVal", SqlDbType.Int);
 						cmd.Parameters["@retVal"].Direction = ParameterDirection.ReturnValue;
 						cmd.ExecuteNonQuery();
@@ -196,7 +197,6 @@ namespace myNotebooks.DataAccess
 						cmd.CommandType = CommandType.StoredProcedure;
 						cmd.Parameters.AddWithValue("@parentId",			parentId);
 						cmd.Parameters.AddWithValue("@createdBy",			creatorId);
-						//var v = (int)orgLevelType;
 						cmd.Parameters.AddWithValue("@orgLevelType",		(int)orgLevelType);
 						cmd.Parameters.AddWithValue("@orgLevelName",		orgLevelName.Trim());
 						cmd.Parameters.AddWithValue("@orgLevelDescription", orgLevelDescription.Trim());
