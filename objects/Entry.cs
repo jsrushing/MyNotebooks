@@ -1,6 +1,6 @@
 ﻿/* Journal Entry object
  * 8/1//21
- * Refactored to Notebook Entry object
+ * Refactored to LocalNotebook Entry object
  * 06/10/23
  */
 using System;
@@ -19,23 +19,26 @@ namespace myNotebooks
 	[Serializable]
     public class Entry
     {
-        public DateTime		Date;
-		public DateTime		LastEditedOn;
-        public string		Text;
+		public int			CreatedBy { get; set; }
+        public DateTime		CreatedOn { get; set; }
 		public string		DisplayText { get { return GetTextDisplayText(); } set { DisplayText = value; } }
+		public DateTime		EditedOn { get; set; }
+        public string		Id { get; set; }
+		public string		Labels { get; set; }
 		public string		NotebookName { get; set; }
-		public string		RTF;
-        public string		Labels;
-		public string		Title;
-		public bool			isEdited = false;
-        public string		Id;
+		public int			NotebookId { get; set; }
+		public string		RTF { get; set; }
+		public string		Text { get; set; }
+		public string		Title { get; set; }
+
+		//public bool			isEdited = false;
 
 		public Entry() { }
 
-		// one-time code for converting Journal to Notebook.
+		// one-time code for converting Journal to LocalNotebook.
 		//public Entry(JournalEntry entry)
 		//{
-		//	this.Date = entry.Date;
+		//	this.CreatedOn = entry.CreatedOn;
 		//	this.Text = entry.Text;
 		//	this.Title = entry.Title;
 		//	this.RTF = "";
@@ -47,36 +50,36 @@ namespace myNotebooks
 
 		public Entry(string _title, string _text, string _RTF, string _labels, string _notebookName = "", bool _edited = false)
         {
-			if(Date == DateTime.MinValue) { Date = DateTime.Now; }
+			if(CreatedOn == DateTime.MinValue) { CreatedOn = DateTime.Now; }
 
 			Text		= _text.Trim();
 			Title		= _title.Trim();
 			RTF			= _RTF;
 			Labels		= _labels;
             Id			= Guid.NewGuid().ToString();
-			isEdited	= _edited;	
+			//isEdited	= _edited;	
 			NotebookName = _notebookName;
 		}
 
 		string				GetTextDisplayText()
 		{
 			return String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
-				, Title, Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), Labels.Replace(",", ", "), Text);
+				, Title, CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), Labels.Replace(",", ", "), Text);
 		}
 
 		public string[]		GetSynopsis(bool includeJournalName = false, int maxWidth = -1)
 		{
 			string[] sRtrn = new string[4];
-			int iTextChunkLength = maxWidth > 0 ? maxWidth / 5 : 150;
-			string sTitle = Title + " (" + Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"
-				+ (LastEditedOn < new DateTime(2000, 1, 1) ? "" : " [edited on " + LastEditedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + "]");
-			if (includeJournalName) { sTitle += NotebookName == null ? "" : " > in '" + NotebookName + "'"; }
-			sRtrn[0] = sTitle;
-			string sEntryText = Text.Replace("\n", " ");
-			sEntryText = (sEntryText.Length < iTextChunkLength ? sEntryText : sEntryText.Substring(0, iTextChunkLength) + " ...");
-			sRtrn[1] = sEntryText;
-			sRtrn[2] = "labels: " + Labels.Replace(",", ", ");
-			sRtrn[3] = "---------------------";
+			//int iTextChunkLength = maxWidth > 0 ? maxWidth / 5 : 150;
+			//string sTitle = Title + " (" + CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"
+			//	+ (EditedOn  < new DateTime(2000, 1, 1) ? "" : " [edited on " + EditedOn .ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + "]");
+			//if (includeJournalName) { sTitle += NotebookName == null ? "" : " > in '" + NotebookName + "'"; }
+			//sRtrn[0] = sTitle;
+			//string sEntryText = Text.Replace("\n", " ");
+			//sEntryText = (sEntryText.Length < iTextChunkLength ? sEntryText : sEntryText.Substring(0, iTextChunkLength) + " ...");
+			//sRtrn[1] = sEntryText;
+			//sRtrn[2] = "labels: " + Labels.Replace(",", ", ");
+			//sRtrn[3] = "---------------------";
 			return sRtrn;
 		}
 
@@ -197,7 +200,7 @@ namespace myNotebooks
 							if(entryRtrn != null)
 							{
 								rtb.Text = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
-								, entryRtrn.Title, entryRtrn.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), entryRtrn.Labels, entryRtrn.Text);
+								, entryRtrn.Title, entryRtrn.CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), entryRtrn.Labels, entryRtrn.Text);
 							}
 						}
 

@@ -204,22 +204,22 @@ namespace myNotebooks.subforms
 
 			#region one-time code
 
-			// convert Journal objects to Notebook objects
+			// convert Journal objects to LocalNotebook objects
 
 			//using (Stream stream = File.Open("C:\\Users\\js_ru\\source\\repos\\myJournal2022\\bin\\Debug\\netcoreapp3.1\\journals - Copy\\The New Real Thing", FileMode.Open))
 			//{
 			//	BinaryFormatter formatter = new BinaryFormatter();
 			//	Journal jRtrn = (Journal)formatter.Deserialize(stream);
-			//	Notebook nb = new Notebook(jRtrn);
+			//	LocalNotebook nb = new LocalNotebook(jRtrn);
 			//	await nb.Save();
 
-			//	//Notebook nb = (Notebook)formatter.Deserialize(stream);
+			//	//LocalNotebook nb = (LocalNotebook)formatter.Deserialize(stream);
 			//	//jRtrn.FileName = journalToOpen;
 			//	//jRtrn.Name = journalToOpen.Substring(journalToOpen.LastIndexOf("\\") + 1);
 			//}
 
 			//one - time code to create test notebooks
-			//Notebook newNotebook;
+			//LocalNotebook newNotebook;
 			//Entry newEntry;
 
 			//for (var i = 0; i < 10; i++)
@@ -231,7 +231,7 @@ namespace myNotebooks.subforms
 			//	var rnd = new Random(Guid.NewGuid().GetHashCode());
 
 			//	Entry newEntry1 = new Entry("created", "-", "-", "", newNotebook.Name); // Utilities.CreateEntry("created", "-", "-", "", newNotebook.Name, Program.PIN);
-			//	newEntry1.Date = DateTime.Parse("01/01/23 1:00 AM");
+			//	newEntry1.CreatedOn = DateTime.Parse("01/01/23 1:00 AM");
 			//	newNotebook.Entries.Add(newEntry1);
 
 			//	for (var j = 0; j < 5; j++)
@@ -242,7 +242,7 @@ namespace myNotebooks.subforms
 			//		//newEntry = Utilities.CreateEntry("Entry " + j + 1.ToString() + " in " + newNotebook.Name,
 			//		//	"This is the entry text for entry " + rnd.Next(1, 150), "{rtf", GetRandomLabels(), newNotebook.Name, Program.PIN);
 
-			//		newEntry.Date = DateTime.Now.AddDays(-Convert.ToDouble(rnd.Next(1, 150)));
+			//		newEntry.CreatedOn = DateTime.Now.AddDays(-Convert.ToDouble(rnd.Next(1, 150)));
 			//		newNotebook.Entries.Add(newEntry);
 			//	}
 
@@ -252,7 +252,7 @@ namespace myNotebooks.subforms
 
 			// fix The New Real Thing entries
 			//Program.PIN = "0711";
-			//Notebook nb = new Notebook("The New Real Thing").Open();
+			//LocalNotebook nb = new LocalNotebook("The New Real Thing").Open();
 
 			////fix some entries.RTF property is blank.
 			////List<Entry> v = nb.Entries.Where(e => e.RTF.Length == 0).ToList();
@@ -261,10 +261,10 @@ namespace myNotebooks.subforms
 			////nb.Save();
 
 			//// fix The New Real Thing problem of Entry[0] is not the 'created' entry.
-			////Notebook nb = new Notebook("The New Real Thing").Open();
+			////LocalNotebook nb = new LocalNotebook("The New Real Thing").Open();
 			////Program.PIN = "0711";
 			//Entry entry = new Entry("created", "-", "{f", "The New Real Thing");
-			//entry.Date = DateTime.Parse("12/01/2021 12:00 AM");
+			//entry.CreatedOn = DateTime.Parse("12/01/2021 12:00 AM");
 			//nb.Entries.Insert(0, entry);
 			//nb.Save();
 			//List<Entry> indx = nb.Entries.Where(e => e.Title == EncryptDecrypt.Encrypt("created")).ToList();
@@ -276,7 +276,7 @@ namespace myNotebooks.subforms
 			//Utilities.PopulateAllNotebooks();
 			//Program.PIN = "";
 
-			//foreach(Notebook nb in Program.AllNotebooks)
+			//foreach(LocalNotebook nb in Program.AllNotebooks)
 			//{
 			//	foreach(Entry en in nb.Entries)
 			//	{
@@ -330,15 +330,16 @@ namespace myNotebooks.subforms
 				{
 					frm.ShowDialog();
 
-					if (frm.Notebook != null)
+					if (frm.LocalNotebook != null)
 					{
-						await frm.Notebook.Create();
+						await frm.LocalNotebook.Create();
+
 						LoadNotebooks();
 					}
 					else
 					{
 						using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.Message, "At least one notebook must exist. " +
-							"Please re-open the program and create a notebook.", "One Notebook Must Exist", this))
+							"Please re-open the program and create a notebook.", "One LocalNotebook Must Exist", this))
 						{ frm2.ShowDialog(); this.Close(); }
 					}
 				}
@@ -390,7 +391,7 @@ namespace myNotebooks.subforms
 						var nbPath = CurrentNotebook.FileName;
 						var nbName = CurrentNotebook.Name;
 						CloudSynchronizer cs = new CloudSynchronizer();
-						await cs.SynchWithCloud(false, CurrentNotebook);
+						//await cs.SynchWithCloud(false, CurrentNotebook);
 						Notebook curNotebook = new Notebook(nbName, nbPath).Open();
 
 						if (curNotebook == null)    // the sync deleted the file
@@ -664,7 +665,7 @@ namespace myNotebooks.subforms
 				{
 					CurrentEntry = frm.Entry;
 					await CurrentNotebook.Save();
-					if (!cbxDatesTo.Items.Contains(CurrentEntry.Date)) { cbxDatesTo.Items.Insert(0, CurrentEntry.Date.ToShortDateString()); }
+					if (!cbxDatesTo.Items.Contains(CurrentEntry.CreatedOn)) { cbxDatesTo.Items.Insert(0, CurrentEntry.CreatedOn.ToShortDateString()); }
 					cbxDatesTo.SelectedIndex = 0;
 					lstEntries.SelectedIndex = 0;
 				}
@@ -737,11 +738,11 @@ namespace myNotebooks.subforms
 			{
 				frm.ShowDialog(this);
 
-				if (frm.Notebook != null && frm.Notebook.Name.Length > 0)
+				if (frm.LocalNotebook != null && frm.LocalNotebook.Name.Length > 0)
 				{
-					frm.Notebook.LastSaved = DateTime.Now;
-					frm.Notebook.FileName = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + frm.Notebook.Name;
-					await frm.Notebook.Create();
+					frm.LocalNotebook.EditedOn = DateTime.Now;
+					frm.LocalNotebook.FileName = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + frm.LocalNotebook.Name;
+					await frm.LocalNotebook.Create();
 					//await Utilities.PopulateAllNotebookNames();
 					LoadNotebooks();
 				}
@@ -882,7 +883,7 @@ namespace myNotebooks.subforms
 				if (Program.AzurePassword.Length > 0)
 				{
 					CloudSynchronizer cs = new CloudSynchronizer();
-					await cs.SynchWithCloud();
+					//await cs.SynchWithCloud();
 				}
 			}
 		}
@@ -906,7 +907,7 @@ namespace myNotebooks.subforms
 			SuppressDateClick = true;
 			cbxDatesFrom.DataSource = null;
 			cbxDatesTo.Items.Clear();
-			List<string> l = CurrentNotebook.Entries.Select(e => e.Date.ToShortDateString()).Distinct().ToList();
+			List<string> l = CurrentNotebook.Entries.Select(e => e.CreatedOn.ToShortDateString()).Distinct().ToList();
 			l.Sort((x, y) => -DateTime.Parse(x).CompareTo(DateTime.Parse(y)));
 			cbxDatesFrom.DataSource = l;
 			//cbxDatesTo.Items.AddRange(cbxDates.Items.Cast<Object>().ToArray());

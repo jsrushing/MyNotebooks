@@ -44,10 +44,10 @@ namespace myNotebooks.subforms
 			{
 				frm.ShowDialog();
 				  
-				if(frm.Notebook.Name.Length > 0)
+				if(frm.LocalNotebook.Name.Length > 0)
 				{
-					Notebook nb = frm.Notebook;
-					FoundEntries.ForEach(e => e.NotebookName = frm.Notebook.Name);
+					Notebook nb = frm.LocalNotebook;
+					FoundEntries.ForEach(e => e.NotebookName = frm.LocalNotebook.Name);
 					nb.Entries.Add(new Entry("created", "-", "{rtf", nb.Name));
 					nb.Entries.AddRange(FoundEntries);
 					await nb.Create(false);

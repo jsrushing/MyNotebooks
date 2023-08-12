@@ -100,7 +100,7 @@ namespace myNotebooks.subforms
 			txtPIN.Name = "txtPIN";
 			txtPIN.Size = new System.Drawing.Size(116, 23);
 			txtPIN.TabIndex = 50;
-			txtPIN.Text = "(select a Notebook)";
+			txtPIN.Text = "(select a LocalNotebook)";
 			// 
 			// lstNotebookPINs
 			// 

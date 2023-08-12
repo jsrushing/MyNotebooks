@@ -9,22 +9,22 @@ namespace myNotebooks.subforms
 {
 	public partial class frmNewNotebook : Form
 	{
-		public Notebook Notebook { get; private set; }
+		public Notebook LocalNotebook { get; private set; }
 
 		public frmNewNotebook(Form parent)
 		{
 			InitializeComponent();
 			Utilities.SetStartPosition(this, parent);
-			this.Notebook = new Notebook("", "");
-			Notebook.Settings = new NotebookSettings { IfCloudOnly_Download = true, IfLocalOnly_Upload = true, AllowCloud = true };
+			this.LocalNotebook = new Notebook("", "");
+			LocalNotebook.Settings = new NotebookSettings { IfCloudOnly_Download = true, IfLocalOnly_Upload = true, AllowCloud = true };
 		}
 
 		private void btnSettings_Click(object sender, EventArgs e)
 		{
 			if (txtName.Text.Length > 0)
 			{
-				Notebook.Name = txtName.Text;
-				using (frmNotebookSettings nbs = new frmNotebookSettings(Notebook, this, false)) { nbs.ShowDialog(); }
+				LocalNotebook.Name = txtName.Text;
+				using (frmNotebookSettings nbs = new frmNotebookSettings(LocalNotebook, this, false)) { nbs.ShowDialog(); }
 			}
 		}
 
@@ -36,10 +36,12 @@ namespace myNotebooks.subforms
 
 		private void btnOk_Click(object sender, EventArgs e)
 		{
-			NotebookSettings nbs = Notebook.Settings;
-			this.Notebook = new Notebook(txtName.Text, null);
-			Notebook.Settings = nbs;
-			Program.PIN = txtPIN.Text;
+			NotebookSettings nbs = LocalNotebook.Settings;
+			this.LocalNotebook = new Notebook(txtName.Text, null);
+			LocalNotebook.Settings = nbs;
+			LocalNotebook.PIN = txtPIN.Text;
+			LocalNotebook.Description = txtDescription.Text;
+			//Program.PIN = txtPIN.Text;
 			this.Hide();
 		}
 

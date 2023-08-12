@@ -144,7 +144,7 @@ namespace myNotebooks.subforms
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(34, 15);
 			this.label4.TabIndex = 1;
-			this.label4.Text = "Date:";
+			this.label4.Text = "CreatedOn:";
 			// 
 			// label3
 			// 
@@ -190,7 +190,7 @@ namespace myNotebooks.subforms
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(37, 15);
 			this.label8.TabIndex = 1;
-			this.label8.Text = "Date: ";
+			this.label8.Text = "CreatedOn: ";
 			// 
 			// label9
 			// 

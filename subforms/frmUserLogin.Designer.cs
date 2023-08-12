@@ -144,7 +144,6 @@
 		private System.Windows.Forms.Panel pnlLogin;
 		private System.Windows.Forms.Button btnOkAccounts;
 		private System.Windows.Forms.Button btnOkGroups;
-		private System.Windows.Forms.CheckedListBox checkedListBox3;
 		private System.Windows.Forms.Panel panel1;
 	}
 }

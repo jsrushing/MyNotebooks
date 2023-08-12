@@ -237,7 +237,7 @@ namespace myNotebooks.objects
 				foreach (string label in labels) { sb.AppendLine(label); }
 				sb.AppendLine (DateTime.Now.ToString(ConfigurationManager.AppSettings["FileDate"]));
 				File.WriteAllText(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_LabelsFile"], sb.ToString());
-				await cs.SyncLabelsAndSettings();
+				//await cs.SyncLabelsAndSettings();
 				bRtrn = true;
 			}
 			catch (Exception) { }

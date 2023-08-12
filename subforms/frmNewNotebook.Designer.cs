@@ -36,6 +36,8 @@ namespace myNotebooks.subforms
 			btnCancel = new System.Windows.Forms.Button();
 			btnOk = new System.Windows.Forms.Button();
 			grp1 = new System.Windows.Forms.Panel();
+			txtDescription = new System.Windows.Forms.TextBox();
+			label3 = new System.Windows.Forms.Label();
 			btnSettings = new System.Windows.Forms.Button();
 			lblNameExists = new System.Windows.Forms.Label();
 			lblShowPIN = new System.Windows.Forms.Label();
@@ -44,44 +46,44 @@ namespace myNotebooks.subforms
 			// 
 			// txtName
 			// 
-			txtName.Location = new System.Drawing.Point(103, 25);
+			txtName.Location = new System.Drawing.Point(78, 25);
 			txtName.MaxLength = 80;
 			txtName.Name = "txtName";
-			txtName.Size = new System.Drawing.Size(138, 23);
+			txtName.Size = new System.Drawing.Size(163, 23);
 			txtName.TabIndex = 0;
 			txtName.TextChanged += this.txtName_TextChanged;
 			// 
 			// label1
 			// 
 			label1.AutoSize = true;
-			label1.Location = new System.Drawing.Point(2, 28);
+			label1.Location = new System.Drawing.Point(30, 28);
 			label1.Name = "label1";
-			label1.Size = new System.Drawing.Size(98, 15);
+			label1.Size = new System.Drawing.Size(42, 15);
 			label1.TabIndex = 1;
-			label1.Text = "Notebook Name:";
+			label1.Text = "Name:";
 			// 
 			// label2
 			// 
 			label2.AutoSize = true;
-			label2.Location = new System.Drawing.Point(15, 60);
+			label2.Location = new System.Drawing.Point(43, 111);
 			label2.Name = "label2";
-			label2.Size = new System.Drawing.Size(85, 15);
+			label2.Size = new System.Drawing.Size(29, 15);
 			label2.TabIndex = 2;
-			label2.Text = "Notebook PIN:";
+			label2.Text = "PIN:";
 			// 
 			// txtPIN
 			// 
-			txtPIN.Location = new System.Drawing.Point(103, 57);
-			txtPIN.MaxLength = 80;
+			txtPIN.Location = new System.Drawing.Point(78, 108);
+			txtPIN.MaxLength = 25;
 			txtPIN.Name = "txtPIN";
 			txtPIN.PasswordChar = '*';
-			txtPIN.Size = new System.Drawing.Size(138, 23);
+			txtPIN.Size = new System.Drawing.Size(163, 23);
 			txtPIN.TabIndex = 1;
 			txtPIN.TextChanged += this.txtPIN_TextChanged;
 			// 
 			// btnCancel
 			// 
-			btnCancel.Location = new System.Drawing.Point(164, 142);
+			btnCancel.Location = new System.Drawing.Point(164, 187);
 			btnCancel.Name = "btnCancel";
 			btnCancel.Size = new System.Drawing.Size(75, 23);
 			btnCancel.TabIndex = 5;
@@ -92,7 +94,7 @@ namespace myNotebooks.subforms
 			// btnOk
 			// 
 			btnOk.Enabled = false;
-			btnOk.Location = new System.Drawing.Point(21, 142);
+			btnOk.Location = new System.Drawing.Point(21, 187);
 			btnOk.Name = "btnOk";
 			btnOk.Size = new System.Drawing.Size(75, 23);
 			btnOk.TabIndex = 4;
@@ -102,6 +104,8 @@ namespace myNotebooks.subforms
 			// 
 			// grp1
 			// 
+			grp1.Controls.Add(txtDescription);
+			grp1.Controls.Add(label3);
 			grp1.Controls.Add(btnSettings);
 			grp1.Controls.Add(lblNameExists);
 			grp1.Controls.Add(lblShowPIN);
@@ -113,13 +117,31 @@ namespace myNotebooks.subforms
 			grp1.Controls.Add(label2);
 			grp1.Location = new System.Drawing.Point(12, -1);
 			grp1.Name = "grp1";
-			grp1.Size = new System.Drawing.Size(257, 175);
+			grp1.Size = new System.Drawing.Size(257, 222);
 			grp1.TabIndex = 6;
+			// 
+			// txtDescription
+			// 
+			txtDescription.Location = new System.Drawing.Point(78, 54);
+			txtDescription.MaxLength = 500;
+			txtDescription.Multiline = true;
+			txtDescription.Name = "txtDescription";
+			txtDescription.Size = new System.Drawing.Size(163, 48);
+			txtDescription.TabIndex = 57;
+			// 
+			// label3
+			// 
+			label3.AutoSize = true;
+			label3.Location = new System.Drawing.Point(2, 57);
+			label3.Name = "label3";
+			label3.Size = new System.Drawing.Size(70, 15);
+			label3.TabIndex = 58;
+			label3.Text = "Description:";
 			// 
 			// btnSettings
 			// 
 			btnSettings.Enabled = false;
-			btnSettings.Location = new System.Drawing.Point(124, 100);
+			btnSettings.Location = new System.Drawing.Point(78, 147);
 			btnSettings.Name = "btnSettings";
 			btnSettings.Size = new System.Drawing.Size(120, 23);
 			btnSettings.TabIndex = 56;
@@ -141,7 +163,7 @@ namespace myNotebooks.subforms
 			// lblShowPIN
 			// 
 			lblShowPIN.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
-			lblShowPIN.Location = new System.Drawing.Point(184, 80);
+			lblShowPIN.Location = new System.Drawing.Point(184, 131);
 			lblShowPIN.Name = "lblShowPIN";
 			lblShowPIN.Size = new System.Drawing.Size(35, 13);
 			lblShowPIN.TabIndex = 2;
@@ -156,14 +178,14 @@ namespace myNotebooks.subforms
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			CancelButton = btnCancel;
-			ClientSize = new System.Drawing.Size(284, 186);
+			ClientSize = new System.Drawing.Size(284, 226);
 			Controls.Add(grp1);
 			FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			MaximizeBox = false;
 			MinimizeBox = false;
 			MinimumSize = new System.Drawing.Size(300, 225);
 			Name = "frmNewNotebook";
-			Text = "New Notebook";
+			Text = "New LocalNotebook";
 			Activated += this.frmNewJournal_Activated;
 			Load += this.frmNewJournal_Load;
 			grp1.ResumeLayout(false);
@@ -183,5 +205,7 @@ namespace myNotebooks.subforms
 		private System.Windows.Forms.Label lblShowPIN;
 		private System.Windows.Forms.Label lblNameExists;
 		private System.Windows.Forms.Button btnSettings;
+		private System.Windows.Forms.TextBox txtDescription;
+		private System.Windows.Forms.Label label3;
 	}
 }

@@ -464,7 +464,7 @@ namespace myNotebooks.subforms
 							OccurenceTitleIndicies.Add(lstOccurrences.Items.Count - 1);
 							lstEntryObjects.Items.Add("");
 
-							foreach (Entry nbEntry in foundLables.OrderByDescending(e => e.Date))
+							foreach (Entry nbEntry in foundLables.OrderByDescending(e => e.CreatedOn))
 							{
 								lstOccurrences.Items.Add("   > " + nbEntry.Title);
 								lstEntryObjects.Items.Add(new KeyValuePair<Notebook, Entry>(nb, nbEntry));

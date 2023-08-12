@@ -1,4 +1,4 @@
-﻿/* Simple data object for Notebook Settings. Extensible.
+﻿/* Simple data object for LocalNotebook Settings. Extensible.
  * 06/05/23
  * JSR
  */

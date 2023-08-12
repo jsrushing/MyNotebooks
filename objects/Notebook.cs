@@ -1,7 +1,7 @@
-﻿/* Notebook object
+﻿/* LocalNotebook object
  * Created as Journal on: 8/1//21
  * Created by: S. Rushing
- * Modified to Notebook 06/10/23
+ * Modified to LocalNotebook 06/10/23
  */
 using System;
 using System.Collections.Generic;
@@ -19,6 +19,9 @@ using MailKit.Net.Imap;
 using myNotebooks.objects;
 using myNotebooks.subforms;
 using Newtonsoft.Json;
+using System.Data;
+using System.Reflection;
+using Newtonsoft.Json.Linq;
 
 namespace myNotebooks
 {
@@ -31,18 +34,17 @@ namespace myNotebooks
 		public DateTime EditedOn { get; set; }
 		public int		Id { get; set; }
 		public string	Name { get; set; }
+		public string	PIN { get; set; }
 		public int		ParentId { get; set; }
-		public string	RTF { get; set; }
 
-		public string				FileName { get; set; }
-
-		public List<Entry>			Entries = new List<Entry>();
-		public string root			= "notebooks\\";
-		public NotebookSettings		Settings;
-		public bool					WrongPIN { get; set; } = false;
-		public bool					BackupCompleted { get; private set; }
-		public bool					Saved { get; private set; }
-
+		public string			FileName;
+		public string			root = "notebooks\\";
+		public bool				WrongPIN = false;
+		public bool				BackupCompleted;
+		public bool				Saved;
+		public List<Entry>		Entries = new List<Entry>();
+		public NotebookSettings	Settings;
+		
 		public Notebook(string _name = null, string _fileName = null) 
         {
             if(_name != null)
@@ -52,6 +54,35 @@ namespace myNotebooks
 				else { this.FileName = Program.AppRoot + this.root + this.Name; }
 			}
 		}
+
+		public Notebook(DataTable dt)
+		{
+			var value = "";
+
+			foreach (PropertyInfo sPropertyName in typeof(Notebook).GetProperties())
+			{
+				try
+				{
+					if (dt.Columns[sPropertyName.Name].DataType == typeof(string))
+					{
+						value = dt.Rows[0].Field<string>(sPropertyName.Name).ToString();
+						this.GetType().GetProperty(sPropertyName.Name).SetValue(this, value.ToString());
+					}
+					if (dt.Columns[sPropertyName.Name].DataType == typeof(Int32))
+					{
+						value = dt.Rows[0].Field<Int32>(sPropertyName.Name).ToString();
+						this.GetType().GetProperty(sPropertyName.Name).SetValue(this, Convert.ToInt32(value));
+					}
+					else if (dt.Columns[sPropertyName.Name].DataType == typeof(DateTime))
+					{
+						DateTime dtime = Convert.ToDateTime(dt.Rows[0].Field<DateTime>(sPropertyName.Name));
+						this.GetType().GetProperty(sPropertyName.Name).SetValue(this, dtime);
+					}
+				}
+				catch { }
+			}
+		}
+
 
 		public void			AddEntry(Entry entryToAdd) { Entries.Add(entryToAdd); }
 
@@ -145,10 +176,10 @@ namespace myNotebooks
 
 			foreach(Entry e in this.Entries)
 			{
-				if(e.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]).Equals(Date)) { jeRtrn = e; break; }
+				if(e.CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]).Equals(Date)) { jeRtrn = e; break; }
 			}
 
-			//try { jeRtrn = Entries.First(a => a.ClearTitle() == Title && a.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]).Equals(Date)); }
+			//try { jeRtrn = Entries.First(a => a.ClearTitle() == Title && a.CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]).Equals(CreatedOn)); }
 			//catch (Exception) { }
 			return jeRtrn;
         }
@@ -285,8 +316,8 @@ namespace myNotebooks
 
         public void			ReplaceEntry(Entry jeToReplace, Entry jeToInsert)
 		{
-			jeToInsert.Date = jeToReplace.Date;
-			jeToInsert.LastEditedOn = DateTime.Now;
+			jeToInsert.CreatedOn = jeToReplace.CreatedOn;
+			jeToInsert.EditedOn  = DateTime.Now;
 			var index = Array.FindIndex(Entries.ToArray(), row => row.Id == jeToReplace.Id);
 			Entries[index] = jeToInsert;
 		}
@@ -328,27 +359,29 @@ namespace myNotebooks
 
 		public async Task	Save(bool synchWithCloud = true)
 		{
-			var fName = this.FileName.Length > 0 ? this.FileName : Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + this.Name;
-			fName = fName.Contains("\\") ? fName :  Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + this.Name;
+			//var fName = this.FileName.Length > 0 ? this.FileName : Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + this.Name;
+			//fName = fName.Contains("\\") ? fName :  Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + this.Name;
 
 			Notebook nTmp = (Notebook)this.MemberwiseClone();
 
 			// Encrypt the notebook and entries to save to disk.
-			this.LastSaved			= DateTime.Now;
-			this.FileName			= EncryptDecrypt.Encrypt(this.FileName, Program.PIN);
-			this.Name				= EncryptDecrypt.Encrypt(this.Name, Program.PIN);
-			this.Entries.ForEach(e	=> e.Title	= EncryptDecrypt	.Encrypt(e.Title, Program.PIN));
-			this.Entries.ForEach(e	=> e.Text	= EncryptDecrypt	.Encrypt(e.Text, Program.PIN));
-			this.Entries.ForEach(e	=> e.Labels = EncryptDecrypt	.Encrypt(e.Labels, Program.PIN));
-			this.Entries.ForEach(e	=> e.RTF	= EncryptDecrypt	.Encrypt(e.RTF, Program.PIN));
-			this.Entries.ForEach(e	=> e.NotebookName = EncryptDecrypt.Encrypt(e.NotebookName, Program.PIN));
-			File.Delete(fName);
+			//this.FileName						= EncryptDecrypt.Encrypt(this.FileName, this.PIN);
+			this.Name		= EncryptDecrypt.Encrypt(this.Name,		this.PIN);
+			this.PIN		= EncryptDecrypt.Encrypt(this.PIN, this.PIN);
+			this.Description = EncryptDecrypt.Encrypt(this.Description, this.PIN);
 
-			using (Stream stream = File.Open(fName, FileMode.Create))
-			{
-				DataContractSerializer dcs = new DataContractSerializer(typeof(Notebook));
-				dcs.WriteObject(stream, this);
-			}
+			this.Entries.ForEach(e	=> e.Title	= EncryptDecrypt.Encrypt(e.Title,	this.PIN));
+			this.Entries.ForEach(e	=> e.Text	= EncryptDecrypt.Encrypt(e.Text,	this.PIN));
+			this.Entries.ForEach(e	=> e.Labels = EncryptDecrypt.Encrypt(e.Labels,	this.PIN));
+			this.Entries.ForEach(e	=> e.RTF	= EncryptDecrypt.Encrypt(e.RTF,		this.PIN));
+			this.Entries.ForEach(e	=> e.NotebookName = EncryptDecrypt.Encrypt(e.NotebookName, this.PIN));
+			//File.Delete(fName);
+
+			//using (Stream stream = File.Open(fName, FileMode.Create))
+			//{
+			//	DataContractSerializer dcs = new DataContractSerializer(typeof(Notebook));
+			//	dcs.WriteObject(stream, this);
+			//}
 
 			//if (Program.AzurePassword.Length > 0 && this.Settings.AllowCloud)
 			//{
@@ -386,9 +419,9 @@ namespace myNotebooks
 			if(So.chkUseDate.Checked | So.chkUseDateRange.Checked)
 			{
 				if (So.chkUseDate.Checked) 
-				{ allEntries = Entries.Where(p => p.Date.ToShortDateString() == So.dtFindDate.Value.ToShortDateString()).ToList(); }
+				{ allEntries = Entries.Where(p => p.CreatedOn.ToShortDateString() == So.dtFindDate.Value.ToShortDateString()).ToList(); }
 				else
-				{ allEntries = Entries.Where(p => p.Date >= So.dtFindDate_From.Value && p.Date <= So.dtFindDate_To.Value).ToList(); }
+				{ allEntries = Entries.Where(p => p.CreatedOn >= So.dtFindDate_From.Value && p.CreatedOn <= So.dtFindDate_To.Value).ToList(); }
 			}
 
 			if(So.labelsArray != null) { allEntries = ProcessLabels(allEntries, So.labelsArray, So.radBtnLabelsAnd.Checked); }

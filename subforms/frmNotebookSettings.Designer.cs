@@ -231,7 +231,7 @@
 			MinimizeBox = false;
 			Name = "frmNotebookSettings";
 			ShowInTaskbar = false;
-			Text = "Notebook Settings";
+			Text = "LocalNotebook Settings";
 			Load += this.frmJournalSettings_Load;
 			pnlLocalNotCloud.ResumeLayout(false);
 			pnlLocalNotCloud.PerformLayout();

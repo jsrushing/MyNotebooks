@@ -117,7 +117,7 @@ namespace myNotebooks.DataAccess
 			return iRtrn;
 		}
 
-		public static int CreateNotebook(int createdBy, DateTime createdOn, string description, string name, int parentId, string RTF)
+		public static int CreateNotebook(Notebook nb)
 		{
 			int iRtrn = 0;
 
@@ -128,18 +128,27 @@ namespace myNotebooks.DataAccess
 				using (SqlCommand cmd = new("sp_CreateNotebook", conn))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@createdBy", createdBy);
-					cmd.Parameters.AddWithValue("@createdOn", createdOn);
-					cmd.Parameters.AddWithValue("@description", description);
-					cmd.Parameters.AddWithValue("@name", name);
-					cmd.Parameters.AddWithValue("@parentId", parentId);
-					cmd.Parameters.AddWithValue("@rtf", RTF);
+					cmd.Parameters.AddWithValue("@createdBy",	nb.CreatedBy);
+					cmd.Parameters.AddWithValue("@createdOn",	nb.CreatedOn);
+					cmd.Parameters.AddWithValue("@description", nb.Description);
+					cmd.Parameters.AddWithValue("@name",		nb.Name);
+					cmd.Parameters.AddWithValue("@pin",			nb.PIN);
+					cmd.Parameters.AddWithValue("@parentId",	nb.ParentId);
 					cmd.Parameters.Add("@rtnVal");
 					cmd.Parameters["@retVal"].Direction= ParameterDirection.ReturnValue;
 					cmd.ExecuteNonQuery();
 					iRtrn = Convert.ToInt32(cmd.Parameters["@retVal"].Value.ToString());
 				}
 			}
+
+			return iRtrn;
+		}
+
+		public static int CreateNotebookEntry(Entry entry)
+		{
+			int iRtrn = 0;
+
+
 
 			return iRtrn;
 		}
@@ -330,6 +339,13 @@ namespace myNotebooks.DataAccess
 			return lstReturn;
 		}
 
+		public static Entry GetEntryTextAndTitle(int entryId, Entry entryToComplete) 
+		{
+
+
+			return entryToComplete;
+		}
+
 		public static List<Group> GetGroups(int userId)
 		{
 			List<Group> lstReturn = new List<Group>();
@@ -353,6 +369,7 @@ namespace myNotebooks.DataAccess
 		public static Notebook GetNotebook(int notebookId) 
 		{
 			Notebook nbRtrn = null;
+			DataTable dt = new();
 
 			using (SqlConnection conn = new(connString))
 			{
@@ -362,27 +379,68 @@ namespace myNotebooks.DataAccess
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 					cmd.Parameters.AddWithValue("@notebookId", notebookId);
+					SqlDataAdapter sda = new SqlDataAdapter() { SelectCommand = cmd };
+					sda.Fill(dt);
+					nbRtrn = new Notebook(dt);
 
-					using (SqlDataReader reader = cmd.ExecuteReader())
+					dt = new();
+					cmd.Parameters.Clear();
+					cmd.CommandText = "sp_GetEntries";
+					cmd.Parameters.AddWithValue("notebookId", notebookId);
+					sda.SelectCommand = cmd;
+					sda.Fill(dt);
+					foreach (DataRow dr in dt.Rows)
 					{
-						if (reader.HasRows)
+						Entry entry = new()
 						{
-							while (reader.Read())
-							{
-								nbRtrn = new Notebook()
-								{
-									CreatedBy	= reader.GetInt32	("CreatedBy"),
-									CreatedOn	= reader.GetDateTime("CreatedOn"),
-									Description = reader.GetString	("Description"),
-									EditedOn	= reader.GetDateTime("EditedOn"),
-									Id			= reader.GetInt32	("Id"),
-									Name		= reader.GetString	("Name"),
-									ParentId	= reader.GetInt32	("ParentId"),
-									RTF			= reader.GetString	("RTF")
-								};
-							}
+							Id = dr.Field<int>("Id").ToString(),
+							NotebookId = Convert.ToInt32(dr.Field<int>("NotebookId")),
+							Title = dr.Field<string>("Title").ToString(),
+							Text = dr.Field<string>("Text").ToString(),
+							CreatedBy = Convert.ToInt32(dr.Field<int>("CreatedBy")),
+							CreatedOn = DateTime.Parse(dr.Field<DateTime>("CreatedOn").ToString())
+						};
+
+						var v = dr.Field<DateTime?>("EditedOn").ToString();
+						if (v != null)
+						{
+							entry.EditedOn = DateTime.Parse(v);
+							nbRtrn.Entries.Add(entry);
 						}
 					}
+
+
+
+					//SqlDataAdapter da = new() { SelectCommand = cmd };
+					//da.Fill(dt);
+
+					//DataRow drNotebook = dt.Tables[0].Rows[0];
+
+					//nbRtrn = new()
+					//{
+					//	CreatedBy	= (int)drNotebook["CreatedBy"],
+					//	CreatedOn	= DateTime.Parse(drNotebook["CreatedBy"].ToString()),
+					//	EditedOn	= DateTime.Parse(drNotebook["EditedOn"].ToString()),
+					//	Id			= (int)drNotebook["Id"],
+					//	Name		= (string)drNotebook["Name"],
+					//	PIN			= drNotebook["PIN"].ToString()
+					//};
+
+
+
+
+					//foreach(DataRow drEntry in dt.Tables[1].Rows)
+					//{
+					//	Entry entry = new()
+					//	{
+					//		Id			= drEntry["Id"].ToString(),
+					//		Title		= drEntry["Title"].ToString(),	// Title and Text are truncated for loading all entries.
+					//		Text		= drEntry["Text"].ToString(),	// Full values are retrieved when the entry is clicked.
+					//		CreatedBy	= (int)drEntry["CreatedBy"],
+					//		CreatedOn	= DateTime.Parse(drEntry["CreatedOn"].ToString())
+					//	};
+					//	nbRtrn.Entries.Add(entry);
+					//}
 				}
 			}
 
@@ -438,7 +496,7 @@ namespace myNotebooks.DataAccess
 					cmd.CommandType = CommandType.StoredProcedure;
 					cmd.Parameters.AddWithValue("@orgLevelId", orgLevelId);
 					cmd.Parameters.AddWithValue("parentId", parentId);
-					SqlDataAdapter adapter = new SqlDataAdapter() { SelectCommand = cmd };
+					SqlDataAdapter adapter = new () { SelectCommand = cmd };
 					adapter.Fill(dt);
 					foreach (DataRow row in dt.Rows)
 					{

@@ -58,7 +58,7 @@ namespace myNotebooks.objects
 				}
 				else
 				{
-					//using(frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "There is a problem with this entry. The Date can not be found.", "")) { frm.ShowDialog(); }
+					//using(frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "There is a problem with this entry. The CreatedOn can not be found.", "")) { frm.ShowDialog(); }
 				}
 			}
 			catch (Exception) { }
@@ -153,7 +153,7 @@ namespace myNotebooks.objects
 			foreach (var notebookName in Program.AllNotebookNames) { Program.AllNotebooks.Add(new Notebook(notebookName).Open()); }
 		}
 
-		// one-time code to convert Journal objects to Notebook objects
+		// one-time code to convert Journal objects to LocalNotebook objects
 		//public static List<Journal> AllJournals()
 		//{
 		//	List<Journal> jrnlReturn = new List<Journal>();
@@ -177,21 +177,21 @@ namespace myNotebooks.objects
 		{
 			if(clearPrevious) lbxToPopulate.Items.Clear();
 			List<Entry> tmpEntries = null;
-			tmpEntries = startDate.Length > 0 ? entries.Where(d => DateTime.Parse(d.Date.ToShortDateString()) >= DateTime.Parse(startDate)).ToList() : entries;
-			tmpEntries = endDate.Length > 0 ? tmpEntries.Where(d => DateTime.Parse(d.Date.ToShortDateString()) <= DateTime.Parse(endDate)).ToList() : tmpEntries;
+			tmpEntries = startDate.Length > 0 ? entries.Where(d => DateTime.Parse(d.CreatedOn.ToShortDateString()) >= DateTime.Parse(startDate)).ToList() : entries;
+			tmpEntries = endDate.Length > 0 ? tmpEntries.Where(d => DateTime.Parse(d.CreatedOn.ToShortDateString()) <= DateTime.Parse(endDate)).ToList() : tmpEntries;
 
 			if(labelFilter.Length > 0)
 			{
 				tmpEntries = tmpEntries.Where(e => e.Labels.Contains(labelFilter)).ToList();
 			}
-
+			
 			switch (SortBy)
 			{
 				case 0: 
-					tmpEntries.Sort((x, y) => -x.Date.CompareTo(y.Date));
+					tmpEntries.Sort((x, y) => -x.CreatedOn.CompareTo(y.CreatedOn));
 					break;
 				case 1:
-					tmpEntries.Sort((x, y) => -x.LastEditedOn.CompareTo(y.LastEditedOn));
+					tmpEntries.Sort((x, y) => -x.EditedOn.CompareTo(y.EditedOn));
 					break;
 				case 2:
 					tmpEntries.Sort((x, y) => x.Title.CompareTo(y.Title));

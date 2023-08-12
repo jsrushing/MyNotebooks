@@ -58,13 +58,13 @@ namespace myNotebooks.subforms
 				lblCreatedOn.Visible = true;
 				lblEditedOn.Visible = true;
 
-				lblCreatedOn.Text = this.Entry.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]);
-				lblEditedOn.Text = this.Entry.LastEditedOn < new DateTime(2000, 1, 1) ? "" : this.Entry.LastEditedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]);
+				lblCreatedOn.Text = this.Entry.CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]);
+				lblEditedOn.Text = this.Entry.EditedOn  < new DateTime(2000, 1, 1) ? "" : this.Entry.EditedOn .ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]);
 
 				if (PreserveOriginalText)
 				{
 					OriginalText_Full = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Editing"],
-						this.Entry.Date.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), this.Entry.Title, this.Entry.Text);
+						this.Entry.CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), this.Entry.Title, this.Entry.Text);
 
 					OriginalEntryLength = OriginalText_Full.Length - 1;
 					OriginalText_Full = OriginalText_Full.Substring(OriginalText_Full.Length - OriginalEntryLength + 1);
@@ -227,7 +227,7 @@ namespace myNotebooks.subforms
 						this.Entry.Title = txtNewEntryTitle.Text.Trim();
 						this.Entry.Labels = LabelsManager.CheckedLabels_Get(clbLabels);
 						this.Entry.RTF = rtbNewEntry.Rtf;
-						Entry.LastEditedOn = DateTime.Now;
+						Entry.EditedOn  = DateTime.Now;
 
 					}
 					else
