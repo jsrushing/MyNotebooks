@@ -113,7 +113,7 @@ namespace myNotebooks.objects
 
 							using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "The following labels were found in the " +
 								"imported notebook but are not in your main labels list." + Environment.NewLine + lbls + Environment.NewLine + 
-								"Do you want to add themt?", "New Labels Found", parent))
+								"Do you want to add them?", "New Labels Found", parent))
 							{
 								frm.ShowDialog();
 								if (frm.Result == frmMessage.ReturnResult.Yes) { await LabelsManager.AddLabel(newLabels.ToArray()); }
@@ -129,17 +129,19 @@ namespace myNotebooks.objects
 
 		public static async Task PopulateAllNotebookNames(List<string> notebookNames = null)
 		{
-			Program.AllNotebookNames.Clear();	
-			
-			if(notebookNames != null)
+
+			if (notebookNames != null)
 			{
 				//Program.AllNotebookNames.AddRange(notebookNames); << DOESN'T WORK ??	
-				foreach(string notebookName in notebookNames) { Program.AllNotebookNames.Add(notebookName); }
+				foreach (string notebookName in notebookNames) { Program.AllNotebookNames.Add(notebookName); }
 			}
 			else
 			{
-				List<string> s = Directory.GetFiles(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"]).ToList();
-				Program.AllNotebookNames.AddRange(s.Select(s => s[(s.LastIndexOf("\\") + 1)..]));
+				Program.AllNotebookNames.Clear();
+				Program.User.Notebooks.Select(item => item.Name).ToList();
+
+				//List<string> s = Directory.GetFiles(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"]).ToList();
+				//Program.AllNotebookNames.AddRange(s.Select(s => s[(s.LastIndexOf("\\") + 1)..]));
 			}
 		} 
 

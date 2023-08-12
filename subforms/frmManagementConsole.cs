@@ -40,7 +40,6 @@ namespace myNotebooks.subforms
 		private const string CreateUserButton_UpdateUser = "Update User";
 		private const string CreateUserButton_UpdatePermissions = "Update Permissions";
 		private ListBox CurrentMouseListBox;
-		private ListBox LastClickedListBox;
 		private GroupBox CurrentMouseGroupBox;
 		private frmMain.OrgLevelTypes CurrentType;
 
@@ -167,8 +166,8 @@ namespace myNotebooks.subforms
 
 			if (ds.Tables.Count > 0 & ds.Tables[0].Rows.Count > 0)
 			{
-				CurrentUser = new(ds.Tables[0]);	
-				CurrentUser = CurrentUser == null ?  Program.User.ContainsChild(CurrentUser) ? CurrentUser : null : CurrentUser;
+				CurrentUser = new(ds.Tables[0]);
+				CurrentUser = CurrentUser == null ? Program.User.ContainsChild(CurrentUser) ? CurrentUser : null : CurrentUser;
 			}
 
 			if (CurrentUser != null)
@@ -338,7 +337,7 @@ namespace myNotebooks.subforms
 
 			if (e.Button == MouseButtons.Right)
 			{
-				if(CurrentMouseListBox.SelectedItem != null)
+				if (CurrentMouseListBox.SelectedItem != null)
 				{
 					var vMouseListSelectedItemName = (CurrentMouseListBox.SelectedItem as ListItem).Name.Trim();
 					var vGrp = CurrentMouseGroupBox as GroupBox;
@@ -354,7 +353,7 @@ namespace myNotebooks.subforms
 					}
 
 					ListBox parentList = (ListBox)vMouseListBoxGroup.Controls[0];
-				
+
 					mnuCreateNew.Text = "&Create New " + vMouseListBoxGroup.Name.Replace("grp", "").Replace("_MU", "") +
 												(vParentListSelectedItem.Length > 0 ? " in '" + vParentListSelectedItem.Trim() + "'" : "'");
 					mnuCreateNew.Enabled = CurrentMouseListBox.Name.EndsWith("_MU");
@@ -376,7 +375,7 @@ namespace myNotebooks.subforms
 					mnuCreateNew.Enabled = false;
 					mnuAssignUser.Enabled = false;
 					mnuEdit.Enabled = false;
-					mnuDelete.Enabled= false;
+					mnuDelete.Enabled = false;
 					mnuManageNotebooks.Visible = false;
 				}
 			}
@@ -387,7 +386,9 @@ namespace myNotebooks.subforms
 		{
 			CurrentMouseListBox = (ListBox)sender;
 			CurrentMouseGroupBox = (GroupBox)CurrentMouseListBox.Parent;
+
 			frmMain.OrgLevelTypes choice;
+
 			var typeName = CurrentMouseGroupBox.Name.Replace("grp", "").Replace("_MU", "").Replace("_CU", "");
 			if (Enum.TryParse(typeName, out choice)) { CurrentType = choice; }
 
@@ -470,6 +471,21 @@ namespace myNotebooks.subforms
 
 		private void mnuDelete_Click(object sender, EventArgs e)
 		{
+
+		}
+
+		private void mnuManageNotebooks_Click(object sender, EventArgs e)
+		{
+			// Get notebooks by ParentId (group id).
+			var groupId = (CurrentMouseListBox.SelectedItem as ListItem).Id;
+			List<Notebook> notebooks = DbAccess.GetNotebookNamesAndIdsForGroup(groupId);
+			var tmpProgramUser = Program.User;
+
+			if (CurrentMouseListBox.Name.EndsWith("MU"))
+			{ tmpProgramUser = Program.User; }
+			else { tmpProgramUser = CurrentUser; }
+
+
 
 		}
 

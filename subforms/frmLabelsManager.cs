@@ -120,7 +120,7 @@ namespace myNotebooks.subforms
 		private List<Notebook> GetSelectedNotebooks()
 		{
 			SelectedNotebooks.Clear();
-			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedNotebooks) { SelectedNotebooks.Add(new Notebook(kvp.Key, "", this).Open()); }
+			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedNotebooks) { SelectedNotebooks.Add(new Notebook(kvp.Key, "").Open()); }
 			return SelectedNotebooks;
 		}
 
@@ -319,7 +319,7 @@ namespace myNotebooks.subforms
 				notebookName = notebookName.Substring(4, notebookName.Length - 5);
 				Utilities.SetProgramPIN(notebookName);
 
-				notebooksToEdit.Add(new Notebook(notebookName, null, this).Open());
+				notebooksToEdit.Add(new Notebook(notebookName, null).Open());
 				sMsg += "in the notebook '" + notebookName + "'?";
 			}
 			else

@@ -4,6 +4,8 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Reflection;
 using System.Text;
 
 namespace myNotebooks.objects
@@ -19,6 +21,15 @@ namespace myNotebooks.objects
 		public bool IfLocalOnly_DisallowCloud { get; set; }
 
 		public NotebookSettings() { }
+
+		public NotebookSettings(DataRow dr) 
+		{
+			foreach (PropertyInfo sPropertyName in typeof(Company).GetProperties())
+			{
+				var value = dr.Field<bool>(sPropertyName.Name);
+				this.GetType().GetProperty(sPropertyName.Name).SetValue(this, value);
+			}
+		}
 
 
 	}

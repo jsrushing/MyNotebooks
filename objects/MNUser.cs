@@ -33,6 +33,7 @@ namespace myNotebooks.objects
 		public List<Account>	Accounts = new();
 		public List<Company>	Companies = new();
 		public List<MNUser>		Children = new();
+		public List<Notebook>	Notebooks = new();
 
 		public List<UserAssignments> Assignments { get; set; } = new();
 		public UserPermissions		Permissions { get; set; } = new();

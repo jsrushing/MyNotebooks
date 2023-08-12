@@ -288,42 +288,43 @@ namespace myNotebooks.subforms
 			// 
 			mnuContextTree.Items.AddRange(new ToolStripItem[] { mnuAssignUser, mnuCreateNew, mnuEdit, mnuDelete, mnuManageNotebooks });
 			mnuContextTree.Name = "mnuContextTree";
-			mnuContextTree.Size = new System.Drawing.Size(181, 136);
+			mnuContextTree.Size = new System.Drawing.Size(179, 114);
 			// 
 			// mnuAssignUser
 			// 
 			mnuAssignUser.Name = "mnuAssignUser";
-			mnuAssignUser.Size = new System.Drawing.Size(180, 22);
+			mnuAssignUser.Size = new System.Drawing.Size(178, 22);
 			mnuAssignUser.Text = "&Assign to User";
 			mnuAssignUser.Click += this.mnuAssignUser_Click;
 			// 
 			// mnuCreateNew
 			// 
 			mnuCreateNew.Name = "mnuCreateNew";
-			mnuCreateNew.Size = new System.Drawing.Size(180, 22);
+			mnuCreateNew.Size = new System.Drawing.Size(178, 22);
 			mnuCreateNew.Text = "Create &New";
 			mnuCreateNew.Click += this.mnuCreateNew_Click;
 			// 
 			// mnuEdit
 			// 
 			mnuEdit.Name = "mnuEdit";
-			mnuEdit.Size = new System.Drawing.Size(180, 22);
+			mnuEdit.Size = new System.Drawing.Size(178, 22);
 			mnuEdit.Text = "&Edit";
 			mnuEdit.Click += this.mnuEdit_Click;
 			// 
 			// mnuDelete
 			// 
 			mnuDelete.Name = "mnuDelete";
-			mnuDelete.Size = new System.Drawing.Size(180, 22);
+			mnuDelete.Size = new System.Drawing.Size(178, 22);
 			mnuDelete.Text = "&Delete";
 			mnuDelete.Click += this.mnuDelete_Click;
 			// 
 			// mnuManageNotebooks
 			// 
 			mnuManageNotebooks.Name = "mnuManageNotebooks";
-			mnuManageNotebooks.Size = new System.Drawing.Size(180, 22);
+			mnuManageNotebooks.Size = new System.Drawing.Size(178, 22);
 			mnuManageNotebooks.Text = "&Manage Notebooks";
 			mnuManageNotebooks.Visible = false;
+			mnuManageNotebooks.Click += this.mnuManageNotebooks_Click;
 			// 
 			// grpGroup_MU
 			// 

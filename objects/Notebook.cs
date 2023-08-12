@@ -25,8 +25,15 @@ namespace myNotebooks
 	[Serializable]
 	public class Notebook
 	{
-		public string				Name { get; set; }
-		public DateTime				LastSaved { get; set; }
+		public int		CreatedBy { get; set; }
+		public DateTime	CreatedOn { get; set; }
+		public string	Description { get; set; }
+		public DateTime EditedOn { get; set; }
+		public int		Id { get; set; }
+		public string	Name { get; set; }
+		public int		ParentId { get; set; }
+		public string	RTF { get; set; }
+
 		public string				FileName { get; set; }
 
 		public List<Entry>			Entries = new List<Entry>();
@@ -36,7 +43,7 @@ namespace myNotebooks
 		public bool					BackupCompleted { get; private set; }
 		public bool					Saved { get; private set; }
 
-		public Notebook(string _name = null, string _fileName = null, Form thisParent = null) 
+		public Notebook(string _name = null, string _fileName = null) 
         {
             if(_name != null)
             {

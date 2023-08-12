@@ -17,6 +17,8 @@ using myNotebooks;
 using System.Windows.Forms;
 using myNotebooks.subforms;
 using MyNotebooks.objects;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+using System.Runtime.CompilerServices;
 
 namespace myNotebooks.DataAccess
 {
@@ -111,6 +113,33 @@ namespace myNotebooks.DataAccess
 				}
 			}
 			catch (Exception ex) { var v = ex.Message; }
+
+			return iRtrn;
+		}
+
+		public static int CreateNotebook(int createdBy, DateTime createdOn, string description, string name, int parentId, string RTF)
+		{
+			int iRtrn = 0;
+
+			using (SqlConnection conn = new(connString))
+			{
+				conn.Open();
+
+				using (SqlCommand cmd = new("sp_CreateNotebook", conn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					cmd.Parameters.AddWithValue("@createdBy", createdBy);
+					cmd.Parameters.AddWithValue("@createdOn", createdOn);
+					cmd.Parameters.AddWithValue("@description", description);
+					cmd.Parameters.AddWithValue("@name", name);
+					cmd.Parameters.AddWithValue("@parentId", parentId);
+					cmd.Parameters.AddWithValue("@rtf", RTF);
+					cmd.Parameters.Add("@rtnVal");
+					cmd.Parameters["@retVal"].Direction= ParameterDirection.ReturnValue;
+					cmd.ExecuteNonQuery();
+					iRtrn = Convert.ToInt32(cmd.Parameters["@retVal"].Value.ToString());
+				}
+			}
 
 			return iRtrn;
 		}
@@ -315,6 +344,80 @@ namespace myNotebooks.DataAccess
 					cmd.Parameters.AddWithValue("@userId", userId);
 					using (SqlDataAdapter da = new() { SelectCommand = cmd }) { da.Fill(dt); }
 					foreach (DataRow row in dt.Rows) { lstReturn.Add(new(row)); }
+				}
+			}
+
+			return lstReturn;
+		}
+
+		public static Notebook GetNotebook(int notebookId) 
+		{
+			Notebook nbRtrn = null;
+
+			using (SqlConnection conn = new(connString))
+			{
+				conn.Open();
+
+				using (SqlCommand cmd = new("sp_GetNotebook", conn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					cmd.Parameters.AddWithValue("@notebookId", notebookId);
+
+					using (SqlDataReader reader = cmd.ExecuteReader())
+					{
+						if (reader.HasRows)
+						{
+							while (reader.Read())
+							{
+								nbRtrn = new Notebook()
+								{
+									CreatedBy	= reader.GetInt32	("CreatedBy"),
+									CreatedOn	= reader.GetDateTime("CreatedOn"),
+									Description = reader.GetString	("Description"),
+									EditedOn	= reader.GetDateTime("EditedOn"),
+									Id			= reader.GetInt32	("Id"),
+									Name		= reader.GetString	("Name"),
+									ParentId	= reader.GetInt32	("ParentId"),
+									RTF			= reader.GetString	("RTF")
+								};
+							}
+						}
+					}
+				}
+			}
+
+			return nbRtrn;
+		}
+
+		public static List<Notebook> GetNotebookNamesAndIdsForGroup(int groupId)
+		{
+			List<Notebook> lstReturn = new List<Notebook>();
+
+			using (SqlConnection conn = new(connString))
+			{
+				conn.Open();
+
+				using (SqlCommand cmd = new("sp_GetNotebooks", conn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					cmd.Parameters.AddWithValue("@groupId", groupId);
+					
+					using(SqlDataReader  reader = cmd.ExecuteReader())
+					{
+						if (reader.HasRows)
+						{
+							while (reader.Read())
+							{
+								Notebook nb = new Notebook() 
+								{
+									Id	 = reader.GetInt32	("Id"),
+									Name = reader.GetString	("Name")
+								};
+
+								lstReturn.Add(nb);
+							}	
+						}
+					}
 				}
 			}
 

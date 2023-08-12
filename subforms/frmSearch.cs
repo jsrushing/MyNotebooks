@@ -91,7 +91,7 @@ namespace myNotebooks.subforms
 			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedNotebooks)
 			{
 				Utilities.SetProgramPIN(kvp.Key);
-				nbFound = new Notebook(kvp.Key.Replace(" (****)", ""), "", this).Open().Search(so);
+				nbFound = new Notebook(kvp.Key.Replace(" (****)", ""), "").Open().Search(so);
 				await Utilities.PopulateEntries(lstFoundEntries, nbFound, "", "", "", false, 0, true);
 
 				if(nbFound.Count > 0 )
@@ -126,7 +126,7 @@ namespace myNotebooks.subforms
 			if (selectedIndices.Count() > 1) { selectedIndices = selectedIndices.Except(ThreeSelections).ToList(); }
 			kvp = NotebookBoundariesDict.FirstOrDefault(p => p.Value >= selectedIndices[0]);
 			Utilities.SetProgramPIN(kvp.Key);
-			return kvp.Key == "" ? null : new Notebook(kvp.Key, "", this).Open();
+			return kvp.Key == "" ? null : new Notebook(kvp.Key, "").Open();
 		}
 
 		private void lblSeparator_MouseMove(object sender, MouseEventArgs e)
@@ -192,7 +192,7 @@ namespace myNotebooks.subforms
 		{
 			this.Cursor = Cursors.WaitCursor;
 			Entry fe = lstFoundEntries.SelectedIndex == 0 ? FoundEntries[0] : FoundEntries[lstFoundEntries.SelectedIndex / 4];
-			Notebook nb = new Notebook(fe.NotebookName, "", this).Open();
+			Notebook nb = new Notebook(fe.NotebookName, "").Open();
 			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
 
 			using (frmNewEntry frm = new frmNewEntry(this, nb, fe, mnu.Text.ToLower().StartsWith("preserve")))
@@ -223,7 +223,7 @@ namespace myNotebooks.subforms
 
 				if (frm.Result == frmMessage.ReturnResult.Yes)
 				{
-					Notebook nb = new Notebook(fe.NotebookName, "", this).Open();
+					Notebook nb = new Notebook(fe.NotebookName, "").Open();
 
 					if (nb != null)
 					{

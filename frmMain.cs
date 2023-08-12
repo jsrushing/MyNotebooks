@@ -290,7 +290,7 @@ namespace myNotebooks.subforms
 
 			#endregion
 
-			CheckForSystemDirectories();    // am I keeping system directories now that the cloud is working? Why or why not?
+			//CheckForSystemDirectories();    // Am I keeping system directories now that the cloud is working? Why or why not? 08/11/23 - No. Cloud only (db) from this date.
 
 			//using (frmAzurePwd frm = new frmAzurePwd(this, frmAzurePwd.Mode.AskingForKey))
 			//{ if (Program.AzurePassword.Length > 0) { frm.Close(); } }
@@ -322,7 +322,6 @@ namespace myNotebooks.subforms
 				//await cs.SynchWithCloud(false, null, true);
 			}
 
-			await Utilities.PopulateAllNotebookNames();
 			LoadNotebooks();
 
 			if (ddlNotebooks.Items.Count == 0)
@@ -366,7 +365,7 @@ namespace myNotebooks.subforms
 			lblWrongPin.Visible = false;
 			if (CurrentNotebook != null && Program.DictCheckedNotebooks.Count == 1 && Program.DictCheckedNotebooks.Keys.Contains(CurrentNotebook.Name)) { Program.DictCheckedNotebooks.Clear(); }
 			if (Program.DictCheckedNotebooks.Count == 0) { Program.DictCheckedNotebooks.Add(ddlNotebooks.Text, txtJournalPIN.Text); }
-			CurrentNotebook = new Notebook(ddlNotebooks.Text, null, this).Open(true);
+			CurrentNotebook = new Notebook(ddlNotebooks.Text, null).Open(true);
 			var wrongPIN = true;
 
 			if (CurrentNotebook != null)
@@ -392,7 +391,7 @@ namespace myNotebooks.subforms
 						var nbName = CurrentNotebook.Name;
 						CloudSynchronizer cs = new CloudSynchronizer();
 						await cs.SynchWithCloud(false, CurrentNotebook);
-						Notebook curNotebook = new Notebook(nbName, nbPath, this).Open();
+						Notebook curNotebook = new Notebook(nbName, nbPath).Open();
 
 						if (curNotebook == null)    // the sync deleted the file
 						{ ddlNotebooks.Items.Remove(nbName); }
