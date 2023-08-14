@@ -610,6 +610,36 @@ namespace myNotebooks.subforms
 					break;
 				}
 			}
+
+			//GroupBox box = new();
+			//List<ListBox> lstBoxes = new();
+
+			//if (populateMU)
+			//{
+			//	foreach (ListBox lb in OrgLevelLists_MU) { lb.Items.Clear(); }
+			//	box = OrgLevelGroups_MU.Where(e => e.Enabled).FirstOrDefault();
+			//	lstBoxes = box.Controls.Cast<ListBox>().ToList();
+			//	//var highestLevel = CurrentUser.Companies;
+			//	//if(highestLevel == null) { highestLevel = CurrentUser.Accounts; }
+			//	//if(highestLevel == null) { highestLevel = CurrentUser.Departments; }
+			//	//if(!highestLevel) { highestLevel = CurrentUser.Groups}
+
+			//	//Type type = null;
+			//	//type = 
+
+			//	//var listItems = CurrentUser.Companies;
+
+			//	lstBoxes[0].Items.AddRange(DbAccess.GetTopLevelItemsForUser(Program.User.UserId).ToArray());
+			//}
+
+			//if (populateCU)
+			//{
+			//	foreach (ListBox lb in OrgLevelLists_CU) { lb.Items.Clear(); }
+			//	box = OrgLevelGroups_CU.Where(e => e.Enabled).FirstOrDefault();
+			//	lstBoxes = box.Controls.Cast<ListBox>().ToList();
+			//	lstBoxes[0].Items.AddRange(DbAccess.GetTopLevelItemsForUser(CurrentUser.UserId).ToArray());
+			//}
+
 		}
 
 		private void ResetForm(bool resize = true)
@@ -643,6 +673,20 @@ namespace myNotebooks.subforms
 					lbToPopulate.Items.Add(ol);
 				}
 			}
+
+			//ListBox lb = (ListBox)sender;
+
+			//if (lb.SelectedItem != null)
+			//{
+			//	var v2 = ((ListItem)lb.SelectedItem).Id;
+			//	ListBox lbToPopulate = GetNextListBox((ListBox)sender);
+			//	ListBoxes_ClearBelow(lbToPopulate);
+			//	//lbToPopulate.Items.Clear();
+
+			//	foreach (ListItem li in DbAccess.GetOrgLevelChildren(Convert.ToInt16(lbToPopulate.Tag), v2))
+			//	{ if (!ListContains(lbToPopulate, li)) { lbToPopulate.Items.Add(li); } }
+			//}
+
 		}
 
 		private void SetContextMenus(TreeNode tn)

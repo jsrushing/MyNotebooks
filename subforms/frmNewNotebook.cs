@@ -47,6 +47,14 @@ namespace myNotebooks.subforms
 			LocalNotebook.CreatedOn = DateTime.Now;
 			//Program.PIN = txtPIN.Text;
 			this.Hide();
+
+			//NotebookSettings nbs = LocalNotebook.Settings;
+			//this.LocalNotebook = new Notebook(txtName.Text, null);
+			//LocalNotebook.Settings = nbs;
+			//LocalNotebook.PIN = txtPIN.Text;
+			//LocalNotebook.Description = txtDescription.Text;
+			////Program.PIN = txtPIN.Text;
+			//this.Hide();
 		}
 
 		private void lblShowPIN_Click(object sender, EventArgs e)
