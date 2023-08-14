@@ -326,23 +326,25 @@ namespace myNotebooks.subforms
 
 			if (ddlNotebooks.Items.Count == 0)
 			{
-				using (frmNewNotebook frm = new frmNewNotebook(this))
-				{
-					frm.ShowDialog();
+				using(frmManagementConsole frm = new(this, true)) { frm.ShowDialog(); }
 
-					if (frm.LocalNotebook != null)
-					{
-						await frm.LocalNotebook.Create();
+				//using (frmNewNotebook frm = new frmNewNotebook(this))
+				//{
+				//	frm.ShowDialog();
 
-						LoadNotebooks();
-					}
-					else
-					{
-						using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.Message, "At least one notebook must exist. " +
-							"Please re-open the program and create a notebook.", "One LocalNotebook Must Exist", this))
-						{ frm2.ShowDialog(); this.Close(); }
-					}
-				}
+				//	if (frm.LocalNotebook != null)
+				//	{
+				//		await frm.LocalNotebook.Create();
+
+				//		LoadNotebooks();
+				//	}
+				//	else
+				//	{
+				//		using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.Message, "At least one notebook must exist. " +
+				//			"Please re-open the program and create a notebook.", "One LocalNotebook Must Exist", this))
+				//		{ frm2.ShowDialog(); this.Close(); }
+				//	}
+				//}
 			}
 
 			this.Cursor = Cursors.Default;
@@ -740,8 +742,8 @@ namespace myNotebooks.subforms
 
 				if (frm.LocalNotebook != null && frm.LocalNotebook.Name.Length > 0)
 				{
-					frm.LocalNotebook.EditedOn = DateTime.Now;
-					frm.LocalNotebook.FileName = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + frm.LocalNotebook.Name;
+					//frm.LocalNotebook.EditedOn = DateTime.Now;
+					//frm.LocalNotebook.FileName = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + frm.LocalNotebook.Name;
 					await frm.LocalNotebook.Create();
 					//await Utilities.PopulateAllNotebookNames();
 					LoadNotebooks();

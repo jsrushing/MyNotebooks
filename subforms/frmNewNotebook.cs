@@ -3,6 +3,7 @@
  */
 using System;
 using System.Windows.Forms;
+using myNotebooks.DataAccess;
 using myNotebooks.objects;
 
 namespace myNotebooks.subforms
@@ -36,11 +37,14 @@ namespace myNotebooks.subforms
 
 		private void btnOk_Click(object sender, EventArgs e)
 		{
-			NotebookSettings nbs = LocalNotebook.Settings;
-			this.LocalNotebook = new Notebook(txtName.Text, null);
-			LocalNotebook.Settings = nbs;
+			
+			this.LocalNotebook = new Notebook();
+			//NotebookSettings nbs = LocalNotebook.Settings;
+			//LocalNotebook.Settings = nbs;
 			LocalNotebook.PIN = txtPIN.Text;
 			LocalNotebook.Description = txtDescription.Text;
+			LocalNotebook.Name = txtName.Text;
+			LocalNotebook.CreatedOn = DateTime.Now;
 			//Program.PIN = txtPIN.Text;
 			this.Hide();
 		}

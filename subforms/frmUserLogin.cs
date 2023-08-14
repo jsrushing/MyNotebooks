@@ -1,18 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using Encryption;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using myNotebooks.DataAccess;
-using myNotebooks.objects;
-using myNotebooks;
-using System.Reflection;
-using myNotebooks.subforms;
 
 namespace myNotebooks.subforms
 {
@@ -26,6 +15,7 @@ namespace myNotebooks.subforms
 		private void btnOk_Click(object sender, EventArgs e)
 		{
 			// look up the user
+			Program.PIN = txtPwd.Text;
 			DataSet ds = DbAccess.GetUser(txtUserName.Text, txtPwd.Text);
 
 			if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)    // the user was found

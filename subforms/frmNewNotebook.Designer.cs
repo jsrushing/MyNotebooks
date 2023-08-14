@@ -83,7 +83,7 @@ namespace myNotebooks.subforms
 			// 
 			// btnCancel
 			// 
-			btnCancel.Location = new System.Drawing.Point(164, 187);
+			btnCancel.Location = new System.Drawing.Point(164, 152);
 			btnCancel.Name = "btnCancel";
 			btnCancel.Size = new System.Drawing.Size(75, 23);
 			btnCancel.TabIndex = 5;
@@ -94,7 +94,7 @@ namespace myNotebooks.subforms
 			// btnOk
 			// 
 			btnOk.Enabled = false;
-			btnOk.Location = new System.Drawing.Point(21, 187);
+			btnOk.Location = new System.Drawing.Point(21, 152);
 			btnOk.Name = "btnOk";
 			btnOk.Size = new System.Drawing.Size(75, 23);
 			btnOk.TabIndex = 4;
@@ -106,7 +106,6 @@ namespace myNotebooks.subforms
 			// 
 			grp1.Controls.Add(txtDescription);
 			grp1.Controls.Add(label3);
-			grp1.Controls.Add(btnSettings);
 			grp1.Controls.Add(lblNameExists);
 			grp1.Controls.Add(lblShowPIN);
 			grp1.Controls.Add(txtPIN);
@@ -117,7 +116,7 @@ namespace myNotebooks.subforms
 			grp1.Controls.Add(label2);
 			grp1.Location = new System.Drawing.Point(12, -1);
 			grp1.Name = "grp1";
-			grp1.Size = new System.Drawing.Size(257, 222);
+			grp1.Size = new System.Drawing.Size(257, 183);
 			grp1.TabIndex = 6;
 			// 
 			// txtDescription
@@ -141,7 +140,7 @@ namespace myNotebooks.subforms
 			// btnSettings
 			// 
 			btnSettings.Enabled = false;
-			btnSettings.Location = new System.Drawing.Point(78, 147);
+			btnSettings.Location = new System.Drawing.Point(77, 248);
 			btnSettings.Name = "btnSettings";
 			btnSettings.Size = new System.Drawing.Size(120, 23);
 			btnSettings.TabIndex = 56;
@@ -178,8 +177,9 @@ namespace myNotebooks.subforms
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			CancelButton = btnCancel;
-			ClientSize = new System.Drawing.Size(284, 226);
+			ClientSize = new System.Drawing.Size(284, 187);
 			Controls.Add(grp1);
+			Controls.Add(btnSettings);
 			FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			MaximizeBox = false;
 			MinimizeBox = false;

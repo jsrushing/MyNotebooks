@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using myNotebooks.DataAccess;
 using myNotebooks.subforms;
+using MyNotebooks.objects;
 using Newtonsoft.Json.Linq;
 
 namespace myNotebooks.objects
@@ -32,6 +33,9 @@ namespace myNotebooks.objects
 		public List<Department> Departments = new();
 		public List<Account>	Accounts = new();
 		public List<Company>	Companies = new();
+
+		public List<OrgLevel>	OrgLevels = new();
+
 		public List<MNUser>		Children = new();
 		public List<Notebook>	Notebooks = new();
 
@@ -88,11 +92,6 @@ namespace myNotebooks.objects
 						if (setProp) { this.GetType().GetProperty(sPropertyName.Name).SetValue(this, value); }
 						setProp = true;
 					}
-
-					//this.GetGroups();
-					//this.GetAccounts();
-					//this.GetDepartments();
-					//this.GetCompanies();
 				}
 				catch (Exception ex) 
 				{
@@ -104,6 +103,7 @@ namespace myNotebooks.objects
 				}
 			}
 
+			this.GetAllOrgLevels();
 			if(dt.Rows.Count > 1) { AddChildUsers(dt); }
 		}
 
@@ -174,13 +174,22 @@ namespace myNotebooks.objects
 
 		public bool Equals(MNUser userToCompare) { return this.UserId == userToCompare.UserId; }
 
-		private void GetGroups() { this.Groups = DbAccess.GetGroups(this.UserId); }
+		public void GetAllOrgLevels()
+		{
+			DataSet dataSet = DbAccess.GetUserOrgLevels(this.UserId);
 
-		private void GetDepartments() { this.Departments = DbAccess.GetDepartments(this.UserId); }
+			for (int i = 0; i < dataSet.Tables[0].Rows.Count; i++)
+			{ this.OrgLevels.Add(new(frmMain.OrgLevelTypes.Company, dataSet.Tables[0], i)); }	//  this.Companies.Add(new(dataSet.Tables[0], i)); }
 
-		private void GetAccounts() { this.Accounts = DbAccess.GetAccounts(this.UserId); }
+			for (int i = 0; i < dataSet.Tables[1].Rows.Count; i++)
+			{ this.OrgLevels.Add(new(frmMain.OrgLevelTypes.Account, dataSet.Tables[1], i)); }   // this.Accounts.Add(new(dataSet.Tables[1], i)); }
 
-		private void GetCompanies() { this.Companies = DbAccess.GetCompanies(this.UserId); }
+			for (int i = 0; i < dataSet.Tables[2].Rows.Count; i++)
+			{ this.OrgLevels.Add(new(frmMain.OrgLevelTypes.Department, dataSet.Tables[2], i)); }   // this.Departments.Add(new(dataSet.Tables[2], i)); }
+
+			for (int i = 0; i < dataSet.Tables[3].Rows.Count; i++)
+			{ this.OrgLevels.Add(new(frmMain.OrgLevelTypes.Group, dataSet.Tables[3], i)); }   // this.Groups.Add(new(dataSet.Tables[3], i)); }
+		}
 
 		public void SaveAssignments() { DbAccess.CreateMNUserAssignments(this); }
 

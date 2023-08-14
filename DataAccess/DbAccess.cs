@@ -27,6 +27,30 @@ namespace myNotebooks.DataAccess
 //		private static string connString = "Server=mynotebooksserver.database.windows.net;Database=myNotebooks;user id=mydb_admin;password=cloud_Bringer1!";
 		private static string connString = "Server=FORRESTSTNW;Database=MyNotebooks;Trusted_Connection = true";
 
+		public static bool CreateLabel(int notebookId, string label)
+		{
+			bool bRtrn = false;
+
+			try
+			{
+				using (SqlConnection conn = new(connString))
+				{
+					conn.Open();
+					using (SqlCommand cmd = new SqlCommand("sp_DeleteUser", conn))
+					{
+						cmd.CommandType = CommandType.StoredProcedure;
+						cmd.Parameters.AddWithValue("@notebookId", notebookId);
+						cmd.Parameters.AddWithValue("@label", label);
+						cmd.ExecuteNonQuery();
+					}
+				}
+				bRtrn = true;
+			}
+			catch { }
+
+			return bRtrn;
+		}
+
 		public static int			CreateMNUser(MNUser user)
 		{
 			int iRtrn = 0;
@@ -117,7 +141,7 @@ namespace myNotebooks.DataAccess
 			return iRtrn;
 		}
 
-		public static int CreateNotebook(Notebook nb)
+		public static int			CreateNotebook(Notebook nb)
 		{
 			int iRtrn = 0;
 
@@ -132,8 +156,8 @@ namespace myNotebooks.DataAccess
 					cmd.Parameters.AddWithValue("@createdOn",	nb.CreatedOn);
 					cmd.Parameters.AddWithValue("@description", nb.Description);
 					cmd.Parameters.AddWithValue("@name",		nb.Name);
-					cmd.Parameters.AddWithValue("@pin",			nb.PIN);
 					cmd.Parameters.AddWithValue("@parentId",	nb.ParentId);
+					cmd.Parameters.AddWithValue("@pin",			nb.PIN);
 					cmd.Parameters.Add("@rtnVal");
 					cmd.Parameters["@retVal"].Direction= ParameterDirection.ReturnValue;
 					cmd.ExecuteNonQuery();
@@ -144,11 +168,32 @@ namespace myNotebooks.DataAccess
 			return iRtrn;
 		}
 
-		public static int CreateNotebookEntry(Entry entry)
+		public static int			CreateNotebookEntry(Entry entry)
 		{
 			int iRtrn = 0;
 
+			using (SqlConnection conn = new(connString))
+			{
+				conn.Open();
 
+				using (SqlCommand cmd = new("sp_CreateNotebookEntry", conn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					cmd.Parameters.AddWithValue("@createdBy", entry.CreatedBy);
+					cmd.Parameters.AddWithValue("@createdOn", entry.CreatedOn);
+					cmd.Parameters.AddWithValue("@editedOn", entry.EditedOn);
+					cmd.Parameters.AddWithValue("@id", entry.Id);
+					cmd.Parameters.AddWithValue("@notebookName", entry.NotebookName);
+					cmd.Parameters.AddWithValue("@notebookId", entry.NotebookId);
+					cmd.Parameters.AddWithValue("@RTF", entry.RTF);
+					cmd.Parameters.AddWithValue("@text", entry.Text);
+					cmd.Parameters.AddWithValue("@title", entry.Title);
+					cmd.Parameters.Add("@rtnVal");
+					cmd.Parameters["@retVal"].Direction = ParameterDirection.ReturnValue;
+					cmd.ExecuteNonQuery();
+					iRtrn = Convert.ToInt32(cmd.Parameters["@retVal"].Value.ToString());
+				}
+			}
 
 			return iRtrn;
 		}
@@ -250,6 +295,25 @@ namespace myNotebooks.DataAccess
 			return bRtrn;
 		}
 
+		public static DataSet GetUserOrgLevels(int userId)
+		{
+			DataSet ds = new();
+
+			using(SqlConnection conn = new(connString))
+			{
+				conn.Open();
+
+				using(SqlCommand cmd = new SqlCommand("sp_GetOrgLevelAssignmentsForUser", conn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					cmd.Parameters.AddWithValue("@userId", userId);
+					using (SqlDataAdapter da = new() { SelectCommand = cmd }) { da.Fill(ds); }
+				}
+			}
+
+			return ds;
+		}
+
 		public static List<ListItem> GetTopLevelItemsForUser(int userId)
 		{
 			//List<TreeNode> lstRtrn = new List<TreeNode>();	
@@ -279,91 +343,91 @@ namespace myNotebooks.DataAccess
 			return lstRtrn;
 		}
 
-		public static List<Company> GetCompanies(int userId)
-		{
-			List<Company> lstReturn = new List<Company>();
-			DataTable dt = new();
+		//public static List<Company> GetCompanies(int userId)
+		//{
+		//	List<Company> lstReturn = new List<Company>();
+		//	DataTable dt = new();
 
-			using (SqlConnection conn = new(connString))
-			{
-				conn.Open();
-				using (SqlCommand cmd = new("sp_GetCompanies"))
-				{
-					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@userId", userId);
-					using (SqlDataAdapter da = new() { SelectCommand = cmd }) { da.Fill(dt); }
-					foreach(DataRow row in dt.Rows) { lstReturn.Add(new(row)); }
-				}
-			}
+		//	using (SqlConnection conn = new(connString))
+		//	{
+		//		conn.Open();
+		//		using (SqlCommand cmd = new("sp_GetCompanies"))
+		//		{
+		//			cmd.CommandType = CommandType.StoredProcedure;
+		//			cmd.Parameters.AddWithValue("@userId", userId);
+		//			using (SqlDataAdapter da = new() { SelectCommand = cmd }) { da.Fill(dt); }
+		//			foreach(DataRow row in dt.Rows) { lstReturn.Add(new(row)); }
+		//		}
+		//	}
 
-			return lstReturn;
-		}
+		//	return lstReturn;
+		//}
 
-		public static List<Account> GetAccounts(int userId)
-		{
-			List<Account>lstReturn = new List<Account>();
-			DataTable dt = new();
+		//public static List<Account> GetAccounts(int userId)
+		//{
+		//	List<Account>lstReturn = new List<Account>();
+		//	DataTable dt = new();
 
-			using (SqlConnection conn = new(connString))
-			{
-				conn.Open();
-				using(SqlCommand cmd = new("sp_GetAccounts"))
-				{
-					cmd.CommandType= CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@userId", userId);
-					using (SqlDataAdapter da = new() { SelectCommand = cmd }) { da.Fill(dt); }
-					foreach (DataRow row in dt.Rows) { lstReturn.Add(new(row)); }
-				}
-			}
+		//	using (SqlConnection conn = new(connString))
+		//	{
+		//		conn.Open();
+		//		using(SqlCommand cmd = new("sp_GetAccounts"))
+		//		{
+		//			cmd.CommandType= CommandType.StoredProcedure;
+		//			cmd.Parameters.AddWithValue("@userId", userId);
+		//			using (SqlDataAdapter da = new() { SelectCommand = cmd }) { da.Fill(dt); }
+		//			foreach (DataRow row in dt.Rows) { lstReturn.Add(new(row)); }
+		//		}
+		//	}
 
-			return lstReturn;
-		}
+		//	return lstReturn;
+		//}
 
-		public static List<Department> GetDepartments(int userId)
-		{
-			List<Department> lstReturn = new List<Department>();
-			DataTable dt = new();
+		//public static List<Department> GetDepartments(int userId)
+		//{
+		//	List<Department> lstReturn = new List<Department>();
+		//	DataTable dt = new();
 
-			using (SqlConnection conn = new(connString))
-			{
-				conn.Open();
-				using (SqlCommand cmd = new("sp_GetDepartments"))
-				{
-					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@userId", userId);
-					using (SqlDataAdapter da = new() { SelectCommand = cmd }) { da.Fill(dt); }
-					foreach (DataRow row in dt.Rows) { lstReturn.Add(new(row)); }
-				}
-			}
+		//	using (SqlConnection conn = new(connString))
+		//	{
+		//		conn.Open();
+		//		using (SqlCommand cmd = new("sp_GetDepartments"))
+		//		{
+		//			cmd.CommandType = CommandType.StoredProcedure;
+		//			cmd.Parameters.AddWithValue("@userId", userId);
+		//			using (SqlDataAdapter da = new() { SelectCommand = cmd }) { da.Fill(dt); }
+		//			foreach (DataRow row in dt.Rows) { lstReturn.Add(new(row)); }
+		//		}
+		//	}
 
-			return lstReturn;
-		}
+		//	return lstReturn;
+		//}
+
+		//public static List<Group> GetGroups(int userId)
+		//{
+		//	List<Group> lstReturn = new List<Group>();
+		//	DataTable dt = new();
+
+		//	using (SqlConnection conn = new(connString))
+		//	{
+		//		conn.Open();
+		//		using (SqlCommand cmd = new("sp_GetGroups"))
+		//		{
+		//			cmd.CommandType = CommandType.StoredProcedure;
+		//			cmd.Parameters.AddWithValue("@userId", userId);
+		//			using (SqlDataAdapter da = new() { SelectCommand = cmd }) { da.Fill(dt); }
+		//			foreach (DataRow row in dt.Rows) { lstReturn.Add(new(row)); }
+		//		}
+		//	}
+
+		//	return lstReturn;
+		//}
 
 		public static Entry GetEntryTextAndTitle(int entryId, Entry entryToComplete) 
 		{
 
 
 			return entryToComplete;
-		}
-
-		public static List<Group> GetGroups(int userId)
-		{
-			List<Group> lstReturn = new List<Group>();
-			DataTable dt = new();
-
-			using (SqlConnection conn = new(connString))
-			{
-				conn.Open();
-				using (SqlCommand cmd = new("sp_GetGroups"))
-				{
-					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@userId", userId);
-					using (SqlDataAdapter da = new() { SelectCommand = cmd }) { da.Fill(dt); }
-					foreach (DataRow row in dt.Rows) { lstReturn.Add(new(row)); }
-				}
-			}
-
-			return lstReturn;
 		}
 
 		public static Notebook GetNotebook(int notebookId) 
@@ -524,7 +588,7 @@ namespace myNotebooks.DataAccess
 					cmd.CommandType = CommandType.StoredProcedure;
 					cmd.Parameters.AddWithValue("@userName", userName);
 					var v = EncryptDecrypt.Encrypt(password, password);
-					cmd.Parameters.AddWithValue("@password", EncryptDecrypt.Encrypt(password, password));
+					cmd.Parameters.AddWithValue("@password", v);
 					SqlDataAdapter adapter = new() { SelectCommand = cmd } ;
 					adapter.Fill(ds);
 				}

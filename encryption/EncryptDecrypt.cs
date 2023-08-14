@@ -42,7 +42,9 @@ namespace Encryption
 				Program.PIN = curPin;	
 			}
 
-			return Program.PIN.Length == 0 ? TextToEncrypt : TextToEncrypt.Replace("/", "_").Replace("+", "-");
+			return TextToEncrypt;
+
+			//return Program.PIN.Length == 0 ? TextToEncrypt : TextToEncrypt.Replace("/", "_").Replace("+", "-");
 
 			//string s = AESThenHMAC.SimpleEncryptWithPassword(TextToEncrypt, AESPin(Program.PIN));
 			//return s;

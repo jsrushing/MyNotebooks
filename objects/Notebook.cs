@@ -22,6 +22,7 @@ using Newtonsoft.Json;
 using System.Data;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
+using myNotebooks.DataAccess;
 
 namespace myNotebooks
 {
@@ -31,7 +32,6 @@ namespace myNotebooks
 		public int		CreatedBy { get; set; }
 		public DateTime	CreatedOn { get; set; }
 		public string	Description { get; set; }
-		public DateTime EditedOn { get; set; }
 		public int		Id { get; set; }
 		public string	Name { get; set; }
 		public string	PIN { get; set; }
@@ -112,11 +112,12 @@ namespace myNotebooks
 
 		public async Task	Create(bool addCreatedOn = true)
         {
-			this.FileName += this.Settings.AllowCloud ? "" : " (local)";
-			if(addCreatedOn) Entries.Add(new Entry("created", "-", "-", "", this.Name));
-			Program.SkipFileSizeComparison = true;
+			//this.FileName += this.Settings.AllowCloud ? "" : " (local)";
+			//if(addCreatedOn) Entries.Add(new Entry("created", "-", "-", "", this.Name));
+			//Program.SkipFileSizeComparison = true;
+			this.CreatedBy = Program.User.UserId;
 			await this.Save();
-			Program.SkipFileSizeComparison = false;
+			//Program.SkipFileSizeComparison = false;
 		}
 
 		public async void	Delete()
@@ -375,6 +376,13 @@ namespace myNotebooks
 			this.Entries.ForEach(e	=> e.Labels = EncryptDecrypt.Encrypt(e.Labels,	this.PIN));
 			this.Entries.ForEach(e	=> e.RTF	= EncryptDecrypt.Encrypt(e.RTF,		this.PIN));
 			this.Entries.ForEach(e	=> e.NotebookName = EncryptDecrypt.Encrypt(e.NotebookName, this.PIN));
+
+			if (DbAccess.CreateNotebook(this) == 0)
+			{
+				using (frmMessage frm = new(frmMessage.OperationType.Message,
+					"An error occurred. The Notebook was not created.")) { frm.ShowDialog(); }
+			}
+
 			//File.Delete(fName);
 
 			//using (Stream stream = File.Open(fName, FileMode.Create))
@@ -404,9 +412,7 @@ namespace myNotebooks
 				this.Entries.ForEach(e => e.Labels = EncryptDecrypt.Decrypt(e.Labels, Program.PIN));
 				this.Entries.ForEach(e => e.RTF = EncryptDecrypt.Decrypt(e.RTF, Program.PIN));
 				this.Entries.ForEach(e => e.NotebookName = EncryptDecrypt.Decrypt(e.NotebookName, Program.PIN));
-
 			}
-
 
 			//Backup();
 			await Utilities.PopulateAllNotebookNames();

@@ -11,11 +11,12 @@ namespace MyNotebooks.objects
 	public abstract class IOrgLevel
 	{
 		public frmMain.OrgLevelTypes OrgLevelType { get; set; }
-		public string		Id { get; set; }
-		public string		ParentId { get; set; }
-		public string		Name { get; set; }
-		public string		Description { get; set; }
-		public DateTime		CreatedOn { get; set; }
-		public DateTime?	EditedOn { get; set; }
+		public int		Id { get; set; }
+		public int		ParentId { get; set; }
+		public string	Name { get; set; }
+		public string	Description { get; set; }
+		public DateTime	CreatedOn { get; set; }
+		public int		CreatedBy { get; set; }
+		public DateTime? EditedOn { get; set; }
 	}
 }
