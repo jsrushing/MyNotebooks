@@ -103,7 +103,7 @@ namespace myNotebooks.objects
 				}
 			}
 
-			this.GetAllOrgLevels();
+			//this.GetAllOrgLevels();
 			if(dt.Rows.Count > 1) { AddChildUsers(dt); }
 		}
 
@@ -189,6 +189,11 @@ namespace myNotebooks.objects
 
 			for (int i = 0; i < dataSet.Tables[3].Rows.Count; i++)
 			{ this.OrgLevels.Add(new(frmMain.OrgLevelTypes.Group, dataSet.Tables[3], i)); }   // this.Groups.Add(new(dataSet.Tables[3], i)); }
+		}
+
+		public bool HasPermission(string permission)
+		{
+			return Convert.ToBoolean(this.Permissions.GetType().GetProperty(permission).GetValue(this.Permissions, null));
 		}
 
 		public void SaveAssignments() { DbAccess.CreateMNUserAssignments(this); }

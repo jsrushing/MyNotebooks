@@ -27,7 +27,7 @@ namespace myNotebooks.DataAccess
 //		private static string connString = "Server=mynotebooksserver.database.windows.net;Database=myNotebooks;user id=mydb_admin;password=cloud_Bringer1!";
 		private static string connString = "Server=FORRESTSTNW;Database=MyNotebooks;Trusted_Connection = true";
 
-		public static bool CreateLabel(int notebookId, string label)
+		public static bool			CreateLabel(int notebookId, string label)
 		{
 			bool bRtrn = false;
 
@@ -295,7 +295,7 @@ namespace myNotebooks.DataAccess
 			return bRtrn;
 		}
 
-		public static DataSet GetUserOrgLevels(int userId)
+		public static DataSet		GetUserOrgLevels(int userId)
 		{
 			DataSet ds = new();
 
@@ -423,14 +423,14 @@ namespace myNotebooks.DataAccess
 		//	return lstReturn;
 		//}
 
-		public static Entry GetEntryTextAndTitle(int entryId, Entry entryToComplete) 
+		public static Entry			GetEntryTextAndTitle(int entryId, Entry entryToComplete) 
 		{
 
 
 			return entryToComplete;
 		}
 
-		public static Notebook GetNotebook(int notebookId) 
+		public static Notebook		GetNotebook(int notebookId) 
 		{
 			Notebook nbRtrn = null;
 			DataTable dt = new();
@@ -519,7 +519,7 @@ namespace myNotebooks.DataAccess
 			{
 				conn.Open();
 
-				using (SqlCommand cmd = new("sp_GetNotebooks", conn))
+				using (SqlCommand cmd = new("sp_GetNotebookNames", conn))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 					cmd.Parameters.AddWithValue("@groupId", groupId);

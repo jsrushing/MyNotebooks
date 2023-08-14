@@ -70,6 +70,7 @@ namespace myNotebooks.subforms
 			{
 				txtPwd.Text = Program.PIN;
 				btnLogin_Click(null, null);
+				IsQuickStart = false;
 			}
 		}
 
@@ -152,7 +153,7 @@ namespace myNotebooks.subforms
 					msg = "The permissions for '" + CurrentUser.Name + "' were updated.";
 					using (frmMessage frm = new(frmMessage.OperationType.Message, msg, "Operation Complete", this)) { frm.ShowDialog(this); }
 				}
-				Program.User = new(DbAccess.GetUser(Program.User.Name, Program.User.Password).Tables[0]);
+				//Program.User = new(DbAccess.GetUser(Program.User.Name, Program.User.Password).Tables[0]);
 			}
 			catch (Exception ex)
 			{
@@ -186,7 +187,6 @@ namespace myNotebooks.subforms
 
 			if (CurrentUser != null)
 			{
-
 				if (!IsQuickStart) CurrentUser.Permissions = new(ds.Tables[1]);
 
 				//foreach (DataRow dr in ds.Tables[2].Rows) { CurrentUser.Assignments.Add(new UserAssignments(dr)); }
@@ -194,18 +194,18 @@ namespace myNotebooks.subforms
 				//TreeNode topNode = new TreeNode();
 				PopulateBaseOrgLevels();
 				PopulatePermissions();
-				clbPermissions.Enabled = false;
+				//clbPermissions.Enabled = false;
 				ListBox lb2Populate = new ListBox();
 				ddlAccessLevels.SelectedIndex = CurrentUser.AccessLevel - 1;
 				btnCreateUser.Text = CreateUserButton_UpdateUser;
-				//ddlAccessLevels.Enabled = false;
+				ddlAccessLevels.Enabled = false;
 				PopulateTopLevels();
 
 				//treeUser.Nodes.Cast<TreeNode>().Where(e => e.Text == vOrgLevelName).First().Nodes.AddRange(Program.User.GetHighestNodeItems().ToArray());
 				//treeUser.ExpandAll();
 
 				btnCreateUser.Visible = !CurrentUser.Equals(Program.User);
-				clbPermissions.Enabled = true;
+				clbPermissions.Enabled = CurrentUser.HasPermission("ManageUserPermissions"); ;
 				this.Size = CurrentUser.Equals(Program.User) ? OneUserSize : FullSize;
 				btnLogin.Enabled = false;
 			}
@@ -228,16 +228,23 @@ namespace myNotebooks.subforms
 				}
 			}
 
+			IsQuickStart = false;
 			pnlCreateUser.Visible = true;
 		}
 
 		private void clbPermissions_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (btnCreateUser.Text != CreateUserButton_CreateUser)
+			var isChecked = clbPermissions.CheckedItems.Contains(clbPermissions.SelectedItem);
+
+			if (CurrentUser.HasPermission("ManageUserPermissions"))
 			{
-				btnCreateUser.Text = CreateUserButton_UpdatePermissions;
-				btnCreateUser.Visible = true;
+				if (btnCreateUser.Text != CreateUserButton_CreateUser)
+				{
+					btnCreateUser.Text = CreateUserButton_UpdatePermissions;
+					btnCreateUser.Visible = true;
+				}
 			}
+			else { clbPermissions.SetItemChecked(clbPermissions.SelectedIndex, !isChecked); }
 		}
 
 		private ListBox GetNextListBox(ListBox lb)
@@ -351,9 +358,9 @@ namespace myNotebooks.subforms
 
 			if (e.Button == MouseButtons.Right)
 			{
-				if (CurrentMouseListBox.SelectedItem != null)
-				{
-					var vMouseListSelectedItemName = (CurrentMouseListBox.SelectedItem as ListItem).Name.Trim();
+				//if (CurrentMouseListBox.SelectedItem != null)
+				//{
+					var vMouseListSelectedItemName = CurrentMouseListBox.SelectedItem != null ? (CurrentMouseListBox.SelectedItem as ListItem).Name.Trim() : null;
 					var vGrp = CurrentMouseGroupBox as GroupBox;
 					GroupBox vMouseListBoxGroup = (GroupBox)CurrentMouseListBox.Parent;
 					var vCurMouseBoxIndex = OrgLevelLists_MU.IndexOf(CurrentMouseListBox);
@@ -372,7 +379,9 @@ namespace myNotebooks.subforms
 					mnuCreateNew.Enabled = CurrentMouseListBox.Name.EndsWith("_MU");
 
 					mnuAssignUser.Enabled = vMouseListSelectedItemName != null && vGrp.Enabled && vGrp.Enabled;
+
 					if (vMouseListSelectedItemName != null) mnuAssignUser.Text = "&Assign '" + vMouseListSelectedItemName + "' to User";
+				
 					mnuAssignUser.Visible = this.Size == FullSize && CurrentMouseListBox.Name.EndsWith("_MU");
 
 					mnuEdit.Enabled = vMouseListSelectedItemName != null & CurrentMouseListBox.Name.EndsWith("_MU");
@@ -382,17 +391,20 @@ namespace myNotebooks.subforms
 					mnuDelete.Text = vMouseListSelectedItemName != null ? "Delete '" + vMouseListSelectedItemName + "'" : "Delete";
 
 					mnuManageNotebooks.Visible = vGrp.Name.ToLower().Contains("group");
-				}
-				else
-				{
-					mnuCreateNew.Enabled = false;
-					mnuAssignUser.Enabled = false;
-					mnuEdit.Enabled = false;
-					mnuDelete.Enabled = false;
-					mnuManageNotebooks.Visible = false;
-				}
+				//}
+				//else
+				//{
+				//	mnuCreateNew.Enabled = CurrentMouseListBox.Items.Count == 0;
+				//	mnuAssignUser.Enabled = false;
+				//	mnuEdit.Enabled = false;
+				//	mnuDelete.Enabled = false;
+				//	mnuManageNotebooks.Visible = false;
+				//}
 			}
-			SelectChildren(sender, e);
+			else
+			{
+				SelectChildren(sender, e);
+			}
 		}
 
 		private void lstMUCU_MouseMove(object sender, MouseEventArgs e)
@@ -592,53 +604,53 @@ namespace myNotebooks.subforms
 
 		private void PopulateTopLevels(bool populateMU = true, bool populateCU = true)
 		{
-			ListBox lbCurrentLevel = new ListBox();
-			List<ListBox> tmpList = populateMU ? OrgLevelLists_MU : OrgLevelLists_CU;
+			//ListBox lbCurrentLevel = new ListBox();
+			//List<ListBox> tmpList = populateMU ? OrgLevelLists_MU : OrgLevelLists_CU;
 
-			foreach (ListBox lb in tmpList) { lb.Items.Clear(); }
+			//foreach (ListBox lb in tmpList) { lb.Items.Clear(); }
 
-			for (int i = 6; i > tmpList.Count; i--)
+			//for (int i = 6; i > tmpList.Count; i--)
+			//{
+			//	var v2 = Program.User.OrgLevels.Where(e => e.OrgLevelType == (frmMain.OrgLevelTypes)i).ToList();
+
+			//	if (v2.Count() > 0)
+			//	{
+			//		foreach (OrgLevel ol in v2)
+			//		{
+			//			tmpList[i - 6].Items.Add(ol);
+			//		}
+			//		break;
+			//	}
+			//}
+
+			GroupBox box = new();
+			List<ListBox> lstBoxes = new();
+
+			if (populateMU)
 			{
-				var v2 = Program.User.OrgLevels.Where(e => e.OrgLevelType == (frmMain.OrgLevelTypes)i).ToList();
+				foreach (ListBox lb in OrgLevelLists_MU) { lb.Items.Clear(); }
+				box = OrgLevelGroups_MU.Where(e => e.Enabled).FirstOrDefault();
+				lstBoxes = box.Controls.Cast<ListBox>().ToList();
+				//var highestLevel = CurrentUser.Companies;
+				//if(highestLevel == null) { highestLevel = CurrentUser.Accounts; }
+				//if(highestLevel == null) { highestLevel = CurrentUser.Departments; }
+				//if(!highestLevel) { highestLevel = CurrentUser.Groups}
 
-				if (v2.Count() > 0)
-				{
-					foreach (OrgLevel ol in v2)
-					{
-						tmpList[i - 6].Items.Add(ol);
-					}
-					break;
-				}
+				//Type type = null;
+				//type = 
+
+				//var listItems = CurrentUser.Companies;
+
+				lstBoxes[0].Items.AddRange(DbAccess.GetTopLevelItemsForUser(Program.User.UserId).ToArray());
 			}
 
-			//GroupBox box = new();
-			//List<ListBox> lstBoxes = new();
-
-			//if (populateMU)
-			//{
-			//	foreach (ListBox lb in OrgLevelLists_MU) { lb.Items.Clear(); }
-			//	box = OrgLevelGroups_MU.Where(e => e.Enabled).FirstOrDefault();
-			//	lstBoxes = box.Controls.Cast<ListBox>().ToList();
-			//	//var highestLevel = CurrentUser.Companies;
-			//	//if(highestLevel == null) { highestLevel = CurrentUser.Accounts; }
-			//	//if(highestLevel == null) { highestLevel = CurrentUser.Departments; }
-			//	//if(!highestLevel) { highestLevel = CurrentUser.Groups}
-
-			//	//Type type = null;
-			//	//type = 
-
-			//	//var listItems = CurrentUser.Companies;
-
-			//	lstBoxes[0].Items.AddRange(DbAccess.GetTopLevelItemsForUser(Program.User.UserId).ToArray());
-			//}
-
-			//if (populateCU)
-			//{
-			//	foreach (ListBox lb in OrgLevelLists_CU) { lb.Items.Clear(); }
-			//	box = OrgLevelGroups_CU.Where(e => e.Enabled).FirstOrDefault();
-			//	lstBoxes = box.Controls.Cast<ListBox>().ToList();
-			//	lstBoxes[0].Items.AddRange(DbAccess.GetTopLevelItemsForUser(CurrentUser.UserId).ToArray());
-			//}
+			if (populateCU)
+			{
+				foreach (ListBox lb in OrgLevelLists_CU) { lb.Items.Clear(); }
+				box = OrgLevelGroups_CU.Where(e => e.Enabled).FirstOrDefault();
+				lstBoxes = box.Controls.Cast<ListBox>().ToList();
+				lstBoxes[0].Items.AddRange(DbAccess.GetTopLevelItemsForUser(CurrentUser.UserId).ToArray());
+			}
 
 		}
 
@@ -657,35 +669,35 @@ namespace myNotebooks.subforms
 
 		private void SelectChildren(object sender, MouseEventArgs e)
 		{
-			ListBox lb = (ListBox)sender;
-
-			if (lb.SelectedItem != null)
-			{
-				var orgLvl = ((OrgLevel)lb.SelectedItem);
-				var v4 = orgLvl.OrgLevelType;
-
-				ListBox lbToPopulate = OrgLevelLists_MU[Convert.ToInt32(CurrentMouseListBox.Tag) + 1];
-				lbToPopulate.Items.Clear();
-				var v3 = Program.User.OrgLevels.Where(e => e.ParentId == orgLvl.Id ).ToList();
-
-				foreach (OrgLevel ol in v3)
-				{
-					lbToPopulate.Items.Add(ol);
-				}
-			}
-
 			//ListBox lb = (ListBox)sender;
 
 			//if (lb.SelectedItem != null)
 			//{
-			//	var v2 = ((ListItem)lb.SelectedItem).Id;
-			//	ListBox lbToPopulate = GetNextListBox((ListBox)sender);
-			//	ListBoxes_ClearBelow(lbToPopulate);
-			//	//lbToPopulate.Items.Clear();
+			//	var orgLvl = ((OrgLevel)lb.SelectedItem);
+			//	var v4 = orgLvl.OrgLevelType;
 
-			//	foreach (ListItem li in DbAccess.GetOrgLevelChildren(Convert.ToInt16(lbToPopulate.Tag), v2))
-			//	{ if (!ListContains(lbToPopulate, li)) { lbToPopulate.Items.Add(li); } }
+			//	ListBox lbToPopulate = OrgLevelLists_MU[Convert.ToInt32(CurrentMouseListBox.Tag) + 1];
+			//	lbToPopulate.Items.Clear();
+			//	var v3 = Program.User.OrgLevels.Where(e => e.ParentId == orgLvl.Id ).ToList();
+
+			//	foreach (OrgLevel ol in v3)
+			//	{
+			//		lbToPopulate.Items.Add(ol);
+			//	}
 			//}
+
+			ListBox lb = (ListBox)sender;
+
+			if (lb.SelectedItem != null)
+			{
+				var v2 = ((ListItem)lb.SelectedItem).Id;
+				ListBox lbToPopulate = GetNextListBox((ListBox)sender);
+				ListBoxes_ClearBelow(lbToPopulate);
+				//lbToPopulate.Items.Clear();
+
+				foreach (ListItem li in DbAccess.GetOrgLevelChildren(Convert.ToInt16(lbToPopulate.Tag), v2))
+				{ if (!ListContains(lbToPopulate, li)) { lbToPopulate.Items.Add(li); } }
+			}
 
 		}
 
