@@ -107,7 +107,7 @@ namespace myNotebooks.objects
 			if(dt.Rows.Count > 1) { AddChildUsers(dt); }
 		}
 
-		//public void CreateSimpleUser() { this.UserId = DbAccess.CreateMNUser(this); }
+		//public void CreateSimpleUser() { this.UserId = DbAccess.CRUDMNUser(this); }
 
 		private void AddChildUsers(DataTable dt)
 		{

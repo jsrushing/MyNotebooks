@@ -238,7 +238,7 @@ namespace myNotebooks.subforms
 
 						newEntry.CreatedBy = Program.User.UserId;
 						newEntry.NotebookId = this.NotebookId;
-						var v = DbAccess.CreateNotebookEntry(newEntry);
+						var v = DbAccess.CRUDNotebookEntry(newEntry);
 
 						//if (Entry == null) { CurrentNotebook.AddEntry(newEntry); } else { CurrentNotebook.ReplaceEntry(Entry, newEntry); }
 						Entry = newEntry;

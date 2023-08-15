@@ -44,7 +44,9 @@ namespace myNotebooks
 		public bool		Saved;
 		public List<Entry>		Entries = new List<Entry>();
 		public NotebookSettings	Settings;
-		
+
+		private bool isNewNotebook = false;
+
 		public Notebook(string _name = null, string _fileName = null) 
         {
             if(_name != null)
@@ -115,6 +117,7 @@ namespace myNotebooks
 			//if(addCreatedOn) Entries.Add(new Entry("created", "-", "-", "", this.Name));
 			//Program.SkipFileSizeComparison = true;
 			this.CreatedBy = Program.User.UserId;
+			isNewNotebook = true;
 			await this.Save();
 			//Program.SkipFileSizeComparison = false;
 		}
@@ -376,11 +379,11 @@ namespace myNotebooks
 			this.Entries.ForEach(e	=> e.RTF	= EncryptDecrypt.Encrypt(e.RTF,		this.PIN));
 			this.Entries.ForEach(e	=> e.NotebookName = EncryptDecrypt.Encrypt(e.NotebookName, this.PIN));
 
-			//if (DbAccess.CreateNotebook(this) == 0)
-			//{
-			//	using (frmMessage frm = new(frmMessage.OperationType.Message,
-			//		"An error occurred. The Notebook was not created.")) { frm.ShowDialog(); }
-			//}
+			if (isNewNotebook && DbAccess.CRUDNotebook(this) == 0)
+			{
+				using (frmMessage frm = new(frmMessage.OperationType.Message,
+					"An error occurred. The Notebook was not created.")) { frm.ShowDialog(); }
+			}
 
 			//File.Delete(fName);
 
@@ -414,7 +417,7 @@ namespace myNotebooks
 			}
 
 			//Backup();
-			await Utilities.PopulateAllNotebookNames();
+			if (isNewNotebook) { await Utilities.PopulateAllNotebookNames(); }
 		}
 
 		public List<Entry>	Search(SearchObject So)

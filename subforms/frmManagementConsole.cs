@@ -124,7 +124,7 @@ namespace myNotebooks.subforms
 							if (frm.Result == frmMessage.ReturnResult.Ok)
 							{
 								CurrentUser.Email = frm.ResultText;
-								CurrentUser.UserId = DbAccess.CreateMNUser(CurrentUser);
+								CurrentUser.UserId = DbAccess.CRUDMNUser(CurrentUser);
 								msg = "The User '" + CurrentUser.Name + "' was created. Now choose permissions and organizationl levels and click '" + CreateUserButton_UpdateUser + "'.";
 								this.Size = FullSize;
 								btnCreateUser.Text = CreateUserButton_UpdateUser;

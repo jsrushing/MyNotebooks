@@ -695,10 +695,12 @@ namespace myNotebooks.subforms
 				if (frm.Saved)
 				{
 					CurrentEntry = frm.Entry;
-					await CurrentNotebook.Save();
+					//await CurrentNotebook.Save();
 					if (!cbxDatesTo.Items.Contains(CurrentEntry.CreatedOn)) { cbxDatesTo.Items.Insert(0, CurrentEntry.CreatedOn.ToShortDateString()); }
 					cbxDatesTo.SelectedIndex = 0;
 					lstEntries.SelectedIndex = 0;
+					CurrentNotebook.Entries.Add(frm.Entry);
+					await Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries);
 				}
 			}
 

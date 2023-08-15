@@ -22,12 +22,15 @@ using System.Runtime.CompilerServices;
 
 namespace myNotebooks.DataAccess
 {
+	public enum OperationType
+	{ Create = 0, Update = 1, Delete = 2 }
+
 	internal class DbAccess
 	{
 //		private static string connString = "Server=mynotebooksserver.database.windows.net;Database=myNotebooks;user id=mydb_admin;password=cloud_Bringer1!";
 		private static string connString = "Server=FORRESTSTNW;Database=MyNotebooks;Trusted_Connection = true";
 
-		public static bool			CreateLabel(int notebookId, string label)
+		public static bool			CRUDLabel(int notebookId, string label, OperationType opType = OperationType.Create)
 		{
 			bool bRtrn = false;
 
@@ -36,11 +39,12 @@ namespace myNotebooks.DataAccess
 				using (SqlConnection conn = new(connString))
 				{
 					conn.Open();
-					using (SqlCommand cmd = new SqlCommand("sp_DeleteUser", conn))
+					using (SqlCommand cmd = new SqlCommand("sp_CRUD_Label", conn))
 					{
 						cmd.CommandType = CommandType.StoredProcedure;
 						cmd.Parameters.AddWithValue("@notebookId", notebookId);
 						cmd.Parameters.AddWithValue("@label", label);
+						cmd.Parameters.AddWithValue("@opType", (int)opType);
 						cmd.ExecuteNonQuery();
 					}
 				}
@@ -51,7 +55,7 @@ namespace myNotebooks.DataAccess
 			return bRtrn;
 		}
 
-		public static int			CreateMNUser(MNUser user)
+		public static int			CRUDMNUser(MNUser user, OperationType opType = OperationType.Create)
 		{
 			int iRtrn = 0;
 			try
@@ -59,7 +63,7 @@ namespace myNotebooks.DataAccess
 				using (SqlConnection conn = new(connString))
 				{
 					conn.Open();
-					using (SqlCommand cmd = new SqlCommand("sp_CreateUser", conn))
+					using (SqlCommand cmd = new SqlCommand("sp_CRUD_User", conn))
 					{
 						cmd.CommandType = CommandType.StoredProcedure;
 						cmd.Parameters.AddWithValue("@userName", user.Name);
@@ -67,6 +71,7 @@ namespace myNotebooks.DataAccess
 						cmd.Parameters.AddWithValue("@accessLevel", user.AccessLevel);
 						cmd.Parameters.AddWithValue("@createdBy", user.CreatedBy);
 						cmd.Parameters.AddWithValue("@email", user.Email);
+						cmd.Parameters.AddWithValue("@opType", (int)opType);
 						cmd.Parameters.Add("@retVal", SqlDbType.Int);
 						cmd.Parameters["@retVal"].Direction = ParameterDirection.ReturnValue;
 						cmd.ExecuteNonQuery();
@@ -91,7 +96,7 @@ namespace myNotebooks.DataAccess
 				{
 					foreach(UserAssignments ua in user.Assignments)
 					{
-						using (SqlCommand cmd = new SqlCommand("sp_CreateUserAssignments", conn))
+						using (SqlCommand cmd = new SqlCommand("sp_CRUD_UserAssignments", conn))
 						{
 							cmd.CommandType = CommandType.StoredProcedure;
 							cmd.Parameters.AddWithValue("@userId", ua.UserId);
@@ -121,7 +126,7 @@ namespace myNotebooks.DataAccess
 				using (SqlConnection conn = new(connString))
 				{
 					conn.Open();
-					using (SqlCommand cmd = new SqlCommand("sp_CreateUserPermissions", conn))
+					using (SqlCommand cmd = new SqlCommand("sp_CRUD_UserPermissions", conn))
 					{
 						cmd.CommandType = CommandType.StoredProcedure;
 						cmd.Parameters.AddWithValue("@userId", user.UserId);
@@ -141,7 +146,7 @@ namespace myNotebooks.DataAccess
 			return iRtrn;
 		}
 
-		public static int			CreateNotebook(Notebook nb)
+		public static int			CRUDNotebook(Notebook nb, OperationType opType = OperationType.Create)
 		{
 			int iRtrn = 0;
 
@@ -149,8 +154,7 @@ namespace myNotebooks.DataAccess
 			{
 				conn.Open();
 
-				using (SqlCommand cmd = new("sp_CreateNotebook", conn))
-				
+				using (SqlCommand cmd = new("sp_CRUD_Notebook", conn))	
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 					cmd.Parameters.AddWithValue("@createdBy",	nb.CreatedBy);
@@ -158,6 +162,7 @@ namespace myNotebooks.DataAccess
 					cmd.Parameters.AddWithValue("@name",		nb.Name);
 					cmd.Parameters.AddWithValue("@parentId",	Program.ActiveGroupId);
 					cmd.Parameters.AddWithValue("@pin",			nb.PIN);
+					cmd.Parameters.AddWithValue("@opType",		(int)opType);
 					cmd.Parameters.Add("@retVal", SqlDbType.Int);
 					cmd.Parameters["@retVal"].Direction= ParameterDirection.ReturnValue;
 					cmd.ExecuteNonQuery();
@@ -168,7 +173,7 @@ namespace myNotebooks.DataAccess
 			return iRtrn;
 		}
 
-		public static int			CreateNotebookEntry(Entry entry)
+		public static int			CRUDNotebookEntry(Entry entry, OperationType opType = OperationType.Create)
 		{
 			int iRtrn = 0;
 
@@ -176,7 +181,7 @@ namespace myNotebooks.DataAccess
 			{
 				conn.Open();
 
-				using (SqlCommand cmd = new("sp_CreateNotebookEntry", conn))
+				using (SqlCommand cmd = new("sp_CRUD_NotebookEntry", conn))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 					cmd.Parameters.AddWithValue("@createdBy",	entry.CreatedBy);
@@ -187,6 +192,7 @@ namespace myNotebooks.DataAccess
 					cmd.Parameters.AddWithValue("@RTF",			entry.RTF);
 					cmd.Parameters.AddWithValue("@text",		entry.Text);
 					cmd.Parameters.AddWithValue("@title",		entry.Title);
+					cmd.Parameters.AddWithValue("@opType",		(int)opType);
 					cmd.Parameters.Add("@retVal", SqlDbType.Int);
 					cmd.Parameters["@retVal"].Direction = ParameterDirection.ReturnValue;
 					cmd.ExecuteNonQuery();
@@ -197,7 +203,8 @@ namespace myNotebooks.DataAccess
 			return iRtrn;
 		}
 
-		public static bool			CreateOrgLevel(int creatorId, string orgLevelDescription, frmMain.OrgLevelTypes orgLevelType, string orgLevelName, int parentId)
+		public static bool			CreateOrgLevel(int creatorId, string orgLevelDescription
+										, frmMain.OrgLevelTypes orgLevelType, string orgLevelName, int parentId, OperationType opType)
 		{
 			bool bRtrn = false;
 
@@ -206,7 +213,7 @@ namespace myNotebooks.DataAccess
 				using (SqlConnection conn = new(connString))
 				{
 					conn.Open();
-					using (SqlCommand cmd = new SqlCommand("sp_CreateOrgLevel", conn))
+					using (SqlCommand cmd = new SqlCommand("sp_CRUD_OrgLevel", conn))
 					{
 						cmd.CommandType = CommandType.StoredProcedure;
 						cmd.Parameters.AddWithValue("@parentId",			parentId);
@@ -214,6 +221,7 @@ namespace myNotebooks.DataAccess
 						cmd.Parameters.AddWithValue("@orgLevelType",		(int)orgLevelType);
 						cmd.Parameters.AddWithValue("@orgLevelName",		orgLevelName.Trim());
 						cmd.Parameters.AddWithValue("@orgLevelDescription", orgLevelDescription.Trim());
+						cmd.Parameters.AddWithValue("@opType",				(int)opType);
 						cmd.Parameters.Add("@retVal", SqlDbType.Int);
 						cmd.Parameters["@retVal"].Direction = ParameterDirection.ReturnValue;
 						cmd.ExecuteNonQuery();
@@ -222,29 +230,6 @@ namespace myNotebooks.DataAccess
 				}
 			}
 			catch (Exception ex) { var v = ex.Message; }
-
-			return bRtrn;
-		}
-
-		public static bool			DeleteUser(int userId)
-		{
-			bool bRtrn = false;
-
-			try
-			{
-				using(SqlConnection conn = new(connString))
-				{
-					conn.Open();
-					using(SqlCommand cmd = new SqlCommand("sp_DeleteUser", conn)) 
-					{ 
-						cmd.CommandType = CommandType.StoredProcedure;
-						cmd.Parameters.AddWithValue("@userId", userId);
-						cmd.ExecuteNonQuery ();
-					}
-				}
-				bRtrn = true;
-			}
-			catch { }
 
 			return bRtrn;
 		}
