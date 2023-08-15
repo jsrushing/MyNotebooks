@@ -179,16 +179,15 @@ namespace myNotebooks.DataAccess
 				using (SqlCommand cmd = new("sp_CreateNotebookEntry", conn))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@createdBy", entry.CreatedBy);
-					cmd.Parameters.AddWithValue("@createdOn", entry.CreatedOn);
-					cmd.Parameters.AddWithValue("@editedOn", entry.EditedOn);
-					cmd.Parameters.AddWithValue("@id", entry.Id);
+					cmd.Parameters.AddWithValue("@createdBy",	entry.CreatedBy);
+					cmd.Parameters.AddWithValue("@createdOn",	entry.CreatedOn);
+					//cmd.Parameters.AddWithValue("@editedOn",	entry.EditedOn);
+					cmd.Parameters.AddWithValue("@notebookId",	entry.NotebookId);
 					cmd.Parameters.AddWithValue("@notebookName", entry.NotebookName);
-					cmd.Parameters.AddWithValue("@notebookId", entry.NotebookId);
-					cmd.Parameters.AddWithValue("@RTF", entry.RTF);
-					cmd.Parameters.AddWithValue("@text", entry.Text);
-					cmd.Parameters.AddWithValue("@title", entry.Title);
-					cmd.Parameters.Add("@rtnVal");
+					cmd.Parameters.AddWithValue("@RTF",			entry.RTF);
+					cmd.Parameters.AddWithValue("@text",		entry.Text);
+					cmd.Parameters.AddWithValue("@title",		entry.Title);
+					cmd.Parameters.Add("@retVal", SqlDbType.Int);
 					cmd.Parameters["@retVal"].Direction = ParameterDirection.ReturnValue;
 					cmd.ExecuteNonQuery();
 					iRtrn = Convert.ToInt32(cmd.Parameters["@retVal"].Value.ToString());
@@ -349,7 +348,7 @@ namespace myNotebooks.DataAccess
 						var v = dt.Rows[i].Field<DateTime?>("EditedOn").ToString();
 						if (v != null)
 						{
-							entry.EditedOn = DateTime.Parse(v);
+							//entry.EditedOn = DateTime.Parse(v);
 							nbRtrn.Entries.Add(entry);
 						}
 					}

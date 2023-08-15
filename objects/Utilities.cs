@@ -18,11 +18,11 @@ namespace myNotebooks.objects
 {
 	public static class Utilities
 	{
-		public static Entry CreateEntry(string title, string text, string RTF, string labels, string notebookName, string PIN)
-		{
-			return new Entry(EncryptDecrypt.Encrypt(title, PIN), EncryptDecrypt.Encrypt(text, PIN), 
-				EncryptDecrypt.Encrypt(RTF, PIN), EncryptDecrypt.Encrypt(labels, PIN), EncryptDecrypt.Encrypt(notebookName, PIN));
-		}
+		//public static Entry CreateEntry(string title, string text, string RTF, string labels, string notebookName, string PIN)
+		//{
+		//	return new Entry(EncryptDecrypt.Encrypt(title, PIN), EncryptDecrypt.Encrypt(text, PIN), 
+		//		EncryptDecrypt.Encrypt(RTF, PIN), EncryptDecrypt.Encrypt(labels, PIN), EncryptDecrypt.Encrypt(notebookName, PIN));
+		//}
 
 		public static bool FileNameIsValid(string proposedFileName) { return proposedFileName.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) == -1; }
 
@@ -139,6 +139,8 @@ namespace myNotebooks.objects
 			else
 			{
 				Program.AllNotebookNames.Clear();
+				Program.NotebooksNamesAndIds.Clear();
+
 				var v = DbAccess.GetNotebookNamesAndIdsForGroup(Program.ActiveGroupId);
 
 				foreach(var v2 in DbAccess.GetNotebookNamesAndIdsForGroup(Program.ActiveGroupId))

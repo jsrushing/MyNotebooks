@@ -59,7 +59,7 @@ namespace myNotebooks.objects
 							this.GetType().GetProperty(sPropertyName.Name).SetValue(this, value);
 						//}
 					}
-					catch (Exception ex)
+					catch (Exception)
 					{
 						//using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The error '" + ex.Message +
 						//	"' occurred while processing the property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }

@@ -195,7 +195,7 @@ namespace myNotebooks.subforms
 			Notebook nb = new Notebook(fe.NotebookName, "").Open();
 			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
 
-			using (frmNewEntry frm = new frmNewEntry(this, nb, fe, mnu.Text.ToLower().StartsWith("preserve")))
+			using (frmNewEntry frm = new frmNewEntry(this, nb, 0, fe, mnu.Text.ToLower().StartsWith("preserve")))
 			{
 				frm.ShowDialog();
 

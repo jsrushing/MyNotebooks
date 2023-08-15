@@ -189,7 +189,7 @@ namespace myNotebooks.subforms
 				Utilities.SetProgramPIN(kvp.Key.Name);
 				var currentEntry = kvp.Value;
 
-				using (frmNewEntry frm = new frmNewEntry(this, kvp.Key, kvp.Value))
+				using (frmNewEntry frm = new frmNewEntry(this, kvp.Key, 0, kvp.Value))
 				{
 					frm.ShowDialog();
 

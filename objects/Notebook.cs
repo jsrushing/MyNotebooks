@@ -376,11 +376,11 @@ namespace myNotebooks
 			this.Entries.ForEach(e	=> e.RTF	= EncryptDecrypt.Encrypt(e.RTF,		this.PIN));
 			this.Entries.ForEach(e	=> e.NotebookName = EncryptDecrypt.Encrypt(e.NotebookName, this.PIN));
 
-			if (DbAccess.CreateNotebook(this) == 0)
-			{
-				using (frmMessage frm = new(frmMessage.OperationType.Message,
-					"An error occurred. The Notebook was not created.")) { frm.ShowDialog(); }
-			}
+			//if (DbAccess.CreateNotebook(this) == 0)
+			//{
+			//	using (frmMessage frm = new(frmMessage.OperationType.Message,
+			//		"An error occurred. The Notebook was not created.")) { frm.ShowDialog(); }
+			//}
 
 			//File.Delete(fName);
 

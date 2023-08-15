@@ -384,65 +384,73 @@ namespace myNotebooks.subforms
 
 			if (CurrentNotebook != null)
 			{
-				wrongPIN = CurrentNotebook.WrongPIN;
-
-				if (!wrongPIN && !Program.AllNotebookNames.Contains(CurrentNotebook.Name))
+				if(CurrentNotebook.Entries.Count == 0)
 				{
-					Program.AllNotebooks.Add(CurrentNotebook);
-				}
-
-				if (wrongPIN)
-				{
-					lblWrongPin.Visible = true;
-					txtJournalPIN.Focus();
-					txtJournalPIN.SelectAll();
+					ShowHideMenusAndControls(SelectionState.NotebookLoaded);
 				}
 				else
 				{
-					//if (CurrentNotebook.Settings.AllowCloud && Program.AzurePassword.Length > 0)
-					//{
-					//	var nbPath = CurrentNotebook.FileName;
-					//	var nbName = CurrentNotebook.Name;
-					//	CloudSynchronizer cs = new CloudSynchronizer();
-					//	//await cs.SynchWithCloud(false, CurrentNotebook);
-					//	Notebook curNotebook = new Notebook(nbName, nbPath).Open();
+					wrongPIN = CurrentNotebook.WrongPIN;
 
-					//	if (curNotebook == null)    // the sync deleted the file
-					//	{ ddlNotebooks.Items.Remove(nbName); }
-					//	else { if (!curNotebook.Equals(CurrentNotebook)) { CurrentNotebook = curNotebook; } }// the synch dl'd a newer copy of the file
-					//}
-
-					try
+					if (!wrongPIN && !Program.AllNotebookNames.Contains(CurrentNotebook.Name))
 					{
-						if (CurrentNotebook != null)
-						{
-							PopulateShowFromDates();
-							SuppressDateClick = true;
-							await ProcessDateFilters();
-							SuppressDateClick = false;
-							lstEntries.Height = this.Height - lstEntries.Top - 50;
-							lstEntries.Visible = true;
-							pnlDateFilters.Visible = true;
-
-							for (var i = 0; i < cbxDatesFrom.Items.Count; i++)
-							{
-								if (DateTime.Parse(cbxDatesFrom.Items[i].ToString()) <= DateTime.Parse(cbxDatesTo.Text).AddDays(-60) || i == cbxDatesFrom.Items.Count - 1)
-								{
-									cbxDatesFrom.SelectedIndex = i;
-									break;
-								}
-							}
-
-							cbxDatesTo.SelectedIndex = 0;
-							ShowHideMenusAndControls(SelectionState.NotebookLoaded);
-						}
-						else
-						{
-							lstEntries.Focus();
-						}
+						Program.AllNotebooks.Add(CurrentNotebook);
 					}
-					catch (Exception ex) { Console.Write(ex.Message); }
+
+					if (wrongPIN)
+					{
+						lblWrongPin.Visible = true;
+						txtJournalPIN.Focus();
+						txtJournalPIN.SelectAll();
+					}
+					else
+					{
+						//if (CurrentNotebook.Settings.AllowCloud && Program.AzurePassword.Length > 0)
+						//{
+						//	var nbPath = CurrentNotebook.FileName;
+						//	var nbName = CurrentNotebook.Name;
+						//	CloudSynchronizer cs = new CloudSynchronizer();
+						//	//await cs.SynchWithCloud(false, CurrentNotebook);
+						//	Notebook curNotebook = new Notebook(nbName, nbPath).Open();
+
+						//	if (curNotebook == null)    // the sync deleted the file
+						//	{ ddlNotebooks.Items.Remove(nbName); }
+						//	else { if (!curNotebook.Equals(CurrentNotebook)) { CurrentNotebook = curNotebook; } }// the synch dl'd a newer copy of the file
+						//}
+
+						try
+						{
+							if (CurrentNotebook != null)
+							{
+								PopulateShowFromDates();
+								SuppressDateClick = true;
+								await ProcessDateFilters();
+								SuppressDateClick = false;
+								lstEntries.Height = this.Height - lstEntries.Top - 50;
+								//lstEntries.Visible = true;
+								//pnlDateFilters.Visible = true;
+
+								for (var i = 0; i < cbxDatesFrom.Items.Count; i++)
+								{
+									if (DateTime.Parse(cbxDatesFrom.Items[i].ToString()) <= DateTime.Parse(cbxDatesTo.Text).AddDays(-60) || i == cbxDatesFrom.Items.Count - 1)
+									{
+										cbxDatesFrom.SelectedIndex = i;
+										break;
+									}
+								}
+
+								cbxDatesTo.SelectedIndex = 0;
+								ShowHideMenusAndControls(SelectionState.NotebookLoaded);
+							}
+							else
+							{
+								lstEntries.Focus();
+							}
+						}
+						catch (Exception ex) { Console.Write(ex.Message); }
+					}
 				}
+
 			}
 
 			this.Cursor = Cursors.Default;
@@ -596,13 +604,6 @@ namespace myNotebooks.subforms
 			ddlNotebooks.DisplayMember = "Name";
 			ddlNotebooks.ValueMember = "Id";
 
-
-			//ddlNotebooks.Items.AddRange(Program.AllNotebookNames.ToArray());
-
-
-
-
-
 			if (ddlNotebooks.Items.Count > 0)
 			{
 				ddlNotebooks.Enabled = true;
@@ -648,7 +649,7 @@ namespace myNotebooks.subforms
 
 				var currentId = createdEntry != null ? createdEntry.Id : "";
 
-				if (CurrentEntry != null && !CurrentEntry.Id.Equals(currentId)) // Disallow modification of the 'created' entry.
+				if (CurrentEntry != null)		//&& !CurrentEntry.Id.Equals(currentId)) // Disallow modification of the 'created' entry.
 				{
 					FirstSelection = false;
 					lblSelectionType.Visible = rtb.Text.Length > 0;
@@ -688,7 +689,7 @@ namespace myNotebooks.subforms
 			using (frmNewEntry frm = new frmNewEntry(this, CurrentNotebook))
 			{
 				frm.Text = "New entry in '" + CurrentNotebook.Name + "'";
-
+				frm.NotebookId = CurrentNotebook.Id;
 				frm.ShowDialog(this);
 
 				if (frm.Saved)
@@ -729,7 +730,7 @@ namespace myNotebooks.subforms
 			this.Cursor = Cursors.WaitCursor;
 			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
 
-			using (frmNewEntry frm = new frmNewEntry(this, CurrentNotebook, CurrentEntry, mnu.Text.ToLower().StartsWith("preserve")))
+			using (frmNewEntry frm = new frmNewEntry(this, CurrentNotebook, 0, CurrentEntry, mnu.Text.ToLower().StartsWith("preserve")))
 			{
 				frm.Text = "Edit '" + CurrentEntry.Title + "' in '" + CurrentNotebook.Name + "'";
 				frm.ShowDialog(this);
@@ -920,16 +921,16 @@ namespace myNotebooks.subforms
 
 		private async Task PopulateLabelsSummary()
 		{
-			foreach (var label in LabelsManager.GetLabels_NoFileDate())
-			{
-				var v = CurrentNotebook.Entries.Where(e => e.Labels.Contains(label)).ToList();
-				if (v.Count > 0)
-				{
-					ToolStripMenuItem item = new ToolStripMenuItem(label + " (" + v.Count + ")", null, menuLabelsSummary_Click);
-					item.Tag = label;
-					mnuLabelsSummary.DropDownItems.Add(item);
-				}
-			}
+			//foreach (var label in LabelsManager.GetLabels_NoFileDate())
+			//{
+			//	var v = CurrentNotebook.Entries.Where(e => e.Labels.Contains(label)).ToList();
+			//	if (v.Count > 0)
+			//	{
+			//		ToolStripMenuItem item = new ToolStripMenuItem(label + " (" + v.Count + ")", null, menuLabelsSummary_Click);
+			//		item.Tag = label;
+			//		mnuLabelsSummary.DropDownItems.Add(item);
+			//	}
+			//}
 		}
 
 		private void PopulateShowFromDates()
@@ -976,7 +977,7 @@ namespace myNotebooks.subforms
 		private void SetDisplayText()
 		{
 			this.Text = this.Text.EndsWith(" (local)") ? this.Text.Replace(" (local)", "") : this.Text;
-			this.Text = CurrentNotebook != null ? CurrentNotebook.Settings.AllowCloud ? this.Text : this.Text + " (local)" : this.Text;
+			//this.Text = CurrentNotebook != null ? CurrentNotebook.Settings.AllowCloud ? this.Text : this.Text + " (local)" : this.Text;
 		}
 
 		private async void ShowHideMenusAndControls(SelectionState st)

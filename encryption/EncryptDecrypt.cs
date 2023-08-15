@@ -124,7 +124,7 @@ namespace Encryption
 					}
 
 				}
-				catch(Exception e) { TextToDecrypt = string.Empty; }
+				catch(Exception) { TextToDecrypt = string.Empty; }
 			//}
 
 			return TextToDecrypt;

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Encryption;
+using myNotebooks.DataAccess;
 using myNotebooks.objects;
 
 namespace myNotebooks.subforms
@@ -23,17 +24,18 @@ namespace myNotebooks.subforms
 		private string OriginalText_Full = string.Empty;
 		private LabelsManager.LabelsSortType Sort = LabelsManager.LabelsSortType.None;
 		private string LabelLabelsSelected = "({0} selected)";
-
+		public int NotebookId { get; set; }
 		public bool Saved { get; private set; }
 		private bool PreserveOriginalText;
 
-		public frmNewEntry(Form parent, Notebook notebook, Entry entryToEdit = null, bool disallowOriginalTextEdit = false)
+		public frmNewEntry(Form parent, Notebook notebook, int notebookId = 0, Entry entryToEdit = null, bool disallowOriginalTextEdit = false)
 		{
 			InitializeComponent();
 			Entry = entryToEdit;
 			IsEdit = Entry != null;
 			PreserveOriginalText = disallowOriginalTextEdit;
 			CurrentNotebook = notebook;
+			NotebookId = notebookId;
 			Utilities.SetStartPosition(this, parent);
 		}
 
@@ -228,13 +230,17 @@ namespace myNotebooks.subforms
 						this.Entry.Labels = LabelsManager.CheckedLabels_Get(clbLabels);
 						this.Entry.RTF = rtbNewEntry.Rtf;
 						Entry.EditedOn  = DateTime.Now;
-
 					}
 					else
 					{
 						Entry newEntry = new(txtNewEntryTitle.Text.Trim(), rtbNewEntry.Text.Trim(), rtbNewEntry.Rtf, 
-							LabelsManager.CheckedLabels_Get(clbLabels), CurrentNotebook.Name);
-						if (Entry == null) { CurrentNotebook.AddEntry(newEntry); } else { CurrentNotebook.ReplaceEntry(Entry, newEntry); }
+							LabelsManager.CheckedLabels_Get(clbLabels), CurrentNotebook.Id, CurrentNotebook.Name);
+
+						newEntry.CreatedBy = Program.User.UserId;
+						newEntry.NotebookId = this.NotebookId;
+						var v = DbAccess.CreateNotebookEntry(newEntry);
+
+						//if (Entry == null) { CurrentNotebook.AddEntry(newEntry); } else { CurrentNotebook.ReplaceEntry(Entry, newEntry); }
 						Entry = newEntry;
 					}
 

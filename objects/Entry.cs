@@ -26,7 +26,7 @@ namespace myNotebooks
 		public string		DisplayText { get { return GetTextDisplayText(); } set { DisplayText = value; } }
 		public DateTime		EditedOn { get; set; }
         public string		Id { get; set; }
-		public string		Labels { get; set; }
+		public string		Labels { get; set; } = string.Empty;
 		public string		NotebookName { get; set; }
 		public int			NotebookId { get; set; }
 		public string		RTF { get; set; }
@@ -50,7 +50,7 @@ namespace myNotebooks
 		//	isEdited = entry.isEdited;
 		//}
 
-		public Entry(string _title, string _text, string _RTF, string _labels, string _notebookName = "", bool _edited = false)
+		public Entry(string _title, string _text, string _RTF, string _labels, int notebookId = 0, string _notebookName = "", bool _edited = false)
         {
 			if(CreatedOn == DateTime.MinValue) { CreatedOn = DateTime.Now; }
 
@@ -61,6 +61,7 @@ namespace myNotebooks
             Id			= Guid.NewGuid().ToString();
 			//isEdited	= _edited;	
 			NotebookName = _notebookName;
+			NotebookId = notebookId;
 		}
 
 		public Entry(DataTable dt, int rowIndex = 0)
@@ -68,11 +69,11 @@ namespace myNotebooks
 			var value = "";
 			var setProp = true;
 
-			foreach (PropertyInfo sPropertyName in typeof(MNUser).GetProperties())
+			foreach (PropertyInfo sPropertyName in typeof(Entry).GetProperties())
 			{
 				try
 				{
-					if (sPropertyName.Name != "Assignments" & sPropertyName.Name != "Permissions" & dt.Columns[sPropertyName.Name] != null)
+					if (sPropertyName.Name != "DisplayText" & dt.Columns[sPropertyName.Name] != null)
 					{
 						if (dt.Columns[sPropertyName.Name].DataType == typeof(string))
 						{
@@ -105,8 +106,11 @@ namespace myNotebooks
 				{
 					if (ex.GetType() != typeof(InvalidCastException))
 					{
-						using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The error '" + ex.Message + "' occurred while processing the " +
-							"property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
+						if(sPropertyName.Name != "EditedOn" && sPropertyName.Name != "Id")
+						{
+							using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The error '" + ex.Message + "' occurred while processing the " +
+								"property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
+						}
 					}
 				}
 			}
@@ -115,22 +119,22 @@ namespace myNotebooks
 		string				GetTextDisplayText()
 		{
 			return String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
-				, Title, CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), Labels.Replace(",", ", "), Text);
+				, Title, CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), "labels", Text);	// Labels.Replace(",", ", "), Text);
 		}
 
 		public string[]		GetSynopsis(bool includeJournalName = false, int maxWidth = -1)
 		{
 			string[] sRtrn = new string[4];
-			//int iTextChunkLength = maxWidth > 0 ? maxWidth / 5 : 150;
-			//string sTitle = Title + " (" + CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"
-			//	+ (EditedOn  < new DateTime(2000, 1, 1) ? "" : " [edited on " + EditedOn .ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + "]");
-			//if (includeJournalName) { sTitle += NotebookName == null ? "" : " > in '" + NotebookName + "'"; }
-			//sRtrn[0] = sTitle;
-			//string sEntryText = Text.Replace("\n", " ");
-			//sEntryText = (sEntryText.Length < iTextChunkLength ? sEntryText : sEntryText.Substring(0, iTextChunkLength) + " ...");
-			//sRtrn[1] = sEntryText;
-			//sRtrn[2] = "labels: " + Labels.Replace(",", ", ");
-			//sRtrn[3] = "---------------------";
+			int iTextChunkLength = maxWidth > 0 ? maxWidth / 5 : 150;
+			string sTitle = Title + " (" + CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"
+				+ (EditedOn  < new DateTime(2000, 1, 1) ? "" : " [edited on " + EditedOn .ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + "]");
+			if (includeJournalName) { sTitle += NotebookName == null ? "" : " > in '" + NotebookName + "'"; }
+			sRtrn[0] = sTitle;
+			string sEntryText = Text.Replace("\n", " ");
+			sEntryText = (sEntryText.Length < iTextChunkLength ? sEntryText : sEntryText.Substring(0, iTextChunkLength) + " ...");
+			sRtrn[1] = sEntryText;
+			sRtrn[2] = "labels: " + Labels.Replace(",", ", ");
+			sRtrn[3] = "---------------------";
 			return sRtrn;
 		}
 
