@@ -38,9 +38,9 @@ namespace myNotebooks.subforms
 			grp1 = new System.Windows.Forms.Panel();
 			txtDescription = new System.Windows.Forms.TextBox();
 			label3 = new System.Windows.Forms.Label();
-			btnSettings = new System.Windows.Forms.Button();
 			lblNameExists = new System.Windows.Forms.Label();
 			lblShowPIN = new System.Windows.Forms.Label();
+			btnSettings = new System.Windows.Forms.Button();
 			grp1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -78,7 +78,7 @@ namespace myNotebooks.subforms
 			txtPIN.Name = "txtPIN";
 			txtPIN.PasswordChar = '*';
 			txtPIN.Size = new System.Drawing.Size(163, 23);
-			txtPIN.TabIndex = 1;
+			txtPIN.TabIndex = 2;
 			txtPIN.TextChanged += this.txtPIN_TextChanged;
 			// 
 			// btnCancel
@@ -126,7 +126,7 @@ namespace myNotebooks.subforms
 			txtDescription.Multiline = true;
 			txtDescription.Name = "txtDescription";
 			txtDescription.Size = new System.Drawing.Size(163, 48);
-			txtDescription.TabIndex = 57;
+			txtDescription.TabIndex = 1;
 			// 
 			// label3
 			// 
@@ -136,17 +136,6 @@ namespace myNotebooks.subforms
 			label3.Size = new System.Drawing.Size(70, 15);
 			label3.TabIndex = 58;
 			label3.Text = "Description:";
-			// 
-			// btnSettings
-			// 
-			btnSettings.Enabled = false;
-			btnSettings.Location = new System.Drawing.Point(77, 248);
-			btnSettings.Name = "btnSettings";
-			btnSettings.Size = new System.Drawing.Size(120, 23);
-			btnSettings.TabIndex = 56;
-			btnSettings.Text = "&Set Sync Behaviors";
-			btnSettings.UseVisualStyleBackColor = true;
-			btnSettings.Click += this.btnSettings_Click;
 			// 
 			// lblNameExists
 			// 
@@ -165,11 +154,22 @@ namespace myNotebooks.subforms
 			lblShowPIN.Location = new System.Drawing.Point(184, 131);
 			lblShowPIN.Name = "lblShowPIN";
 			lblShowPIN.Size = new System.Drawing.Size(35, 13);
-			lblShowPIN.TabIndex = 2;
+			lblShowPIN.TabIndex = 3;
 			lblShowPIN.Text = "show";
 			lblShowPIN.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			lblShowPIN.Visible = false;
 			lblShowPIN.Click += this.lblShowPIN_Click;
+			// 
+			// btnSettings
+			// 
+			btnSettings.Enabled = false;
+			btnSettings.Location = new System.Drawing.Point(77, 248);
+			btnSettings.Name = "btnSettings";
+			btnSettings.Size = new System.Drawing.Size(120, 23);
+			btnSettings.TabIndex = 56;
+			btnSettings.Text = "&Set Sync Behaviors";
+			btnSettings.UseVisualStyleBackColor = true;
+			btnSettings.Click += this.btnSettings_Click;
 			// 
 			// frmNewNotebook
 			// 

@@ -37,7 +37,7 @@ namespace myNotebooks.subforms
 
 		private void btnOk_Click(object sender, EventArgs e)
 		{
-			
+
 			this.LocalNotebook = new Notebook();
 			//NotebookSettings nbs = LocalNotebook.Settings;
 			//LocalNotebook.Settings = nbs;

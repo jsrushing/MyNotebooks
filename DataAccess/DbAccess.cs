@@ -150,15 +150,15 @@ namespace myNotebooks.DataAccess
 				conn.Open();
 
 				using (SqlCommand cmd = new("sp_CreateNotebook", conn))
+				
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 					cmd.Parameters.AddWithValue("@createdBy",	nb.CreatedBy);
-					cmd.Parameters.AddWithValue("@createdOn",	nb.CreatedOn);
 					cmd.Parameters.AddWithValue("@description", nb.Description);
 					cmd.Parameters.AddWithValue("@name",		nb.Name);
-					cmd.Parameters.AddWithValue("@parentId",	nb.ParentId);
+					cmd.Parameters.AddWithValue("@parentId",	Program.ActiveGroupId);
 					cmd.Parameters.AddWithValue("@pin",			nb.PIN);
-					cmd.Parameters.Add("@rtnVal");
+					cmd.Parameters.Add("@retVal", SqlDbType.Int);
 					cmd.Parameters["@retVal"].Direction= ParameterDirection.ReturnValue;
 					cmd.ExecuteNonQuery();
 					iRtrn = Convert.ToInt32(cmd.Parameters["@retVal"].Value.ToString());
@@ -196,6 +196,35 @@ namespace myNotebooks.DataAccess
 			}
 
 			return iRtrn;
+		}
+
+		public static bool			CreateOrgLevel(int creatorId, string orgLevelDescription, frmMain.OrgLevelTypes orgLevelType, string orgLevelName, int parentId)
+		{
+			bool bRtrn = false;
+
+			try
+			{
+				using (SqlConnection conn = new(connString))
+				{
+					conn.Open();
+					using (SqlCommand cmd = new SqlCommand("sp_CreateOrgLevel", conn))
+					{
+						cmd.CommandType = CommandType.StoredProcedure;
+						cmd.Parameters.AddWithValue("@parentId",			parentId);
+						cmd.Parameters.AddWithValue("@createdBy",			creatorId);
+						cmd.Parameters.AddWithValue("@orgLevelType",		(int)orgLevelType);
+						cmd.Parameters.AddWithValue("@orgLevelName",		orgLevelName.Trim());
+						cmd.Parameters.AddWithValue("@orgLevelDescription", orgLevelDescription.Trim());
+						cmd.Parameters.Add("@retVal", SqlDbType.Int);
+						cmd.Parameters["@retVal"].Direction = ParameterDirection.ReturnValue;
+						cmd.ExecuteNonQuery();
+						bRtrn = cmd.Parameters["@retVal"].Value.ToString() == "1";
+					}
+				}
+			}
+			catch (Exception ex) { var v = ex.Message; }
+
+			return bRtrn;
 		}
 
 		public static bool			DeleteUser(int userId)
@@ -266,52 +295,207 @@ namespace myNotebooks.DataAccess
 			}
 		}
 
-		public static bool			CreateOrgLevel(int creatorId, string orgLevelDescription, frmMain.OrgLevelTypes orgLevelType, string orgLevelName, int parentId)
+		public static Entry			GetNBEntryFullTextAndTitle(int entryId, Entry entryToComplete) 
 		{
-			bool bRtrn = false;
-
-			try
-			{
-				using (SqlConnection conn = new(connString))
-				{
-					conn.Open();
-					using (SqlCommand cmd = new SqlCommand("sp_CreateOrgLevel", conn))
-					{
-						cmd.CommandType = CommandType.StoredProcedure;
-						cmd.Parameters.AddWithValue("@parentId",			parentId);
-						cmd.Parameters.AddWithValue("@createdBy",			creatorId);
-						cmd.Parameters.AddWithValue("@orgLevelType",		(int)orgLevelType);
-						cmd.Parameters.AddWithValue("@orgLevelName",		orgLevelName.Trim());
-						cmd.Parameters.AddWithValue("@orgLevelDescription", orgLevelDescription.Trim());
-						cmd.Parameters.Add("@retVal", SqlDbType.Int);
-						cmd.Parameters["@retVal"].Direction = ParameterDirection.ReturnValue;
-						cmd.ExecuteNonQuery();
-						bRtrn = cmd.Parameters["@retVal"].Value.ToString() == "1";
-					}
-				}
-			}
-			catch (Exception ex) { var v = ex.Message; }
-
-			return bRtrn;
-		}
-
-		public static DataSet		GetUserOrgLevels(int userId)
-		{
-			DataSet ds = new();
-
-			using(SqlConnection conn = new(connString))
+			using (SqlConnection conn = new(connString))
 			{
 				conn.Open();
 
-				using(SqlCommand cmd = new SqlCommand("sp_GetOrgLevelAssignmentsForUser", conn))
+				using (SqlCommand cmd = new("GetNBEntryFullTextAndTitle", conn))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@userId", userId);
-					using (SqlDataAdapter da = new() { SelectCommand = cmd }) { da.Fill(ds); }
+					cmd.Parameters.AddWithValue("@entryId", entryId);
+					cmd.Parameters.Add("@text", SqlDbType.VarChar);
+					cmd.Parameters.Add("@title", SqlDbType.VarChar);
+					cmd.Parameters["@text"].Direction = ParameterDirection.Output;
+					cmd.Parameters["@title"].Direction = ParameterDirection.Output;
+					cmd.ExecuteNonQuery();
+					entryToComplete.Text = cmd.Parameters["@text"].ToString();
+					entryToComplete.Title = cmd.Parameters["@title"].ToString();
 				}
 			}
 
-			return ds;
+			return entryToComplete;
+		}
+
+		public static Notebook		GetNotebookWithShortEntries(int notebookId) 
+		{
+			Notebook nbRtrn = null;
+			DataTable dt = new();
+
+			using (SqlConnection conn = new(connString))
+			{
+				conn.Open();
+
+				using (SqlCommand cmd = new("sp_GetNotebook", conn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					cmd.Parameters.AddWithValue("@notebookId", notebookId);
+					SqlDataAdapter sda = new SqlDataAdapter() { SelectCommand = cmd };
+					sda.Fill(dt);
+					nbRtrn = new Notebook(dt);
+
+					// get the entries
+					dt = new();
+					cmd.Parameters.Clear();
+					cmd.CommandText = "sp_GetNotebookEntries";
+					cmd.Parameters.AddWithValue("notebookId", notebookId);
+					sda.SelectCommand = cmd;
+					sda.Fill(dt);
+
+					for(int i = 0; i < dt.Rows.Count; i++)
+					{
+						Entry entry = new(dt, i);
+						var v = dt.Rows[i].Field<DateTime?>("EditedOn").ToString();
+						if (v != null)
+						{
+							entry.EditedOn = DateTime.Parse(v);
+							nbRtrn.Entries.Add(entry);
+						}
+					}
+
+					//foreach (DataRow dr in dt.Rows)
+					//{
+					//	Entry entry = new()
+					//	{
+					//		Id = dr.Field<int>("Id").ToString(),
+					//		NotebookId = Convert.ToInt32(dr.Field<int>("NotebookId")),
+					//		Title = dr.Field<string>("Title").ToString(),
+					//		Text = dr.Field<string>("Text").ToString(),
+					//		CreatedBy = Convert.ToInt32(dr.Field<int>("CreatedBy")),
+					//		CreatedOn = DateTime.Parse(dr.Field<DateTime>("CreatedOn").ToString())
+					//	};
+
+					//	var v = dr.Field<DateTime?>("EditedOn").ToString();
+					//	if (v != null)
+					//	{
+					//		entry.EditedOn = DateTime.Parse(v);
+					//		nbRtrn.Entries.Add(entry);
+					//	}
+					//}
+
+
+
+					//SqlDataAdapter da = new() { SelectCommand = cmd };
+					//da.Fill(dt);
+
+					//DataRow drNotebook = dt.Tables[0].Rows[0];
+
+					//nbRtrn = new()
+					//{
+					//	CreatedBy	= (int)drNotebook["CreatedBy"],
+					//	CreatedOn	= DateTime.Parse(drNotebook["CreatedBy"].ToString()),
+					//	EditedOn	= DateTime.Parse(drNotebook["EditedOn"].ToString()),
+					//	Id			= (int)drNotebook["Id"],
+					//	Name		= (string)drNotebook["Name"],
+					//	PIN			= drNotebook["PIN"].ToString()
+					//};
+
+
+
+
+					//foreach(DataRow drEntry in dt.Tables[1].Rows)
+					//{
+					//	Entry entry = new()
+					//	{
+					//		Id			= drEntry["Id"].ToString(),
+					//		Title		= drEntry["Title"].ToString(),	// Title and Text are truncated for loading all entries.
+					//		Text		= drEntry["Text"].ToString(),	// Full values are retrieved when the entry is clicked.
+					//		CreatedBy	= (int)drEntry["CreatedBy"],
+					//		CreatedOn	= DateTime.Parse(drEntry["CreatedOn"].ToString())
+					//	};
+					//	nbRtrn.Entries.Add(entry);
+					//}
+				}
+			}
+
+			return nbRtrn;
+		}
+
+		public static List<Entry>	GetNotebookEntries(int notebookId)
+		{
+			List<Entry> lstRtrn = new List<Entry>();
+			DataTable dt = new DataTable();
+
+			using (SqlConnection conn = new(connString))
+			{
+				conn.Open();
+
+				using (SqlCommand cmd = new("sp_GetNotebookEntries", conn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					cmd.Parameters.AddWithValue("@notebookId", notebookId);
+					SqlDataAdapter sda = new() { SelectCommand = cmd };
+					sda.Fill(dt);
+				}
+			}
+
+			foreach(DataRow dr in dt.Rows) { lstRtrn.Add(new(dt));	}
+			return lstRtrn;
+		}
+
+		public static List<Notebook> GetNotebookNamesAndIdsForGroup(int groupId)
+		{
+			List<Notebook> lstReturn = new List<Notebook>();
+
+			using (SqlConnection conn = new(connString))
+			{
+				conn.Open();
+
+				using (SqlCommand cmd = new("sp_GetNotebookNamesAndIds", conn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					cmd.Parameters.AddWithValue("@groupId", groupId);
+					
+					using(SqlDataReader  reader = cmd.ExecuteReader())
+					{
+						if (reader.HasRows)
+						{
+							while (reader.Read())
+							{
+								Notebook nb = new Notebook() 
+								{
+									Id	 = reader.GetInt32	("Id"),
+									Name = reader.GetString	("Name")
+								};
+
+								lstReturn.Add(nb);
+							}	
+						}
+					}
+				}
+			}
+
+			return lstReturn;
+		}
+
+		public static List<ListItem> GetOrgLevelChildren(int orgLevelId, int parentId) 
+		{
+			List<ListItem> lstRtrn = new List<ListItem>();
+			//TreeNode node;
+			DataTable dt = new();
+
+			using (SqlConnection conn = new(connString))
+			{
+				conn.Open();
+				using (SqlCommand cmd = new("sp_GetOrgLevelChildren", conn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					cmd.Parameters.AddWithValue("@orgLevelId", orgLevelId);
+					cmd.Parameters.AddWithValue("parentId", parentId);
+					SqlDataAdapter adapter = new () { SelectCommand = cmd };
+					adapter.Fill(dt);
+					foreach (DataRow row in dt.Rows)
+					{
+						lstRtrn.Add(new ListItem() { Id = (int)row["Id"], Name = row["Name"].ToString()});
+
+						//node = new() { Tag = row["Id"].ToString(), Text = row["Name"].ToString().Trim(), Name = row["Name"].ToString().Trim(), ToolTipText = row["Description"].ToString() };
+						//lstRtrn.Add(node);
+					}
+				}
+			}
+
+			return lstRtrn;
 		}
 
 		public static List<ListItem> GetTopLevelItemsForUser(int userId)
@@ -341,6 +525,25 @@ namespace myNotebooks.DataAccess
 			}
 
 			return lstRtrn;
+		}
+
+		public static DataSet		GetUserOrgLevels(int userId)
+		{
+			DataSet ds = new();
+
+			using(SqlConnection conn = new(connString))
+			{
+				conn.Open();
+
+				using(SqlCommand cmd = new SqlCommand("sp_GetOrgLevelAssignmentsForUser", conn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					cmd.Parameters.AddWithValue("@userId", userId);
+					using (SqlDataAdapter da = new() { SelectCommand = cmd }) { da.Fill(ds); }
+				}
+			}
+
+			return ds;
 		}
 
 		//public static List<Company> GetCompanies(int userId)
@@ -422,158 +625,6 @@ namespace myNotebooks.DataAccess
 
 		//	return lstReturn;
 		//}
-
-		public static Entry			GetEntryTextAndTitle(int entryId, Entry entryToComplete) 
-		{
-
-
-			return entryToComplete;
-		}
-
-		public static Notebook		GetNotebook(int notebookId) 
-		{
-			Notebook nbRtrn = null;
-			DataTable dt = new();
-
-			using (SqlConnection conn = new(connString))
-			{
-				conn.Open();
-
-				using (SqlCommand cmd = new("sp_GetNotebook", conn))
-				{
-					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@notebookId", notebookId);
-					SqlDataAdapter sda = new SqlDataAdapter() { SelectCommand = cmd };
-					sda.Fill(dt);
-					nbRtrn = new Notebook(dt);
-
-					dt = new();
-					cmd.Parameters.Clear();
-					cmd.CommandText = "sp_GetEntries";
-					cmd.Parameters.AddWithValue("notebookId", notebookId);
-					sda.SelectCommand = cmd;
-					sda.Fill(dt);
-					foreach (DataRow dr in dt.Rows)
-					{
-						Entry entry = new()
-						{
-							Id = dr.Field<int>("Id").ToString(),
-							NotebookId = Convert.ToInt32(dr.Field<int>("NotebookId")),
-							Title = dr.Field<string>("Title").ToString(),
-							Text = dr.Field<string>("Text").ToString(),
-							CreatedBy = Convert.ToInt32(dr.Field<int>("CreatedBy")),
-							CreatedOn = DateTime.Parse(dr.Field<DateTime>("CreatedOn").ToString())
-						};
-
-						var v = dr.Field<DateTime?>("EditedOn").ToString();
-						if (v != null)
-						{
-							entry.EditedOn = DateTime.Parse(v);
-							nbRtrn.Entries.Add(entry);
-						}
-					}
-
-
-
-					//SqlDataAdapter da = new() { SelectCommand = cmd };
-					//da.Fill(dt);
-
-					//DataRow drNotebook = dt.Tables[0].Rows[0];
-
-					//nbRtrn = new()
-					//{
-					//	CreatedBy	= (int)drNotebook["CreatedBy"],
-					//	CreatedOn	= DateTime.Parse(drNotebook["CreatedBy"].ToString()),
-					//	EditedOn	= DateTime.Parse(drNotebook["EditedOn"].ToString()),
-					//	Id			= (int)drNotebook["Id"],
-					//	Name		= (string)drNotebook["Name"],
-					//	PIN			= drNotebook["PIN"].ToString()
-					//};
-
-
-
-
-					//foreach(DataRow drEntry in dt.Tables[1].Rows)
-					//{
-					//	Entry entry = new()
-					//	{
-					//		Id			= drEntry["Id"].ToString(),
-					//		Title		= drEntry["Title"].ToString(),	// Title and Text are truncated for loading all entries.
-					//		Text		= drEntry["Text"].ToString(),	// Full values are retrieved when the entry is clicked.
-					//		CreatedBy	= (int)drEntry["CreatedBy"],
-					//		CreatedOn	= DateTime.Parse(drEntry["CreatedOn"].ToString())
-					//	};
-					//	nbRtrn.Entries.Add(entry);
-					//}
-				}
-			}
-
-			return nbRtrn;
-		}
-
-		public static List<Notebook> GetNotebookNamesAndIdsForGroup(int groupId)
-		{
-			List<Notebook> lstReturn = new List<Notebook>();
-
-			using (SqlConnection conn = new(connString))
-			{
-				conn.Open();
-
-				using (SqlCommand cmd = new("sp_GetNotebookNames", conn))
-				{
-					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@groupId", groupId);
-					
-					using(SqlDataReader  reader = cmd.ExecuteReader())
-					{
-						if (reader.HasRows)
-						{
-							while (reader.Read())
-							{
-								Notebook nb = new Notebook() 
-								{
-									Id	 = reader.GetInt32	("Id"),
-									Name = reader.GetString	("Name")
-								};
-
-								lstReturn.Add(nb);
-							}	
-						}
-					}
-				}
-			}
-
-			return lstReturn;
-		}
-
-		public static List<ListItem> GetOrgLevelChildren(int orgLevelId, int parentId) 
-		{
-			List<ListItem> lstRtrn = new List<ListItem>();
-			//TreeNode node;
-			DataTable dt = new();
-
-			using (SqlConnection conn = new(connString))
-			{
-				conn.Open();
-				using (SqlCommand cmd = new("sp_GetOrgLevelChildren", conn))
-				{
-					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@orgLevelId", orgLevelId);
-					cmd.Parameters.AddWithValue("parentId", parentId);
-					SqlDataAdapter adapter = new () { SelectCommand = cmd };
-					adapter.Fill(dt);
-					foreach (DataRow row in dt.Rows)
-					{
-						lstRtrn.Add(new ListItem() { Id = (int)row["Id"], Name = row["Name"].ToString()});
-
-						//node = new() { Tag = row["Id"].ToString(), Text = row["Name"].ToString().Trim(), Name = row["Name"].ToString().Trim(), ToolTipText = row["Description"].ToString() };
-						//lstRtrn.Add(node);
-					}
-				}
-			}
-
-			return lstRtrn;
-		}
 
 		public static DataSet		GetUser(string userName, string password)
 		{

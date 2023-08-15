@@ -352,6 +352,7 @@ namespace myNotebooks.subforms
 			lstGroups_MU.Tag = "3";
 			lstGroups_MU.ValueMember = "Id";
 			lstGroups_MU.DragLeave += this.lstMU_DragLeave;
+			lstGroups_MU.DoubleClick += this.lstGroups_MU_DoubleClick;
 			lstGroups_MU.MouseDown += this.lstMUCU_MouseDown;
 			lstGroups_MU.MouseMove += this.lstMUCU_MouseMove;
 			// 
@@ -548,6 +549,7 @@ namespace myNotebooks.subforms
 			lstGroups_CU.Tag = "3";
 			lstGroups_CU.ValueMember = "Id";
 			lstGroups_CU.DragEnter += this.lstCU_DragEnter;
+			lstGroups_CU.DoubleClick += this.lstGroups_MU_DoubleClick;
 			lstGroups_CU.MouseDown += this.lstMUCU_MouseDown;
 			lstGroups_CU.MouseMove += this.lstMUCU_MouseMove;
 			// 
@@ -627,7 +629,8 @@ namespace myNotebooks.subforms
 			Name = "frmManagementConsole";
 			Text = "ManagementConsole";
 			Activated += this.frmManagementConsole_Activated;
-			Load += this.frmManagementConsole_Load_1;
+			FormClosing += this.frmManagementConsole_FormClosing;
+			Load += this.frmManagementConsole_Load;
 			grpUsers.ResumeLayout(false);
 			pnlCreateUser.ResumeLayout(false);
 			pnlCreateUser.PerformLayout();

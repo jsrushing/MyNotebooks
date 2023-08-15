@@ -37,11 +37,11 @@ namespace myNotebooks
 		public string	PIN { get; set; }
 		public int		ParentId { get; set; }
 
-		public string			FileName;
-		public string			root = "notebooks\\";
-		public bool				WrongPIN = false;
-		public bool				BackupCompleted;
-		public bool				Saved;
+		public string	FileName;
+		public string	root = "notebooks\\";
+		public bool		WrongPIN = false;
+		public bool		BackupCompleted;
+		public bool		Saved;
 		public List<Entry>		Entries = new List<Entry>();
 		public NotebookSettings	Settings;
 		
@@ -68,7 +68,7 @@ namespace myNotebooks
 						value = dt.Rows[0].Field<string>(sPropertyName.Name).ToString();
 						this.GetType().GetProperty(sPropertyName.Name).SetValue(this, value.ToString());
 					}
-					if (dt.Columns[sPropertyName.Name].DataType == typeof(Int32))
+					else if (dt.Columns[sPropertyName.Name].DataType == typeof(Int32))
 					{
 						value = dt.Rows[0].Field<Int32>(sPropertyName.Name).ToString();
 						this.GetType().GetProperty(sPropertyName.Name).SetValue(this, Convert.ToInt32(value));
@@ -82,7 +82,6 @@ namespace myNotebooks
 				catch { }
 			}
 		}
-
 
 		public void			AddEntry(Entry entryToAdd) { Entries.Add(entryToAdd); }
 
@@ -401,7 +400,7 @@ namespace myNotebooks
 			//}
 
 			// switch back to the original notebook
-			this.FileName	= nTmp.FileName;  // EncryptDecrypt.Decrypt(this.FileName, Program.PIN);
+			//this.FileName	= nTmp.FileName;  // EncryptDecrypt.Decrypt(this.FileName, Program.PIN);
 			this.Name		= nTmp.Name;	// EncryptDecrypt.Decrypt(this.Name, Program.PIN);
 			//this.Entries	= nTmp.Entries;
 

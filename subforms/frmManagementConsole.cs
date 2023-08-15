@@ -64,13 +64,28 @@ namespace myNotebooks.subforms
 			txtPwd.Focus();
 		}
 
-		private void frmManagementConsole_Load_1(object sender, EventArgs e)
+		private void frmManagementConsole_Load(object sender, EventArgs e)
 		{
 			if (IsQuickStart)
 			{
 				txtPwd.Text = Program.PIN;
 				btnLogin_Click(null, null);
 				IsQuickStart = false;
+			}
+		}
+
+		private void frmManagementConsole_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			if (lstGroups_CU.SelectedItem == null & lstGroups_MU.SelectedItem == null)
+			{
+				using (frmMessage frm = new(frmMessage.OperationType.Message, "You must select a group.", "Group Selection Required", this)) { frm.ShowDialog(); }
+				e.Cancel = true;
+			}
+			else
+			{
+				var v = lstGroups_MU.SelectedItem as ListItem;
+				var v2 = lstGroups_CU.SelectedItem as ListItem;
+				Program.ActiveGroupId = v == null ? v2.Id : v.Id;
 			}
 		}
 
@@ -336,6 +351,9 @@ namespace myNotebooks.subforms
 			}
 		}
 
+		private void lstGroups_MU_DoubleClick(object sender, EventArgs e)
+		{ mnuManageNotebooks_Click(null, null); }
+
 		private void lstMU_DragLeave(object sender, EventArgs e)
 		{
 			ListBox lb = (ListBox)sender;
@@ -360,37 +378,37 @@ namespace myNotebooks.subforms
 			{
 				//if (CurrentMouseListBox.SelectedItem != null)
 				//{
-					var vMouseListSelectedItemName = CurrentMouseListBox.SelectedItem != null ? (CurrentMouseListBox.SelectedItem as ListItem).Name.Trim() : null;
-					var vGrp = CurrentMouseGroupBox as GroupBox;
-					GroupBox vMouseListBoxGroup = (GroupBox)CurrentMouseListBox.Parent;
-					var vCurMouseBoxIndex = OrgLevelLists_MU.IndexOf(CurrentMouseListBox);
-					var vParentListSelectedItem = string.Empty;
+				var vMouseListSelectedItemName = CurrentMouseListBox.SelectedItem != null ? (CurrentMouseListBox.SelectedItem as ListItem).Name.Trim() : null;
+				var vGrp = CurrentMouseGroupBox as GroupBox;
+				GroupBox vMouseListBoxGroup = (GroupBox)CurrentMouseListBox.Parent;
+				var vCurMouseBoxIndex = OrgLevelLists_MU.IndexOf(CurrentMouseListBox);
+				var vParentListSelectedItem = string.Empty;
 
-					if (vCurMouseBoxIndex > 0)
-					{
-						var vPreviousOrgLevelList = OrgLevelLists_MU[vCurMouseBoxIndex - 1] as ListBox;
-						vParentListSelectedItem = vPreviousOrgLevelList.SelectedItem != null ? vPreviousOrgLevelList.SelectedItem.ToString().Trim() : "";
-					}
+				if (vCurMouseBoxIndex > 0)
+				{
+					var vPreviousOrgLevelList = OrgLevelLists_MU[vCurMouseBoxIndex - 1] as ListBox;
+					vParentListSelectedItem = vPreviousOrgLevelList.SelectedItem != null ? vPreviousOrgLevelList.SelectedItem.ToString().Trim() : "";
+				}
 
-					ListBox parentList = (ListBox)vMouseListBoxGroup.Controls[0];
+				ListBox parentList = (ListBox)vMouseListBoxGroup.Controls[0];
 
-					mnuCreateNew.Text = "&Create New " + vMouseListBoxGroup.Name.Replace("grp", "").Replace("_MU", "") +
-												(vParentListSelectedItem.Length > 0 ? " in '" + vParentListSelectedItem.Trim() + "'" : "'");
-					mnuCreateNew.Enabled = CurrentMouseListBox.Name.EndsWith("_MU");
+				mnuCreateNew.Text = "&Create New " + vMouseListBoxGroup.Name.Replace("grp", "").Replace("_MU", "") +
+											(vParentListSelectedItem.Length > 0 ? " in '" + vParentListSelectedItem.Trim() + "'" : "'");
+				mnuCreateNew.Enabled = CurrentMouseListBox.Name.EndsWith("_MU");
 
-					mnuAssignUser.Enabled = vMouseListSelectedItemName != null && vGrp.Enabled && vGrp.Enabled;
+				mnuAssignUser.Enabled = vMouseListSelectedItemName != null && vGrp.Enabled && vGrp.Enabled;
 
-					if (vMouseListSelectedItemName != null) mnuAssignUser.Text = "&Assign '" + vMouseListSelectedItemName + "' to User";
-				
-					mnuAssignUser.Visible = this.Size == FullSize && CurrentMouseListBox.Name.EndsWith("_MU");
+				if (vMouseListSelectedItemName != null) mnuAssignUser.Text = "&Assign '" + vMouseListSelectedItemName + "' to User";
 
-					mnuEdit.Enabled = vMouseListSelectedItemName != null & CurrentMouseListBox.Name.EndsWith("_MU");
-					mnuEdit.Text = vMouseListSelectedItemName != null ? "Edit '" + vMouseListSelectedItemName + "'" : "Delete";
+				mnuAssignUser.Visible = this.Size == FullSize && CurrentMouseListBox.Name.EndsWith("_MU");
 
-					mnuDelete.Enabled = vMouseListSelectedItemName != null;
-					mnuDelete.Text = vMouseListSelectedItemName != null ? "Delete '" + vMouseListSelectedItemName + "'" : "Delete";
+				mnuEdit.Enabled = vMouseListSelectedItemName != null & CurrentMouseListBox.Name.EndsWith("_MU");
+				mnuEdit.Text = vMouseListSelectedItemName != null ? "Edit '" + vMouseListSelectedItemName + "'" : "Delete";
 
-					mnuManageNotebooks.Visible = vGrp.Name.ToLower().Contains("group");
+				mnuDelete.Enabled = vMouseListSelectedItemName != null;
+				mnuDelete.Text = vMouseListSelectedItemName != null ? "Delete '" + vMouseListSelectedItemName + "'" : "Delete";
+
+				mnuManageNotebooks.Visible = vGrp.Name.ToLower().Contains("group");
 				//}
 				//else
 				//{
@@ -503,6 +521,7 @@ namespace myNotebooks.subforms
 		{
 			// Get notebooks by ParentId (group id).
 			var groupId = (CurrentMouseListBox.SelectedItem as ListItem).Id;
+			Program.ActiveGroupId = groupId;
 			List<Notebook> notebooks = DbAccess.GetNotebookNamesAndIdsForGroup(groupId);
 			var tmpProgramUser = Program.User;
 
@@ -510,8 +529,8 @@ namespace myNotebooks.subforms
 			{ tmpProgramUser = Program.User; }
 			else { tmpProgramUser = CurrentUser; }
 
-
-
+			Program.AllNotebooks.AddRange(notebooks);
+			this.Close();
 		}
 
 		private void PopulateBaseOrgLevels()

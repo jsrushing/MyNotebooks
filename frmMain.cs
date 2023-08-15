@@ -145,6 +145,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using myNotebooks.objects;
+using MyNotebooks.objects;
+using myNotebooks.DataAccess;
 
 namespace myNotebooks.subforms
 {
@@ -155,6 +157,7 @@ namespace myNotebooks.subforms
 		private bool FirstSelection = true;
 		bool SuppressDateClick = false;
 		string FoundCountString = "showing {0} of {1} entries";
+		private int SelectedNotebookId;
 
 		private enum SelectionState
 		{
@@ -192,10 +195,14 @@ namespace myNotebooks.subforms
 
 		private async void frmMain_Load(object sender, EventArgs e)
 		{
-			using (frmUserLogin frm = new frmUserLogin()) { frm.ShowDialog(); }
+			using (frmUserLogin frm = new()) { frm.ShowDialog(); }
 
 			// if we don't have a user, stop
 			if (Program.User == null) { this.Close(); return; }
+
+			using (frmManagementConsole frm = new(this, true)) { frm.ShowDialog(); }
+			
+			if(Program.ActiveGroupId == -1) { this.Close(); return; }
 
 			this.Cursor = Cursors.WaitCursor;
 			System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
@@ -314,7 +321,7 @@ namespace myNotebooks.subforms
 
 			pnlDateFilters.Left = pnlPin.Left - 11;
 			ShowHideMenusAndControls(SelectionState.HideAll);
-			await Utilities.PopulateAllNotebookNames();
+			//await Utilities.PopulateAllNotebookNames();
 
 			if (Program.AzurePassword.Length > 0)
 			{
@@ -326,7 +333,7 @@ namespace myNotebooks.subforms
 
 			if (ddlNotebooks.Items.Count == 0)
 			{
-				using(frmManagementConsole frm = new(this, true)) { frm.ShowDialog(); }
+				//using(frmManagementConsole frm = new(this, true)) { frm.ShowDialog(); }
 
 				//using (frmNewNotebook frm = new frmNewNotebook(this))
 				//{
@@ -368,12 +375,16 @@ namespace myNotebooks.subforms
 			lblWrongPin.Visible = false;
 			if (CurrentNotebook != null && Program.DictCheckedNotebooks.Count == 1 && Program.DictCheckedNotebooks.Keys.Contains(CurrentNotebook.Name)) { Program.DictCheckedNotebooks.Clear(); }
 			if (Program.DictCheckedNotebooks.Count == 0) { Program.DictCheckedNotebooks.Add(ddlNotebooks.Text, txtJournalPIN.Text); }
-			CurrentNotebook = new Notebook(ddlNotebooks.Text, null).Open(true);
+
+			CurrentNotebook = DbAccess.GetNotebookWithShortEntries(Convert.ToInt32(SelectedNotebookId));
+
+			//CurrentNotebook = new Notebook(ddlNotebooks.Text, null).Open(true);
+				
 			var wrongPIN = true;
 
 			if (CurrentNotebook != null)
 			{
-				wrongPIN = CurrentNotebook.WrongPIN;    //  CurrentNotebook.Name.Equals("") | !CurrentNotebook.FileName.Contains("\\");
+				wrongPIN = CurrentNotebook.WrongPIN;
 
 				if (!wrongPIN && !Program.AllNotebookNames.Contains(CurrentNotebook.Name))
 				{
@@ -388,18 +399,18 @@ namespace myNotebooks.subforms
 				}
 				else
 				{
-					if (CurrentNotebook.Settings.AllowCloud && Program.AzurePassword.Length > 0)
-					{
-						var nbPath = CurrentNotebook.FileName;
-						var nbName = CurrentNotebook.Name;
-						CloudSynchronizer cs = new CloudSynchronizer();
-						//await cs.SynchWithCloud(false, CurrentNotebook);
-						Notebook curNotebook = new Notebook(nbName, nbPath).Open();
+					//if (CurrentNotebook.Settings.AllowCloud && Program.AzurePassword.Length > 0)
+					//{
+					//	var nbPath = CurrentNotebook.FileName;
+					//	var nbName = CurrentNotebook.Name;
+					//	CloudSynchronizer cs = new CloudSynchronizer();
+					//	//await cs.SynchWithCloud(false, CurrentNotebook);
+					//	Notebook curNotebook = new Notebook(nbName, nbPath).Open();
 
-						if (curNotebook == null)    // the sync deleted the file
-						{ ddlNotebooks.Items.Remove(nbName); }
-						else { if (!curNotebook.Equals(CurrentNotebook)) { CurrentNotebook = curNotebook; } }// the synch dl'd a newer copy of the file
-					}
+					//	if (curNotebook == null)    // the sync deleted the file
+					//	{ ddlNotebooks.Items.Remove(nbName); }
+					//	else { if (!curNotebook.Equals(CurrentNotebook)) { CurrentNotebook = curNotebook; } }// the synch dl'd a newer copy of the file
+					//}
 
 					try
 					{
@@ -534,6 +545,8 @@ namespace myNotebooks.subforms
 			pnlPin.Visible = ddlNotebooks.SelectedIndex > -1;
 			txtJournalPIN.Text = Program.DictCheckedNotebooks.FirstOrDefault(e => e.Key == ddlNotebooks.Text).Value;
 			pnlDateFilters.Visible = false;
+			var v = ddlNotebooks.SelectedItem as ListItem;
+			SelectedNotebookId = v.Id;
 		}
 
 		private void ddlNotebooks_Click(object sender, EventArgs e)
@@ -573,7 +586,22 @@ namespace myNotebooks.subforms
 			ddlNotebooks.Items.Clear();
 			ddlNotebooks.Text = string.Empty;
 			if (Program.AllNotebookNames.Count == 0) await Utilities.PopulateAllNotebookNames();
-			ddlNotebooks.Items.AddRange(Program.AllNotebookNames.ToArray());
+
+			foreach(var v in Program.NotebooksNamesAndIds)
+			{
+				ListItem lvi = new ListItem() { Name = v.Key, Id = v.Value };
+				ddlNotebooks.Items.Add(lvi);
+			}
+
+			ddlNotebooks.DisplayMember = "Name";
+			ddlNotebooks.ValueMember = "Id";
+
+
+			//ddlNotebooks.Items.AddRange(Program.AllNotebookNames.ToArray());
+
+
+
+
 
 			if (ddlNotebooks.Items.Count > 0)
 			{

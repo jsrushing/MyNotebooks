@@ -55,7 +55,7 @@ namespace myNotebooks.objects
 			EditedOn = editedOn;
 		}
 
-		public MNUser(DataTable dt)
+		public MNUser(DataTable dt, int rowIndex = 0)
 		{
 			var value = "";
 			var setProp = true;
@@ -68,23 +68,23 @@ namespace myNotebooks.objects
 					{
 						if (dt.Columns[sPropertyName.Name].DataType == typeof(string))
 						{
-							value = dt.Rows[0].Field<string>(sPropertyName.Name).ToString();
+							value = dt.Rows[rowIndex].Field<string>(sPropertyName.Name).ToString();
 						}
 						else if (dt.Columns[sPropertyName.Name].DataType == typeof(Int32))
 						{
-							int iVal = dt.Rows[0].Field<Int32>(sPropertyName.Name);
+							int iVal = dt.Rows[rowIndex].Field<Int32>(sPropertyName.Name);
 							this.GetType().GetProperty(sPropertyName.Name).SetValue(this, iVal);
 							setProp = false;
 						}
 						else if (dt.Columns[sPropertyName.Name].DataType == typeof(DateTime))
 						{
-							DateTime dtime = Convert.ToDateTime(dt.Rows[0].Field<DateTime>(sPropertyName.Name));
+							DateTime dtime = Convert.ToDateTime(dt.Rows[rowIndex].Field<DateTime>(sPropertyName.Name));
 							this.GetType().GetProperty(sPropertyName.Name).SetValue(this, dtime);
 							setProp = false;
 						}
 						else if (dt.Columns[sPropertyName.Name].DataType == typeof(bool))
 						{
-							bool b = dt.Rows[0].Field< bool>(sPropertyName.Name);
+							bool b = dt.Rows[rowIndex].Field< bool>(sPropertyName.Name);
 							this.GetType().GetProperty(sPropertyName.Name).SetValue(this, b.ToString() == "1");
 							setProp = false;
 						}

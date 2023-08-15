@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using Encryption;
+using myNotebooks.DataAccess;
 using myNotebooks.subforms;
 using static Azure.Core.HttpHeader;
 
@@ -138,7 +139,16 @@ namespace myNotebooks.objects
 			else
 			{
 				Program.AllNotebookNames.Clear();
-				Program.User.Notebooks.Select(item => item.Name).ToList();
+				var v = DbAccess.GetNotebookNamesAndIdsForGroup(Program.ActiveGroupId);
+
+				foreach(var v2 in DbAccess.GetNotebookNamesAndIdsForGroup(Program.ActiveGroupId))
+				{
+					Program.NotebooksNamesAndIds.Add(v2.Name, v2.Id);
+				}
+
+				//var v = DbAccess.get
+
+				//Program.User.Notebooks.Select(item => item.Name).ToList();
 
 				//List<string> s = Directory.GetFiles(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"]).ToList();
 				//Program.AllNotebookNames.AddRange(s.Select(s => s[(s.LastIndexOf("\\") + 1)..]));

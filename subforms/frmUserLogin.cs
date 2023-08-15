@@ -25,7 +25,7 @@ namespace myNotebooks.subforms
 			}
 			else
 			{
-				using (frmMessage frm = new(frmMessage.OperationType.Message, "No myNotebooks User Found.", "No Such User", this))
+				using (frmMessage frm = new(frmMessage.OperationType.Message, "No MyNotebooks User Found.", "No Such User", this))
 				{ frm.ShowDialog(); }
 				txtUserName.Text = "";
 				txtPwd.Text = "";
