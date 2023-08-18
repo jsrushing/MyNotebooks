@@ -14,7 +14,7 @@ namespace myNotebooks
 
 		public static string PIN = string.Empty;
 		public static List<ListViewItem> lstFonts = new List<ListViewItem>();
-		public static int				ActiveGroupId			= -1;
+		public static int				ActiveNBParentId			= -1;
 		public static List<Notebook>	AllNotebooks			= new List<Notebook>();
 		public static List<string>		AllNotebookNames		= new List<string>();
 		public static string			AppRoot					= AppDomain.CurrentDomain.BaseDirectory;

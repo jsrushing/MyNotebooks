@@ -294,7 +294,7 @@ namespace myNotebooks.subforms
 
 		private void mnuAdd_Click(object sender, EventArgs e)
 		{
-			lblOperation.Text = "Label Name:";
+			lblOperation.Text = "MNLabel Name:";
 			pnlNewLabelName.Visible = true;
 			txtLabelName.Text = string.Empty;
 			txtLabelName.Focus();
@@ -498,7 +498,7 @@ namespace myNotebooks.subforms
 
 			sMsg += "your Labels collection.";
 
-			using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "Label Delete Successful", this))
+			using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "MNLabel Delete Successful", this))
 			{ frm.ShowDialog(); }
 		}
 

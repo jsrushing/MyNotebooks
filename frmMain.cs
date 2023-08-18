@@ -60,7 +60,7 @@
 				> Globally delete a label 
 				-> New entry does not save and journal re-opens w/ no entry title + text
 			Fix:
-				Apparently when the Label > Delete runs the Program.PIN is changed.
+				Apparently when the MNLabel > Delete runs the Program.PIN is changed.
 				Added a class variable to frmLabelsManager storing the Program.PIN when launched. Reset Program.PIN to that variable value on Form_Closing(...).
 			Tested OK 11/27/22
 			
@@ -158,6 +158,7 @@ namespace myNotebooks.subforms
 		bool SuppressDateClick = false;
 		string FoundCountString = "showing {0} of {1} entries";
 		private int SelectedNotebookId;
+		private KeyValuePair<int, string> SelectedNotebookIds;
 
 		private enum SelectionState
 		{
@@ -197,12 +198,16 @@ namespace myNotebooks.subforms
 		{
 			using (frmUserLogin frm = new()) { frm.ShowDialog(); }
 
-			// if we don't have a user, stop
-			if (Program.User == null) { this.Close(); return; }
+			// if we don't have a user, disable all main menus except mnuSwitchAccounts
+			if (Program.User == null) 
+			{ 
+				foreach(ToolStripItem mnu in menuStrip1.Items) { mnu.Enabled = false; }
+				mnuSwitchAccount.Enabled = true;			
+			}
 
 			using (frmManagementConsole frm = new(this, true)) { frm.ShowDialog(); }
-			
-			if(Program.ActiveGroupId == -1) { this.Close(); return; }
+
+			if (Program.ActiveNBParentId == -1) { this.Close(); return; }
 
 			this.Cursor = Cursors.WaitCursor;
 			System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
@@ -376,15 +381,15 @@ namespace myNotebooks.subforms
 			if (CurrentNotebook != null && Program.DictCheckedNotebooks.Count == 1 && Program.DictCheckedNotebooks.Keys.Contains(CurrentNotebook.Name)) { Program.DictCheckedNotebooks.Clear(); }
 			if (Program.DictCheckedNotebooks.Count == 0) { Program.DictCheckedNotebooks.Add(ddlNotebooks.Text, txtJournalPIN.Text); }
 
-			CurrentNotebook = DbAccess.GetNotebookWithShortEntries(Convert.ToInt32(SelectedNotebookId));
+			CurrentNotebook = DbAccess.GetNotebookWithShortEntries(SelectedNotebookIds.Key, SelectedNotebookIds.Value);         //Convert.ToInt32(SelectedNotebookId));
 
 			//CurrentNotebook = new Notebook(ddlNotebooks.Text, null).Open(true);
-				
+
 			var wrongPIN = true;
 
 			if (CurrentNotebook != null)
 			{
-				if(CurrentNotebook.Entries.Count == 0)
+				if (CurrentNotebook.Entries.Count == 0)
 				{
 					ShowHideMenusAndControls(SelectionState.NotebookLoaded);
 				}
@@ -555,6 +560,7 @@ namespace myNotebooks.subforms
 			pnlDateFilters.Visible = false;
 			var v = ddlNotebooks.SelectedItem as ListItem;
 			SelectedNotebookId = v.Id;
+			SelectedNotebookIds = new(v.Id, v.Name);
 		}
 
 		private void ddlNotebooks_Click(object sender, EventArgs e)
@@ -595,7 +601,7 @@ namespace myNotebooks.subforms
 			ddlNotebooks.Text = string.Empty;
 			if (Program.AllNotebookNames.Count == 0) await Utilities.PopulateAllNotebookNames();
 
-			foreach(var v in Program.NotebooksNamesAndIds)
+			foreach (var v in Program.NotebooksNamesAndIds)
 			{
 				ListItem lvi = new ListItem() { Name = v.Key, Id = v.Value };
 				ddlNotebooks.Items.Add(lvi);
@@ -642,6 +648,7 @@ namespace myNotebooks.subforms
 			if (lb.SelectedIndex > -1)
 			{
 				lb.SelectedIndexChanged -= new System.EventHandler(this.lstEntries_SelectEntry);
+
 				CurrentEntry = Entry.Select(rtb, lb, CurrentNotebook, FirstSelection, null, true);
 
 				try { createdEntry = CurrentNotebook.Entries.First(e => e.Title.Equals("created") & e.Text.Equals("-")); }
@@ -649,7 +656,7 @@ namespace myNotebooks.subforms
 
 				var currentId = createdEntry != null ? createdEntry.Id : "";
 
-				if (CurrentEntry != null)		//&& !CurrentEntry.Id.Equals(currentId)) // Disallow modification of the 'created' entry.
+				if (CurrentEntry != null)       //&& !CurrentEntry.Id.Equals(currentId)) // Disallow modification of the 'created' entry.
 				{
 					FirstSelection = false;
 					lblSelectionType.Visible = rtb.Text.Length > 0;
@@ -689,7 +696,7 @@ namespace myNotebooks.subforms
 			using (frmNewEntry frm = new frmNewEntry(this, CurrentNotebook))
 			{
 				frm.Text = "New entry in '" + CurrentNotebook.Name + "'";
-				frm.NotebookId = CurrentNotebook.Id;
+				frm.ParentNotebookId = CurrentNotebook.ParentId;
 				frm.ShowDialog(this);
 
 				if (frm.Saved)
@@ -907,18 +914,21 @@ namespace myNotebooks.subforms
 
 		private async void mnuSwitchAccount_Click(object sender, EventArgs e)
 		{
-			frmAzurePwd ap = new frmAzurePwd(this, frmAzurePwd.Mode.ChangingKey);
+			Program.User = null;
+			using (frmUserLogin frm = new()) { frm.ShowDialog(); }
 
-			if (ap.KeyChanged)
-			{
-				CheckForSystemDirectories(true);
+			//frmAzurePwd ap = new frmAzurePwd(this, frmAzurePwd.Mode.ChangingKey);
 
-				if (Program.AzurePassword.Length > 0)
-				{
-					CloudSynchronizer cs = new CloudSynchronizer();
-					//await cs.SynchWithCloud();
-				}
-			}
+			//if (ap.KeyChanged)
+			//{
+			//	CheckForSystemDirectories(true);
+
+			//	if (Program.AzurePassword.Length > 0)
+			//	{
+			//		CloudSynchronizer cs = new CloudSynchronizer();
+			//		//await cs.SynchWithCloud();
+			//	}
+			//}
 		}
 
 		private async Task PopulateLabelsSummary()

@@ -55,7 +55,7 @@
 			txtUserName.Name = "txtUserName";
 			txtUserName.Size = new System.Drawing.Size(184, 23);
 			txtUserName.TabIndex = 1;
-			txtUserName.Text = "mr";
+			txtUserName.Text = "big";
 			// 
 			// txtPwd
 			// 
@@ -64,7 +64,7 @@
 			txtPwd.Name = "txtPwd";
 			txtPwd.Size = new System.Drawing.Size(184, 23);
 			txtPwd.TabIndex = 3;
-			txtPwd.Text = "mr";
+			txtPwd.Text = "boy";
 			// 
 			// label2
 			// 

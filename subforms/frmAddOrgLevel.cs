@@ -30,9 +30,9 @@ namespace myNotebooks.subforms
 
 			if (txtOrgLevelName.Text.Length > 0)
 			{
-				WasCreated = DbAccess.CreateOrgLevel(CreatedBy, txtOrgLevelDescription.Text, OrgLevel, txtOrgLevelName.Text, ParentId);
+				//WasCreated = DbAccess.CreateOrgLevel(CreatedBy, txtOrgLevelDescription.Text, OrgLevel, txtOrgLevelName.Text, ParentId);
 				//{ msg = "The " + IOrgLevel_Old.ToString() + " was created."; msg2 += "Complete"; WasCreated = true; }
-				if (!WasCreated) { msg = "An error occurred. The " + OrgLevel.ToString() + " was not created."; msg2 += "Failed"; }
+				//if (!WasCreated) { msg = "An error occurred. The " + OrgLevel.ToString() + " was not created."; msg2 += "Failed"; }
 
 				if(msg.Length > 0)
 				{ using (frmMessage frm = new(frmMessage.OperationType.Message, msg, msg2, this)) { frm.ShowDialog(); } }

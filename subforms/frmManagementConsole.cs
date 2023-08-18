@@ -43,6 +43,7 @@ namespace myNotebooks.subforms
 		private GroupBox CurrentMouseGroupBox;
 		private frmMain.OrgLevelTypes CurrentType;
 		private bool IsQuickStart;
+		private bool ForceClose;
 
 		public frmManagementConsole(Form parent, bool isQuickStart = false)
 		{
@@ -53,7 +54,7 @@ namespace myNotebooks.subforms
 			MediumSize = new(SmallSize.Width, FullSize.Height);
 			OneUserSize = new(grpMasterUser.Left + grpMasterUser.Width + 20, FullSize.Height);
 			ddlAccessLevels.Items.AddRange(DbAccess.GetAccessLevels().ToArray());
-			txtUserName.Text = Program.User.Name;
+			txtUserName.Text = Program.User != null ? Program.User.Name : "";
 			this.Size = SmallSize;
 			PopulatePermissions();
 			OrgLevelGroups_MU.AddRange(new GroupBox[] { grpCompany_MU, grpAccount_MU, grpDepartment_MU, grpGroup_MU });
@@ -78,20 +79,23 @@ namespace myNotebooks.subforms
 		{
 			if (lstGroups_CU.SelectedItem == null & lstGroups_MU.SelectedItem == null)
 			{
-				using (frmMessage frm = new(frmMessage.OperationType.Message, "You must select a group.", "Group Selection Required", this)) { frm.ShowDialog(); }
-				e.Cancel = true;
+				if(!ForceClose && this.Size != SmallSize)
+				{
+					using (frmMessage frm = new(frmMessage.OperationType.Message, "You must select a group.", "Group Selection Required", this)) { frm.ShowDialog(); }
+					e.Cancel = true;
+				}
 			}
 			else
 			{
 				var v = lstGroups_MU.SelectedItem as ListItem;
 				var v2 = lstGroups_CU.SelectedItem as ListItem;
-				Program.ActiveGroupId = v == null ? v2.Id : v.Id;
+				Program.ActiveNBParentId = v == null ? v2.Id : v.Id;
 			}
 		}
 
 		private void frmManagementConsole_Activated(object sender, EventArgs e) { txtPwd.Focus(); }
 
-		private void btnCancel_Click(object sender, EventArgs e) { this.Close(); }
+		private void btnCancel_Click(object sender, EventArgs e) { ForceClose = true; this.Close(); }
 
 		private void btnCancelContinue_Click(object sender, EventArgs e) { this.Size = SmallSize; }
 
@@ -139,6 +143,7 @@ namespace myNotebooks.subforms
 				{
 					msg = string.Empty;
 					UserPermissions permissions = GetCheckedPermissions();
+					permissions.CreatedOn = DateTime.Now;
 
 					if (!CurrentUser.Permissions.GetGrantedPermissions().Equals(permissions.GetGrantedPermissions()))
 					{
@@ -150,16 +155,18 @@ namespace myNotebooks.subforms
 						msg = "The permissions for '" + CurrentUser.Name + "' were updated.";
 						using (frmMessage frm = new(frmMessage.OperationType.Message, msg, "Operation Complete", this)) { frm.ShowDialog(this); }
 					}
+
 					List<UserAssignments> assignments = GetAssignments();
+					
 					if (CurrentUser.Assignments != assignments)
 					{
-						CurrentUser.Assignments = GetAssignments();
+						CurrentUser.Assignments = assignments;
 						CurrentUser.SaveAssignments();
 						msg = "The organization levels for '" + CurrentUser.Name + "' were updated.";
 						using (frmMessage frm = new(frmMessage.OperationType.Message, msg, "Operation Complete", this)) { frm.ShowDialog(this); }
 					}
 
-					if (msg.Length > 0) { PopulateTopLevels(true, this.Size == FullSize); }
+					//if (msg.Length > 0) { PopulateTopLevels(true, this.Size == FullSize); }
 				}
 				else if (btnCreateUser.Text == CreateUserButton_UpdatePermissions)
 				{
@@ -175,10 +182,10 @@ namespace myNotebooks.subforms
 				msg = "An error occurred: " + ex.Message + ". The User was not created.";
 			}
 
-			if (msg.Length > 0)
-			{
-				using (frmMessage frm = new(frmMessage.OperationType.Message, msg, "Operation Complete", this)) { frm.ShowDialog(this); }
-			}
+			//if (msg.Length > 0)
+			//{
+			//	using (frmMessage frm = new(frmMessage.OperationType.Message, msg, "Operation Complete", this)) { frm.ShowDialog(this); }
+			//}
 		}
 
 		private void btnCancelNewUser_Click(object sender, EventArgs e) { ResetForm(); }
@@ -226,19 +233,22 @@ namespace myNotebooks.subforms
 			}
 			else
 			{
-				using (frmMessage frm = new(frmMessage.OperationType.YesNoQuestion,
-					"User not found. Would you like to create the user '" + txtUserName.Text + "'?", "Invalid Credentials", this))
+				if(txtUserName.Text.Length > 0)
 				{
-					frm.ShowDialog(this);
-					if (frm.Result == frmMessage.ReturnResult.Yes)
+					using (frmMessage frm = new(frmMessage.OperationType.YesNoQuestion,
+						"User not found. Would you like to create the user '" + txtUserName.Text + "'?", "Invalid Credentials", this))
 					{
-						CurrentUser = null;
-						this.Size = MediumSize;
-						ddlAccessLevels.Enabled = true;
-						ddlAccessLevels.SelectedIndex = -1;
-						btnCreateUser.Visible = true;
-						btnCreateUser.Text = CreateUserButton_CreateUser;
-						PopulatePermissions();
+						frm.ShowDialog(this);
+						if (frm.Result == frmMessage.ReturnResult.Yes)
+						{
+							CurrentUser = null;
+							this.Size = MediumSize;
+							ddlAccessLevels.Enabled = true;
+							ddlAccessLevels.SelectedIndex = -1;
+							btnCreateUser.Visible = true;
+							btnCreateUser.Text = CreateUserButton_CreateUser;
+							PopulatePermissions();
+						}
 					}
 				}
 			}
@@ -293,7 +303,7 @@ namespace myNotebooks.subforms
 			{
 				permissions.Add(v.ToString());
 			}
-
+	
 			return new UserPermissions(permissions);
 		}
 
@@ -521,7 +531,7 @@ namespace myNotebooks.subforms
 		{
 			// Get notebooks by ParentId (group id).
 			var groupId = (CurrentMouseListBox.SelectedItem as ListItem).Id;
-			Program.ActiveGroupId = groupId;
+			Program.ActiveNBParentId = groupId;
 			List<Notebook> notebooks = DbAccess.GetNotebookNamesAndIdsForGroup(groupId);
 			var tmpProgramUser = Program.User;
 
@@ -710,12 +720,16 @@ namespace myNotebooks.subforms
 			if (lb.SelectedItem != null)
 			{
 				var v2 = ((ListItem)lb.SelectedItem).Id;
-				ListBox lbToPopulate = GetNextListBox((ListBox)sender);
-				ListBoxes_ClearBelow(lbToPopulate);
-				//lbToPopulate.Items.Clear();
+				ListBox lbToPopulate = GetNextListBox((ListBox)sender);	// Will not get a listBox if sender is a Group listBox.
 
-				foreach (ListItem li in DbAccess.GetOrgLevelChildren(Convert.ToInt16(lbToPopulate.Tag), v2))
-				{ if (!ListContains(lbToPopulate, li)) { lbToPopulate.Items.Add(li); } }
+				if(lbToPopulate.Name.Length > 0)
+				{
+					ListBoxes_ClearBelow(lbToPopulate);
+					//lbToPopulate.Items.Clear();
+
+					foreach (ListItem li in DbAccess.GetOrgLevelChildren(Convert.ToInt16(lbToPopulate.Tag), v2))
+					{ if (!ListContains(lbToPopulate, li)) { lbToPopulate.Items.Add(li); } }
+				}
 			}
 
 		}

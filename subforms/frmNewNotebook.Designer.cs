@@ -185,7 +185,7 @@ namespace myNotebooks.subforms
 			MinimizeBox = false;
 			MinimumSize = new System.Drawing.Size(300, 225);
 			Name = "frmNewNotebook";
-			Text = "New LocalNotebook";
+			Text = "New Notebook";
 			Activated += this.frmNewJournal_Activated;
 			Load += this.frmNewJournal_Load;
 			grp1.ResumeLayout(false);

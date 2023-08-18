@@ -23,6 +23,7 @@ using System.Data;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
 using myNotebooks.DataAccess;
+using MyNotebooks.objects;
 
 namespace myNotebooks
 {
@@ -31,18 +32,20 @@ namespace myNotebooks
 	{
 		public int		CreatedBy { get; set; }
 		public DateTime	CreatedOn { get; set; }
+		public DateTime? EditedOn { get; set; }
 		public string	Description { get; set; }
-		public int		Id { get; set; }
+		//public int		Id { get; set; }
 		public string	Name { get; set; }
 		public string	PIN { get; set; }
 		public int		ParentId { get; set; }
 
-		public string	FileName;
-		public string	root = "notebooks\\";
-		public bool		WrongPIN = false;
-		public bool		BackupCompleted;
-		public bool		Saved;
-		public List<Entry>		Entries = new List<Entry>();
+		public string		FileName;
+		public string		root = "notebooks\\";
+		public bool			WrongPIN = false;
+		public bool			BackupCompleted;
+		public bool			Saved;
+		public List<Entry>	Entries = new();
+
 		public NotebookSettings	Settings;
 
 		private bool isNewNotebook = false;

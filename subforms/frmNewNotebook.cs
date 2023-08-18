@@ -17,7 +17,7 @@ namespace myNotebooks.subforms
 			InitializeComponent();
 			Utilities.SetStartPosition(this, parent);
 			this.LocalNotebook = new Notebook("", "");
-			LocalNotebook.Settings = new NotebookSettings { IfCloudOnly_Download = true, IfLocalOnly_Upload = true, AllowCloud = true };
+			//LocalNotebook.Settings = new NotebookSettings { IfCloudOnly_Download = true, IfLocalOnly_Upload = true, AllowCloud = true };
 		}
 
 		private void btnSettings_Click(object sender, EventArgs e)
@@ -41,10 +41,11 @@ namespace myNotebooks.subforms
 			this.LocalNotebook = new Notebook();
 			//NotebookSettings nbs = LocalNotebook.Settings;
 			//LocalNotebook.Settings = nbs;
-			LocalNotebook.PIN = txtPIN.Text;
-			LocalNotebook.Description = txtDescription.Text;
-			LocalNotebook.Name = txtName.Text;
-			LocalNotebook.CreatedOn = DateTime.Now;
+			LocalNotebook.PIN			= txtPIN.Text;
+			LocalNotebook.Name			= txtName.Text;
+			LocalNotebook.CreatedOn		= DateTime.Now;
+			LocalNotebook.ParentId		= Program.ActiveNBParentId;
+			LocalNotebook.Description	= txtDescription.Text;
 			//Program.PIN = txtPIN.Text;
 			this.Hide();
 

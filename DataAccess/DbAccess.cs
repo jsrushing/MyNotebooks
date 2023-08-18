@@ -23,14 +23,14 @@ using System.Runtime.CompilerServices;
 namespace myNotebooks.DataAccess
 {
 	public enum OperationType
-	{ Create = 0, Update = 1, Delete = 2 }
+	{ Create = 1, Update = 2, Delete = 3 }
 
 	internal class DbAccess
 	{
 //		private static string connString = "Server=mynotebooksserver.database.windows.net;Database=myNotebooks;user id=mydb_admin;password=cloud_Bringer1!";
 		private static string connString = "Server=FORRESTSTNW;Database=MyNotebooks;Trusted_Connection = true";
 
-		public static bool			CRUDLabel(int notebookId, string label, OperationType opType = OperationType.Create)
+		public static bool			CRUDLabel(MNLabel label, Entry entry, OperationType opType = OperationType.Create)
 		{
 			bool bRtrn = false;
 
@@ -42,9 +42,11 @@ namespace myNotebooks.DataAccess
 					using (SqlCommand cmd = new SqlCommand("sp_CRUD_Label", conn))
 					{
 						cmd.CommandType = CommandType.StoredProcedure;
-						cmd.Parameters.AddWithValue("@notebookId", notebookId);
-						cmd.Parameters.AddWithValue("@label", label);
-						cmd.Parameters.AddWithValue("@opType", (int)opType);
+						cmd.Parameters.AddWithValue("@labelText",label.LabelText);
+						cmd.Parameters.AddWithValue("@entryId", entry.Id);
+						cmd.Parameters.AddWithValue("@opType",	opType == OperationType.Delete ? 2 : (int)opType);
+						if (opType == OperationType.Create)		cmd.Parameters.AddWithValue("@createdBy", Program.User.UserId);
+						if (opType == OperationType.Delete)		cmd.Parameters.AddWithValue("isActive", 0); 
 						cmd.ExecuteNonQuery();
 					}
 				}
@@ -66,12 +68,14 @@ namespace myNotebooks.DataAccess
 					using (SqlCommand cmd = new SqlCommand("sp_CRUD_User", conn))
 					{
 						cmd.CommandType = CommandType.StoredProcedure;
-						cmd.Parameters.AddWithValue("@userName", user.Name);
-						cmd.Parameters.AddWithValue("@password", user.Password);
+						cmd.Parameters.AddWithValue("@userName",	user.Name);
+						cmd.Parameters.AddWithValue("@password",	user.Password);
 						cmd.Parameters.AddWithValue("@accessLevel", user.AccessLevel);
-						cmd.Parameters.AddWithValue("@createdBy", user.CreatedBy);
-						cmd.Parameters.AddWithValue("@email", user.Email);
-						cmd.Parameters.AddWithValue("@opType", (int)opType);
+						cmd.Parameters.AddWithValue("@email",		user.Email);
+						cmd.Parameters.AddWithValue("@opType",		opType == OperationType.Delete ? 2 : (int)opType);
+						if (opType == OperationType.Create) cmd.Parameters.AddWithValue("@createdBy", Program.User.UserId);
+						if (opType != OperationType.Create) cmd.Parameters.AddWithValue("@userId", Program.User.UserId);
+						if (opType == OperationType.Delete) cmd.Parameters.AddWithValue("isActive", 0);
 						cmd.Parameters.Add("@retVal", SqlDbType.Int);
 						cmd.Parameters["@retVal"].Direction = ParameterDirection.ReturnValue;
 						cmd.ExecuteNonQuery();
@@ -157,14 +161,15 @@ namespace myNotebooks.DataAccess
 				using (SqlCommand cmd = new("sp_CRUD_Notebook", conn))	
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@createdBy",	nb.CreatedBy);
 					cmd.Parameters.AddWithValue("@description", nb.Description);
 					cmd.Parameters.AddWithValue("@name",		nb.Name);
-					cmd.Parameters.AddWithValue("@parentId",	Program.ActiveGroupId);
 					cmd.Parameters.AddWithValue("@pin",			nb.PIN);
-					cmd.Parameters.AddWithValue("@opType",		(int)opType);
+					cmd.Parameters.AddWithValue("@opType",		opType == OperationType.Delete ? 2 : (int)opType);
+					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@createdBy", Program.User.UserId);
+					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@parentId", nb.ParentId);
+					if (opType == OperationType.Delete)			cmd.Parameters.AddWithValue("isActive", 0);
 					cmd.Parameters.Add("@retVal", SqlDbType.Int);
-					cmd.Parameters["@retVal"].Direction= ParameterDirection.ReturnValue;
+					cmd.Parameters["@retVal"].Direction = ParameterDirection.ReturnValue;
 					cmd.ExecuteNonQuery();
 					iRtrn = Convert.ToInt32(cmd.Parameters["@retVal"].Value.ToString());
 				}
@@ -184,15 +189,14 @@ namespace myNotebooks.DataAccess
 				using (SqlCommand cmd = new("sp_CRUD_NotebookEntry", conn))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@createdBy",	entry.CreatedBy);
-					cmd.Parameters.AddWithValue("@createdOn",	entry.CreatedOn);
-					//cmd.Parameters.AddWithValue("@editedOn",	entry.EditedOn);
-					cmd.Parameters.AddWithValue("@notebookId",	entry.NotebookId);
 					cmd.Parameters.AddWithValue("@notebookName", entry.NotebookName);
 					cmd.Parameters.AddWithValue("@RTF",			entry.RTF);
 					cmd.Parameters.AddWithValue("@text",		entry.Text);
 					cmd.Parameters.AddWithValue("@title",		entry.Title);
-					cmd.Parameters.AddWithValue("@opType",		(int)opType);
+					cmd.Parameters.AddWithValue("@opType",		opType == OperationType.Delete ? 2: (int)opType);
+					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@createdBy"	, Program.User.UserId);
+					if (opType != OperationType.Create)			cmd.Parameters.AddWithValue("@entryId"		, entry.Id);
+					if (opType == OperationType.Delete)			cmd.Parameters.AddWithValue("isActive"		, 0);
 					cmd.Parameters.Add("@retVal", SqlDbType.Int);
 					cmd.Parameters["@retVal"].Direction = ParameterDirection.ReturnValue;
 					cmd.ExecuteNonQuery();
@@ -279,6 +283,42 @@ namespace myNotebooks.DataAccess
 			}
 		}
 
+		public static List<MNLabel> GetLabels(int entryId)
+		{
+			List<MNLabel> lstRtrn = new List<MNLabel>();
+
+			using (SqlConnection conn = new(connString))
+			{
+				conn.Open();
+
+				using (SqlCommand cmd = new("sp_GetLabels", conn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					cmd.Parameters.AddWithValue("@entryId", entryId);
+
+					using(SqlDataReader reader = cmd.ExecuteReader())
+					{
+						while (reader.Read())
+						{
+							MNLabel lbl = new()
+							{
+								CreatedBy	= reader.GetInt32	("CreatedBy")
+								, CreatedOn = reader.GetDateTime("CreatedOn")
+								, EditedOn	= reader.GetDateTime("EditedOn")
+								, LabelText = reader.GetString	("LabelText")
+								, EntryId	= reader.GetInt32	("EntryId")
+								, IsActive	= reader.GetBoolean	("IsActive")
+							};
+
+							lstRtrn.Add(lbl);
+						}
+					}
+				}
+			}
+
+			return lstRtrn;
+		}
+
 		public static Entry			GetNBEntryFullTextAndTitle(int entryId, Entry entryToComplete) 
 		{
 			using (SqlConnection conn = new(connString))
@@ -302,7 +342,7 @@ namespace myNotebooks.DataAccess
 			return entryToComplete;
 		}
 
-		public static Notebook		GetNotebookWithShortEntries(int notebookId) 
+		public static Notebook		GetNotebookWithShortEntries(int parentId, string name) 
 		{
 			Notebook nbRtrn = null;
 			DataTable dt = new();
@@ -314,7 +354,8 @@ namespace myNotebooks.DataAccess
 				using (SqlCommand cmd = new("sp_GetNotebook", conn))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@notebookId", notebookId);
+					cmd.Parameters.AddWithValue("@parentId", parentId);
+					cmd.Parameters.AddWithValue("@name", name);
 					SqlDataAdapter sda = new SqlDataAdapter() { SelectCommand = cmd };
 					sda.Fill(dt);
 					nbRtrn = new Notebook(dt);
@@ -323,19 +364,30 @@ namespace myNotebooks.DataAccess
 					dt = new();
 					cmd.Parameters.Clear();
 					cmd.CommandText = "sp_GetNotebookEntries";
-					cmd.Parameters.AddWithValue("notebookId", notebookId);
+					cmd.Parameters.AddWithValue("@notebookId", parentId);
 					sda.SelectCommand = cmd;
 					sda.Fill(dt);
 
 					for(int i = 0; i < dt.Rows.Count; i++)
 					{
 						Entry entry = new(dt, i);
-						var v = dt.Rows[i].Field<DateTime?>("EditedOn").ToString();
-						if (v != null)
-						{
-							//entry.EditedOn = DateTime.Parse(v);
-							nbRtrn.Entries.Add(entry);
+
+						try 
+						{ 
+							var v = dt.Rows[i].Field<DateTime?>("EditedOn").ToString(); 
+							if (v != null) { entry.EditedOn = DateTime.Parse(v); }
 						}
+						catch(Exception e) 
+						{ 
+							if(e.GetType() != typeof(System.FormatException))
+							{
+								using (frmMessage frm = new(frmMessage.OperationType.Message, 
+									"An error occurred getting shortend Entries. " + e.Message, "Error!")) { frm.ShowDialog(); }
+							}
+						}
+
+						nbRtrn.Entries.Add(entry);
+						
 					}
 
 					//foreach (DataRow dr in dt.Rows)
@@ -343,7 +395,7 @@ namespace myNotebooks.DataAccess
 					//	Entry entry = new()
 					//	{
 					//		Id = dr.Field<int>("Id").ToString(),
-					//		NotebookId = Convert.ToInt32(dr.Field<int>("NotebookId")),
+					//		EntryId = Convert.ToInt32(dr.Field<int>("EntryId")),
 					//		Title = dr.Field<string>("Title").ToString(),
 					//		Text = dr.Field<string>("Text").ToString(),
 					//		CreatedBy = Convert.ToInt32(dr.Field<int>("CreatedBy")),
@@ -439,8 +491,8 @@ namespace myNotebooks.DataAccess
 							{
 								Notebook nb = new Notebook() 
 								{
-									Id	 = reader.GetInt32	("Id"),
-									Name = reader.GetString	("Name")
+									ParentId	= reader.GetInt32	("ParentId"),
+									Name		= reader.GetString	("Name")
 								};
 
 								lstReturn.Add(nb);

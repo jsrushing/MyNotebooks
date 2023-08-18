@@ -15,6 +15,8 @@ using System.Windows.Forms;
 using System.Runtime.CompilerServices;
 using myNotebooks.objects;
 using System.Reflection;
+using MyNotebooks.objects;
+using myNotebooks.DataAccess;
 
 namespace myNotebooks
 {
@@ -31,7 +33,11 @@ namespace myNotebooks
 		public int			NotebookId { get; set; }
 		public string		RTF { get; set; }
 		public string		Text { get; set; }
+		public string		Text_Shortened { get; set; }
 		public string		Title { get; set; }
+
+		public List<MNLabel> AllLabels = new();
+
 
 		//public bool			isEdited = false;
 
@@ -116,26 +122,9 @@ namespace myNotebooks
 			}
 		}
 
-		string				GetTextDisplayText()
+		public void PopulateLabels()
 		{
-			return String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
-				, Title, CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), "labels", Text);	// Labels.Replace(",", ", "), Text);
-		}
-
-		public string[]		GetSynopsis(bool includeJournalName = false, int maxWidth = -1)
-		{
-			string[] sRtrn = new string[4];
-			int iTextChunkLength = maxWidth > 0 ? maxWidth / 5 : 150;
-			string sTitle = Title + " (" + CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"
-				+ (EditedOn  < new DateTime(2000, 1, 1) ? "" : " [edited on " + EditedOn .ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + "]");
-			if (includeJournalName) { sTitle += NotebookName == null ? "" : " > in '" + NotebookName + "'"; }
-			sRtrn[0] = sTitle;
-			string sEntryText = Text.Replace("\n", " ");
-			sEntryText = (sEntryText.Length < iTextChunkLength ? sEntryText : sEntryText.Substring(0, iTextChunkLength) + " ...");
-			sRtrn[1] = sEntryText;
-			sRtrn[2] = "labels: " + Labels.Replace(",", ", ");
-			sRtrn[3] = "---------------------";
-			return sRtrn;
+			this.AllLabels = DbAccess.GetLabels(Convert.ToInt32(this.Id));
 		}
 
 		public bool			RemoveOrReplaceLabel(string newLabelName, string oldLabelName, bool renaming = true)
@@ -166,6 +155,28 @@ namespace myNotebooks
 				}
 			}
 			return bLabelEdited;
+		}
+
+		public string[]		GetSynopsis(bool includeJournalName = false, int maxWidth = -1)
+		{
+			string[] sRtrn = new string[4];
+			int iTextChunkLength = maxWidth > 0 ? maxWidth / 5 : 150;
+			string sTitle = Title + " (" + CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"
+				+ (EditedOn  < new DateTime(2000, 1, 1) ? "" : " [edited on " + EditedOn .ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + "]");
+			if (includeJournalName) { sTitle += NotebookName == null ? "" : " > in '" + NotebookName + "'"; }
+			sRtrn[0] = sTitle;
+			string sEntryText = Text.Replace("\n", " ");
+			sEntryText = (sEntryText.Length < iTextChunkLength ? sEntryText : sEntryText.Substring(0, iTextChunkLength) + " ...");
+			sRtrn[1] = sEntryText;
+			sRtrn[2] = "labels: " + Labels.Replace(",", ", ");
+			sRtrn[3] = "---------------------";
+			return sRtrn;
+		}
+
+		string				GetTextDisplayText()
+		{
+			return String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
+				, Title, CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), "labels", Text);	// Labels.Replace(",", ", "), Text);
 		}
 
 		public static Entry Select(RichTextBox rtb, ListBox lb, Notebook currentNotebook, bool firstSelection = false, Entry je = null, bool resetTopIndex = true)

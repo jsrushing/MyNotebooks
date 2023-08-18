@@ -361,7 +361,7 @@ namespace myNotebooks.subforms
 			// mnuAbout
 			// 
 			mnuAbout.Name = "mnuAbout";
-			mnuAbout.Size = new System.Drawing.Size(180, 22);
+			mnuAbout.Size = new System.Drawing.Size(165, 22);
 			mnuAbout.Text = "About MyJournal";
 			mnuAbout.Click += this.mnuAbout_Click;
 			// 

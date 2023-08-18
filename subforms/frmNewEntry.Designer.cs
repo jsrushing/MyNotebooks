@@ -370,6 +370,7 @@ namespace myNotebooks.subforms
 			txtNewEntryTitle.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
 			txtNewEntryTitle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			txtNewEntryTitle.Location = new System.Drawing.Point(46, 19);
+			txtNewEntryTitle.MaxLength = 40;
 			txtNewEntryTitle.Multiline = true;
 			txtNewEntryTitle.Name = "txtNewEntryTitle";
 			txtNewEntryTitle.Size = new System.Drawing.Size(510, 23);

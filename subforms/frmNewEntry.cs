@@ -24,18 +24,18 @@ namespace myNotebooks.subforms
 		private string OriginalText_Full = string.Empty;
 		private LabelsManager.LabelsSortType Sort = LabelsManager.LabelsSortType.None;
 		private string LabelLabelsSelected = "({0} selected)";
-		public int NotebookId { get; set; }
+		public int ParentNotebookId { get; set; }
 		public bool Saved { get; private set; }
 		private bool PreserveOriginalText;
 
-		public frmNewEntry(Form parent, Notebook notebook, int notebookId = 0, Entry entryToEdit = null, bool disallowOriginalTextEdit = false)
+		public frmNewEntry(Form parent, Notebook notebook, int parentNotebookId = 0, Entry entryToEdit = null, bool disallowOriginalTextEdit = false)
 		{
 			InitializeComponent();
 			Entry = entryToEdit;
 			IsEdit = Entry != null;
 			PreserveOriginalText = disallowOriginalTextEdit;
 			CurrentNotebook = notebook;
-			NotebookId = notebookId;
+			ParentNotebookId = parentNotebookId;
 			Utilities.SetStartPosition(this, parent);
 		}
 
@@ -61,7 +61,7 @@ namespace myNotebooks.subforms
 				lblEditedOn.Visible = true;
 
 				lblCreatedOn.Text = this.Entry.CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]);
-				lblEditedOn.Text = this.Entry.EditedOn  < new DateTime(2000, 1, 1) ? "" : this.Entry.EditedOn .ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]);
+				lblEditedOn.Text = this.Entry.EditedOn < new DateTime(2000, 1, 1) ? "" : this.Entry.EditedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]);
 
 				if (PreserveOriginalText)
 				{
@@ -200,7 +200,7 @@ namespace myNotebooks.subforms
 
 		private async Task SaveEntry()
 		{
-			if(!lblTitleExists.Visible)
+			if (!lblTitleExists.Visible)
 			{
 				// Test title for a date surrounded by parentheses, which interferes with parsing the entry's date when necessary.
 				var openParen = txtNewEntryTitle.Text.IndexOf("(");
@@ -225,19 +225,19 @@ namespace myNotebooks.subforms
 				{
 					if (this.Entry != null)
 					{
-						this.Entry.Text = rtbNewEntry.Text.Trim(); 
+						this.Entry.Text = rtbNewEntry.Text.Trim();
 						this.Entry.Title = txtNewEntryTitle.Text.Trim();
 						this.Entry.Labels = LabelsManager.CheckedLabels_Get(clbLabels);
 						this.Entry.RTF = rtbNewEntry.Rtf;
-						Entry.EditedOn  = DateTime.Now;
+						Entry.EditedOn = DateTime.Now;
 					}
 					else
 					{
-						Entry newEntry = new(txtNewEntryTitle.Text.Trim(), rtbNewEntry.Text.Trim(), rtbNewEntry.Rtf, 
-							LabelsManager.CheckedLabels_Get(clbLabels), CurrentNotebook.Id, CurrentNotebook.Name);
+						Entry newEntry = new(txtNewEntryTitle.Text.Trim(), rtbNewEntry.Text.Trim(), rtbNewEntry.Rtf,
+							LabelsManager.CheckedLabels_Get(clbLabels), CurrentNotebook.ParentId, CurrentNotebook.Name);
 
 						newEntry.CreatedBy = Program.User.UserId;
-						newEntry.NotebookId = this.NotebookId;
+						newEntry.NotebookId = this.ParentNotebookId;
 						var v = DbAccess.CRUDNotebookEntry(newEntry);
 
 						//if (Entry == null) { CurrentNotebook.AddEntry(newEntry); } else { CurrentNotebook.ReplaceEntry(Entry, newEntry); }

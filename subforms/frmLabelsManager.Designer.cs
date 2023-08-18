@@ -120,7 +120,7 @@ namespace myNotebooks.subforms
 			lblLabelExists.Name = "lblLabelExists";
 			lblLabelExists.Size = new System.Drawing.Size(111, 15);
 			lblLabelExists.TabIndex = 4;
-			lblLabelExists.Text = "Label already exists.";
+			lblLabelExists.Text = "MNLabel already exists.";
 			lblLabelExists.Visible = false;
 			// 
 			// btnOK
@@ -151,7 +151,7 @@ namespace myNotebooks.subforms
 			lblOperation.Name = "lblOperation";
 			lblOperation.Size = new System.Drawing.Size(100, 15);
 			lblOperation.TabIndex = 1;
-			lblOperation.Text = "New Label Name:";
+			lblOperation.Text = "New MNLabel Name:";
 			lblOperation.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label5

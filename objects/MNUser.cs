@@ -155,8 +155,8 @@ namespace myNotebooks.objects
 					{
 						if (ex.GetType() != typeof(InvalidCastException))
 						{
-							using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The error '" + ex.Message + "' occurred while processing the " +
-								"property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
+							using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The error '" + ex.Message + 
+								"' occurred while processing the property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
 						}
 					}	
 				}
@@ -169,8 +169,6 @@ namespace myNotebooks.objects
 			var v = this.Children.Where(e => e.UserId == child.UserId).FirstOrDefault();
 			return v != null;
 		}
-
-		public void Delete() { DbAccess.DeleteUser(this.UserId); }
 
 		public bool Equals(MNUser userToCompare) { return this.UserId == userToCompare.UserId; }
 

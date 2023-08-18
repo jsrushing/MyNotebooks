@@ -74,7 +74,7 @@
 			MaximizeBox = false;
 			MinimizeBox = false;
 			Name = "frmSelectLabel";
-			Text = "Select a Label";
+			Text = "Select a MNLabel";
 			this.ResumeLayout(false);
 		}
 
