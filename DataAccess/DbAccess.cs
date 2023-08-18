@@ -189,12 +189,12 @@ namespace myNotebooks.DataAccess
 				using (SqlCommand cmd = new("sp_CRUD_NotebookEntry", conn))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@notebookName", entry.NotebookName);
 					cmd.Parameters.AddWithValue("@RTF",			entry.RTF);
 					cmd.Parameters.AddWithValue("@text",		entry.Text);
 					cmd.Parameters.AddWithValue("@title",		entry.Title);
 					cmd.Parameters.AddWithValue("@opType",		opType == OperationType.Delete ? 2: (int)opType);
 					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@createdBy"	, Program.User.UserId);
+					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@parentId"		, entry.ParentId);
 					if (opType != OperationType.Create)			cmd.Parameters.AddWithValue("@entryId"		, entry.Id);
 					if (opType == OperationType.Delete)			cmd.Parameters.AddWithValue("isActive"		, 0);
 					cmd.Parameters.Add("@retVal", SqlDbType.Int);
@@ -354,16 +354,16 @@ namespace myNotebooks.DataAccess
 				using (SqlCommand cmd = new("sp_GetNotebook", conn))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@parentId", parentId);
+					cmd.Parameters.AddWithValue("@Id", parentId);
 					cmd.Parameters.AddWithValue("@name", name);
-					SqlDataAdapter sda = new SqlDataAdapter() { SelectCommand = cmd };
+					SqlDataAdapter sda = new() { SelectCommand = cmd };
 					sda.Fill(dt);
 					nbRtrn = new Notebook(dt);
 
 					// get the entries
 					dt = new();
 					cmd.Parameters.Clear();
-					cmd.CommandText = "sp_GetNotebookEntries";
+					cmd.CommandText = "sp_GetNotebookEntries_ShortText";
 					cmd.Parameters.AddWithValue("@notebookId", parentId);
 					sda.SelectCommand = cmd;
 					sda.Fill(dt);
@@ -371,6 +371,7 @@ namespace myNotebooks.DataAccess
 					for(int i = 0; i < dt.Rows.Count; i++)
 					{
 						Entry entry = new(dt, i);
+						//entry.ParentId = nbRtrn.Id;
 
 						try 
 						{ 
@@ -379,69 +380,15 @@ namespace myNotebooks.DataAccess
 						}
 						catch(Exception e) 
 						{ 
-							if(e.GetType() != typeof(System.FormatException))
+							if(e.GetType() != typeof(System.FormatException))	// 'v' was not a valid datetime
 							{
 								using (frmMessage frm = new(frmMessage.OperationType.Message, 
 									"An error occurred getting shortend Entries. " + e.Message, "Error!")) { frm.ShowDialog(); }
 							}
 						}
 
-						nbRtrn.Entries.Add(entry);
-						
+						nbRtrn.Entries.Add(entry);	
 					}
-
-					//foreach (DataRow dr in dt.Rows)
-					//{
-					//	Entry entry = new()
-					//	{
-					//		Id = dr.Field<int>("Id").ToString(),
-					//		EntryId = Convert.ToInt32(dr.Field<int>("EntryId")),
-					//		Title = dr.Field<string>("Title").ToString(),
-					//		Text = dr.Field<string>("Text").ToString(),
-					//		CreatedBy = Convert.ToInt32(dr.Field<int>("CreatedBy")),
-					//		CreatedOn = DateTime.Parse(dr.Field<DateTime>("CreatedOn").ToString())
-					//	};
-
-					//	var v = dr.Field<DateTime?>("EditedOn").ToString();
-					//	if (v != null)
-					//	{
-					//		entry.EditedOn = DateTime.Parse(v);
-					//		nbRtrn.Entries.Add(entry);
-					//	}
-					//}
-
-
-
-					//SqlDataAdapter da = new() { SelectCommand = cmd };
-					//da.Fill(dt);
-
-					//DataRow drNotebook = dt.Tables[0].Rows[0];
-
-					//nbRtrn = new()
-					//{
-					//	CreatedBy	= (int)drNotebook["CreatedBy"],
-					//	CreatedOn	= DateTime.Parse(drNotebook["CreatedBy"].ToString()),
-					//	EditedOn	= DateTime.Parse(drNotebook["EditedOn"].ToString()),
-					//	Id			= (int)drNotebook["Id"],
-					//	Name		= (string)drNotebook["Name"],
-					//	PIN			= drNotebook["PIN"].ToString()
-					//};
-
-
-
-
-					//foreach(DataRow drEntry in dt.Tables[1].Rows)
-					//{
-					//	Entry entry = new()
-					//	{
-					//		Id			= drEntry["Id"].ToString(),
-					//		Title		= drEntry["Title"].ToString(),	// Title and Text are truncated for loading all entries.
-					//		Text		= drEntry["Text"].ToString(),	// Full values are retrieved when the entry is clicked.
-					//		CreatedBy	= (int)drEntry["CreatedBy"],
-					//		CreatedOn	= DateTime.Parse(drEntry["CreatedOn"].ToString())
-					//	};
-					//	nbRtrn.Entries.Add(entry);
-					//}
 				}
 			}
 
@@ -491,8 +438,8 @@ namespace myNotebooks.DataAccess
 							{
 								Notebook nb = new Notebook() 
 								{
-									ParentId	= reader.GetInt32	("ParentId"),
-									Name		= reader.GetString	("Name")
+									Id	 = reader.GetInt32	("Id"),
+									Name = reader.GetString	("Name")
 								};
 
 								lstReturn.Add(nb);

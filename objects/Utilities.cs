@@ -144,7 +144,7 @@ namespace myNotebooks.objects
 				var v = DbAccess.GetNotebookNamesAndIdsForGroup(Program.ActiveNBParentId);
 
 				foreach(var v2 in DbAccess.GetNotebookNamesAndIdsForGroup(Program.ActiveNBParentId))
-				{ Program.NotebooksNamesAndIds.Add(v2.Name, v2.ParentId); }
+				{ Program.NotebooksNamesAndIds.Add(v2.Name, v2.Id); }
 
 				//var v = DbAccess.get
 

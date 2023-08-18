@@ -27,10 +27,10 @@ namespace myNotebooks
         public DateTime		CreatedOn { get; set; }
 		public string		DisplayText { get { return GetTextDisplayText(); } set { DisplayText = value; } }
 		public DateTime		EditedOn { get; set; }
-        public string		Id { get; set; }
+        public int			Id { get; set; }
 		public string		Labels { get; set; } = string.Empty;
 		public string		NotebookName { get; set; }
-		public int			NotebookId { get; set; }
+		public int			ParentId { get; set; }
 		public string		RTF { get; set; }
 		public string		Text { get; set; }
 		public string		Text_Shortened { get; set; }
@@ -64,10 +64,10 @@ namespace myNotebooks
 			Title		= _title.Trim();
 			RTF			= _RTF;
 			Labels		= _labels;
-            Id			= Guid.NewGuid().ToString();
+            //Id			= Guid.NewGuid();
 			//isEdited	= _edited;	
 			NotebookName = _notebookName;
-			NotebookId = notebookId;
+			ParentId	= notebookId;
 		}
 
 		public Entry(DataTable dt, int rowIndex = 0)

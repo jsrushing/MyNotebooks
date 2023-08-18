@@ -203,23 +203,23 @@ namespace myNotebooks.subforms
 			if (!lblTitleExists.Visible)
 			{
 				// Test title for a date surrounded by parentheses, which interferes with parsing the entry's date when necessary.
-				var openParen = txtNewEntryTitle.Text.IndexOf("(");
-				var closeParen = txtNewEntryTitle.Text.IndexOf(")");
-				var possibleDate = string.Empty;
+				//var openParen = txtNewEntryTitle.Text.IndexOf("(");
+				//var closeParen = txtNewEntryTitle.Text.IndexOf(")");
+				//var possibleDate = string.Empty;
 				var processEntry = true;
 
-				if (openParen > -1 && openParen - closeParen == 17)
-				{
-					possibleDate = txtNewEntryTitle.Text.Substring(openParen + 1, closeParen - openParen);
-					DateTime.TryParse(possibleDate, out DateTime date);
+				//if (openParen > -1 && openParen - closeParen == 17)
+				//{
+				//	possibleDate = txtNewEntryTitle.Text.Substring(openParen + 1, closeParen - openParen);
+				//	DateTime.TryParse(possibleDate, out DateTime date);
 
-					if (date > DateTime.MinValue)
-					{
-						var sMsg = "Sorry, entry titles may not contain a date and time, formatted as you have, surrounded by parentheses. Edit the title accordingly.";
-						using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "Improperly Contstructed Title")) { ShowDialog(frm); }
-						processEntry = false;
-					}
-				}
+				//	if (date > DateTime.MinValue)
+				//	{
+				//		var sMsg = "Sorry, entry titles may not contain a date and time, formatted as you have, surrounded by parentheses. Edit the title accordingly.";
+				//		using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "Improperly Contstructed Title")) { ShowDialog(frm); }
+				//		processEntry = false;
+				//	}
+				//}
 
 				if (processEntry)
 				{
@@ -229,16 +229,16 @@ namespace myNotebooks.subforms
 						this.Entry.Title = txtNewEntryTitle.Text.Trim();
 						this.Entry.Labels = LabelsManager.CheckedLabels_Get(clbLabels);
 						this.Entry.RTF = rtbNewEntry.Rtf;
+						this.ParentNotebookId = CurrentNotebook.Id;
 						Entry.EditedOn = DateTime.Now;
 					}
 					else
 					{
 						Entry newEntry = new(txtNewEntryTitle.Text.Trim(), rtbNewEntry.Text.Trim(), rtbNewEntry.Rtf,
-							LabelsManager.CheckedLabels_Get(clbLabels), CurrentNotebook.ParentId, CurrentNotebook.Name);
+							LabelsManager.CheckedLabels_Get(clbLabels), CurrentNotebook.Id, CurrentNotebook.Name);
 
 						newEntry.CreatedBy = Program.User.UserId;
-						newEntry.NotebookId = this.ParentNotebookId;
-						var v = DbAccess.CRUDNotebookEntry(newEntry);
+						DbAccess.CRUDNotebookEntry(newEntry);
 
 						//if (Entry == null) { CurrentNotebook.AddEntry(newEntry); } else { CurrentNotebook.ReplaceEntry(Entry, newEntry); }
 						Entry = newEntry;

@@ -599,7 +599,7 @@ namespace myNotebooks.subforms
 		{
 			ddlNotebooks.Items.Clear();
 			ddlNotebooks.Text = string.Empty;
-			if (Program.AllNotebookNames.Count == 0) await Utilities.PopulateAllNotebookNames();
+			if (Program.NotebooksNamesAndIds.Count == 0) await Utilities.PopulateAllNotebookNames();
 
 			foreach (var v in Program.NotebooksNamesAndIds)
 			{
@@ -654,8 +654,6 @@ namespace myNotebooks.subforms
 				try { createdEntry = CurrentNotebook.Entries.First(e => e.Title.Equals("created") & e.Text.Equals("-")); }
 				catch (Exception) { }
 
-				var currentId = createdEntry != null ? createdEntry.Id : "";
-
 				if (CurrentEntry != null)       //&& !CurrentEntry.Id.Equals(currentId)) // Disallow modification of the 'created' entry.
 				{
 					FirstSelection = false;
@@ -693,21 +691,21 @@ namespace myNotebooks.subforms
 			this.Cursor = Cursors.WaitCursor;
 			var vCurrentEntriesCount = lstEntries.Items.Count;
 
-			using (frmNewEntry frm = new frmNewEntry(this, CurrentNotebook))
+			using (frmNewEntry frm = new(this, CurrentNotebook, CurrentNotebook.Id))
 			{
 				frm.Text = "New entry in '" + CurrentNotebook.Name + "'";
-				frm.ParentNotebookId = CurrentNotebook.ParentId;
+				frm.ParentNotebookId = CurrentNotebook.Id;
 				frm.ShowDialog(this);
 
 				if (frm.Saved)
 				{
 					CurrentEntry = frm.Entry;
 					//await CurrentNotebook.Save();
-					if (!cbxDatesTo.Items.Contains(CurrentEntry.CreatedOn)) { cbxDatesTo.Items.Insert(0, CurrentEntry.CreatedOn.ToShortDateString()); }
-					cbxDatesTo.SelectedIndex = 0;
-					lstEntries.SelectedIndex = 0;
-					CurrentNotebook.Entries.Add(frm.Entry);
+					CurrentNotebook.Entries.Add(CurrentEntry);
 					await Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries);
+					if (!cbxDatesTo.Items.Contains(CurrentEntry.CreatedOn)) { cbxDatesTo.Items.Insert(0, CurrentEntry.CreatedOn.ToShortDateString()); }
+					if(cbxDatesTo.Items.Count > 0) cbxDatesTo.SelectedIndex = 0;
+					if(lstEntries.Items.Count > 0) lstEntries.SelectedIndex = 0;
 				}
 			}
 
@@ -739,7 +737,7 @@ namespace myNotebooks.subforms
 			this.Cursor = Cursors.WaitCursor;
 			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
 
-			using (frmNewEntry frm = new frmNewEntry(this, CurrentNotebook, 0, CurrentEntry, mnu.Text.ToLower().StartsWith("preserve")))
+			using (frmNewEntry frm = new frmNewEntry(this, CurrentNotebook, CurrentNotebook.Id, CurrentEntry, mnu.Text.ToLower().StartsWith("preserve")))
 			{
 				frm.Text = "Edit '" + CurrentEntry.Title + "' in '" + CurrentNotebook.Name + "'";
 				frm.ShowDialog(this);

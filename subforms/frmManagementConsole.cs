@@ -361,8 +361,8 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private void lstGroups_MU_DoubleClick(object sender, EventArgs e)
-		{ mnuManageNotebooks_Click(null, null); }
+		private async void lstGroups_MU_DoubleClick(object sender, EventArgs e)
+		{ mnuManageNotebooks_Click(null, null); await Utilities.PopulateAllNotebookNames(); }
 
 		private void lstMU_DragLeave(object sender, EventArgs e)
 		{
@@ -540,6 +540,7 @@ namespace myNotebooks.subforms
 			else { tmpProgramUser = CurrentUser; }
 
 			Program.AllNotebooks.AddRange(notebooks);
+			
 			this.Close();
 		}
 
