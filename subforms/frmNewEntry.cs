@@ -231,6 +231,7 @@ namespace myNotebooks.subforms
 						this.Entry.RTF = rtbNewEntry.Rtf;
 						this.ParentNotebookId = CurrentNotebook.Id;
 						Entry.EditedOn = DateTime.Now;
+						DbAccess.CRUDNotebookEntry(this.Entry, OperationType.Update);
 					}
 					else
 					{

@@ -208,7 +208,7 @@ namespace myNotebooks.DataAccess
 		}
 
 		public static bool			CreateOrgLevel(int creatorId, string orgLevelDescription
-										, frmMain.OrgLevelTypes orgLevelType, string orgLevelName, int parentId, OperationType opType)
+										, frmMain.OrgLevelTypes orgLevelType, string orgLevelName, int parentId, OperationType opType = OperationType.Create)
 		{
 			bool bRtrn = false;
 
@@ -325,17 +325,19 @@ namespace myNotebooks.DataAccess
 			{
 				conn.Open();
 
-				using (SqlCommand cmd = new("GetNBEntryFullTextAndTitle", conn))
+				using (SqlCommand cmd = new("sp_GetNBEntryFullTextAndTitle", conn))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 					cmd.Parameters.AddWithValue("@entryId", entryId);
-					cmd.Parameters.Add("@text", SqlDbType.VarChar);
-					cmd.Parameters.Add("@title", SqlDbType.VarChar);
-					cmd.Parameters["@text"].Direction = ParameterDirection.Output;
-					cmd.Parameters["@title"].Direction = ParameterDirection.Output;
-					cmd.ExecuteNonQuery();
-					entryToComplete.Text = cmd.Parameters["@text"].ToString();
-					entryToComplete.Title = cmd.Parameters["@title"].ToString();
+
+					using (SqlDataReader reader = cmd.ExecuteReader())
+					{
+						while (reader.Read())
+						{
+							entryToComplete.Text = reader.GetString("Text");
+							entryToComplete.RTF = reader.GetString("RTF");
+						}
+					}
 				}
 			}
 

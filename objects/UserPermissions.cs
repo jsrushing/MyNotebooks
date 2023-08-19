@@ -36,7 +36,27 @@ namespace myNotebooks.objects
 		public DateTime CreatedOn { get; set; }
 		public DateTime EditedOn { get; set; }
 
-		public UserPermissions() { }
+		public enum Permissions
+		{
+		CreateCompany,
+		CreateAccount,
+		CreateDepartment,
+		CreateGroup,
+		CreateNotebook,
+		CreateSimpleUser,
+		CreateMasterUser,
+		DeleteRenameCompany,
+		DeleteRenameAccount,
+		DeleteRenameDepartment,
+		DeleteRenameGroup,
+		DeleteRenameNotebooks,
+		EditNotebookValues,
+		EditNotebookSettings,
+		ManageUsers,
+		ManageUserPermissions
+	}
+
+	public UserPermissions() { }
 
 		public UserPermissions(DataTable dataTable) { PopulateFromDataTable(dataTable); }
 

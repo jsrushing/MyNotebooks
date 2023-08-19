@@ -189,9 +189,9 @@ namespace myNotebooks.objects
 			{ this.OrgLevels.Add(new(frmMain.OrgLevelTypes.Group, dataSet.Tables[3], i)); }   // this.Groups.Add(new(dataSet.Tables[3], i)); }
 		}
 
-		public bool HasPermission(string permission)
+		public bool HasPermission(UserPermissions.Permissions permission)
 		{
-			return Convert.ToBoolean(this.Permissions.GetType().GetProperty(permission).GetValue(this.Permissions, null));
+			return Convert.ToBoolean(this.Permissions.GetType().GetProperty(permission.ToString()).GetValue(this.Permissions, null));
 		}
 
 		public void SaveAssignments() { DbAccess.CreateMNUserAssignments(this); }

@@ -216,7 +216,6 @@ namespace myNotebooks.subforms
 				//TreeNode topNode = new TreeNode();
 				PopulateBaseOrgLevels();
 				PopulatePermissions();
-				//clbPermissions.Enabled = false;
 				ListBox lb2Populate = new ListBox();
 				ddlAccessLevels.SelectedIndex = CurrentUser.AccessLevel - 1;
 				btnCreateUser.Text = CreateUserButton_UpdateUser;
@@ -227,7 +226,7 @@ namespace myNotebooks.subforms
 				//treeUser.ExpandAll();
 
 				btnCreateUser.Visible = !CurrentUser.Equals(Program.User);
-				clbPermissions.Enabled = CurrentUser.HasPermission("ManageUserPermissions"); ;
+				clbPermissions.Enabled = CurrentUser.HasPermission(UserPermissions.Permissions.ManageUserPermissions);
 				this.Size = CurrentUser.Equals(Program.User) ? OneUserSize : FullSize;
 				btnLogin.Enabled = false;
 			}
@@ -259,17 +258,11 @@ namespace myNotebooks.subforms
 
 		private void clbPermissions_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			var isChecked = clbPermissions.CheckedItems.Contains(clbPermissions.SelectedItem);
-
-			if (CurrentUser.HasPermission("ManageUserPermissions"))
+			if (btnCreateUser.Text != CreateUserButton_CreateUser)
 			{
-				if (btnCreateUser.Text != CreateUserButton_CreateUser)
-				{
-					btnCreateUser.Text = CreateUserButton_UpdatePermissions;
-					btnCreateUser.Visible = true;
-				}
+				btnCreateUser.Text = CreateUserButton_UpdatePermissions;
+				btnCreateUser.Visible = true;
 			}
-			else { clbPermissions.SetItemChecked(clbPermissions.SelectedIndex, !isChecked); }
 		}
 
 		private ListBox GetNextListBox(ListBox lb)
@@ -313,13 +306,13 @@ namespace myNotebooks.subforms
 			UserAssignments ua = new();
 
 			foreach (ListItem li in lstCompanies_CU.Items)
-			{ ua = new() { UserId = CurrentUser.UserId, CompanyId = li.Id, orgType = UserAssignments.OrgType.Company }; lRtrn.Add(ua); }
+			{ ua = new() { UserId = CurrentUser.UserId, CompanyId = li.Id, orgType = UserAssignments.OrgType.Company };			lRtrn.Add(ua); }
 			foreach (ListItem li in lstAccounts_CU.Items)
-			{ ua = new() { UserId = CurrentUser.UserId, AccountId = li.Id, orgType = UserAssignments.OrgType.Account }; lRtrn.Add(ua); }
+			{ ua = new() { UserId = CurrentUser.UserId, AccountId = li.Id, orgType = UserAssignments.OrgType.Account };			lRtrn.Add(ua); }
 			foreach (ListItem li in lstDepartments_CU.Items)
-			{ ua = new() { UserId = CurrentUser.UserId, DepartmentId = li.Id, orgType = UserAssignments.OrgType.Department }; lRtrn.Add(ua); }
+			{ ua = new() { UserId = CurrentUser.UserId, DepartmentId = li.Id, orgType = UserAssignments.OrgType.Department };	lRtrn.Add(ua); }
 			foreach (ListItem li in lstGroups_CU.Items)
-			{ ua = new() { UserId = CurrentUser.UserId, GroupId = li.Id, orgType = UserAssignments.OrgType.Group }; lRtrn.Add(ua); }
+			{ ua = new() { UserId = CurrentUser.UserId, GroupId = li.Id, orgType = UserAssignments.OrgType.Group };				lRtrn.Add(ua); }
 
 			return lRtrn;
 		}

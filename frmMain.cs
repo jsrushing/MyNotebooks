@@ -643,16 +643,14 @@ namespace myNotebooks.subforms
 		{
 			ListBox lb = (ListBox)sender;
 			RichTextBox rtb = rtbSelectedEntry;
-			Entry createdEntry = null;
 
 			if (lb.SelectedIndex > -1)
 			{
 				lb.SelectedIndexChanged -= new System.EventHandler(this.lstEntries_SelectEntry);
-
 				CurrentEntry = Entry.Select(rtb, lb, CurrentNotebook, FirstSelection, null, true);
-
-				try { createdEntry = CurrentNotebook.Entries.First(e => e.Title.Equals("created") & e.Text.Equals("-")); }
-				catch (Exception) { }
+				CurrentEntry = DbAccess.GetNBEntryFullTextAndTitle(CurrentEntry.Id, CurrentEntry);
+				//rtbSelectedEntry.Text = CurrentEntry.Text;
+				//rtbSelectedEntry.Rtf = CurrentEntry.RTF;
 
 				if (CurrentEntry != null)       //&& !CurrentEntry.Id.Equals(currentId)) // Disallow modification of the 'created' entry.
 				{
