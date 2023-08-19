@@ -650,12 +650,10 @@ namespace myNotebooks.subforms
 			{
 				lb.SelectedIndexChanged -= new System.EventHandler(this.lstEntries_SelectEntry);
 				CurrentEntry = Entry.Select(rtb, lb, CurrentNotebook, FirstSelection, null, true);
-				CurrentEntry = DbAccess.GetNBEntryFullTextAndTitle(CurrentEntry.Id, CurrentEntry);
-				//rtbSelectedEntry.Text = CurrentEntry.Text;
-				//rtbSelectedEntry.Rtf = CurrentEntry.RTF;
 
 				if (CurrentEntry != null)       //&& !CurrentEntry.Id.Equals(currentId)) // Disallow modification of the 'created' entry.
 				{
+					if (CurrentEntry.Text.EndsWith("...")) { CurrentEntry = DbAccess.GetNBEntryFullTextAndTitle(CurrentEntry); }
 					FirstSelection = false;
 					lblSelectionType.Visible = rtb.Text.Length > 0;
 					lblSeparator.Visible = rtb.Text.Length > 0;

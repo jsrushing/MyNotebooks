@@ -202,51 +202,43 @@ namespace myNotebooks.subforms
 		{
 			if (!lblTitleExists.Visible)
 			{
-				// Test title for a date surrounded by parentheses, which interferes with parsing the entry's date when necessary.
-				//var openParen = txtNewEntryTitle.Text.IndexOf("(");
-				//var closeParen = txtNewEntryTitle.Text.IndexOf(")");
-				//var possibleDate = string.Empty;
-				var processEntry = true;
+				OperationType opType = OperationType.Create;
+				Entry newEntry = new();
 
-				//if (openParen > -1 && openParen - closeParen == 17)
-				//{
-				//	possibleDate = txtNewEntryTitle.Text.Substring(openParen + 1, closeParen - openParen);
-				//	DateTime.TryParse(possibleDate, out DateTime date);
-
-				//	if (date > DateTime.MinValue)
-				//	{
-				//		var sMsg = "Sorry, entry titles may not contain a date and time, formatted as you have, surrounded by parentheses. Edit the title accordingly.";
-				//		using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "Improperly Contstructed Title")) { ShowDialog(frm); }
-				//		processEntry = false;
-				//	}
-				//}
-
-				if (processEntry)
+				if (this.Entry != null)
 				{
-					if (this.Entry != null)
-					{
-						this.Entry.Text = rtbNewEntry.Text.Trim();
-						this.Entry.Title = txtNewEntryTitle.Text.Trim();
-						this.Entry.Labels = LabelsManager.CheckedLabels_Get(clbLabels);
-						this.Entry.RTF = rtbNewEntry.Rtf;
-						this.ParentNotebookId = CurrentNotebook.Id;
-						Entry.EditedOn = DateTime.Now;
-						DbAccess.CRUDNotebookEntry(this.Entry, OperationType.Update);
-					}
-					else
-					{
-						Entry newEntry = new(txtNewEntryTitle.Text.Trim(), rtbNewEntry.Text.Trim(), rtbNewEntry.Rtf,
-							LabelsManager.CheckedLabels_Get(clbLabels), CurrentNotebook.Id, CurrentNotebook.Name);
+					this.Entry.Text = rtbNewEntry.Text.Trim();
+					this.Entry.Title = txtNewEntryTitle.Text.Trim();
+					this.Entry.Labels = LabelsManager.CheckedLabels_Get(clbLabels);
+					this.Entry.RTF = rtbNewEntry.Rtf;
+					this.Entry.EditedOn = DateTime.Now;
+					this.ParentNotebookId = CurrentNotebook.Id;
+					opType = OperationType.Update;
+				}
+				else
+				{
+					newEntry = new(txtNewEntryTitle.Text.Trim(), rtbNewEntry.Text.Trim(), rtbNewEntry.Rtf,
+						LabelsManager.CheckedLabels_Get(clbLabels), CurrentNotebook.Id, CurrentNotebook.Name);
 
-						newEntry.CreatedBy = Program.User.UserId;
-						DbAccess.CRUDNotebookEntry(newEntry);
+					newEntry.CreatedBy = Program.User.UserId;
+					this.Entry = newEntry;
+				}
 
-						//if (Entry == null) { CurrentNotebook.AddEntry(newEntry); } else { CurrentNotebook.ReplaceEntry(Entry, newEntry); }
-						Entry = newEntry;
-					}
+				int iResult = DbAccess.CRUDNotebookEntry(this.Entry, opType);
+				var msg = string.Empty;
 
+				if (iResult < 0) 
+				{msg = "A SQL Error occurred (error number " + (iResult * -1).ToString() + ")               "; }
+				else if(opType == OperationType.Update && iResult != this.Entry.Id)
+				{ msg = "An error occurred. The entry was not updated.";}
+				else { this.Entry.Id = iResult; }
+
+				if(msg.Length > 0)
+				{ using (frmMessage frm = new(frmMessage.OperationType.Message, msg, "Error!", this)) { frm.ShowDialog(); } }
+				else
+				{
 					Saved = true;
-					SetIsDirty(false);
+					SetIsDirty(false);	
 				}
 			}
 		}

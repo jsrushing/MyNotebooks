@@ -67,6 +67,8 @@ namespace myNotebooks.subforms
 
 		private void frmManagementConsole_Load(object sender, EventArgs e)
 		{
+			txtPwd.Text = "boy";
+
 			if (IsQuickStart)
 			{
 				txtPwd.Text = Program.PIN;

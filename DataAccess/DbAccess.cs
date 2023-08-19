@@ -200,7 +200,7 @@ namespace myNotebooks.DataAccess
 					cmd.Parameters.Add("@retVal", SqlDbType.Int);
 					cmd.Parameters["@retVal"].Direction = ParameterDirection.ReturnValue;
 					cmd.ExecuteNonQuery();
-					iRtrn = Convert.ToInt32(cmd.Parameters["@retVal"].Value.ToString());
+					iRtrn = Convert.ToInt32(cmd.Parameters["@retVal"].Value.ToString());	// = entry.Id if update, new entry Id if Create, or (negated) SQL error number
 				}
 			}
 
@@ -319,7 +319,7 @@ namespace myNotebooks.DataAccess
 			return lstRtrn;
 		}
 
-		public static Entry			GetNBEntryFullTextAndTitle(int entryId, Entry entryToComplete) 
+		public static Entry			GetNBEntryFullTextAndTitle(Entry entryToComplete) 
 		{
 			using (SqlConnection conn = new(connString))
 			{
@@ -328,7 +328,7 @@ namespace myNotebooks.DataAccess
 				using (SqlCommand cmd = new("sp_GetNBEntryFullTextAndTitle", conn))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@entryId", entryId);
+					cmd.Parameters.AddWithValue("@entryId", entryToComplete.Id);
 
 					using (SqlDataReader reader = cmd.ExecuteReader())
 					{
