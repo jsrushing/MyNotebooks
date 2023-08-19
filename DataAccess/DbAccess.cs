@@ -207,7 +207,7 @@ namespace myNotebooks.DataAccess
 			return iRtrn;
 		}
 
-		public static bool			CreateOrgLevel(int creatorId, string orgLevelDescription
+		public static bool			CRUDOrgLevel(int creatorId, string orgLevelDescription
 										, frmMain.OrgLevelTypes orgLevelType, string orgLevelName, int parentId, OperationType opType = OperationType.Create)
 		{
 			bool bRtrn = false;

@@ -621,9 +621,11 @@ namespace myNotebooks.subforms
 					ShowHideMenusAndControls(SelectionState.NotebookSelectedNotLoaded);
 					txtJournalPIN.Focus();
 				}
+				else
+				{
+					ShowHideMenusAndControls(SelectionState.NotebookNotSelected);
+				}
 
-				lstEntries.Visible = false;
-				ShowHideMenusAndControls(SelectionState.NotebookNotSelected);
 				txtJournalPIN.Focus();
 			}
 		}
@@ -682,6 +684,19 @@ namespace myNotebooks.subforms
 		{
 			Form frm = new frmAbout(this);
 			frm.ShowDialog(this);
+		}
+
+		private async void mnuAdministratorConsole_Click(object sender, EventArgs e)
+		{
+			using (frmManagementConsole frm = new(this))
+			{
+				frm.ShowDialog();
+				if (Program.ActiveNBParentId > 0) 
+				{ 
+					LoadNotebooks(); 
+					ShowHideMenusAndControls(SelectionState.NotebookNotSelected);
+				}
+			}
 		}
 
 		private async void mnuEntryCreate_Click(object sender, EventArgs e)
@@ -1057,6 +1072,7 @@ namespace myNotebooks.subforms
 				pnlPin.Visible = false;
 				pnlDateFilters.Visible = false;
 				lblSeparator.Visible = false;
+				lstEntries.Visible = false;
 				rtbSelectedEntry.Visible = false;
 				lblSelectionType.Visible = false;
 				lblEntries.Visible = false;
@@ -1070,14 +1086,6 @@ namespace myNotebooks.subforms
 				btnLoadNotebook.Enabled = true;
 				lblShowPIN.Visible = true;
 				lblWrongPin.Visible = false;
-			}
-		}
-
-		private void mnuAdministratorConsole_Click(object sender, EventArgs e)
-		{
-			using (frmManagementConsole frm = new frmManagementConsole(this))
-			{
-				frm.ShowDialog();
 			}
 		}
 

@@ -532,8 +532,8 @@ namespace myNotebooks.subforms
 			{ tmpProgramUser = Program.User; }
 			else { tmpProgramUser = CurrentUser; }
 
-			Program.AllNotebooks.AddRange(notebooks);
-			
+			Program.AllNotebooks.Clear();
+			Program.AllNotebooks.AddRange(notebooks);	
 			this.Close();
 		}
 

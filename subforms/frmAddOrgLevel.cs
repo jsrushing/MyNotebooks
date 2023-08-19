@@ -31,7 +31,7 @@ namespace myNotebooks.subforms
 
 			if (txtOrgLevelName.Text.Length > 0)
 			{
-				WasCreated = DbAccess.CreateOrgLevel(CreatedBy, txtOrgLevelDescription.Text, OrgLevel, txtOrgLevelName.Text, ParentId);
+				WasCreated = DbAccess.CRUDOrgLevel(CreatedBy, txtOrgLevelDescription.Text, OrgLevel, txtOrgLevelName.Text, ParentId);
 				if (WasCreated) { }	// msg = "The " + OrgLevel.ToString() + " was created."; msg2 += "Complete"; }
 				else { msg = "An error occurred. The " + OrgLevel.ToString() + " was not created."; msg2 += "Failed"; }
 
