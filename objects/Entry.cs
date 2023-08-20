@@ -63,7 +63,7 @@ namespace myNotebooks
 			Text		= _text.Trim();
 			Title		= _title.Trim();
 			RTF			= _RTF;
-			Labels		= _labels;
+			//Labels		= _labels;
             //Id			= Guid.NewGuid();
 			//isEdited	= _edited;	
 			NotebookName = _notebookName;
@@ -122,8 +122,9 @@ namespace myNotebooks
 			}
 		}
 
-		public void PopulateLabels()
+		public void			PopulateLabels()
 		{
+			this.AllLabels.Clear();
 			this.AllLabels = DbAccess.GetLabels(Convert.ToInt32(this.Id));
 		}
 
@@ -168,7 +169,7 @@ namespace myNotebooks
 			string sEntryText = Text.Replace("\n", " ");
 			sEntryText = (sEntryText.Length < iTextChunkLength ? sEntryText : sEntryText.Substring(0, iTextChunkLength) + " ...");
 			sRtrn[1] = sEntryText;
-			sRtrn[2] = "labels: " + Labels.Replace(",", ", ");
+			sRtrn[2] = "labels: " + string.Join(", ", this.AllLabels.Select(e => e.LabelText).ToArray());	// Labels.Replace(",", ", ");
 			sRtrn[3] = "---------------------";
 			return sRtrn;
 		}
@@ -176,7 +177,7 @@ namespace myNotebooks
 		string				GetTextDisplayText()
 		{
 			return String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
-				, Title, CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), "labels", Text);	// Labels.Replace(",", ", "), Text);
+				, Title, CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), string.Join(", ", this.AllLabels.Select(e => e.LabelText).ToArray()), Text);	// Labels.Replace(",", ", "), Text);
 		}
 
 		public static Entry Select(RichTextBox rtb, ListBox lb, Notebook currentNotebook, bool firstSelection = false, Entry je = null, bool resetTopIndex = true)

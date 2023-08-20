@@ -4,21 +4,12 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Data.SqlClient;
 using System.Data;
+using System.Data.SqlClient;
 using Encryption;
-using System.Threading.Tasks;
 using myNotebooks.objects;
-using System.Reflection;
-using Microsoft.VisualBasic.ApplicationServices;
-using myNotebooks;
-using System.Windows.Forms;
 using myNotebooks.subforms;
 using MyNotebooks.objects;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
-using System.Runtime.CompilerServices;
 
 namespace myNotebooks.DataAccess
 {
@@ -45,8 +36,9 @@ namespace myNotebooks.DataAccess
 						cmd.Parameters.AddWithValue("@labelText",label.LabelText);
 						cmd.Parameters.AddWithValue("@entryId", entry.Id);
 						cmd.Parameters.AddWithValue("@opType",	opType == OperationType.Delete ? 2 : (int)opType);
-						if (opType == OperationType.Create)		cmd.Parameters.AddWithValue("@createdBy", Program.User.UserId);
-						if (opType == OperationType.Delete)		cmd.Parameters.AddWithValue("isActive", 0); 
+						if (opType == OperationType.Create)		cmd.Parameters.AddWithValue("@createdBy",	Program.User.UserId);
+						if(opType != OperationType.Create)		cmd.Parameters.AddWithValue("@labelId",		label.Id);
+						if (opType == OperationType.Delete)		cmd.Parameters.AddWithValue("isActive",		0); 
 						cmd.ExecuteNonQuery();
 					}
 				}
@@ -286,6 +278,7 @@ namespace myNotebooks.DataAccess
 		public static List<MNLabel> GetLabels(int entryId)
 		{
 			List<MNLabel> lstRtrn = new List<MNLabel>();
+			DataTable dataTable = new DataTable();
 
 			using (SqlConnection conn = new(connString))
 			{
@@ -296,36 +289,45 @@ namespace myNotebooks.DataAccess
 					cmd.CommandType = CommandType.StoredProcedure;
 					cmd.Parameters.AddWithValue("@entryId", entryId);
 
-					using(SqlDataReader reader = cmd.ExecuteReader())
-					{
-						while (reader.Read())
-						{
-							MNLabel lbl = new()
-							{
-								CreatedBy	= reader.GetInt32	("CreatedBy")
-								, CreatedOn = reader.GetDateTime("CreatedOn")
-								, EditedOn	= reader.GetDateTime("EditedOn")
-								, LabelText = reader.GetString	("LabelText")
-								, EntryId	= reader.GetInt32	("EntryId")
-								, IsActive	= reader.GetBoolean	("IsActive")
-							};
+					SqlDataAdapter sda = new() { SelectCommand = cmd };
+					sda.Fill(dataTable);
 
-							lstRtrn.Add(lbl);
-						}
+					for(int i = 0; i < dataTable.Rows.Count; i++)
+					{
+						lstRtrn.Add(new(dataTable, i));
 					}
+
+					//using(SqlDataReader reader = cmd.ExecuteReader())
+					//{
+					//	while (reader.Read())
+					//	{
+					//		MNLabel lbl = new()
+					//		{
+					//			CreatedBy	= reader.GetInt32	("CreatedBy")
+					//			, CreatedOn = reader.GetDateTime("CreatedOn")
+					//			, EditedOn	= reader.GetDateTime("EditedOn")
+					//			, Id		= reader.GetInt32	("Id")
+					//			, LabelText = reader.GetString	("LabelText")
+					//			, IsActive	= reader.GetBoolean	("IsActive")
+					//		};
+
+					//		lbl.EntryId = entryId;
+					//		lstRtrn.Add(lbl);
+					//	}
+					//}
 				}
 			}
 
 			return lstRtrn;
 		}
 
-		public static Entry			GetNBEntryFullTextAndTitle(Entry entryToComplete) 
+		public static Entry			GetFullEntry(Entry entryToComplete) 
 		{
 			using (SqlConnection conn = new(connString))
 			{
 				conn.Open();
 
-				using (SqlCommand cmd = new("sp_GetNBEntryFullTextAndTitle", conn))
+				using (SqlCommand cmd = new("sp_GetNotebookEntry_Full", conn))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 					cmd.Parameters.AddWithValue("@entryId", entryToComplete.Id);
@@ -339,6 +341,8 @@ namespace myNotebooks.DataAccess
 						}
 					}
 				}
+
+				entryToComplete.AllLabels = GetLabels(entryToComplete.Id);
 			}
 
 			return entryToComplete;

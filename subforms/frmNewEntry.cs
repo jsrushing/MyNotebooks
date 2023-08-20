@@ -78,7 +78,7 @@ namespace myNotebooks.subforms
 					rtbNewEntry.Text = Entry.Text;
 				}
 
-				LabelsManager.CheckedLabels_Set(clbLabels, Entry);
+				//LabelsManager.CheckedLabels_Set(clbLabels, Entry);
 				lblNumLabelsSelected.Text = string.Format(LabelLabelsSelected, clbLabels.CheckedItems.Count);
 				rtbNewEntry.Focus();
 				rtbNewEntry.SelectionStart = 0;
@@ -209,7 +209,7 @@ namespace myNotebooks.subforms
 				{
 					this.Entry.Text = rtbNewEntry.Text.Trim();
 					this.Entry.Title = txtNewEntryTitle.Text.Trim();
-					this.Entry.Labels = LabelsManager.CheckedLabels_Get(clbLabels);
+					//this.Entry.Labels = LabelsManager.CheckedLabels_Get(clbLabels);
 					this.Entry.RTF = rtbNewEntry.Rtf;
 					this.Entry.EditedOn = DateTime.Now;
 					this.ParentNotebookId = CurrentNotebook.Id;
@@ -264,17 +264,17 @@ namespace myNotebooks.subforms
 			switch (Sort)
 			{
 				case LabelsManager.LabelsSortType.None:
-					LabelsManager.PopulateLabelsList(clbLabels, null, LabelsManager.LabelsSortType.None);
+					LabelsManager.PopulateLabelsList(clbLabels, null, LabelsManager.LabelsSortType.None, this.Entry);
 					lblSortType.Text = "sort A-Z";
 					Sort = LabelsManager.LabelsSortType.Ascending;
 					break;
 				case LabelsManager.LabelsSortType.Ascending:
-					LabelsManager.PopulateLabelsList(clbLabels, null, LabelsManager.LabelsSortType.Descending);
+					LabelsManager.PopulateLabelsList(clbLabels, null, LabelsManager.LabelsSortType.Descending, this.Entry);
 					lblSortType.Text = "sort Z-A";
 					Sort = LabelsManager.LabelsSortType.Descending;
 					break;
 				case LabelsManager.LabelsSortType.Descending:
-					LabelsManager.PopulateLabelsList(clbLabels, null, LabelsManager.LabelsSortType.Ascending);
+					LabelsManager.PopulateLabelsList(clbLabels, null, LabelsManager.LabelsSortType.Ascending, this.Entry);
 					lblSortType.Text = "unsorted";
 					Sort = LabelsManager.LabelsSortType.None;
 					break;

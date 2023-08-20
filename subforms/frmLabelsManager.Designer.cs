@@ -120,7 +120,7 @@ namespace myNotebooks.subforms
 			lblLabelExists.Name = "lblLabelExists";
 			lblLabelExists.Size = new System.Drawing.Size(111, 15);
 			lblLabelExists.TabIndex = 4;
-			lblLabelExists.Text = "MNLabel already exists.";
+			lblLabelExists.Text = "Label already exists.";
 			lblLabelExists.Visible = false;
 			// 
 			// btnOK
@@ -151,7 +151,7 @@ namespace myNotebooks.subforms
 			lblOperation.Name = "lblOperation";
 			lblOperation.Size = new System.Drawing.Size(100, 15);
 			lblOperation.TabIndex = 1;
-			lblOperation.Text = "New MNLabel Name:";
+			lblOperation.Text = "New Label Name:";
 			lblOperation.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label5
@@ -245,7 +245,7 @@ namespace myNotebooks.subforms
 			// 
 			mnuContextEntries.Items.AddRange(new ToolStripItem[] { mnuContextRename_lstEntries, mnuContextDelete_lstEntries });
 			mnuContextEntries.Name = "mnuFoundEntries";
-			mnuContextEntries.Size = new System.Drawing.Size(185, 70);
+			mnuContextEntries.Size = new System.Drawing.Size(185, 48);
 			// 
 			// mnuContextRename_lstEntries
 			// 
@@ -438,34 +438,34 @@ namespace myNotebooks.subforms
 
 		#endregion
 
-		private System.Windows.Forms.Panel pnlMain;
-		private System.Windows.Forms.MenuStrip mnuMain;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.ListBox lstLabels;
-		private System.Windows.Forms.ToolStripMenuItem mnuMoveUp;
-		private System.Windows.Forms.ToolStripMenuItem mnuMoveDown;
-		private System.Windows.Forms.Panel pnlNewLabelName;
-		private System.Windows.Forms.Button btnCancel;
-		private System.Windows.Forms.Button btnOK;
-		private System.Windows.Forms.Label lblOperation;
-		private System.Windows.Forms.TextBox txtLabelName;
-		private System.Windows.Forms.ListBox lstOccurrences;
-		private System.Windows.Forms.ToolStripMenuItem mnuAssignPINs;
-		private System.Windows.Forms.Label lblEntries1;
-		private System.Windows.Forms.Label lblLabelExists;
-		private System.Windows.Forms.Label lblSortType;
-		private System.Windows.Forms.ListBox lstEntryObjects;
-		private System.Windows.Forms.ToolStripMenuItem mnuLabelsOperations;
-		private System.Windows.Forms.ToolStripMenuItem mnuMoveTop;
-		private System.Windows.Forms.ToolStripMenuItem mnuFindOrphans;
-		private System.Windows.Forms.Panel pnlOrphanedLabels;
-		private System.Windows.Forms.Button btnExitOrphans;
-		private System.Windows.Forms.CheckBox chkSelectAllOrphans;
-		private System.Windows.Forms.Button btnRemoveSelectedOrphans;
-		private System.Windows.Forms.ListBox lstOrphanedLabels;
-		private System.Windows.Forms.Label label4;
-		private System.Windows.Forms.ToolStripMenuItem mnuAdd;
-		private System.Windows.Forms.Label label5;
+		private Panel pnlMain;
+		private MenuStrip mnuMain;
+		private Label label1;
+		private ListBox lstLabels;
+		private ToolStripMenuItem mnuMoveUp;
+		private ToolStripMenuItem mnuMoveDown;
+		private Panel pnlNewLabelName;
+		private Button btnCancel;
+		private Button btnOK;
+		private Label lblOperation;
+		private TextBox txtLabelName;
+		private ListBox lstOccurrences;
+		private ToolStripMenuItem mnuAssignPINs;
+		private Label lblEntries1;
+		private Label lblLabelExists;
+		private Label lblSortType;
+		private ListBox lstEntryObjects;
+		private ToolStripMenuItem mnuLabelsOperations;
+		private ToolStripMenuItem mnuMoveTop;
+		private ToolStripMenuItem mnuFindOrphans;
+		private Panel pnlOrphanedLabels;
+		private Button btnExitOrphans;
+		private CheckBox chkSelectAllOrphans;
+		private Button btnRemoveSelectedOrphans;
+		private ListBox lstOrphanedLabels;
+		private Label label4;
+		private ToolStripMenuItem mnuAdd;
+		private Label label5;
 
 		private ContextMenuStrip mnuContextEntries;
 		private ContextMenuStrip mnuContextLabels;

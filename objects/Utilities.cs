@@ -4,14 +4,17 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using Encryption;
 using myNotebooks.DataAccess;
 using myNotebooks.subforms;
+using Newtonsoft.Json.Linq;
 using static Azure.Core.HttpHeader;
 
 namespace myNotebooks.objects
@@ -182,6 +185,58 @@ namespace myNotebooks.objects
 			}
 		}
 
+		public static void PopulatePropertiesFromDataRow(Type targetType, DataTable dt, int rowIndex = 0, string skippedProperties = "")
+		{
+			var value = "";
+			var setProp = true;
+
+			foreach (PropertyInfo sPropertyName in targetType.GetProperties())
+			{
+				try
+				{
+					if (!skippedProperties.Contains(sPropertyName.Name) & dt.Columns[sPropertyName.Name] != null)
+					{
+						if (dt.Columns[sPropertyName.Name].DataType == typeof(string))
+						{
+							value = dt.Rows[rowIndex].Field<string>(sPropertyName.Name).ToString();
+						}
+						else if (dt.Columns[sPropertyName.Name].DataType == typeof(Int32))
+						{
+							int iVal = dt.Rows[rowIndex].Field<Int32>(sPropertyName.Name);
+							targetType.GetType().GetProperty(sPropertyName.Name).SetValue(targetType, iVal);
+							setProp = false;
+						}
+						else if (dt.Columns[sPropertyName.Name].DataType == typeof(DateTime))
+						{
+							DateTime dtime = Convert.ToDateTime(dt.Rows[rowIndex].Field<DateTime>(sPropertyName.Name));
+							targetType.GetType().GetProperty(sPropertyName.Name).SetValue(targetType, dtime);
+							setProp = false;
+						}
+						else if (dt.Columns[sPropertyName.Name].DataType == typeof(bool))
+						{
+							bool b = dt.Rows[rowIndex].Field<bool>(sPropertyName.Name);
+							targetType.GetType().GetProperty(sPropertyName.Name).SetValue(targetType, b.ToString() == "1");
+							setProp = false;
+						}
+
+						if (setProp) { targetType.GetType().GetProperty(sPropertyName.Name).SetValue(targetType, value); }
+						setProp = true;
+					}
+				}
+				catch (Exception ex)
+				{
+					if (ex.GetType() != typeof(InvalidCastException))
+					{
+						if (!skippedProperties.Contains(sPropertyName.Name))
+						{
+							using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The error '" + ex.Message + "' occurred while processing the " +
+								"property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
+						}
+					}
+				}
+			}
+		}
+
 		public static async Task PopulateEntries(ListBox lbxToPopulate, List<Entry> entries, string notebookName = "", string startDate = "", 
 			string endDate = "", bool clearPrevious = true, int SortBy = 0, bool includeJrnlName = false, int maxWidth = 0, string labelFilter = "")
 		{
@@ -210,6 +265,7 @@ namespace myNotebooks.objects
 
 			foreach (Entry nbEntry in tmpEntries)
 			{
+				nbEntry.PopulateLabels();
 				var synopsis = nbEntry.GetSynopsis(includeJrnlName, maxWidth);
 				for(int i = 0; i < synopsis.Length; i++) { lbxToPopulate.Items.Add(synopsis[i]); } 
 			}

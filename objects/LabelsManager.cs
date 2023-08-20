@@ -18,6 +18,8 @@ using System.Reflection.Emit;
 using Newtonsoft.Json.Linq;
 using System.Globalization;
 using Encryption;
+using MyNotebooks.objects;
+using System.Transactions;
 
 namespace myNotebooks.objects
 {
@@ -168,16 +170,22 @@ namespace myNotebooks.objects
 			return lstRtrn;
 		}
 
-		public static void			PopulateLabelsList(CheckedListBox clb = null, ListBox lb = null, LabelsSortType sort = LabelsSortType.None)
+		public static void			PopulateLabelsList(CheckedListBox clb = null, ListBox lb = null, LabelsSortType sort = LabelsSortType.None, Entry currentEntry = null)
 		{
 			if (clb != null) { clb.Items.Clear(); }
 			if (lb != null) { lb.Items.Clear(); }
 
-			foreach (string label in LabelsManager.GetLabels_NoFileDate(sort))
-			{
-				if (lb != null) { lb.Items.Add(label); }
-				else { clb.Items.Add(label); }
-			}
+			//var v = currentEntry.AllLabels.Select(e => e.LabelText).ToList();
+			//clb.Items.AddRange(v);
+
+			foreach (MNLabel lbl in currentEntry.AllLabels) { clb.Items.Add(lbl.LabelText); }
+			for(int i = 0; i < clb.Items.Count; i++) { clb.SetItemChecked(i, true); }
+
+			//foreach (string label in LabelsManager.GetLabels_NoFileDate(sort))
+			//{
+			//	if (lb != null) { lb.Items.Add(label); }
+			//	else { clb.Items.Add(label); }
+			//}
 		}
 
 		public static async Task	RenameLabelInNotebooksList(string oldLabelName, string newLabelName, List<Notebook> notebooksToEdit, Dictionary<string, string> jrnlsAndPINs, Form parent)

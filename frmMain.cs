@@ -653,7 +653,7 @@ namespace myNotebooks.subforms
 
 				if (CurrentEntry != null)       //&& !CurrentEntry.Id.Equals(currentId)) // Disallow modification of the 'created' entry.
 				{
-					if (CurrentEntry.Text.EndsWith("...")) { CurrentEntry = DbAccess.GetNBEntryFullTextAndTitle(CurrentEntry); }
+					CurrentEntry = DbAccess.GetFullEntry(CurrentEntry);
 					FirstSelection = false;
 					lblSelectionType.Visible = rtb.Text.Length > 0;
 					lblSeparator.Visible = rtb.Text.Length > 0;
