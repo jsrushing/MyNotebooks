@@ -10,7 +10,9 @@ using System.Net.NetworkInformation;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using myNotebooks.DataAccess;
 using myNotebooks.objects;
+using MyNotebooks.objects;
 
 namespace myNotebooks.subforms
 {
@@ -20,17 +22,19 @@ namespace myNotebooks.subforms
 		private List<int> OccurenceTitleIndicies = new List<int>();
 		private bool DeletingOrphans;
 		private string strSeperator = "-----------------------";
+		public Entry CurrentEntry { get; set; }
 
 		private List<Notebook> SelectedNotebooks { get; set; }
 
 		public bool ActionTaken { get; private set; }
 
-		public frmLabelsManager(Form parent, bool deleteOrphans = false, Notebook _jrnl = null)
+		public frmLabelsManager(Form parent, bool deleteOrphans = false, Notebook _jrnl = null, Entry currentEntry = null)
 		{
 			InitializeComponent();
 			SelectedNotebooks = new List<Notebook>();
 			Utilities.SetStartPosition(this, parent);
 			DeletingOrphans = deleteOrphans;
+			CurrentEntry = currentEntry;
 		}
 
 		private async void frmLabelsManager_Load(object sender, EventArgs e)
@@ -72,13 +76,22 @@ namespace myNotebooks.subforms
 
 			if (txtLabelName.Text.Length > 0)
 			{
-				lstLabels.Items.Add(txtLabelName.Text);
-				await LabelsManager.SaveLabelsToFile(lstLabels.Items.OfType<string>().ToList());
+				MNLabel lbl = new()
+				{
+					CreatedBy = Program.User.UserId,
+					ParentId = CurrentEntry.Id,
+					LabelText = txtLabelName.Text,
+				};
+
+				lbl.Save();
+				//lstLabels.Items.Add(txtLabelName.Text);
+				//await LabelsManager.SaveLabelsToFile(lstLabels.Items.OfType<string>().ToList());
 				pnlNewLabelName.Visible = false;
-				//LabelsManager.PopulateLabelsList(null, lstLabels);
-				lstOccurrences.Items.Clear();
-				this.ShowHideOccurrences();
-				this.ShowPanel(pnlMain);
+				CurrentEntry.AllLabels.Add(lbl);
+				LabelsManager.PopulateLabelsList(null, lstLabels, LabelsManager.LabelsSortType.None, CurrentEntry);
+				//lstOccurrences.Items.Clear();
+				//this.ShowHideOccurrences();
+				//this.ShowPanel(pnlMain);
 			}
 
 			this.Cursor = Cursors.Default;
@@ -139,17 +152,17 @@ namespace myNotebooks.subforms
 			switch (sort)
 			{
 				case LabelsManager.LabelsSortType.None:
-					LabelsManager.PopulateLabelsList(null, lstLabels, LabelsManager.LabelsSortType.None);
+					LabelsManager.PopulateLabelsList(null, lstLabels, LabelsManager.LabelsSortType.None, this.CurrentEntry);
 					lblSortType.Text = "sort A-Z";
 					sort = LabelsManager.LabelsSortType.Ascending;
 					break;
 				case LabelsManager.LabelsSortType.Ascending:
-					LabelsManager.PopulateLabelsList(null, lstLabels, LabelsManager.LabelsSortType.Ascending);
+					LabelsManager.PopulateLabelsList(null, lstLabels, LabelsManager.LabelsSortType.Ascending, this.CurrentEntry);
 					lblSortType.Text = "unsorted";
 					sort = LabelsManager.LabelsSortType.None;
 					break;
 				case LabelsManager.LabelsSortType.Descending:
-					LabelsManager.PopulateLabelsList(null, lstLabels, LabelsManager.LabelsSortType.None);
+					LabelsManager.PopulateLabelsList(null, lstLabels, LabelsManager.LabelsSortType.None, this.CurrentEntry);
 					lblSortType.Text = "sort A-Z";
 					sort = LabelsManager.LabelsSortType.Descending;
 					break;
@@ -294,7 +307,7 @@ namespace myNotebooks.subforms
 
 		private void mnuAdd_Click(object sender, EventArgs e)
 		{
-			lblOperation.Text = "MNLabel Name:";
+			lblOperation.Text = "Label Name:";
 			pnlNewLabelName.Visible = true;
 			txtLabelName.Text = string.Empty;
 			txtLabelName.Focus();

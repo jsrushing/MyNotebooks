@@ -768,7 +768,7 @@ namespace myNotebooks.subforms
 
 		private void mnuLabels_Click(object sender, EventArgs e)
 		{
-			using (frmLabelsManager frm = new frmLabelsManager(this, false, CurrentNotebook))
+			using (frmLabelsManager frm = new frmLabelsManager(this, false, CurrentNotebook, CurrentEntry))
 			{
 				frm.ShowDialog();
 				if (frm.ActionTaken)

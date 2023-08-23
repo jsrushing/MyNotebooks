@@ -36,7 +36,7 @@ namespace myNotebooks
 		public string	Description { get; set; }
 		public int		Id { get; set; }
 		public string	Name { get; set; }
-		public string	PIN { get; set; }
+		public string PIN { get; set; } = string.Empty;
 		public int		ParentId { get; set; }
 
 		public string		FileName;
@@ -84,7 +84,7 @@ namespace myNotebooks
 						this.GetType().GetProperty(sPropertyName.Name).SetValue(this, dtime);
 					}
 				}
-				catch { }
+				catch(NullReferenceException) { }
 			}
 		}
 

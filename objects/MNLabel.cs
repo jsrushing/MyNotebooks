@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using myNotebooks;
+using myNotebooks.DataAccess;
 using myNotebooks.objects;
 using myNotebooks.subforms;
 using Newtonsoft.Json.Linq;
@@ -19,11 +20,12 @@ namespace MyNotebooks.objects
 		public int		CreatedBy { get; set; }
 		public DateTime CreatedOn { get; set; }
 		public DateTime? EditedOn { get; set; }
-		public int		EntryId { get; set; }
+		public int		ParentId { get; set; }
 		public int		Id { get; set; }
 		public string	LabelText { get; set; }
 		public bool		IsActive { get; set; }
 
+		public MNLabel() { }	
 		public MNLabel(DataTable dt, int rowIndex = 0)
 		{
 			var value = "";
@@ -78,5 +80,10 @@ namespace MyNotebooks.objects
 
 			//Utilities.PopulatePropertiesFromDataRow(typeof(MNLabel), dataTable, rowIndex);
 		}
+
+		public void Delete() { DbAccess.CRUDLabel(this, OperationType.Delete); }
+		public void Save() { DbAccess.CRUDLabel(this); }
+		public void Update() { DbAccess.CRUDLabel(this, OperationType.Update); }
+
 	}
 }

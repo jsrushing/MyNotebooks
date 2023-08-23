@@ -67,6 +67,10 @@ namespace myNotebooks.subforms
 			btnRemoveSelectedOrphans = new Button();
 			lstOrphanedLabels = new ListBox();
 			label4 = new Label();
+			listBox1 = new ListBox();
+			listBox2 = new ListBox();
+			label2 = new Label();
+			label3 = new Label();
 			pnlMain.SuspendLayout();
 			pnlNewLabelName.SuspendLayout();
 			mnuContextLabels.SuspendLayout();
@@ -77,7 +81,10 @@ namespace myNotebooks.subforms
 			// 
 			// pnlMain
 			// 
-			pnlMain.Controls.Add(pnlNewLabelName);
+			pnlMain.Controls.Add(label3);
+			pnlMain.Controls.Add(label2);
+			pnlMain.Controls.Add(listBox2);
+			pnlMain.Controls.Add(listBox1);
 			pnlMain.Controls.Add(lstLabels);
 			pnlMain.Controls.Add(lblEntries2);
 			pnlMain.Controls.Add(lblSortType);
@@ -98,7 +105,7 @@ namespace myNotebooks.subforms
 			pnlNewLabelName.Controls.Add(btnCancel);
 			pnlNewLabelName.Controls.Add(lblOperation);
 			pnlNewLabelName.Controls.Add(label5);
-			pnlNewLabelName.Location = new System.Drawing.Point(19, 75);
+			pnlNewLabelName.Location = new System.Drawing.Point(303, 297);
 			pnlNewLabelName.Name = "pnlNewLabelName";
 			pnlNewLabelName.Size = new System.Drawing.Size(204, 110);
 			pnlNewLabelName.TabIndex = 2;
@@ -171,7 +178,7 @@ namespace myNotebooks.subforms
 			lstLabels.ItemHeight = 15;
 			lstLabels.Location = new System.Drawing.Point(9, 23);
 			lstLabels.Name = "lstLabels";
-			lstLabels.Size = new System.Drawing.Size(251, 184);
+			lstLabels.Size = new System.Drawing.Size(251, 79);
 			lstLabels.TabIndex = 0;
 			lstLabels.SelectedIndexChanged += this.lstLabels_SelectedIndexChanged;
 			lstLabels.MouseUp += this.lstLabels_MouseUp;
@@ -199,7 +206,7 @@ namespace myNotebooks.subforms
 			// lblEntries2
 			// 
 			lblEntries2.AutoSize = true;
-			lblEntries2.Location = new System.Drawing.Point(9, 225);
+			lblEntries2.Location = new System.Drawing.Point(4, 376);
 			lblEntries2.Name = "lblEntries2";
 			lblEntries2.Size = new System.Drawing.Size(216, 15);
 			lblEntries2.TabIndex = 6;
@@ -211,7 +218,7 @@ namespace myNotebooks.subforms
 			lblSortType.Cursor = Cursors.Hand;
 			lblSortType.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
 			lblSortType.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			lblSortType.Location = new System.Drawing.Point(145, 4);
+			lblSortType.Location = new System.Drawing.Point(187, 4);
 			lblSortType.Name = "lblSortType";
 			lblSortType.Size = new System.Drawing.Size(59, 17);
 			lblSortType.TabIndex = 5;
@@ -221,7 +228,7 @@ namespace myNotebooks.subforms
 			// lblEntries1
 			// 
 			lblEntries1.AutoSize = true;
-			lblEntries1.Location = new System.Drawing.Point(9, 210);
+			lblEntries1.Location = new System.Drawing.Point(4, 361);
 			lblEntries1.Name = "lblEntries1";
 			lblEntries1.Size = new System.Drawing.Size(79, 15);
 			lblEntries1.TabIndex = 4;
@@ -234,9 +241,9 @@ namespace myNotebooks.subforms
 			lstOccurrences.FormattingEnabled = true;
 			lstOccurrences.IntegralHeight = false;
 			lstOccurrences.ItemHeight = 15;
-			lstOccurrences.Location = new System.Drawing.Point(9, 243);
+			lstOccurrences.Location = new System.Drawing.Point(9, 428);
 			lstOccurrences.Name = "lstOccurrences";
-			lstOccurrences.Size = new System.Drawing.Size(251, 303);
+			lstOccurrences.Size = new System.Drawing.Size(251, 118);
 			lstOccurrences.TabIndex = 3;
 			lstOccurrences.DoubleClick += this.lstOccurrences_DoubleClick;
 			lstOccurrences.MouseUp += this.lstOccurrences_MouseUp;
@@ -264,18 +271,18 @@ namespace myNotebooks.subforms
 			// label1
 			// 
 			label1.AutoSize = true;
-			label1.Location = new System.Drawing.Point(4, 6);
+			label1.Location = new System.Drawing.Point(4, 7);
 			label1.Name = "label1";
-			label1.Size = new System.Drawing.Size(113, 15);
+			label1.Size = new System.Drawing.Size(109, 15);
 			label1.TabIndex = 1;
-			label1.Text = "Labels (click to find)";
+			label1.Text = "Labels in Notebook";
 			// 
 			// mnuMain
 			// 
 			mnuMain.Items.AddRange(new ToolStripItem[] { mnuLabelsOperations, mnuMoveTop, mnuAssignPINs });
 			mnuMain.Location = new System.Drawing.Point(0, 0);
 			mnuMain.Name = "mnuMain";
-			mnuMain.Size = new System.Drawing.Size(524, 24);
+			mnuMain.Size = new System.Drawing.Size(535, 24);
 			mnuMain.TabIndex = 1;
 			mnuMain.Text = "menuStrip1";
 			// 
@@ -335,7 +342,7 @@ namespace myNotebooks.subforms
 			lstEntryObjects.FormattingEnabled = true;
 			lstEntryObjects.IntegralHeight = false;
 			lstEntryObjects.ItemHeight = 15;
-			lstEntryObjects.Location = new System.Drawing.Point(312, 240);
+			lstEntryObjects.Location = new System.Drawing.Point(317, 240);
 			lstEntryObjects.Name = "lstEntryObjects";
 			lstEntryObjects.Size = new System.Drawing.Size(127, 25);
 			lstEntryObjects.TabIndex = 4;
@@ -405,11 +412,54 @@ namespace myNotebooks.subforms
 			label4.TabIndex = 0;
 			label4.Text = "Orphaned lables:";
 			// 
+			// listBox1
+			// 
+			listBox1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+			listBox1.ContextMenuStrip = mnuContextLabels;
+			listBox1.FormattingEnabled = true;
+			listBox1.IntegralHeight = false;
+			listBox1.ItemHeight = 15;
+			listBox1.Location = new System.Drawing.Point(9, 119);
+			listBox1.Name = "listBox1";
+			listBox1.Size = new System.Drawing.Size(251, 79);
+			listBox1.TabIndex = 7;
+			// 
+			// listBox2
+			// 
+			listBox2.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+			listBox2.ContextMenuStrip = mnuContextLabels;
+			listBox2.FormattingEnabled = true;
+			listBox2.IntegralHeight = false;
+			listBox2.ItemHeight = 15;
+			listBox2.Location = new System.Drawing.Point(9, 219);
+			listBox2.Name = "listBox2";
+			listBox2.Size = new System.Drawing.Size(251, 125);
+			listBox2.TabIndex = 8;
+			// 
+			// label2
+			// 
+			label2.AutoSize = true;
+			label2.Location = new System.Drawing.Point(4, 104);
+			label2.Name = "label2";
+			label2.Size = new System.Drawing.Size(196, 15);
+			label2.TabIndex = 9;
+			label2.Text = "Labels in All Notebooks in <Group>";
+			// 
+			// label3
+			// 
+			label3.AutoSize = true;
+			label3.Location = new System.Drawing.Point(4, 202);
+			label3.Name = "label3";
+			label3.Size = new System.Drawing.Size(188, 15);
+			label3.TabIndex = 10;
+			label3.Text = "Labels in All Groups in <Account>";
+			// 
 			// frmLabelsManager
 			// 
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new System.Drawing.Size(524, 581);
+			ClientSize = new System.Drawing.Size(535, 581);
+			Controls.Add(pnlNewLabelName);
 			Controls.Add(pnlOrphanedLabels);
 			Controls.Add(lstEntryObjects);
 			Controls.Add(pnlMain);
@@ -474,5 +524,9 @@ namespace myNotebooks.subforms
 		private Label lblEntries2;
 		private ToolStripMenuItem mnuContextDelete_lstLabels;
 		private ToolStripMenuItem mnuContextRename_lstEntries;
+		private ListBox listBox2;
+		private ListBox listBox1;
+		private Label label3;
+		private Label label2;
 	}
 }

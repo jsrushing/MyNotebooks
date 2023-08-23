@@ -21,7 +21,7 @@ namespace myNotebooks.DataAccess
 //		private static string connString = "Server=mynotebooksserver.database.windows.net;Database=myNotebooks;user id=mydb_admin;password=cloud_Bringer1!";
 		private static string connString = "Server=FORRESTSTNW;Database=MyNotebooks;Trusted_Connection = true";
 
-		public static bool			CRUDLabel(MNLabel label, Entry entry, OperationType opType = OperationType.Create)
+		public static bool			CRUDLabel(MNLabel label, OperationType opType = OperationType.Create)
 		{
 			bool bRtrn = false;
 
@@ -34,7 +34,7 @@ namespace myNotebooks.DataAccess
 					{
 						cmd.CommandType = CommandType.StoredProcedure;
 						cmd.Parameters.AddWithValue("@labelText",label.LabelText);
-						cmd.Parameters.AddWithValue("@entryId", entry.Id);
+						cmd.Parameters.AddWithValue("@parentId", label.ParentId);
 						cmd.Parameters.AddWithValue("@opType",	opType == OperationType.Delete ? 2 : (int)opType);
 						if (opType == OperationType.Create)		cmd.Parameters.AddWithValue("@createdBy",	Program.User.UserId);
 						if(opType != OperationType.Create)		cmd.Parameters.AddWithValue("@labelId",		label.Id);
@@ -155,7 +155,7 @@ namespace myNotebooks.DataAccess
 					cmd.CommandType = CommandType.StoredProcedure;
 					cmd.Parameters.AddWithValue("@description", nb.Description);
 					cmd.Parameters.AddWithValue("@name",		nb.Name);
-					cmd.Parameters.AddWithValue("@pin",			nb.PIN);
+					cmd.Parameters.AddWithValue("@pin",			nb.PIN.Length > 0 ? nb.PIN : null);
 					cmd.Parameters.AddWithValue("@opType",		opType == OperationType.Delete ? 2 : (int)opType);
 					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@createdBy", Program.User.UserId);
 					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@parentId", nb.ParentId);
@@ -311,7 +311,7 @@ namespace myNotebooks.DataAccess
 					//			, IsActive	= reader.GetBoolean	("IsActive")
 					//		};
 
-					//		lbl.EntryId = entryId;
+					//		lbl.ParentId = entryId;
 					//		lstRtrn.Add(lbl);
 					//	}
 					//}

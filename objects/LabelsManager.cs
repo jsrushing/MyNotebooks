@@ -178,8 +178,19 @@ namespace myNotebooks.objects
 			//var v = currentEntry.AllLabels.Select(e => e.LabelText).ToList();
 			//clb.Items.AddRange(v);
 
-			foreach (MNLabel lbl in currentEntry.AllLabels) { clb.Items.Add(lbl.LabelText); }
-			for(int i = 0; i < clb.Items.Count; i++) { clb.SetItemChecked(i, true); }
+			if(currentEntry != null)
+			{
+				foreach (MNLabel lbl in currentEntry.AllLabels)
+				{
+					if (lb != null) { lb.Items.Add(lbl.LabelText); }
+					else { clb.Items.Add(lbl.LabelText); }
+				}
+
+				if(clb != null)
+				{
+					for(int i = 0; i < clb.Items.Count; i++) { clb.SetItemChecked(i, true); }
+				}
+			}
 
 			//foreach (string label in LabelsManager.GetLabels_NoFileDate(sort))
 			//{

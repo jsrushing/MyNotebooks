@@ -78,7 +78,7 @@ namespace myNotebooks.subforms
 					rtbNewEntry.Text = Entry.Text;
 				}
 
-				//LabelsManager.CheckedLabels_Set(clbLabels, Entry);
+				//LabelsManager.CheckedLabels_Set(clbLabels, Entry);	// 08/20/23 : Deprecated. Now using Labels from db.
 				lblNumLabelsSelected.Text = string.Format(LabelLabelsSelected, clbLabels.CheckedItems.Count);
 				rtbNewEntry.Focus();
 				rtbNewEntry.SelectionStart = 0;
@@ -114,8 +114,9 @@ namespace myNotebooks.subforms
 
 		private void lblManageLabels_Click(object sender, EventArgs e)
 		{
-			using (frmLabelsManager frm = new frmLabelsManager(this, false, this.CurrentNotebook)) { frm.ShowDialog(); }
-			LabelsManager.PopulateLabelsList(clbLabels);
+			if(this.Entry == null) { this.Entry = new Entry() { CreatedBy = Program.User.UserId, NotebookName = this.CurrentNotebook.Name, Title = txtNewEntryTitle.Text, Text = rtbNewEntry.Text }; }
+			using (frmLabelsManager frm = new frmLabelsManager(this, false, this.CurrentNotebook, this.Entry)) { frm.ShowDialog(); }
+			LabelsManager.PopulateLabelsList(clbLabels, null, LabelsManager.LabelsSortType.None, this.Entry);
 		}
 
 		private void lblSortType_Click(object sender, EventArgs e) { SortLabels(); }
