@@ -4,6 +4,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Net.NetworkInformation;
@@ -205,54 +206,6 @@ namespace myNotebooks.subforms
 			mnuContextLabels.Visible = e.Button == MouseButtons.Right && lstLabels.SelectedIndex > -1;
 		}
 
-		private void lstOccurrences_Click(object sender, EventArgs e)
-		{
-			//// populate and display the label parent tree.
-			//lstEntryParents.Items.Clear();
-			//ListItem selectedItem = lstOccurrences.SelectedItem as ListItem;
-
-			//lstEntryParents.Items.Add("Entry: " + selectedItem.Name);
-
-			//if (selectedItem != null && selectedItem.Name.StartsWith("  "))
-			//{
-			//	List<KeyValuePair<int, string>> parents = DbAccess.GetEntryParentTree(selectedItem.Id);
-
-			//	for (int i = 0; i < parents.Count; i++)
-			//	{
-			//		var manualText = string.Empty;
-
-			//		switch (i)
-			//		{
-			//			case 0:
-			//				manualText = "Notebook: ";
-			//				break;
-			//			case 1:
-			//				manualText = "Group: ";
-			//				break;
-			//			case 2:
-			//				manualText = "Department: ";
-			//				break;
-			//			case 3:
-			//				manualText = "Account: ";
-			//				break;
-			//			case 4:
-			//				manualText = "SelectedCompanyName: ";
-			//				break;
-			//		}
-
-			//		lstEntryParents.Items.Add(manualText + parents[i].Value);
-			//	}
-
-			//	lstEntryParents.Visible = true;
-			//}
-
-		}
-
-		private void lstOccurrences_MouseMove(object sender, MouseEventArgs e)
-		{
-			//lstEntryParents.Visible = false;
-		}
-
 		private async void lstOccurrences_DoubleClick(object sender, EventArgs e)
 		{
 
@@ -286,15 +239,20 @@ namespace myNotebooks.subforms
 		private void lstOccurrences_MouseUp(object sender, MouseEventArgs e)
 		{
 			// populate and display the label parent tree.
-			lstEntryParents.Items.Clear();
-			lstEntryParents.Visible = false;
+			gridViewEntryDetails.Rows.Clear();
+			gridViewEntryDetails.Rows.Add(6);
+			gridViewEntryDetails.RowTemplate.Height = 23;
+			gridViewEntryDetails.Columns[0].Width = 80;
+			gridViewEntryDetails.Columns[1].Width = 170;
+			gridViewEntryDetails.Height = (gridViewEntryDetails.RowTemplate.Height * 7) - 20;
+			gridViewEntryDetails.Width = gridViewEntryDetails.Columns[0].Width + gridViewEntryDetails.Columns[1].Width + 3;
+			gridViewEntryDetails.GridColor = Color.White;
 			ListItem selectedItem = lstOccurrences.SelectedItem as ListItem;
-
 
 			if (selectedItem != null && selectedItem.Name.StartsWith("  "))
 			{
-				lstEntryParents.Items.Add("Entry: " + selectedItem.Name.Substring(2, selectedItem.Name.Length - 2));
-
+				gridViewEntryDetails.Rows[0].Cells[0].Value = "Entry: ";
+				gridViewEntryDetails.Rows[0].Cells[1].Value = selectedItem.Name.Substring(2, selectedItem.Name.Length - 2);
 				List<KeyValuePair<int, string>> parents = DbAccess.GetEntryParentTree(selectedItem.Id);
 
 				for (int i = 0; i < parents.Count; i++)
@@ -320,10 +278,18 @@ namespace myNotebooks.subforms
 							break;
 					}
 
-					lstEntryParents.Items.Add(manualText + parents[i].Value);
+
+					gridViewEntryDetails.Rows[i + 1].Cells[0].Value = manualText;
+					gridViewEntryDetails.Rows[i + 1].Cells[1].Value = parents[i].Value.ToString().Trim();
+
+
+
+					//lstEntryParents.Items.Add(manualText + parents[i].Value);
 				}
 
-				lstEntryParents.Visible = true;
+				gridViewEntryDetails.Visible = true;
+				gridViewEntryDetails.Columns[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+				//lstEntryParents.Visible = true;
 			}
 			//mnuContextDelete_lstEntries.Visible = true;
 
@@ -659,9 +625,7 @@ namespace myNotebooks.subforms
 		}
 
 		private void treeAvailableLabels_Click(object sender, EventArgs e)
-		{
-			lstEntryParents.Visible = false;
-		}
+		{ gridViewEntryDetails.Visible = false; }
 
 		private void treeAvailableLabels_AfterSelect(object sender, TreeViewEventArgs e)
 		{
@@ -670,11 +634,8 @@ namespace myNotebooks.subforms
 			if (tn.Level > 0)
 			{
 				var id = Convert.ToInt32(tn.Tag);
-				// get label info
 				var v = DbAccess.GetLabel(id);
 				lstOccurrences.Items.Clear();
-
-				// populate the list with lbl info + entries where label is found
 				lstOccurrences.Items.Add("Label: " + v.Key.LabelText);
 				lstOccurrences.Items.Add("Created By: " + v.Value.Name.ToString() + " (" + v.Value.Email + ")");
 				lstOccurrences.Items.Add("Created On: " + v.Value.CreatedOn.ToString());
@@ -694,13 +655,11 @@ namespace myNotebooks.subforms
 
 		private void treeAvailableLabels_AfterExpand(object sender, TreeViewEventArgs e)
 		{
-			// get the child labels for the node
-			TreeNode tn = e.Node;   // treeAvailableLabels.GetNodeAt(e.Node)
+			TreeNode tn = e.Node;
 
 			if (tn.Level == 0 && tn.Nodes[0].Text.Length == 0)
 			{
 				tn.Nodes.Clear();
-
 				var choice = Convert.ToInt32(Enum.Parse(typeof(frmMain.OrgLevelTypes), tn.Text.Substring(0, tn.Text.IndexOf(" "))));
 
 				foreach (MNLabel label in DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, choice))
@@ -712,16 +671,9 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private void lstEntryParents_DoubleClick(object sender, EventArgs e)
+		private void gridViewEntryDetails_DoubleClick(object sender, EventArgs e)
 		{
-			lstEntryParents.Visible = false;
-		}
-
-		private void lstEntryParents_Click(object sender, EventArgs e)
-		{
-			// evaluate the clicked item and proceed accordingly
-			// if Entry, 
-
+			gridViewEntryDetails.Visible = false;
 		}
 	}
 }

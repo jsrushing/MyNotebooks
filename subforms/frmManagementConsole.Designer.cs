@@ -673,8 +673,7 @@ namespace myNotebooks.subforms
 		private Label label2;
 		private TextBox txtPwd;
 		private GroupBox grpTree;
-		private TreeView treeUser
-			;
+		private TreeView treeUser;
 		private Button btnCancelNewUser;
 		private Button btnCreateUser;
 		private ToolStripMenuItem mnuAssignUser;

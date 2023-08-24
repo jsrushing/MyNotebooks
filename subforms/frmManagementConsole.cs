@@ -383,10 +383,10 @@ namespace myNotebooks.subforms
 
 			if (lb.Name.EndsWith("MU"))
 			{
-				if (lb.Name.ToLower().Contains("group"))			{ Program.SelectedGroupName = CurrentMouseListBox.Text; }
-				else if (lb.Name.ToLower().Contains("department"))	{ Program.SelectedDepartmentName = CurrentMouseListBox.Text; }
-				else if (lb.Name.ToLower().Contains("account"))		{ Program.SelectedAccountName = CurrentMouseListBox.Text; }
-				else if (lb.Name.ToLower().Contains("companies"))		{ Program.SelectedCompanyName = CurrentMouseListBox.Text; }
+				if (lb.Name.ToLower().Contains("group"))			{ Program.SelectedGroupName = CurrentMouseListBox.Text.Trim(); }
+				else if (lb.Name.ToLower().Contains("department"))	{ Program.SelectedDepartmentName = CurrentMouseListBox.Text.Trim(); }
+				else if (lb.Name.ToLower().Contains("account"))		{ Program.SelectedAccountName = CurrentMouseListBox.Text.Trim(); }
+				else if (lb.Name.ToLower().Contains("companies"))		{ Program.SelectedCompanyName = CurrentMouseListBox.Text.Trim(); }
 			}  
 
 			if (e.Button == MouseButtons.Right)
