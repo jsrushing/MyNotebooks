@@ -425,7 +425,7 @@ namespace myNotebooks.subforms
 			// grpTree
 			// 
 			grpTree.Controls.Add(treeUser);
-			grpTree.Location = new System.Drawing.Point(1089, 22);
+			grpTree.Location = new System.Drawing.Point(832, 145);
 			grpTree.Name = "grpTree";
 			grpTree.Size = new System.Drawing.Size(221, 461);
 			grpTree.TabIndex = 28;
@@ -435,7 +435,7 @@ namespace myNotebooks.subforms
 			// treeUser
 			// 
 			treeUser.ContextMenuStrip = mnuContextTree;
-			treeUser.Location = new System.Drawing.Point(3, 18);
+			treeUser.Location = new System.Drawing.Point(12, 22);
 			treeUser.Name = "treeUser";
 			treeUser.Size = new System.Drawing.Size(209, 401);
 			treeUser.TabIndex = 0;
@@ -469,7 +469,7 @@ namespace myNotebooks.subforms
 			// 
 			// panel2
 			// 
-			panel2.Location = new System.Drawing.Point(972, 521);
+			panel2.Location = new System.Drawing.Point(832, 18);
 			panel2.Name = "panel2";
 			panel2.Size = new System.Drawing.Size(125, 117);
 			panel2.TabIndex = 22;
@@ -614,7 +614,7 @@ namespace myNotebooks.subforms
 			AcceptButton = btnLogin;
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new System.Drawing.Size(795, 525);
+			ClientSize = new System.Drawing.Size(1113, 641);
 			Controls.Add(grpCurrentUser);
 			Controls.Add(groupBox1);
 			Controls.Add(panel2);

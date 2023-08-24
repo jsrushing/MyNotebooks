@@ -275,16 +275,90 @@ namespace myNotebooks.DataAccess
 			}
 		}
 
-		public static List<MNLabel> GetLabels(int entryId)
+		public static List<KeyValuePair<int, string>> GetEntryParentTree(int entryId)
 		{
-			List<MNLabel> lstRtrn = new List<MNLabel>();
-			DataTable dataTable = new DataTable();
+			List<KeyValuePair<int, string>> lstRtrn = new();
+			DataSet ds = new();
 
 			using (SqlConnection conn = new(connString))
 			{
 				conn.Open();
 
-				using (SqlCommand cmd = new("sp_GetLabels", conn))
+				using (SqlCommand cmd = new("sp_GetEntryParentsTree", conn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					cmd.Parameters.AddWithValue("@entryId", entryId);
+					SqlDataAdapter sda = new() { SelectCommand = cmd };
+					sda.Fill(ds);
+					foreach(DataTable dt in ds.Tables)
+					{
+						lstRtrn.Add(new(Convert.ToInt32(dt.Rows[0]["Id"].ToString()), dt.Rows[0]["Name"].ToString()));
+					}
+				}
+			}
+
+			return lstRtrn;
+		}
+
+		public static List<Entry> GetEntriesForLabel(MNLabel label)
+		{
+			List<Entry> entries = new();
+			DataTable dt = new();
+
+			using (SqlConnection conn = new(connString))
+			{
+				conn.Open();
+
+				using (SqlCommand cmd = new("sp_GetEntriesWithLabel", conn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					cmd.Parameters.AddWithValue("@labelText", label.LabelText);
+					SqlDataAdapter sda = new() { SelectCommand = cmd };
+					sda.Fill(dt);
+
+					for(int i = 0; i < dt.Rows.Count; i++)
+					{
+						entries.Add(new(dt, i));
+					}
+				}
+			}
+
+			return entries;
+		}
+
+		public static KeyValuePair<MNLabel, MNUser> GetLabel(int labelId)
+		{
+			KeyValuePair<MNLabel, MNUser>  kvpRtrn = new();
+			DataSet dataSet = new();
+
+			using (SqlConnection conn = new(connString))
+			{
+				conn.Open();
+
+				using (SqlCommand cmd = new("sp_GetLabelAndUser", conn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					cmd.Parameters.AddWithValue("@labelId", labelId);
+					SqlDataAdapter sda = new() { SelectCommand = cmd };
+					sda.Fill(dataSet);
+
+					kvpRtrn = new KeyValuePair<MNLabel, MNUser>(new(dataSet.Tables[0], 0), new(dataSet.Tables[1], 0));
+				}
+			}
+
+			return kvpRtrn;
+		}
+
+		public static List<MNLabel> GetLabelsForEntry(int entryId)
+		{
+			List<MNLabel> lstRtrn = new();
+			DataTable dataTable = new();
+
+			using (SqlConnection conn = new(connString))
+			{
+				conn.Open();
+
+				using (SqlCommand cmd = new("sp_GetLabelsForEntry", conn))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 					cmd.Parameters.AddWithValue("@entryId", entryId);
@@ -296,25 +370,34 @@ namespace myNotebooks.DataAccess
 					{
 						lstRtrn.Add(new(dataTable, i));
 					}
+				}
+			}
 
-					//using(SqlDataReader reader = cmd.ExecuteReader())
-					//{
-					//	while (reader.Read())
-					//	{
-					//		MNLabel lbl = new()
-					//		{
-					//			CreatedBy	= reader.GetInt32	("CreatedBy")
-					//			, CreatedOn = reader.GetDateTime("CreatedOn")
-					//			, EditedOn	= reader.GetDateTime("EditedOn")
-					//			, Id		= reader.GetInt32	("Id")
-					//			, LabelText = reader.GetString	("LabelText")
-					//			, IsActive	= reader.GetBoolean	("IsActive")
-					//		};
+			return lstRtrn;
+		}
 
-					//		lbl.ParentId = entryId;
-					//		lstRtrn.Add(lbl);
-					//	}
-					//}
+		public static List<MNLabel> GetLabelsUnderOrgLevel(int entryId, int orgLevel)
+		{
+			List<MNLabel> lstRtrn = new();
+			DataTable dataTable = new();
+
+			using (SqlConnection conn = new(connString))
+			{
+				conn.Open();
+
+				using (SqlCommand cmd = new("sp_GetLabelsUnderOrgLevel", conn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					cmd.Parameters.AddWithValue("@entryId", entryId);
+					cmd.Parameters.AddWithValue("@orgLevel", orgLevel);
+
+					SqlDataAdapter sda = new() { SelectCommand = cmd };
+					sda.Fill(dataTable);
+
+					for (int i = 0; i < dataTable.Rows.Count; i++)
+					{
+						lstRtrn.Add(new(dataTable, i));
+					}
 				}
 			}
 
@@ -342,7 +425,7 @@ namespace myNotebooks.DataAccess
 					}
 				}
 
-				entryToComplete.AllLabels = GetLabels(entryToComplete.Id);
+				entryToComplete.AllLabels = GetLabelsForEntry(entryToComplete.Id);
 			}
 
 			return entryToComplete;
@@ -479,7 +562,7 @@ namespace myNotebooks.DataAccess
 						lstRtrn.Add(new ListItem() { Id = (int)row["Id"], Name = row["Name"].ToString()});
 
 						//node = new() { Tag = row["Id"].ToString(), Text = row["Name"].ToString().Trim(), Name = row["Name"].ToString().Trim(), ToolTipText = row["Description"].ToString() };
-						//lstRtrn.Add(node);
+						//lblRtrn.Add(node);
 					}
 				}
 			}
@@ -489,7 +572,7 @@ namespace myNotebooks.DataAccess
 
 		public static List<ListItem> GetTopLevelItemsForUser(int userId)
 		{
-			//List<TreeNode> lstRtrn = new List<TreeNode>();	
+			//List<TreeNode> lblRtrn = new List<TreeNode>();	
 			//TreeNode node;
 			DataTable dt = new();
 			List<ListItem> lstRtrn = new List<ListItem>();
@@ -508,7 +591,7 @@ namespace myNotebooks.DataAccess
 					{
 						lstRtrn.Add(new ListItem() { Id = (int)row["Id"], Name = row["Name"].ToString() });
 						//node = new() { Tag = row["Id"].ToString(), Text = row["Name"].ToString().Trim(), ToolTipText = row["Description"].ToString() };
-						//lstRtrn.Add(node);
+						//lblRtrn.Add(node);
 					}
 				}
 			}

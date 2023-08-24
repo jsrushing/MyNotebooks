@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Net.NetworkInformation;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -547,6 +548,111 @@ namespace myNotebooks.subforms
 			else { msg = "Found " + (lstOccurrences.Items.Count - (OccurenceTitleIndicies.Count * 2)).ToString("###,###,###") + " entries in " + (OccurenceTitleIndicies.Count).ToString() + " notebooks"; }
 
 			lblEntries1.Text = lstOccurrences.Items.Count == 0 ? "Found 0 Entries" : msg;
+		}
+
+		private void treeAvailableLabels_BeforeExpand(object sender, TreeViewCancelEventArgs e)
+		{
+
+		}
+
+		private void treeAvailableLabels_Click(object sender, EventArgs e)
+		{
+
+
+
+		}
+
+		private void treeAvailableLabels_AfterSelect(object sender, TreeViewEventArgs e)
+		{
+			TreeNode tn = treeAvailableLabels.SelectedNode;
+
+			if (tn.Level > 0)
+			{
+				var id = Convert.ToInt32(tn.Tag);
+				// get label info
+				var v = DbAccess.GetLabel(id);
+				lstOccurrences.Items.Clear();
+
+				// populate the list with lbl info + entries where label is found
+				lstOccurrences.Items.Add("Text: " + v.Key.LabelText);
+				lstOccurrences.Items.Add("Created By: " + v.Value.Name.ToString() + " (" + v.Value.Email + ")");
+				lstOccurrences.Items.Add("Created On: " + v.Value.CreatedOn.ToString());
+				lstOccurrences.Items.Add("Found in Entries ...");
+				foreach (Entry entry in DbAccess.GetEntriesForLabel(v.Key))
+				{
+					ListItem item = new ListItem() { Id = entry.Id, Name = "  " + entry.Title };
+					lstOccurrences.Items.Add(item);
+				}
+			}
+
+			lstOccurrences.Visible = true;
+			ShowPanel(pnlMain);
+		}
+
+		private void treeAvailableLabels_AfterExpand(object sender, TreeViewEventArgs e)
+		{
+			// get the child labels for the node
+			TreeNode tn = e.Node;   // treeAvailableLabels.GetNodeAt(e.Node)
+
+			if (tn.Level == 0 && tn.Nodes[0].Text.Length == 0)
+			{
+				tn.Nodes.Clear();
+
+				var choice = Convert.ToInt32(Enum.Parse(typeof(frmMain.OrgLevelTypes), tn.Text));
+
+				foreach (MNLabel label in DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, choice))
+				{
+					TreeNode treeNode = new(label.LabelText);
+					treeNode.Tag = label.Id;
+					tn.Nodes.Add(treeNode);
+				}
+			}
+		}
+
+		private void lstOccurrences_Click(object sender, EventArgs e)
+		{
+			// populate and display the label parent tree.
+			lstEntryParents.Items.Clear();
+
+			var v = lstOccurrences.SelectedItem as ListItem;
+
+			if(v != null && v.Name.StartsWith("  "))
+			{
+				List<KeyValuePair<int, string>> parents = DbAccess.GetEntryParentTree(v.Id);
+
+				for(int i = 0; i < parents.Count; i++)
+				{
+					var manualText = string.Empty;
+
+					switch (i)
+					{
+						case 0:
+							manualText = "Notebook: ";
+							break;
+						case 1:
+							manualText = "Group: ";
+							break;
+						case 2:
+							manualText = "Department: ";
+							break;
+						case 3:
+							manualText = "Account: ";
+							break;
+						case 4:
+							manualText = "Company: ";
+							break;
+					}
+
+					lstEntryParents.Items.Add(manualText + parents[i].Value);
+				}
+				lstEntryParents.Visible = true;
+			}
+
+		}
+
+		private void lstOccurrences_MouseMove(object sender, MouseEventArgs e)
+		{
+			lstEntryParents.Visible = false;
 		}
 	}
 }

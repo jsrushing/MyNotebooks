@@ -68,20 +68,23 @@ namespace myNotebooks
 			{
 				try
 				{
-					if (dt.Columns[sPropertyName.Name].DataType == typeof(string))
+					if (dt.Rows[0].Field<object>(sPropertyName.Name) != null)
 					{
-						value = dt.Rows[0].Field<string>(sPropertyName.Name).ToString();
-						this.GetType().GetProperty(sPropertyName.Name).SetValue(this, value.ToString());
-					}
-					else if (dt.Columns[sPropertyName.Name].DataType == typeof(Int32))
-					{
-						value = dt.Rows[0].Field<Int32>(sPropertyName.Name).ToString();
-						this.GetType().GetProperty(sPropertyName.Name).SetValue(this, Convert.ToInt32(value));
-					}
-					else if (dt.Columns[sPropertyName.Name].DataType == typeof(DateTime))
-					{
-						DateTime dtime = Convert.ToDateTime(dt.Rows[0].Field<DateTime>(sPropertyName.Name));
-						this.GetType().GetProperty(sPropertyName.Name).SetValue(this, dtime);
+						if (dt.Columns[sPropertyName.Name].DataType == typeof(string))
+						{
+							value = dt.Rows[0].Field<string>(sPropertyName.Name).ToString();
+							this.GetType().GetProperty(sPropertyName.Name).SetValue(this, value.ToString());
+						}
+						else if (dt.Columns[sPropertyName.Name].DataType == typeof(Int32))
+						{
+							value = dt.Rows[0].Field<Int32>(sPropertyName.Name).ToString();
+							this.GetType().GetProperty(sPropertyName.Name).SetValue(this, Convert.ToInt32(value));
+						}
+						else if (dt.Columns[sPropertyName.Name].DataType == typeof(DateTime))
+						{
+							DateTime dtime = Convert.ToDateTime(dt.Rows[0].Field<DateTime>(sPropertyName.Name));
+							this.GetType().GetProperty(sPropertyName.Name).SetValue(this, dtime);
+						}
 					}
 				}
 				catch(NullReferenceException) { }

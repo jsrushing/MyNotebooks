@@ -125,7 +125,7 @@ namespace myNotebooks
 		public void			PopulateLabels()
 		{
 			this.AllLabels.Clear();
-			this.AllLabels = DbAccess.GetLabels(Convert.ToInt32(this.Id));
+			this.AllLabels = DbAccess.GetLabelsForEntry(Convert.ToInt32(this.Id));
 		}
 
 		public bool			RemoveOrReplaceLabel(string newLabelName, string oldLabelName, bool renaming = true)

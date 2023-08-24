@@ -171,6 +171,8 @@ namespace myNotebooks.subforms
 
 		public enum OrgLevelTypes : uint
 		{
+			NotebookEntry = 1,
+			Notebook = 2,
 			Group = 3,
 			Department = 4,
 			Account = 5,

@@ -81,7 +81,7 @@ namespace myNotebooks.subforms
 		{
 			if (lstGroups_CU.SelectedItem == null & lstGroups_MU.SelectedItem == null)
 			{
-				if(!ForceClose && this.Size != SmallSize)
+				if (!ForceClose && this.Size != SmallSize)
 				{
 					using (frmMessage frm = new(frmMessage.OperationType.Message, "You must select a group.", "Group Selection Required", this)) { frm.ShowDialog(); }
 					e.Cancel = true;
@@ -159,7 +159,7 @@ namespace myNotebooks.subforms
 					}
 
 					List<UserAssignments> assignments = GetAssignments();
-					
+
 					if (CurrentUser.Assignments != assignments)
 					{
 						CurrentUser.Assignments = assignments;
@@ -234,7 +234,7 @@ namespace myNotebooks.subforms
 			}
 			else
 			{
-				if(txtUserName.Text.Length > 0)
+				if (txtUserName.Text.Length > 0)
 				{
 					using (frmMessage frm = new(frmMessage.OperationType.YesNoQuestion,
 						"User not found. Would you like to create the user '" + txtUserName.Text + "'?", "Invalid Credentials", this))
@@ -298,7 +298,7 @@ namespace myNotebooks.subforms
 			{
 				permissions.Add(v.ToString());
 			}
-	
+
 			return new UserPermissions(permissions);
 		}
 
@@ -308,13 +308,13 @@ namespace myNotebooks.subforms
 			UserAssignments ua = new();
 
 			foreach (ListItem li in lstCompanies_CU.Items)
-			{ ua = new() { UserId = CurrentUser.UserId, CompanyId = li.Id, orgType = UserAssignments.OrgType.Company };			lRtrn.Add(ua); }
+			{ ua = new() { UserId = CurrentUser.UserId, CompanyId = li.Id, orgType = UserAssignments.OrgType.Company }; lRtrn.Add(ua); }
 			foreach (ListItem li in lstAccounts_CU.Items)
-			{ ua = new() { UserId = CurrentUser.UserId, AccountId = li.Id, orgType = UserAssignments.OrgType.Account };			lRtrn.Add(ua); }
+			{ ua = new() { UserId = CurrentUser.UserId, AccountId = li.Id, orgType = UserAssignments.OrgType.Account }; lRtrn.Add(ua); }
 			foreach (ListItem li in lstDepartments_CU.Items)
-			{ ua = new() { UserId = CurrentUser.UserId, DepartmentId = li.Id, orgType = UserAssignments.OrgType.Department };	lRtrn.Add(ua); }
+			{ ua = new() { UserId = CurrentUser.UserId, DepartmentId = li.Id, orgType = UserAssignments.OrgType.Department }; lRtrn.Add(ua); }
 			foreach (ListItem li in lstGroups_CU.Items)
-			{ ua = new() { UserId = CurrentUser.UserId, GroupId = li.Id, orgType = UserAssignments.OrgType.Group };				lRtrn.Add(ua); }
+			{ ua = new() { UserId = CurrentUser.UserId, GroupId = li.Id, orgType = UserAssignments.OrgType.Group }; lRtrn.Add(ua); }
 
 			return lRtrn;
 		}
@@ -535,7 +535,7 @@ namespace myNotebooks.subforms
 			else { tmpProgramUser = CurrentUser; }
 
 			Program.AllNotebooks.Clear();
-			Program.AllNotebooks.AddRange(notebooks);	
+			Program.AllNotebooks.AddRange(notebooks);
 			this.Close();
 		}
 
@@ -716,9 +716,9 @@ namespace myNotebooks.subforms
 			if (lb.SelectedItem != null)
 			{
 				var v2 = ((ListItem)lb.SelectedItem).Id;
-				ListBox lbToPopulate = GetNextListBox((ListBox)sender);	// Will not get a listBox if sender is a Group listBox.
+				ListBox lbToPopulate = GetNextListBox((ListBox)sender); // Will not get a listBox if sender is a Group listBox.
 
-				if(lbToPopulate.Name.Length > 0)
+				if (lbToPopulate.Name.Length > 0)
 				{
 					ListBoxes_ClearBelow(lbToPopulate);
 					//lbToPopulate.Items.Clear();

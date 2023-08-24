@@ -32,7 +32,36 @@ namespace myNotebooks.subforms
 		private void InitializeComponent()
 		{
 			components = new System.ComponentModel.Container();
+			TreeNode treeNode1 = new TreeNode("");
+			TreeNode treeNode2 = new TreeNode("Notebook", new TreeNode[] { treeNode1 });
+			TreeNode treeNode3 = new TreeNode("");
+			TreeNode treeNode4 = new TreeNode("Group", new TreeNode[] { treeNode3 });
+			TreeNode treeNode5 = new TreeNode("");
+			TreeNode treeNode6 = new TreeNode("Department", new TreeNode[] { treeNode5 });
+			TreeNode treeNode7 = new TreeNode("");
+			TreeNode treeNode8 = new TreeNode("Account", new TreeNode[] { treeNode7 });
+			TreeNode treeNode9 = new TreeNode("");
+			TreeNode treeNode10 = new TreeNode("Company", new TreeNode[] { treeNode9 });
 			pnlMain = new Panel();
+			lstEntryParents = new ListBox();
+			mnuContextLabels = new ContextMenuStrip(components);
+			mnuContextRename_lstLables = new ToolStripMenuItem();
+			mnuContextDelete_lstLabels = new ToolStripMenuItem();
+			label6 = new Label();
+			lblEntries2 = new Label();
+			treeAvailableLabels = new TreeView();
+			lblSortType = new Label();
+			lblEntries1 = new Label();
+			lstOccurrences = new ListBox();
+			mnuContextEntries = new ContextMenuStrip(components);
+			mnuContextRename_lstEntries = new ToolStripMenuItem();
+			mnuContextDelete_lstEntries = new ToolStripMenuItem();
+			label3 = new Label();
+			label2 = new Label();
+			listBox2 = new ListBox();
+			listBox1 = new ListBox();
+			lstLabels = new ListBox();
+			label1 = new Label();
 			pnlNewLabelName = new Panel();
 			txtLabelName = new TextBox();
 			lblLabelExists = new Label();
@@ -40,18 +69,6 @@ namespace myNotebooks.subforms
 			btnCancel = new Button();
 			lblOperation = new Label();
 			label5 = new Label();
-			lstLabels = new ListBox();
-			mnuContextLabels = new ContextMenuStrip(components);
-			mnuContextRename_lstLables = new ToolStripMenuItem();
-			mnuContextDelete_lstLabels = new ToolStripMenuItem();
-			lblEntries2 = new Label();
-			lblSortType = new Label();
-			lblEntries1 = new Label();
-			lstOccurrences = new ListBox();
-			mnuContextEntries = new ContextMenuStrip(components);
-			mnuContextRename_lstEntries = new ToolStripMenuItem();
-			mnuContextDelete_lstEntries = new ToolStripMenuItem();
-			label1 = new Label();
 			mnuMain = new MenuStrip();
 			mnuLabelsOperations = new ToolStripMenuItem();
 			mnuAdd = new ToolStripMenuItem();
@@ -67,34 +84,233 @@ namespace myNotebooks.subforms
 			btnRemoveSelectedOrphans = new Button();
 			lstOrphanedLabels = new ListBox();
 			label4 = new Label();
-			listBox1 = new ListBox();
-			listBox2 = new ListBox();
-			label2 = new Label();
-			label3 = new Label();
+			panel1 = new Panel();
 			pnlMain.SuspendLayout();
-			pnlNewLabelName.SuspendLayout();
 			mnuContextLabels.SuspendLayout();
 			mnuContextEntries.SuspendLayout();
+			pnlNewLabelName.SuspendLayout();
 			mnuMain.SuspendLayout();
 			pnlOrphanedLabels.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// pnlMain
 			// 
-			pnlMain.Controls.Add(label3);
-			pnlMain.Controls.Add(label2);
-			pnlMain.Controls.Add(listBox2);
-			pnlMain.Controls.Add(listBox1);
-			pnlMain.Controls.Add(lstLabels);
+			pnlMain.Controls.Add(lstEntryParents);
+			pnlMain.Controls.Add(label6);
 			pnlMain.Controls.Add(lblEntries2);
+			pnlMain.Controls.Add(treeAvailableLabels);
 			pnlMain.Controls.Add(lblSortType);
 			pnlMain.Controls.Add(lblEntries1);
 			pnlMain.Controls.Add(lstOccurrences);
-			pnlMain.Controls.Add(label1);
 			pnlMain.Location = new System.Drawing.Point(16, 25);
 			pnlMain.Name = "pnlMain";
-			pnlMain.Size = new System.Drawing.Size(269, 554);
+			pnlMain.Size = new System.Drawing.Size(340, 554);
 			pnlMain.TabIndex = 0;
+			// 
+			// lstEntryParents
+			// 
+			lstEntryParents.BackColor = System.Drawing.Color.Linen;
+			lstEntryParents.ContextMenuStrip = mnuContextLabels;
+			lstEntryParents.FormattingEnabled = true;
+			lstEntryParents.IntegralHeight = false;
+			lstEntryParents.ItemHeight = 15;
+			lstEntryParents.Items.AddRange(new object[] { "Notebook:", "Group:", "Department:", "Account:", "Company:" });
+			lstEntryParents.Location = new System.Drawing.Point(119, 355);
+			lstEntryParents.Name = "lstEntryParents";
+			lstEntryParents.Size = new System.Drawing.Size(190, 83);
+			lstEntryParents.TabIndex = 12;
+			// 
+			// mnuContextLabels
+			// 
+			mnuContextLabels.Items.AddRange(new ToolStripItem[] { mnuContextRename_lstLables, mnuContextDelete_lstLabels });
+			mnuContextLabels.Name = "mnuContextLabels";
+			mnuContextLabels.Size = new System.Drawing.Size(118, 48);
+			// 
+			// mnuContextRename_lstLables
+			// 
+			mnuContextRename_lstLables.Name = "mnuContextRename_lstLables";
+			mnuContextRename_lstLables.Size = new System.Drawing.Size(117, 22);
+			mnuContextRename_lstLables.Text = "&Rename";
+			mnuContextRename_lstLables.Click += this.DeleteOrRename;
+			// 
+			// mnuContextDelete_lstLabels
+			// 
+			mnuContextDelete_lstLabels.Name = "mnuContextDelete_lstLabels";
+			mnuContextDelete_lstLabels.Size = new System.Drawing.Size(117, 22);
+			mnuContextDelete_lstLabels.Text = "&Delete";
+			mnuContextDelete_lstLabels.Click += this.DeleteOrRename;
+			// 
+			// label6
+			// 
+			label6.AutoSize = true;
+			label6.Location = new System.Drawing.Point(4, 4);
+			label6.Name = "label6";
+			label6.Size = new System.Drawing.Size(164, 15);
+			label6.TabIndex = 11;
+			label6.Text = "Labels in Currently Selected ...";
+			// 
+			// lblEntries2
+			// 
+			lblEntries2.AutoSize = true;
+			lblEntries2.Location = new System.Drawing.Point(4, 307);
+			lblEntries2.Name = "lblEntries2";
+			lblEntries2.Size = new System.Drawing.Size(216, 15);
+			lblEntries2.TabIndex = 6;
+			lblEntries2.Text = "(dbl-click entry or right-click notebook)";
+			// 
+			// treeAvailableLabels
+			// 
+			treeAvailableLabels.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+			treeAvailableLabels.Location = new System.Drawing.Point(11, 25);
+			treeAvailableLabels.Name = "treeAvailableLabels";
+			treeNode1.Name = "Node0";
+			treeNode1.Text = "";
+			treeNode2.Name = "nodeNotebook";
+			treeNode2.Text = "Notebook";
+			treeNode3.Name = "Node1";
+			treeNode3.Text = "";
+			treeNode4.Name = "nodeGroup";
+			treeNode4.Text = "Group";
+			treeNode5.Name = "Node2";
+			treeNode5.Text = "";
+			treeNode6.Name = "nodeDepartment";
+			treeNode6.Text = "Department";
+			treeNode7.Name = "Node3";
+			treeNode7.Text = "";
+			treeNode8.Name = "nodeAccount";
+			treeNode8.Text = "Account";
+			treeNode9.Name = "Node4";
+			treeNode9.Text = "";
+			treeNode10.Name = "nodeCompany";
+			treeNode10.Text = "Company";
+			treeAvailableLabels.Nodes.AddRange(new TreeNode[] { treeNode2, treeNode4, treeNode6, treeNode8, treeNode10 });
+			treeAvailableLabels.Size = new System.Drawing.Size(318, 264);
+			treeAvailableLabels.TabIndex = 6;
+			treeAvailableLabels.Text = "tree";
+			treeAvailableLabels.BeforeExpand += this.treeAvailableLabels_BeforeExpand;
+			treeAvailableLabels.AfterExpand += this.treeAvailableLabels_AfterExpand;
+			treeAvailableLabels.AfterSelect += this.treeAvailableLabels_AfterSelect;
+			treeAvailableLabels.Click += this.treeAvailableLabels_Click;
+			// 
+			// lblSortType
+			// 
+			lblSortType.AutoSize = true;
+			lblSortType.Cursor = Cursors.Hand;
+			lblSortType.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+			lblSortType.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			lblSortType.Location = new System.Drawing.Point(187, 4);
+			lblSortType.Name = "lblSortType";
+			lblSortType.Size = new System.Drawing.Size(59, 17);
+			lblSortType.TabIndex = 5;
+			lblSortType.Text = "Sort A-Z";
+			lblSortType.Click += this.lblSortType_Click;
+			// 
+			// lblEntries1
+			// 
+			lblEntries1.AutoSize = true;
+			lblEntries1.Location = new System.Drawing.Point(4, 292);
+			lblEntries1.Name = "lblEntries1";
+			lblEntries1.Size = new System.Drawing.Size(79, 15);
+			lblEntries1.TabIndex = 4;
+			lblEntries1.Text = "Found Entries";
+			// 
+			// lstOccurrences
+			// 
+			lstOccurrences.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+			lstOccurrences.ContextMenuStrip = mnuContextEntries;
+			lstOccurrences.FormattingEnabled = true;
+			lstOccurrences.IntegralHeight = false;
+			lstOccurrences.ItemHeight = 15;
+			lstOccurrences.Location = new System.Drawing.Point(9, 325);
+			lstOccurrences.Name = "lstOccurrences";
+			lstOccurrences.Size = new System.Drawing.Size(322, 221);
+			lstOccurrences.TabIndex = 3;
+			lstOccurrences.Click += this.lstOccurrences_Click;
+			lstOccurrences.DoubleClick += this.lstOccurrences_DoubleClick;
+			lstOccurrences.MouseMove += this.lstOccurrences_MouseMove;
+			lstOccurrences.MouseUp += this.lstOccurrences_MouseUp;
+			// 
+			// mnuContextEntries
+			// 
+			mnuContextEntries.Items.AddRange(new ToolStripItem[] { mnuContextRename_lstEntries, mnuContextDelete_lstEntries });
+			mnuContextEntries.Name = "mnuFoundEntries";
+			mnuContextEntries.Size = new System.Drawing.Size(185, 48);
+			// 
+			// mnuContextRename_lstEntries
+			// 
+			mnuContextRename_lstEntries.Name = "mnuContextRename_lstEntries";
+			mnuContextRename_lstEntries.Size = new System.Drawing.Size(184, 22);
+			mnuContextRename_lstEntries.Text = "&Rename in notebook";
+			mnuContextRename_lstEntries.Click += this.DeleteOrRename;
+			// 
+			// mnuContextDelete_lstEntries
+			// 
+			mnuContextDelete_lstEntries.Name = "mnuContextDelete_lstEntries";
+			mnuContextDelete_lstEntries.Size = new System.Drawing.Size(184, 22);
+			mnuContextDelete_lstEntries.Text = "&Delete in notebook";
+			mnuContextDelete_lstEntries.Click += this.DeleteOrRename;
+			// 
+			// label3
+			// 
+			label3.AutoSize = true;
+			label3.Location = new System.Drawing.Point(628, 266);
+			label3.Name = "label3";
+			label3.Size = new System.Drawing.Size(188, 15);
+			label3.TabIndex = 10;
+			label3.Text = "Labels in All Groups in <Account>";
+			// 
+			// label2
+			// 
+			label2.AutoSize = true;
+			label2.Location = new System.Drawing.Point(628, 168);
+			label2.Name = "label2";
+			label2.Size = new System.Drawing.Size(196, 15);
+			label2.TabIndex = 9;
+			label2.Text = "Labels in All Notebooks in <Group>";
+			// 
+			// listBox2
+			// 
+			listBox2.ContextMenuStrip = mnuContextLabels;
+			listBox2.FormattingEnabled = true;
+			listBox2.IntegralHeight = false;
+			listBox2.ItemHeight = 15;
+			listBox2.Location = new System.Drawing.Point(633, 283);
+			listBox2.Name = "listBox2";
+			listBox2.Size = new System.Drawing.Size(190, 125);
+			listBox2.TabIndex = 8;
+			// 
+			// listBox1
+			// 
+			listBox1.ContextMenuStrip = mnuContextLabels;
+			listBox1.FormattingEnabled = true;
+			listBox1.IntegralHeight = false;
+			listBox1.ItemHeight = 15;
+			listBox1.Location = new System.Drawing.Point(633, 183);
+			listBox1.Name = "listBox1";
+			listBox1.Size = new System.Drawing.Size(190, 79);
+			listBox1.TabIndex = 7;
+			// 
+			// lstLabels
+			// 
+			lstLabels.ContextMenuStrip = mnuContextLabels;
+			lstLabels.FormattingEnabled = true;
+			lstLabels.IntegralHeight = false;
+			lstLabels.ItemHeight = 15;
+			lstLabels.Location = new System.Drawing.Point(633, 87);
+			lstLabels.Name = "lstLabels";
+			lstLabels.Size = new System.Drawing.Size(190, 79);
+			lstLabels.TabIndex = 0;
+			lstLabels.SelectedIndexChanged += this.lstLabels_SelectedIndexChanged;
+			lstLabels.MouseUp += this.lstLabels_MouseUp;
+			// 
+			// label1
+			// 
+			label1.AutoSize = true;
+			label1.Location = new System.Drawing.Point(628, 71);
+			label1.Name = "label1";
+			label1.Size = new System.Drawing.Size(109, 15);
+			label1.TabIndex = 1;
+			label1.Text = "Labels in Notebook";
 			// 
 			// pnlNewLabelName
 			// 
@@ -105,7 +321,7 @@ namespace myNotebooks.subforms
 			pnlNewLabelName.Controls.Add(btnCancel);
 			pnlNewLabelName.Controls.Add(lblOperation);
 			pnlNewLabelName.Controls.Add(label5);
-			pnlNewLabelName.Location = new System.Drawing.Point(303, 297);
+			pnlNewLabelName.Location = new System.Drawing.Point(376, 297);
 			pnlNewLabelName.Name = "pnlNewLabelName";
 			pnlNewLabelName.Size = new System.Drawing.Size(204, 110);
 			pnlNewLabelName.TabIndex = 2;
@@ -169,120 +385,12 @@ namespace myNotebooks.subforms
 			label5.Size = new System.Drawing.Size(182, 93);
 			label5.TabIndex = 5;
 			// 
-			// lstLabels
-			// 
-			lstLabels.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-			lstLabels.ContextMenuStrip = mnuContextLabels;
-			lstLabels.FormattingEnabled = true;
-			lstLabels.IntegralHeight = false;
-			lstLabels.ItemHeight = 15;
-			lstLabels.Location = new System.Drawing.Point(9, 23);
-			lstLabels.Name = "lstLabels";
-			lstLabels.Size = new System.Drawing.Size(251, 79);
-			lstLabels.TabIndex = 0;
-			lstLabels.SelectedIndexChanged += this.lstLabels_SelectedIndexChanged;
-			lstLabels.MouseUp += this.lstLabels_MouseUp;
-			// 
-			// mnuContextLabels
-			// 
-			mnuContextLabels.Items.AddRange(new ToolStripItem[] { mnuContextRename_lstLables, mnuContextDelete_lstLabels });
-			mnuContextLabels.Name = "mnuContextLabels";
-			mnuContextLabels.Size = new System.Drawing.Size(118, 48);
-			// 
-			// mnuContextRename_lstLables
-			// 
-			mnuContextRename_lstLables.Name = "mnuContextRename_lstLables";
-			mnuContextRename_lstLables.Size = new System.Drawing.Size(117, 22);
-			mnuContextRename_lstLables.Text = "&Rename";
-			mnuContextRename_lstLables.Click += this.DeleteOrRename;
-			// 
-			// mnuContextDelete_lstLabels
-			// 
-			mnuContextDelete_lstLabels.Name = "mnuContextDelete_lstLabels";
-			mnuContextDelete_lstLabels.Size = new System.Drawing.Size(117, 22);
-			mnuContextDelete_lstLabels.Text = "&Delete";
-			mnuContextDelete_lstLabels.Click += this.DeleteOrRename;
-			// 
-			// lblEntries2
-			// 
-			lblEntries2.AutoSize = true;
-			lblEntries2.Location = new System.Drawing.Point(4, 376);
-			lblEntries2.Name = "lblEntries2";
-			lblEntries2.Size = new System.Drawing.Size(216, 15);
-			lblEntries2.TabIndex = 6;
-			lblEntries2.Text = "(dbl-click entry or right-click notebook)";
-			// 
-			// lblSortType
-			// 
-			lblSortType.AutoSize = true;
-			lblSortType.Cursor = Cursors.Hand;
-			lblSortType.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
-			lblSortType.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			lblSortType.Location = new System.Drawing.Point(187, 4);
-			lblSortType.Name = "lblSortType";
-			lblSortType.Size = new System.Drawing.Size(59, 17);
-			lblSortType.TabIndex = 5;
-			lblSortType.Text = "Sort A-Z";
-			lblSortType.Click += this.lblSortType_Click;
-			// 
-			// lblEntries1
-			// 
-			lblEntries1.AutoSize = true;
-			lblEntries1.Location = new System.Drawing.Point(4, 361);
-			lblEntries1.Name = "lblEntries1";
-			lblEntries1.Size = new System.Drawing.Size(79, 15);
-			lblEntries1.TabIndex = 4;
-			lblEntries1.Text = "Found Entries";
-			// 
-			// lstOccurrences
-			// 
-			lstOccurrences.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-			lstOccurrences.ContextMenuStrip = mnuContextEntries;
-			lstOccurrences.FormattingEnabled = true;
-			lstOccurrences.IntegralHeight = false;
-			lstOccurrences.ItemHeight = 15;
-			lstOccurrences.Location = new System.Drawing.Point(9, 428);
-			lstOccurrences.Name = "lstOccurrences";
-			lstOccurrences.Size = new System.Drawing.Size(251, 118);
-			lstOccurrences.TabIndex = 3;
-			lstOccurrences.DoubleClick += this.lstOccurrences_DoubleClick;
-			lstOccurrences.MouseUp += this.lstOccurrences_MouseUp;
-			// 
-			// mnuContextEntries
-			// 
-			mnuContextEntries.Items.AddRange(new ToolStripItem[] { mnuContextRename_lstEntries, mnuContextDelete_lstEntries });
-			mnuContextEntries.Name = "mnuFoundEntries";
-			mnuContextEntries.Size = new System.Drawing.Size(185, 48);
-			// 
-			// mnuContextRename_lstEntries
-			// 
-			mnuContextRename_lstEntries.Name = "mnuContextRename_lstEntries";
-			mnuContextRename_lstEntries.Size = new System.Drawing.Size(184, 22);
-			mnuContextRename_lstEntries.Text = "&Rename in notebook";
-			mnuContextRename_lstEntries.Click += this.DeleteOrRename;
-			// 
-			// mnuContextDelete_lstEntries
-			// 
-			mnuContextDelete_lstEntries.Name = "mnuContextDelete_lstEntries";
-			mnuContextDelete_lstEntries.Size = new System.Drawing.Size(184, 22);
-			mnuContextDelete_lstEntries.Text = "&Delete in notebook";
-			mnuContextDelete_lstEntries.Click += this.DeleteOrRename;
-			// 
-			// label1
-			// 
-			label1.AutoSize = true;
-			label1.Location = new System.Drawing.Point(4, 7);
-			label1.Name = "label1";
-			label1.Size = new System.Drawing.Size(109, 15);
-			label1.TabIndex = 1;
-			label1.Text = "Labels in Notebook";
-			// 
 			// mnuMain
 			// 
 			mnuMain.Items.AddRange(new ToolStripItem[] { mnuLabelsOperations, mnuMoveTop, mnuAssignPINs });
 			mnuMain.Location = new System.Drawing.Point(0, 0);
 			mnuMain.Name = "mnuMain";
-			mnuMain.Size = new System.Drawing.Size(535, 24);
+			mnuMain.Size = new System.Drawing.Size(795, 24);
 			mnuMain.TabIndex = 1;
 			mnuMain.Text = "menuStrip1";
 			// 
@@ -338,11 +446,10 @@ namespace myNotebooks.subforms
 			// 
 			// lstEntryObjects
 			// 
-			lstEntryObjects.Anchor = AnchorStyles.None;
 			lstEntryObjects.FormattingEnabled = true;
 			lstEntryObjects.IntegralHeight = false;
 			lstEntryObjects.ItemHeight = 15;
-			lstEntryObjects.Location = new System.Drawing.Point(317, 240);
+			lstEntryObjects.Location = new System.Drawing.Point(376, 254);
 			lstEntryObjects.Name = "lstEntryObjects";
 			lstEntryObjects.Size = new System.Drawing.Size(127, 25);
 			lstEntryObjects.TabIndex = 4;
@@ -355,7 +462,7 @@ namespace myNotebooks.subforms
 			pnlOrphanedLabels.Controls.Add(btnRemoveSelectedOrphans);
 			pnlOrphanedLabels.Controls.Add(lstOrphanedLabels);
 			pnlOrphanedLabels.Controls.Add(label4);
-			pnlOrphanedLabels.Location = new System.Drawing.Point(303, 25);
+			pnlOrphanedLabels.Location = new System.Drawing.Point(376, 25);
 			pnlOrphanedLabels.Name = "pnlOrphanedLabels";
 			pnlOrphanedLabels.Size = new System.Drawing.Size(212, 212);
 			pnlOrphanedLabels.TabIndex = 5;
@@ -412,58 +519,32 @@ namespace myNotebooks.subforms
 			label4.TabIndex = 0;
 			label4.Text = "Orphaned lables:";
 			// 
-			// listBox1
+			// panel1
 			// 
-			listBox1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-			listBox1.ContextMenuStrip = mnuContextLabels;
-			listBox1.FormattingEnabled = true;
-			listBox1.IntegralHeight = false;
-			listBox1.ItemHeight = 15;
-			listBox1.Location = new System.Drawing.Point(9, 119);
-			listBox1.Name = "listBox1";
-			listBox1.Size = new System.Drawing.Size(251, 79);
-			listBox1.TabIndex = 7;
-			// 
-			// listBox2
-			// 
-			listBox2.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-			listBox2.ContextMenuStrip = mnuContextLabels;
-			listBox2.FormattingEnabled = true;
-			listBox2.IntegralHeight = false;
-			listBox2.ItemHeight = 15;
-			listBox2.Location = new System.Drawing.Point(9, 219);
-			listBox2.Name = "listBox2";
-			listBox2.Size = new System.Drawing.Size(251, 125);
-			listBox2.TabIndex = 8;
-			// 
-			// label2
-			// 
-			label2.AutoSize = true;
-			label2.Location = new System.Drawing.Point(4, 104);
-			label2.Name = "label2";
-			label2.Size = new System.Drawing.Size(196, 15);
-			label2.TabIndex = 9;
-			label2.Text = "Labels in All Notebooks in <Group>";
-			// 
-			// label3
-			// 
-			label3.AutoSize = true;
-			label3.Location = new System.Drawing.Point(4, 202);
-			label3.Name = "label3";
-			label3.Size = new System.Drawing.Size(188, 15);
-			label3.TabIndex = 10;
-			label3.Text = "Labels in All Groups in <Account>";
+			panel1.BackColor = System.Drawing.SystemColors.ActiveCaption;
+			panel1.Location = new System.Drawing.Point(383, 437);
+			panel1.Name = "panel1";
+			panel1.Size = new System.Drawing.Size(186, 110);
+			panel1.TabIndex = 11;
+			panel1.Visible = false;
 			// 
 			// frmLabelsManager
 			// 
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new System.Drawing.Size(535, 581);
+			ClientSize = new System.Drawing.Size(795, 613);
+			Controls.Add(panel1);
+			Controls.Add(label3);
+			Controls.Add(label2);
+			Controls.Add(listBox1);
+			Controls.Add(listBox2);
 			Controls.Add(pnlNewLabelName);
+			Controls.Add(lstLabels);
 			Controls.Add(pnlOrphanedLabels);
 			Controls.Add(lstEntryObjects);
 			Controls.Add(pnlMain);
 			Controls.Add(mnuMain);
+			Controls.Add(label1);
 			FormBorderStyle = FormBorderStyle.SizableToolWindow;
 			MainMenuStrip = mnuMain;
 			MaximizeBox = false;
@@ -474,10 +555,10 @@ namespace myNotebooks.subforms
 			Resize += this.frmLabelsManager_Resize;
 			pnlMain.ResumeLayout(false);
 			pnlMain.PerformLayout();
-			pnlNewLabelName.ResumeLayout(false);
-			pnlNewLabelName.PerformLayout();
 			mnuContextLabels.ResumeLayout(false);
 			mnuContextEntries.ResumeLayout(false);
+			pnlNewLabelName.ResumeLayout(false);
+			pnlNewLabelName.PerformLayout();
 			mnuMain.ResumeLayout(false);
 			mnuMain.PerformLayout();
 			pnlOrphanedLabels.ResumeLayout(false);
@@ -528,5 +609,9 @@ namespace myNotebooks.subforms
 		private ListBox listBox1;
 		private Label label3;
 		private Label label2;
+		private TreeView treeAvailableLabels;
+		private Label label6;
+		private Panel panel1;
+		private ListBox lstEntryParents;
 	}
 }
