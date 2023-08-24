@@ -53,11 +53,22 @@ namespace myNotebooks.subforms
 				foreach (Control c in this.Controls) if (c.GetType() == typeof(Panel)) c.Location = new Point(0, 25);
 				ShowPanel(pnlMain);
 				ShowHideOccurrences();
-				this.GetSelectedNotebooks();
+				this.Size = new Size(pnlMain.Width + 25, pnlMain.Height + 25);
+				//this.GetSelectedNotebooks();
 				sort = LabelsManager.LabelsSortType.None;
 				lblSortType_Click(null, null);
-				pnlMain.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
-				lstLabels.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
+				//pnlMain.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
+				//lstLabels.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
+
+				treeAvailableLabels.Nodes.Clear();
+				treeAvailableLabels.Nodes.Add("Notebook '" + Program.SelectedNotebookName + "'");
+				treeAvailableLabels.Nodes.Add("Group '" + Program.SelectedGroupName + "'");
+				treeAvailableLabels.Nodes.Add("Department '" + Program.SelectedDepartmentName + "'");
+				treeAvailableLabels.Nodes.Add("Account '" + Program.SelectedAccountName + "'");
+				treeAvailableLabels.Nodes.Add("Company '" + Program.SelectedCompanyName + "'");
+
+				foreach (TreeNode tn in treeAvailableLabels.Nodes) { tn.Nodes.Add(""); }
+
 			}
 		}
 
@@ -194,51 +205,140 @@ namespace myNotebooks.subforms
 			mnuContextLabels.Visible = e.Button == MouseButtons.Right && lstLabels.SelectedIndex > -1;
 		}
 
+		private void lstOccurrences_Click(object sender, EventArgs e)
+		{
+			//// populate and display the label parent tree.
+			//lstEntryParents.Items.Clear();
+			//ListItem selectedItem = lstOccurrences.SelectedItem as ListItem;
+
+			//lstEntryParents.Items.Add("Entry: " + selectedItem.Name);
+
+			//if (selectedItem != null && selectedItem.Name.StartsWith("  "))
+			//{
+			//	List<KeyValuePair<int, string>> parents = DbAccess.GetEntryParentTree(selectedItem.Id);
+
+			//	for (int i = 0; i < parents.Count; i++)
+			//	{
+			//		var manualText = string.Empty;
+
+			//		switch (i)
+			//		{
+			//			case 0:
+			//				manualText = "Notebook: ";
+			//				break;
+			//			case 1:
+			//				manualText = "Group: ";
+			//				break;
+			//			case 2:
+			//				manualText = "Department: ";
+			//				break;
+			//			case 3:
+			//				manualText = "Account: ";
+			//				break;
+			//			case 4:
+			//				manualText = "SelectedCompanyName: ";
+			//				break;
+			//		}
+
+			//		lstEntryParents.Items.Add(manualText + parents[i].Value);
+			//	}
+
+			//	lstEntryParents.Visible = true;
+			//}
+
+		}
+
+		private void lstOccurrences_MouseMove(object sender, MouseEventArgs e)
+		{
+			//lstEntryParents.Visible = false;
+		}
+
 		private async void lstOccurrences_DoubleClick(object sender, EventArgs e)
 		{
-			try
-			{
-				var i = lstOccurrences.SelectedIndex;
-				KeyValuePair<Notebook, Entry> kvp = (KeyValuePair<Notebook, Entry>)lstEntryObjects.Items[i];
-				Utilities.SetProgramPIN(kvp.Key.Name);
-				var currentEntry = kvp.Value;
 
-				using (frmNewEntry frm = new frmNewEntry(this, kvp.Key, 0, kvp.Value))
-				{
-					frm.ShowDialog();
+			//try
+			//{
+			//	var i = lstOccurrences.SelectedIndex;
+			//	KeyValuePair<Notebook, Entry> kvp = (KeyValuePair<Notebook, Entry>)lstEntryObjects.Items[i];
+			//	Utilities.SetProgramPIN(kvp.Key.Name);
+			//	var currentEntry = kvp.Value;
 
-					if (frm.Saved)
-					{
-						Entry nbEntry = frm.Entry;
-						kvp.Key.ReplaceEntry(currentEntry, nbEntry);
-						await kvp.Key.Save();
-						var lblIndx = lstLabels.SelectedIndex;
-						PopulateOccurrences();
-						lstLabels.SelectedIndex = -1;
-						lstLabels.SelectedIndex = lblIndx;
-						lstOccurrences.SelectedIndex = i;
-					}
-				}
-			}
-			catch (Exception) { }
+			//	using (frmNewEntry frm = new frmNewEntry(this, kvp.Key, 0, kvp.Value))
+			//	{
+			//		frm.ShowDialog();
+
+			//		if (frm.Saved)
+			//		{
+			//			Entry nbEntry = frm.Entry;
+			//			kvp.Key.ReplaceEntry(currentEntry, nbEntry);
+			//			await kvp.Key.Save();
+			//			var lblIndx = lstLabels.SelectedIndex;
+			//			PopulateOccurrences();
+			//			lstLabels.SelectedIndex = -1;
+			//			lstLabels.SelectedIndex = lblIndx;
+			//			lstOccurrences.SelectedIndex = i;
+			//		}
+			//	}
+			//}
+			//catch (Exception) { }
 		}
 
 		private void lstOccurrences_MouseUp(object sender, MouseEventArgs e)
 		{
-			mnuContextDelete_lstEntries.Visible = true;
+			// populate and display the label parent tree.
+			lstEntryParents.Items.Clear();
+			lstEntryParents.Visible = false;
+			ListItem selectedItem = lstOccurrences.SelectedItem as ListItem;
 
-			if (e.Button == MouseButtons.Right && lstOccurrences.Items.Count > 1)
+
+			if (selectedItem != null && selectedItem.Name.StartsWith("  "))
 			{
-				lstOccurrences.SelectedIndex = lstOccurrences.TopIndex + e.Y / 15;
+				lstEntryParents.Items.Add("Entry: " + selectedItem.Name.Substring(2, selectedItem.Name.Length - 2));
 
-				if (!OccurenceTitleIndicies.Contains(lstOccurrences.SelectedIndex))
-				{ mnuContextEntries.Visible = false; lstOccurrences.SelectedIndex = -1; }
-				else
+				List<KeyValuePair<int, string>> parents = DbAccess.GetEntryParentTree(selectedItem.Id);
+
+				for (int i = 0; i < parents.Count; i++)
 				{
-					mnuContextEntries.Visible = true;
+					var manualText = string.Empty;
+
+					switch (i)
+					{
+						case 0:
+							manualText = "Notebook: ";
+							break;
+						case 1:
+							manualText = "Group: ";
+							break;
+						case 2:
+							manualText = "Department: ";
+							break;
+						case 3:
+							manualText = "Account: ";
+							break;
+						case 4:
+							manualText = "Company: ";
+							break;
+					}
+
+					lstEntryParents.Items.Add(manualText + parents[i].Value);
 				}
+
+				lstEntryParents.Visible = true;
 			}
-			else { mnuContextDelete_lstEntries.Visible = false; }
+			//mnuContextDelete_lstEntries.Visible = true;
+
+			//if (e.Button == MouseButtons.Right && lstOccurrences.Items.Count > 1)
+			//{
+			//	lstOccurrences.SelectedIndex = lstOccurrences.TopIndex + e.Y / 15;
+
+			//	if (!OccurenceTitleIndicies.Contains(lstOccurrences.SelectedIndex))
+			//	{ mnuContextEntries.Visible = false; lstOccurrences.SelectedIndex = -1; }
+			//	else
+			//	{
+			//		mnuContextEntries.Visible = true;
+			//	}
+			//}
+			//else { mnuContextDelete_lstEntries.Visible = false; }
 		}
 
 		private async Task ManageOrphans()
@@ -519,7 +619,7 @@ namespace myNotebooks.subforms
 		private void ShowPanel(Panel panelToShow)
 		{   //411, 576
 			foreach (Control c in this.Controls) { if (c.GetType() == typeof(Panel)) { c.Visible = false; } }
-			if (panelToShow == pnlMain) { panelToShow.Top = 25; this.Size = new Size(panelToShow.Left + panelToShow.Width + 17, this.Height = panelToShow.Height + panelToShow.Top + 35); }
+			if (panelToShow == pnlMain) { treeAvailableLabels.Height = lstOccurrences.Items.Count > 0 ? 264 : 523; }  // { panelToShow.Top = 25; this.Size = new Size(panelToShow.Left + panelToShow.Width + 17, this.Height = panelToShow.Height + panelToShow.Top + 35); }
 			if (panelToShow == pnlOrphanedLabels) { lstLabels.SelectedIndices.Clear(); this.Size = new Size(panelToShow.Left + panelToShow.Width + 15, panelToShow.Height + panelToShow.Top + 40); }
 			panelToShow.Visible = true;
 		}
@@ -528,17 +628,20 @@ namespace myNotebooks.subforms
 		{
 			if (lstOccurrences.Items.Count > 0)
 			{
-				lstLabels.Height = 184; // pnlMain.Height - 320;
-				lstOccurrences.Height = pnlMain.Height - 250; lstOccurrences.Visible = true;
-				lblEntries1.Visible = true;
-				lblEntries2.Visible = true;
+				treeAvailableLabels.Height = 184;
+				//lstLabels.Height = 184; // pnlMain.Height - 320;
+				lstOccurrences.Height = pnlMain.Height - 250;
+				pnlLabelDetails.Visible = true;
+				//lblEntries1.Visible = true;
+				//lblEntries2.Visible = true;
 			}
 			else
 			{
-				lstLabels.Height = pnlMain.Height - 50;
+				treeAvailableLabels.Height = pnlMain.Height - 50;
+				//lstLabels.Height = pnlMain.Height - 50;
 				lstOccurrences.Visible = false;
-				lblEntries1.Visible = false;
-				lblEntries2.Visible = false;
+				//lblEntries1.Visible = false;
+				//lblEntries2.Visible = false;
 			}
 
 			var msg = string.Empty;
@@ -557,9 +660,7 @@ namespace myNotebooks.subforms
 
 		private void treeAvailableLabels_Click(object sender, EventArgs e)
 		{
-
-
-
+			lstEntryParents.Visible = false;
 		}
 
 		private void treeAvailableLabels_AfterSelect(object sender, TreeViewEventArgs e)
@@ -574,19 +675,21 @@ namespace myNotebooks.subforms
 				lstOccurrences.Items.Clear();
 
 				// populate the list with lbl info + entries where label is found
-				lstOccurrences.Items.Add("Text: " + v.Key.LabelText);
+				lstOccurrences.Items.Add("Label: " + v.Key.LabelText);
 				lstOccurrences.Items.Add("Created By: " + v.Value.Name.ToString() + " (" + v.Value.Email + ")");
 				lstOccurrences.Items.Add("Created On: " + v.Value.CreatedOn.ToString());
 				lstOccurrences.Items.Add("Found in Entries ...");
-				foreach (Entry entry in DbAccess.GetEntriesForLabel(v.Key))
+				foreach (Entry entry in DbAccess.GetEntriesWithLabel(v.Key))
 				{
 					ListItem item = new ListItem() { Id = entry.Id, Name = "  " + entry.Title };
 					lstOccurrences.Items.Add(item);
 				}
+
+				lstOccurrences.Visible = true;
+				ShowPanel(pnlMain);
+				pnlLabelDetails.Visible = lstOccurrences.Items.Count > 0;
 			}
 
-			lstOccurrences.Visible = true;
-			ShowPanel(pnlMain);
 		}
 
 		private void treeAvailableLabels_AfterExpand(object sender, TreeViewEventArgs e)
@@ -598,7 +701,7 @@ namespace myNotebooks.subforms
 			{
 				tn.Nodes.Clear();
 
-				var choice = Convert.ToInt32(Enum.Parse(typeof(frmMain.OrgLevelTypes), tn.Text));
+				var choice = Convert.ToInt32(Enum.Parse(typeof(frmMain.OrgLevelTypes), tn.Text.Substring(0, tn.Text.IndexOf(" "))));
 
 				foreach (MNLabel label in DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, choice))
 				{
@@ -609,50 +712,16 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private void lstOccurrences_Click(object sender, EventArgs e)
-		{
-			// populate and display the label parent tree.
-			lstEntryParents.Items.Clear();
-
-			var v = lstOccurrences.SelectedItem as ListItem;
-
-			if(v != null && v.Name.StartsWith("  "))
-			{
-				List<KeyValuePair<int, string>> parents = DbAccess.GetEntryParentTree(v.Id);
-
-				for(int i = 0; i < parents.Count; i++)
-				{
-					var manualText = string.Empty;
-
-					switch (i)
-					{
-						case 0:
-							manualText = "Notebook: ";
-							break;
-						case 1:
-							manualText = "Group: ";
-							break;
-						case 2:
-							manualText = "Department: ";
-							break;
-						case 3:
-							manualText = "Account: ";
-							break;
-						case 4:
-							manualText = "Company: ";
-							break;
-					}
-
-					lstEntryParents.Items.Add(manualText + parents[i].Value);
-				}
-				lstEntryParents.Visible = true;
-			}
-
-		}
-
-		private void lstOccurrences_MouseMove(object sender, MouseEventArgs e)
+		private void lstEntryParents_DoubleClick(object sender, EventArgs e)
 		{
 			lstEntryParents.Visible = false;
+		}
+
+		private void lstEntryParents_Click(object sender, EventArgs e)
+		{
+			// evaluate the clicked item and proceed accordingly
+			// if Entry, 
+
 		}
 	}
 }

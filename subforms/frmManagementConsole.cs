@@ -379,6 +379,16 @@ namespace myNotebooks.subforms
 		{
 			CurrentMouseListBox.SelectedIndex = CurrentMouseListBox.IndexFromPoint(e.X, e.Y);
 
+			ListBox lb = (ListBox)sender;
+
+			if (lb.Name.EndsWith("MU"))
+			{
+				if (lb.Name.ToLower().Contains("group"))			{ Program.SelectedGroupName = CurrentMouseListBox.Text; }
+				else if (lb.Name.ToLower().Contains("department"))	{ Program.SelectedDepartmentName = CurrentMouseListBox.Text; }
+				else if (lb.Name.ToLower().Contains("account"))		{ Program.SelectedAccountName = CurrentMouseListBox.Text; }
+				else if (lb.Name.ToLower().Contains("companies"))		{ Program.SelectedCompanyName = CurrentMouseListBox.Text; }
+			}  
+
 			if (e.Button == MouseButtons.Right)
 			{
 				//if (CurrentMouseListBox.SelectedItem != null)
@@ -474,7 +484,7 @@ namespace myNotebooks.subforms
 					parentListBox = lstCompanies_MU;
 					parentGroupBox = (GroupBox)parentListBox.Parent;
 					if (parentListBox.Items.Count == 1) parentListBox.SelectedIndex = 0;
-					if (parentGroupBox.Enabled && parentListBox.SelectedIndex == -1) { msg = string.Format(sMsgTemplate, " Company", "n Account"); }
+					if (parentGroupBox.Enabled && parentListBox.SelectedIndex == -1) { msg = string.Format(sMsgTemplate, " SelectedCompanyName", "n Account"); }
 					break;
 				case frmMain.OrgLevelTypes.Department:
 					parentListBox = lstAccounts_MU;

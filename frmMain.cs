@@ -391,6 +391,8 @@ namespace myNotebooks.subforms
 
 			if (CurrentNotebook != null)
 			{
+				Program.SelectedNotebookName = CurrentNotebook.Name;
+
 				if (CurrentNotebook.Entries.Count == 0)
 				{
 					ShowHideMenusAndControls(SelectionState.NotebookLoaded);

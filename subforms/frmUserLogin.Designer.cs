@@ -127,7 +127,7 @@
 			MaximizeBox = false;
 			MinimizeBox = false;
 			Name = "frmUserLogin";
-			Text = "MNUser Login";
+			Text = "User Login";
 			pnlLogin.ResumeLayout(false);
 			pnlLogin.PerformLayout();
 			this.ResumeLayout(false);

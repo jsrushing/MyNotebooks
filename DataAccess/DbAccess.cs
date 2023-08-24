@@ -300,7 +300,7 @@ namespace myNotebooks.DataAccess
 			return lstRtrn;
 		}
 
-		public static List<Entry> GetEntriesForLabel(MNLabel label)
+		public static List<Entry> GetEntriesWithLabel(MNLabel label)
 		{
 			List<Entry> entries = new();
 			DataTable dt = new();
@@ -618,9 +618,9 @@ namespace myNotebooks.DataAccess
 			return ds;
 		}
 
-		//public static List<Company> GetCompanies(int userId)
+		//public static List<SelectedCompanyName> GetCompanies(int userId)
 		//{
-		//	List<Company> lstReturn = new List<Company>();
+		//	List<SelectedCompanyName> lstReturn = new List<SelectedCompanyName>();
 		//	DataTable dt = new();
 
 		//	using (SqlConnection conn = new(connString))
