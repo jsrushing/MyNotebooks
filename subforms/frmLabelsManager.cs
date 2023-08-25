@@ -440,7 +440,7 @@ namespace myNotebooks.subforms
 			}
 			else if (mnu.Text == LoadNotebookMenuText)
 			{
-				// launch frmMain with this notebook loaded
+				// Launch frmMain with the selected notebook 'pre-loaded'.
 				var notebookId = Convert.ToInt32(gridViewEntryDetails.Rows[1].Cells[1].Tag);
 				var notebookName = gridViewEntryDetails.Rows[1].Cells[1].Value.ToString();
 				Program.NotebooksNamesAndIds.Clear();
@@ -449,6 +449,20 @@ namespace myNotebooks.subforms
 			}
 			else
 			{
+				var gridIndex = gridViewEntryDetails.SelectedRows[0];
+
+				switch (gridIndex.Index)
+				{
+					case 2:     // Group
+						Program.ActiveNBParentId = Convert.ToInt32(gridViewEntryDetails.Rows[2].Cells[1].Tag);
+						Program.NotebooksNamesAndIds.Clear();
+						using(frmMain frm = new()) { frm.ShowDialog(); }
+						break;
+					case 3:		// Department
+						break;
+				}
+
+
 				// invent way to explore org levels here ...
 			}
 		}
