@@ -152,7 +152,9 @@ namespace myNotebooks.subforms
 			// treeAvailableLabels
 			// 
 			treeAvailableLabels.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+			treeAvailableLabels.CheckBoxes = true;
 			treeAvailableLabels.ContextMenuStrip = mnuContextLabels;
+			treeAvailableLabels.HotTracking = true;
 			treeAvailableLabels.Location = new System.Drawing.Point(11, 25);
 			treeAvailableLabels.Name = "treeAvailableLabels";
 			treeNode1.Name = "Node0";
@@ -179,10 +181,11 @@ namespace myNotebooks.subforms
 			treeAvailableLabels.Size = new System.Drawing.Size(318, 264);
 			treeAvailableLabels.TabIndex = 6;
 			treeAvailableLabels.Text = "tree";
+			treeAvailableLabels.AfterCheck += this.treeAvailableLabels_AfterCheck;
 			treeAvailableLabels.BeforeExpand += this.treeAvailableLabels_BeforeExpand;
 			treeAvailableLabels.AfterExpand += this.treeAvailableLabels_AfterExpand;
 			treeAvailableLabels.AfterSelect += this.treeAvailableLabels_AfterSelect;
-			treeAvailableLabels.Click += this.treeAvailableLabels_Click;
+			treeAvailableLabels.MouseMove += this.treeAvailableLabels_MouseMove;
 			// 
 			// mnuContextLabels
 			// 
@@ -222,12 +225,12 @@ namespace myNotebooks.subforms
 			// 
 			mnuContextEntries.Items.AddRange(new ToolStripItem[] { mnuContext_GridEntryDetails });
 			mnuContextEntries.Name = "mnuFoundEntries";
-			mnuContextEntries.Size = new System.Drawing.Size(181, 48);
+			mnuContextEntries.Size = new System.Drawing.Size(125, 26);
 			// 
 			// mnuContext_GridEntryDetails
 			// 
 			mnuContext_GridEntryDetails.Name = "mnuContext_GridEntryDetails";
-			mnuContext_GridEntryDetails.Size = new System.Drawing.Size(180, 22);
+			mnuContext_GridEntryDetails.Size = new System.Drawing.Size(124, 22);
 			mnuContext_GridEntryDetails.Text = "Edit Entry";
 			mnuContext_GridEntryDetails.Click += this.mnuContext_GridEntryDetails_Click;
 			// 

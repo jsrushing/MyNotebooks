@@ -346,6 +346,7 @@ namespace myNotebooks.subforms
 			// 
 			// mnuLabels
 			// 
+			mnuLabels.Enabled = false;
 			mnuLabels.Name = "mnuLabels";
 			mnuLabels.Size = new System.Drawing.Size(52, 20);
 			mnuLabels.Text = "&Labels";

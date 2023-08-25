@@ -817,7 +817,7 @@ namespace myNotebooks.subforms
 
 		private void treeUser_DoubleClick(object sender, EventArgs e)
 		{
-			//LastClickedNode = treeUser.SelectedNode;
+			//LastClickedLabelNode = treeUser.SelectedNode;
 
 			//try
 			//{

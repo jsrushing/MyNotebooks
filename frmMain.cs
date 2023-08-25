@@ -201,10 +201,10 @@ namespace myNotebooks.subforms
 			using (frmUserLogin frm = new()) { frm.ShowDialog(); }
 
 			// if we don't have a user, disable all main menus except mnuSwitchAccounts
-			if (Program.User == null) 
-			{ 
-				foreach(ToolStripItem mnu in menuStrip1.Items) { mnu.Enabled = false; }
-				mnuSwitchAccount.Enabled = true;			
+			if (Program.User == null)
+			{
+				foreach (ToolStripItem mnu in menuStrip1.Items) { mnu.Enabled = false; }
+				mnuSwitchAccount.Enabled = true;
 			}
 
 			using (frmManagementConsole frm = new(this, true)) { frm.ShowDialog(); }
@@ -459,7 +459,6 @@ namespace myNotebooks.subforms
 						catch (Exception ex) { Console.Write(ex.Message); }
 					}
 				}
-
 			}
 
 			this.Cursor = Cursors.Default;
@@ -663,6 +662,7 @@ namespace myNotebooks.subforms
 					lblSeparator.Visible = rtb.Text.Length > 0;
 					Utilities.ResizeListsAndRTBs(lstEntries, rtbSelectedEntry, lblSeparator, lblSelectionType, this);
 					ShowHideMenusAndControls(SelectionState.EntrySelected);
+					mnuLabels.Enabled = true;
 				}
 				else
 				{
@@ -693,9 +693,9 @@ namespace myNotebooks.subforms
 			using (frmManagementConsole frm = new(this))
 			{
 				frm.ShowDialog();
-				if (Program.ActiveNBParentId > 0) 
-				{ 
-					LoadNotebooks(); 
+				if (Program.ActiveNBParentId > 0)
+				{
+					LoadNotebooks();
 					ShowHideMenusAndControls(SelectionState.NotebookNotSelected);
 				}
 			}
@@ -719,8 +719,8 @@ namespace myNotebooks.subforms
 					CurrentNotebook.Entries.Add(CurrentEntry);
 					await Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries);
 					if (!cbxDatesTo.Items.Contains(CurrentEntry.CreatedOn)) { cbxDatesTo.Items.Insert(0, CurrentEntry.CreatedOn.ToShortDateString()); }
-					if(cbxDatesTo.Items.Count > 0) cbxDatesTo.SelectedIndex = 0;
-					if(lstEntries.Items.Count > 0) lstEntries.SelectedIndex = 0;
+					if (cbxDatesTo.Items.Count > 0) cbxDatesTo.SelectedIndex = 0;
+					if (lstEntries.Items.Count > 0) lstEntries.SelectedIndex = 0;
 				}
 			}
 

@@ -26,6 +26,9 @@ namespace myNotebooks.subforms
 		private string strSeperator = "-----------------------";
 		public Entry CurrentEntry { get; set; }
 		private bool FirstDetailsLoad = true;
+		private bool ProgramaticallyChecking = false;
+		private TreeNode LastClickedLabelNode = null;
+		private int LastClickedEntryIndex = -1;
 
 		private List<Notebook> SelectedNotebooks { get; set; }
 
@@ -171,7 +174,8 @@ namespace myNotebooks.subforms
 					v2 = "Load Notebook";
 					break;
 				case > 1:
-					v2 = "Explore '";	// + gridViewEntryDetails.Rows[v].Cells[1].Value.ToString() + "'";
+					var v3 = gridViewEntryDetails.Rows[v].Cells[1].Value;
+					v2 = "Explore '" + (v3 != null ? v3.ToString() : "") + "'";
 					break;
 			}
 
@@ -266,63 +270,8 @@ namespace myNotebooks.subforms
 
 		private void lstOccurrences_MouseUp(object sender, MouseEventArgs e)
 		{
-			// Populate and display the label parent data grid.
-			gridViewEntryDetails.Rows.Clear();
-			gridViewEntryDetails.Rows.Add(6);
-			gridViewEntryDetails.GridColor = Color.White;
-			ListItem selectedItem = lstOccurrences.SelectedItem as ListItem;
-			gridViewEntryDetails.Visible = false;
+			PopulateGridViewEntryDetails();
 
-			if (selectedItem != null && selectedItem.Name.StartsWith("  "))
-			{
-				gridViewEntryDetails.Rows[0].Cells[0].Value = "Entry: ";
-				gridViewEntryDetails.Rows[0].Cells[1].Value = selectedItem.Name.Substring(2, selectedItem.Name.Length - 2);
-				gridViewEntryDetails.Rows[0].Cells[1].Tag = selectedItem.Id;
-				List<KeyValuePair<int, string>> parents = DbAccess.GetEntryParentTree(selectedItem.Id);
-
-				for (int i = 0; i < parents.Count; i++)
-				{
-					var manualText = string.Empty;
-
-					switch (i)
-					{
-						case 0:
-							manualText = "Notebook: ";
-							break;
-						case 1:
-							manualText = "Group: ";
-							break;
-						case 2:
-							manualText = "Department: ";
-							break;
-						case 3:
-							manualText = "Account: ";
-							break;
-						case 4:
-							manualText = "Company: ";
-							break;
-					}
-
-					gridViewEntryDetails.Rows[i + 1].Cells[0].Value = manualText;
-					gridViewEntryDetails.Rows[i + 1].Cells[1].Value = parents[i].Value.ToString().Trim();
-					gridViewEntryDetails.Rows[i + 1].Cells[1].Tag	= parents[i].Key;
-
-					//lstEntryParents.Items.Add(manualText + parents[i].Value);
-				}
-
-				gridViewEntryDetails.RowTemplate.Height = 23;
-				gridViewEntryDetails.Columns[0].Width = 80;
-				gridViewEntryDetails.Columns[1].Width = 170;
-				gridViewEntryDetails.Height = (gridViewEntryDetails.RowTemplate.Height * 7) - 20;
-				gridViewEntryDetails.Width = gridViewEntryDetails.Columns[0].Width + gridViewEntryDetails.Columns[1].Width + 3;
-				gridViewEntryDetails.Visible = true;
-				gridViewEntryDetails.Columns[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-
-				if (FirstDetailsLoad) { FirstDetailsLoad = false; lstOccurrences_MouseUp(sender, e); }
-
-
-				//lstEntryParents.Visible = true;
-			}
 			//mnuContextDelete_lstEntries.Visible = true;
 
 			//if (e.Button == MouseButtons.Right && lstOccurrences.Items.Count > 1)
@@ -492,16 +441,24 @@ namespace myNotebooks.subforms
 
 			if (mnu.Text == "Open Entry")
 			{
-				//var notebookId = gridViewEntryDetails.Rows[1].Cells[1].Tag;
 				using (frmNewEntry frm = new(this, null, 0, DbAccess.GetEntry(v)))
 				{
 					frm.ShowDialog();
 
-					if (frm.Saved) { lstOccurrences_MouseUp(sender, null); }
+					if (frm.Saved)
+					{    // refresh lstOccurrences
+						treeAvailableLabels.SelectedNode = LastClickedLabelNode;
+						PopulateLabelDetails();
+						lstOccurrences.SelectedIndex = LastClickedEntryIndex;
+						PopulateGridViewEntryDetails();
+					}
 				}
 			}
 			else if (mnu.Text == "Load Notebook")
 			{
+				// launch frmMain with this notebook loaded
+				var notebookId = gridViewEntryDetails.Rows[1].Cells[1].Tag;
+
 			}
 			else
 			{
@@ -567,6 +524,96 @@ namespace myNotebooks.subforms
 			GetSelectedNotebooks();
 			KickLstLabels();
 			ShowPanel(pnlMain);
+		}
+
+		private void PopulateLabelDetails()
+		{
+			// Populate and display details about the selected label
+			TreeNode tn = treeAvailableLabels.SelectedNode;
+			lstOccurrences.Items.Clear();
+			gridViewEntryDetails.Visible = false;
+
+			if (tn.Level > 0)
+			{
+				var id = Convert.ToInt32(tn.Tag);
+				var v = DbAccess.GetLabel(id);
+				lstOccurrences.Items.Clear();
+				lstOccurrences.Items.Add("Label: " + v.Key.LabelText);
+				lstOccurrences.Items.Add("Created By: " + v.Value.Name.ToString() + " (" + v.Value.Email + ")");
+				lstOccurrences.Items.Add("Created On: " + v.Value.CreatedOn.ToString());
+				lstOccurrences.Items.Add("Found in Entries ...");
+				foreach (Entry entry in DbAccess.GetEntriesWithLabel(v.Key))
+				{
+					ListItem item = new() { Id = entry.Id, Name = "  " + entry.Title };
+					lstOccurrences.Items.Add(item);
+				}
+
+				lstOccurrences.Visible = true;
+				ShowPanel(pnlMain);
+				pnlLabelDetails.Visible = lstOccurrences.Items.Count > 0;
+			}
+		}
+
+		private void PopulateGridViewEntryDetails()
+		{
+			// Populate and display the label parent data grid.
+			gridViewEntryDetails.Rows.Clear();
+			gridViewEntryDetails.Rows.Add(6);
+			gridViewEntryDetails.GridColor = Color.White;
+			ListItem selectedItem = lstOccurrences.SelectedItem as ListItem;
+			LastClickedEntryIndex = lstOccurrences.SelectedIndex;
+			gridViewEntryDetails.Visible = false;
+
+			if (selectedItem != null && selectedItem.Name.StartsWith("  "))
+			{
+				gridViewEntryDetails.Rows[0].Cells[0].Value = "Entry: ";
+				gridViewEntryDetails.Rows[0].Cells[1].Value = selectedItem.Name.Substring(2, selectedItem.Name.Length - 2);
+				gridViewEntryDetails.Rows[0].Cells[1].Tag = selectedItem.Id;
+				List<KeyValuePair<int, string>> parents = DbAccess.GetEntryParentTree(selectedItem.Id);
+
+				for (int i = 0; i < parents.Count; i++)
+				{
+					var manualText = string.Empty;
+
+					switch (i)
+					{
+						case 0:
+							manualText = "Notebook: ";
+							break;
+						case 1:
+							manualText = "Group: ";
+							break;
+						case 2:
+							manualText = "Department: ";
+							break;
+						case 3:
+							manualText = "Account: ";
+							break;
+						case 4:
+							manualText = "Company: ";
+							break;
+					}
+
+					gridViewEntryDetails.Rows[i + 1].Cells[0].Value = manualText;
+					gridViewEntryDetails.Rows[i + 1].Cells[1].Value = parents[i].Value.ToString().Trim();
+					gridViewEntryDetails.Rows[i + 1].Cells[1].Tag = parents[i].Key;
+
+					//lstEntryParents.Items.Add(manualText + parents[i].Value);
+				}
+
+				gridViewEntryDetails.RowTemplate.Height = 23;
+				gridViewEntryDetails.Columns[0].Width = 80;
+				gridViewEntryDetails.Columns[1].Width = 170;
+				gridViewEntryDetails.Height = (gridViewEntryDetails.RowTemplate.Height * 7) - 20;
+				gridViewEntryDetails.Width = gridViewEntryDetails.Columns[0].Width + gridViewEntryDetails.Columns[1].Width + 3;
+				gridViewEntryDetails.Visible = true;
+				gridViewEntryDetails.Columns[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
+				if (FirstDetailsLoad) { FirstDetailsLoad = false; PopulateGridViewEntryDetails(); }
+
+
+				//lstEntryParents.Visible = true;
+			}
 		}
 
 		private void PopulateOccurrences(string labelName = null)
@@ -680,34 +727,13 @@ namespace myNotebooks.subforms
 
 		}
 
-		private void treeAvailableLabels_Click(object sender, EventArgs e)
-		{ gridViewEntryDetails.Visible = false; }
-
 		private void treeAvailableLabels_AfterSelect(object sender, TreeViewEventArgs e)
-		{
-			// Populate and display details about the selected label
-			TreeNode tn = treeAvailableLabels.SelectedNode;
-
-			if (tn.Level > 0)
+		{ 
+			if(treeAvailableLabels.SelectedNode.Level > 0)
 			{
-				var id = Convert.ToInt32(tn.Tag);
-				var v = DbAccess.GetLabel(id);
-				lstOccurrences.Items.Clear();
-				lstOccurrences.Items.Add("Label: " + v.Key.LabelText);
-				lstOccurrences.Items.Add("Created By: " + v.Value.Name.ToString() + " (" + v.Value.Email + ")");
-				lstOccurrences.Items.Add("Created On: " + v.Value.CreatedOn.ToString());
-				lstOccurrences.Items.Add("Found in Entries ...");
-				foreach (Entry entry in DbAccess.GetEntriesWithLabel(v.Key))
-				{
-					ListItem item = new ListItem() { Id = entry.Id, Name = "  " + entry.Title };
-					lstOccurrences.Items.Add(item);
-				}
-
-				lstOccurrences.Visible = true;
-				ShowPanel(pnlMain);
-				pnlLabelDetails.Visible = lstOccurrences.Items.Count > 0;
+				PopulateLabelDetails(); 
+				LastClickedLabelNode = treeAvailableLabels.SelectedNode; 
 			}
-
 		}
 
 		private void treeAvailableLabels_AfterExpand(object sender, TreeViewEventArgs e)
@@ -718,15 +744,53 @@ namespace myNotebooks.subforms
 			if (tn.Level == 0 && tn.Nodes[0].Text.Length == 0)
 			{
 				tn.Nodes.Clear();
-				var choice = Convert.ToInt32(Enum.Parse(typeof(frmMain.OrgLevelTypes), tn.Text.Substring(0, tn.Text.IndexOf(" "))));
+				var orgLevel = Convert.ToInt32(Enum.Parse(typeof(frmMain.OrgLevelTypes), tn.Text.AsSpan(0, tn.Text.IndexOf(" "))));
 
-				foreach (MNLabel label in DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, choice))
+				foreach (MNLabel label in DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, orgLevel))
+				{ tn.Nodes.Add(new TreeNode() { Text = label.LabelText, Tag = label.Id }); }
+			}
+		}
+
+		private void treeAvailableLabels_AfterCheck(object sender, TreeViewEventArgs e)
+		{
+			 if(!ProgramaticallyChecking)
+			{
+				TreeNode tn = treeAvailableLabels.SelectedNode;
+
+				if (tn != null)
 				{
-					TreeNode treeNode = new(label.LabelText);
-					treeNode.Tag = label.Id;
-					tn.Nodes.Add(treeNode);
+					if(tn.Level == 0)
+					{
+						ProgramaticallyChecking = true;
+
+						if (tn.Nodes.Count == 0)
+						{
+							tn.Checked = false;
+						}
+						else
+						{
+							foreach (TreeNode tn2 in tn.Nodes)
+							{
+								tn2.Checked = tn.Checked;
+							}
+						}
+
+						ProgramaticallyChecking = false;
+					}
+					else { LastClickedLabelNode = tn; }
 				}
 			}
+		}
+
+		private void treeAvailableLabels_MouseMove(object sender, MouseEventArgs e)
+		{
+			if(!lstOccurrences.Visible)
+			{
+				TreeNode tn = treeAvailableLabels.GetNodeAt(e.X, e.Y);
+				if (tn != null && tn.Level == 0) { treeAvailableLabels.SelectedNode = tn; }
+			}
+
+			gridViewEntryDetails.Visible = false;
 		}
 	}
 }

@@ -291,6 +291,7 @@ namespace myNotebooks.DataAccess
 					SqlDataAdapter sda = new() { SelectCommand = cmd };
 					sda.Fill(dt);
 					entryRtrn = new(dt);
+					entryRtrn.AllLabels = DbAccess.GetLabelsForEntry(entryId);
 				}
 			}
 
