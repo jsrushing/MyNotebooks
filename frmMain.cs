@@ -198,18 +198,21 @@ namespace myNotebooks.subforms
 
 		private async void frmMain_Load(object sender, EventArgs e)
 		{
-			using (frmUserLogin frm = new()) { frm.ShowDialog(); }
-
-			// if we don't have a user, disable all main menus except mnuSwitchAccounts
-			if (Program.User == null)
+			if(Program.NotebooksNamesAndIds.Count == 0)
 			{
-				foreach (ToolStripItem mnu in menuStrip1.Items) { mnu.Enabled = false; }
-				mnuSwitchAccount.Enabled = true;
+				using (frmUserLogin frm = new()) { frm.ShowDialog(); }
+
+				// if we don't have a user, disable all main menus except mnuSwitchAccounts
+				if (Program.User == null)
+				{
+					foreach (ToolStripItem mnu in menuStrip1.Items) { mnu.Enabled = false; }
+					mnuSwitchAccount.Enabled = true;
+				}
+
+				using (frmManagementConsole frm = new(this, true)) { frm.ShowDialog(); }
+
+				if (Program.ActiveNBParentId == -1) { this.Close(); return; }
 			}
-
-			using (frmManagementConsole frm = new(this, true)) { frm.ShowDialog(); }
-
-			if (Program.ActiveNBParentId == -1) { this.Close(); return; }
 
 			this.Cursor = Cursors.WaitCursor;
 			System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();

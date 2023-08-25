@@ -34,7 +34,7 @@ namespace myNotebooks.DataAccess
 					{
 						cmd.CommandType = CommandType.StoredProcedure;
 						cmd.Parameters.AddWithValue("@labelText",label.LabelText);
-						cmd.Parameters.AddWithValue("@parentId", label.ParentId);
+						cmd.Parameters.AddWithValue("@notebookId", label.ParentId);
 						cmd.Parameters.AddWithValue("@opType",	opType == OperationType.Delete ? 2 : (int)opType);
 						if (opType == OperationType.Create)		cmd.Parameters.AddWithValue("@createdBy",	Program.User.UserId);
 						if(opType != OperationType.Create)		cmd.Parameters.AddWithValue("@labelId",		label.Id);
@@ -158,7 +158,7 @@ namespace myNotebooks.DataAccess
 					cmd.Parameters.AddWithValue("@pin",			nb.PIN.Length > 0 ? nb.PIN : null);
 					cmd.Parameters.AddWithValue("@opType",		opType == OperationType.Delete ? 2 : (int)opType);
 					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@createdBy", Program.User.UserId);
-					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@parentId", nb.ParentId);
+					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@notebookId", nb.ParentId);
 					if (opType == OperationType.Delete)			cmd.Parameters.AddWithValue("isActive", 0);
 					cmd.Parameters.Add("@retVal", SqlDbType.Int);
 					cmd.Parameters["@retVal"].Direction = ParameterDirection.ReturnValue;
@@ -186,7 +186,7 @@ namespace myNotebooks.DataAccess
 					cmd.Parameters.AddWithValue("@title",		entry.Title);
 					cmd.Parameters.AddWithValue("@opType",		opType == OperationType.Delete ? 2: (int)opType);
 					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@createdBy"	, Program.User.UserId);
-					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@parentId"		, entry.ParentId);
+					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@notebookId"		, entry.ParentId);
 					if (opType != OperationType.Create)			cmd.Parameters.AddWithValue("@entryId"		, entry.Id);
 					if (opType == OperationType.Delete)			cmd.Parameters.AddWithValue("isActive"		, 0);
 					cmd.Parameters.Add("@retVal", SqlDbType.Int);
@@ -212,7 +212,7 @@ namespace myNotebooks.DataAccess
 					using (SqlCommand cmd = new SqlCommand("sp_CRUD_OrgLevel", conn))
 					{
 						cmd.CommandType = CommandType.StoredProcedure;
-						cmd.Parameters.AddWithValue("@parentId",			parentId);
+						cmd.Parameters.AddWithValue("@notebookId",			parentId);
 						cmd.Parameters.AddWithValue("@createdBy",			creatorId);
 						cmd.Parameters.AddWithValue("@orgLevelType",		(int)orgLevelType);
 						cmd.Parameters.AddWithValue("@orgLevelName",		orgLevelName.Trim());
@@ -454,7 +454,7 @@ namespace myNotebooks.DataAccess
 			return entryToComplete;
 		}
 
-		public static Notebook		GetNotebookWithShortEntries(int parentId, string name) 
+		public static Notebook		GetNotebookWithShortEntries(int notebookId, string name) 
 		{
 			Notebook nbRtrn = null;
 			DataTable dt = new();
@@ -466,7 +466,7 @@ namespace myNotebooks.DataAccess
 				using (SqlCommand cmd = new("sp_GetNotebook", conn))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@Id", parentId);
+					cmd.Parameters.AddWithValue("@Id", notebookId);
 					cmd.Parameters.AddWithValue("@name", name);
 					SqlDataAdapter sda = new() { SelectCommand = cmd };
 					sda.Fill(dt);
@@ -476,7 +476,7 @@ namespace myNotebooks.DataAccess
 					dt = new();
 					cmd.Parameters.Clear();
 					cmd.CommandText = "sp_GetNotebookEntries_ShortText";
-					cmd.Parameters.AddWithValue("@notebookId", parentId);
+					cmd.Parameters.AddWithValue("@notebookId", notebookId);
 					sda.SelectCommand = cmd;
 					sda.Fill(dt);
 
@@ -574,10 +574,10 @@ namespace myNotebooks.DataAccess
 			{
 				conn.Open();
 				using (SqlCommand cmd = new("sp_GetOrgLevelChildren", conn))
-				{
+				{  
 					cmd.CommandType = CommandType.StoredProcedure;
 					cmd.Parameters.AddWithValue("@orgLevelId", orgLevelId);
-					cmd.Parameters.AddWithValue("parentId", parentId);
+					cmd.Parameters.AddWithValue("@parentId", parentId);
 					SqlDataAdapter adapter = new () { SelectCommand = cmd };
 					adapter.Fill(dt);
 					foreach (DataRow row in dt.Rows)

@@ -29,6 +29,8 @@ namespace myNotebooks.subforms
 		private bool ProgramaticallyChecking = false;
 		private TreeNode LastClickedLabelNode = null;
 		private int LastClickedEntryIndex = -1;
+		private const string ViewEntryMenuText = "View Entry";
+		private const string LoadNotebookMenuText = "Load Notebook";
 
 		private List<Notebook> SelectedNotebooks { get; set; }
 
@@ -161,20 +163,19 @@ namespace myNotebooks.subforms
 
 		private void gridViewEntryDetails_MouseDown(object sender, MouseEventArgs e)
 		{
-			//gridViewEntryDetails.SelectedRows.Clear();
-			var v = e.Y / gridViewEntryDetails.RowTemplate.Height;
-			gridViewEntryDetails.Rows[v].Selected = true;
-			var v2 = "Open Entry";
+			var vRowIndex = e.Y / gridViewEntryDetails.RowTemplate.Height;
+			gridViewEntryDetails.Rows[vRowIndex].Selected = true;
+			var v2 = ViewEntryMenuText;
 
-			switch (v)
+			switch (vRowIndex)
 			{
 				case 0:
 					break;
 				case 1:
-					v2 = "Load Notebook";
+					v2 = LoadNotebookMenuText;
 					break;
 				case > 1:
-					var v3 = gridViewEntryDetails.Rows[v].Cells[1].Value;
+					var v3 = gridViewEntryDetails.Rows[vRowIndex].Cells[1].Value;
 					v2 = "Explore '" + (v3 != null ? v3.ToString() : "") + "'";
 					break;
 			}
@@ -269,24 +270,7 @@ namespace myNotebooks.subforms
 		}
 
 		private void lstOccurrences_MouseUp(object sender, MouseEventArgs e)
-		{
-			PopulateGridViewEntryDetails();
-
-			//mnuContextDelete_lstEntries.Visible = true;
-
-			//if (e.Button == MouseButtons.Right && lstOccurrences.Items.Count > 1)
-			//{
-			//	lstOccurrences.SelectedIndex = lstOccurrences.TopIndex + e.Y / 15;
-
-			//	if (!OccurenceTitleIndicies.Contains(lstOccurrences.SelectedIndex))
-			//	{ mnuContextEntries.Visible = false; lstOccurrences.SelectedIndex = -1; }
-			//	else
-			//	{
-			//		mnuContextEntries.Visible = true;
-			//	}
-			//}
-			//else { mnuContextDelete_lstEntries.Visible = false; }
-		}
+		{ PopulateGridViewEntryDetails(); }
 
 		private async Task ManageOrphans()
 		{
@@ -439,7 +423,7 @@ namespace myNotebooks.subforms
 			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
 			Int32 v = Convert.ToInt32(gridViewEntryDetails.SelectedRows[0].Cells[1].Tag);
 
-			if (mnu.Text == "Open Entry")
+			if (mnu.Text == ViewEntryMenuText)
 			{
 				using (frmNewEntry frm = new(this, null, 0, DbAccess.GetEntry(v)))
 				{
@@ -454,11 +438,14 @@ namespace myNotebooks.subforms
 					}
 				}
 			}
-			else if (mnu.Text == "Load Notebook")
+			else if (mnu.Text == LoadNotebookMenuText)
 			{
 				// launch frmMain with this notebook loaded
-				var notebookId = gridViewEntryDetails.Rows[1].Cells[1].Tag;
-
+				var notebookId = Convert.ToInt32(gridViewEntryDetails.Rows[1].Cells[1].Tag);
+				var notebookName = gridViewEntryDetails.Rows[1].Cells[1].Value.ToString();
+				Program.NotebooksNamesAndIds.Clear();
+				Program.NotebooksNamesAndIds.Add(notebookName, notebookId);
+				using(frmMain frm = new()) { frm.ShowDialog(this); }
 			}
 			else
 			{
