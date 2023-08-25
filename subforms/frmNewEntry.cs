@@ -213,7 +213,7 @@ namespace myNotebooks.subforms
 					//this.Entry.Labels = LabelsManager.CheckedLabels_Get(clbLabels);
 					this.Entry.RTF = rtbNewEntry.Rtf;
 					this.Entry.EditedOn = DateTime.Now;
-					this.ParentNotebookId = CurrentNotebook.Id;
+					this.ParentNotebookId = CurrentNotebook != null ? CurrentNotebook.Id : 0;
 					opType = OperationType.Update;
 				}
 				else
@@ -232,7 +232,7 @@ namespace myNotebooks.subforms
 				{msg = "A SQL Error occurred (error number " + (iResult * -1).ToString() + ")               "; }
 				else if(opType == OperationType.Update && iResult != this.Entry.Id)
 				{ msg = "An error occurred. The entry was not updated.";}
-				else { this.Entry.Id = iResult; }
+				//else { this.Entry.Id = iResult; }
 
 				if(msg.Length > 0)
 				{ using (frmMessage frm = new(frmMessage.OperationType.Message, msg, "Error!", this)) { frm.ShowDialog(); } }
@@ -246,8 +246,8 @@ namespace myNotebooks.subforms
 
 		private void SetIsDirty(bool dirty)
 		{
-			var v = CurrentNotebook.Entries.ToArray().Where(e => e.Title == txtNewEntryTitle.Text);
-			lblTitleExists.Visible = !IsEdit && v.Count() > 0;
+			var v = CurrentNotebook != null ? CurrentNotebook.Entries.ToArray().Where(e => e.Title == txtNewEntryTitle.Text) : null;
+			lblTitleExists.Visible = !IsEdit && v.Any();
 
 			if (!lblTitleExists.Visible)
 			{

@@ -275,6 +275,28 @@ namespace myNotebooks.DataAccess
 			}
 		}
 
+		public static Entry GetEntry(int entryId)
+		{
+			Entry entryRtrn = new();
+			DataTable dt = new();
+
+			using (SqlConnection conn = new(connString))
+			{
+				conn.Open();
+
+				using (SqlCommand cmd = new("sp_GetEntry", conn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					cmd.Parameters.AddWithValue("@entryId", entryId);
+					SqlDataAdapter sda = new() { SelectCommand = cmd };
+					sda.Fill(dt);
+					entryRtrn = new(dt);
+				}
+			}
+
+			return entryRtrn;
+		}
+
 		public static List<KeyValuePair<int, string>> GetEntryParentTree(int entryId)
 		{
 			List<KeyValuePair<int, string>> lstRtrn = new();

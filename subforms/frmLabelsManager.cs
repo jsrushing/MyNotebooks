@@ -25,6 +25,7 @@ namespace myNotebooks.subforms
 		private bool DeletingOrphans;
 		private string strSeperator = "-----------------------";
 		public Entry CurrentEntry { get; set; }
+		private bool FirstDetailsLoad = true;
 
 		private List<Notebook> SelectedNotebooks { get; set; }
 
@@ -150,6 +151,33 @@ namespace myNotebooks.subforms
 			return SelectedNotebooks;
 		}
 
+		private void gridViewEntryDetails_DoubleClick(object sender, EventArgs e)
+		{
+			gridViewEntryDetails.Visible = false;
+		}
+
+		private void gridViewEntryDetails_MouseDown(object sender, MouseEventArgs e)
+		{
+			//gridViewEntryDetails.SelectedRows.Clear();
+			var v = e.Y / gridViewEntryDetails.RowTemplate.Height;
+			gridViewEntryDetails.Rows[v].Selected = true;
+			var v2 = "Open Entry";
+
+			switch (v)
+			{
+				case 0:
+					break;
+				case 1:
+					v2 = "Load Notebook";
+					break;
+				case > 1:
+					v2 = "Explore '";	// + gridViewEntryDetails.Rows[v].Cells[1].Value.ToString() + "'";
+					break;
+			}
+
+			mnuContext_GridEntryDetails.Text = v2;
+		}
+
 		private void KickLstLabels(int previousIndex = -1)
 		{
 			if (lstLabels.SelectedItems.Count == 1 | previousIndex > -1)
@@ -238,21 +266,18 @@ namespace myNotebooks.subforms
 
 		private void lstOccurrences_MouseUp(object sender, MouseEventArgs e)
 		{
-			// populate and display the label parent tree.
+			// Populate and display the label parent data grid.
 			gridViewEntryDetails.Rows.Clear();
 			gridViewEntryDetails.Rows.Add(6);
-			gridViewEntryDetails.RowTemplate.Height = 23;
-			gridViewEntryDetails.Columns[0].Width = 80;
-			gridViewEntryDetails.Columns[1].Width = 170;
-			gridViewEntryDetails.Height = (gridViewEntryDetails.RowTemplate.Height * 7) - 20;
-			gridViewEntryDetails.Width = gridViewEntryDetails.Columns[0].Width + gridViewEntryDetails.Columns[1].Width + 3;
 			gridViewEntryDetails.GridColor = Color.White;
 			ListItem selectedItem = lstOccurrences.SelectedItem as ListItem;
+			gridViewEntryDetails.Visible = false;
 
 			if (selectedItem != null && selectedItem.Name.StartsWith("  "))
 			{
 				gridViewEntryDetails.Rows[0].Cells[0].Value = "Entry: ";
 				gridViewEntryDetails.Rows[0].Cells[1].Value = selectedItem.Name.Substring(2, selectedItem.Name.Length - 2);
+				gridViewEntryDetails.Rows[0].Cells[1].Tag = selectedItem.Id;
 				List<KeyValuePair<int, string>> parents = DbAccess.GetEntryParentTree(selectedItem.Id);
 
 				for (int i = 0; i < parents.Count; i++)
@@ -278,17 +303,24 @@ namespace myNotebooks.subforms
 							break;
 					}
 
-
 					gridViewEntryDetails.Rows[i + 1].Cells[0].Value = manualText;
 					gridViewEntryDetails.Rows[i + 1].Cells[1].Value = parents[i].Value.ToString().Trim();
-
-
+					gridViewEntryDetails.Rows[i + 1].Cells[1].Tag	= parents[i].Key;
 
 					//lstEntryParents.Items.Add(manualText + parents[i].Value);
 				}
 
+				gridViewEntryDetails.RowTemplate.Height = 23;
+				gridViewEntryDetails.Columns[0].Width = 80;
+				gridViewEntryDetails.Columns[1].Width = 170;
+				gridViewEntryDetails.Height = (gridViewEntryDetails.RowTemplate.Height * 7) - 20;
+				gridViewEntryDetails.Width = gridViewEntryDetails.Columns[0].Width + gridViewEntryDetails.Columns[1].Width + 3;
 				gridViewEntryDetails.Visible = true;
 				gridViewEntryDetails.Columns[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
+				if (FirstDetailsLoad) { FirstDetailsLoad = false; lstOccurrences_MouseUp(sender, e); }
+
+
 				//lstEntryParents.Visible = true;
 			}
 			//mnuContextDelete_lstEntries.Visible = true;
@@ -451,6 +483,30 @@ namespace myNotebooks.subforms
 			}
 
 			this.Cursor = Cursors.Default;
+		}
+
+		private void mnuContext_GridEntryDetails_Click(object sender, EventArgs e)
+		{
+			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
+			Int32 v = Convert.ToInt32(gridViewEntryDetails.SelectedRows[0].Cells[1].Tag);
+
+			if (mnu.Text == "Open Entry")
+			{
+				//var notebookId = gridViewEntryDetails.Rows[1].Cells[1].Tag;
+				using (frmNewEntry frm = new(this, null, 0, DbAccess.GetEntry(v)))
+				{
+					frm.ShowDialog();
+
+					if (frm.Saved) { lstOccurrences_MouseUp(sender, null); }
+				}
+			}
+			else if (mnu.Text == "Load Notebook")
+			{
+			}
+			else
+			{
+				// invent way to explore org levels here ...
+			}
 		}
 
 		private void mnuExit_Click(object sender, EventArgs e)
@@ -629,6 +685,7 @@ namespace myNotebooks.subforms
 
 		private void treeAvailableLabels_AfterSelect(object sender, TreeViewEventArgs e)
 		{
+			// Populate and display details about the selected label
 			TreeNode tn = treeAvailableLabels.SelectedNode;
 
 			if (tn.Level > 0)
@@ -655,6 +712,7 @@ namespace myNotebooks.subforms
 
 		private void treeAvailableLabels_AfterExpand(object sender, TreeViewEventArgs e)
 		{
+			// Get labels under one of the root nodes.
 			TreeNode tn = e.Node;
 
 			if (tn.Level == 0 && tn.Nodes[0].Text.Length == 0)
@@ -669,11 +727,6 @@ namespace myNotebooks.subforms
 					tn.Nodes.Add(treeNode);
 				}
 			}
-		}
-
-		private void gridViewEntryDetails_DoubleClick(object sender, EventArgs e)
-		{
-			gridViewEntryDetails.Visible = false;
 		}
 	}
 }
