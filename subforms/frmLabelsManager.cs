@@ -814,7 +814,24 @@ namespace myNotebooks.subforms
 				var orgLevel = Convert.ToInt32(Enum.Parse(typeof(frmMain.OrgLevelTypes), tn.Text.AsSpan(0, tn.Text.IndexOf(" "))));
 
 				foreach (MNLabel label in DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, orgLevel))
-				{ tn.Nodes.Add(new TreeNode() { Text = label.LabelText, Tag = label.Id }); }
+				{
+					// If tn.Nodes contains a node with label.LabelText, add label as a child of the existing node.
+					TreeNode existingNode = tn.Nodes.OfType<TreeNode>().FirstOrDefault(n => n.Text == label.LabelText);
+
+					if(existingNode == null)
+					{
+						tn.Nodes.Add(new TreeNode() { Text = label.LabelText, Tag = label.Id });
+					}
+
+					//if(existingNode != null)
+					//{
+					//	existingNode.Nodes.Add(new TreeNode() { Text = label.LabelText, Tag = label.Id });
+					//}
+					//else
+					//{
+						 
+					//}
+				}
 			}
 		}
 

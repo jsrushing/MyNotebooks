@@ -420,19 +420,6 @@ namespace myNotebooks.subforms
 					}
 					else
 					{
-						//if (CurrentNotebook.Settings.AllowCloud && Program.AzurePassword.Length > 0)
-						//{
-						//	var nbPath = CurrentNotebook.FileName;
-						//	var nbName = CurrentNotebook.Name;
-						//	CloudSynchronizer cs = new CloudSynchronizer();
-						//	//await cs.SynchWithCloud(false, CurrentNotebook);
-						//	Notebook curNotebook = new Notebook(nbName, nbPath).Open();
-
-						//	if (curNotebook == null)    // the sync deleted the file
-						//	{ ddlNotebooks.Items.Remove(nbName); }
-						//	else { if (!curNotebook.Equals(CurrentNotebook)) { CurrentNotebook = curNotebook; } }// the synch dl'd a newer copy of the file
-						//}
-
 						try
 						{
 							if (CurrentNotebook != null)
@@ -442,6 +429,7 @@ namespace myNotebooks.subforms
 								await ProcessDateFilters();
 								SuppressDateClick = false;
 								lstEntries.Height = this.Height - lstEntries.Top - 50;
+								mnuLabels.Enabled = false;
 								//lstEntries.Visible = true;
 								//pnlDateFilters.Visible = true;
 

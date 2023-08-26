@@ -418,9 +418,7 @@ namespace myNotebooks.DataAccess
 					sda.Fill(dataTable);
 
 					for (int i = 0; i < dataTable.Rows.Count; i++)
-					{
-						lstRtrn.Add(new(dataTable, i));
-					}
+					{ lstRtrn.Add(new(dataTable, i)); }
 				}
 			}
 
