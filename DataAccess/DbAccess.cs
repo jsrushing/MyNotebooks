@@ -162,14 +162,14 @@ namespace myNotebooks.DataAccess
 					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@parentId", nb.ParentId);
 					if (opType != OperationType.Create)			cmd.Parameters.AddWithValue("@notebookId", nb.Id);
 					if (opType == OperationType.Delete)			cmd.Parameters.AddWithValue("isActive", 0);
-					PopulateSqlReturn(rtrn, cmd);
+					PopulateSqlReturn(ref rtrn, cmd);
 				}
 			}
 
 			return rtrn;
 		}
 
-		public static SQLReturn			CRUDNotebookEntry(Entry entry, OperationType opType = OperationType.Create)
+		public static SQLReturn		CRUDNotebookEntry(Entry entry, OperationType opType = OperationType.Create)
 		{
 			SQLReturn rtrn = new();
 
@@ -188,14 +188,14 @@ namespace myNotebooks.DataAccess
 					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@parentId"		, entry.ParentId);
 					if (opType != OperationType.Create)			cmd.Parameters.AddWithValue("@entryId"		, entry.Id);
 					if (opType == OperationType.Delete)			cmd.Parameters.AddWithValue("isActive"		, 0);
-					PopulateSqlReturn(rtrn, cmd);
+					PopulateSqlReturn(ref rtrn, cmd);
 				}
 			}
 
 			return rtrn;
 		}
 
-		public static SQLReturn CRUDOrgLevel(OrgLevel orgLevel, OperationType opType)
+		public static SQLReturn		CRUDOrgLevel(OrgLevel orgLevel, OperationType opType)
 		{
 			SQLReturn rtrn = new();
 
@@ -213,7 +213,7 @@ namespace myNotebooks.DataAccess
 						cmd.Parameters.AddWithValue("@orgLevelName", orgLevel.Name.Trim());
 						cmd.Parameters.AddWithValue("@orgLevelDescription", orgLevel.Description.Trim());
 						if (opType != OperationType.Create) cmd.Parameters.AddWithValue("orgId", orgLevel.Id);
-						PopulateSqlReturn(rtrn, cmd);
+						PopulateSqlReturn(ref rtrn, cmd);
 					}
 				}
 			}
@@ -221,35 +221,6 @@ namespace myNotebooks.DataAccess
 
 			return rtrn;
 		}
-
-		//public static SQLReturn CRUDOrgLevel(int creatorId, string orgLevelDescription
-		//								, frmMain.OrgLevelTypes orgLevelType, string orgLevelName, int parentId, OperationType opType = OperationType.Create)
-		//{
-		//	SQLReturn rtrn = new();
-
-		//	try
-		//	{
-		//		using (SqlConnection conn = new(connString))
-		//		{
-		//			conn.Open();
-		//			using (SqlCommand cmd = new SqlCommand("sp_CRUD_OrgLevel", conn))
-		//			{
-		//				cmd.CommandType = CommandType.StoredProcedure;
-		//				cmd.Parameters.AddWithValue("@parentId",			parentId);
-		//				cmd.Parameters.AddWithValue("@createdBy",			creatorId);
-		//				cmd.Parameters.AddWithValue("@orgLevelType",		(int)orgLevelType);
-		//				cmd.Parameters.AddWithValue("@orgLevelName",		orgLevelName.Trim());
-		//				cmd.Parameters.AddWithValue("@orgLevelDescription", orgLevelDescription.Trim());
-		//				if(opType != OperationType.Create) cmd.Parameters.AddWithValue("orgId")
-		//				cmd.Parameters.AddWithValue("@opType",				(int)opType);
-		//				PopulateSqlReturn(rtrn, cmd);
-		//			}
-		//		}
-		//	}
-		//	catch (Exception ex) { var v = ex.Message; }
-
-		//	return rtrn;
-		//}
 
 		public static string		GetAccessLevelName(int accessLevel)
 		{
@@ -761,7 +732,7 @@ namespace myNotebooks.DataAccess
 			return ds;
 		}
 
-		private static void	PopulateSqlReturn(SQLReturn sqlReturn, SqlCommand cmd)
+		private static void	PopulateSqlReturn(ref SQLReturn sqlReturn, SqlCommand cmd)
 		{
 			using (SqlDataReader rdr = cmd.ExecuteReader())
 			{
