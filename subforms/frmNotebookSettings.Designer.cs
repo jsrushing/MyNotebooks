@@ -173,7 +173,7 @@
 			btnSaveChanges.Name = "btnSaveChanges";
 			btnSaveChanges.Size = new System.Drawing.Size(75, 23);
 			btnSaveChanges.TabIndex = 53;
-			btnSaveChanges.Text = "&Save Changes";
+			btnSaveChanges.Text = "&Create Changes";
 			btnSaveChanges.UseVisualStyleBackColor = true;
 			btnSaveChanges.Click += this.btnSaveChanges_Click;
 			// 

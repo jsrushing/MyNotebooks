@@ -32,16 +32,16 @@ namespace myNotebooks.subforms
 		private void InitializeComponent()
 		{
 			components = new System.ComponentModel.Container();
-			TreeNode treeNode1 = new TreeNode("");
-			TreeNode treeNode2 = new TreeNode("Notebook", new TreeNode[] { treeNode1 });
-			TreeNode treeNode3 = new TreeNode("");
-			TreeNode treeNode4 = new TreeNode("Group", new TreeNode[] { treeNode3 });
-			TreeNode treeNode5 = new TreeNode("");
-			TreeNode treeNode6 = new TreeNode("Department", new TreeNode[] { treeNode5 });
-			TreeNode treeNode7 = new TreeNode("");
-			TreeNode treeNode8 = new TreeNode("Account", new TreeNode[] { treeNode7 });
-			TreeNode treeNode9 = new TreeNode("");
-			TreeNode treeNode10 = new TreeNode("Company", new TreeNode[] { treeNode9 });
+			TreeNode treeNode11 = new TreeNode("");
+			TreeNode treeNode12 = new TreeNode("Notebook", new TreeNode[] { treeNode11 });
+			TreeNode treeNode13 = new TreeNode("");
+			TreeNode treeNode14 = new TreeNode("Group", new TreeNode[] { treeNode13 });
+			TreeNode treeNode15 = new TreeNode("");
+			TreeNode treeNode16 = new TreeNode("Department", new TreeNode[] { treeNode15 });
+			TreeNode treeNode17 = new TreeNode("");
+			TreeNode treeNode18 = new TreeNode("Account", new TreeNode[] { treeNode17 });
+			TreeNode treeNode19 = new TreeNode("");
+			TreeNode treeNode20 = new TreeNode("Company", new TreeNode[] { treeNode19 });
 			pnlMain = new Panel();
 			pnlLabelDetails = new Panel();
 			lstOccurrences = new ListBox();
@@ -74,7 +74,8 @@ namespace myNotebooks.subforms
 			label5 = new Label();
 			mnuMain = new MenuStrip();
 			mnuLabelsOperations = new ToolStripMenuItem();
-			mnuAdd = new ToolStripMenuItem();
+			mnuAddCheckedLabelsToEntry = new ToolStripMenuItem();
+			mnuCreateNewLabel = new ToolStripMenuItem();
 			mnuMoveTop = new ToolStripMenuItem();
 			mnuMoveUp = new ToolStripMenuItem();
 			mnuMoveDown = new ToolStripMenuItem();
@@ -156,27 +157,27 @@ namespace myNotebooks.subforms
 			treeAvailableLabels.HotTracking = true;
 			treeAvailableLabels.Location = new System.Drawing.Point(11, 25);
 			treeAvailableLabels.Name = "treeAvailableLabels";
-			treeNode1.Name = "Node0";
-			treeNode1.Text = "";
-			treeNode2.Name = "nodeNotebook";
-			treeNode2.Text = "Notebook";
-			treeNode3.Name = "Node1";
-			treeNode3.Text = "";
-			treeNode4.Name = "nodeGroup";
-			treeNode4.Text = "Group";
-			treeNode5.Name = "Node2";
-			treeNode5.Text = "";
-			treeNode6.Name = "nodeDepartment";
-			treeNode6.Text = "Department";
-			treeNode7.Name = "Node3";
-			treeNode7.Text = "";
-			treeNode8.Name = "nodeAccount";
-			treeNode8.Text = "Account";
-			treeNode9.Name = "Node4";
-			treeNode9.Text = "";
-			treeNode10.Name = "nodeCompany";
-			treeNode10.Text = "Company";
-			treeAvailableLabels.Nodes.AddRange(new TreeNode[] { treeNode2, treeNode4, treeNode6, treeNode8, treeNode10 });
+			treeNode11.Name = "Node0";
+			treeNode11.Text = "";
+			treeNode12.Name = "nodeNotebook";
+			treeNode12.Text = "Notebook";
+			treeNode13.Name = "Node1";
+			treeNode13.Text = "";
+			treeNode14.Name = "nodeGroup";
+			treeNode14.Text = "Group";
+			treeNode15.Name = "Node2";
+			treeNode15.Text = "";
+			treeNode16.Name = "nodeDepartment";
+			treeNode16.Text = "Department";
+			treeNode17.Name = "Node3";
+			treeNode17.Text = "";
+			treeNode18.Name = "nodeAccount";
+			treeNode18.Text = "Account";
+			treeNode19.Name = "Node4";
+			treeNode19.Text = "";
+			treeNode20.Name = "nodeCompany";
+			treeNode20.Text = "Company";
+			treeAvailableLabels.Nodes.AddRange(new TreeNode[] { treeNode12, treeNode14, treeNode16, treeNode18, treeNode20 });
 			treeAvailableLabels.Size = new System.Drawing.Size(318, 264);
 			treeAvailableLabels.TabIndex = 6;
 			treeAvailableLabels.Text = "tree";
@@ -431,17 +432,24 @@ namespace myNotebooks.subforms
 			// 
 			// mnuLabelsOperations
 			// 
-			mnuLabelsOperations.DropDownItems.AddRange(new ToolStripItem[] { mnuAdd });
+			mnuLabelsOperations.DropDownItems.AddRange(new ToolStripItem[] { mnuAddCheckedLabelsToEntry, mnuCreateNewLabel });
 			mnuLabelsOperations.Name = "mnuLabelsOperations";
 			mnuLabelsOperations.Size = new System.Drawing.Size(52, 20);
 			mnuLabelsOperations.Text = "Labels";
 			// 
-			// mnuAdd
+			// mnuAddCheckedLabelsToEntry
 			// 
-			mnuAdd.Name = "mnuAdd";
-			mnuAdd.Size = new System.Drawing.Size(225, 22);
-			mnuAdd.Text = "&Add Checked Labels to Entry";
-			mnuAdd.Click += this.mnuAdd_Click;
+			mnuAddCheckedLabelsToEntry.Name = "mnuAddCheckedLabelsToEntry";
+			mnuAddCheckedLabelsToEntry.Size = new System.Drawing.Size(225, 22);
+			mnuAddCheckedLabelsToEntry.Text = "&Add Checked Labels to Entry";
+			mnuAddCheckedLabelsToEntry.Click += this.mnuAddCheckedLabelsToEntry_Click;
+			// 
+			// mnuCreateNewLabel
+			// 
+			mnuCreateNewLabel.Name = "mnuCreateNewLabel";
+			mnuCreateNewLabel.Size = new System.Drawing.Size(225, 22);
+			mnuCreateNewLabel.Text = "Create New Label";
+			mnuCreateNewLabel.Click += this.mnuCreateNewLabel_Click;
 			// 
 			// mnuMoveTop
 			// 
@@ -628,7 +636,7 @@ namespace myNotebooks.subforms
 		private Button btnRemoveSelectedOrphans;
 		private ListBox lstOrphanedLabels;
 		private Label label4;
-		private ToolStripMenuItem mnuAdd;
+		private ToolStripMenuItem mnuAddCheckedLabelsToEntry;
 		private Label label5;
 
 		private ContextMenuStrip mnuContextEntries;
@@ -649,5 +657,6 @@ namespace myNotebooks.subforms
 		private DataGridView gridViewEntryDetails;
 		private DataGridViewTextBoxColumn colItem;
 		private DataGridViewTextBoxColumn colIdentifier;
+		private ToolStripMenuItem mnuCreateNewLabel;
 	}
 }

@@ -490,14 +490,14 @@ namespace myNotebooks.subforms
 			menuStrip1.Name = "menuStrip1";
 			menuStrip1.Size = new System.Drawing.Size(590, 24);
 			menuStrip1.TabIndex = 6;
-			menuStrip1.Text = "Save Entry";
+			menuStrip1.Text = "Create Entry";
 			// 
 			// mnuSaveEntry
 			// 
 			mnuSaveEntry.Enabled = false;
 			mnuSaveEntry.Name = "mnuSaveEntry";
 			mnuSaveEntry.Size = new System.Drawing.Size(43, 20);
-			mnuSaveEntry.Text = "&Save";
+			mnuSaveEntry.Text = "&Create";
 			mnuSaveEntry.Click += this.mnuSaveEntry_Click;
 			// 
 			// mnuSaveAndExit
@@ -505,7 +505,7 @@ namespace myNotebooks.subforms
 			mnuSaveAndExit.Enabled = false;
 			mnuSaveAndExit.Name = "mnuSaveAndExit";
 			mnuSaveAndExit.Size = new System.Drawing.Size(88, 20);
-			mnuSaveAndExit.Text = "Save and &Exit";
+			mnuSaveAndExit.Text = "Create and &Exit";
 			mnuSaveAndExit.Click += this.mnuSaveAndExit_Click;
 			// 
 			// mnuFind

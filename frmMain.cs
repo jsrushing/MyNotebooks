@@ -7,7 +7,7 @@
 			> 002x Can select and drag into or out of no type area.
 				1400 Fixed
 		07/08/22 1000
-			003x Save entry edit sometimes leaves out Text.
+			003x Create entry edit sometimes leaves out Text.
 				1740 Found issue. Entries with '(' in the title cause failure to build currentEntry (it remains null after entry is selected).
 				1745 Fixed: When selecting in the short entry (lstEntries) get LastIndexOf('(') instead of just .IndexOf.
 
@@ -17,12 +17,12 @@
 
 	toDo:
 		07/07/22 001 Entry RTB formatting controls.
-				 002 Save .RichText instead of just .Text;
+				 002 Create .RichText instead of just .Text;
 				002ax Add password char for PIN and show/hide function.
 					1730 Done.
 		07/08/22 003x Column tab stops in rtbNewEntry.
 					07/10/22 1810 Done (was simple properties setting - .AcceptTab)
-				 004x Save new entry without exiting (to save incrementally)?
+				 004x Create new entry without exiting (to save incrementally)?
 					07/11/22 1445 No. Have user save entry then edit if desired.
 				 005x Allow selection length > 1 in editing entry notypearea for copying? Catch key code, only allow Ctrl.
 					07/12/22 1330 No. Parts of old text can be copied via the Edit Existing Text menu.
@@ -68,7 +68,7 @@
 			Replicate sequence:
 				> Open a journal
 				> Select an entry
-				> Create a new entry (Save and Exit)
+				> Create a new entry (Create and Exit)
 				->  frmMain is shown in EntrySelected mode but no entry is selected (because they reloaded). Therefore when lblSeperator is clicked on we throw an 'Index out of range' error 
 						because no entry is selected.
 			Fix:
@@ -231,7 +231,7 @@ namespace myNotebooks.subforms
 			//	BinaryFormatter formatter = new BinaryFormatter();
 			//	Journal jRtrn = (Journal)formatter.Deserialize(stream);
 			//	LocalNotebook nb = new LocalNotebook(jRtrn);
-			//	await nb.Save();
+			//	await nb.Create();
 
 			//	//LocalNotebook nb = (LocalNotebook)formatter.Deserialize(stream);
 			//	//jRtrn.FileName = journalToOpen;
@@ -278,7 +278,7 @@ namespace myNotebooks.subforms
 			////List<Entry> v = nb.Entries.Where(e => e.RTF.Length == 0).ToList();
 			////v.ForEach(e => e.RTF = "{rtf");
 			////// nb.Entries.ForEach(E => E.NotebookName = EncryptDecrypt.Encrypt("The New Real Thing"));
-			////nb.Save();
+			////nb.Create();
 
 			//// fix The New Real Thing problem of Entry[0] is not the 'created' entry.
 			////LocalNotebook nb = new LocalNotebook("The New Real Thing").Open();
@@ -286,11 +286,11 @@ namespace myNotebooks.subforms
 			//Entry entry = new Entry("created", "-", "{f", "The New Real Thing");
 			//entry.CreatedOn = DateTime.Parse("12/01/2021 12:00 AM");
 			//nb.Entries.Insert(0, entry);
-			//nb.Save();
+			//nb.Create();
 			//List<Entry> indx = nb.Entries.Where(e => e.Title == EncryptDecrypt.Encrypt("created")).ToList();
 			//nb.FileName = EncryptDecrypt.Encrypt(nb.FileName);
 			//nb.Name = EncryptDecrypt.Encrypt(nb.Name);
-			//nb.Save();
+			//nb.Create();
 
 			// fix all NotebookName values (encrypt them)
 			//Utilities.PopulateAllNotebooks();
@@ -721,7 +721,7 @@ namespace myNotebooks.subforms
 				if (frm.Saved)
 				{
 					CurrentEntry = frm.Entry;
-					//await CurrentNotebook.Save();
+					//await CurrentNotebook.Create();
 					CurrentNotebook.Entries.Add(CurrentEntry);
 					await Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries);
 					if (!cbxDatesTo.Items.Contains(CurrentEntry.CreatedOn)) { cbxDatesTo.Items.Insert(0, CurrentEntry.CreatedOn.ToShortDateString()); }

@@ -31,6 +31,7 @@ namespace myNotebooks.subforms
 		private int LastClickedEntryIndex = -1;
 		private const string ViewEntryMenuText = "View Entry";
 		private const string LoadNotebookMenuText = "Load Notebook";
+		private bool RefreshEntry = false;
 
 		private List<Notebook> SelectedNotebooks { get; set; }
 
@@ -67,13 +68,7 @@ namespace myNotebooks.subforms
 				//pnlMain.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
 				//lstLabels.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
 
-				treeAvailableLabels.Nodes.Clear();
-				treeAvailableLabels.Nodes.Add("Notebook '" + Program.SelectedNotebookName + "'");
-				treeAvailableLabels.Nodes.Add("Group '" + Program.SelectedGroupName + "'");
-				treeAvailableLabels.Nodes.Add("Department '" + Program.SelectedDepartmentName + "'");
-				treeAvailableLabels.Nodes.Add("Account '" + Program.SelectedAccountName + "'");
-				treeAvailableLabels.Nodes.Add("Company '" + Program.SelectedCompanyName + "'");
-
+				ResetTree();
 				foreach (TreeNode tn in treeAvailableLabels.Nodes) { tn.Nodes.Add(""); }
 
 			}
@@ -102,7 +97,7 @@ namespace myNotebooks.subforms
 					LabelText = txtLabelName.Text,
 				};
 
-				lbl.Save();
+				lbl.Create();
 				//lstLabels.Items.Add(txtLabelName.Text);
 				//await LabelsManager.SaveLabelsToFile(lstLabels.Items.OfType<string>().ToList());
 				pnlNewLabelName.Visible = false;
@@ -153,17 +148,17 @@ namespace myNotebooks.subforms
 		{
 			List<MNLabel> lstRtrn = new();
 
-			foreach(TreeNode tn in treeAvailableLabels.Nodes)
+			foreach (TreeNode tn in treeAvailableLabels.Nodes)
 			{
-				if(tn.Nodes.Count > 0)
+				if (tn.Nodes.Count > 0)
 				{
 					foreach (TreeNode child in tn.Nodes)
 					{
-						if(child.Checked) 
+						if (child.Checked)
 						{
-							if(!lstRtrn.Any(l => l.LabelText == child.Text & l.ParentId == CurrentEntry.Id))
+							if (!lstRtrn.Any(l => l.LabelText == child.Text & l.ParentId == CurrentEntry.Id))
 							{
-								lstRtrn.Add(new() { LabelText = child.Text, ParentId = CurrentEntry.Id }); 
+								lstRtrn.Add(new() { CreatedBy = Program.User.UserId, LabelText = child.Text, ParentId = CurrentEntry.Id });
 							}
 						}
 					}
@@ -281,7 +276,7 @@ namespace myNotebooks.subforms
 			//		{
 			//			Entry nbEntry = frm.Entry;
 			//			kvp.Key.ReplaceEntry(currentEntry, nbEntry);
-			//			await kvp.Key.Save();
+			//			await kvp.Key.Create();
 			//			var lblIndx = lstLabels.SelectedIndex;
 			//			PopulateOccurrences();
 			//			lstLabels.SelectedIndex = -1;
@@ -361,29 +356,21 @@ namespace myNotebooks.subforms
 			await LabelsManager.SaveLabelsToFile(lstLabels.Items.OfType<string>().ToList());
 		}
 
-		private void mnuAdd_Click(object sender, EventArgs e)
+		private void mnuAddCheckedLabelsToEntry_Click(object sender, EventArgs e)
 		{
 			// get the checked labels
-			
+
 			var checkedNodes = GetCheckedNodes(treeAvailableLabels.Nodes) as List<MNLabel>;
 			var v = CurrentEntry.AllLabels;
 
-			foreach(MNLabel lbl in checkedNodes)
+			foreach (MNLabel lbl in checkedNodes)
 			{
-				if(!CurrentEntry.AllLabels.Any(l => l.LabelText == lbl.LabelText & l.ParentId == lbl.ParentId))
-				{
-					DbAccess.CRUDLabel(lbl);
-				}
+				if (!CurrentEntry.AllLabels.Any(l => l.LabelText == lbl.LabelText & l.ParentId == lbl.ParentId))
+				{ lbl.Create(); RefreshEntry = true; }
 			}
 
 			CurrentEntry.AllLabels.Clear();
 			CurrentEntry.AllLabels = DbAccess.GetLabelsForEntry(CurrentEntry.Id);
-
-			//lblOperation.Text = "Label Name:";
-			//pnlNewLabelName.Visible = true;
-			//txtLabelName.Text = string.Empty;
-			//txtLabelName.Focus();
-			//this.AcceptButton = btnOK;
 		}
 
 		private async void DeleteOrRename(object sender, EventArgs e)
@@ -500,6 +487,35 @@ namespace myNotebooks.subforms
 					break;
 			}
 
+		}
+
+		private void mnuCreateNewLabel_Click(object sender, EventArgs e)
+		{
+			var msg = "You are creating a new Label for the entry '" + CurrentEntry.Title +
+				"'. What is the Label text?";
+
+			using (frmMessage frm = new(frmMessage.OperationType.InputBox, msg, "", this))
+			{
+				frm.ShowDialog(this);
+
+				if (frm.ResultText.Length > 0)
+				{
+					MNLabel lbl = new()
+					{
+						CreatedBy = Program.User.UserId,
+						LabelText = frm.ResultText,
+						ParentId = CurrentEntry.Id
+					};
+
+					if (!CurrentEntry.AllLabels.Any(l => l.LabelText == lbl.LabelText & l.ParentId == lbl.ParentId))
+					{ 
+						lbl.Create(); 
+						RefreshEntry = true;
+						ResetTree();
+						
+					}
+				}
+			}
 		}
 
 		private void mnuExit_Click(object sender, EventArgs e)
@@ -707,6 +723,21 @@ namespace myNotebooks.subforms
 		private async Task RemoveOrphans()
 		{
 			foreach (string lbl in lstOrphanedLabels.SelectedItems) { await LabelsManager.DeleteLabelInNotebooksList(lbl, Utilities.GetCheckedNotebooks(), this, true); }
+		}
+
+		private void ResetTree()
+		{
+			treeAvailableLabels.Nodes.Clear();
+			treeAvailableLabels.Nodes.Add("Notebook '" + Program.SelectedNotebookName + "'");
+			treeAvailableLabels.Nodes[0].Nodes.Add("");
+			treeAvailableLabels.Nodes.Add("Group '" + Program.SelectedGroupName + "'");
+			treeAvailableLabels.Nodes[1].Nodes.Add("");
+			treeAvailableLabels.Nodes.Add("Department '" + Program.SelectedDepartmentName + "'");
+			treeAvailableLabels.Nodes[2].Nodes.Add("");
+			treeAvailableLabels.Nodes.Add("Account '" + Program.SelectedAccountName + "'");
+			treeAvailableLabels.Nodes[3].Nodes.Add("");
+			treeAvailableLabels.Nodes.Add("Company '" + Program.SelectedCompanyName + "'");
+			treeAvailableLabels.Nodes[4].Nodes.Add("");
 		}
 
 		private void ShowMessage(string sMsg)

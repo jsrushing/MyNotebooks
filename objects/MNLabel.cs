@@ -82,7 +82,7 @@ namespace MyNotebooks.objects
 		}
 
 		public void Delete() { DbAccess.CRUDLabel(this, OperationType.Delete); }
-		public void Save() { DbAccess.CRUDLabel(this); }
+		public void Create() { DbAccess.CRUDLabel(this); }
 		public void Update() { DbAccess.CRUDLabel(this, OperationType.Update); }
 
 	}

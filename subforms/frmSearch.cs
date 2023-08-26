@@ -51,7 +51,7 @@ namespace myNotebooks.subforms
 					nb.Entries.Add(new Entry("created", "-", "{rtf", nb.Name));
 					nb.Entries.AddRange(FoundEntries);
 					await nb.Create(false);
-					//await nb.Save();
+					//await nb.Create();
 					NotebookName = nb.Name;
 					using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.Message, "The notebook '" + NotebookName + "' was created.", "", this)) { frm2.ShowDialog(); }
 				}

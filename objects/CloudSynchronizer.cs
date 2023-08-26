@@ -116,7 +116,7 @@ namespace myNotebooks.objects
 //				{
 //					if (j2.Settings.IfLocalOnly_Delete) { j2.Delete(); }
 //					else if (j2.Settings.IfLocalOnly_Upload) { await AzureFileClient.UploadFile(j2.FileName); }
-//					else if (j2.Settings.IfLocalOnly_DisallowCloud) { j2.Settings.AllowCloud = false; await j2.Save(); }
+//					else if (j2.Settings.IfLocalOnly_DisallowCloud) { j2.Settings.AllowCloud = false; await j2.Create(); }
 //				}
 //			}
 //		}
@@ -200,7 +200,7 @@ namespace myNotebooks.objects
 //							else // The cloud journal is a 0-entry placeholder which sets the local journal's AllowCloud = false.
 //							{
 //								book.Settings.AllowCloud = false;
-//								await book.Save();
+//								await book.Create();
 //							}
 //						}
 //						else	// a local notebook doesn't have a match in the cloud
@@ -212,14 +212,14 @@ namespace myNotebooks.objects
 //							if(azCommands.Count > 0)
 //							{
 //								var newName = azCommands[0].Replace(book.Name + "_", "");
-//								await book.Rename(newName, false);	// will Save() the book
+//								await book.Rename(newName, false);	// will Create() the book
 
 //								// Get the cloud book. The local copy will have been saved so it's newer, but the cloud one is what we want since it has the latest updates.
 //								await AzureFileClient.DownloadOrDeleteFile(tempFolder + book.Name, Program.AzurePassword + book.Name);
 //								cloudNotebook = File.Exists(tempFolder + book.Name) ? new Notebook(book.Name, tempFolder + book.Name).Open(true) : null;
 //								File.Move(cloudNotebook.FileName, book.FileName, true);
 
-//								//await book.Save();
+//								//await book.Create();
 //							}
 //							else
 //							{
