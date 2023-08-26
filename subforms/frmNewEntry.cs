@@ -225,14 +225,14 @@ namespace myNotebooks.subforms
 					this.Entry = newEntry;
 				}
 
-				int iResult = DbAccess.CRUDNotebookEntry(this.Entry, opType);
+				var sqlResult = DbAccess.CRUDNotebookEntry(this.Entry, opType);
 				var msg = string.Empty;
 
-				if (iResult < 0) 
-				{msg = "A SQL Error occurred (error number " + (iResult * -1).ToString() + ")               "; }
-				else if(opType == OperationType.Update && iResult != this.Entry.Id)
-				{ msg = "An error occurred. The entry was not updated.";}
-				//else { this.Entry.Id = iResult; }
+				if (sqlResult.intValue < 0) 
+				{msg = "A SQL Error occurred (error number " + (sqlResult.intValue * -1).ToString() + ")               "; }
+				else if(opType == OperationType.Update && sqlResult.intValue != this.Entry.Id)
+				{ msg = "An error occurred. The entry was not updated. " + sqlResult.strValue ;}
+				//else { this.Entry.Id = sqlResult; }
 
 				if(msg.Length > 0)
 				{ using (frmMessage frm = new(frmMessage.OperationType.Message, msg, "Error!", this)) { frm.ShowDialog(); } }

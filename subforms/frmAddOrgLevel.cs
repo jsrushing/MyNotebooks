@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
-using myNotebooks.subforms;
 using myNotebooks.DataAccess;
+using MyNotebooks.objects;
 using myNotebooks.objects;
-using System.Diagnostics.Eventing.Reader;
 
 namespace myNotebooks.subforms
 {
@@ -31,12 +30,25 @@ namespace myNotebooks.subforms
 
 			if (txtOrgLevelName.Text.Length > 0)
 			{
-				WasCreated = DbAccess.CRUDOrgLevel(CreatedBy, txtOrgLevelDescription.Text, OrgLevel, txtOrgLevelName.Text, ParentId);
-				if (WasCreated) { }	// msg = "The " + OrgLevel.ToString() + " was created."; msg2 += "Complete"; }
-				else { msg = "An error occurred. The " + OrgLevel.ToString() + " was not created."; msg2 += "Failed"; }
+				OrgLevel level = new()
+				{
+					CreatedBy = Program.User.UserId,
+					ParentId = this.ParentId,
+					Description = txtOrgLevelDescription.Text,
+					Name = txtOrgLevelName.Text,
+					OrgLevelType = this.OrgLevel,
+				};
+
+				var sqlResult = DbAccess.CRUDOrgLevel(level, OperationType.Create);
+
+				//var sqlResult = DbAccess.CRUDOrgLevel(CreatedBy, txtOrgLevelDescription.Text, OrgLevel, txtOrgLevelName.Text, ParentId);
+
+				if (sqlResult.strValue.Length == 0) { }	// msg = "The " + OrgLevel.ToString() + " was created."; msg2 += "Complete"; }
+				else { msg = "An error occurred. The " + OrgLevel.ToString() + " was not created. " + sqlResult.strValue ; msg2 += "Failed"; }
 
 				if (msg.Length > 0)
 				{ using (frmMessage frm = new(frmMessage.OperationType.Message, msg, msg2, this)) { frm.ShowDialog(); } }
+				else { WasCreated = true; }
 				
 				this.Hide();
 			}

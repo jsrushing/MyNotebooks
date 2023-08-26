@@ -10,6 +10,7 @@ using Encryption;
 using myNotebooks.objects;
 using myNotebooks.subforms;
 using MyNotebooks.objects;
+using static myNotebooks.subforms.frmMain;
 
 namespace myNotebooks.DataAccess
 {
@@ -142,10 +143,9 @@ namespace myNotebooks.DataAccess
 			return iRtrn;
 		}
 
-		public static int			CRUDNotebook(Notebook nb, OperationType opType = OperationType.Create)
+		public static SQLReturn		CRUDNotebook(Notebook nb, OperationType opType = OperationType.Create)
 		{
-			int iRtrn = 0;
-			string errMsg = string.Empty;
+			SQLReturn rtrn = new();
 
 			using (SqlConnection conn = new(connString))
 			{
@@ -162,33 +162,16 @@ namespace myNotebooks.DataAccess
 					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@parentId", nb.ParentId);
 					if (opType != OperationType.Create)			cmd.Parameters.AddWithValue("@notebookId", nb.Id);
 					if (opType == OperationType.Delete)			cmd.Parameters.AddWithValue("isActive", 0);
-
-					using(SqlDataReader rdr = cmd.ExecuteReader())
-					{
-						if (rdr.HasRows)
-						{
-							rdr.Read();
-							iRtrn = Convert.ToInt32(rdr.GetValue(0).ToString());
-							errMsg = rdr.GetValue(1).ToString();
-						}
-					}
-
-					//cmd.Parameters.Add("@retVal", SqlDbType.Int);
-					//cmd.Parameters["@retVal"].Direction = ParameterDirection.ReturnValue;
-					//cmd.Parameters.Add("@retMsg", SqlDbType.VarChar, 255);
-					//cmd.Parameters["@retMsg"].Direction = ParameterDirection.ReturnValue;
-					//cmd.ExecuteNonQuery();
-					//iRtrn = Convert.ToInt32(cmd.Parameters["@retVal"].Value.ToString());
-					//if(iRtrn < 0) { errMsg = cmd.Parameters["@retMsg"].Value.ToString(); }
+					PopulateSqlReturn(rtrn, cmd);
 				}
 			}
 
-			return iRtrn;
+			return rtrn;
 		}
 
-		public static int			CRUDNotebookEntry(Entry entry, OperationType opType = OperationType.Create)
+		public static SQLReturn			CRUDNotebookEntry(Entry entry, OperationType opType = OperationType.Create)
 		{
-			int iRtrn = 0;
+			SQLReturn rtrn = new();
 
 			using (SqlConnection conn = new(connString))
 			{
@@ -202,23 +185,19 @@ namespace myNotebooks.DataAccess
 					cmd.Parameters.AddWithValue("@title",		entry.Title);
 					cmd.Parameters.AddWithValue("@opType",		opType == OperationType.Delete ? 2: (int)opType);
 					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@createdBy"	, Program.User.UserId);
-					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@notebookId"		, entry.ParentId);
+					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@parentId"		, entry.ParentId);
 					if (opType != OperationType.Create)			cmd.Parameters.AddWithValue("@entryId"		, entry.Id);
 					if (opType == OperationType.Delete)			cmd.Parameters.AddWithValue("isActive"		, 0);
-					cmd.Parameters.Add("@retVal", SqlDbType.Int);
-					cmd.Parameters["@retVal"].Direction = ParameterDirection.ReturnValue;
-					cmd.ExecuteNonQuery();
-					iRtrn = Convert.ToInt32(cmd.Parameters["@retVal"].Value.ToString());	// = entry.Id if update, new entry Id if Create, or (negated) SQL error number
+					PopulateSqlReturn(rtrn, cmd);
 				}
 			}
 
-			return iRtrn;
+			return rtrn;
 		}
 
-		public static bool			CRUDOrgLevel(int creatorId, string orgLevelDescription
-										, frmMain.OrgLevelTypes orgLevelType, string orgLevelName, int parentId, OperationType opType = OperationType.Create)
+		public static SQLReturn CRUDOrgLevel(OrgLevel orgLevel, OperationType opType)
 		{
-			bool bRtrn = false;
+			SQLReturn rtrn = new();
 
 			try
 			{
@@ -228,23 +207,49 @@ namespace myNotebooks.DataAccess
 					using (SqlCommand cmd = new SqlCommand("sp_CRUD_OrgLevel", conn))
 					{
 						cmd.CommandType = CommandType.StoredProcedure;
-						cmd.Parameters.AddWithValue("@notebookId",			parentId);
-						cmd.Parameters.AddWithValue("@createdBy",			creatorId);
-						cmd.Parameters.AddWithValue("@orgLevelType",		(int)orgLevelType);
-						cmd.Parameters.AddWithValue("@orgLevelName",		orgLevelName.Trim());
-						cmd.Parameters.AddWithValue("@orgLevelDescription", orgLevelDescription.Trim());
-						cmd.Parameters.AddWithValue("@opType",				(int)opType);
-						cmd.Parameters.Add("@retVal", SqlDbType.Int);
-						cmd.Parameters["@retVal"].Direction = ParameterDirection.ReturnValue;
-						cmd.ExecuteNonQuery();
-						bRtrn = cmd.Parameters["@retVal"].Value.ToString() == "1";
+						cmd.Parameters.AddWithValue("@parentId", orgLevel.ParentId);
+						cmd.Parameters.AddWithValue("@createdBy", orgLevel.CreatedBy);
+						cmd.Parameters.AddWithValue("@orgLevelType", (int)orgLevel.OrgLevelType);
+						cmd.Parameters.AddWithValue("@orgLevelName", orgLevel.Name.Trim());
+						cmd.Parameters.AddWithValue("@orgLevelDescription", orgLevel.Description.Trim());
+						if (opType != OperationType.Create) cmd.Parameters.AddWithValue("orgId", orgLevel.Id);
+						PopulateSqlReturn(rtrn, cmd);
 					}
 				}
 			}
 			catch (Exception ex) { var v = ex.Message; }
 
-			return bRtrn;
+			return rtrn;
 		}
+
+		//public static SQLReturn CRUDOrgLevel(int creatorId, string orgLevelDescription
+		//								, frmMain.OrgLevelTypes orgLevelType, string orgLevelName, int parentId, OperationType opType = OperationType.Create)
+		//{
+		//	SQLReturn rtrn = new();
+
+		//	try
+		//	{
+		//		using (SqlConnection conn = new(connString))
+		//		{
+		//			conn.Open();
+		//			using (SqlCommand cmd = new SqlCommand("sp_CRUD_OrgLevel", conn))
+		//			{
+		//				cmd.CommandType = CommandType.StoredProcedure;
+		//				cmd.Parameters.AddWithValue("@parentId",			parentId);
+		//				cmd.Parameters.AddWithValue("@createdBy",			creatorId);
+		//				cmd.Parameters.AddWithValue("@orgLevelType",		(int)orgLevelType);
+		//				cmd.Parameters.AddWithValue("@orgLevelName",		orgLevelName.Trim());
+		//				cmd.Parameters.AddWithValue("@orgLevelDescription", orgLevelDescription.Trim());
+		//				if(opType != OperationType.Create) cmd.Parameters.AddWithValue("orgId")
+		//				cmd.Parameters.AddWithValue("@opType",				(int)opType);
+		//				PopulateSqlReturn(rtrn, cmd);
+		//			}
+		//		}
+		//	}
+		//	catch (Exception ex) { var v = ex.Message; }
+
+		//	return rtrn;
+		//}
 
 		public static string		GetAccessLevelName(int accessLevel)
 		{
@@ -755,5 +760,26 @@ namespace myNotebooks.DataAccess
 			}
 			return ds;
 		}
+
+		private static void	PopulateSqlReturn(SQLReturn sqlReturn, SqlCommand cmd)
+		{
+			using (SqlDataReader rdr = cmd.ExecuteReader())
+			{
+				if (rdr.HasRows)
+				{
+					rdr.Read();
+
+					sqlReturn.intValue = Convert.ToInt32(rdr.GetValue(0).ToString());
+					sqlReturn.strValue = rdr.GetValue(1).ToString();
+				}
+			}
+			//return sqlReturn;
+		}
+	}
+
+	struct SQLReturn
+	{
+		public int intValue;
+		public string strValue;
 	}
 }

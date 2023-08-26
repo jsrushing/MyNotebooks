@@ -661,6 +661,7 @@ namespace myNotebooks.subforms
 					ShowHideMenusAndControls(SelectionState.NotebookLoaded);
 					lstEntries.SelectedIndices.Clear();
 				}
+
 				lb.SelectedIndexChanged += new System.EventHandler(this.lstEntries_SelectEntry);
 			}
 		}

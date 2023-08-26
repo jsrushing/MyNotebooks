@@ -381,25 +381,25 @@ namespace myNotebooks
 			this.Entries.ForEach(e	=> e.RTF	= EncryptDecrypt.Encrypt(e.RTF,		this.PIN));
 			this.Entries.ForEach(e	=> e.NotebookName = EncryptDecrypt.Encrypt(e.NotebookName, this.PIN));
 
-			if (IsNewNotebook && DbAccess.CRUDNotebook(this) == 0)
+			if (IsNewNotebook)
 			{
 				var vId = DbAccess.CRUDNotebook(this);
 
-				if(vId == 0)
+				if(vId.intValue == 0)
 				{
 					using (frmMessage frm = new(frmMessage.OperationType.Message,
-						"An error occurred. The Notebook was not created.")) { frm.ShowDialog(); }
+						"An error occurred. The Notebook was not created. " + vId.strValue)) { frm.ShowDialog(); }
 				}
-				else { this.Id = vId; }
+				else { this.Id = vId.intValue; }
 			}
 			else 
 			{
 				var vRtrn = DbAccess.CRUDNotebook(this, OperationType.Update);
 
-				if (vRtrn < 1 | vRtrn != this.Id)
+				if (vRtrn.intValue == 0 | vRtrn.intValue != this.Id)
 				{
 					using (frmMessage frm = new(frmMessage.OperationType.Message,
-					"An error occurred. The Notebook was not updated.")) { frm.ShowDialog(); }
+					"An error occurred. The Notebook was not updated. " + vRtrn.strValue)) { frm.ShowDialog(); }
 				}
 			}
 			//File.Delete(fName);
@@ -426,10 +426,10 @@ namespace myNotebooks
 
 			if(Program.PIN.Length > 0)
 			{
-				this.Entries.ForEach(e => e.Title = EncryptDecrypt.Decrypt(e.Title, Program.PIN));
-				this.Entries.ForEach(e => e.Text = EncryptDecrypt.Decrypt(e.Text, Program.PIN));
-				this.Entries.ForEach(e => e.Labels = EncryptDecrypt.Decrypt(e.Labels, Program.PIN));
-				this.Entries.ForEach(e => e.RTF = EncryptDecrypt.Decrypt(e.RTF, Program.PIN));
+				this.Entries.ForEach(e => e.Title	= EncryptDecrypt.Decrypt(e.Title, Program.PIN));
+				this.Entries.ForEach(e => e.Text	= EncryptDecrypt.Decrypt(e.Text, Program.PIN));
+				this.Entries.ForEach(e => e.Labels	= EncryptDecrypt.Decrypt(e.Labels, Program.PIN));
+				this.Entries.ForEach(e => e.RTF		= EncryptDecrypt.Decrypt(e.RTF, Program.PIN));
 				this.Entries.ForEach(e => e.NotebookName = EncryptDecrypt.Decrypt(e.NotebookName, Program.PIN));
 			}
 
@@ -486,15 +486,6 @@ namespace myNotebooks
 				}
 			}
 			return allEntries;
-		}
-
-		protected struct EntryValues
-		{
-			public string title;
-			public string text;
-			public string labels;
-			public string RTF;
-			public string notebookName;
 		}
     }
 
