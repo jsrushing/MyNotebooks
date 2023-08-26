@@ -149,6 +149,30 @@ namespace myNotebooks.subforms
 			else { lstOrphanedLabels.SelectedItems.Clear(); }
 		}
 
+		public List<MNLabel> GetCheckedNodes(TreeNodeCollection nodes)
+		{
+			List<MNLabel> lstRtrn = new();
+
+			foreach(TreeNode tn in treeAvailableLabels.Nodes)
+			{
+				if(tn.Nodes.Count > 0)
+				{
+					foreach (TreeNode child in tn.Nodes)
+					{
+						if(child.Checked) 
+						{
+							if(!lstRtrn.Any(l => l.LabelText == child.Text & l.ParentId == CurrentEntry.Id))
+							{
+								lstRtrn.Add(new() { LabelText = child.Text, ParentId = CurrentEntry.Id }); 
+							}
+						}
+					}
+				}
+			}
+
+			return lstRtrn;
+		}
+
 		private List<Notebook> GetSelectedNotebooks()
 		{
 			SelectedNotebooks.Clear();
@@ -339,11 +363,27 @@ namespace myNotebooks.subforms
 
 		private void mnuAdd_Click(object sender, EventArgs e)
 		{
-			lblOperation.Text = "Label Name:";
-			pnlNewLabelName.Visible = true;
-			txtLabelName.Text = string.Empty;
-			txtLabelName.Focus();
-			this.AcceptButton = btnOK;
+			// get the checked labels
+			
+			var checkedNodes = GetCheckedNodes(treeAvailableLabels.Nodes) as List<MNLabel>;
+			var v = CurrentEntry.AllLabels;
+
+			foreach(MNLabel lbl in checkedNodes)
+			{
+				if(!CurrentEntry.AllLabels.Any(l => l.LabelText == lbl.LabelText & l.ParentId == lbl.ParentId))
+				{
+					DbAccess.CRUDLabel(lbl);
+				}
+			}
+
+			CurrentEntry.AllLabels.Clear();
+			CurrentEntry.AllLabels = DbAccess.GetLabelsForEntry(CurrentEntry.Id);
+
+			//lblOperation.Text = "Label Name:";
+			//pnlNewLabelName.Visible = true;
+			//txtLabelName.Text = string.Empty;
+			//txtLabelName.Focus();
+			//this.AcceptButton = btnOK;
 		}
 
 		private async void DeleteOrRename(object sender, EventArgs e)
@@ -422,49 +462,44 @@ namespace myNotebooks.subforms
 		{
 			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
 			Int32 v = Convert.ToInt32(gridViewEntryDetails.SelectedRows[0].Cells[1].Tag);
+			var gridIndex = gridViewEntryDetails.SelectedRows[0];
 
-			if (mnu.Text == ViewEntryMenuText)
+			switch (gridIndex.Index)
 			{
-				using (frmNewEntry frm = new(this, null, 0, DbAccess.GetEntry(v)))
-				{
-					frm.ShowDialog();
+				case 0:     // View Entry
+					using (frmNewEntry frm = new(this, null, 0, DbAccess.GetEntry(v)))
+					{
+						frm.ShowDialog();
 
-					if (frm.Saved)
-					{    // refresh lstOccurrences
-						treeAvailableLabels.SelectedNode = LastClickedLabelNode;
-						PopulateLabelDetails();
-						lstOccurrences.SelectedIndex = LastClickedEntryIndex;
-						PopulateGridViewEntryDetails();
+						if (frm.Saved)
+						{    // refresh lstOccurrences
+							treeAvailableLabels.SelectedNode = LastClickedLabelNode;
+							PopulateLabelDetails();
+							lstOccurrences.SelectedIndex = LastClickedEntryIndex;
+							PopulateGridViewEntryDetails();
+						}
 					}
-				}
+					break;
+				case 1:     // Load Notebook
+							// Launch frmMain with Program.NotebooksNamesAndIds pre-loaded with the target Notebook.
+					Program.NotebooksNamesAndIds.Clear();
+					Program.NotebooksNamesAndIds.Add(gridViewEntryDetails.Rows[1].Cells[1].Value.ToString(),
+						Convert.ToInt32(gridViewEntryDetails.Rows[1].Cells[1].Tag));
+					using (frmMain frm = new()) { frm.ShowDialog(this); }
+					break;
+				case 2:     // Explore Group
+					Program.ActiveNBParentId = Convert.ToInt32(gridViewEntryDetails.Rows[2].Cells[1].Tag);
+					Program.NotebooksNamesAndIds.Clear();
+					using (frmMain frm = new()) { frm.ShowDialog(); }
+					break;
+				case 3:     // Explore Department
+					break;
+				case 4:     // Explore Account
+					break;
+				case 5:     // Explore Company
+					break;
 			}
-			else if (mnu.Text == LoadNotebookMenuText)
-			{
-				// Launch frmMain with the selected notebook 'pre-loaded'.
-				var notebookId = Convert.ToInt32(gridViewEntryDetails.Rows[1].Cells[1].Tag);
-				var notebookName = gridViewEntryDetails.Rows[1].Cells[1].Value.ToString();
-				Program.NotebooksNamesAndIds.Clear();
-				Program.NotebooksNamesAndIds.Add(notebookName, notebookId);
-				using(frmMain frm = new()) { frm.ShowDialog(this); }
-			}
-			else
-			{
-				var gridIndex = gridViewEntryDetails.SelectedRows[0];
 
-				switch (gridIndex.Index)
-				{
-					case 2:     // Group
-						Program.ActiveNBParentId = Convert.ToInt32(gridViewEntryDetails.Rows[2].Cells[1].Tag);
-						Program.NotebooksNamesAndIds.Clear();
-						using(frmMain frm = new()) { frm.ShowDialog(); }
-						break;
-					case 3:		// Department
-						break;
-				}
-
-
-				// invent way to explore org levels here ...
-			}
 		}
 
 		private void mnuExit_Click(object sender, EventArgs e)
@@ -729,11 +764,11 @@ namespace myNotebooks.subforms
 		}
 
 		private void treeAvailableLabels_AfterSelect(object sender, TreeViewEventArgs e)
-		{ 
-			if(treeAvailableLabels.SelectedNode.Level > 0)
+		{
+			if (treeAvailableLabels.SelectedNode.Level > 0)
 			{
-				PopulateLabelDetails(); 
-				LastClickedLabelNode = treeAvailableLabels.SelectedNode; 
+				PopulateLabelDetails();
+				LastClickedLabelNode = treeAvailableLabels.SelectedNode;
 			}
 		}
 
@@ -754,13 +789,13 @@ namespace myNotebooks.subforms
 
 		private void treeAvailableLabels_AfterCheck(object sender, TreeViewEventArgs e)
 		{
-			 if(!ProgramaticallyChecking)
+			if (!ProgramaticallyChecking)
 			{
 				TreeNode tn = treeAvailableLabels.SelectedNode;
 
 				if (tn != null)
 				{
-					if(tn.Level == 0)
+					if (tn.Level == 0)
 					{
 						ProgramaticallyChecking = true;
 
@@ -785,7 +820,7 @@ namespace myNotebooks.subforms
 
 		private void treeAvailableLabels_MouseMove(object sender, MouseEventArgs e)
 		{
-			if(!lstOccurrences.Visible)
+			if (!lstOccurrences.Visible)
 			{
 				TreeNode tn = treeAvailableLabels.GetNodeAt(e.X, e.Y);
 				if (tn != null && tn.Level == 0) { treeAvailableLabels.SelectedNode = tn; }

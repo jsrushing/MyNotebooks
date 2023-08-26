@@ -34,7 +34,7 @@ namespace myNotebooks.DataAccess
 					{
 						cmd.CommandType = CommandType.StoredProcedure;
 						cmd.Parameters.AddWithValue("@labelText",label.LabelText);
-						cmd.Parameters.AddWithValue("@notebookId", label.ParentId);
+						cmd.Parameters.AddWithValue("@parentId", label.ParentId);
 						cmd.Parameters.AddWithValue("@opType",	opType == OperationType.Delete ? 2 : (int)opType);
 						if (opType == OperationType.Create)		cmd.Parameters.AddWithValue("@createdBy",	Program.User.UserId);
 						if(opType != OperationType.Create)		cmd.Parameters.AddWithValue("@labelId",		label.Id);
@@ -275,7 +275,7 @@ namespace myNotebooks.DataAccess
 			}
 		}
 
-		public static Entry GetEntry(int entryId)
+		public static Entry			GetEntry(int entryId)
 		{
 			Entry entryRtrn = new();
 			DataTable dt = new();
@@ -323,7 +323,7 @@ namespace myNotebooks.DataAccess
 			return lstRtrn;
 		}
 
-		public static List<Entry> GetEntriesWithLabel(MNLabel label)
+		public static List<Entry>	GetEntriesWithLabel(MNLabel label)
 		{
 			List<Entry> entries = new();
 			DataTable dt = new();

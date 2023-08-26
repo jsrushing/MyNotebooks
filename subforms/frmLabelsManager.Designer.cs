@@ -75,7 +75,6 @@ namespace myNotebooks.subforms
 			mnuMain = new MenuStrip();
 			mnuLabelsOperations = new ToolStripMenuItem();
 			mnuAdd = new ToolStripMenuItem();
-			mnuFindOrphans = new ToolStripMenuItem();
 			mnuMoveTop = new ToolStripMenuItem();
 			mnuMoveUp = new ToolStripMenuItem();
 			mnuMoveDown = new ToolStripMenuItem();
@@ -432,7 +431,7 @@ namespace myNotebooks.subforms
 			// 
 			// mnuLabelsOperations
 			// 
-			mnuLabelsOperations.DropDownItems.AddRange(new ToolStripItem[] { mnuAdd, mnuFindOrphans });
+			mnuLabelsOperations.DropDownItems.AddRange(new ToolStripItem[] { mnuAdd });
 			mnuLabelsOperations.Name = "mnuLabelsOperations";
 			mnuLabelsOperations.Size = new System.Drawing.Size(52, 20);
 			mnuLabelsOperations.Text = "Labels";
@@ -440,16 +439,9 @@ namespace myNotebooks.subforms
 			// mnuAdd
 			// 
 			mnuAdd.Name = "mnuAdd";
-			mnuAdd.Size = new System.Drawing.Size(145, 22);
-			mnuAdd.Text = "&Add";
+			mnuAdd.Size = new System.Drawing.Size(225, 22);
+			mnuAdd.Text = "&Add Checked Labels to Entry";
 			mnuAdd.Click += this.mnuAdd_Click;
-			// 
-			// mnuFindOrphans
-			// 
-			mnuFindOrphans.Name = "mnuFindOrphans";
-			mnuFindOrphans.Size = new System.Drawing.Size(145, 22);
-			mnuFindOrphans.Text = "Find &Orphans";
-			mnuFindOrphans.Click += this.mnuFindOrphans_Click;
 			// 
 			// mnuMoveTop
 			// 
@@ -630,7 +622,6 @@ namespace myNotebooks.subforms
 		private ListBox lstEntryObjects;
 		private ToolStripMenuItem mnuLabelsOperations;
 		private ToolStripMenuItem mnuMoveTop;
-		private ToolStripMenuItem mnuFindOrphans;
 		private Panel pnlOrphanedLabels;
 		private Button btnExitOrphans;
 		private CheckBox chkSelectAllOrphans;
