@@ -82,8 +82,8 @@
 						2) Clear currentEntry + rtb
 						3) Show the filtered entries
 						4) If one is the entry remembered in 1), select it.
-			08/02/22 Update. Have disabled filter actions. NEEDS ATTENTION. HIDE FILTER CONTROLS UNTIL FIXED !!!
-			12/13/22 Update. As of v1.5 date filters are working. 'week' and 'month' buttons are deprecated/removed.
+			08/02/22 Rename. Have disabled filter actions. NEEDS ATTENTION. HIDE FILTER CONTROLS UNTIL FIXED !!!
+			12/13/22 Rename. As of v1.5 date filters are working. 'week' and 'month' buttons are deprecated/removed.
 
 		12/1/22 
 			002x ClickOnce install
@@ -389,9 +389,7 @@ namespace myNotebooks.subforms
 			if (CurrentNotebook != null && Program.DictCheckedNotebooks.Count == 1 && Program.DictCheckedNotebooks.Keys.Contains(CurrentNotebook.Name)) { Program.DictCheckedNotebooks.Clear(); }
 			if (Program.DictCheckedNotebooks.Count == 0) { Program.DictCheckedNotebooks.Add(ddlNotebooks.Text, txtJournalPIN.Text); }
 
-			CurrentNotebook = DbAccess.GetNotebookWithShortEntries(SelectedNotebookIds.Key, SelectedNotebookIds.Value);         //Convert.ToInt32(SelectedNotebookId));
-
-			//CurrentNotebook = new Notebook(ddlNotebooks.Text, null).Open(true);
+			CurrentNotebook = DbAccess.GetNotebookWithShortEntries(SelectedNotebookIds.Key, SelectedNotebookIds.Value);
 
 			var wrongPIN = true;
 

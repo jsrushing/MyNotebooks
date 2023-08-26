@@ -145,6 +145,7 @@ namespace myNotebooks.DataAccess
 		public static int			CRUDNotebook(Notebook nb, OperationType opType = OperationType.Create)
 		{
 			int iRtrn = 0;
+			string errMsg = string.Empty;
 
 			using (SqlConnection conn = new(connString))
 			{
@@ -158,12 +159,27 @@ namespace myNotebooks.DataAccess
 					cmd.Parameters.AddWithValue("@pin",			nb.PIN.Length > 0 ? nb.PIN : null);
 					cmd.Parameters.AddWithValue("@opType",		opType == OperationType.Delete ? 2 : (int)opType);
 					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@createdBy", Program.User.UserId);
-					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@notebookId", nb.ParentId);
+					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@parentId", nb.ParentId);
+					if (opType != OperationType.Create)			cmd.Parameters.AddWithValue("@notebookId", nb.Id);
 					if (opType == OperationType.Delete)			cmd.Parameters.AddWithValue("isActive", 0);
-					cmd.Parameters.Add("@retVal", SqlDbType.Int);
-					cmd.Parameters["@retVal"].Direction = ParameterDirection.ReturnValue;
-					cmd.ExecuteNonQuery();
-					iRtrn = Convert.ToInt32(cmd.Parameters["@retVal"].Value.ToString());
+
+					using(SqlDataReader rdr = cmd.ExecuteReader())
+					{
+						if (rdr.HasRows)
+						{
+							rdr.Read();
+							iRtrn = Convert.ToInt32(rdr.GetValue(0).ToString());
+							errMsg = rdr.GetValue(1).ToString();
+						}
+					}
+
+					//cmd.Parameters.Add("@retVal", SqlDbType.Int);
+					//cmd.Parameters["@retVal"].Direction = ParameterDirection.ReturnValue;
+					//cmd.Parameters.Add("@retMsg", SqlDbType.VarChar, 255);
+					//cmd.Parameters["@retMsg"].Direction = ParameterDirection.ReturnValue;
+					//cmd.ExecuteNonQuery();
+					//iRtrn = Convert.ToInt32(cmd.Parameters["@retVal"].Value.ToString());
+					//if(iRtrn < 0) { errMsg = cmd.Parameters["@retMsg"].Value.ToString(); }
 				}
 			}
 

@@ -37,8 +37,8 @@ namespace myNotebooks.subforms
 		private List<ListBox> OrgLevelLists_CU = new List<ListBox>();
 		private ListItem DraggedItem = null;
 		private const string CreateUserButton_CreateUser = "Create User";
-		private const string CreateUserButton_UpdateUser = "Update User";
-		private const string CreateUserButton_UpdatePermissions = "Update Permissions";
+		private const string CreateUserButton_UpdateUser = "Rename User";
+		private const string CreateUserButton_UpdatePermissions = "Rename Permissions";
 		private ListBox CurrentMouseListBox;
 		private GroupBox CurrentMouseGroupBox;
 		private frmMain.OrgLevelTypes CurrentType;

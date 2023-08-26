@@ -6,38 +6,31 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Globalization;
+using System.Data;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Reflection;
 using System.Runtime.Serialization;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Encryption;
-using MailKit.Net.Imap;
+using myNotebooks.DataAccess;
 using myNotebooks.objects;
 using myNotebooks.subforms;
-using Newtonsoft.Json;
-using System.Data;
-using System.Reflection;
-using Newtonsoft.Json.Linq;
-using myNotebooks.DataAccess;
-using MyNotebooks.objects;
 
 namespace myNotebooks
 {
 	[Serializable]
 	public class Notebook
 	{
-		public int		CreatedBy { get; set; }
-		public DateTime	CreatedOn { get; set; }
-		public DateTime? EditedOn { get; set; }
-		public string	Description { get; set; }
-		public int		Id { get; set; }
-		public string	Name { get; set; }
-		public string PIN { get; set; } = string.Empty;
-		public int		ParentId { get; set; }
+		public int			CreatedBy { get; set; }
+		public DateTime		CreatedOn { get; set; }
+		public DateTime?	EditedOn { get; set; }
+		public string		Description { get; set; }
+		public int			Id { get; set; }
+		public string		Name { get; set; }
+		public string		PIN { get; set; } = string.Empty;
+		public int			ParentId { get; set; }
 
 		public string		FileName;
 		public string		root = "notebooks\\";
@@ -48,7 +41,7 @@ namespace myNotebooks
 
 		public NotebookSettings	Settings;
 
-		private bool isNewNotebook = false;
+		private bool		IsNewNotebook = false;
 
 		public Notebook(string _name = null, string _fileName = null) 
         {
@@ -123,7 +116,7 @@ namespace myNotebooks
 			//if(addCreatedOn) Entries.Add(new Entry("created", "-", "-", "", this.Name));
 			//Program.SkipFileSizeComparison = true;
 			this.CreatedBy = Program.User.UserId;
-			isNewNotebook = true;
+			IsNewNotebook = true;
 			await this.Save();
 			//Program.SkipFileSizeComparison = false;
 		}
@@ -286,31 +279,34 @@ namespace myNotebooks
 
 		public async Task	Rename(string newName, bool uploadTriggerFile)
 		{
+			this.Name = newName;
+			await this.Save();
+
 			//DeleteBackups();
-			var oldName		= this.Name;
-			var oldFileName = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + this.Name;
-			File.Move		(this.FileName, this.FileName.Substring(0, this.FileName.LastIndexOf("\\")) + "\\" + newName);
-			Thread.Sleep	(500);
-			this.FileName	= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + newName;
-			this.Name		= newName;
-			this.Entries	.ForEach(e => e.NotebookName = newName);
-			await this.Save(false);
+			//var oldName		= this.Name;
+			//var oldFileName = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + this.Name;
+			//File.Move		(this.FileName, this.FileName.Substring(0, this.FileName.LastIndexOf("\\")) + "\\" + newName);
+			//Thread.Sleep	(500);
+			//this.FileName	= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + newName;
+			//this.Name		= newName;
+			//this.Entries	.ForEach(e => e.NotebookName = newName);
+			//await this.Save(false);
 
-			if (this.Settings.AllowCloud)
-			{
-				await AzureFileClient.GetAzureItemNames();	// Populate Program.AzureNotebooks.
+			//if (this.Settings.AllowCloud)
+			//{
+			//	await AzureFileClient.GetAzureItemNames();	// Populate Program.AzureNotebooks.
 
-				if(Program.AzureNotebookNames.Contains(Program.AzurePassword + oldName)) 
-				{ 
-					Program.AzureNotebookNames.Remove(Program.AzurePassword + oldName);
-					//await AzureFileClient.RenameFile($"notebooks/container1a.file.core.windows.net" + "//" + Program.AzurePassword + oldName, newName);
-					await AzureFileClient.DownloadOrDeleteFile(this.FileName, Program.AzurePassword + oldName, FileMode.Create, true);
-					CloudSynchronizer cs = new CloudSynchronizer(); await AzureFileClient.UploadFile(this.FileName);   // gets this newly renamed notebook to Azure
+			//	if(Program.AzureNotebookNames.Contains(Program.AzurePassword + oldName)) 
+			//	{ 
+			//		Program.AzureNotebookNames.Remove(Program.AzurePassword + oldName);
+			//		//await AzureFileClient.RenameFile($"notebooks/container1a.file.core.windows.net" + "//" + Program.AzurePassword + oldName, newName);
+			//		await AzureFileClient.DownloadOrDeleteFile(this.FileName, Program.AzurePassword + oldName, FileMode.Create, true);
+			//		CloudSynchronizer cs = new CloudSynchronizer(); await AzureFileClient.UploadFile(this.FileName);   // gets this newly renamed notebook to Azure
 
-				}
-				if (!Program.AzureNotebookNames.Contains(Program.AzurePassword + newName)) { Program.AzureNotebookNames.Add(Program.AzurePassword + newName); }
-				if (uploadTriggerFile) { AzureFileClient.UploadRenamedFileTrigger(oldName, newName); }
-			}
+			//	}
+			//	if (!Program.AzureNotebookNames.Contains(Program.AzurePassword + newName)) { Program.AzureNotebookNames.Add(Program.AzurePassword + newName); }
+			//	if (uploadTriggerFile) { AzureFileClient.UploadRenamedFileTrigger(oldName, newName); }
+			//}
 			//Backup();
 		}
 
@@ -385,12 +381,27 @@ namespace myNotebooks
 			this.Entries.ForEach(e	=> e.RTF	= EncryptDecrypt.Encrypt(e.RTF,		this.PIN));
 			this.Entries.ForEach(e	=> e.NotebookName = EncryptDecrypt.Encrypt(e.NotebookName, this.PIN));
 
-			if (isNewNotebook && DbAccess.CRUDNotebook(this) == 0)
+			if (IsNewNotebook && DbAccess.CRUDNotebook(this) == 0)
 			{
-				using (frmMessage frm = new(frmMessage.OperationType.Message,
-					"An error occurred. The Notebook was not created.")) { frm.ShowDialog(); }
-			}
+				var vId = DbAccess.CRUDNotebook(this);
 
+				if(vId == 0)
+				{
+					using (frmMessage frm = new(frmMessage.OperationType.Message,
+						"An error occurred. The Notebook was not created.")) { frm.ShowDialog(); }
+				}
+				else { this.Id = vId; }
+			}
+			else 
+			{
+				var vRtrn = DbAccess.CRUDNotebook(this, OperationType.Update);
+
+				if (vRtrn < 1 | vRtrn != this.Id)
+				{
+					using (frmMessage frm = new(frmMessage.OperationType.Message,
+					"An error occurred. The Notebook was not updated.")) { frm.ShowDialog(); }
+				}
+			}
 			//File.Delete(fName);
 
 			//using (Stream stream = File.Open(fName, FileMode.Create))
@@ -423,7 +434,7 @@ namespace myNotebooks
 			}
 
 			//Backup();
-			if (isNewNotebook) { await Utilities.PopulateAllNotebookNames(); }
+			if (IsNewNotebook) { await Utilities.PopulateAllNotebookNames(); }
 		}
 
 		public List<Entry>	Search(SearchObject So)
