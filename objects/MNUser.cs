@@ -24,7 +24,7 @@ namespace myNotebooks.objects
 		public bool				IsActive { get; private set; }
 		public string			Name { get; set; }
 		public string			Password { get; set; }
-		public int				UserId { get; set; }
+		public int				Id { get; set; }
 		public int				CreatedBy { get; set; }
 		public DateTime			CreatedOn { get; set; }
 		public DateTime?		EditedOn { get; set; }
@@ -33,9 +33,7 @@ namespace myNotebooks.objects
 		public List<Department> Departments = new();
 		public List<Account>	Accounts = new();
 		public List<Company>	Companies = new();
-
 		public List<OrgLevel>	OrgLevels = new();
-
 		public List<MNUser>		Children = new();
 		public List<Notebook>	Notebooks = new();
 
@@ -47,7 +45,7 @@ namespace myNotebooks.objects
 		public MNUser(int accessLevel, string name, string password, int userId, DateTime createdOn, DateTime? editedOn = null, bool isEnterprise = false)
 		{
 			AccessLevel = accessLevel;
-			UserId = userId;
+			Id = userId;
 			Name = name;
 			//Password = password;
 			//IsEnterprise = isEnterprise;
@@ -107,7 +105,25 @@ namespace myNotebooks.objects
 			if(dt.Rows.Count > 1) { AddChildUsers(dt); }
 		}
 
-		//public void CreateSimpleUser() { this.UserId = DbAccess.CRUDMNUser(this); }
+		public void Create() { GetOperationResult(DbAccess.CRUDMNUser(this), true); }
+		public void Update() { GetOperationResult(DbAccess.CRUDMNUser(this, OperationType.Update)); }
+		public void Delete() { GetOperationResult(DbAccess.CRUDMNUser(this, OperationType.Delete)); }
+
+		private void GetOperationResult(SQLReturn @return, bool isCreate = false)
+		{
+			if (isCreate)
+			{
+				if (@return.strValue.Length == 0) { this.Id = @return.intValue; }
+			}
+			else
+			{
+				if (@return.strValue.Length > 0)
+				{
+					using (frmMessage frm = new(frmMessage.OperationType.Message, "An error occurred. '" + @return.strValue + "'", "Error"))
+					{ frm.ShowDialog(); }
+				}
+			}
+		}
 
 		private void AddChildUsers(DataTable dt)
 		{
@@ -166,15 +182,15 @@ namespace myNotebooks.objects
 
 		public bool ContainsChild(MNUser child)
 		{
-			var v = this.Children.Where(e => e.UserId == child.UserId).FirstOrDefault();
+			var v = this.Children.Where(e => e.Id == child.Id).FirstOrDefault();
 			return v != null;
 		}
 
-		public bool Equals(MNUser userToCompare) { return this.UserId == userToCompare.UserId; }
+		public bool Equals(MNUser userToCompare) { return this.Id == userToCompare.Id; }
 
 		public void GetAllOrgLevels()
 		{
-			DataSet dataSet = DbAccess.GetUserOrgLevels(this.UserId);
+			DataSet dataSet = DbAccess.GetUserOrgLevels(this.Id);
 
 			for (int i = 0; i < dataSet.Tables[0].Rows.Count; i++)
 			{ this.OrgLevels.Add(new(frmMain.OrgLevelTypes.Company, dataSet.Tables[0], i)); }	//  this.Companies.Add(new(dataSet.Tables[0], i)); }
@@ -197,5 +213,7 @@ namespace myNotebooks.objects
 		public void SaveAssignments() { DbAccess.CreateMNUserAssignments(this); }
 
 		public void SavePermissions() { DbAccess.CreateMNUserPermissions(this);  }
+
+		
 	}
 }

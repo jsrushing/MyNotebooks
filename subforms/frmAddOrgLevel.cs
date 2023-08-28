@@ -32,7 +32,7 @@ namespace myNotebooks.subforms
 			{
 				OrgLevel level = new()
 				{
-					CreatedBy = Program.User.UserId,
+					CreatedBy = Program.User.Id,
 					ParentId = this.ParentId,
 					Description = txtOrgLevelDescription.Text,
 					Name = txtOrgLevelName.Text,

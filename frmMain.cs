@@ -686,6 +686,7 @@ namespace myNotebooks.subforms
 			using (frmManagementConsole frm = new(this))
 			{
 				frm.ShowDialog();
+
 				if (Program.ActiveNBParentId > 0)
 				{
 					LoadNotebooks();

@@ -115,7 +115,7 @@ namespace myNotebooks
 			//this.FileName += this.Settings.AllowCloud ? "" : " (local)";
 			//if(addCreatedOn) Entries.Add(new Entry("created", "-", "-", "", this.Name));
 			//Program.SkipFileSizeComparison = true;
-			this.CreatedBy = Program.User.UserId;
+			this.CreatedBy = Program.User.Id;
 			IsNewNotebook = true;
 			await this.Save();
 			//Program.SkipFileSizeComparison = false;

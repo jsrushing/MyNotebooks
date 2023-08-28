@@ -22,9 +22,9 @@ namespace myNotebooks.DataAccess
 //		private static string connString = "Server=mynotebooksserver.database.windows.net;Database=myNotebooks;user id=mydb_admin;password=cloud_Bringer1!";
 		private static string connString = "Server=FORRESTSTNW;Database=MyNotebooks;Trusted_Connection = true";
 
-		public static bool			CRUDLabel(MNLabel label, OperationType opType = OperationType.Create)
+		public static SQLReturn CRUDLabel(MNLabel label, OperationType opType = OperationType.Create)
 		{
-			bool bRtrn = false;
+			SQLReturn rtrn = new();
 
 			try
 			{
@@ -37,22 +37,22 @@ namespace myNotebooks.DataAccess
 						cmd.Parameters.AddWithValue("@labelText",label.LabelText);
 						cmd.Parameters.AddWithValue("@parentId", label.ParentId);
 						cmd.Parameters.AddWithValue("@opType",	opType == OperationType.Delete ? 2 : (int)opType);
-						if (opType == OperationType.Create)		cmd.Parameters.AddWithValue("@createdBy",	Program.User.UserId);
+						if (opType == OperationType.Create)		cmd.Parameters.AddWithValue("@createdBy",	Program.User.Id);
 						if(opType != OperationType.Create)		cmd.Parameters.AddWithValue("@labelId",		label.Id);
-						if (opType == OperationType.Delete)		cmd.Parameters.AddWithValue("isActive",		0); 
-						cmd.ExecuteNonQuery();
+						if (opType == OperationType.Delete)		cmd.Parameters.AddWithValue("isActive",		0);
+						GetSqlReturn(ref rtrn, cmd);
 					}
 				}
-				bRtrn = true;
 			}
 			catch { }
 
-			return bRtrn;
+			return rtrn;
 		}
 
-		public static int			CRUDMNUser(MNUser user, OperationType opType = OperationType.Create)
+		public static SQLReturn CRUDMNUser(MNUser user, OperationType opType = OperationType.Create)
 		{
-			int iRtrn = 0;
+			SQLReturn rtrn = new();
+
 			try
 			{
 				using (SqlConnection conn = new(connString))
@@ -66,19 +66,16 @@ namespace myNotebooks.DataAccess
 						cmd.Parameters.AddWithValue("@accessLevel", user.AccessLevel);
 						cmd.Parameters.AddWithValue("@email",		user.Email);
 						cmd.Parameters.AddWithValue("@opType",		opType == OperationType.Delete ? 2 : (int)opType);
-						if (opType == OperationType.Create) cmd.Parameters.AddWithValue("@createdBy", Program.User.UserId);
-						if (opType != OperationType.Create) cmd.Parameters.AddWithValue("@userId", Program.User.UserId);
+						if (opType == OperationType.Create) cmd.Parameters.AddWithValue("@createdBy", Program.User.Id);
+						if (opType != OperationType.Create) cmd.Parameters.AddWithValue("@userId", Program.User.Id);
 						if (opType == OperationType.Delete) cmd.Parameters.AddWithValue("isActive", 0);
-						cmd.Parameters.Add("@retVal", SqlDbType.Int);
-						cmd.Parameters["@retVal"].Direction = ParameterDirection.ReturnValue;
-						cmd.ExecuteNonQuery();
-						iRtrn = Convert.ToInt32(cmd.Parameters["@retVal"].Value.ToString());
+						GetSqlReturn(ref rtrn, cmd);
 					}
 				}
 			}
 			catch (Exception ex) { var v = ex.Message; }
 
-			return iRtrn;
+			return rtrn;
 		}
 
 		public static bool			CreateMNUserAssignments(MNUser user)
@@ -126,7 +123,7 @@ namespace myNotebooks.DataAccess
 					using (SqlCommand cmd = new SqlCommand("sp_CRUD_UserPermissions", conn))
 					{
 						cmd.CommandType = CommandType.StoredProcedure;
-						cmd.Parameters.AddWithValue("@userId", user.UserId);
+						cmd.Parameters.AddWithValue("@userId", user.Id);
 
 						foreach(string sPerm in user.Permissions.GetGrantedPermissions()) 
 						{ cmd.Parameters.AddWithValue("@" + sPerm, 1); }
@@ -158,11 +155,11 @@ namespace myNotebooks.DataAccess
 					cmd.Parameters.AddWithValue("@name",		nb.Name);
 					cmd.Parameters.AddWithValue("@pin",			nb.PIN.Length > 0 ? nb.PIN : null);
 					cmd.Parameters.AddWithValue("@opType",		opType == OperationType.Delete ? 2 : (int)opType);
-					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@createdBy", Program.User.UserId);
+					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@createdBy", Program.User.Id);
 					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@parentId", nb.ParentId);
 					if (opType != OperationType.Create)			cmd.Parameters.AddWithValue("@notebookId", nb.Id);
 					if (opType == OperationType.Delete)			cmd.Parameters.AddWithValue("isActive", 0);
-					PopulateSqlReturn(ref rtrn, cmd);
+					GetSqlReturn(ref rtrn, cmd);
 				}
 			}
 
@@ -184,11 +181,11 @@ namespace myNotebooks.DataAccess
 					cmd.Parameters.AddWithValue("@text",		entry.Text);
 					cmd.Parameters.AddWithValue("@title",		entry.Title);
 					cmd.Parameters.AddWithValue("@opType",		opType == OperationType.Delete ? 2: (int)opType);
-					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@createdBy"	, Program.User.UserId);
+					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@createdBy"	, Program.User.Id);
 					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@parentId"		, entry.ParentId);
 					if (opType != OperationType.Create)			cmd.Parameters.AddWithValue("@entryId"		, entry.Id);
 					if (opType == OperationType.Delete)			cmd.Parameters.AddWithValue("isActive"		, 0);
-					PopulateSqlReturn(ref rtrn, cmd);
+					GetSqlReturn(ref rtrn, cmd);
 				}
 			}
 
@@ -213,7 +210,7 @@ namespace myNotebooks.DataAccess
 						cmd.Parameters.AddWithValue("@orgLevelName", orgLevel.Name.Trim());
 						cmd.Parameters.AddWithValue("@orgLevelDescription", orgLevel.Description.Trim());
 						if (opType != OperationType.Create) cmd.Parameters.AddWithValue("orgId", orgLevel.Id);
-						PopulateSqlReturn(ref rtrn, cmd);
+						GetSqlReturn(ref rtrn, cmd);
 					}
 				}
 			}
@@ -583,6 +580,20 @@ namespace myNotebooks.DataAccess
 			return lstRtrn;
 		}
 
+		private static void	GetSqlReturn(ref SQLReturn sqlReturn, SqlCommand cmd)
+		{
+			using (SqlDataReader rdr = cmd.ExecuteReader())
+			{
+				if (rdr.HasRows)
+				{
+					rdr.Read();
+
+					sqlReturn.intValue = Convert.ToInt32(rdr.GetValue(0).ToString());
+					sqlReturn.strValue = rdr.GetValue(1).ToString();
+				}
+			}
+		}
+
 		public static List<ListItem> GetTopLevelItemsForUser(int userId)
 		{
 			//List<TreeNode> lblRtrn = new List<TreeNode>();	
@@ -730,21 +741,6 @@ namespace myNotebooks.DataAccess
 				}
 			}
 			return ds;
-		}
-
-		private static void	PopulateSqlReturn(ref SQLReturn sqlReturn, SqlCommand cmd)
-		{
-			using (SqlDataReader rdr = cmd.ExecuteReader())
-			{
-				if (rdr.HasRows)
-				{
-					rdr.Read();
-
-					sqlReturn.intValue = Convert.ToInt32(rdr.GetValue(0).ToString());
-					sqlReturn.strValue = rdr.GetValue(1).ToString();
-				}
-			}
-			//return sqlReturn;
 		}
 	}
 

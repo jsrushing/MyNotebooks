@@ -92,7 +92,7 @@ namespace myNotebooks.subforms
 			{
 				MNLabel lbl = new()
 				{
-					CreatedBy = Program.User.UserId,
+					CreatedBy = Program.User.Id,
 					ParentId = CurrentEntry.Id,
 					LabelText = txtLabelName.Text,
 				};
@@ -158,7 +158,7 @@ namespace myNotebooks.subforms
 						{
 							if (!lstRtrn.Any(l => l.LabelText == child.Text & l.ParentId == CurrentEntry.Id))
 							{
-								lstRtrn.Add(new() { CreatedBy = Program.User.UserId, LabelText = child.Text, ParentId = CurrentEntry.Id });
+								lstRtrn.Add(new() { CreatedBy = Program.User.Id, LabelText = child.Text, ParentId = CurrentEntry.Id });
 							}
 						}
 					}
@@ -289,7 +289,7 @@ namespace myNotebooks.subforms
 		}
 
 		private void lstOccurrences_MouseUp(object sender, MouseEventArgs e)
-		{ PopulateGridViewEntryDetails(); }
+		{ PopulateGridViewEntryDetails(e.Y); }
 
 		private async Task ManageOrphans()
 		{
@@ -502,7 +502,7 @@ namespace myNotebooks.subforms
 				{
 					MNLabel lbl = new()
 					{
-						CreatedBy = Program.User.UserId,
+						CreatedBy = Program.User.Id,
 						LabelText = frm.ResultText,
 						ParentId = CurrentEntry.Id
 					};
@@ -606,7 +606,7 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private void PopulateGridViewEntryDetails()
+		private void PopulateGridViewEntryDetails(int mouseY = -1)
 		{
 			// Populate and display the label parent data grid.
 			gridViewEntryDetails.Rows.Clear();
@@ -660,8 +660,8 @@ namespace myNotebooks.subforms
 				gridViewEntryDetails.Width = gridViewEntryDetails.Columns[0].Width + gridViewEntryDetails.Columns[1].Width + 3;
 				gridViewEntryDetails.Visible = true;
 				gridViewEntryDetails.Columns[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-
-				if (FirstDetailsLoad) { FirstDetailsLoad = false; PopulateGridViewEntryDetails(); }
+				if (mouseY > -1) gridViewEntryDetails.Top = mouseY + gridViewEntryDetails.Height + 40;
+				if (FirstDetailsLoad) { FirstDetailsLoad = false; PopulateGridViewEntryDetails(mouseY); }
 
 
 				//lstEntryParents.Visible = true;

@@ -81,9 +81,24 @@ namespace MyNotebooks.objects
 			//Utilities.PopulatePropertiesFromDataRow(typeof(MNLabel), dataTable, rowIndex);
 		}
 
-		public void Delete() { DbAccess.CRUDLabel(this, OperationType.Delete); }
-		public void Create() { DbAccess.CRUDLabel(this); }
-		public void Update() { DbAccess.CRUDLabel(this, OperationType.Update); }
+		public void Create() { GetOperationResult(DbAccess.CRUDLabel(this), true); }
+		public void Update() { GetOperationResult(DbAccess.CRUDLabel(this, OperationType.Update)); }
+		public void Delete() { GetOperationResult(DbAccess.CRUDLabel(this, OperationType.Delete)); }
 
+		private void GetOperationResult(SQLReturn @return, bool isCreate = false)
+		{
+			if(isCreate)
+			{
+				if(@return.strValue.Length == 0) { this.Id = @return.intValue; }
+			}
+			else
+			{
+				if (@return.strValue.Length > 0)
+				{
+					using (frmMessage frm = new(frmMessage.OperationType.Message, "An error occurred. '" + @return.strValue + "'", "Error"))
+					{ frm.ShowDialog(); }
+				}
+			}
+		}
 	}
 }

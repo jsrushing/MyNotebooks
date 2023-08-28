@@ -114,7 +114,7 @@ namespace myNotebooks.subforms
 
 		private void lblManageLabels_Click(object sender, EventArgs e)
 		{
-			if(this.Entry == null) { this.Entry = new Entry() { CreatedBy = Program.User.UserId, NotebookName = this.CurrentNotebook.Name, Title = txtNewEntryTitle.Text, Text = rtbNewEntry.Text }; }
+			if(this.Entry == null) { this.Entry = new Entry() { CreatedBy = Program.User.Id, NotebookName = this.CurrentNotebook.Name, Title = txtNewEntryTitle.Text, Text = rtbNewEntry.Text }; }
 			using (frmLabelsManager frm = new frmLabelsManager(this, false, this.CurrentNotebook, this.Entry)) { frm.ShowDialog(); }
 			LabelsManager.PopulateLabelsList(clbLabels, null, LabelsManager.LabelsSortType.None, this.Entry);
 		}
@@ -221,7 +221,7 @@ namespace myNotebooks.subforms
 					newEntry = new(txtNewEntryTitle.Text.Trim(), rtbNewEntry.Text.Trim(), rtbNewEntry.Rtf,
 						LabelsManager.CheckedLabels_Get(clbLabels), CurrentNotebook.Id, CurrentNotebook.Name);
 
-					newEntry.CreatedBy = Program.User.UserId;
+					newEntry.CreatedBy = Program.User.Id;
 					this.Entry = newEntry;
 				}
 
