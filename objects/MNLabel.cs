@@ -81,25 +81,25 @@ namespace MyNotebooks.objects
 			//Utilities.PopulatePropertiesFromDataRow(typeof(MNLabel), dataTable, rowIndex);
 		}
 
-		public SQLReturn Create() { return GetOperationResult(DbAccess.CRUDLabel(this), true); }
-		public SQLReturn Update() { return GetOperationResult(DbAccess.CRUDLabel(this, OperationType.Update)); }
-		public SQLReturn Delete() { return GetOperationResult(DbAccess.CRUDLabel(this, OperationType.Delete)); }
+		public SQLResult Create() { return GetOperationResult(DbAccess.CRUDLabel(this), true); }
+		public SQLResult Update() { return GetOperationResult(DbAccess.CRUDLabel(this, OperationType.Update)); }
+		public SQLResult Delete() { return GetOperationResult(DbAccess.CRUDLabel(this, OperationType.Delete)); }
 
-		private SQLReturn GetOperationResult(SQLReturn @return, bool isCreate = false)
+		private SQLResult GetOperationResult(SQLResult result, bool isCreate = false)
 		{
 			if(isCreate)
 			{
-				if(@return.strValue.Length == 0) { this.Id = @return.intValue; }
+				if(result.strValue.Length == 0) { this.Id = result.intValue; }
 			}
 			else
 			{
-				if (@return.strValue.Length > 0)
+				if (result.strValue.Length > 0)
 				{
-					using (frmMessage frm = new(frmMessage.OperationType.Message, "An error occurred. '" + @return.strValue + "'", "Error"))
+					using (frmMessage frm = new(frmMessage.OperationType.Message, "An error occurred. '" + result.strValue + "'", "Error"))
 					{ frm.ShowDialog(); }
 				}
 			}
-			return @return;
+			return result;
 		}
 	}
 }

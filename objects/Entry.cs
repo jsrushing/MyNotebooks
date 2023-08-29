@@ -126,17 +126,17 @@ namespace myNotebooks
 		public async Task	Update() { GetOperationResult(DbAccess.CRUDNotebookEntry(this, OperationType.Update)); }
 		public async Task	Delete() { GetOperationResult(DbAccess.CRUDNotebookEntry(this, OperationType.Delete)); }
 
-		private void		GetOperationResult(SQLReturn @return, bool isCreate = false)
+		private void		GetOperationResult(SQLResult result, bool isCreate = false)
 		{
 			if (isCreate)
 			{
-				if (@return.strValue.Length == 0) { this.Id = @return.intValue; }
+				if (result.strValue.Length == 0) { this.Id = result.intValue; }
 			}
 			else
 			{
-				if (@return.strValue.Length > 0)
+				if (result.strValue.Length > 0)
 				{
-					using (frmMessage frm = new(frmMessage.OperationType.Message, "An error occurred. '" + @return.strValue + "'", "Error"))
+					using (frmMessage frm = new(frmMessage.OperationType.Message, "An error occurred. '" + result.strValue + "'", "Error"))
 					{ frm.ShowDialog(); }
 				}
 			}

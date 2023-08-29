@@ -22,9 +22,9 @@ namespace myNotebooks.DataAccess
 //		private static string connString = "Server=mynotebooksserver.database.windows.net;Database=myNotebooks;user id=mydb_admin;password=cloud_Bringer1!";
 		private static string connString = "Server=FORRESTSTNW;Database=MyNotebooks;Trusted_Connection = true";
 
-		public static SQLReturn CRUDLabel(MNLabel label, OperationType opType = OperationType.Create)
+		public static SQLResult		CRUDLabel(MNLabel label, OperationType opType = OperationType.Create)
 		{
-			SQLReturn rtrn = new();
+			SQLResult rtrn = new();
 
 			try
 			{
@@ -49,9 +49,9 @@ namespace myNotebooks.DataAccess
 			return rtrn;
 		}
 
-		public static SQLReturn CRUDMNUser(MNUser user, OperationType opType = OperationType.Create)
+		public static SQLResult		CRUDMNUser(MNUser user, OperationType opType = OperationType.Create)
 		{
-			SQLReturn rtrn = new();
+			SQLResult rtrn = new();
 
 			try
 			{
@@ -140,9 +140,9 @@ namespace myNotebooks.DataAccess
 			return iRtrn;
 		}
 
-		public static SQLReturn		CRUDNotebook(Notebook nb, OperationType opType = OperationType.Create)
+		public static SQLResult		CRUDNotebook(Notebook nb, OperationType opType = OperationType.Create)
 		{
-			SQLReturn rtrn = new();
+			SQLResult rtrn = new();
 
 			using (SqlConnection conn = new(connString))
 			{
@@ -166,9 +166,9 @@ namespace myNotebooks.DataAccess
 			return rtrn;
 		}
 
-		public static SQLReturn		CRUDNotebookEntry(Entry entry, OperationType opType = OperationType.Create)
+		public static SQLResult		CRUDNotebookEntry(Entry entry, OperationType opType = OperationType.Create)
 		{
-			SQLReturn rtrn = new();
+			SQLResult rtrn = new();
 
 			using (SqlConnection conn = new(connString))
 			{
@@ -199,9 +199,9 @@ namespace myNotebooks.DataAccess
 			return rtrn;
 		}
 
-		public static SQLReturn		CRUDOrgLevel(OrgLevel orgLevel, OperationType opType = OperationType.Create)
+		public static SQLResult		CRUDOrgLevel(OrgLevel orgLevel, OperationType opType = OperationType.Create)
 		{
-			SQLReturn rtrn = new();
+			SQLResult rtrn = new();
 
 			try
 			{
@@ -226,34 +226,9 @@ namespace myNotebooks.DataAccess
 			return rtrn;
 		}
 
-		public static string		GetAccessLevelName(int accessLevel)
-		{
-			string sRtrn = string.Empty;
-			using(SqlConnection conn = new(connString)) 
-			{ 
-				conn.Open();
-				using(SqlCommand cmd = new("sp_GetAccessLevels", conn)) 
-				{
-					cmd.CommandType = CommandType.StoredProcedure;
-					using(SqlDataReader reader = cmd.ExecuteReader())
-					{
-						while(reader.Read())
-						{
-							if (reader[0].Equals(accessLevel + 1)) 
-							{ 
-								sRtrn = reader[1].ToString();
-								break;
-							}
-						}
-					}
-				}
-				return sRtrn;
-			}
-		}
-
 		public static List<string>	GetAccessLevels()
 		{
-			List<string> list = new List<string>();
+			List<string> list = new();
 
 			using (SqlConnection conn = new(connString))
 			{
@@ -587,7 +562,7 @@ namespace myNotebooks.DataAccess
 			return lstRtrn;
 		}
 
-		private static void			GetSqlReturn(ref SQLReturn sqlReturn, SqlCommand cmd)
+		private static void			GetSqlReturn(ref SQLResult sqlReturn, SqlCommand cmd)
 		{
 			using (SqlDataReader rdr = cmd.ExecuteReader())
 			{
@@ -751,7 +726,7 @@ namespace myNotebooks.DataAccess
 		}
 	}
 
-	public struct SQLReturn
+	public struct SQLResult
 	{
 		public int intValue;
 		public string strValue;

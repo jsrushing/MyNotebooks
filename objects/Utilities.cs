@@ -42,17 +42,17 @@ namespace myNotebooks.objects
 			return rtrn;
 		}
 
-		//public static SQLReturn GetOperationResult(SQLReturn @return, int objectId, bool isCreate = false)
+		//public static SQLResult GetOperationResult(SQLResult result, int objectId, bool isCreate = false)
 		//{
 		//	if (isCreate)
 		//	{
-		//		if (@return.strValue.Length == 0) { objectId = @return.intValue; }
+		//		if (result.strValue.Length == 0) { objectId = result.intValue; }
 		//	}
 		//	else
 		//	{
-		//		if (@return.strValue.Length > 0)
+		//		if (result.strValue.Length > 0)
 		//		{
-		//			using (frmMessage frm = new(frmMessage.OperationType.Message, "An error occurred. '" + @return.strValue + "'", "Error"))
+		//			using (frmMessage frm = new(frmMessage.OperationType.Message, "An error occurred. '" + result.strValue + "'", "Error"))
 		//			{ frm.ShowDialog(); }
 		//		}
 		//	}
