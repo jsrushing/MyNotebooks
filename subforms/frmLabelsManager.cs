@@ -508,11 +508,11 @@ namespace myNotebooks.subforms
 					};
 
 					if (!CurrentEntry.AllLabels.Any(l => l.LabelText == lbl.LabelText & l.ParentId == lbl.ParentId))
-					{ 
-						lbl.Create(); 
+					{
+						lbl.Create();
 						RefreshEntry = true;
 						ResetTree();
-						
+
 					}
 				}
 			}
@@ -748,7 +748,7 @@ namespace myNotebooks.subforms
 
 			sMsg += "your Labels collection.";
 
-			using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "MNLabel Delete Successful", this))
+			using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "MNLabel Delete_original Successful", this))
 			{ frm.ShowDialog(); }
 		}
 
@@ -789,11 +789,6 @@ namespace myNotebooks.subforms
 			lblEntries1.Text = lstOccurrences.Items.Count == 0 ? "Found 0 Entries" : msg;
 		}
 
-		private void treeAvailableLabels_BeforeExpand(object sender, TreeViewCancelEventArgs e)
-		{
-
-		}
-
 		private void treeAvailableLabels_AfterSelect(object sender, TreeViewEventArgs e)
 		{
 			if (treeAvailableLabels.SelectedNode.Level > 0)
@@ -807,6 +802,7 @@ namespace myNotebooks.subforms
 		{
 			// Get labels under one of the root nodes.
 			TreeNode tn = e.Node;
+			TreeNode newNode = new();
 
 			if (tn.Level == 0 && tn.Nodes[0].Text.Length == 0)
 			{
@@ -815,22 +811,15 @@ namespace myNotebooks.subforms
 
 				foreach (MNLabel label in DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, orgLevel))
 				{
-					// If tn.Nodes contains a node with label.LabelText, add label as a child of the existing node.
 					TreeNode existingNode = tn.Nodes.OfType<TreeNode>().FirstOrDefault(n => n.Text == label.LabelText);
 
-					if(existingNode == null)
+					if (existingNode == null)
 					{
-						tn.Nodes.Add(new TreeNode() { Text = label.LabelText, Tag = label.Id });
+						newNode = new() { Text = label.LabelText, Tag = label.Id };
+						//var v = CurrentEntry.AllLabels.FirstOrDefault(n => n.LabelText == label.LabelText);
+						newNode.Checked = CurrentEntry.AllLabels.FirstOrDefault(n => n.LabelText == label.LabelText) != null;
+						tn.Nodes.Add(newNode);
 					}
-
-					//if(existingNode != null)
-					//{
-					//	existingNode.Nodes.Add(new TreeNode() { Text = label.LabelText, Tag = label.Id });
-					//}
-					//else
-					//{
-						 
-					//}
 				}
 			}
 		}

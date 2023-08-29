@@ -497,7 +497,7 @@ namespace myNotebooks.subforms
 			mnuSaveEntry.Enabled = false;
 			mnuSaveEntry.Name = "mnuSaveEntry";
 			mnuSaveEntry.Size = new System.Drawing.Size(43, 20);
-			mnuSaveEntry.Text = "&Create";
+			mnuSaveEntry.Text = "&Save";
 			mnuSaveEntry.Click += this.mnuSaveEntry_Click;
 			// 
 			// mnuSaveAndExit
@@ -505,7 +505,7 @@ namespace myNotebooks.subforms
 			mnuSaveAndExit.Enabled = false;
 			mnuSaveAndExit.Name = "mnuSaveAndExit";
 			mnuSaveAndExit.Size = new System.Drawing.Size(88, 20);
-			mnuSaveAndExit.Text = "Create and &Exit";
+			mnuSaveAndExit.Text = "Save and &Exit";
 			mnuSaveAndExit.Click += this.mnuSaveAndExit_Click;
 			// 
 			// mnuFind

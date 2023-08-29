@@ -28,7 +28,7 @@
 					07/12/22 1330 No. Parts of old text can be copied via the Edit Existing Text menu.
 				 006x Don't allow save of entry with no text or title.
 					16:50 Done
-				 007x Context menu for entries? (Delete, Edit)
+				 007x Context menu for entries? (Delete_original, Edit)
 					07/11/22 1445 No. This functionality isn't important since app is destined for mobile UI.
 				 008x Disallow clicking/typing in Selected Entry text on frmMain.
 					07/10/22 1145 Done.
@@ -60,7 +60,7 @@
 				> Globally delete a label 
 				-> New entry does not save and journal re-opens w/ no entry title + text
 			Fix:
-				Apparently when the MNLabel > Delete runs the Program.PIN is changed.
+				Apparently when the MNLabel > Delete_original runs the Program.PIN is changed.
 				Added a class variable to frmLabelsManager storing the Program.PIN when launched. Reset Program.PIN to that variable value on Form_Closing(...).
 			Tested OK 11/27/22
 			
@@ -754,7 +754,7 @@ namespace myNotebooks.subforms
 				if (frm.Saved)
 				{
 					CurrentEntry = frm.Entry;
-					await CurrentNotebook.Save();
+					if(CurrentEntry.LabelsToRemove == null) await CurrentNotebook.Save();
 					await ProcessDateFilters();
 					var v = lstEntries.Items.OfType<string>().FirstOrDefault(e => e.StartsWith(CurrentEntry.Title));
 					lstEntries.SelectedIndex = lstEntries.Items.IndexOf(v);
@@ -804,7 +804,7 @@ namespace myNotebooks.subforms
 
 				if (frm.Result == frmMessage.ReturnResult.Yes)
 				{
-					CurrentNotebook.Delete();
+					CurrentNotebook.Delete_original();
 					ddlNotebooks.Text = string.Empty;
 					lstEntries.Items.Clear();
 					ShowHideMenusAndControls(SelectionState.NotebookSelectedNotLoaded);

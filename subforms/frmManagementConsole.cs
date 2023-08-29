@@ -423,10 +423,10 @@ namespace myNotebooks.subforms
 				mnuAssignUser.Visible = this.Size == FullSize && CurrentMouseListBox.Name.EndsWith("_MU");
 
 				mnuEdit.Enabled = vMouseListSelectedItemName != null & CurrentMouseListBox.Name.EndsWith("_MU");
-				mnuEdit.Text = vMouseListSelectedItemName != null ? "Edit '" + vMouseListSelectedItemName + "'" : "Delete";
+				mnuEdit.Text = vMouseListSelectedItemName != null ? "Edit '" + vMouseListSelectedItemName + "'" : "Delete_original";
 
 				mnuDelete.Enabled = vMouseListSelectedItemName != null;
-				mnuDelete.Text = vMouseListSelectedItemName != null ? "Delete '" + vMouseListSelectedItemName + "'" : "Delete";
+				mnuDelete.Text = vMouseListSelectedItemName != null ? "Delete_original '" + vMouseListSelectedItemName + "'" : "Delete_original";
 
 				mnuManageNotebooks.Visible = vGrp.Name.ToLower().Contains("group");
 				//}

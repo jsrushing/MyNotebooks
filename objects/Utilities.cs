@@ -42,6 +42,23 @@ namespace myNotebooks.objects
 			return rtrn;
 		}
 
+		//public static SQLReturn GetOperationResult(SQLReturn @return, int objectId, bool isCreate = false)
+		//{
+		//	if (isCreate)
+		//	{
+		//		if (@return.strValue.Length == 0) { objectId = @return.intValue; }
+		//	}
+		//	else
+		//	{
+		//		if (@return.strValue.Length > 0)
+		//		{
+		//			using (frmMessage frm = new(frmMessage.OperationType.Message, "An error occurred. '" + @return.strValue + "'", "Error"))
+		//			{ frm.ShowDialog(); }
+		//		}
+		//	}
+		//}
+	//}
+
 		public static string[] GetTitleAndDate(string searchString, int startPosition = 0)
 		{
 			var result = new string[2];

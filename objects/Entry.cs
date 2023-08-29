@@ -17,6 +17,8 @@ using myNotebooks.objects;
 using System.Reflection;
 using MyNotebooks.objects;
 using myNotebooks.DataAccess;
+using Org.BouncyCastle.Bcpg.Sig;
+using System.Threading.Tasks;
 
 namespace myNotebooks
 {
@@ -29,6 +31,7 @@ namespace myNotebooks
 		public DateTime		EditedOn { get; set; }
         public int			Id { get; set; }
 		public string		Labels { get; set; } = string.Empty;
+		public string		LabelsToRemove { get; set; }
 		public string		NotebookName { get; set; }
 		public int			ParentId { get; set; }
 		public string		RTF { get; set; }
@@ -37,9 +40,6 @@ namespace myNotebooks
 		public string		Title { get; set; }
 
 		public List<MNLabel> AllLabels = new();
-
-
-		//public bool			isEdited = false;
 
 		public Entry() { }
 
@@ -118,6 +118,26 @@ namespace myNotebooks
 								"property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
 						}
 					}
+				}
+			}
+		}
+
+		public async Task	Create() { GetOperationResult(DbAccess.CRUDNotebookEntry(this), true); }
+		public async Task	Update() { GetOperationResult(DbAccess.CRUDNotebookEntry(this, OperationType.Update)); }
+		public async Task	Delete() { GetOperationResult(DbAccess.CRUDNotebookEntry(this, OperationType.Delete)); }
+
+		private void		GetOperationResult(SQLReturn @return, bool isCreate = false)
+		{
+			if (isCreate)
+			{
+				if (@return.strValue.Length == 0) { this.Id = @return.intValue; }
+			}
+			else
+			{
+				if (@return.strValue.Length > 0)
+				{
+					using (frmMessage frm = new(frmMessage.OperationType.Message, "An error occurred. '" + @return.strValue + "'", "Error"))
+					{ frm.ShowDialog(); }
 				}
 			}
 		}

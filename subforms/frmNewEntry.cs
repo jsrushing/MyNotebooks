@@ -5,6 +5,7 @@ using System;
 using System.Configuration;
 using System.Drawing;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Encryption;
@@ -114,7 +115,7 @@ namespace myNotebooks.subforms
 
 		private void lblManageLabels_Click(object sender, EventArgs e)
 		{
-			if(this.Entry == null) { this.Entry = new Entry() { CreatedBy = Program.User.Id, NotebookName = this.CurrentNotebook.Name, Title = txtNewEntryTitle.Text, Text = rtbNewEntry.Text }; }
+			if (this.Entry == null) { this.Entry = new Entry() { CreatedBy = Program.User.Id, NotebookName = this.CurrentNotebook.Name, Title = txtNewEntryTitle.Text, Text = rtbNewEntry.Text }; }
 			using (frmLabelsManager frm = new frmLabelsManager(this, false, this.CurrentNotebook, this.Entry)) { frm.ShowDialog(); }
 			LabelsManager.PopulateLabelsList(clbLabels, null, LabelsManager.LabelsSortType.None, this.Entry);
 		}
@@ -210,11 +211,24 @@ namespace myNotebooks.subforms
 				{
 					this.Entry.Text = rtbNewEntry.Text.Trim();
 					this.Entry.Title = txtNewEntryTitle.Text.Trim();
-					//this.Entry.Labels = LabelsManager.CheckedLabels_Get(clbLabels);
-					this.Entry.RTF = rtbNewEntry.Rtf;
-					this.Entry.EditedOn = DateTime.Now;
-					this.ParentNotebookId = CurrentNotebook != null ? CurrentNotebook.Id : 0;
-					opType = OperationType.Update;
+					this.Entry.Labels = LabelsManager.CheckedLabels_Get(clbLabels);
+
+					// remove any un-checked labels (with this entryId) from the Labels table
+					var labelsToRemove = string.Empty;
+
+					for(var i = 0; i < clbLabels.Items.Count; i++)
+					{
+						if (!clbLabels.CheckedItems.Contains(clbLabels.Items[i])) { labelsToRemove += clbLabels.Items[i].ToString() + ","; }
+					}
+
+					if (labelsToRemove.Length > 0) { this.Entry.LabelsToRemove = labelsToRemove; opType = OperationType.Update; }
+					else
+					{
+						this.Entry.RTF = rtbNewEntry.Rtf;
+						this.Entry.EditedOn = DateTime.Now;
+						this.ParentNotebookId = CurrentNotebook != null ? CurrentNotebook.Id : 0;
+						opType = OperationType.Update;
+					}
 				}
 				else
 				{
@@ -228,18 +242,18 @@ namespace myNotebooks.subforms
 				var sqlResult = DbAccess.CRUDNotebookEntry(this.Entry, opType);
 				var msg = string.Empty;
 
-				if (sqlResult.intValue < 0) 
-				{msg = "A SQL Error occurred (error number " + (sqlResult.intValue * -1).ToString() + ")               "; }
-				else if(opType == OperationType.Update && sqlResult.intValue != this.Entry.Id)
-				{ msg = "An error occurred. The entry was not updated. " + sqlResult.strValue ;}
+				if (sqlResult.intValue < -1)
+				{ msg = "A SQL Error occurred (error number " + (sqlResult.intValue * -1).ToString() + ")               "; }
+				else if (opType == OperationType.Update && (sqlResult.intValue != -1 & sqlResult.intValue != this.Entry.Id))
+				{ msg = "An error occurred. The entry was not updated. " + sqlResult.strValue; }
 				//else { this.Entry.Id = sqlResult; }
 
-				if(msg.Length > 0)
+				if (msg.Length > 0)
 				{ using (frmMessage frm = new(frmMessage.OperationType.Message, msg, "Error!", this)) { frm.ShowDialog(); } }
 				else
 				{
 					Saved = true;
-					SetIsDirty(false);	
+					SetIsDirty(false);
 				}
 			}
 		}

@@ -177,10 +177,17 @@ namespace myNotebooks.DataAccess
 				using (SqlCommand cmd = new("sp_CRUD_NotebookEntry", conn))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@RTF",			entry.RTF);
-					cmd.Parameters.AddWithValue("@text",		entry.Text);
-					cmd.Parameters.AddWithValue("@title",		entry.Title);
-					cmd.Parameters.AddWithValue("@opType",		opType == OperationType.Delete ? 2: (int)opType);
+
+					if(entry.LabelsToRemove != null)
+					{ cmd.Parameters.AddWithValue("@labelsToRemove", entry.LabelsToRemove); }
+					else
+					{
+						cmd.Parameters.AddWithValue("@RTF",			entry.RTF);
+						cmd.Parameters.AddWithValue("@text",		entry.Text);
+						cmd.Parameters.AddWithValue("@title",		entry.Title);
+						cmd.Parameters.AddWithValue("@opType",		opType == OperationType.Delete ? 2: (int)opType);
+					}
+
 					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@createdBy"	, Program.User.Id);
 					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@parentId"		, entry.ParentId);
 					if (opType != OperationType.Create)			cmd.Parameters.AddWithValue("@entryId"		, entry.Id);
@@ -192,7 +199,7 @@ namespace myNotebooks.DataAccess
 			return rtrn;
 		}
 
-		public static SQLReturn		CRUDOrgLevel(OrgLevel orgLevel, OperationType opType)
+		public static SQLReturn		CRUDOrgLevel(OrgLevel orgLevel, OperationType opType = OperationType.Create)
 		{
 			SQLReturn rtrn = new();
 
@@ -580,7 +587,7 @@ namespace myNotebooks.DataAccess
 			return lstRtrn;
 		}
 
-		private static void	GetSqlReturn(ref SQLReturn sqlReturn, SqlCommand cmd)
+		private static void			GetSqlReturn(ref SQLReturn sqlReturn, SqlCommand cmd)
 		{
 			using (SqlDataReader rdr = cmd.ExecuteReader())
 			{
@@ -744,7 +751,7 @@ namespace myNotebooks.DataAccess
 		}
 	}
 
-	struct SQLReturn
+	public struct SQLReturn
 	{
 		public int intValue;
 		public string strValue;

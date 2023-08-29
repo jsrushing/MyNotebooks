@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using myNotebooks.DataAccess;
 using myNotebooks.subforms;
@@ -105,9 +106,9 @@ namespace myNotebooks.objects
 			if(dt.Rows.Count > 1) { AddChildUsers(dt); }
 		}
 
-		public void Create() { GetOperationResult(DbAccess.CRUDMNUser(this), true); }
-		public void Update() { GetOperationResult(DbAccess.CRUDMNUser(this, OperationType.Update)); }
-		public void Delete() { GetOperationResult(DbAccess.CRUDMNUser(this, OperationType.Delete)); }
+		public async Task Create() { GetOperationResult(DbAccess.CRUDMNUser(this), true); }
+		public async Task Update() { GetOperationResult(DbAccess.CRUDMNUser(this, OperationType.Update)); }
+		public async Task Delete() { GetOperationResult(DbAccess.CRUDMNUser(this, OperationType.Delete)); }
 
 		private void GetOperationResult(SQLReturn @return, bool isCreate = false)
 		{

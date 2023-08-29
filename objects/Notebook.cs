@@ -110,6 +110,26 @@ namespace myNotebooks
 			catch (Exception) { }
 		}
 
+		public async Task	Create() { GetOperationResult(DbAccess.CRUDNotebook(this), true); }
+		public async Task	Update() { GetOperationResult(DbAccess.CRUDNotebook(this, OperationType.Update)); }
+		public async Task	Delete() { GetOperationResult(DbAccess.CRUDNotebook(this, OperationType.Delete)); }
+
+		private void		GetOperationResult(SQLReturn @return, bool isCreate = false)
+		{
+			if (isCreate)
+			{
+				if (@return.strValue.Length == 0) { this.Id = @return.intValue; }
+			}
+			else
+			{
+				if (@return.strValue.Length > 0)
+				{
+					using (frmMessage frm = new(frmMessage.OperationType.Message, "An error occurred. '" + @return.strValue + "'", "Error"))
+					{ frm.ShowDialog(); }
+				}
+			}
+		}
+
 		public async Task	Create(bool addCreatedOn = true)
         {
 			//this.FileName += this.Settings.AllowCloud ? "" : " (local)";
@@ -121,7 +141,7 @@ namespace myNotebooks
 			//Program.SkipFileSizeComparison = false;
 		}
 
-		public async void	Delete()
+		public async void	Delete_original()
 		{
 			if (Program.AzurePassword.Length > 0 && this.Settings.AllowCloud)
 			{ await AzureFileClient.DownloadOrDeleteFile(this.FileName, Program.AzurePassword + this.Name, FileMode.Create, true);  }
@@ -394,15 +414,15 @@ namespace myNotebooks
 			}
 			else 
 			{
-				var vRtrn = DbAccess.CRUDNotebook(this, OperationType.Update);
+				//var vRtrn = DbAccess.CRUDNotebook(this, OperationType.Update);
 
-				if (vRtrn.intValue == 0 | vRtrn.intValue != this.Id)
-				{
-					using (frmMessage frm = new(frmMessage.OperationType.Message,
-					"An error occurred. The Notebook was not updated. " + vRtrn.strValue)) { frm.ShowDialog(); }
-				}
+				//if (vRtrn.intValue == 0 | vRtrn.intValue != this.Id)
+				//{
+				//	using (frmMessage frm = new(frmMessage.OperationType.Message,
+				//	"An error occurred. The Notebook was not updated. " + vRtrn.strValue)) { frm.ShowDialog(); }
+				//}
 			}
-			//File.Delete(fName);
+			//File.Delete_original(fName);
 
 			//using (Stream stream = File.Open(fName, FileMode.Create))
 			//{

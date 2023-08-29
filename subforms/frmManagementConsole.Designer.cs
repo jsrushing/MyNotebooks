@@ -317,7 +317,7 @@ namespace myNotebooks.subforms
 			// 
 			mnuDelete.Name = "mnuDelete";
 			mnuDelete.Size = new System.Drawing.Size(178, 22);
-			mnuDelete.Text = "&Delete";
+			mnuDelete.Text = "&Delete_original";
 			mnuDelete.Click += this.mnuDelete_Click;
 			// 
 			// mnuManageNotebooks

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Reflection;
+using myNotebooks.DataAccess;
 using myNotebooks.objects;
 using myNotebooks.subforms;
 
@@ -48,6 +49,24 @@ namespace MyNotebooks.objects
 				}
 			}
 		}
+		public void Create() { GetOperationResult(DbAccess.CRUDOrgLevel(this), true); }
+		public void Update() { GetOperationResult(DbAccess.CRUDOrgLevel(this, OperationType.Update)); }
+		public void Delete() { GetOperationResult(DbAccess.CRUDOrgLevel(this, OperationType.Delete)); }
 
+		private void GetOperationResult(SQLReturn @return, bool isCreate = false)
+		{
+			if (isCreate)
+			{
+				if (@return.strValue.Length == 0) { this.Id = @return.intValue; }
+			}
+			else
+			{
+				if (@return.strValue.Length > 0)
+				{
+					using (frmMessage frm = new(frmMessage.OperationType.Message, "An error occurred. '" + @return.strValue + "'", "Error"))
+					{ frm.ShowDialog(); }
+				}
+			}
+		}
 	}
 }

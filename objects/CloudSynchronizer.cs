@@ -105,7 +105,7 @@ namespace myNotebooks.objects
 //					{ frm.ShowDialog(); }
 //				}
 
-//				File.Delete(tempFolder + sBookName);
+//				File.Delete_original(tempFolder + sBookName);
 //			}
 
 //			foreach (var sLocalFile in Program.AllNotebookNames.Except(Program.AzureNotebookNames))   // any journal found locally but not on Azure
@@ -114,7 +114,7 @@ namespace myNotebooks.objects
 
 //				if (j2.Settings.AllowCloud)
 //				{
-//					if (j2.Settings.IfLocalOnly_Delete) { j2.Delete(); }
+//					if (j2.Settings.IfLocalOnly_Delete) { j2.Delete_original(); }
 //					else if (j2.Settings.IfLocalOnly_Upload) { await AzureFileClient.UploadFile(j2.FileName); }
 //					else if (j2.Settings.IfLocalOnly_DisallowCloud) { j2.Settings.AllowCloud = false; await j2.Create(); }
 //				}
@@ -195,7 +195,7 @@ namespace myNotebooks.objects
 //										break;
 //								}
 
-//								File.Delete(tempFolder + cloudNotebook.Name);
+//								File.Delete_original(tempFolder + cloudNotebook.Name);
 //							}
 //							else // The cloud journal is a 0-entry placeholder which sets the local journal's AllowCloud = false.
 //							{
@@ -224,7 +224,7 @@ namespace myNotebooks.objects
 //							else
 //							{
 //								if (book.Settings.IfLocalOnly_Upload)			{ await AzureFileClient.UploadFile(book.FileName); }
-//								if (book.Settings.IfLocalOnly_Delete)			{ File.Delete(book.FileName); }
+//								if (book.Settings.IfLocalOnly_Delete)			{ File.Delete_original(book.FileName); }
 //								if (book.Settings.IfLocalOnly_DisallowCloud)	{ book.Settings.AllowCloud = false; }
 //							}
 //						}
@@ -239,7 +239,7 @@ namespace myNotebooks.objects
 //					if (book.Settings.AllowCloud) { await AzureFileClient.UploadFile(notebooksFolder + book.Name); }
 //				}
 
-//				File.Delete(tempFolder + book.Name);
+//				File.Delete_original(tempFolder + book.Name);
 //			}
 //		}
 
@@ -334,7 +334,7 @@ namespace myNotebooks.objects
 //			}
 //			catch (Exception ex) { Err = ex.Message; }
 
-//			File.Delete(tempLabelsFile);			
+//			File.Delete_original(tempLabelsFile);			
 
 //			//try
 //			//{
@@ -373,7 +373,7 @@ namespace myNotebooks.objects
 //			//}
 //			//catch (Exception ex) { Err = ex.Message; }
 
-//			//File.Delete(tempSettingsFile);
+//			//File.Delete_original(tempSettingsFile);
 //		}
 //	}
 //}

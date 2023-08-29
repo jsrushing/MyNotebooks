@@ -81,11 +81,11 @@ namespace MyNotebooks.objects
 			//Utilities.PopulatePropertiesFromDataRow(typeof(MNLabel), dataTable, rowIndex);
 		}
 
-		public void Create() { GetOperationResult(DbAccess.CRUDLabel(this), true); }
-		public void Update() { GetOperationResult(DbAccess.CRUDLabel(this, OperationType.Update)); }
-		public void Delete() { GetOperationResult(DbAccess.CRUDLabel(this, OperationType.Delete)); }
+		public SQLReturn Create() { return GetOperationResult(DbAccess.CRUDLabel(this), true); }
+		public SQLReturn Update() { return GetOperationResult(DbAccess.CRUDLabel(this, OperationType.Update)); }
+		public SQLReturn Delete() { return GetOperationResult(DbAccess.CRUDLabel(this, OperationType.Delete)); }
 
-		private void GetOperationResult(SQLReturn @return, bool isCreate = false)
+		private SQLReturn GetOperationResult(SQLReturn @return, bool isCreate = false)
 		{
 			if(isCreate)
 			{
@@ -99,6 +99,7 @@ namespace MyNotebooks.objects
 					{ frm.ShowDialog(); }
 				}
 			}
+			return @return;
 		}
 	}
 }
