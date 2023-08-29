@@ -171,12 +171,12 @@ namespace myNotebooks.subforms
 
 		public enum OrgLevelTypes : uint
 		{
-			NotebookEntry = 1,
-			Notebook = 2,
-			Group = 3,
-			Department = 4,
-			Account = 5,
-			Company = 6
+			NotebookEntry	= 1,
+			Notebook		= 2,
+			Group			= 3,
+			Department		= 4,
+			Account			= 5,
+			Company			= 6
 		}
 
 		public frmMain() { InitializeComponent(); }
@@ -424,7 +424,7 @@ namespace myNotebooks.subforms
 							{
 								PopulateShowFromDates();
 								SuppressDateClick = true;
-								await ProcessDateFilters();
+								await ProcessDateFiltersAndPopulateEntries();
 								SuppressDateClick = false;
 								lstEntries.Height = this.Height - lstEntries.Top - 50;
 								mnuLabels.Enabled = false;
@@ -458,20 +458,20 @@ namespace myNotebooks.subforms
 
 		private async void btnResetLabelFilter_Click(object sender, EventArgs e)
 		{
-			await ProcessDateFilters();
+			await ProcessDateFiltersAndPopulateEntries();
 			ShowHideMenusAndControls(SelectionState.NotebookLoaded);
 		}
 
 		private async void cbxDates_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (!SuppressDateClick) { await ProcessDateFilters(); }
+			if (!SuppressDateClick) { await ProcessDateFiltersAndPopulateEntries(); }
 		}
 
 		private async void cbxSortEntriesBy_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (CurrentNotebook != null)
 			{
-				await ProcessDateFilters();
+				await ProcessDateFiltersAndPopulateEntries();
 				lstEntries.Focus();
 			}
 		}
@@ -733,7 +733,7 @@ namespace myNotebooks.subforms
 				{
 					CurrentNotebook.Entries.Remove(CurrentEntry);
 					await CurrentNotebook.Save();
-					await ProcessDateFilters();
+					await ProcessDateFiltersAndPopulateEntries();
 					ShowHideMenusAndControls(SelectionState.NotebookLoaded);
 				}
 			}
@@ -751,11 +751,11 @@ namespace myNotebooks.subforms
 				frm.Text = "Edit '" + CurrentEntry.Title + "' in '" + CurrentNotebook.Name + "'";
 				frm.ShowDialog(this);
 
-				if (frm.Saved)
+				if (frm.Saved && frm.Entry != null)
 				{
 					CurrentEntry = frm.Entry;
 					if(CurrentEntry.LabelsToRemove == null) await CurrentNotebook.Save();
-					await ProcessDateFilters();
+					await ProcessDateFiltersAndPopulateEntries();
 					var v = lstEntries.Items.OfType<string>().FirstOrDefault(e => e.StartsWith(CurrentEntry.Title));
 					lstEntries.SelectedIndex = lstEntries.Items.IndexOf(v);
 				}
@@ -764,17 +764,17 @@ namespace myNotebooks.subforms
 			this.Cursor = Cursors.Default;
 		}
 
-		private void mnuLabels_Click(object sender, EventArgs e)
+		private async void mnuLabels_Click(object sender, EventArgs e)
 		{
 			using (frmLabelsManager frm = new frmLabelsManager(this, false, CurrentNotebook, CurrentEntry))
 			{
 				frm.ShowDialog();
+
 				if (frm.ActionTaken)
 				{
-					var indx = ddlNotebooks.SelectedIndex;
-					LoadNotebooks();
-					ddlNotebooks.SelectedIndex = -1;
-					ddlNotebooks.SelectedIndex = indx;
+					await ProcessDateFiltersAndPopulateEntries();
+					var v = lstEntries.Items.OfType<string>().FirstOrDefault(e => e.StartsWith(CurrentEntry.Title));
+					lstEntries.SelectedIndex = lstEntries.Items.IndexOf(v);
 				}
 			}
 		}
@@ -886,7 +886,7 @@ namespace myNotebooks.subforms
 
 		private void mnuNotebook_Search_Click(object sender, EventArgs e)
 		{
-			using (frmSearch frm = new frmSearch(this))
+			using (frmSearch frm = new(this))
 			{
 				try
 				{
@@ -966,7 +966,7 @@ namespace myNotebooks.subforms
 			SuppressDateClick = false;
 		}
 
-		private async Task ProcessDateFilters()
+		private async Task ProcessDateFiltersAndPopulateEntries()
 		{
 			if (cbxDatesFrom.Text.Length > 0 && cbxDatesTo.Text.Length > 0)
 			{

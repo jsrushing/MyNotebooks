@@ -430,7 +430,7 @@ namespace myNotebooks.subforms
 			clbLabels.Name = "clbLabels";
 			clbLabels.Size = new System.Drawing.Size(550, 126);
 			clbLabels.TabIndex = 27;
-			clbLabels.SelectedIndexChanged += this.lstLabels_SelectedIndexChanged;
+			clbLabels.SelectedIndexChanged += this.clbLabels_SelectedIndexChanged;
 			// 
 			// label14
 			// 

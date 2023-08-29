@@ -358,8 +358,6 @@ namespace myNotebooks.subforms
 
 		private void mnuAddCheckedLabelsToEntry_Click(object sender, EventArgs e)
 		{
-			// get the checked labels
-
 			var checkedNodes = GetCheckedNodes(treeAvailableLabels.Nodes) as List<MNLabel>;
 			var v = CurrentEntry.AllLabels;
 
@@ -371,6 +369,8 @@ namespace myNotebooks.subforms
 
 			CurrentEntry.AllLabels.Clear();
 			CurrentEntry.AllLabels = DbAccess.GetLabelsForEntry(CurrentEntry.Id);
+			ActionTaken = true;
+			this.Close();
 		}
 
 		private async void DeleteOrRename(object sender, EventArgs e)
@@ -518,10 +518,7 @@ namespace myNotebooks.subforms
 			}
 		}
 
-		private void mnuExit_Click(object sender, EventArgs e)
-		{
-			this.Hide();
-		}
+		private void mnuExit_Click(object sender, EventArgs e) { this.Hide(); }
 
 		private async void mnuFindOrphans_Click(object sender, EventArgs e) { await ManageOrphans(); }
 

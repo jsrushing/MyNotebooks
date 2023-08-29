@@ -444,7 +444,7 @@ namespace myNotebooks.DataAccess
 					// get the entries
 					dt = new();
 					cmd.Parameters.Clear();
-					cmd.CommandText = "sp_GetNotebookEntries_ShortText";
+					cmd.CommandText = "sp_GetNotebookEntries";
 					cmd.Parameters.AddWithValue("@notebookId", notebookId);
 					sda.SelectCommand = cmd;
 					sda.Fill(dt);
