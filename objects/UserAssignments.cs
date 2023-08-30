@@ -5,9 +5,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using myNotebooks.subforms;
+using MyNotebooks.subforms;
 
-namespace myNotebooks.objects
+namespace MyNotebooks.objects
 {
 	public class UserAssignments
 	{

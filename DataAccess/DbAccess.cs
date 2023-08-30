@@ -7,19 +7,17 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using Encryption;
-using myNotebooks.objects;
-using myNotebooks.subforms;
 using MyNotebooks.objects;
-using static myNotebooks.subforms.frmMain;
+using MyNotebooks.subforms;
 
-namespace myNotebooks.DataAccess
+namespace MyNotebooks.DataAccess
 {
 	public enum OperationType
 	{ Create = 1, Update = 2, Delete = 3 }
 
 	internal class DbAccess
 	{
-//		private static string connString = "Server=mynotebooksserver.database.windows.net;Database=myNotebooks;user id=mydb_admin;password=cloud_Bringer1!";
+//		private static string connString = "Server=mynotebooksserver.database.windows.net;Database=MyNotebooks;user id=mydb_admin;password=cloud_Bringer1!";
 		private static string connString = "Server=FORRESTSTNW;Database=MyNotebooks;Trusted_Connection = true";
 
 		public static SQLResult		CRUDLabel(MNLabel label, OperationType opType = OperationType.Create)
@@ -532,7 +530,25 @@ namespace myNotebooks.DataAccess
 
 			return lstReturn;
 		}
+		public static List<ListItem> GetOrgLevels()
+		{
+			List<ListItem> list = new();
 
+			using (SqlConnection conn = new(connString))
+			{
+				conn.Open();
+				using (SqlCommand cmd = new("sp_GetOrgLevels", conn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					using (SqlDataReader reader = cmd.ExecuteReader())
+					{
+						while (reader.Read())
+						{ list.Add(new() { Id = Convert.ToInt32(reader["Id"]), Name = reader["Name"].ToString() }); }
+					}
+				}
+				return list;
+			}
+		}
 		public static List<ListItem> GetOrgLevelChildren(int orgLevelId, int parentId) 
 		{
 			List<ListItem> lstRtrn = new List<ListItem>();

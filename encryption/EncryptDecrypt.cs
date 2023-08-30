@@ -3,7 +3,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Configuration;
-using myNotebooks;
+using MyNotebooks;
 
 // https://www.delftstack.com/howto/csharp/encrypt-and-decrypt-a-string-in-csharp/
 

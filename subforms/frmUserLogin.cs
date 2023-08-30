@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Data;
 using System.Windows.Forms;
-using myNotebooks.DataAccess;
+using MyNotebooks.DataAccess;
 
-namespace myNotebooks.subforms
+namespace MyNotebooks.subforms
 {
 	public partial class frmUserLogin : Form
 	{

@@ -5,10 +5,10 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using myNotebooks.subforms;
+using MyNotebooks.subforms;
 using MyNotebooks.objects;
 
-namespace myNotebooks.objects
+namespace MyNotebooks.objects
 {
 	public class Department : IOrgLevel
 	{

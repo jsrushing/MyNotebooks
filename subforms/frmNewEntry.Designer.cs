@@ -1,5 +1,5 @@
 ﻿
-namespace myNotebooks.subforms
+namespace MyNotebooks.subforms
 {
 	partial class frmNewEntry
 	{

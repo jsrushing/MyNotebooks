@@ -14,11 +14,11 @@ using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Encryption;
-using myNotebooks.DataAccess;
-using myNotebooks.objects;
-using myNotebooks.subforms;
+using MyNotebooks.DataAccess;
+using MyNotebooks.objects;
+using MyNotebooks.subforms;
 
-namespace myNotebooks
+namespace MyNotebooks
 {
 	[Serializable]
 	public class Notebook

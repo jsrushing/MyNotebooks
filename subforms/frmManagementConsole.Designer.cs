@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography.Xml;
 using System.Windows.Forms;
 
-namespace myNotebooks.subforms
+namespace MyNotebooks.subforms
 {
 	partial class frmManagementConsole
 	{

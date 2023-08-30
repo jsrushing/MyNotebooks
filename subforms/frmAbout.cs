@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
-using myNotebooks.objects;
+using MyNotebooks.objects;
 
-namespace myNotebooks.subforms
+namespace MyNotebooks.subforms
 {
 	public partial class frmAbout : Form
 	{

@@ -9,10 +9,10 @@ using System.Reflection.Emit;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Encryption;
-using myNotebooks.DataAccess;
-using myNotebooks.objects;
+using MyNotebooks.DataAccess;
+using MyNotebooks.objects;
 
-namespace myNotebooks.subforms
+namespace MyNotebooks.subforms
 {
 	public partial class frmNewEntry : Form
 	{

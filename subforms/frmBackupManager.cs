@@ -5,9 +5,9 @@ using System;
 using System.Configuration;
 using System.IO;
 using System.Windows.Forms;
-using myNotebooks.objects;
+using MyNotebooks.objects;
 
-namespace myNotebooks.subforms
+namespace MyNotebooks.subforms
 {
 	public partial class frmBackupManager : Form
 	{

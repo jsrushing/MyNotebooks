@@ -8,7 +8,7 @@ using System.Data;
 using System.Reflection;
 using System.Text;
 
-namespace myNotebooks.objects
+namespace MyNotebooks.objects
 {
 	[Serializable]
 	public class NotebookSettings

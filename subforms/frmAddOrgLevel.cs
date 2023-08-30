@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
-using myNotebooks.DataAccess;
+using MyNotebooks.DataAccess;
 using MyNotebooks.objects;
-using myNotebooks.objects;
 
-namespace myNotebooks.subforms
+namespace MyNotebooks.subforms
 {
 	public partial class frmAddOrgLevel : Form
 	{

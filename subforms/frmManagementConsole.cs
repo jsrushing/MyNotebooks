@@ -11,13 +11,10 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using Encryption;
-using Microsoft.VisualBasic.ApplicationServices;
-using myNotebooks.DataAccess;
-using myNotebooks.objects;
+using MyNotebooks.DataAccess;
 using MyNotebooks.objects;
-using Org.BouncyCastle.Asn1;
 
-namespace myNotebooks.subforms
+namespace MyNotebooks.subforms
 {
 	public partial class frmManagementConsole : Form
 	{

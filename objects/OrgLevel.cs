@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Data;
 using System.Reflection;
-using myNotebooks.DataAccess;
-using myNotebooks.objects;
-using myNotebooks.subforms;
+using MyNotebooks.DataAccess;
+using MyNotebooks.objects;
+using MyNotebooks.subforms;
 
 namespace MyNotebooks.objects
 {

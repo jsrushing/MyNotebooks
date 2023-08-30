@@ -10,12 +10,12 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using myNotebooks.DataAccess;
-using myNotebooks.subforms;
+using MyNotebooks.DataAccess;
+using MyNotebooks.subforms;
 using MyNotebooks.objects;
 using Newtonsoft.Json.Linq;
 
-namespace myNotebooks.objects
+namespace MyNotebooks.objects
 {
 	public class MNUser
 	{

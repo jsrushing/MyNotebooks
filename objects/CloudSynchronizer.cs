@@ -11,9 +11,9 @@
 //using System.Threading.Tasks;
 //using Encryption;
 //using myJournal.subforms;
-//using myNotebooks.subforms;
+//using MyNotebooks.subforms;
 
-namespace myNotebooks.objects
+namespace MyNotebooks.objects
 {
 	internal class CloudSynchronizer
 	{

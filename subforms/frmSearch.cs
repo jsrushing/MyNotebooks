@@ -8,25 +8,55 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Encryption;
-using myNotebooks.objects;
+using MyNotebooks.DataAccess;
+using MyNotebooks.objects;
+using MyNotebooks.subforms;
 
-namespace myNotebooks.subforms
+namespace MyNotebooks.subforms
 {
 	public partial class frmSearch : Form
 	{
-		private List<int>	ThreeSelections = new List<int>();
-		private bool		IgnoreCheckChange = false;
+		private List<int> ThreeSelections = new List<int>();
+		private bool IgnoreCheckChange = false;
 		private List<Entry> FoundEntries = new List<Entry>();
-		private string		LabelEntriesFoundText = "{0} entries found";
+		private const string LabelEntriesFoundText = "{0} entries found";
+		private int OrgLevelToSearch;
 		private Dictionary<string, int> NotebookBoundariesDict = new Dictionary<string, int>();
-		public string		NotebookName { get; private set; }
+		public string NotebookName { get; private set; }
+
+
 
 		public frmSearch(Form parent)
 		{
 			InitializeComponent();
 
-			if (Program.DictCheckedNotebooks.Count == 0)
-			{ using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(parent)) { frm.ShowDialog(); } }
+			using (frmSearch_SelectOrgLevel frm = new())
+			{
+				frm.ShowDialog(parent);
+				OrgLevelToSearch = frm.SelectedOrgLevelId;
+			}
+
+			// select items for dropdown based on Org Level
+			//ddlOrgLevels.Items.Add(new CheckBox() { Text = "me", Tag = 3 });
+
+			//ddlOrgLevels.DisplayMember = "Text";
+
+			CheckedComboBox ccb = new();
+			ccb.Location = ddlOrgLevels.Location;
+			ccb.Size = ddlOrgLevels.Size;
+			ddlOrgLevels.Visible = false;
+			//ccb.Visible = true;
+			grpFindEntry.Controls.Add(ccb);
+			ccb.Items.Add(new { Id = 1, Name = "me" });
+			ccb.Items.Add(new ListItem() { Id = 2, Name = "you" });
+
+			//ccb.DisplayMember = "Item";
+			//ccb.ValueMember = "State";
+
+			//
+
+			//if (Program.DictCheckedNotebooks.Count == 0)
+			//{ using (frmSelectNotebooksToSearch frm = new(parent)) { frm.ShowDialog(); } }
 
 			SetNotebookSelectLabelAndButton();
 			LabelsManager.PopulateLabelsList(lstLabelsForSearch);
@@ -43,8 +73,8 @@ namespace myNotebooks.subforms
 			using (frmNewNotebook frm = new frmNewNotebook(this))
 			{
 				frm.ShowDialog();
-				  
-				if(frm.LocalNotebook.Name.Length > 0)
+
+				if (frm.LocalNotebook.Name.Length > 0)
 				{
 					Notebook nb = frm.LocalNotebook;
 					FoundEntries.ForEach(e => e.NotebookName = frm.LocalNotebook.Name);
@@ -94,10 +124,10 @@ namespace myNotebooks.subforms
 				nbFound = new Notebook(kvp.Key.Replace(" (****)", ""), "").Open().Search(so);
 				await Utilities.PopulateEntries(lstFoundEntries, nbFound, "", "", "", false, 0, true);
 
-				if(nbFound.Count > 0 )
+				if (nbFound.Count > 0)
 				{
 					lastIndex += nbFound.Count * 4;
-					if(!NotebookBoundariesDict.Keys.Contains(kvp.Key)) NotebookBoundariesDict.Add(kvp.Key, lastIndex);
+					if (!NotebookBoundariesDict.Keys.Contains(kvp.Key)) NotebookBoundariesDict.Add(kvp.Key, lastIndex);
 					FoundEntries.AddRange(nbFound);
 				}
 
@@ -107,7 +137,7 @@ namespace myNotebooks.subforms
 			if (lstFoundEntries.Items.Count == 0) { lstFoundEntries.Items.Add("no matches found"); }
 			btnExportEntries.Visible = lstFoundEntries.Items.Count > 1;
 			lblNumEntriesFound.Visible = btnExportEntries.Visible;
-			lblNumEntriesFound.Text = string.Format(this.LabelEntriesFoundText, lstFoundEntries.Items.Count / 4);
+			//lblNumEntriesFound.Text = string.Format(this.LabelEntriesFoundText, lstFoundEntries.Items.Count / 4);
 			lblSeparator.Visible = true;
 			this.Cursor = Cursors.Default;
 		}
@@ -150,7 +180,7 @@ namespace myNotebooks.subforms
 			ListBox lb = (ListBox)sender;
 			RichTextBox rtb = rtbSelectedEntry_Found;
 
-			if(lb.SelectedIndex > -1)
+			if (lb.SelectedIndex > -1)
 			{
 				lb.SelectedIndexChanged -= new System.EventHandler(this.lstFoundEntries_SelectedIndexChanged);
 				Notebook nb = GetEntryNotebook();
@@ -252,7 +282,7 @@ namespace myNotebooks.subforms
 		private void SetNotebookSelectLabelAndButton()
 		{
 			lblSearchingIn.Text = "Searching in " + Program.DictCheckedNotebooks.Count + " of " + Program.AllNotebookNames.Count + " notebooks";
-				//(Program.DictCheckedNotebooks.Count == Program.AllNotebookNames.Count ? "all " : Program.DictCheckedNotebooks.Count.ToString() + " selected ") + "notebook" + (Program.DictCheckedNotebooks.Count == 1 ? "" : "s");
+			//(Program.DictCheckedNotebooks.Count == Program.AllNotebookNames.Count ? "all " : Program.DictCheckedNotebooks.Count.ToString() + " selected ") + "notebook" + (Program.DictCheckedNotebooks.Count == 1 ? "" : "s");
 
 			btnSelectNotebooks.Left = lblSearchingIn.Left + lblSearchingIn.Width + 5;
 			btnExportEntries.Left = btnSelectNotebooks.Left + btnSelectNotebooks.Width + 5;

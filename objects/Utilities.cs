@@ -12,12 +12,12 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using Encryption;
-using myNotebooks.DataAccess;
-using myNotebooks.subforms;
+using MyNotebooks.DataAccess;
+using MyNotebooks.subforms;
 using Newtonsoft.Json.Linq;
 using static Azure.Core.HttpHeader;
 
-namespace myNotebooks.objects
+namespace MyNotebooks.objects
 {
 	public static class Utilities
 	{

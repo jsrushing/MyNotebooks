@@ -1,10 +1,10 @@
 using System;
 using System.Windows.Forms;
-using myNotebooks.subforms;
+using MyNotebooks.subforms;
 using System.Collections.Generic;
-using myNotebooks.objects;
+using MyNotebooks.objects;
 
-namespace myNotebooks
+namespace MyNotebooks
 {
 	static class Program
     {

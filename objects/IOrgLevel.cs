@@ -4,7 +4,7 @@
  * - jsr
  */
 using System;
-using myNotebooks.subforms;
+using MyNotebooks.subforms;
 
 namespace MyNotebooks.objects
 {

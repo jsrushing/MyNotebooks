@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 
-namespace myNotebooks.objects
+namespace MyNotebooks.objects
 {
 	public class SearchObject
 	{

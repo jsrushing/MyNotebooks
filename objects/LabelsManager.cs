@@ -8,10 +8,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using static myNotebooks.objects.Utilities;
+using static MyNotebooks.objects.Utilities;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
-using myNotebooks.subforms;
+using MyNotebooks.subforms;
 using System.Xml;
 using Org.BouncyCastle.Crypto.Agreement;
 using System.Reflection.Emit;
@@ -21,7 +21,7 @@ using Encryption;
 using MyNotebooks.objects;
 using System.Transactions;
 
-namespace myNotebooks.objects
+namespace MyNotebooks.objects
 {
 	public static class LabelsManager
 	{

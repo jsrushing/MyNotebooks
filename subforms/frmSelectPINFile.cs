@@ -6,8 +6,8 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
-using myNotebooks.objects;
-using myNotebooks;
+using MyNotebooks.objects;
+using MyNotebooks;
 using System.Linq;
 using Org.BouncyCastle.Asn1.X509;
 

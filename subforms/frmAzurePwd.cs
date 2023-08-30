@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using Encryption;
-using myNotebooks.objects;
+using MyNotebooks.objects;
 
-namespace myNotebooks.subforms
+namespace MyNotebooks.subforms
 {
 	public partial class frmAzurePwd : Form
 	{

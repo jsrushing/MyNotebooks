@@ -10,17 +10,16 @@ using Encryption;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
-using myNotebooks.subforms;
+using MyNotebooks.subforms;
 using System.Windows.Forms;
 using System.Runtime.CompilerServices;
-using myNotebooks.objects;
-using System.Reflection;
 using MyNotebooks.objects;
-using myNotebooks.DataAccess;
+using System.Reflection;
+using MyNotebooks.DataAccess;
 using Org.BouncyCastle.Bcpg.Sig;
 using System.Threading.Tasks;
 
-namespace myNotebooks
+namespace MyNotebooks
 {
 	[Serializable]
     public class Entry

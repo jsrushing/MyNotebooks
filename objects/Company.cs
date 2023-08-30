@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Data;
 using System.Reflection;
-using myNotebooks.subforms;
+using MyNotebooks.subforms;
 using MyNotebooks.objects;
 
-namespace myNotebooks.objects
+namespace MyNotebooks.objects
 {
 	public class Company : IOrgLevel
 	{

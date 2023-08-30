@@ -144,11 +144,10 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using myNotebooks.objects;
 using MyNotebooks.objects;
-using myNotebooks.DataAccess;
+using MyNotebooks.DataAccess;
 
-namespace myNotebooks.subforms
+namespace MyNotebooks.subforms
 {
 	public partial class frmMain : Form
 	{
@@ -171,7 +170,7 @@ namespace myNotebooks.subforms
 
 		public enum OrgLevelTypes : uint
 		{
-			NotebookEntry	= 1,
+			Entry			= 1,
 			Notebook		= 2,
 			Group			= 3,
 			Department		= 4,

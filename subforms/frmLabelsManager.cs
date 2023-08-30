@@ -12,11 +12,10 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using myNotebooks.DataAccess;
-using myNotebooks.objects;
+using MyNotebooks.DataAccess;
 using MyNotebooks.objects;
 
-namespace myNotebooks.subforms
+namespace MyNotebooks.subforms
 {
 	public partial class frmLabelsManager : Form
 	{

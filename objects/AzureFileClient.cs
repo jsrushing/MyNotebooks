@@ -15,7 +15,7 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage.File;
 
-namespace myNotebooks.objects
+namespace MyNotebooks.objects
 {
 	internal static class AzureFileClient
 	{

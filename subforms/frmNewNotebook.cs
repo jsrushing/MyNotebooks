@@ -3,10 +3,10 @@
  */
 using System;
 using System.Windows.Forms;
-using myNotebooks.DataAccess;
-using myNotebooks.objects;
+using MyNotebooks.DataAccess;
+using MyNotebooks.objects;
 
-namespace myNotebooks.subforms
+namespace MyNotebooks.subforms
 {
 	public partial class frmNewNotebook : Form
 	{

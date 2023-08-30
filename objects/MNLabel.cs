@@ -7,10 +7,10 @@ using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using myNotebooks;
-using myNotebooks.DataAccess;
-using myNotebooks.objects;
-using myNotebooks.subforms;
+using MyNotebooks;
+using MyNotebooks.DataAccess;
+using MyNotebooks.objects;
+using MyNotebooks.subforms;
 using Newtonsoft.Json.Linq;
 
 namespace MyNotebooks.objects

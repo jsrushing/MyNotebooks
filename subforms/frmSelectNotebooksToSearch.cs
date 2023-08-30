@@ -14,11 +14,11 @@ using System.Windows.Forms;
 using Encryption;
 using Microsoft.Extensions.Primitives;
 using myJournal.subforms;
-using myNotebooks.objects;
+using MyNotebooks.objects;
 using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.Crypto.Prng.Drbg;
 
-namespace myNotebooks.subforms
+namespace MyNotebooks.subforms
 {
 	public partial class frmSelectNotebooksToSearch : Form
 	{
