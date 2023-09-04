@@ -475,6 +475,14 @@ namespace MyNotebooks.objects
 			}
 		}
 
+		public void ToggleAll(bool setChecked) 
+		{
+			for ( int i = 0; i < Items.Count; i++ )
+			{
+				SetItemChecked(i, setChecked);
+			}
+		}
+
 	} // end public class CheckedComboBox
 
 }

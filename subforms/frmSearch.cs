@@ -26,6 +26,7 @@ namespace MyNotebooks.subforms
 		private readonly new Form Parent;
 		private Dictionary<string, int> NotebookBoundariesDict = new Dictionary<string, int>();
 		private string LblSearchingInText = "Searching in {0} {1}s";
+		//private CheckedComboBox ccb = new();
 
 		public frmSearch(Form parent)
 		{
@@ -37,14 +38,7 @@ namespace MyNotebooks.subforms
 
 			//ddlOrgLevels.DisplayMember = "Text";
 
-			//CheckedComboBox ccb = new();
-			//ccb.Location = ddlOrgLevels.Location;
-			//ccb.Size = ddlOrgLevels.Size;
-			//ddlOrgLevels.Visible = false;
-			////ccb.Visible = true;
-			//grpFindEntry.Controls.Add(ccb);
-			//ccb.Items.Add(new { Id = 1, Name = "me" });
-			//ccb.Items.Add(new ListItem() { Id = 2, Name = "you" });
+
 
 			//ccb.DisplayMember = "Item";
 			//ccb.ValueMember = "State";
@@ -74,9 +68,13 @@ namespace MyNotebooks.subforms
 				}
 			}
 
-			foreach (OrgLevel orgLevel in this.OrgLevels) { ddlSelectedOrgLevels.Items.Add(new ListItem() { Name = orgLevel.Name, Id = Convert.ToInt32(orgLevel.Id) }); }
+
+			foreach (OrgLevel orgLevel in this.OrgLevels) { ccb.Items.Add(new { orgLevel.Id, orgLevel.Name })/*; ccb.SetItemChecked(ccb.Items.Count - 1, true)*/; }
+			ccb.ToggleAll(true);
+
+			//{ ddlSelectedOrgLevels.Items.Add(new ListItem() { Name = orgLevel.Name, Id = Convert.ToInt32(orgLevel.Id) }); }
+
 			lblSearchingIn.Text = string.Format(LblSearchingInText, this.OrgLevels.Count.ToString(), this.OrgLevels[0].OrgLevelType.ToString());
-			ddlSelectedOrgLevels.SelectedIndex = ddlSelectedOrgLevels.Items.Count > 0 ? 0 : -1;
 		}
 
 		private async void btnSearch_Click(object sender, EventArgs e) { await DoSearch(); }
@@ -314,6 +312,36 @@ namespace MyNotebooks.subforms
 				}
 			}
 
+		}
+
+		private void lblSelectAllOrNone_Click(object sender, EventArgs e)
+		{
+			bool b = lblSelectAllOrNone.Text == "select all";
+			ccb.ToggleAll(b);
+			lblSelectAllOrNone.Text = b ? "unselect all" : "select all";
+			ccb.DroppedDown = true;
+		}
+
+		private void ccb_SelectedIndexChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private void ccb_SelectedValueChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private void ccb_MouseClick(object sender, MouseEventArgs e)
+		{
+			//if (ccb.SelectedIndex > 0)
+			//{ int i = 1; }
+			lblSearchingIn.Text = string.Format(LblSearchingInText, ccb.CheckedItems.Count, OrgLevels[0].OrgLevelType.ToString());
+		}
+
+		private void ccb_Click(object sender, EventArgs e)
+		{
+			lblSearchingIn.Text = string.Format(LblSearchingInText, OrgLevels[0].OrgLevelType.ToString(), ccb.CheckedItems.Count);
 		}
 	}
 
