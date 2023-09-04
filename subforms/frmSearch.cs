@@ -21,49 +21,62 @@ namespace MyNotebooks.subforms
 		private List<Entry> FoundEntries = new List<Entry>();
 		private const string LabelEntriesFoundText = "{0} entries found";
 		private int OrgLevelToSearch;
-		private Dictionary<string, int> NotebookBoundariesDict = new Dictionary<string, int>();
 		public string NotebookName { get; private set; }
-
-
+		private List<OrgLevel> OrgLevels = new();
+		private readonly new Form Parent;
+		private Dictionary<string, int> NotebookBoundariesDict = new Dictionary<string, int>();
+		private string LblSearchingInText = "Searching in {0} {1}s";
 
 		public frmSearch(Form parent)
 		{
+			this.Parent = parent;
 			InitializeComponent();
-
-			using (frmSearch_SelectOrgLevel frm = new())
-			{
-				frm.ShowDialog(parent);
-				OrgLevelToSearch = frm.SelectedOrgLevelId;
-			}
 
 			// select items for dropdown based on Org Level
 			//ddlOrgLevels.Items.Add(new CheckBox() { Text = "me", Tag = 3 });
 
 			//ddlOrgLevels.DisplayMember = "Text";
 
-			CheckedComboBox ccb = new();
-			ccb.Location = ddlOrgLevels.Location;
-			ccb.Size = ddlOrgLevels.Size;
-			ddlOrgLevels.Visible = false;
-			//ccb.Visible = true;
-			grpFindEntry.Controls.Add(ccb);
-			ccb.Items.Add(new { Id = 1, Name = "me" });
-			ccb.Items.Add(new ListItem() { Id = 2, Name = "you" });
+			//CheckedComboBox ccb = new();
+			//ccb.Location = ddlOrgLevels.Location;
+			//ccb.Size = ddlOrgLevels.Size;
+			//ddlOrgLevels.Visible = false;
+			////ccb.Visible = true;
+			//grpFindEntry.Controls.Add(ccb);
+			//ccb.Items.Add(new { Id = 1, Name = "me" });
+			//ccb.Items.Add(new ListItem() { Id = 2, Name = "you" });
 
 			//ccb.DisplayMember = "Item";
 			//ccb.ValueMember = "State";
-
 			//
 
 			//if (Program.DictCheckedNotebooks.Count == 0)
-			//{ using (frmSelectNotebooksToSearch frm = new(parent)) { frm.ShowDialog(); } }
+			//{ using (frmSelectNotebooksToSearch frm = new(Parent)) { frm.ShowDialog(); } }
 
-			SetNotebookSelectLabelAndButton();
+			//SetNotebookSelectLabelAndButton();
 			LabelsManager.PopulateLabelsList(lstLabelsForSearch);
 			Utilities.SetStartPosition(this, parent);
 			dtFindDate.Value = DateTime.Now;
 			dtFindDate_From.Value = DateTime.Now.AddDays(-30);
 			dtFindDate_To.Value = DateTime.Now;
+		}
+
+		private void frmSearch_Load(object sender, EventArgs e)
+		{
+			using (frmSearch_SelectOrgLevel frm = new(this))
+			{
+				frm.ShowDialog(Parent);
+
+				using (frmSearch_SelectOrgLevelItems frm2 = new(frm.SelectedOrgLevelType, this))
+				{
+					frm2.ShowDialog(this);
+					this.OrgLevels = frm2.TopOrgLevels;
+				}
+			}
+
+			foreach (OrgLevel orgLevel in this.OrgLevels) { ddlSelectedOrgLevels.Items.Add(new ListItem() { Name = orgLevel.Name, Id = Convert.ToInt32(orgLevel.Id) }); }
+			lblSearchingIn.Text = string.Format(LblSearchingInText, this.OrgLevels.Count.ToString(), this.OrgLevels[0].OrgLevelType.ToString());
+			ddlSelectedOrgLevels.SelectedIndex = ddlSelectedOrgLevels.Items.Count > 0 ? 0 : -1;
 		}
 
 		private async void btnSearch_Click(object sender, EventArgs e) { await DoSearch(); }
@@ -86,12 +99,6 @@ namespace MyNotebooks.subforms
 					using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.Message, "The notebook '" + NotebookName + "' was created.", "", this)) { frm2.ShowDialog(); }
 				}
 			}
-		}
-
-		private void btnSelectNotebooks_Click(object sender, EventArgs e)
-		{
-			using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(this)) { frm.ShowDialog(); }
-			SetNotebookSelectLabelAndButton();
 		}
 
 		private void chkUseDate_CheckedChanged(object sender, EventArgs e) { ToggleDateControls(true); }
@@ -278,15 +285,6 @@ namespace MyNotebooks.subforms
 		}
 
 		private void mnuExit_Click(object sender, EventArgs e) { this.Hide(); }
-
-		private void SetNotebookSelectLabelAndButton()
-		{
-			lblSearchingIn.Text = "Searching in " + Program.DictCheckedNotebooks.Count + " of " + Program.AllNotebookNames.Count + " notebooks";
-			//(Program.DictCheckedNotebooks.Count == Program.AllNotebookNames.Count ? "all " : Program.DictCheckedNotebooks.Count.ToString() + " selected ") + "notebook" + (Program.DictCheckedNotebooks.Count == 1 ? "" : "s");
-
-			btnSelectNotebooks.Left = lblSearchingIn.Left + lblSearchingIn.Width + 5;
-			btnExportEntries.Left = btnSelectNotebooks.Left + btnSelectNotebooks.Width + 5;
-		}
 
 		private void ToggleDateControls(bool toggleUseDate)
 		{

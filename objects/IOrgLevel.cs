@@ -1,5 +1,5 @@
 ﻿/* 
- * OrgLevelType interface.
+ * SelectedOrgLevelType interface.
  * created 08/09/23
  * - jsr
  */

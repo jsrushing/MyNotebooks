@@ -100,7 +100,7 @@ namespace MyNotebooks.subforms
 
 		private void btnCancelContinue_Click(object sender, EventArgs e) { this.Size = SmallSize; }
 
-		private void btnCreateUser_Click(object sender, EventArgs e)
+		private async void btnCreateUser_Click(object sender, EventArgs e)
 		{
 			var msg = string.Empty;
 
@@ -130,7 +130,7 @@ namespace MyNotebooks.subforms
 							if (frm.Result == frmMessage.ReturnResult.Ok)
 							{
 								CurrentUser.Email = frm.ResultText;
-								CurrentUser.Create();
+								await CurrentUser.Create();
 
 								if(CurrentUser.Id > 0)
 								{
@@ -697,7 +697,7 @@ namespace MyNotebooks.subforms
 			//if (lb.SelectedItem != null)
 			//{
 			//	var orgLvl = ((OrgLevel)lb.SelectedItem);
-			//	var v4 = orgLvl.OrgLevelType;
+			//	var v4 = orgLvl.SelectedOrgLevelType;
 
 			//	ListBox lbToPopulate = OrgLevelLists_MU[Convert.ToInt32(CurrentMouseListBox.Tag) + 1];
 			//	lbToPopulate.Items.Clear();
@@ -719,7 +719,6 @@ namespace MyNotebooks.subforms
 				if (lbToPopulate.Name.Length > 0)
 				{
 					ListBoxes_ClearBelow(lbToPopulate);
-					//lbToPopulate.Items.Clear();
 
 					foreach (ListItem li in DbAccess.GetOrgLevelChildren(Convert.ToInt16(lbToPopulate.Tag), v2))
 					{ if (!ListContains(lbToPopulate, li)) { lbToPopulate.Items.Add(li); } }
@@ -825,22 +824,22 @@ namespace MyNotebooks.subforms
 			//			case "companies":
 			//				nextRootNodeName = "Accounts";
 			//				level = CurrentUser.AccessLevel + 1;
-			//				info = new NodeInfo() { NodeId = Convert.ToInt16(tn.Tag), NodeName = tn.Text, NodeType = frmMain.OrgLevelType.Companies };
+			//				info = new NodeInfo() { NodeId = Convert.ToInt16(tn.Tag), NodeName = tn.Text, NodeType = frmMain.SelectedOrgLevelType.Companies };
 			//				break;
 			//			case "accounts":
 			//				nextRootNodeName = "Departments";
 			//				level = CurrentUser.AccessLevel;
-			//				info = new NodeInfo() { NodeId = Convert.ToInt16(tn.Tag), NodeName = tn.Text, NodeType = frmMain.OrgLevelType.Accounts };
+			//				info = new NodeInfo() { NodeId = Convert.ToInt16(tn.Tag), NodeName = tn.Text, NodeType = frmMain.SelectedOrgLevelType.Accounts };
 			//				break;
 			//			case "departments":
 			//				nextRootNodeName = "Groups";
 			//				level = CurrentUser.AccessLevel - 1;
-			//				info = new NodeInfo() { NodeId = Convert.ToInt16(tn.Tag), NodeName = tn.Text, NodeType = frmMain.OrgLevelType.Departments };
+			//				info = new NodeInfo() { NodeId = Convert.ToInt16(tn.Tag), NodeName = tn.Text, NodeType = frmMain.SelectedOrgLevelType.Departments };
 			//				break;
 			//			case "groups":
 			//				nextRootNodeName = "Notebooks";
 			//				level = CurrentUser.AccessLevel - 2;
-			//				info = new NodeInfo() { NodeId = Convert.ToInt16(tn.Tag), NodeName = tn.Text, NodeType = frmMain.OrgLevelType.Groups };
+			//				info = new NodeInfo() { NodeId = Convert.ToInt16(tn.Tag), NodeName = tn.Text, NodeType = frmMain.SelectedOrgLevelType.Groups };
 			//				break;
 			//		}
 

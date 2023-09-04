@@ -530,6 +530,7 @@ namespace MyNotebooks.DataAccess
 
 			return lstReturn;
 		}
+
 		public static List<ListItem> GetOrgLevels()
 		{
 			List<ListItem> list = new();
@@ -549,6 +550,46 @@ namespace MyNotebooks.DataAccess
 				return list;
 			}
 		}
+
+		public static List<OrgLevel> GetOrgLevelItemsAvailableToUser(frmMain.OrgLevelTypes orgLevelType) 
+		{ 
+			List<OrgLevel> lstRtrn = new();
+
+			DataTable dt = new();
+
+			using (SqlConnection conn = new(connString))
+			{
+				conn.Open();
+				using (SqlCommand cmd = new("sp_GetOrgLevelItemsAvailableToUser", conn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					cmd.Parameters.AddWithValue("@orgLevelType", (int)orgLevelType);
+					cmd.Parameters.AddWithValue("@userId", Program.User.Id);
+					SqlDataAdapter adapter = new() { SelectCommand = cmd };
+					adapter.Fill(dt);
+
+					foreach (DataRow row in dt.Rows)
+					{
+						OrgLevel ol = new() { OrgLevelType = orgLevelType, Name = row["Name"].ToString(), Id = Convert.ToInt32(row["Id"].ToString()),
+							Description = row["description"].ToString(), CreatedBy = Convert.ToInt32(row["CreatedBy"].ToString()),
+							CreatedOn = DateTime.Parse(row["CreatedOn"].ToString())};
+
+						try { ol.EditedOn = DateTime.Parse(row["EditedOn"].ToString()); }
+						catch { }
+
+						lstRtrn.Add(ol);
+
+						//lstRtrn.Add(new ListItem() { Id = (int)row["Id"], Name = row["Name"].ToString() });
+
+						//node = new() { Tag = row["Id"].ToString(), Text = row["Name"].ToString().Trim(), Name = row["Name"].ToString().Trim(), ToolTipText = row["Description"].ToString() };
+						//lblRtrn.Add(node);
+					}
+				}
+			}
+
+			return lstRtrn;
+		}
+
 		public static List<ListItem> GetOrgLevelChildren(int orgLevelId, int parentId) 
 		{
 			List<ListItem> lstRtrn = new List<ListItem>();
@@ -563,6 +604,7 @@ namespace MyNotebooks.DataAccess
 					cmd.CommandType = CommandType.StoredProcedure;
 					cmd.Parameters.AddWithValue("@orgLevelId", orgLevelId);
 					cmd.Parameters.AddWithValue("@parentId", parentId);
+					cmd.Parameters.AddWithValue("@userId", Program.User.Id);
 					SqlDataAdapter adapter = new () { SelectCommand = cmd };
 					adapter.Fill(dt);
 					foreach (DataRow row in dt.Rows)
@@ -621,24 +663,24 @@ namespace MyNotebooks.DataAccess
 			return lstRtrn;
 		}
 
-		public static DataSet		GetUserOrgLevels(int userId)
-		{
-			DataSet ds = new();
+		//public static DataSet		GetUserOrgLevels(int userId)
+		//{
+		//	DataSet ds = new();
 
-			using(SqlConnection conn = new(connString))
-			{
-				conn.Open();
+		//	using(SqlConnection conn = new(connString))
+		//	{
+		//		conn.Open();
 
-				using(SqlCommand cmd = new SqlCommand("sp_GetOrgLevelAssignmentsForUser", conn))
-				{
-					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@userId", userId);
-					using (SqlDataAdapter da = new() { SelectCommand = cmd }) { da.Fill(ds); }
-				}
-			}
+		//		using(SqlCommand cmd = new SqlCommand("sp_GetOrgLevelAssignmentsForUser", conn))
+		//		{
+		//			cmd.CommandType = CommandType.StoredProcedure;
+		//			cmd.Parameters.AddWithValue("@userId", userId);
+		//			using (SqlDataAdapter da = new() { SelectCommand = cmd }) { da.Fill(ds); }
+		//		}
+		//	}
 
-			return ds;
-		}
+		//	return ds;
+		//}
 
 		//public static List<SelectedCompanyName> GetCompanies(int userId)
 		//{

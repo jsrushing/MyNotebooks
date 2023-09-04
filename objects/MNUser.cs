@@ -189,22 +189,22 @@ namespace MyNotebooks.objects
 
 		public bool Equals(MNUser userToCompare) { return this.Id == userToCompare.Id; }
 
-		public void GetAllOrgLevels()
-		{
-			DataSet dataSet = DbAccess.GetUserOrgLevels(this.Id);
+		//public void GetAllOrgLevels()
+		//{
+		//	DataSet dataSet = DbAccess.GetUserOrgLevels(this.Id);
 
-			for (int i = 0; i < dataSet.Tables[0].Rows.Count; i++)
-			{ this.OrgLevels.Add(new(frmMain.OrgLevelTypes.Company, dataSet.Tables[0], i)); }	//  this.Companies.Add(new(dataSet.Tables[0], i)); }
+		//	for (int i = 0; i < dataSet.Tables[0].Rows.Count; i++)
+		//	{ this.OrgLevels.Add(new(frmMain.OrgLevelTypes.Company, dataSet.Tables[0], i)); }	//  this.Companies.Add(new(dataSet.Tables[0], i)); }
 
-			for (int i = 0; i < dataSet.Tables[1].Rows.Count; i++)
-			{ this.OrgLevels.Add(new(frmMain.OrgLevelTypes.Account, dataSet.Tables[1], i)); }   // this.Accounts.Add(new(dataSet.Tables[1], i)); }
+		//	for (int i = 0; i < dataSet.Tables[1].Rows.Count; i++)
+		//	{ this.OrgLevels.Add(new(frmMain.OrgLevelTypes.Account, dataSet.Tables[1], i)); }   // this.Accounts.Add(new(dataSet.Tables[1], i)); }
 
-			for (int i = 0; i < dataSet.Tables[2].Rows.Count; i++)
-			{ this.OrgLevels.Add(new(frmMain.OrgLevelTypes.Department, dataSet.Tables[2], i)); }   // this.Departments.Add(new(dataSet.Tables[2], i)); }
+		//	for (int i = 0; i < dataSet.Tables[2].Rows.Count; i++)
+		//	{ this.OrgLevels.Add(new(frmMain.OrgLevelTypes.Department, dataSet.Tables[2], i)); }   // this.Departments.Add(new(dataSet.Tables[2], i)); }
 
-			for (int i = 0; i < dataSet.Tables[3].Rows.Count; i++)
-			{ this.OrgLevels.Add(new(frmMain.OrgLevelTypes.Group, dataSet.Tables[3], i)); }   // this.Groups.Add(new(dataSet.Tables[3], i)); }
-		}
+		//	for (int i = 0; i < dataSet.Tables[3].Rows.Count; i++)
+		//	{ this.OrgLevels.Add(new(frmMain.OrgLevelTypes.Group, dataSet.Tables[3], i)); }   // this.Groups.Add(new(dataSet.Tables[3], i)); }
+		//}
 
 		public bool HasPermission(UserPermissions.Permissions permission)
 		{

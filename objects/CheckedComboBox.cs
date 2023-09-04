@@ -144,7 +144,7 @@ namespace MyNotebooks.objects
 				this.ccbParent = ccbParent;
 				InitializeComponent();
 				this.ShowInTaskbar = false;
-				// Add a handler to notify our parent of ItemCheck events.
+				// Add a handler to notify our Parent of ItemCheck events.
 				this.cclb.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.cclb_ItemCheck);
 			}
 
@@ -229,7 +229,7 @@ namespace MyNotebooks.objects
 				// From now on the dropdown is considered closed. We set the flag here to prevent OnDeactivate() calling
 				// this method once again after hiding this window.
 				dropdownClosed = true;
-				// Set the focus to our parent CheckedComboBox and hide the dropdown check list.
+				// Set the focus to our Parent CheckedComboBox and hide the dropdown check list.
 				ccbParent.Focus();
 				this.Hide();
 				// Notify CheckedComboBox that its dropdown is closed. (NOTE: it does not matter which parameters we pass to

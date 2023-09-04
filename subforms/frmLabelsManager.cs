@@ -604,7 +604,7 @@ namespace MyNotebooks.subforms
 
 		private void PopulateGridViewEntryDetails(int mouseY = -1)
 		{
-			// Populate and display the label parent data grid.
+			// Populate and display the label Parent data grid.
 			gridViewEntryDetails.Rows.Clear();
 			gridViewEntryDetails.Rows.Add(6);
 			gridViewEntryDetails.GridColor = Color.White;

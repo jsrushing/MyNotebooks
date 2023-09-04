@@ -34,6 +34,7 @@ namespace MyNotebooks.subforms
 			components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSearch));
 			grpFindEntry = new GroupBox();
+			ddlSelectedOrgLevels = new ComboBox();
 			lblNumEntriesFound = new Label();
 			btnExportEntries = new Button();
 			btnSearch = new Button();
@@ -42,7 +43,6 @@ namespace MyNotebooks.subforms
 			radLabels_Or = new RadioButton();
 			radLabels_And = new RadioButton();
 			lblSearchingIn = new Label();
-			btnSelectNotebooks = new Button();
 			label2 = new Label();
 			chkMatchWholeWord = new CheckBox();
 			chkMatchCase = new CheckBox();
@@ -70,8 +70,6 @@ namespace MyNotebooks.subforms
 			lblSelectionType = new Label();
 			label8 = new Label();
 			mnuEditEntry = new ToolStripMenuItem();
-			ddlOrgLevels = new ComboBox();
-			label1 = new Label();
 			grpFindEntry.SuspendLayout();
 			pnlLabels_AndOr.SuspendLayout();
 			mnuEntryEditTop.SuspendLayout();
@@ -80,15 +78,13 @@ namespace MyNotebooks.subforms
 			// grpFindEntry
 			// 
 			grpFindEntry.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-			grpFindEntry.Controls.Add(ddlOrgLevels);
-			grpFindEntry.Controls.Add(label1);
+			grpFindEntry.Controls.Add(ddlSelectedOrgLevels);
 			grpFindEntry.Controls.Add(lblNumEntriesFound);
 			grpFindEntry.Controls.Add(btnExportEntries);
 			grpFindEntry.Controls.Add(btnSearch);
 			grpFindEntry.Controls.Add(lstEntryObjects);
 			grpFindEntry.Controls.Add(pnlLabels_AndOr);
 			grpFindEntry.Controls.Add(lblSearchingIn);
-			grpFindEntry.Controls.Add(btnSelectNotebooks);
 			grpFindEntry.Controls.Add(label2);
 			grpFindEntry.Controls.Add(chkMatchWholeWord);
 			grpFindEntry.Controls.Add(chkMatchCase);
@@ -112,9 +108,19 @@ namespace MyNotebooks.subforms
 			grpFindEntry.Controls.Add(label8);
 			grpFindEntry.Location = new System.Drawing.Point(16, 22);
 			grpFindEntry.Name = "grpFindEntry";
-			grpFindEntry.Size = new System.Drawing.Size(712, 717);
+			grpFindEntry.Size = new System.Drawing.Size(726, 717);
 			grpFindEntry.TabIndex = 7;
 			grpFindEntry.TabStop = false;
+			// 
+			// ddlSelectedOrgLevels
+			// 
+			ddlSelectedOrgLevels.DisplayMember = "Name";
+			ddlSelectedOrgLevels.FormattingEnabled = true;
+			ddlSelectedOrgLevels.Location = new System.Drawing.Point(339, 15);
+			ddlSelectedOrgLevels.Name = "ddlSelectedOrgLevels";
+			ddlSelectedOrgLevels.Size = new System.Drawing.Size(167, 23);
+			ddlSelectedOrgLevels.TabIndex = 53;
+			ddlSelectedOrgLevels.ValueMember = "Id";
 			// 
 			// lblNumEntriesFound
 			// 
@@ -129,6 +135,7 @@ namespace MyNotebooks.subforms
 			// 
 			// btnExportEntries
 			// 
+			btnExportEntries.Enabled = false;
 			btnExportEntries.Location = new System.Drawing.Point(565, 15);
 			btnExportEntries.Name = "btnExportEntries";
 			btnExportEntries.Size = new System.Drawing.Size(135, 23);
@@ -191,22 +198,12 @@ namespace MyNotebooks.subforms
 			// 
 			// lblSearchingIn
 			// 
-			lblSearchingIn.AutoSize = true;
-			lblSearchingIn.Location = new System.Drawing.Point(844, 19);
+			lblSearchingIn.Location = new System.Drawing.Point(150, 16);
 			lblSearchingIn.Name = "lblSearchingIn";
-			lblSearchingIn.Size = new System.Drawing.Size(186, 15);
+			lblSearchingIn.Size = new System.Drawing.Size(190, 18);
 			lblSearchingIn.TabIndex = 47;
-			lblSearchingIn.Text = "Searching in 3 selected notebooks";
-			// 
-			// btnSelectNotebooks
-			// 
-			btnSelectNotebooks.Location = new System.Drawing.Point(722, 15);
-			btnSelectNotebooks.Name = "btnSelectNotebooks";
-			btnSelectNotebooks.Size = new System.Drawing.Size(116, 23);
-			btnSelectNotebooks.TabIndex = 45;
-			btnSelectNotebooks.Text = "select notebooks";
-			btnSelectNotebooks.UseVisualStyleBackColor = true;
-			btnSelectNotebooks.Click += this.btnSelectNotebooks_Click;
+			lblSearchingIn.Text = "Searching {0} {1}s";
+			lblSearchingIn.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label2
 			// 
@@ -243,7 +240,7 @@ namespace MyNotebooks.subforms
 			lblSeparator.ForeColor = System.Drawing.Color.Red;
 			lblSeparator.Location = new System.Drawing.Point(105, 433);
 			lblSeparator.Name = "lblSeparator";
-			lblSeparator.Size = new System.Drawing.Size(595, 19);
+			lblSeparator.Size = new System.Drawing.Size(609, 19);
 			lblSeparator.TabIndex = 37;
 			lblSeparator.Text = resources.GetString("lblSeparator.Text");
 			lblSeparator.Visible = false;
@@ -281,7 +278,7 @@ namespace MyNotebooks.subforms
 			lstFoundEntries.Location = new System.Drawing.Point(6, 175);
 			lstFoundEntries.Name = "lstFoundEntries";
 			lstFoundEntries.SelectionMode = SelectionMode.MultiSimple;
-			lstFoundEntries.Size = new System.Drawing.Size(700, 257);
+			lstFoundEntries.Size = new System.Drawing.Size(714, 257);
 			lstFoundEntries.TabIndex = 14;
 			lstFoundEntries.UseTabStops = false;
 			lstFoundEntries.SelectedIndexChanged += this.lstFoundEntries_SelectedIndexChanged;
@@ -382,7 +379,7 @@ namespace MyNotebooks.subforms
 			txtSearchText.BorderStyle = BorderStyle.FixedSingle;
 			txtSearchText.Location = new System.Drawing.Point(196, 92);
 			txtSearchText.Name = "txtSearchText";
-			txtSearchText.Size = new System.Drawing.Size(504, 23);
+			txtSearchText.Size = new System.Drawing.Size(518, 23);
 			txtSearchText.TabIndex = 22;
 			// 
 			// txtSearchTitle
@@ -391,7 +388,7 @@ namespace MyNotebooks.subforms
 			txtSearchTitle.BorderStyle = BorderStyle.FixedSingle;
 			txtSearchTitle.Location = new System.Drawing.Point(192, 48);
 			txtSearchTitle.Name = "txtSearchTitle";
-			txtSearchTitle.Size = new System.Drawing.Size(508, 23);
+			txtSearchTitle.Size = new System.Drawing.Size(522, 23);
 			txtSearchTitle.TabIndex = 21;
 			// 
 			// dtFindDate_To
@@ -433,7 +430,7 @@ namespace MyNotebooks.subforms
 			rtbSelectedEntry_Found.BorderStyle = BorderStyle.FixedSingle;
 			rtbSelectedEntry_Found.Location = new System.Drawing.Point(6, 464);
 			rtbSelectedEntry_Found.Name = "rtbSelectedEntry_Found";
-			rtbSelectedEntry_Found.Size = new System.Drawing.Size(700, 247);
+			rtbSelectedEntry_Found.Size = new System.Drawing.Size(714, 247);
 			rtbSelectedEntry_Found.TabIndex = 12;
 			rtbSelectedEntry_Found.Text = "";
 			// 
@@ -476,37 +473,17 @@ namespace MyNotebooks.subforms
 			mnuEditEntry.Size = new System.Drawing.Size(32, 19);
 			mnuEditEntry.Text = "Edit Entry";
 			// 
-			// ddlOrgLevels
-			// 
-			ddlOrgLevels.DisplayMember = "Name";
-			ddlOrgLevels.FormattingEnabled = true;
-			ddlOrgLevels.Location = new System.Drawing.Point(276, 8);
-			ddlOrgLevels.Name = "ddlOrgLevels";
-			ddlOrgLevels.Size = new System.Drawing.Size(171, 23);
-			ddlOrgLevels.Sorted = true;
-			ddlOrgLevels.TabIndex = 54;
-			ddlOrgLevels.ValueMember = "Id";
-			// 
-			// label1
-			// 
-			label1.AutoSize = true;
-			label1.Location = new System.Drawing.Point(154, 13);
-			label1.Name = "label1";
-			label1.Size = new System.Drawing.Size(120, 15);
-			label1.TabIndex = 53;
-			label1.Text = "Select Department(s):";
-			label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
 			// frmSearch
 			// 
 			AcceptButton = btnSearch;
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new System.Drawing.Size(740, 751);
+			ClientSize = new System.Drawing.Size(754, 751);
 			Controls.Add(grpFindEntry);
 			MinimumSize = new System.Drawing.Size(509, 512);
 			Name = "frmSearch";
 			Text = "Search";
+			Load += this.frmSearch_Load;
 			grpFindEntry.ResumeLayout(false);
 			grpFindEntry.PerformLayout();
 			pnlLabels_AndOr.ResumeLayout(false);
@@ -540,7 +517,6 @@ namespace MyNotebooks.subforms
 		private Label label2;
 		private CheckBox chkMatchWholeWord;
 		private Button btnSearch;
-		private Button btnSelectNotebooks;
 		private Label lblSearchingIn;
 		private RadioButton radLabels_Or;
 		private RadioButton radLabels_And;
@@ -554,7 +530,6 @@ namespace MyNotebooks.subforms
 		private Label lblNumEntriesFound;
 		private ToolStripMenuItem preserveOriginalTextToolStripMenuItem;
 		private ToolStripMenuItem editOriginalTextToolStripMenuItem;
-		private ComboBox ddlOrgLevels;
-		private Label label1;
+		private ComboBox ddlSelectedOrgLevels;
 	}
 }
