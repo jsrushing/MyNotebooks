@@ -31,54 +31,54 @@ namespace MyNotebooks.objects
 			var value = "";
 			var setProp = true;
 
-			foreach (PropertyInfo sPropertyName in typeof(MNLabel).GetProperties())
+			if(dt.Rows.Count > 0)
 			{
-				try
+				foreach (PropertyInfo sPropertyName in typeof(MNLabel).GetProperties())
 				{
-					if (sPropertyName.Name != "DisplayText" & dt.Columns[sPropertyName.Name] != null)
+					try
 					{
-						if (dt.Columns[sPropertyName.Name].DataType == typeof(string))
-						{
-							value = dt.Rows[rowIndex].Field<string>(sPropertyName.Name).ToString();
-						}
-						else if (dt.Columns[sPropertyName.Name].DataType == typeof(Int32))
-						{
-							int iVal = dt.Rows[rowIndex].Field<Int32>(sPropertyName.Name);
-							this.GetType().GetProperty(sPropertyName.Name).SetValue(this, iVal);
-							setProp = false;
-						}
-						else if (dt.Columns[sPropertyName.Name].DataType == typeof(DateTime))
-						{
-							DateTime dtime = Convert.ToDateTime(dt.Rows[rowIndex].Field<DateTime>(sPropertyName.Name));
-							this.GetType().GetProperty(sPropertyName.Name).SetValue(this, dtime);
-							setProp = false;
-						}
-						else if (dt.Columns[sPropertyName.Name].DataType == typeof(bool))
-						{
-							bool b = dt.Rows[rowIndex].Field<bool>(sPropertyName.Name);
-							this.GetType().GetProperty(sPropertyName.Name).SetValue(this, b.ToString() == "1");
-							setProp = false;
-						}
+						//if (sPropertyName.Name != "DisplayText" & dt.Columns[sPropertyName.Name] != null)
+						//{
+							if (dt.Columns[sPropertyName.Name].DataType == typeof(string))
+							{
+								value = dt.Rows[rowIndex].Field<string>(sPropertyName.Name).ToString();
+							}
+							else if (dt.Columns[sPropertyName.Name].DataType == typeof(Int32))
+							{
+								int iVal = dt.Rows[rowIndex].Field<Int32>(sPropertyName.Name);
+								this.GetType().GetProperty(sPropertyName.Name).SetValue(this, iVal);
+								setProp = false;
+							}
+							else if (dt.Columns[sPropertyName.Name].DataType == typeof(DateTime))
+							{
+								DateTime dtime = Convert.ToDateTime(dt.Rows[rowIndex].Field<DateTime>(sPropertyName.Name));
+								this.GetType().GetProperty(sPropertyName.Name).SetValue(this, dtime);
+								setProp = false;
+							}
+							else if (dt.Columns[sPropertyName.Name].DataType == typeof(bool))
+							{
+								bool b = dt.Rows[rowIndex].Field<bool>(sPropertyName.Name);
+								this.GetType().GetProperty(sPropertyName.Name).SetValue(this, b.ToString() == "1");
+								setProp = false;
+							}
 
-						if (setProp) { this.GetType().GetProperty(sPropertyName.Name).SetValue(this, value); }
-						setProp = true;
+							if (setProp) { this.GetType().GetProperty(sPropertyName.Name).SetValue(this, value); }
+							setProp = true;
+						//}
 					}
-				}
-				catch (Exception ex)
-				{
-					if (ex.GetType() != typeof(InvalidCastException))
+					catch (Exception ex)
 					{
-						if (sPropertyName.Name != "EditedOn" && sPropertyName.Name != "Id")
+						if (ex.GetType() != typeof(InvalidCastException))
 						{
-							using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The error '" + ex.Message + "' occurred while processing the " +
-								"property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
+							if (sPropertyName.Name != "EditedOn" && sPropertyName.Name != "Id")
+							{
+								using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The error '" + ex.Message + "' occurred while processing the " +
+									"property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
+							}
 						}
 					}
 				}
 			}
-
-
-			//Utilities.PopulatePropertiesFromDataRow(typeof(MNLabel), dataTable, rowIndex);
 		}
 
 		public SQLResult Create() { return GetOperationResult(DbAccess.CRUDLabel(this), true); }

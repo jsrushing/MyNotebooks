@@ -5,20 +5,25 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Encryption;
 using MyNotebooks.DataAccess;
 using MyNotebooks.objects;
 using MyNotebooks.subforms;
+using static MyNotebooks.objects.CheckedComboBox.Dropdown;
 
 namespace MyNotebooks.subforms
 {
 	public partial class frmSearch : Form
 	{
-		private List<int> ThreeSelections = new List<int>();
+		private List<int> ThreeSelections = new();
 		private bool IgnoreCheckChange = false;
-		private List<Entry> FoundEntries = new List<Entry>();
+		private List<Entry> FoundEntries = new();
+		private List<Entry> EntriesToSearch = new();
 		private const string LabelEntriesFoundText = "{0} entries found";
 		private int OrgLevelToSearch;
 		public string NotebookName { get; private set; }
@@ -26,28 +31,11 @@ namespace MyNotebooks.subforms
 		private readonly new Form Parent;
 		private Dictionary<string, int> NotebookBoundariesDict = new Dictionary<string, int>();
 		private string LblSearchingInText = "Searching in {0} {1}s";
-		//private CheckedComboBox ccb = new();
 
 		public frmSearch(Form parent)
 		{
 			this.Parent = parent;
 			InitializeComponent();
-
-			// select items for dropdown based on Org Level
-			//ddlOrgLevels.Items.Add(new CheckBox() { Text = "me", Tag = 3 });
-
-			//ddlOrgLevels.DisplayMember = "Text";
-
-
-
-			//ccb.DisplayMember = "Item";
-			//ccb.ValueMember = "State";
-			//
-
-			//if (Program.DictCheckedNotebooks.Count == 0)
-			//{ using (frmSelectNotebooksToSearch frm = new(Parent)) { frm.ShowDialog(); } }
-
-			//SetNotebookSelectLabelAndButton();
 			LabelsManager.PopulateLabelsList(lstLabelsForSearch);
 			Utilities.SetStartPosition(this, parent);
 			dtFindDate.Value = DateTime.Now;
@@ -68,12 +56,12 @@ namespace MyNotebooks.subforms
 				}
 			}
 
+			foreach (OrgLevel orgLevel in this.OrgLevels)
+			{
+				ccb.Items.Add(new { orgLevel.Id, orgLevel.Name });
 
-			foreach (OrgLevel orgLevel in this.OrgLevels) { ccb.Items.Add(new { orgLevel.Id, orgLevel.Name })/*; ccb.SetItemChecked(ccb.Items.Count - 1, true)*/; }
-			ccb.ToggleAll(true);
-
-			//{ ddlSelectedOrgLevels.Items.Add(new ListItem() { Name = orgLevel.Name, Id = Convert.ToInt32(orgLevel.Id) }); }
-
+			}
+			ccb.CheckUncheckAll(true);
 			lblSearchingIn.Text = string.Format(LblSearchingInText, this.OrgLevels.Count.ToString(), this.OrgLevels[0].OrgLevelType.ToString());
 		}
 
@@ -103,18 +91,83 @@ namespace MyNotebooks.subforms
 
 		private void chkUseDateRange_CheckedChanged(object sender, EventArgs e) { ToggleDateControls(false); }
 
+		private object? PopulateNotebookEntries()
+		{
+			foreach(Notebook nb in Program.User.Notebooks)
+			{
+
+			}
+			return null;
+		}
+
 		private async Task DoSearch()
 		{
 			this.Cursor = Cursors.WaitCursor;
 			var labels = string.Empty;
 			string[] labelsArray;
 			List<Entry> foundEntries = new List<Entry>();
+			EntriesToSearch.Clear();
 			List<Entry> nbFound = null;
+			List<Entry> entries = new();
+			List<Notebook> notebooks = new();
+			//DbAccess.PopulateNotebooksByUserAndDescendants(true);
+
+
+			// get all entries under the org level
+
+			if(Program.User.Notebooks.Count == 0)
+			{
+				Program.User.Notebooks.AddRange(DbAccess.GetNotebooksUnderOrgLevel(OrgLevels[0].OrgLevelType, GetCheckedIds()));
+				
+					//foreach (OrgLevel ol in this.OrgLevels)
+				//{
+					//entries = DbAccess.GetEntriesCreatedByUser();
+					//DbAccess.PopulateNotebooksByUserAndDescendants(ol.OrgLevelType, GetCheckedIds());
+					//this.EntriesToSearch = DbAccess.GetEntriesCreatedByUser((int)ol.OrgLevelType, GetCheckedIds());
+
+					//this.EntriesToSearch.AddRange(entries.Where(e => !EntriesToSearch.Contains(e)).ToList());
+
+					//notebooks = DbAccess.GetNotebooksUnderOrgLevel(ol.OrgLevelType, GetCheckedIds());
+
+					//notebooks = notebooks.Where(p => !Program.User.Notebooks.Any(p2 => p2.Id == p.Id)).ToList();
+
+					//if (notebooks.Any() ) { Program.User.Notebooks.AddRange(notebooks); }
+				//}
+
+				// land here with Program.User populated with Notebook objects
+
+				this.Cursor = Cursors.WaitCursor;
+
+				foreach (Notebook nb in Program.User.Notebooks)
+				{
+					nb.Entries = DbAccess.GetEntriesInNotebook(nb.Id);
+				}
+
+				this.Cursor = Cursors.Default;
+			}
+
+			// land here with Program.User.Notebooks populated with Entry objects
+
+			// get labels being searched for ...
+			labels = labels.Length > 0 ? labels.Substring(0, labels.Length - 1) : string.Empty;
+			labelsArray = labels.Length > 0 ? labels.Split(',') : null;
+
+			SearchObject sob = new SearchObject(chkUseDate, chkUseDateRange, chkMatchCase, dtFindDate,
+						dtFindDate_From, dtFindDate_To, radBtnAnd, radLabels_And, txtSearchTitle.Text, txtSearchText.Text, labelsArray);
+
+
+
+
 
 			NotebookBoundariesDict.Clear();
 			lstFoundEntries.Items.Clear();
 			FoundEntries.Clear();
+
+			lstLabelsForSearch.Items.Clear();
+			var v = EntriesToSearch.Select(e => e.AllLabels).ToList();
+
 			for (var i = 0; i < lstLabelsForSearch.CheckedItems.Count; i++) { labels += lstLabelsForSearch.CheckedItems[i].ToString() + ","; }
+
 			labels = labels.Length > 0 ? labels.Substring(0, labels.Length - 1) : string.Empty;
 			labelsArray = labels.Length > 0 ? labels.Split(',') : null;
 
@@ -145,6 +198,39 @@ namespace MyNotebooks.subforms
 			//lblNumEntriesFound.Text = string.Format(this.LabelEntriesFoundText, lstFoundEntries.Items.Count / 4);
 			lblSeparator.Visible = true;
 			this.Cursor = Cursors.Default;
+		}
+
+		private string GetCheckedIds()
+		{
+			var vRtrn = string.Empty;
+
+			foreach (OrgLevel ol in this.OrgLevels)
+			{
+				vRtrn += ol.Id + ",";
+			}
+
+			//for(int i = 0; i < ccb.CheckedIndices.Count; i++)
+			//{
+			//	var v = (ListItem)ccb.Items[i];
+
+			//	vRtrn += v.Id.ToString() + ",";
+			//}
+
+			//for (int i = 0; i < ccb.Items.Count; i++)
+			//{
+			//	if (ccb.GetItemChecked(i)) { vRtrn += ccb.Items[i]; }
+			//}
+
+
+
+			//foreach (int v in ccb.CheckedIndices)
+			//{
+			//	var v2 = ccb.CheckedIndices[v];
+			//	vRtrn = v.ToString() + ",";
+			//	//var item = new ListItem() { Name = v.}
+			//	vRtrn += new ListItem() { Name = v.ToString() } + ",";
+			//}
+			return vRtrn.AsSpan(0, vRtrn.Length - 1).ToString();
 		}
 
 		private void GetCurrentSelections()
@@ -317,32 +403,56 @@ namespace MyNotebooks.subforms
 		private void lblSelectAllOrNone_Click(object sender, EventArgs e)
 		{
 			bool b = lblSelectAllOrNone.Text == "select all";
-			ccb.ToggleAll(b);
+			ccb.CheckUncheckAll(b);
 			lblSelectAllOrNone.Text = b ? "unselect all" : "select all";
 			ccb.DroppedDown = true;
 		}
 
-		private void ccb_SelectedIndexChanged(object sender, EventArgs e)
+		private void ccb_ItemCheck(object sender, ItemCheckEventArgs e)
 		{
+			//this.Text = sender.ToString();  // this.Text == "whoo" ? "what?" : "whoo";
 
+			////MyNotebooks.objects.CheckedComboBox+Dropdown+CustomCheckedListBox 
+			////CheckedComboBox clb = (CheckedComboBox)sender;
+			//CheckedListBox clb = (CheckedListBox)sender;
+
+			//var v = clb.SelectedItem as ListViewItem;
+
+			//var v3 = clb.Items;
+
+			//var v4 = ccb.GetSelectedItem();
+
+
+			//if(v != null)
+			//{
+			//	foreach(ListViewItem item in clb.Items)
+			//	{
+			//		if (item.Checked) { }
+			//	}
+			//}
 		}
 
-		private void ccb_SelectedValueChanged(object sender, EventArgs e)
-		{
+		//private void ccb_SelectedIndexChanged(object sender, EventArgs e)
+		//{
 
-		}
+		//}
 
-		private void ccb_MouseClick(object sender, MouseEventArgs e)
-		{
-			//if (ccb.SelectedIndex > 0)
-			//{ int i = 1; }
-			lblSearchingIn.Text = string.Format(LblSearchingInText, ccb.CheckedItems.Count, OrgLevels[0].OrgLevelType.ToString());
-		}
+		//private void ccb_SelectedValueChanged(object sender, EventArgs e)
+		//{
 
-		private void ccb_Click(object sender, EventArgs e)
-		{
-			lblSearchingIn.Text = string.Format(LblSearchingInText, OrgLevels[0].OrgLevelType.ToString(), ccb.CheckedItems.Count);
-		}
+		//}
+
+		//private void ccb_MouseClick(object sender, MouseEventArgs e)
+		//{
+		//	//if (ccb.SelectedIndex > 0)
+		//	//{ int i = 1; }
+		//	lblSearchingIn.Text = string.Format(LblSearchingInText, ccb.CheckedItems.Count, OrgLevels[0].OrgLevelType.ToString());
+		//}
+
+		//private void ccb_Click(object sender, EventArgs e)
+		//{
+		//	lblSearchingIn.Text = string.Format(LblSearchingInText, OrgLevels[0].OrgLevelType.ToString(), ccb.CheckedItems.Count);
+		//}
 	}
 
 	public struct FoundEntry

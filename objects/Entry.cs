@@ -197,7 +197,7 @@ namespace MyNotebooks
 		{
 			return String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
 				, Title, CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"])
-				, string.Join(", ", this.AllLabels.Select(e => e.LabelText).ToArray()), DbAccess.GetFullEntry(this).Text);
+				, string.Join(", ", this.AllLabels.Select(e => e.LabelText).ToArray()));	//, DbAccess.GetFullEntry(this).Text);
 		}
 
 		public static Entry Select(RichTextBox rtb, ListBox lb, Notebook currentNotebook, bool firstSelection = false, Entry je = null, bool resetTopIndex = true)
@@ -273,7 +273,7 @@ namespace MyNotebooks
 				if (titleAndDate[0] != null && titleAndDate[1] != null)
 				{
 					DateTime.TryParse(titleAndDate[1], out DateTime dt);
-					entryRtrn = DbAccess.GetFullEntry(currentNotebook.GetEntry(titleAndDate[0], titleAndDate[1]));
+					entryRtrn = currentNotebook.GetEntry(titleAndDate[0], titleAndDate[1]);	// DbAccess.GetFullEntry(currentNotebook.GetEntry(titleAndDate[0], titleAndDate[1]));
 
 					if(entryRtrn != null)
 					{

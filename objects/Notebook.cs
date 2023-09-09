@@ -53,7 +53,7 @@ namespace MyNotebooks
 			}
 		}
 
-		public Notebook(DataTable dt)
+		public Notebook(DataTable dt, int rowIndex = 0)
 		{
 			var value = "";
 
@@ -61,21 +61,21 @@ namespace MyNotebooks
 			{
 				try
 				{
-					if (dt.Rows[0].Field<object>(sPropertyName.Name) != null)
+					if (dt.Rows[rowIndex].Field<object>(sPropertyName.Name) != null)
 					{
 						if (dt.Columns[sPropertyName.Name].DataType == typeof(string))
 						{
-							value = dt.Rows[0].Field<string>(sPropertyName.Name).ToString();
+							value = dt.Rows[rowIndex].Field<string>(sPropertyName.Name).ToString();
 							this.GetType().GetProperty(sPropertyName.Name).SetValue(this, value.ToString());
 						}
 						else if (dt.Columns[sPropertyName.Name].DataType == typeof(Int32))
 						{
-							value = dt.Rows[0].Field<Int32>(sPropertyName.Name).ToString();
+							value = dt.Rows[rowIndex].Field<Int32>(sPropertyName.Name).ToString();
 							this.GetType().GetProperty(sPropertyName.Name).SetValue(this, Convert.ToInt32(value));
 						}
 						else if (dt.Columns[sPropertyName.Name].DataType == typeof(DateTime))
 						{
-							DateTime dtime = Convert.ToDateTime(dt.Rows[0].Field<DateTime>(sPropertyName.Name));
+							DateTime dtime = Convert.ToDateTime(dt.Rows[rowIndex].Field<DateTime>(sPropertyName.Name));
 							this.GetType().GetProperty(sPropertyName.Name).SetValue(this, dtime);
 						}
 					}
@@ -95,20 +95,20 @@ namespace MyNotebooks
 			File.Copy(this.FileName, AppDomain.CurrentDomain.BaseDirectory + dir + this.Name, true);
 		}
 
-		public void			Backup_Forced()
-		{
-			try
-			{
-				string dir = AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_NotebookForcedBackupsFolder"];
-				if (!System.IO.Directory.Exists(dir))
-				{ System.IO.Directory.CreateDirectory(dir); }
-				File.Copy(this.FileName, dir + this.Name);
-				FileInfo fi = new FileInfo(dir + this.Name);
-				File.Move(dir + this.Name, dir + this.Name + " (" + fi.CreationTime.ToString(ConfigurationManager.AppSettings["DateFormat_ForcedBackupFileName"] + ")"), true);
-				BackupCompleted = true;
-			}
-			catch (Exception) { }
-		}
+		//public void			Backup_Forced()
+		//{
+		//	try
+		//	{
+		//		string dir = AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_NotebookForcedBackupsFolder"];
+		//		if (!System.IO.Directory.Exists(dir))
+		//		{ System.IO.Directory.CreateDirectory(dir); }
+		//		File.Copy(this.FileName, dir + this.Name);
+		//		FileInfo fi = new FileInfo(dir + this.Name);
+		//		File.Move(dir + this.Name, dir + this.Name + " (" + fi.CreationTime.ToString(ConfigurationManager.AppSettings["DateFormat_ForcedBackupFileName"] + ")"), true);
+		//		BackupCompleted = true;
+		//	}
+		//	catch (Exception) { }
+		//}
 
 		public async Task	Create() { GetOperationResult(DbAccess.CRUDNotebook(this), true); }
 		public async Task	Update() { GetOperationResult(DbAccess.CRUDNotebook(this, OperationType.Update)); }
@@ -174,14 +174,14 @@ namespace MyNotebooks
 			}
 
 			File.Delete(this.FileName);
-			DeleteBackups();
+			//DeleteBackups();
 		}
 		
-		private void		DeleteBackups()
-		{
-			File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebookIncrementalBackupsFolder"] + this.Name);
-			File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebookForcedBackupsFolder"] + this.Name);
-		}
+		//private void		DeleteBackups()
+		//{
+		//	File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebookIncrementalBackupsFolder"] + this.Name);
+		//	File.Delete(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebookForcedBackupsFolder"] + this.Name);
+		//}
 
 		public async Task	DeleteLabelFromNotebook(string label)
 		{

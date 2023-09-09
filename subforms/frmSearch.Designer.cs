@@ -1,4 +1,5 @@
 ﻿
+using System.ComponentModel;
 using System.Windows.Forms;
 using MyNotebooks.objects;
 
@@ -9,7 +10,7 @@ namespace MyNotebooks.subforms
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		private System.ComponentModel.IContainer components = null;
+		private IContainer components = null;
 
 		/// <summary>
 		/// Clean up any resources being used.
@@ -32,8 +33,8 @@ namespace MyNotebooks.subforms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSearch));
+			components = new Container();
+			ComponentResourceManager resources = new ComponentResourceManager(typeof(frmSearch));
 			grpFindEntry = new GroupBox();
 			lblSelectAllOrNone = new Label();
 			ccb = new CheckedComboBox();
@@ -72,6 +73,7 @@ namespace MyNotebooks.subforms
 			lblSelectionType = new Label();
 			label8 = new Label();
 			mnuEditEntry = new ToolStripMenuItem();
+			worker = new BackgroundWorker();
 			grpFindEntry.SuspendLayout();
 			pnlLabels_AndOr.SuspendLayout();
 			mnuEntryEditTop.SuspendLayout();
@@ -139,6 +141,7 @@ namespace MyNotebooks.subforms
 			ccb.TabIndex = 55;
 			ccb.ValueMember = "Id";
 			ccb.ValueSeparator = ", ";
+			ccb.ItemCheck += this.ccb_ItemCheck;
 			// 
 			// lblNumEntriesFound
 			// 
@@ -177,7 +180,7 @@ namespace MyNotebooks.subforms
 			// 
 			lstEntryObjects.FormattingEnabled = true;
 			lstEntryObjects.ItemHeight = 15;
-			lstEntryObjects.Location = new System.Drawing.Point(636, 121);
+			lstEntryObjects.Location = new System.Drawing.Point(604, 121);
 			lstEntryObjects.Name = "lstEntryObjects";
 			lstEntryObjects.Size = new System.Drawing.Size(120, 34);
 			lstEntryObjects.TabIndex = 50;
@@ -491,6 +494,10 @@ namespace MyNotebooks.subforms
 			mnuEditEntry.Size = new System.Drawing.Size(32, 19);
 			mnuEditEntry.Text = "Edit Entry";
 			// 
+			// worker
+			// 
+			worker.WorkerReportsProgress = true;
+			// 
 			// frmSearch
 			// 
 			AcceptButton = btnSearch;
@@ -550,5 +557,6 @@ namespace MyNotebooks.subforms
 		private ToolStripMenuItem editOriginalTextToolStripMenuItem;
 		private Label lblSelectAllOrNone;
 		private CheckedComboBox ccb;
+		BackgroundWorker worker;
 	}
 }

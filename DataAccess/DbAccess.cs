@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
+using System.Security.Cryptography;
 using Encryption;
 using MyNotebooks.objects;
 using MyNotebooks.subforms;
@@ -292,6 +294,82 @@ namespace MyNotebooks.DataAccess
 			return lstRtrn;
 		}
 
+		public static List<Entry>	GetEntriesCreatedByUser()
+		{
+			try
+			{
+				List<Entry> entries = new();
+				DataTable dt = new();
+
+				using (SqlConnection conn = new(connString))
+				{
+					conn.Open();
+
+					using (SqlCommand cmd = new("sp_GetEntriesCreatedByUser", conn))
+					{
+						cmd.CommandType = CommandType.StoredProcedure;
+						cmd.Parameters.AddWithValue("@userId", Program.User.Id);
+						SqlDataAdapter sda = new() { SelectCommand = cmd };
+						sda.Fill(dt);
+
+						for (int i = 0; i < dt.Rows.Count; i++)
+						{
+							entries.Add(new(dt, i));
+						}
+					}
+				}
+				return entries;
+			}
+			catch { return null; }
+		}
+
+		public static List<Entry> GetEntriesInNotebook(int notebookId)
+		{
+			try
+			{
+				List<Entry> entries = new();
+				DataTable dt = new();
+				DataSet ds = new();
+				Entry entry = null;
+
+				using (SqlConnection conn = new(connString))
+				{
+					conn.Open();
+					 
+					using (SqlCommand cmd = new("sp_GetEntriesForNotebook", conn))
+					{
+						cmd.CommandType = CommandType.StoredProcedure;
+						cmd.Parameters.AddWithValue("@notebookId", notebookId);
+						SqlDataAdapter sda = new() { SelectCommand = cmd };
+						sda.Fill(ds);
+						DataTable tblEntries = ds.Tables[0];
+						DataTable tblLabels = ds.Tables[1];
+						List<MNLabel> labels = new();
+
+						for (int i = 0; i < tblEntries.Rows.Count; i++)
+						{
+							entry = new(tblEntries, i);
+
+							for (int i2 = 0; i2 < tblLabels.Rows.Count; i2++)
+							{
+								if (dt.Rows.Count > 0) { entry.AllLabels.Add(new(dt, i2)); }
+							}
+
+							//var v = labels.Where(e => e.ParentId == entry.Id).ToList();
+							//if (v.Any()) { entry.AllLabels.AddRange(v); }
+
+							entries.Add(entry);
+						}
+
+
+					}
+				}
+				return entries;
+			}
+			catch { return null; }
+
+		}
+
 		public static List<Entry>	GetEntriesWithLabel(MNLabel label)
 		{
 			List<Entry> entries = new();
@@ -316,6 +394,36 @@ namespace MyNotebooks.DataAccess
 			}
 
 			return entries;
+		}
+
+		public static List<Notebook> GetNotebooksUnderOrgLevel(frmMain.OrgLevelTypes orgLevel, string orgLevelIds)
+		{
+			try
+			{
+				List<Notebook> notebooks = new();
+				DataTable dt = new();
+
+				using (SqlConnection conn = new(connString))
+				{
+					conn.Open();
+
+					using (SqlCommand cmd = new("sp_GetNotebooksUnderOrgLevel", conn))
+					{
+						cmd.CommandType = CommandType.StoredProcedure;
+						cmd.Parameters.AddWithValue("@orgLevel", (int)orgLevel);
+						cmd.Parameters.AddWithValue("@orgLevelIds", orgLevelIds);
+						SqlDataAdapter sda = new() { SelectCommand = cmd };
+						sda.Fill(dt);
+
+						for (int i = 0; i < dt.Rows.Count; i++)
+						{
+							notebooks.Add(new(dt, i));
+						}
+					}
+				}
+				return notebooks;
+			}
+			catch { return null; }
 		}
 
 		public static KeyValuePair<MNLabel, MNUser> GetLabel(int labelId)
@@ -394,34 +502,34 @@ namespace MyNotebooks.DataAccess
 			return lstRtrn;
 		}
 
-		public static Entry			GetFullEntry(Entry entryToComplete) 
-		{
-			using (SqlConnection conn = new(connString))
-			{
-				conn.Open();
+		//public static Entry			GetFullEntry(Entry entryToComplete) 
+		//{
+		//	using (SqlConnection conn = new(connString))
+		//	{
+		//		conn.Open();
 
-				using (SqlCommand cmd = new("sp_GetNotebookEntry_Full", conn))
-				{
-					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@entryId", entryToComplete.Id);
+		//		using (SqlCommand cmd = new("sp_GetNotebookEntry_Full", conn))
+		//		{
+		//			cmd.CommandType = CommandType.StoredProcedure;
+		//			cmd.Parameters.AddWithValue("@entryId", entryToComplete.Id);
 
-					using (SqlDataReader reader = cmd.ExecuteReader())
-					{
-						while (reader.Read())
-						{
-							entryToComplete.Text = reader.GetString("Text");
-							entryToComplete.RTF = reader.GetString("RTF");
-						}
-					}
-				}
+		//			using (SqlDataReader reader = cmd.ExecuteReader())
+		//			{
+		//				while (reader.Read())
+		//				{
+		//					entryToComplete.Text = reader.GetString("Text");
+		//					entryToComplete.RTF = reader.GetString("RTF");
+		//				}
+		//			}
+		//		}
 
-				entryToComplete.AllLabels = GetLabelsForEntry(entryToComplete.Id);
-			}
+		//		entryToComplete.AllLabels = GetLabelsForEntry(entryToComplete.Id);
+		//	}
 
-			return entryToComplete;
-		}
+		//	return entryToComplete;
+		//}
 
-		public static Notebook		GetNotebookWithShortEntries(int notebookId, string name) 
+		public static Notebook		GetNotebook_OptionalEntries(int notebookId, bool getEntries = true) 
 		{
 			Notebook nbRtrn = null;
 			DataTable dt = new();
@@ -434,50 +542,60 @@ namespace MyNotebooks.DataAccess
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 					cmd.Parameters.AddWithValue("@Id", notebookId);
-					cmd.Parameters.AddWithValue("@name", name);
 					SqlDataAdapter sda = new() { SelectCommand = cmd };
 					sda.Fill(dt);
 					nbRtrn = new Notebook(dt);
 
 					// get the entries
-					dt = new();
-					cmd.Parameters.Clear();
-					cmd.CommandText = "sp_GetNotebookEntries";
-					cmd.Parameters.AddWithValue("@notebookId", notebookId);
-					sda.SelectCommand = cmd;
-					sda.Fill(dt);
-
-					for(int i = 0; i < dt.Rows.Count; i++)
+					if (getEntries)
 					{
-						Entry entry = new(dt, i);
-						//entry.ParentId = nbRtrn.Id;
-
-						try 
-						{ 
-							var v = dt.Rows[i].Field<DateTime?>("EditedOn").ToString(); 
-							if (v != null) { entry.EditedOn = DateTime.Parse(v); }
-						}
-						catch(Exception e) 
-						{ 
-							if(e.GetType() != typeof(System.FormatException))	// 'v' was not a valid datetime
-							{
-								using (frmMessage frm = new(frmMessage.OperationType.Message, 
-									"An error occurred getting shortend Entries. " + e.Message, "Error!")) { frm.ShowDialog(); }
-							}
-						}
-
-						nbRtrn.Entries.Add(entry);	
+						PopulateNotebookEntries(ref nbRtrn);
 					}
 				}
 			}
 
 			return nbRtrn;
 		}
-
-		public static List<Entry>	GetNotebookEntries(int notebookId)
+		/// <summary>
+		/// Populate Program.User.Notebooks. Include 
+		/// </summary>
+		/// <param name="orgLevelType"></param>
+		/// <param name="orgLevelIds"></param>
+//		public static void		PopulateNotebooksByUserAndDescendants(frmMain.OrgLevelTypes orgLevelType, string orgLevelIds, bool getEntries = true)
+		public static void			PopulateNotebooksByUserAndDescendants(bool getEntries)
 		{
-			List<Entry> lstRtrn = new List<Entry>();
-			DataTable dt = new DataTable();
+			List<OrgLevel> lstRtrn = new();
+			DataTable dt = new();
+
+			try
+			{
+				using (SqlConnection conn = new(connString))
+				{
+					conn.Open();
+					using (SqlCommand cmd = new("sp_GetNotebooksCreatedByUser", conn))
+					{
+						cmd.CommandType = CommandType.StoredProcedure;
+						cmd.Parameters.AddWithValue("@userId", Program.User.Id);
+						SqlDataAdapter adapter = new() { SelectCommand = cmd };
+						adapter.Fill(dt);
+
+						foreach (DataRow dr in dt.Rows)
+						{
+							Notebook nb = new(dt);
+							if (getEntries) { PopulateNotebookEntries(ref nb); }
+							Program.User.Notebooks.Add(nb);
+						}
+					}
+				}
+
+			}
+			catch (Exception ex) { }
+		}
+
+		public static void			PopulateNotebookEntries(ref Notebook notebook)
+		{
+			DataTable dt = new();
+			notebook.Entries.Clear();
 
 			using (SqlConnection conn = new(connString))
 			{
@@ -486,14 +604,32 @@ namespace MyNotebooks.DataAccess
 				using (SqlCommand cmd = new("sp_GetNotebookEntries", conn))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@notebookId", notebookId);
+					cmd.Parameters.AddWithValue("@notebookId", notebook.Id);
 					SqlDataAdapter sda = new() { SelectCommand = cmd };
 					sda.Fill(dt);
+
+					for (int i = 0; i < dt.Rows.Count; i++)
+					{
+						Entry entry = new(dt, i);
+
+						try
+						{
+							var v = dt.Rows[i].Field<DateTime?>("EditedOn").ToString();
+							if (v != null) { entry.EditedOn = DateTime.Parse(v); }
+						}
+						catch (Exception e)
+						{
+							if (e.GetType() != typeof(System.FormatException))  // 'v' was not a valid datetime
+							{
+								using (frmMessage frm = new(frmMessage.OperationType.Message,
+									"An error occurred getting Entries. " + e.Message, "Error!")) { frm.ShowDialog(); }
+							}
+						}
+
+						notebook.Entries.Add(entry);
+					}
 				}
 			}
-
-			foreach(DataRow dr in dt.Rows) { lstRtrn.Add(new(dt));	}
-			return lstRtrn;
 		}
 
 		public static List<Notebook> GetNotebookNamesAndIdsForGroup(int groupId)
@@ -554,7 +690,6 @@ namespace MyNotebooks.DataAccess
 		public static List<OrgLevel> GetOrgLevelItemsAvailableToUser(frmMain.OrgLevelTypes orgLevelType) 
 		{ 
 			List<OrgLevel> lstRtrn = new();
-
 			DataTable dt = new();
 
 			using (SqlConnection conn = new(connString))

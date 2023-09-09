@@ -280,7 +280,7 @@ namespace MyNotebooks.subforms
 			lstCompanies_MU.Name = "lstCompanies_MU";
 			lstCompanies_MU.Size = new System.Drawing.Size(227, 94);
 			lstCompanies_MU.TabIndex = 25;
-			lstCompanies_MU.Tag = "0";
+			lstCompanies_MU.Tag = "6";
 			lstCompanies_MU.ValueMember = "Id";
 			lstCompanies_MU.DragLeave += this.lstMU_DragLeave;
 			lstCompanies_MU.MouseDown += this.lstMUCU_MouseDown;
@@ -377,7 +377,7 @@ namespace MyNotebooks.subforms
 			lstDepartments_MU.Name = "lstDepartments_MU";
 			lstDepartments_MU.Size = new System.Drawing.Size(227, 94);
 			lstDepartments_MU.TabIndex = 25;
-			lstDepartments_MU.Tag = "2";
+			lstDepartments_MU.Tag = "4";
 			lstDepartments_MU.ValueMember = "Id";
 			lstDepartments_MU.DragLeave += this.lstMU_DragLeave;
 			lstDepartments_MU.MouseDown += this.lstMUCU_MouseDown;
@@ -404,7 +404,7 @@ namespace MyNotebooks.subforms
 			lstAccounts_MU.Name = "lstAccounts_MU";
 			lstAccounts_MU.Size = new System.Drawing.Size(227, 94);
 			lstAccounts_MU.TabIndex = 25;
-			lstAccounts_MU.Tag = "1";
+			lstAccounts_MU.Tag = "5";
 			lstAccounts_MU.ValueMember = "Id";
 			lstAccounts_MU.DragLeave += this.lstMU_DragLeave;
 			lstAccounts_MU.MouseDown += this.lstMUCU_MouseDown;
@@ -518,7 +518,7 @@ namespace MyNotebooks.subforms
 			lstCompanies_CU.Name = "lstCompanies_CU";
 			lstCompanies_CU.Size = new System.Drawing.Size(227, 94);
 			lstCompanies_CU.TabIndex = 25;
-			lstCompanies_CU.Tag = "0";
+			lstCompanies_CU.Tag = "6";
 			lstCompanies_CU.ValueMember = "Id";
 			lstCompanies_CU.DragEnter += this.lstCU_DragEnter;
 			lstCompanies_CU.MouseDown += this.lstMUCU_MouseDown;
@@ -575,7 +575,7 @@ namespace MyNotebooks.subforms
 			lstDepartments_CU.Name = "lstDepartments_CU";
 			lstDepartments_CU.Size = new System.Drawing.Size(227, 94);
 			lstDepartments_CU.TabIndex = 25;
-			lstDepartments_CU.Tag = "2";
+			lstDepartments_CU.Tag = "4";
 			lstDepartments_CU.ValueMember = "Id";
 			lstDepartments_CU.DragEnter += this.lstCU_DragEnter;
 			lstDepartments_CU.MouseDown += this.lstMUCU_MouseDown;
@@ -603,7 +603,7 @@ namespace MyNotebooks.subforms
 			lstAccounts_CU.Name = "lstAccounts_CU";
 			lstAccounts_CU.Size = new System.Drawing.Size(227, 94);
 			lstAccounts_CU.TabIndex = 25;
-			lstAccounts_CU.Tag = "1";
+			lstAccounts_CU.Tag = "5";
 			lstAccounts_CU.ValueMember = "Id";
 			lstAccounts_CU.DragEnter += this.lstCU_DragEnter;
 			lstAccounts_CU.MouseDown += this.lstMUCU_MouseDown;

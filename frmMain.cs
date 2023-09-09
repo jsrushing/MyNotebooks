@@ -388,7 +388,7 @@ namespace MyNotebooks.subforms
 			if (CurrentNotebook != null && Program.DictCheckedNotebooks.Count == 1 && Program.DictCheckedNotebooks.Keys.Contains(CurrentNotebook.Name)) { Program.DictCheckedNotebooks.Clear(); }
 			if (Program.DictCheckedNotebooks.Count == 0) { Program.DictCheckedNotebooks.Add(ddlNotebooks.Text, txtJournalPIN.Text); }
 
-			CurrentNotebook = DbAccess.GetNotebookWithShortEntries(SelectedNotebookIds.Key, SelectedNotebookIds.Value);
+			CurrentNotebook = DbAccess.GetNotebook_OptionalEntries(SelectedNotebookIds.Key);
 
 			var wrongPIN = true;
 
@@ -647,7 +647,7 @@ namespace MyNotebooks.subforms
 
 				if (CurrentEntry != null)       //&& !CurrentEntry.Id.Equals(currentId)) // Disallow modification of the 'created' entry.
 				{
-					CurrentEntry = DbAccess.GetFullEntry(CurrentEntry);
+					//CurrentEntry = DbAccess.GetFullEntry(CurrentEntry);
 					FirstSelection = false;
 					lblSelectionType.Visible = rtb.Text.Length > 0;
 					lblSeparator.Visible = rtb.Text.Length > 0;
@@ -833,7 +833,7 @@ namespace MyNotebooks.subforms
 
 		private void mnuNotebook_ForceBackup_Click(object sender, EventArgs e)
 		{
-			CurrentNotebook.Backup_Forced();
+			//CurrentNotebook.Backup_Forced();
 			string sMsg = CurrentNotebook.BackupCompleted ? "The backup was completed" : "An error occurred. The backup was not completed.";
 			using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "", this)) { frm.ShowDialog(this); }
 		}

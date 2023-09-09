@@ -435,6 +435,12 @@ namespace MyNotebooks.objects
 			}
 		}
 
+		public object GetSelectedItem()
+		{
+			var v = dropdown.List.SelectedItem;
+			return v;
+		}
+
 		public void SetItemChecked(int index, bool isChecked)
 		{
 			if (index < 0 || index > Items.Count)
@@ -475,7 +481,7 @@ namespace MyNotebooks.objects
 			}
 		}
 
-		public void ToggleAll(bool setChecked) 
+		public void CheckUncheckAll(bool setChecked) 
 		{
 			for ( int i = 0; i < Items.Count; i++ )
 			{

@@ -132,7 +132,7 @@ namespace MyNotebooks.subforms
 								CurrentUser.Email = frm.ResultText;
 								await CurrentUser.Create();
 
-								if(CurrentUser.Id > 0)
+								if (CurrentUser.Id > 0)
 								{
 									msg = "The User '" + CurrentUser.Name + "' was created. Now choose permissions and " +
 										"organizationl levels and click '" + CreateUserButton_UpdateUser + "'.";
@@ -385,11 +385,11 @@ namespace MyNotebooks.subforms
 
 			if (lb.Name.EndsWith("MU"))
 			{
-				if (lb.Name.ToLower().Contains("group"))			{ Program.SelectedGroupName = CurrentMouseListBox.Text.Trim(); }
-				else if (lb.Name.ToLower().Contains("department"))	{ Program.SelectedDepartmentName = CurrentMouseListBox.Text.Trim(); }
-				else if (lb.Name.ToLower().Contains("account"))		{ Program.SelectedAccountName = CurrentMouseListBox.Text.Trim(); }
-				else if (lb.Name.ToLower().Contains("companies"))		{ Program.SelectedCompanyName = CurrentMouseListBox.Text.Trim(); }
-			}  
+				if (lb.Name.ToLower().Contains("group")) { Program.SelectedGroupName = CurrentMouseListBox.Text.Trim(); }
+				else if (lb.Name.ToLower().Contains("department")) { Program.SelectedDepartmentName = CurrentMouseListBox.Text.Trim(); }
+				else if (lb.Name.ToLower().Contains("account")) { Program.SelectedAccountName = CurrentMouseListBox.Text.Trim(); }
+				else if (lb.Name.ToLower().Contains("companies")) { Program.SelectedCompanyName = CurrentMouseListBox.Text.Trim(); }
+			}
 
 			if (e.Button == MouseButtons.Right)
 			{
@@ -780,7 +780,7 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-	#region treeUser methods
+		#region treeUser methods
 
 		private void SetNodeEnabled_Disabled(string nodeName, bool setEnabled = true)
 		{
@@ -921,7 +921,7 @@ namespace MyNotebooks.subforms
 			if (lblTreePath.Text.Length > 0) { this.Height = lblTreePath.Top + lblTreePath.Height + 50; }
 
 		}
-	#endregion
+		#endregion
 
 		private void txtCredentials_TextChanged(object sender, EventArgs e) { if (this.Size != SmallSize) { ResetForm(); } }
 	}
