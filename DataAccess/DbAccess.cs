@@ -328,7 +328,6 @@ namespace MyNotebooks.DataAccess
 			try
 			{
 				List<Entry> entries = new();
-				DataTable dt = new();
 				DataSet ds = new();
 				Entry entry = null;
 
@@ -352,7 +351,7 @@ namespace MyNotebooks.DataAccess
 
 							for (int i2 = 0; i2 < tblLabels.Rows.Count; i2++)
 							{
-								if (dt.Rows.Count > 0) { entry.AllLabels.Add(new(dt, i2)); }
+								entry.AllLabels.Add(new(tblLabels, i2));
 							}
 
 							//var v = labels.Where(e => e.ParentId == entry.Id).ToList();
@@ -360,8 +359,6 @@ namespace MyNotebooks.DataAccess
 
 							entries.Add(entry);
 						}
-
-
 					}
 				}
 				return entries;
@@ -394,36 +391,6 @@ namespace MyNotebooks.DataAccess
 			}
 
 			return entries;
-		}
-
-		public static List<Notebook> GetNotebooksUnderOrgLevel(frmMain.OrgLevelTypes orgLevel, string orgLevelIds)
-		{
-			try
-			{
-				List<Notebook> notebooks = new();
-				DataTable dt = new();
-
-				using (SqlConnection conn = new(connString))
-				{
-					conn.Open();
-
-					using (SqlCommand cmd = new("sp_GetNotebooksUnderOrgLevel", conn))
-					{
-						cmd.CommandType = CommandType.StoredProcedure;
-						cmd.Parameters.AddWithValue("@orgLevel", (int)orgLevel);
-						cmd.Parameters.AddWithValue("@orgLevelIds", orgLevelIds);
-						SqlDataAdapter sda = new() { SelectCommand = cmd };
-						sda.Fill(dt);
-
-						for (int i = 0; i < dt.Rows.Count; i++)
-						{
-							notebooks.Add(new(dt, i));
-						}
-					}
-				}
-				return notebooks;
-			}
-			catch { return null; }
 		}
 
 		public static KeyValuePair<MNLabel, MNUser> GetLabel(int labelId)
@@ -529,6 +496,36 @@ namespace MyNotebooks.DataAccess
 		//	return entryToComplete;
 		//}
 
+		public static List<Notebook> GetNotebooksUnderOrgLevel(frmMain.OrgLevelTypes orgLevel, string orgLevelIds)
+		{
+			try
+			{
+				List<Notebook> notebooks = new();
+				DataTable dt = new();
+
+				using (SqlConnection conn = new(connString))
+				{
+					conn.Open();
+
+					using (SqlCommand cmd = new("sp_GetNotebooksUnderOrgLevel", conn))
+					{
+						cmd.CommandType = CommandType.StoredProcedure;
+						cmd.Parameters.AddWithValue("@orgLevel", (int)orgLevel);
+						cmd.Parameters.AddWithValue("@orgLevelIds", orgLevelIds);
+						SqlDataAdapter sda = new() { SelectCommand = cmd };
+						sda.Fill(dt);
+
+						for (int i = 0; i < dt.Rows.Count; i++)
+						{
+							notebooks.Add(new(dt, i));
+						}
+					}
+				}
+				return notebooks;
+			}
+			catch { return null; }
+		}
+
 		public static Notebook		GetNotebook_OptionalEntries(int notebookId, bool getEntries = true) 
 		{
 			Notebook nbRtrn = null;
@@ -556,6 +553,7 @@ namespace MyNotebooks.DataAccess
 
 			return nbRtrn;
 		}
+
 		/// <summary>
 		/// Populate Program.User.Notebooks. Include 
 		/// </summary>

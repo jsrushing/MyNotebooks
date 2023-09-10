@@ -91,23 +91,21 @@ namespace MyNotebooks.subforms
 
 		private void chkUseDateRange_CheckedChanged(object sender, EventArgs e) { ToggleDateControls(false); }
 
-		private object? PopulateNotebookEntries()
-		{
-			foreach(Notebook nb in Program.User.Notebooks)
-			{
+		//private object? PopulateNotebookEntries()
+		//{
+		//	foreach(Notebook nb in Program.User.Notebooks)
+		//	{
 
-			}
-			return null;
-		}
+		//	}
+		//	return null;
+		//}
 
 		private async Task DoSearch()
 		{
 			this.Cursor = Cursors.WaitCursor;
 			var labels = string.Empty;
-			string[] labelsArray;
 			List<Entry> foundEntries = new List<Entry>();
 			EntriesToSearch.Clear();
-			List<Entry> nbFound = null;
 			List<Entry> entries = new();
 			List<Notebook> notebooks = new();
 			//DbAccess.PopulateNotebooksByUserAndDescendants(true);
@@ -149,48 +147,55 @@ namespace MyNotebooks.subforms
 			// land here with Program.User.Notebooks populated with Entry objects
 
 			// get labels being searched for ...
-			labels = labels.Length > 0 ? labels.Substring(0, labels.Length - 1) : string.Empty;
-			labelsArray = labels.Length > 0 ? labels.Split(',') : null;
+			//labels = labels.Length > 0 ? labels.Substring(0, labels.Length - 1) : string.Empty;
+			//labelsArray = labels.Length > 0 ? labels.Split(',') : null;
 
-			SearchObject sob = new SearchObject(chkUseDate, chkUseDateRange, chkMatchCase, dtFindDate,
-						dtFindDate_From, dtFindDate_To, radBtnAnd, radLabels_And, txtSearchTitle.Text, txtSearchText.Text, labelsArray);
-
-
-
-
-
-			NotebookBoundariesDict.Clear();
-			lstFoundEntries.Items.Clear();
-			FoundEntries.Clear();
-
-			lstLabelsForSearch.Items.Clear();
-			var v = EntriesToSearch.Select(e => e.AllLabels).ToList();
-
-			for (var i = 0; i < lstLabelsForSearch.CheckedItems.Count; i++) { labels += lstLabelsForSearch.CheckedItems[i].ToString() + ","; }
-
-			labels = labels.Length > 0 ? labels.Substring(0, labels.Length - 1) : string.Empty;
-			labelsArray = labels.Length > 0 ? labels.Split(',') : null;
-
-			SearchObject so = new SearchObject(chkUseDate, chkUseDateRange, chkMatchCase, dtFindDate,
-					dtFindDate_From, dtFindDate_To, radBtnAnd, radLabels_And, txtSearchTitle.Text, txtSearchText.Text, labelsArray);
-
-			var lastIndex = 0;
-
-			foreach (KeyValuePair<string, string> kvp in Program.DictCheckedNotebooks)
+			foreach(Notebook nb in Program.User.Notebooks)
 			{
-				Utilities.SetProgramPIN(kvp.Key);
-				nbFound = new Notebook(kvp.Key.Replace(" (****)", ""), "").Open().Search(so);
-				await Utilities.PopulateEntries(lstFoundEntries, nbFound, "", "", "", false, 0, true);
+				foreach(Entry entry in nb.Entries)
+				{ 				
+					SearchObject sob = new SearchObject(chkUseDate, chkUseDateRange, chkMatchCase, dtFindDate,
+								dtFindDate_From, dtFindDate_To, radBtnAnd, radLabels_And, txtSearchTitle.Text
+								, txtSearchText.Text, entry.AllLabels.Select(e => e.LabelText).ToArray());
 
-				if (nbFound.Count > 0)
-				{
-					lastIndex += nbFound.Count * 4;
-					if (!NotebookBoundariesDict.Keys.Contains(kvp.Key)) NotebookBoundariesDict.Add(kvp.Key, lastIndex);
-					FoundEntries.AddRange(nbFound);
+					foundEntries.AddRange(nb.Search(sob));
 				}
-
-				foundEntries.Clear();
 			}
+
+			await Utilities.PopulateEntries(lstFoundEntries, foundEntries, "", "", "", true , 0, true, lstFoundEntries.Width);
+
+			//NotebookBoundariesDict.Clear();
+			//lstFoundEntries.Items.Clear();
+			//FoundEntries.Clear();
+
+			//lstLabelsForSearch.Items.Clear();
+			//var v = EntriesToSearch.Select(e => e.AllLabels).ToList();
+
+			//for (var i = 0; i < lstLabelsForSearch.CheckedItems.Count; i++) { labels += lstLabelsForSearch.CheckedItems[i].ToString() + ","; }
+
+			//labels = labels.Length > 0 ? labels.Substring(0, labels.Length - 1) : string.Empty;
+			//labelsArray = labels.Length > 0 ? labels.Split(',') : null;
+
+			//SearchObject so = new SearchObject(chkUseDate, chkUseDateRange, chkMatchCase, dtFindDate,
+			//		dtFindDate_From, dtFindDate_To, radBtnAnd, radLabels_And, txtSearchTitle.Text, txtSearchText.Text, labelsArray);
+
+			//var lastIndex = 0;
+
+			//foreach (KeyValuePair<string, string> kvp in Program.DictCheckedNotebooks)
+			//{
+			//	Utilities.SetProgramPIN(kvp.Key);
+			//	entriesFound = new Notebook(kvp.Key.Replace(" (****)", ""), "").Open().Search(so);
+			//	await Utilities.PopulateEntries(lstFoundEntries, entriesFound, "", "", "", false, 0, true);
+
+			//	if (entriesFound.Count > 0)
+			//	{
+			//		lastIndex += entriesFound.Count * 4;
+			//		if (!NotebookBoundariesDict.Keys.Contains(kvp.Key)) NotebookBoundariesDict.Add(kvp.Key, lastIndex);
+			//		FoundEntries.AddRange(entriesFound);
+			//	}
+
+			//	foundEntries.Clear();
+			//}
 
 			if (lstFoundEntries.Items.Count == 0) { lstFoundEntries.Items.Add("no matches found"); }
 			btnExportEntries.Visible = lstFoundEntries.Items.Count > 1;

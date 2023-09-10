@@ -469,41 +469,45 @@ namespace MyNotebooks
 				{ allEntries = Entries.Where(p => p.CreatedOn >= So.dtFindDate_From.Value && p.CreatedOn <= So.dtFindDate_To.Value).ToList(); }
 			}
 
+			if(allEntries.Count == 0) allEntries = this.Entries;
+
 			if(So.labelsArray != null) { allEntries = ProcessLabels(allEntries, So.labelsArray, So.radBtnLabelsAnd.Checked); }
 
-			if(!So.chkMatchCase.Checked) { So.searchTitle = So.searchTitle.ToLower(); So.searchText = So.searchText.ToLower(); }
+			if (allEntries.Count == 0) allEntries = this.Entries;
+
+			if (!So.chkMatchCase.Checked) { So.searchTitle = So.searchTitle.ToLower(); So.searchText = So.searchText.ToLower(); }
 
 			if(So.searchText.Length > 0 | So.searchTitle.Length > 0)
 			{
-				if (!So.chkMatchCase.Checked)
-				{
-					So.searchTitle = So.searchTitle.ToLower(); 
-					So.searchText = So.searchText.ToLower();
+				//if (!So.chkMatchCase.Checked)
+				//{
+				//	So.searchTitle = So.searchTitle.ToLower(); 
+				//	So.searchText = So.searchText.ToLower();
 
 					if (So.searchText.Length > 0 & So.searchTitle.Length > 0)
 					{
 						if (So.radBtnAnd.Checked)
 						{ allEntries = allEntries.Where(e => e.Title.ToLower().Contains(So.searchTitle) & e.Text.ToLower().Contains(So.searchText)).ToList(); }
-						else { allEntries = allEntries.Where(e => e.Title.ToLower().Contains(So.searchTitle) | e.Text.ToLower().Contains(So.searchText)).ToList(); }
+						else { allEntries = this.Entries.Where(e => e.Title.ToLower().Contains(So.searchTitle) | e.Text.ToLower().Contains(So.searchText)).ToList(); }
 					}
 					else if (So.searchText.Length > 0)
 					{ allEntries = allEntries.Where(e => e.Text.ToLower().Contains(So.searchText)).ToList(); }
 					else if (So.searchTitle.Length > 0)
 					{ allEntries = allEntries.Where(e => e.Title.ToLower().Contains(So.searchTitle)).ToList(); }
-				}
-				else
-				{
-					if(So.searchText.Length > 0 & So.searchTitle.Length > 0)
-					{
-						if (So.radBtnAnd.Checked)
-						{ allEntries = allEntries.Where(e => e.Title.Contains(So.searchTitle) & e.Text.Contains(So.searchText)).ToList(); }
-						else { allEntries = allEntries.Where(e => e.Title.Contains(So.searchTitle) | e.Text.Contains(So.searchText)).ToList(); }
-					}
-					else if(So.searchText.Length > 0)
-					{ allEntries = allEntries.Where(e => e.Text.Contains(So.searchText)).ToList() ; }
-					else if(So.searchTitle.Length > 0)
-					{ allEntries = allEntries.Where(e => e.Title.Contains(So.searchTitle)).ToList(); }
-				}
+				//}
+				//else
+				//{
+					//if(So.searchText.Length > 0 & So.searchTitle.Length > 0)
+					//{
+					//	if (So.radBtnAnd.Checked)
+					//	{ allEntries = allEntries.Where(e => e.Title.Contains(So.searchTitle) & e.Text.Contains(So.searchText)).ToList(); }
+					//	else { allEntries = allEntries.Where(e => e.Title.Contains(So.searchTitle) | e.Text.Contains(So.searchText)).ToList(); }
+					//}
+					//else if(So.searchText.Length > 0)
+					//{ allEntries = allEntries.Where(e => e.Text.Contains(So.searchText)).ToList() ; }
+					//else if(So.searchTitle.Length > 0)
+					//{ allEntries = allEntries.Where(e => e.Title.Contains(So.searchTitle)).ToList(); }
+				//}
 			}
 			return allEntries;
 		}
