@@ -33,6 +33,7 @@ namespace MyNotebooks
 		public string		LabelsToRemove { get; set; }
 		public string		NotebookName { get; set; }
 		public int			ParentId { get; set; }
+		public string		ParentPath { get; set; }
 		public string		RTF { get; set; }
 		public string		Text { get; set; }
 		public string		Text_Shortened { get; set; }
@@ -177,13 +178,13 @@ namespace MyNotebooks
 			return bLabelEdited;
 		}
 
-		public string[]		GetSynopsis(bool includeJournalName = false, int maxWidth = -1)
+		public string[]		GetSynopsis(bool includeNotebookName = false, int maxWidth = -1)
 		{
 			string[] sRtrn = new string[4];
 			int iTextChunkLength = maxWidth > 0 ? Convert.ToInt32(maxWidth / 5.3): 150;
 			string sTitle = Title + " (" + CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"
 				+ (EditedOn  < new DateTime(2000, 1, 1) ? "" : " [edited on " + EditedOn .ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + "]");
-			if (includeJournalName) { sTitle += NotebookName == null ? "" : " > in '" + NotebookName + "'"; }
+			if (includeNotebookName) { sTitle += NotebookName == null ? "" : " > in '" + NotebookName + "'"; }
 			sRtrn[0] = sTitle;
 			string sEntryText = Text.Replace("\n", " ");
 			sEntryText = (sEntryText.Length < iTextChunkLength ? sEntryText : sEntryText.Substring(0, iTextChunkLength) + " ...");

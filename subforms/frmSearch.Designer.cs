@@ -73,7 +73,7 @@ namespace MyNotebooks.subforms
 			lblSelectionType = new Label();
 			label8 = new Label();
 			mnuEditEntry = new ToolStripMenuItem();
-			worker = new BackgroundWorker();
+			bgWorker = new BackgroundWorker();
 			grpFindEntry.SuspendLayout();
 			pnlLabels_AndOr.SuspendLayout();
 			mnuEntryEditTop.SuspendLayout();
@@ -494,9 +494,9 @@ namespace MyNotebooks.subforms
 			mnuEditEntry.Size = new System.Drawing.Size(32, 19);
 			mnuEditEntry.Text = "Edit Entry";
 			// 
-			// worker
+			// bgWorker
 			// 
-			worker.WorkerReportsProgress = true;
+			bgWorker.WorkerReportsProgress = true;
 			// 
 			// frmSearch
 			// 
@@ -557,6 +557,6 @@ namespace MyNotebooks.subforms
 		private ToolStripMenuItem editOriginalTextToolStripMenuItem;
 		private Label lblSelectAllOrNone;
 		private CheckedComboBox ccb;
-		BackgroundWorker worker;
+		BackgroundWorker bgWorker;
 	}
 }

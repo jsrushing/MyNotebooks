@@ -323,7 +323,7 @@ namespace MyNotebooks.DataAccess
 			catch { return null; }
 		}
 
-		public static List<Entry> GetEntriesInNotebook(int notebookId)
+		public static List<Entry>	GetEntriesInNotebook(int notebookId)
 		{
 			try
 			{

@@ -253,7 +253,7 @@ namespace MyNotebooks.objects
 		}
 
 		public static async Task PopulateEntries(ListBox lbxToPopulate, List<Entry> entries, string notebookName = "", string startDate = "", 
-			string endDate = "", bool clearPrevious = true, int SortBy = 0, bool includeJrnlName = false, int maxWidth = 0, string labelFilter = "")
+			string endDate = "", bool clearPrevious = true, int SortBy = 0, bool includeNotebookName = false, int maxWidth = 0, string labelFilter = "")
 		{
 			if(clearPrevious) lbxToPopulate.Items.Clear();
 			List<Entry> tmpEntries = null;
@@ -276,12 +276,16 @@ namespace MyNotebooks.objects
 				case 2:
 					tmpEntries.Sort((x, y) => x.Title.CompareTo(y.Title));
 					break;
+				case 3:
+					tmpEntries.Sort((x,y) => x.NotebookName.CompareTo(y.NotebookName));
+					break;
 			}
 
 			foreach (Entry nbEntry in tmpEntries)
 			{
 				nbEntry.PopulateLabels();
-				var synopsis = nbEntry.GetSynopsis(includeJrnlName, maxWidth);
+				nbEntry.NotebookName += "' " + nbEntry.ParentPath;
+				var synopsis = nbEntry.GetSynopsis(includeNotebookName, maxWidth);
 				for(int i = 0; i < synopsis.Length; i++) { lbxToPopulate.Items.Add(synopsis[i]); } 
 			}
 		}

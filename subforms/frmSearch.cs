@@ -4,6 +4,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -31,6 +32,7 @@ namespace MyNotebooks.subforms
 		private readonly new Form Parent;
 		private Dictionary<string, int> NotebookBoundariesDict = new Dictionary<string, int>();
 		private string LblSearchingInText = "Searching in {0} {1}s";
+		private BackgroundWorker Worker;
 
 		public frmSearch(Form parent)
 		{
@@ -43,8 +45,31 @@ namespace MyNotebooks.subforms
 			dtFindDate_To.Value = DateTime.Now;
 		}
 
+		private void bgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+		{
+			this.Text += e.ProgressPercentage % 5 == 0 ? "." : ""; 
+		}
+
+		private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
+		{
+			Program.User.Notebooks.Clear();
+			Program.User.Notebooks.AddRange(DbAccess.GetNotebooksUnderOrgLevel(OrgLevels[0].OrgLevelType, GetCheckedIds()));
+			//List<Notebook> SortedNotebooks = Program.User.Notebooks.OrderBy(x => x.Name).ToList();
+			Program.User.Notebooks.Sort((x, y) =>  x.Name.CompareTo(y.Name));
+
+			foreach (Notebook nb in Program.User.Notebooks)
+			{
+				nb.Entries = DbAccess.GetEntriesInNotebook(nb.Id);
+			}
+		}
+
 		private void frmSearch_Load(object sender, EventArgs e)
 		{
+			Worker = new BackgroundWorker();
+			Worker.WorkerReportsProgress = true;
+			Worker.DoWork += new DoWorkEventHandler(bgWorker_DoWork);
+			Worker.ProgressChanged += new ProgressChangedEventHandler(bgWorker_ProgressChanged);
+
 			using (frmSearch_SelectOrgLevel frm = new(this))
 			{
 				frm.ShowDialog(Parent);
@@ -58,11 +83,13 @@ namespace MyNotebooks.subforms
 
 			foreach (OrgLevel orgLevel in this.OrgLevels)
 			{
+				orgLevel.Name = orgLevel.Name.Trim();
 				ccb.Items.Add(new { orgLevel.Id, orgLevel.Name });
 
 			}
 			ccb.CheckUncheckAll(true);
 			lblSearchingIn.Text = string.Format(LblSearchingInText, this.OrgLevels.Count.ToString(), this.OrgLevels[0].OrgLevelType.ToString());
+			Worker.RunWorkerAsync();	
 		}
 
 		private async void btnSearch_Click(object sender, EventArgs e) { await DoSearch(); }
@@ -91,111 +118,32 @@ namespace MyNotebooks.subforms
 
 		private void chkUseDateRange_CheckedChanged(object sender, EventArgs e) { ToggleDateControls(false); }
 
-		//private object? PopulateNotebookEntries()
-		//{
-		//	foreach(Notebook nb in Program.User.Notebooks)
-		//	{
-
-		//	}
-		//	return null;
-		//}
-
 		private async Task DoSearch()
 		{
+			while(Worker.IsBusy) { Thread.Sleep(100); }
 			this.Cursor = Cursors.WaitCursor;
 			var labels = string.Empty;
 			List<Entry> foundEntries = new List<Entry>();
 			EntriesToSearch.Clear();
 			List<Entry> entries = new();
 			List<Notebook> notebooks = new();
-			//DbAccess.PopulateNotebooksByUserAndDescendants(true);
 
-
-			// get all entries under the org level
-
-			if(Program.User.Notebooks.Count == 0)
+			foreach (Notebook nb in Program.User.Notebooks)
 			{
-				Program.User.Notebooks.AddRange(DbAccess.GetNotebooksUnderOrgLevel(OrgLevels[0].OrgLevelType, GetCheckedIds()));
-				
-					//foreach (OrgLevel ol in this.OrgLevels)
-				//{
-					//entries = DbAccess.GetEntriesCreatedByUser();
-					//DbAccess.PopulateNotebooksByUserAndDescendants(ol.OrgLevelType, GetCheckedIds());
-					//this.EntriesToSearch = DbAccess.GetEntriesCreatedByUser((int)ol.OrgLevelType, GetCheckedIds());
-
-					//this.EntriesToSearch.AddRange(entries.Where(e => !EntriesToSearch.Contains(e)).ToList());
-
-					//notebooks = DbAccess.GetNotebooksUnderOrgLevel(ol.OrgLevelType, GetCheckedIds());
-
-					//notebooks = notebooks.Where(p => !Program.User.Notebooks.Any(p2 => p2.Id == p.Id)).ToList();
-
-					//if (notebooks.Any() ) { Program.User.Notebooks.AddRange(notebooks); }
-				//}
-
-				// land here with Program.User populated with Notebook objects
-
-				this.Cursor = Cursors.WaitCursor;
-
-				foreach (Notebook nb in Program.User.Notebooks)
+				foreach (Entry entry in nb.Entries)
 				{
-					nb.Entries = DbAccess.GetEntriesInNotebook(nb.Id);
-				}
-
-				this.Cursor = Cursors.Default;
-			}
-
-			// land here with Program.User.Notebooks populated with Entry objects
-
-			// get labels being searched for ...
-			//labels = labels.Length > 0 ? labels.Substring(0, labels.Length - 1) : string.Empty;
-			//labelsArray = labels.Length > 0 ? labels.Split(',') : null;
-
-			foreach(Notebook nb in Program.User.Notebooks)
-			{
-				foreach(Entry entry in nb.Entries)
-				{ 				
-					SearchObject sob = new SearchObject(chkUseDate, chkUseDateRange, chkMatchCase, dtFindDate,
+					SearchObject so = new SearchObject(chkUseDate, chkUseDateRange, chkMatchCase, dtFindDate,
 								dtFindDate_From, dtFindDate_To, radBtnAnd, radLabels_And, txtSearchTitle.Text
 								, txtSearchText.Text, entry.AllLabels.Select(e => e.LabelText).ToArray());
 
-					foundEntries.AddRange(nb.Search(sob));
+					foundEntries.AddRange(nb.Search(so).Where(e => !foundEntries.Contains(e)));
 				}
 			}
 
-			await Utilities.PopulateEntries(lstFoundEntries, foundEntries, "", "", "", true , 0, true, lstFoundEntries.Width);
+			//foundEntries.OrderBy(x => x.NotebookName);
+			//foundEntries.Sort((x,y) => x.NotebookName.CompareTo(y.NotebookName));
 
-			//NotebookBoundariesDict.Clear();
-			//lstFoundEntries.Items.Clear();
-			//FoundEntries.Clear();
-
-			//lstLabelsForSearch.Items.Clear();
-			//var v = EntriesToSearch.Select(e => e.AllLabels).ToList();
-
-			//for (var i = 0; i < lstLabelsForSearch.CheckedItems.Count; i++) { labels += lstLabelsForSearch.CheckedItems[i].ToString() + ","; }
-
-			//labels = labels.Length > 0 ? labels.Substring(0, labels.Length - 1) : string.Empty;
-			//labelsArray = labels.Length > 0 ? labels.Split(',') : null;
-
-			//SearchObject so = new SearchObject(chkUseDate, chkUseDateRange, chkMatchCase, dtFindDate,
-			//		dtFindDate_From, dtFindDate_To, radBtnAnd, radLabels_And, txtSearchTitle.Text, txtSearchText.Text, labelsArray);
-
-			//var lastIndex = 0;
-
-			//foreach (KeyValuePair<string, string> kvp in Program.DictCheckedNotebooks)
-			//{
-			//	Utilities.SetProgramPIN(kvp.Key);
-			//	entriesFound = new Notebook(kvp.Key.Replace(" (****)", ""), "").Open().Search(so);
-			//	await Utilities.PopulateEntries(lstFoundEntries, entriesFound, "", "", "", false, 0, true);
-
-			//	if (entriesFound.Count > 0)
-			//	{
-			//		lastIndex += entriesFound.Count * 4;
-			//		if (!NotebookBoundariesDict.Keys.Contains(kvp.Key)) NotebookBoundariesDict.Add(kvp.Key, lastIndex);
-			//		FoundEntries.AddRange(entriesFound);
-			//	}
-
-			//	foundEntries.Clear();
-			//}
+			await Utilities.PopulateEntries(lstFoundEntries, foundEntries, "", "", "", true, 3, true, lstFoundEntries.Width - 25);
 
 			if (lstFoundEntries.Items.Count == 0) { lstFoundEntries.Items.Add("no matches found"); }
 			btnExportEntries.Visible = lstFoundEntries.Items.Count > 1;
