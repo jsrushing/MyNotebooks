@@ -158,9 +158,9 @@ namespace MyNotebooks
 				var lblsInBookCount = labelsInBook.Count;
 				var usePlural = lblsInBookCount > 1;
 				var msg = "This notebook contains " + lblsInBookCount + " labels. Do you want " +
-					"to delete th" + (usePlural ? "is " : "ese ") + "label" + (usePlural ? "s " : " ") + " in the " + lblsInBookCount + " selected notebook " +
-					(usePlural ? "s " : " ") + " in which the label " + (usePlural ? "s " : " ") + (usePlural ? "was " : "were ") + "found? " +
-					"If you need to re-select the notebook " + (usePlural ? "s " : " ") + "in which the label will be deleted, click 'No', then the 'Labels' menu, then 'Select Notebooks'.";
+					"to delete th" + (usePlural ? "is " : "ese ") + "labelText" + (usePlural ? "s " : " ") + " in the " + lblsInBookCount + " selected notebook " +
+					(usePlural ? "s " : " ") + " in which the labelText " + (usePlural ? "s " : " ") + (usePlural ? "was " : "were ") + "found? " +
+					"If you need to re-select the notebook " + (usePlural ? "s " : " ") + "in which the labelText will be deleted, click 'No', then the 'Labels' menu, then 'Select Notebooks'.";
 
 				using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, msg)) 
 				{ 
@@ -287,9 +287,9 @@ namespace MyNotebooks
 				}
 				else
 				{
-					foreach (var label in labelsArray)
+					foreach (var labelText in labelsArray)
 					{
-						if (entry.Labels.Contains(label)) { if (!entriesToReturn.Contains(entry)) entriesToReturn.Add(entry); }
+						if (entry.AllLabels.Select(l => l.LabelText).Contains(labelText)) { if (!entriesToReturn.Contains(entry)) entriesToReturn.Add(entry); }
 					}
 				}
 			}
@@ -459,57 +459,57 @@ namespace MyNotebooks
 
 		public List<Entry>	Search(SearchObject So)
 		{
-			List<Entry> allEntries = this.Entries;
+			List<Entry> allEntries = Entries;
+			List<Entry> tmpEntries = new();
 
-			if(So.chkUseDate.Checked | So.chkUseDateRange.Checked)
+			if(So.chkUseDate.Checked | So.chkUseDateRange.Checked)	// if chkUseDate.. controls are checked, clear all and stop if nothing found.
 			{
 				if (So.chkUseDate.Checked) 
-				{ allEntries = Entries.Where(p => p.CreatedOn.ToShortDateString() == So.dtFindDate.Value.ToShortDateString()).ToList(); }
+				{ tmpEntries = Entries.Where(p => p.CreatedOn.ToShortDateString() == So.dtFindDate.Value.ToShortDateString()).ToList(); }
 				else
-				{ allEntries = Entries.Where(p => p.CreatedOn >= So.dtFindDate_From.Value && p.CreatedOn <= So.dtFindDate_To.Value).ToList(); }
+				{ tmpEntries = Entries.Where(p => p.CreatedOn >= So.dtFindDate_From.Value && p.CreatedOn <= So.dtFindDate_To.Value).ToList(); }
 			}
 
-			if(allEntries.Count == 0) allEntries = this.Entries;
-
-			if(So.labelsArray != null) { allEntries = ProcessLabels(allEntries, So.labelsArray, So.radBtnLabelsAnd.Checked); }
-
-			if (allEntries.Count == 0) allEntries = this.Entries;
-
-			if (!So.chkMatchCase.Checked) { So.searchTitle = So.searchTitle.ToLower(); So.searchText = So.searchText.ToLower(); }
+			if(So.labelsArray != null & Entries.Count > 0) 
+			{ 
+				tmpEntries.AddRange(ProcessLabels(Entries, So.labelsArray, So.radBtnLabelsAnd.Checked)); 
+			}
 
 			if(So.searchText.Length > 0 | So.searchTitle.Length > 0)
 			{
-				//if (!So.chkMatchCase.Checked)
-				//{
-				//	So.searchTitle = So.searchTitle.ToLower(); 
-				//	So.searchText = So.searchText.ToLower();
+				if (!So.chkMatchCase.Checked)
+				{
+					So.searchTitle = So.searchTitle.ToLower();
+					So.searchText = So.searchText.ToLower();
+				}
 
-					if (So.searchText.Length > 0 & So.searchTitle.Length > 0)
-					{
-						if (So.radBtnAnd.Checked)
-						{ allEntries = allEntries.Where(e => e.Title.ToLower().Contains(So.searchTitle) & e.Text.ToLower().Contains(So.searchText)).ToList(); }
-						else { allEntries = this.Entries.Where(e => e.Title.ToLower().Contains(So.searchTitle) | e.Text.ToLower().Contains(So.searchText)).ToList(); }
-					}
-					else if (So.searchText.Length > 0)
-					{ allEntries = allEntries.Where(e => e.Text.ToLower().Contains(So.searchText)).ToList(); }
-					else if (So.searchTitle.Length > 0)
-					{ allEntries = allEntries.Where(e => e.Title.ToLower().Contains(So.searchTitle)).ToList(); }
+				if (So.searchText.Length > 0 & So.searchTitle.Length > 0)
+				{
+					if (So.radBtnAnd.Checked)
+					{ tmpEntries = Entries.Where(e => e.Title.ToLower().Contains(So.searchTitle) & e.Text.ToLower().Contains(So.searchText)).ToList(); }
+					else { tmpEntries = Entries.Where(e => e.Title.ToLower().Contains(So.searchTitle) | e.Text.ToLower().Contains(So.searchText)).ToList(); }
+				}
+				else if (So.searchText.Length > 0)
+				{ tmpEntries = Entries.Where(e => e.Text.ToLower().Contains(So.searchText)).ToList(); }
+				else if (So.searchTitle.Length > 0)
+				{ tmpEntries = Entries.Where(e => e.Title.ToLower().Contains(So.searchTitle)).ToList(); }
 				//}
-				//else
+			//else
+			//{
+				//if(So.searchText.Length > 0 & So.searchTitle.Length > 0)
 				//{
-					//if(So.searchText.Length > 0 & So.searchTitle.Length > 0)
-					//{
-					//	if (So.radBtnAnd.Checked)
-					//	{ allEntries = allEntries.Where(e => e.Title.Contains(So.searchTitle) & e.Text.Contains(So.searchText)).ToList(); }
-					//	else { allEntries = allEntries.Where(e => e.Title.Contains(So.searchTitle) | e.Text.Contains(So.searchText)).ToList(); }
-					//}
-					//else if(So.searchText.Length > 0)
-					//{ allEntries = allEntries.Where(e => e.Text.Contains(So.searchText)).ToList() ; }
-					//else if(So.searchTitle.Length > 0)
-					//{ allEntries = allEntries.Where(e => e.Title.Contains(So.searchTitle)).ToList(); }
+				//	if (So.radBtnAnd.Checked)
+				//	{ allEntries = allEntries.Where(e => e.Title.Contains(So.searchTitle) & e.Text.Contains(So.searchText)).ToList(); }
+				//	else { allEntries = allEntries.Where(e => e.Title.Contains(So.searchTitle) | e.Text.Contains(So.searchText)).ToList(); }
 				//}
+				//else if(So.searchText.Length > 0)
+				//{ allEntries = allEntries.Where(e => e.Text.Contains(So.searchText)).ToList() ; }
+				//else if(So.searchTitle.Length > 0)
+				//{ allEntries = allEntries.Where(e => e.Title.Contains(So.searchTitle)).ToList(); }
+			//}
 			}
-			return allEntries;
+
+			return tmpEntries;
 		}
     }
 
