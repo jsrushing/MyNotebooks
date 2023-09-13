@@ -267,21 +267,17 @@ namespace MyNotebooks
 
 			foreach (Entry entry in entriesToSearch)
 			{
-				//if(entry.AllLabels.Select(l => l.LabelText).ToList().Contains(labelsForSearch.Select(l => l.LabelText).ToList()))
-				//{
-
-				//}
-
 				if (UseAnd)
 				{
 					foreach (MNLabel label in entry.AllLabels)
 					{
-						hasLabels = true;
+						hasLabels = labelsForSearch.Select(l => l.LabelText).ToArray().Intersect(entry.AllLabels.Select(l => l.LabelText)).Count() == labelsForSearch.Count;
+						break;
 
-						var v = labelsForSearch.Select(l => l.LabelText).ToArray().Intersect(entry.AllLabels.Select(l => l.LabelText)).Count();
+						//hasLabels = true;
 
-						if (labelsForSearch.Select(l => l.LabelText).ToArray().Intersect(entry.AllLabels.Select(l => l.LabelText)).Count() != labelsForSearch.Count)
-						{ hasLabels = false; break; }
+						//if (labelsForSearch.Select(l => l.LabelText).ToArray().Intersect(entry.AllLabels.Select(l => l.LabelText)).Count() != labelsForSearch.Count)
+						//{ hasLabels = false; break; }
 					}
 
 					if (hasLabels) { if (!entriesToReturn.Contains(entry)) { entriesToReturn.Add(entry); } }
@@ -292,32 +288,6 @@ namespace MyNotebooks
 				}
 
 			}
-
-			//string[] a = labelsForSearch.Select(e => e.LabelText).ToArray();
-			//string[] b;
-
-			//	if (UseAnd)
-			//	{
-			//		if(entry.Labels.Length > 0)
-			//		{
-			//			b = entry.Labels.Split(',');
-
-			//			foreach(var label in labelsForSearch)
-			//			{
-			//				if(!b.Contains(label)) { hasLabels = false; break; }
-			//			}
-
-			//			if(hasLabels) { if(!entriesToReturn.Contains(entry)) entriesToReturn.Add(entry); }
-			//		}
-			//	}
-			//	else
-			//	{
-			//		foreach (var labelText in labelsForSearch)
-			//		{
-			//			if (entry.AllLabels.Select(l => l.LabelText).Contains(labelText)) { if (!entriesToReturn.Contains(entry)) entriesToReturn.Add(entry); }
-			//		}
-			//	}
-			//}
 
 			return entriesToReturn;
 		}

@@ -264,11 +264,12 @@ namespace MyNotebooks.subforms
 
 		private void lstFoundEntries_MouseMove(object sender, MouseEventArgs e)
 		{
-			CurrentMouseOverIndex_lstEntries = e.Y / lstFoundEntries.ItemHeight;
+			CurrentMouseOverIndex_lstEntries = (e.Y / lstFoundEntries.ItemHeight) + lstFoundEntries.TopIndex;
 		}
 
 		private void lstFoundEntries_MouseUp(object sender, MouseEventArgs e)
 		{
+			SelectEntry();
 			if (e.Button == MouseButtons.Right)
 			{ mnuEntryEditTop.Visible = lstFoundEntries.SelectedIndices.Contains((e.Y / 15) + lstFoundEntries.TopIndex); }
 		}
@@ -281,18 +282,30 @@ namespace MyNotebooks.subforms
 			if (lb.SelectedIndex > -1)
 			{
 				lb.SelectedIndexChanged -= new System.EventHandler(this.lstFoundEntries_SelectedIndexChanged);
+
+				if (SelectedEntry != null)
+				{
+					rtbSelectedEntry_Found.Text = SelectedEntry.DisplayText;
+						
+					//	String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
+					//, SelectedEntry.Title, SelectedEntry.CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"])
+					//, SelectedEntry.AllLabels.se , SelectedEntry.Text);
+				}
+
+				//SelectEntry();
+
 				//List<int> selectedIndices = new List<int>();
 
-				var indx = CurrentMouseOverIndex_lstEntries;
+				//var indx = CurrentMouseOverIndex_lstEntries;
 
-				//var item = lstFoundEntries.Items[indx].ToString().StartsWith("---");
+				////var item = lstFoundEntries.Items[indx].ToString().StartsWith("---");
 
-				while (indx > 0 & !lstFoundEntries.Items[indx].ToString().StartsWith("---")) { indx--; }
-				indx += 1;
-				SelectedEntry = FoundEntries[indx / 4];
+				//while (indx > 0 & !lstFoundEntries.Items[indx].ToString().StartsWith("---")) { indx--; }
+				//indx += indx > 0 ? 1 : 0 ;
+				//SelectedEntry = FoundEntries[indx / 4];
 
-				lb.SelectedIndices.Clear();
-				lb.SelectedIndices.Add(indx); lb.SelectedIndices.Add(indx + 1); lb.SelectedIndices.Add(indx + 2);
+				//lb.SelectedIndices.Clear();
+				//lb.SelectedIndices.Add(indx); lb.SelectedIndices.Add(indx + 1); lb.SelectedIndices.Add(indx + 2);
 
 
 				//if (lb.SelectedIndices.Count == 4) 
@@ -417,6 +430,16 @@ namespace MyNotebooks.subforms
 		}
 
 		private void mnuExit_Click(object sender, EventArgs e) { this.Hide(); }
+
+		private void SelectEntry()
+		{
+			var indx = CurrentMouseOverIndex_lstEntries;
+			while (indx > 0 & !lstFoundEntries.Items[indx].ToString().StartsWith("---")) { indx--; }
+			indx += indx > 0 ? 1 : 0;
+			SelectedEntry = FoundEntries[indx / 4];
+			lstFoundEntries.SelectedIndices.Clear();
+			lstFoundEntries.SelectedIndices.Add(indx); lstFoundEntries.SelectedIndices.Add(indx + 1); lstFoundEntries.SelectedIndices.Add(indx + 2);
+		}
 
 		private void ToggleDateControls(bool toggleUseDate)
 		{

@@ -142,6 +142,43 @@ namespace MyNotebooks
 			}
 		}
 
+		public string[]		GetSynopsis(bool includeNotebookName = false, int maxWidth = -1)
+		{
+			string[] sRtrn = new string[4];
+			int iTextChunkLength = maxWidth > 0 ? Convert.ToInt32(maxWidth / 5.3): 150;
+			string sTitle = Title + " (" + CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"
+				+ (EditedOn  < new DateTime(2000, 1, 1) ? "" : " [edited on " + EditedOn .ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + "]");
+			if (includeNotebookName) { sTitle += NotebookName == null ? "" : " > in '" + NotebookName + "'"; }
+			sRtrn[0] = sTitle;
+			string sEntryText = Text.Replace("\n", " ");
+			sEntryText = (sEntryText.Length < iTextChunkLength ? sEntryText : sEntryText.Substring(0, iTextChunkLength) + " ...");
+			sRtrn[1] = sEntryText;
+			sRtrn[2] = "labels: " + string.Join(", ", this.AllLabels.Select(e => e.LabelText).ToArray());	// Labels.Replace(",", ", ");
+			sRtrn[3] = "---------------------";
+			return sRtrn;
+		}
+
+		private string				GetTextDisplayText()
+		{
+			string sRtrn = string.Empty;
+			string lbls = string.Join(", ", this.AllLabels.Select(e => e.LabelText).ToArray());
+
+			//if (this.AllLabels.Count > 0)
+			//{
+
+			//sRtrn = string.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"], "a", "b", "c");
+
+
+				sRtrn = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
+					, Title
+					, CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"])
+					, lbls//, DbAccess.GetFullEntry(this).Text);
+					, this.Text);
+
+			////}
+			return sRtrn;
+		}
+
 		public void			PopulateLabels()
 		{
 			this.AllLabels.Clear();
@@ -176,29 +213,6 @@ namespace MyNotebooks
 				}
 			}
 			return bLabelEdited;
-		}
-
-		public string[]		GetSynopsis(bool includeNotebookName = false, int maxWidth = -1)
-		{
-			string[] sRtrn = new string[4];
-			int iTextChunkLength = maxWidth > 0 ? Convert.ToInt32(maxWidth / 5.3): 150;
-			string sTitle = Title + " (" + CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"
-				+ (EditedOn  < new DateTime(2000, 1, 1) ? "" : " [edited on " + EditedOn .ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + "]");
-			if (includeNotebookName) { sTitle += NotebookName == null ? "" : " > in '" + NotebookName + "'"; }
-			sRtrn[0] = sTitle;
-			string sEntryText = Text.Replace("\n", " ");
-			sEntryText = (sEntryText.Length < iTextChunkLength ? sEntryText : sEntryText.Substring(0, iTextChunkLength) + " ...");
-			sRtrn[1] = sEntryText;
-			sRtrn[2] = "labels: " + string.Join(", ", this.AllLabels.Select(e => e.LabelText).ToArray());	// Labels.Replace(",", ", ");
-			sRtrn[3] = "---------------------";
-			return sRtrn;
-		}
-
-		string				GetTextDisplayText()
-		{
-			return String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
-				, Title, CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"])
-				, string.Join(", ", this.AllLabels.Select(e => e.LabelText).ToArray()));	//, DbAccess.GetFullEntry(this).Text);
 		}
 
 		public static Entry Select(RichTextBox rtb, ListBox lb, Notebook currentNotebook, bool firstSelection = false, Entry je = null, bool resetTopIndex = true)
