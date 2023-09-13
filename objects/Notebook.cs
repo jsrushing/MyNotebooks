@@ -271,20 +271,16 @@ namespace MyNotebooks
 				{
 					foreach (MNLabel label in entry.AllLabels)
 					{
-						hasLabels = labelsForSearch.Select(l => l.LabelText).ToArray().Intersect(entry.AllLabels.Select(l => l.LabelText)).Count() == labelsForSearch.Count;
-						break;
-
-						//hasLabels = true;
-
-						//if (labelsForSearch.Select(l => l.LabelText).ToArray().Intersect(entry.AllLabels.Select(l => l.LabelText)).Count() != labelsForSearch.Count)
-						//{ hasLabels = false; break; }
+						if (labelsForSearch.Count > 0) 
+						{ hasLabels = labelsForSearch.Select(l => l.LabelText).ToArray().Intersect(entry.AllLabels.Select(l => l.LabelText)).Count() == labelsForSearch.Count; }
+						if(!hasLabels) break;
 					}
 
 					if (hasLabels) { if (!entriesToReturn.Contains(entry)) { entriesToReturn.Add(entry); } }
 				}
 				else
 				{
-					if (labelsForSearch.Select(l => l.LabelText).ToArray().Intersect(entry.AllLabels.Select(l => l.LabelText)).Count() > 0) { entriesToReturn.Add(entry); }
+					if (labelsForSearch.Select(l => l.LabelText).ToArray().Intersect(entry.AllLabels.Select(l => l.LabelText)).Any()) { entriesToReturn.Add(entry); }
 				}
 
 			}

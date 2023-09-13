@@ -43,19 +43,6 @@ namespace MyNotebooks
 
 		public Entry() { }
 
-		// one-time code for converting Journal to LocalNotebook.
-		//public Entry(JournalEntry entry)
-		//{
-		//	this.CreatedOn = entry.CreatedOn;
-		//	this.Text = entry.Text;
-		//	this.Title = entry.Title;
-		//	this.RTF = "";
-		//	this.Labels = EncryptDecrypt.Encrypt(entry.ClearLabels());
-		//	this.NotebookName = EncryptDecrypt.Encrypt("The New Real Thing");
-		//	Id = Guid.NewGuid().ToString();
-		//	isEdited = entry.isEdited;
-		//}
-
 		public Entry(string _title, string _text, string _RTF, string _labels, int notebookId = 0, string _notebookName = "", bool _edited = false)
         {
 			if(CreatedOn == DateTime.MinValue) { CreatedOn = DateTime.Now; }
@@ -63,9 +50,6 @@ namespace MyNotebooks
 			Text		= _text.Trim();
 			Title		= _title.Trim();
 			RTF			= _RTF;
-			//Labels		= _labels;
-            //Id			= Guid.NewGuid();
-			//isEdited	= _edited;	
 			NotebookName = _notebookName;
 			ParentId	= notebookId;
 		}
@@ -85,9 +69,9 @@ namespace MyNotebooks
 						{
 							value = dt.Rows[rowIndex].Field<string>(sPropertyName.Name).ToString();
 						}
-						else if (dt.Columns[sPropertyName.Name].DataType == typeof(Int32))
+						else if (dt.Columns[sPropertyName.Name].DataType == typeof(int))
 						{
-							int iVal = dt.Rows[rowIndex].Field<Int32>(sPropertyName.Name);
+							int iVal = dt.Rows[rowIndex].Field<int>(sPropertyName.Name);
 							this.GetType().GetProperty(sPropertyName.Name).SetValue(this, iVal);
 							setProp = false;
 						}
@@ -148,32 +132,31 @@ namespace MyNotebooks
 			int iTextChunkLength = maxWidth > 0 ? Convert.ToInt32(maxWidth / 5.3): 150;
 			string sTitle = Title + " (" + CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"
 				+ (EditedOn  < new DateTime(2000, 1, 1) ? "" : " [edited on " + EditedOn .ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + "]");
-			if (includeNotebookName) { sTitle += NotebookName == null ? "" : " > in '" + NotebookName + "'"; }
+			if (includeNotebookName) 
+			{
+				var hasParentPath = NotebookName.Contains("(c) ");
+				sTitle += NotebookName + (hasParentPath ? "" : this.ParentPath) == null ? "" : " > in '" + NotebookName + "'"; 
+			}
+
 			sRtrn[0] = sTitle;
 			string sEntryText = Text.Replace("\n", " ");
 			sEntryText = (sEntryText.Length < iTextChunkLength ? sEntryText : sEntryText.Substring(0, iTextChunkLength) + " ...");
 			sRtrn[1] = sEntryText;
-			sRtrn[2] = "labels: " + string.Join(", ", this.AllLabels.Select(e => e.LabelText).ToArray());	// Labels.Replace(",", ", ");
+			sRtrn[2] = "labels: " + string.Join(", ", this.AllLabels.Select(e => e.LabelText).ToArray());
 			sRtrn[3] = "---------------------";
 			return sRtrn;
 		}
 
-		private string				GetTextDisplayText()
+		private string		GetTextDisplayText()
 		{
 			string sRtrn = string.Empty;
-			string lbls = string.Join(", ", this.AllLabels.Select(e => e.LabelText).ToArray());
+			//string lbls = string.Join(", ", this.AllLabels.Select(e => e.LabelText).ToArray());
 
-			//if (this.AllLabels.Count > 0)
-			//{
-
-			//sRtrn = string.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"], "a", "b", "c");
-
-
-				sRtrn = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
-					, Title
-					, CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"])
-					, lbls//, DbAccess.GetFullEntry(this).Text);
-					, this.Text);
+			sRtrn = string.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
+				, Title
+				, CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"])
+				, string.Join(", ", this.AllLabels.Select(e => e.LabelText).ToArray())
+				, this.Text);
 
 			////}
 			return sRtrn;
@@ -207,7 +190,7 @@ namespace MyNotebooks
 						arrLabels.RemoveAt(iLabelIndex);
 					}
 
-					var finalLabelsString = String.Join(",", arrLabels).Trim(',').Replace(",,", "");
+					var finalLabelsString = string.Join(",", arrLabels).Trim(',').Replace(",,", "");
 					this.Labels = finalLabelsString.Length > 0 ? finalLabelsString : string.Empty;
 					bLabelEdited = true;
 				}
@@ -292,7 +275,7 @@ namespace MyNotebooks
 
 					if(entryRtrn != null)
 					{
-						rtb.Text = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
+						rtb.Text = string.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
 						, entryRtrn.Title, entryRtrn.CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"])
 						, entryRtrn.Labels, entryRtrn.Text);
 					}
