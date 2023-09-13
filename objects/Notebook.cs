@@ -157,7 +157,7 @@ namespace MyNotebooks
 			{
 				var lblsInBookCount = labelsInBook.Count;
 				var usePlural = lblsInBookCount > 1;
-				var msg = "This notebook contains " + lblsInBookCount + " labels. Do you want " +
+				var msg = "This notebook contains " + lblsInBookCount + " labelsForSearch. Do you want " +
 					"to delete th" + (usePlural ? "is " : "ese ") + "labelText" + (usePlural ? "s " : " ") + " in the " + lblsInBookCount + " selected notebook " +
 					(usePlural ? "s " : " ") + " in which the labelText " + (usePlural ? "s " : " ") + (usePlural ? "was " : "were ") + "found? " +
 					"If you need to re-select the notebook " + (usePlural ? "s " : " ") + "in which the labelText will be deleted, click 'No', then the 'Labels' menu, then 'Select Notebooks'.";
@@ -260,39 +260,64 @@ namespace MyNotebooks
             return nbRtrn;
         }
 
-		private List<Entry> ProcessLabels(List<Entry> entriesToSearch, string[] labelsArray, bool UseAnd)
+		private List<Entry> ProcessLabels(List<Entry> entriesToSearch, List<MNLabel> labelsForSearch, bool UseAnd)
 		{
-			List<Entry> entriesToReturn = new List<Entry>();
-
-			string[] a = labelsArray;
-			string[] b;
-
+			List<Entry> entriesToReturn = new();
+			var hasLabels = false;
 
 			foreach (Entry entry in entriesToSearch)
 			{
+				//if(entry.AllLabels.Select(l => l.LabelText).ToList().Contains(labelsForSearch.Select(l => l.LabelText).ToList()))
+				//{
+
+				//}
+
 				if (UseAnd)
 				{
-					if(entry.Labels.Length > 0)
+					foreach (MNLabel label in entry.AllLabels)
 					{
-						b = entry.Labels.Split(',');
-						var hasLabels = true;
+						hasLabels = true;
 
-						foreach(var label in labelsArray)
-						{
-							if(!b.Contains(label)) { hasLabels = false; break; }
-						}
+						var v = labelsForSearch.Select(l => l.LabelText).ToArray().Intersect(entry.AllLabels.Select(l => l.LabelText)).Count();
 
-						if(hasLabels) { if(!entriesToReturn.Contains(entry)) entriesToReturn.Add(entry); }
+						if (labelsForSearch.Select(l => l.LabelText).ToArray().Intersect(entry.AllLabels.Select(l => l.LabelText)).Count() != labelsForSearch.Count)
+						{ hasLabels = false; break; }
 					}
+
+					if (hasLabels) { if (!entriesToReturn.Contains(entry)) { entriesToReturn.Add(entry); } }
 				}
 				else
 				{
-					foreach (var labelText in labelsArray)
-					{
-						if (entry.AllLabels.Select(l => l.LabelText).Contains(labelText)) { if (!entriesToReturn.Contains(entry)) entriesToReturn.Add(entry); }
-					}
+					if (labelsForSearch.Select(l => l.LabelText).ToArray().Intersect(entry.AllLabels.Select(l => l.LabelText)).Count() > 0) { entriesToReturn.Add(entry); }
 				}
+
 			}
+
+			//string[] a = labelsForSearch.Select(e => e.LabelText).ToArray();
+			//string[] b;
+
+			//	if (UseAnd)
+			//	{
+			//		if(entry.Labels.Length > 0)
+			//		{
+			//			b = entry.Labels.Split(',');
+
+			//			foreach(var label in labelsForSearch)
+			//			{
+			//				if(!b.Contains(label)) { hasLabels = false; break; }
+			//			}
+
+			//			if(hasLabels) { if(!entriesToReturn.Contains(entry)) entriesToReturn.Add(entry); }
+			//		}
+			//	}
+			//	else
+			//	{
+			//		foreach (var labelText in labelsForSearch)
+			//		{
+			//			if (entry.AllLabels.Select(l => l.LabelText).Contains(labelText)) { if (!entriesToReturn.Contains(entry)) entriesToReturn.Add(entry); }
+			//		}
+			//	}
+			//}
 
 			return entriesToReturn;
 		}
@@ -470,9 +495,9 @@ namespace MyNotebooks
 				{ tmpEntries = Entries.Where(p => p.CreatedOn >= So.dtFindDate_From.Value && p.CreatedOn <= So.dtFindDate_To.Value).ToList(); }
 			}
 
-			if(So.labelsArray != null & Entries.Count > 0) 
+			if(So.labelsForSearch.Count > 0 & Entries.Count > 0) 
 			{ 
-				tmpEntries.AddRange(ProcessLabels(Entries, So.labelsArray, So.radBtnLabelsAnd.Checked)); 
+				tmpEntries.AddRange(ProcessLabels(Entries, So.labelsForSearch, So.radLabels_And.Checked)); 
 			}
 
 			if(So.searchText.Length > 0 | So.searchTitle.Length > 0)
@@ -485,7 +510,7 @@ namespace MyNotebooks
 
 				if (So.searchText.Length > 0 & So.searchTitle.Length > 0)
 				{
-					if (So.radBtnAnd.Checked)
+					if (So.radTitle_And.Checked)
 					{ tmpEntries = Entries.Where(e => e.Title.ToLower().Contains(So.searchTitle) & e.Text.ToLower().Contains(So.searchText)).ToList(); }
 					else { tmpEntries = Entries.Where(e => e.Title.ToLower().Contains(So.searchTitle) | e.Text.ToLower().Contains(So.searchText)).ToList(); }
 				}
@@ -498,7 +523,7 @@ namespace MyNotebooks
 			//{
 				//if(So.searchText.Length > 0 & So.searchTitle.Length > 0)
 				//{
-				//	if (So.radBtnAnd.Checked)
+				//	if (So.radTitle_And.Checked)
 				//	{ allEntries = allEntries.Where(e => e.Title.Contains(So.searchTitle) & e.Text.Contains(So.searchText)).ToList(); }
 				//	else { allEntries = allEntries.Where(e => e.Title.Contains(So.searchTitle) | e.Text.Contains(So.searchText)).ToList(); }
 				//}

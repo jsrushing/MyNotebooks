@@ -310,7 +310,7 @@ namespace MyNotebooks.objects
 //					try
 //					{
 //						// this is failing ... 060923 0930
-//						await AzureFileClient.DownloadOrDeleteFile(tempLabelsFile, Program.AzurePassword + "labels", FileMode.Create, false, "labelsandsettings");
+//						await AzureFileClient.DownloadOrDeleteFile(tempLabelsFile, Program.AzurePassword + "labelsForSearch", FileMode.Create, false, "labelsandsettings");
 //						downloadedAzureLabels = Program.AzureFileExists ? new FileInfo(tempLabelsFile) : null;
 //					}
 //					catch (Exception ex) { Err = ex.Message; }

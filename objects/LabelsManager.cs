@@ -79,7 +79,7 @@ namespace MyNotebooks.objects
 				}
 				else
 				{
-					sMsg = "The label '" + labelName + "'  has been left in the labels list because you did not search all Notebooks. " +
+					sMsg = "The label '" + labelName + "'  has been left in the labelsForSearch list because you did not search all Notebooks. " +
 						"You must select ALL notebooks (and provide PINs for all protected notebooks) to clear the label from your Labels file.";
 				}
 
@@ -227,7 +227,7 @@ namespace MyNotebooks.objects
 				// changed in a few notebooks
 				List<string> lstLbls = GetLabels_NoFileDate().ToList();
 				if (!lstLbls.Contains(newLabelName)) { lstLbls.Add(newLabelName); }
-				sMsg = "The label '" + oldLabelName + "' has been left in the labels list because you did not search all Notebooks. The label '" + newLabelName + "' has been added to your Labels file." +
+				sMsg = "The label '" + oldLabelName + "' has been left in the labelsForSearch list because you did not search all Notebooks. The label '" + newLabelName + "' has been added to your Labels file." +
 					Environment.NewLine + "You must select ALL notebooks (and provide PINs for all protected notebooks) to clear the label from your Labels file.";
 
 			}

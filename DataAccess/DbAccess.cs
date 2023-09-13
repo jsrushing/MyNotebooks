@@ -354,7 +354,7 @@ namespace MyNotebooks.DataAccess
 								entry.AllLabels.Add(new(tblLabels, i2));
 							}
 
-							//var v = labels.Where(e => e.ParentId == entry.Id).ToList();
+							//var v = labelsForSearch.Where(e => e.ParentId == entry.Id).ToList();
 							//if (v.Any()) { entry.AllLabels.AddRange(v); }
 
 							entries.Add(entry);

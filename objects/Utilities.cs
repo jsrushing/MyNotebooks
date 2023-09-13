@@ -21,10 +21,10 @@ namespace MyNotebooks.objects
 {
 	public static class Utilities
 	{
-		//public static Entry CreateEntry(string title, string text, string RTF, string labels, string notebookName, string PIN)
+		//public static Entry CreateEntry(string title, string text, string RTF, string labelsForSearch, string notebookName, string PIN)
 		//{
 		//	return new Entry(EncryptDecrypt.Encrypt(title, PIN), EncryptDecrypt.Encrypt(text, PIN), 
-		//		EncryptDecrypt.Encrypt(RTF, PIN), EncryptDecrypt.Encrypt(labels, PIN), EncryptDecrypt.Encrypt(notebookName, PIN));
+		//		EncryptDecrypt.Encrypt(RTF, PIN), EncryptDecrypt.Encrypt(labelsForSearch, PIN), EncryptDecrypt.Encrypt(notebookName, PIN));
 		//}
 
 		public static bool FileNameIsValid(string proposedFileName) { return proposedFileName.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) == -1; }
@@ -132,8 +132,8 @@ namespace MyNotebooks.objects
 						{
 							var lbls = string.Join(',', newLabels);
 
-							using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "The following labels were found in the " +
-								"imported notebook but are not in your main labels list." + Environment.NewLine + lbls + Environment.NewLine + 
+							using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "The following labelsForSearch were found in the " +
+								"imported notebook but are not in your main labelsForSearch list." + Environment.NewLine + lbls + Environment.NewLine + 
 								"Do you want to add them?", "New Labels Found", parent))
 							{
 								frm.ShowDialog();

@@ -102,7 +102,7 @@
 					> Import Journals is working. Is NOT a final fix!
 						On update of ClickOnce deployment (which does work) there needs to be a mechanism to import Journals from 
 							previous (published) version.
-						Need to scan for orphaned labels after an import. Put a new method in Journal.cs - 'AllLabels()'?
+						Need to scan for orphaned labelsForSearch after an import. Put a new method in Journal.cs - 'AllLabels()'?
 					> 02/24/23 All is working, clickonce + cloud sync. Marked complete.
 
 		12/07/22

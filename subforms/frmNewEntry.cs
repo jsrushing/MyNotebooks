@@ -223,7 +223,7 @@ namespace MyNotebooks.subforms
 					this.Entry.Title = txtNewEntryTitle.Text.Trim();
 					this.Entry.Labels = LabelsManager.CheckedLabels_Get(clbLabels);
 
-					// remove any un-checked labels (with this entryId) from the Labels table
+					// remove any un-checked labelsForSearch (with this entryId) from the Labels table
 					var labelsToRemove = string.Empty;
 
 					for(var i = 0; i < clbLabels.Items.Count; i++)

@@ -362,7 +362,7 @@ namespace MyNotebooks.subforms
 			lblManageLabels.Name = "lblManageLabels";
 			lblManageLabels.Size = new System.Drawing.Size(97, 17);
 			lblManageLabels.TabIndex = 40;
-			lblManageLabels.Text = "manage labels";
+			lblManageLabels.Text = "manage labelsForSearch";
 			lblManageLabels.Click += this.lblManageLabels_Click;
 			// 
 			// txtNewEntryTitle
@@ -398,7 +398,7 @@ namespace MyNotebooks.subforms
 			label4.Name = "label4";
 			label4.Size = new System.Drawing.Size(44, 17);
 			label4.TabIndex = 38;
-			label4.Text = "labels";
+			label4.Text = "labelsForSearch";
 			// 
 			// lblEntryText_Hidden
 			// 

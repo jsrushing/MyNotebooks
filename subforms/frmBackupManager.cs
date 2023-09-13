@@ -48,7 +48,7 @@ namespace MyNotebooks.subforms
 				truncatedForcedFileName = truncatedForcedFileName.Substring(0, truncatedForcedFileName.LastIndexOf(" ("));
 				journalsFolderPath = journalsFolder + truncatedForcedFileName;
 
-				using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.InputBox, "Enter the PIN for '" + truncatedForcedFileName + "' so orphaned labels can be restored."))
+				using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.InputBox, "Enter the PIN for '" + truncatedForcedFileName + "' so orphaned labelsForSearch can be restored."))
 				{
 					frm2.ShowDialog();
 					Program.PIN = frm2.ResultText;

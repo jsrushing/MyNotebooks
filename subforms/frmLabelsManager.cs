@@ -1,4 +1,4 @@
-﻿/* Manage labels.
+﻿/* Manage labelsForSearch.
  * 7/9/22
  */
 using System;
@@ -53,7 +53,7 @@ namespace MyNotebooks.subforms
 			{
 				if (Program.DictCheckedNotebooks.Count == 0)
 				{
-					//var msg = "The labels in the deleted notebook will be deleted from all selected notebooks." + Environment.NewLine + "Specify a PIN for any protected notebooks you select.";
+					//var msg = "The labelsForSearch in the deleted notebook will be deleted from all selected notebooks." + Environment.NewLine + "Specify a PIN for any protected notebooks you select.";
 					using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(this)) { frm.ShowDialog(); }
 				}
 
@@ -336,7 +336,7 @@ namespace MyNotebooks.subforms
 			//	if(!DeletingOrphans)
 			//	{
 			//		using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message,
-			//			"No orphaned labels were found.", Application.ProductName, this)) { frm.ShowDialog(); }
+			//			"No orphaned labelsForSearch were found.", Application.ProductName, this)) { frm.ShowDialog(); }
 			//	}
 			//}
 
@@ -796,7 +796,7 @@ namespace MyNotebooks.subforms
 
 		private void treeAvailableLabels_AfterExpand(object sender, TreeViewEventArgs e)
 		{
-			// Get labels under one of the root nodes.
+			// Get labelsForSearch under one of the root nodes.
 			TreeNode tn = e.Node;
 			TreeNode newNode = new();
 
