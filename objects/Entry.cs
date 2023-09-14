@@ -132,10 +132,11 @@ namespace MyNotebooks
 			int iTextChunkLength = maxWidth > 0 ? Convert.ToInt32(maxWidth / 5.3): 150;
 			string sTitle = Title + " (" + CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"
 				+ (EditedOn  < new DateTime(2000, 1, 1) ? "" : " [edited on " + EditedOn .ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + "]");
+
 			if (includeNotebookName) 
 			{
-				var hasParentPath = NotebookName.Contains("(c) ");
-				sTitle += NotebookName + (hasParentPath ? "" : this.ParentPath) == null ? "" : " > in '" + NotebookName + "'"; 
+				//var hasParentPath = NotebookName.Contains("(c) ");
+				sTitle += " in '" + NotebookName + "' " + this.ParentPath;
 			}
 
 			sRtrn[0] = sTitle;

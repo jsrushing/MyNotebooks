@@ -158,10 +158,10 @@ namespace MyNotebooks.objects
 			}
 			else
 			{
-				Program.AllNotebookNames.Clear();
+				//Program.AllNotebookNames.Clear();
 				Program.NotebooksNamesAndIds.Clear();
 
-				foreach(var v2 in DbAccess.GetNotebookNamesAndIdsForGroup(Program.ActiveNBParentId))
+				foreach (var v2 in Program.AllNotebooks) 
 				{ Program.NotebooksNamesAndIds.Add(v2.Name, v2.Id); }
 
 				//var v = DbAccess.get
@@ -284,7 +284,7 @@ namespace MyNotebooks.objects
 			foreach (Entry nbEntry in tmpEntries)
 			{
 				nbEntry.PopulateLabels();
-				nbEntry.NotebookName += "' " + nbEntry.ParentPath;
+				//nbEntry.NotebookName += "' " + nbEntry.ParentPath;
 				var synopsis = nbEntry.GetSynopsis(includeNotebookName, maxWidth);
 				for(int i = 0; i < synopsis.Length; i++) { lbxToPopulate.Items.Add(synopsis[i]); } 
 			}

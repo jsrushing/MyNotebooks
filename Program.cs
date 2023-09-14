@@ -26,6 +26,7 @@ namespace MyNotebooks
 		public static List<string>	AzureRenameCommands		= new List<string>();
 		public static List<string>	AzurePinFileNames		= new List<string>();
 		public static string		GroupsFolder			= Program.AppRoot + "groups\\";
+		public static List<ListBox> ManagementConsoleSelections = new();
 		//public static string		InvalidFileName			= "Sorry, notebook names may not contain characters which are not allowed in file names, for example *, <, >, {, }, |, :, ?, /, \\ (and others).";
 		public static string		SelectedCompanyName		= string.Empty;
 		public static string		SelectedAccountName		= string.Empty;

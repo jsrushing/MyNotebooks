@@ -27,7 +27,7 @@ namespace MyNotebooks.subforms
 		private Color DisabledColor = Color.LightGray;
 		private List<NodeInfo> NodesInPath = new List<NodeInfo>();
 		private TreeNode HoverNode = null;
-		private TreeNode LastClickedNode = null;
+		//private TreeNode LastClickedNode = null;
 		private List<GroupBox> OrgLevelGroups_MU = new List<GroupBox>();
 		private List<ListBox> OrgLevelLists_MU = new List<ListBox>();
 		private List<GroupBox> OrgLevelGroups_CU = new List<GroupBox>();
@@ -58,6 +58,30 @@ namespace MyNotebooks.subforms
 			OrgLevelGroups_CU.AddRange(new GroupBox[] { grpCompany_CU, grpAccount_CU, grpDepartment_CU, grpGroup_CU });
 			OrgLevelLists_MU.AddRange(new ListBox[] { lstCompanies_MU, lstAccounts_MU, lstDepartments_MU, lstGroups_MU });
 			OrgLevelLists_CU.AddRange(new ListBox[] { lstCompanies_CU, lstAccounts_CU, lstDepartments_CU, lstGroups_CU });
+
+			if (Program.ManagementConsoleSelections.Count > 0)
+			{	
+				if(Program.User.Id != Program.User.CreatedBy)
+				{
+					foreach (GroupBox gb in OrgLevelGroups_CU)
+					{
+						ListBox lbTgt = gb.Controls.OfType<ListBox>().FirstOrDefault();
+						ListBox lbSrc = Program.ManagementConsoleSelections.Where(lb => lb.Name == lbTgt.Name).FirstOrDefault();
+						gb.Controls.OfType<ListBox>().FirstOrDefault().Items.AddRange(lbSrc.Items);
+						if (lbTgt.Items.Count > 0) { this.Size = FullSize; }
+					}
+				}
+
+				foreach (GroupBox gb in OrgLevelGroups_MU)
+				{
+					ListBox lbTgt = gb.Controls.OfType<ListBox>().FirstOrDefault();
+					ListBox lbSrc = Program.ManagementConsoleSelections.Where(lb => lb.Name == lbTgt.Name).FirstOrDefault();
+					lbTgt.Items.AddRange(lbSrc.Items);
+				}
+
+				pnlCreateUser.Visible = true;
+			}
+
 			IsQuickStart = isQuickStart;
 			txtPwd.Focus();
 		}
@@ -91,6 +115,19 @@ namespace MyNotebooks.subforms
 				var v = lstGroups_MU.SelectedItem as ListItem;
 				var v2 = lstGroups_CU.SelectedItem as ListItem;
 				Program.ActiveNBParentId = v == null ? v2.Id : v.Id;
+			}
+
+			if (Program.ManagementConsoleSelections.Count == 0)
+			{
+				foreach(GroupBox gb in OrgLevelGroups_CU)
+				{
+					Program.ManagementConsoleSelections.Add(gb.Controls.OfType<ListBox>().FirstOrDefault());
+				}
+
+				foreach (GroupBox gb in OrgLevelGroups_MU)
+				{
+					Program.ManagementConsoleSelections.Add(gb.Controls.OfType<ListBox>().FirstOrDefault());
+				}
 			}
 		}
 
@@ -219,8 +256,8 @@ namespace MyNotebooks.subforms
 
 				//TreeNode topNode = new TreeNode();
 				PopulateBaseOrgLevels();
-				PopulatePermissions();
-				ListBox lb2Populate = new ListBox();
+				//PopulatePermissions();
+				ListBox lb2Populate = new();
 				ddlAccessLevels.SelectedIndex = CurrentUser.AccessLevel - 1;
 				btnCreateUser.Text = CreateUserButton_UpdateUser;
 				ddlAccessLevels.Enabled = false;
@@ -549,7 +586,7 @@ namespace MyNotebooks.subforms
 			Program.AllNotebooks.Clear();
 			Program.AllNotebooks.AddRange(notebooks);
 			//this.Close();
-			this.Hide();
+			this.Close();
 		}
 
 		private void PopulateBaseOrgLevels()
@@ -622,7 +659,7 @@ namespace MyNotebooks.subforms
 
 		private void PopulatePermissions()
 		{
-			clbPermissions.Items.Clear();
+			if (Program.User == null) { clbPermissions.Items.Clear(); } else { CurrentUser = Program.User; }
 
 			if (CurrentUser != null)
 			{
@@ -650,20 +687,10 @@ namespace MyNotebooks.subforms
 				foreach (ListBox lb in OrgLevelLists_MU) { lb.Items.Clear(); }
 				box = OrgLevelGroups_MU.Where(e => e.Enabled).FirstOrDefault();
 				lstBoxes = box.Controls.Cast<ListBox>().ToList();
-				//var highestLevel = CurrentUser.Companies;
-				//if(highestLevel == null) { highestLevel = CurrentUser.Accounts; }
-				//if(highestLevel == null) { highestLevel = CurrentUser.Departments; }
-				//if(!highestLevel) { highestLevel = CurrentUser.Groups}
-
-				//Type type = null;
-				//type = 
-
-				//var listItems = CurrentUser.Companies;
-
 				lstBoxes[0].Items.AddRange(DbAccess.GetTopLevelItemsForUser(Program.User.Id).ToArray());
 			}
 
-			if (populateCU)
+			if (populateCU & (Program.User != null && Program.User.Id != Program.User.CreatedBy))
 			{
 				foreach (ListBox lb in OrgLevelLists_CU) { lb.Items.Clear(); }
 				box = OrgLevelGroups_CU.Where(e => e.Enabled).FirstOrDefault();
@@ -679,10 +706,10 @@ namespace MyNotebooks.subforms
 			{
 				foreach (ListBox lb in OrgLevelLists_CU) { lb.Items.Clear(); }
 				foreach (ListBox lb in OrgLevelLists_MU) { lb.Items.Clear(); }
-				clbPermissions.Items.Clear();
+				//clbPermissions.Items.Clear();
 				//txtUserName.Text = string.Empty;
 				//txtPwd.Text = string.Empty;
-				pnlCreateUser.Visible = false;
+				//pnlCreateUser.Visible = false;
 				txtUserName.Focus();
 				btnLogin.Enabled = true;
 				this.Size = SmallSize;
@@ -924,6 +951,11 @@ namespace MyNotebooks.subforms
 		#endregion
 
 		private void txtCredentials_TextChanged(object sender, EventArgs e) { if (this.Size != SmallSize) { ResetForm(); } }
+
+		private void clbPermissions_VisibleChanged(object sender, EventArgs e)
+		{
+			if (!clbPermissions.Visible) { int i = 0; }
+		}
 	}
 
 	public struct NodeInfo

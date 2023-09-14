@@ -343,28 +343,28 @@ namespace MyNotebooks.subforms
 
 			LoadNotebooks();
 
-			if (ddlNotebooks.Items.Count == 0)
-			{
-				//using(frmManagementConsole frm = new(this, true)) { frm.ShowDialog(); }
+			//if (ddlNotebooks.Items.Count == 0)
+			//{
+			//	//using(frmManagementConsole frm = new(this, true)) { frm.ShowDialog(); }
 
-				//using (frmNewNotebook frm = new frmNewNotebook(this))
-				//{
-				//	frm.ShowDialog();
+			//	//using (frmNewNotebook frm = new frmNewNotebook(this))
+			//	//{
+			//	//	frm.ShowDialog();
 
-				//	if (frm.LocalNotebook != null)
-				//	{
-				//		await frm.LocalNotebook.Create();
+			//	//	if (frm.LocalNotebook != null)
+			//	//	{
+			//	//		await frm.LocalNotebook.Create();
 
-				//		LoadNotebooks();
-				//	}
-				//	else
-				//	{
-				//		using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.Message, "At least one notebook must exist. " +
-				//			"Please re-open the program and create a notebook.", "One LocalNotebook Must Exist", this))
-				//		{ frm2.ShowDialog(); this.Close(); }
-				//	}
-				//}
-			}
+			//	//		LoadNotebooks();
+			//	//	}
+			//	//	else
+			//	//	{
+			//	//		using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.Message, "At least one notebook must exist. " +
+			//	//			"Please re-open the program and create a notebook.", "One LocalNotebook Must Exist", this))
+			//	//		{ frm2.ShowDialog(); this.Close(); }
+			//	//	}
+			//	//}
+			//}
 
 			this.Cursor = Cursors.Default;
 		}

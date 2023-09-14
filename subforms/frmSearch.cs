@@ -47,40 +47,6 @@ namespace MyNotebooks.subforms
 			dtFindDate_To.Value = DateTime.Now;
 		}
 
-		private void bgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
-		{
-			this.Text += e.ProgressPercentage;
-		}
-
-		private void bgWorker_RunWorkerCompleted(
-			object sender, RunWorkerCompletedEventArgs e)
-		{
-			lstLabelsForSearch.Items.AddRange(FoundLabelsAsListItems.ToArray());
-			btnSearch.Enabled = true;
-		}
-
-		private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
-		{
-			Program.User.Notebooks.Clear();
-			Program.User.Notebooks.AddRange(DbAccess.GetNotebooksUnderOrgLevel(OrgLevels[0].OrgLevelType, GetCheckedIds()));
-			//List<Notebook> SortedNotebooks = Program.User.Notebooks.OrderBy(x => x.Name).ToList();
-			Program.User.Notebooks.Sort((x, y) => x.Name.CompareTo(y.Name));
-
-			foreach (Notebook nb in Program.User.Notebooks)
-			{
-				nb.Entries = DbAccess.GetEntriesInNotebook(nb.Id);
-
-				foreach (Entry entry in nb.Entries)
-				{
-					List<MNLabel> v = entry.AllLabels.Where(e => !FoundLabelsAsListItems.Select(e => e.Name).Contains(e.LabelText)).ToList();
-
-					foreach (MNLabel label in v) { FoundLabelsAsListItems.Add(new() { Name = label.LabelText, Id = label.Id }); }
-					//lstLabelsForSearch.Items.Add(new ListItem() { Id = label.Id, Name = label.LabelText }); }
-				}
-
-			}
-		}
-
 		private void frmSearch_Load(object sender, EventArgs e)
 		{
 			Worker = new BackgroundWorker();
@@ -109,6 +75,39 @@ namespace MyNotebooks.subforms
 			ccb.CheckUncheckAll(true);
 			this.Text = string.Format(LblSearchingInText, this.OrgLevels.Count.ToString(), this.OrgLevels[0].OrgLevelType.ToString());
 			Worker.RunWorkerAsync();
+		}
+
+		private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
+		{
+			Program.User.Notebooks.Clear();
+			Program.User.Notebooks.AddRange(DbAccess.GetNotebooksUnderOrgLevel(OrgLevels[0].OrgLevelType, GetCheckedIds()));
+			//List<Notebook> SortedNotebooks = Program.User.Notebooks.OrderBy(x => x.Name).ToList();
+			Program.User.Notebooks.Sort((x, y) => x.Name.CompareTo(y.Name));
+
+			foreach (Notebook nb in Program.User.Notebooks)
+			{
+				nb.Entries = DbAccess.GetEntriesInNotebook(nb.Id);
+
+				foreach (Entry entry in nb.Entries)
+				{
+					List<MNLabel> v = entry.AllLabels.Where(e => !FoundLabelsAsListItems.Select(e => e.Name).Contains(e.LabelText)).ToList();
+
+					foreach (MNLabel label in v) { FoundLabelsAsListItems.Add(new() { Name = label.LabelText, Id = label.Id }); }
+					//lstLabelsForSearch.Items.Add(new ListItem() { Id = label.Id, Name = label.LabelText }); }
+				}
+
+			}
+		}
+
+		private void bgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+		{
+			this.Text += e.ProgressPercentage;
+		}
+
+		private void bgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		{
+			lstLabelsForSearch.Items.AddRange(FoundLabelsAsListItems.ToArray());
+			btnSearch.Enabled = true;
 		}
 
 		private async void btnSearch_Click(object sender, EventArgs e) { await DoSearch(); }
@@ -145,15 +144,12 @@ namespace MyNotebooks.subforms
 			EntriesToSearch.Clear();
 			List<Entry> entries = new();
 			List<Notebook> notebooks = new();
-			//string[] checkedLabels = Array.Empty<string>();
 			NotebookBoundariesDict.Clear();
 
 			foreach (Notebook nb in Program.User.Notebooks)
 			{
 				foreach (Entry entry in nb.Entries)
 				{
-					//checkedLabels = checkedLabels.Length == 0 ? GetCheckedLabels().Split(',') : checkedLabels;
-
 					SearchObject so = new SearchObject(
 						chkUseDate, chkUseDateRange, chkMatchCase, dtFindDate, dtFindDate_From, dtFindDate_To
 						, radDate_And, radLabels_And, radTitleText_And, radTitle_And
@@ -161,12 +157,7 @@ namespace MyNotebooks.subforms
 						, txtSearchText.Text, GetCheckedLabels());
 
 					var v = nb.Search(so);
-
-					if (v.Count > 0)
-					{
-						foundEntries.AddRange(v.Where(e => !foundEntries.Contains(e)));
-						//NotebookBoundariesDict.Add(nb.Name, lstFoundEntries.Items.Count);
-					}
+					if (v.Count > 0) { foundEntries.AddRange(v.Where(e => !foundEntries.Contains(e))); }
 				}
 			}
 
@@ -175,7 +166,7 @@ namespace MyNotebooks.subforms
 			if (lstFoundEntries.Items.Count == 0) { lstFoundEntries.Items.Add("no matches found"); }
 			btnExportEntries.Visible = lstFoundEntries.Items.Count > 1;
 			lblNumEntriesFound.Visible = btnExportEntries.Visible;
-			lblNumEntriesFound.Text = string.Format(LabelEntriesFoundText, lstFoundEntries.Items.Count / 3);
+			lblNumEntriesFound.Text = string.Format(LabelEntriesFoundText, FoundEntries.Count);
 			lblSeparator.Visible = true;
 			this.Cursor = Cursors.Default;
 		}
@@ -268,7 +259,6 @@ namespace MyNotebooks.subforms
 
 		private void lstFoundEntries_MouseUp(object sender, MouseEventArgs e)
 		{
-			//SelectEntry();
 			if (e.Button == MouseButtons.Right)
 			{ mnuEntryEditTop.Visible = lstFoundEntries.SelectedIndices.Contains((e.Y / 15) + lstFoundEntries.TopIndex); }
 		}
@@ -278,7 +268,7 @@ namespace MyNotebooks.subforms
 			ListBox lb = (ListBox)sender;
 			RichTextBox rtb = rtbSelectedEntry_Found;
 
-			if (lb.SelectedIndex > -1)
+			if (lb.SelectedIndex > -1 && lb.SelectedIndex < lb.Items.Count)
 			{
 				lb.SelectedIndexChanged -= new System.EventHandler(this.lstFoundEntries_SelectedIndexChanged);
 
@@ -374,19 +364,19 @@ namespace MyNotebooks.subforms
 		private async void mnuEditEntry_Click(object sender, EventArgs e)
 		{
 			this.Cursor = Cursors.WaitCursor;
-			Entry fe = lstFoundEntries.SelectedIndex == 0 ? FoundEntries[0] : FoundEntries[lstFoundEntries.SelectedIndex / 4];
-			Notebook nb = new Notebook(fe.NotebookName, "").Open();
+
+			Notebook nb = Program.User.Notebooks.FirstOrDefault(n => n.Name == SelectedEntry.NotebookName);
 			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
 
-			using (frmNewEntry frm = new frmNewEntry(this, nb, 0, fe, mnu.Text.ToLower().StartsWith("preserve")))
+			using (frmNewEntry frm = new(this, nb, 0, SelectedEntry, mnu.Text.ToLower().StartsWith("preserve")))
 			{
 				frm.ShowDialog();
 
 				if (frm.Saved)
 				{
-					nb.ReplaceEntry(fe, frm.Entry);
+					nb.ReplaceEntry(SelectedEntry, frm.Entry);
 					await nb.Save();
-					var indx = lstFoundEntries.SelectedIndex;
+					var indx = lstFoundEntries.SelectedIndex;	// nxt line will clear selections
 					await DoSearch();
 					lstFoundEntries.SelectedIndex = indx;
 				}
@@ -435,11 +425,16 @@ namespace MyNotebooks.subforms
 		private void SelectEntry()
 		{
 			var indx = CurrentMouseOverIndex_lstEntries;
-			while (indx > 0 & !lstFoundEntries.Items[indx].ToString().StartsWith("---")) { indx--; }
-			indx += indx > 0 ? 1 : 0;
-			SelectedEntry = FoundEntries[indx / 4];
-			lstFoundEntries.SelectedIndices.Clear();
-			lstFoundEntries.SelectedIndices.Add(indx); lstFoundEntries.SelectedIndices.Add(indx + 1); lstFoundEntries.SelectedIndices.Add(indx + 2);
+
+			if(indx < lstFoundEntries.Items.Count - 1)
+			{
+				while (indx > 0 & !lstFoundEntries.Items[indx].ToString().StartsWith("---")) { indx--; }
+				indx += indx > 0 ? 1 : 0;
+				SelectedEntry = FoundEntries[indx / 4];
+				lstFoundEntries.SelectedIndices.Clear();
+				lstFoundEntries.SelectedIndices.Add(indx); lstFoundEntries.SelectedIndices.Add(indx + 1); lstFoundEntries.SelectedIndices.Add(indx + 2);
+			}
+			else { lstFoundEntries.SelectedIndices.Clear();}
 		}
 
 		private void ToggleDateControls(bool toggleUseDate)

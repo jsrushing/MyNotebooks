@@ -137,7 +137,7 @@ namespace MyNotebooks.subforms
 			pnlCreateUser.Controls.Add(label6);
 			pnlCreateUser.Location = new System.Drawing.Point(4, 125);
 			pnlCreateUser.Name = "pnlCreateUser";
-			pnlCreateUser.Size = new System.Drawing.Size(270, 355);
+			pnlCreateUser.Size = new System.Drawing.Size(266, 355);
 			pnlCreateUser.TabIndex = 12;
 			pnlCreateUser.Visible = false;
 			// 
@@ -164,9 +164,10 @@ namespace MyNotebooks.subforms
 			clbPermissions.FormattingEnabled = true;
 			clbPermissions.Location = new System.Drawing.Point(6, 56);
 			clbPermissions.Name = "clbPermissions";
-			clbPermissions.Size = new System.Drawing.Size(260, 292);
+			clbPermissions.Size = new System.Drawing.Size(254, 292);
 			clbPermissions.TabIndex = 16;
 			clbPermissions.SelectedIndexChanged += this.clbPermissions_SelectedIndexChanged;
+			clbPermissions.VisibleChanged += this.clbPermissions_VisibleChanged;
 			// 
 			// label6
 			// 

@@ -350,12 +350,7 @@ namespace MyNotebooks.DataAccess
 							entry = new(tblEntries, i);
 
 							for (int i2 = 0; i2 < tblLabels.Rows.Count; i2++)
-							{
-								entry.AllLabels.Add(new(tblLabels, i2));
-							}
-
-							//var v = labelsForSearch.Where(e => e.ParentId == entry.Id).ToList();
-							//if (v.Any()) { entry.AllLabels.AddRange(v); }
+							{ entry.AllLabels.Add(new(tblLabels, i2)); }
 
 							entries.Add(entry);
 						}
@@ -364,7 +359,6 @@ namespace MyNotebooks.DataAccess
 				return entries;
 			}
 			catch { return null; }
-
 		}
 
 		public static List<Entry>	GetEntriesWithLabel(MNLabel label)
