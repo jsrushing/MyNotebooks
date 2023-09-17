@@ -35,6 +35,7 @@ namespace MyNotebooks.subforms
 		private Dictionary<string, int> NotebookBoundariesDict = new Dictionary<string, int>();
 		private string LblSearchingInText = "Searching in {0} {1}s";
 		private BackgroundWorker Worker;
+		private bool FirstSearch = true;
 
 		public frmSearch(Form parent)
 		{
@@ -140,12 +141,15 @@ namespace MyNotebooks.subforms
 			while (Worker.IsBusy) { Thread.Sleep(100); }
 			this.Cursor = Cursors.WaitCursor;
 			var labels = string.Empty;
-			List<Entry> foundEntries = new List<Entry>();
+			List<Entry> foundEntries = new();
 			EntriesToSearch.Clear();
 			List<Entry> entries = new();
 			List<Notebook> notebooks = new();
-			NotebookBoundariesDict.Clear();
+			//NotebookBoundariesDict.Clear();
+			//Program.User.Notebooks.Clear();	
 
+			//if(Program.User.Notebooks.Count == 0 & FirstSearch)
+			//{
 			foreach (Notebook nb in Program.User.Notebooks)
 			{
 				foreach (Entry entry in nb.Entries)
@@ -159,8 +163,12 @@ namespace MyNotebooks.subforms
 					var v = nb.Search(so);
 					if (v.Count > 0) { foundEntries.AddRange(v.Where(e => !foundEntries.Contains(e))); }
 				}
+				//}
 			}
 
+			//if(FirstSearch) { FirstSearch = false; await DoSearch(); }
+
+			//FirstSearch = true;
 			await Utilities.PopulateEntries(lstFoundEntries, foundEntries, "", "", "", true, 3, true, lstFoundEntries.Width - 25);
 			this.FoundEntries = foundEntries;
 			if (lstFoundEntries.Items.Count == 0) { lstFoundEntries.Items.Add("no matches found"); }
@@ -277,7 +285,7 @@ namespace MyNotebooks.subforms
 				if (SelectedEntry != null)
 				{
 					rtbSelectedEntry_Found.Text = SelectedEntry.DisplayText;
-						
+
 					//	String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
 					//, SelectedEntry.Title, SelectedEntry.CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"])
 					//, SelectedEntry.AllLabels.se , SelectedEntry.Text);
@@ -374,9 +382,9 @@ namespace MyNotebooks.subforms
 
 				if (frm.Saved)
 				{
-					var indx = lstFoundEntries.SelectedIndex;	// nxt line will clear selections
+					var indx = lstFoundEntries.SelectedIndex;   // nxt line will clear selections
 					await DoSearch();
-					lstFoundEntries.SelectedIndex = indx;
+					lstFoundEntries.SelectedIndex = lstFoundEntries.Items.Count > 1 ? indx : -1;
 				}
 			}
 
@@ -424,7 +432,7 @@ namespace MyNotebooks.subforms
 		{
 			var indx = CurrentMouseOverIndex_lstEntries;
 
-			if(indx < lstFoundEntries.Items.Count - 1)
+			if (indx < lstFoundEntries.Items.Count - 1)
 			{
 				while (indx > 0 & !lstFoundEntries.Items[indx].ToString().StartsWith("---")) { indx--; }
 				indx += indx > 0 ? 1 : 0;
@@ -432,7 +440,7 @@ namespace MyNotebooks.subforms
 				lstFoundEntries.SelectedIndices.Clear();
 				lstFoundEntries.SelectedIndices.Add(indx); lstFoundEntries.SelectedIndices.Add(indx + 1); lstFoundEntries.SelectedIndices.Add(indx + 2);
 			}
-			else { lstFoundEntries.SelectedIndices.Clear();}
+			else { lstFoundEntries.SelectedIndices.Clear(); }
 		}
 
 		private void ToggleDateControls(bool toggleUseDate)
@@ -487,6 +495,15 @@ namespace MyNotebooks.subforms
 			//		if (item.Checked) { }
 			//	}
 			//}
+		}
+
+		private void frmSearch_ResizeEnd(object sender, EventArgs e)
+		{
+			if (this.Height - 344 > 277)
+			{
+				lblSeparator.Top = this.Height - 344;
+				Utilities.ResizeListsAndRTBs(lstFoundEntries, rtbSelectedEntry_Found, lblSeparator, lblSelectionType, this);
+			}
 		}
 
 		//private void ccb_SelectedIndexChanged(object sender, EventArgs e)

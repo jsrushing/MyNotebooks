@@ -475,7 +475,7 @@ namespace MyNotebooks.subforms
 			lblSeparator.Cursor = Cursors.HSplit;
 			lblSeparator.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			lblSeparator.ForeColor = System.Drawing.Color.Red;
-			lblSeparator.Location = new System.Drawing.Point(105, 376);
+			lblSeparator.Location = new System.Drawing.Point(111, 382);
 			lblSeparator.Name = "lblSeparator";
 			lblSeparator.Size = new System.Drawing.Size(670, 19);
 			lblSeparator.TabIndex = 37;
@@ -593,9 +593,11 @@ namespace MyNotebooks.subforms
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new System.Drawing.Size(815, 672);
 			Controls.Add(grpFindEntry);
+			MinimumSize = new System.Drawing.Size(831, 550);
 			Name = "frmSearch";
 			Text = "Search";
 			Load += this.frmSearch_Load;
+			ResizeEnd += this.frmSearch_ResizeEnd;
 			grpFindEntry.ResumeLayout(false);
 			grpFindEntry.PerformLayout();
 			panel5.ResumeLayout(false);

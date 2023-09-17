@@ -30,7 +30,7 @@ namespace MyNotebooks.subforms
 		{
 			if(Program.User.AccessLevel >= 1) { ddlOrgLevels.Items.Add("Group"); }
 			if (Program.User.AccessLevel >= 2) { ddlOrgLevels.Items.Add("Department"); }
-			if (Program.User.AccessLevel >= 3) { ddlOrgLevels.Items.Add("Account)"); }
+			if (Program.User.AccessLevel >= 3) { ddlOrgLevels.Items.Add("Account"); }
 			if (Program.User.AccessLevel >= 4) { ddlOrgLevels.Items.Add("Company"); }
 		}
 
