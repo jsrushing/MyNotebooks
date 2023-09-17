@@ -60,8 +60,8 @@ namespace MyNotebooks.subforms
 			OrgLevelLists_CU.AddRange(new ListBox[] { lstCompanies_CU, lstAccounts_CU, lstDepartments_CU, lstGroups_CU });
 
 			if (Program.ManagementConsoleSelections.Count > 0)
-			{	
-				if(Program.User.Id != Program.User.CreatedBy)
+			{
+				if (Program.User.Id != Program.User.CreatedBy)
 				{
 					foreach (GroupBox gb in OrgLevelGroups_CU)
 					{
@@ -119,7 +119,7 @@ namespace MyNotebooks.subforms
 
 			if (Program.ManagementConsoleSelections.Count == 0)
 			{
-				foreach(GroupBox gb in OrgLevelGroups_CU)
+				foreach (GroupBox gb in OrgLevelGroups_CU)
 				{
 					Program.ManagementConsoleSelections.Add(gb.Controls.OfType<ListBox>().FirstOrDefault());
 				}
@@ -901,7 +901,7 @@ namespace MyNotebooks.subforms
 				SetContextMenus(e.Node);
 			}
 
-			if (e.Node.Level == 0) {; } else { LastClickedNode = e.Node; }
+			//if (e.Node.Level == 0) {; } else { LastClickedNode = e.Node; }
 
 			//if(treeUser.GetNodeAt(e.X, e.Y).Level == 0)
 			//{
@@ -915,47 +915,9 @@ namespace MyNotebooks.subforms
 			HoverNode = treeUser.GetNodeAt(e.X, e.Y);
 		}
 
-		private void UpdatePath()
-		{
-			lblTreePath.Text = string.Empty;
-			NodeInfo info = new NodeInfo();
-			string seperator = " > ";
-			try
-			{
-				info = NodesInPath.Where(e => e.NodeType == frmMain.OrgLevelTypes.Company).First();
-				lblTreePath.Text += info.NodeName + seperator;
-			}
-			catch { }
-			try
-			{
-				info = NodesInPath.Where(e => e.NodeType == frmMain.OrgLevelTypes.Account).First();
-				lblTreePath.Text += info.NodeName + seperator;
-			}
-			catch { }
-			try
-			{
-				info = NodesInPath.Where(e => e.NodeType == frmMain.OrgLevelTypes.Department).First();
-				lblTreePath.Text += info.NodeName + seperator;
-			}
-			catch { }
-			try
-			{
-				info = NodesInPath.Where(e => e.NodeType == frmMain.OrgLevelTypes.Group).First();
-				lblTreePath.Text += info.NodeName;
-			}
-			catch { }
-
-			if (lblTreePath.Text.Length > 0) { this.Height = lblTreePath.Top + lblTreePath.Height + 50; }
-
-		}
 		#endregion
 
 		private void txtCredentials_TextChanged(object sender, EventArgs e) { if (this.Size != SmallSize) { ResetForm(); } }
-
-		private void clbPermissions_VisibleChanged(object sender, EventArgs e)
-		{
-			if (!clbPermissions.Visible) { int i = 0; }
-		}
 	}
 
 	public struct NodeInfo

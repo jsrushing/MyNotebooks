@@ -278,7 +278,7 @@ namespace MyNotebooks.DataAccess
 			{
 				conn.Open();
 
-				using (SqlCommand cmd = new("sp_GetEntryParentsTree", conn))
+				using (SqlCommand cmd = new("sp_GetEntryParents", conn))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 					cmd.Parameters.AddWithValue("@entryId", entryId);
@@ -294,34 +294,34 @@ namespace MyNotebooks.DataAccess
 			return lstRtrn;
 		}
 
-		public static List<Entry>	GetEntriesCreatedByUser()
-		{
-			try
-			{
-				List<Entry> entries = new();
-				DataTable dt = new();
+		//public static List<Entry>	GetEntriesCreatedByUser()
+		//{
+		//	try
+		//	{
+		//		List<Entry> entries = new();
+		//		DataTable dt = new();
 
-				using (SqlConnection conn = new(connString))
-				{
-					conn.Open();
+		//		using (SqlConnection conn = new(connString))
+		//		{
+		//			conn.Open();
 
-					using (SqlCommand cmd = new("sp_GetEntriesCreatedByUser", conn))
-					{
-						cmd.CommandType = CommandType.StoredProcedure;
-						cmd.Parameters.AddWithValue("@userId", Program.User.Id);
-						SqlDataAdapter sda = new() { SelectCommand = cmd };
-						sda.Fill(dt);
+		//			using (SqlCommand cmd = new("sp_GetEntriesCreatedByUser", conn))
+		//			{
+		//				cmd.CommandType = CommandType.StoredProcedure;
+		//				cmd.Parameters.AddWithValue("@userId", Program.User.Id);
+		//				SqlDataAdapter sda = new() { SelectCommand = cmd };
+		//				sda.Fill(dt);
 
-						for (int i = 0; i < dt.Rows.Count; i++)
-						{
-							entries.Add(new(dt, i));
-						}
-					}
-				}
-				return entries;
-			}
-			catch { return null; }
-		}
+		//				for (int i = 0; i < dt.Rows.Count; i++)
+		//				{
+		//					entries.Add(new(dt, i));
+		//				}
+		//			}
+		//		}
+		//		return entries;
+		//	}
+		//	catch { return null; }
+		//}
 
 		public static List<Entry>	GetEntriesInNotebook(int notebookId)
 		{
@@ -370,7 +370,7 @@ namespace MyNotebooks.DataAccess
 			{
 				conn.Open();
 
-				using (SqlCommand cmd = new("sp_GetEntriesWithLabel", conn))
+				using (SqlCommand cmd = new("sp_GetEntriesWithLabel", conn))	// PARENT PATH NOT RETURNING FROM HERE <<< !!!
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 					cmd.Parameters.AddWithValue("@labelText", label.LabelText);
@@ -419,7 +419,7 @@ namespace MyNotebooks.DataAccess
 			{
 				conn.Open();
 
-				using (SqlCommand cmd = new("sp_GetLabelsForEntry", conn))
+				using (SqlCommand cmd = new("sp_GetLabelsForEntry", conn))	// THIS IS WHERE TO ADD PARENTPATH FOR SHORT ENTRY DISPLAY ON frmMain !1!
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 					cmd.Parameters.AddWithValue("@entryId", entryId);

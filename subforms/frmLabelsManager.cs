@@ -459,7 +459,7 @@ namespace MyNotebooks.subforms
 
 						if (frm.Saved)
 						{    // refresh lstOccurrences
-							treeAvailableLabels.SelectedNode = LastClickedLabelNode;
+							//treeAvailableLabels.SelectedNode = LastClickedLabelNode;
 							PopulateLabelDetails();
 							lstOccurrences.SelectedIndex = LastClickedEntryIndex;
 							PopulateGridViewEntryDetails();

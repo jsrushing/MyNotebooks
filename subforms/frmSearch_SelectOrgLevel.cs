@@ -28,17 +28,17 @@ namespace MyNotebooks.subforms
 
 		private void frmSearch_SelectOrgLevel_Load(object sender, EventArgs e)
 		{
-			if(Program.User.AccessLevel >= 1) { ddlOrgLevels.Items.Add("Groups"); }
-			if (Program.User.AccessLevel >= 2) { ddlOrgLevels.Items.Add("Departments"); }
-			if (Program.User.AccessLevel >= 3) { ddlOrgLevels.Items.Add("Accounts"); }
-			if (Program.User.AccessLevel >= 4) { ddlOrgLevels.Items.Add("Companies"); }
+			if(Program.User.AccessLevel >= 1) { ddlOrgLevels.Items.Add("Group"); }
+			if (Program.User.AccessLevel >= 2) { ddlOrgLevels.Items.Add("Department"); }
+			if (Program.User.AccessLevel >= 3) { ddlOrgLevels.Items.Add("Account)"); }
+			if (Program.User.AccessLevel >= 4) { ddlOrgLevels.Items.Add("Company"); }
 		}
 
 		private void ddlOrgLevels_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			var v = ddlOrgLevels.SelectedItem as ListItem;
 			//SelectedOrgLevelId = Convert.ToInt32(v.Id.ToString());
-			SelectedOrgLevelType = (frmMain.OrgLevelTypes)Enum.Parse(typeof(frmMain.OrgLevelTypes), ddlOrgLevels.Text.AsSpan(0, ddlOrgLevels.Text.Length - 1));
+			SelectedOrgLevelType = (frmMain.OrgLevelTypes)Enum.Parse(typeof(frmMain.OrgLevelTypes), ddlOrgLevels.Text);
 			btnOk.Enabled = true;
 		}
 

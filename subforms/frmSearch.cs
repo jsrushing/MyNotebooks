@@ -374,8 +374,6 @@ namespace MyNotebooks.subforms
 
 				if (frm.Saved)
 				{
-					nb.ReplaceEntry(SelectedEntry, frm.Entry);
-					await nb.Save();
 					var indx = lstFoundEntries.SelectedIndex;	// nxt line will clear selections
 					await DoSearch();
 					lstFoundEntries.SelectedIndex = indx;
