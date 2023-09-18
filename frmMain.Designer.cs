@@ -119,9 +119,9 @@ namespace MyNotebooks.subforms
 			lblSelectionType.ForeColor = System.Drawing.SystemColors.MenuHighlight;
 			lblSelectionType.Location = new System.Drawing.Point(12, 252);
 			lblSelectionType.Name = "lblSelectionType";
-			lblSelectionType.Size = new System.Drawing.Size(96, 17);
+			lblSelectionType.Size = new System.Drawing.Size(135, 17);
 			lblSelectionType.TabIndex = 9;
-			lblSelectionType.Text = "Selected Entry";
+			lblSelectionType.Text = "Selected EntryToEdit";
 			lblSelectionType.Visible = false;
 			// 
 			// ddlNotebooks
@@ -168,14 +168,14 @@ namespace MyNotebooks.subforms
 			mnuEntryTop.Enabled = false;
 			mnuEntryTop.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuEntryCreate, mnuEntryEdit, mnuEntryDelete });
 			mnuEntryTop.Name = "mnuEntryTop";
-			mnuEntryTop.Size = new System.Drawing.Size(129, 70);
-			mnuEntryTop.Text = "&Entry";
+			mnuEntryTop.Size = new System.Drawing.Size(181, 92);
+			mnuEntryTop.Text = "&EntryToEdit";
 			// 
 			// mnuEntryCreate
 			// 
 			mnuEntryCreate.Enabled = false;
 			mnuEntryCreate.Name = "mnuEntryCreate";
-			mnuEntryCreate.Size = new System.Drawing.Size(128, 22);
+			mnuEntryCreate.Size = new System.Drawing.Size(180, 22);
 			mnuEntryCreate.Text = "&New Entry";
 			mnuEntryCreate.Click += this.mnuEntryCreate_Click;
 			// 
@@ -184,7 +184,7 @@ namespace MyNotebooks.subforms
 			mnuEntryEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuPreserveOriginalText, mnuDiscardOriginalText });
 			mnuEntryEdit.Enabled = false;
 			mnuEntryEdit.Name = "mnuEntryEdit";
-			mnuEntryEdit.Size = new System.Drawing.Size(128, 22);
+			mnuEntryEdit.Size = new System.Drawing.Size(180, 22);
 			mnuEntryEdit.Text = "E&dit";
 			mnuEntryEdit.Click += this.mnuEntryEdit_Click;
 			// 
@@ -206,7 +206,7 @@ namespace MyNotebooks.subforms
 			// 
 			mnuEntryDelete.Enabled = false;
 			mnuEntryDelete.Name = "mnuEntryDelete";
-			mnuEntryDelete.Size = new System.Drawing.Size(128, 22);
+			mnuEntryDelete.Size = new System.Drawing.Size(180, 22);
 			mnuEntryDelete.Text = "Delete";
 			mnuEntryDelete.Click += this.mnuEntryDelete_Click;
 			// 

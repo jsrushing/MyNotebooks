@@ -194,7 +194,7 @@ namespace MyNotebooks.subforms
 			label9.Name = "label9";
 			label9.Size = new System.Drawing.Size(45, 17);
 			label9.TabIndex = 3;
-			label9.Text = "Entry:";
+			label9.Text = "EntryToEdit:";
 			// 
 			// txtSearchTitle
 			// 
@@ -480,7 +480,6 @@ namespace MyNotebooks.subforms
 			lblSeparator.Size = new System.Drawing.Size(670, 19);
 			lblSeparator.TabIndex = 37;
 			lblSeparator.Text = resources.GetString("lblSeparator.Text");
-			lblSeparator.Visible = false;
 			lblSeparator.MouseMove += this.lblSeparator_MouseMove;
 			// 
 			// lstFoundEntries
@@ -574,13 +573,13 @@ namespace MyNotebooks.subforms
 			lblSelectionType.Name = "lblSelectionType";
 			lblSelectionType.Size = new System.Drawing.Size(96, 17);
 			lblSelectionType.TabIndex = 15;
-			lblSelectionType.Text = "Selected Entry";
+			lblSelectionType.Text = "Selected EntryToEdit";
 			// 
 			// mnuEditEntry
 			// 
 			mnuEditEntry.Name = "mnuEditEntry";
 			mnuEditEntry.Size = new System.Drawing.Size(32, 19);
-			mnuEditEntry.Text = "Edit Entry";
+			mnuEditEntry.Text = "Edit EntryToEdit";
 			// 
 			// bgWorker
 			// 

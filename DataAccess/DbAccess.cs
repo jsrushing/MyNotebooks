@@ -294,11 +294,11 @@ namespace MyNotebooks.DataAccess
 			return lstRtrn;
 		}
 
-		//public static List<Entry>	GetEntriesCreatedByUser()
+		//public static List<EntryToEdit>	GetEntriesCreatedByUser()
 		//{
 		//	try
 		//	{
-		//		List<Entry> entries = new();
+		//		List<EntryToEdit> entries = new();
 		//		DataTable dt = new();
 
 		//		using (SqlConnection conn = new(connString))
@@ -463,7 +463,7 @@ namespace MyNotebooks.DataAccess
 			return lstRtrn;
 		}
 
-		//public static Entry			GetFullEntry(Entry entryToComplete) 
+		//public static EntryToEdit			GetFullEntry(EntryToEdit entryToComplete) 
 		//{
 		//	using (SqlConnection conn = new(connString))
 		//	{

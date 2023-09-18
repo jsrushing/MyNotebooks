@@ -133,7 +133,7 @@ namespace MyNotebooks
 		public async Task	Create(bool addCreatedOn = true)
         {
 			//this.FileName += this.Settings.AllowCloud ? "" : " (local)";
-			//if(addCreatedOn) Entries.Add(new Entry("created", "-", "-", "", this.Name));
+			//if(addCreatedOn) Entries.Add(new EntryToEdit("created", "-", "-", "", this.Name));
 			//Program.SkipFileSizeComparison = true;
 			this.CreatedBy = Program.User.Id;
 			IsNewNotebook = true;

@@ -26,9 +26,10 @@ namespace MyNotebooks.subforms
 		public Entry CurrentEntry { get; set; }
 		private bool FirstDetailsLoad = true;
 		private bool ProgramaticallyChecking = false;
-		private TreeNode LastClickedLabelNode = null;
+		//private TreeNode LastClickedLabelNode = null;
+		private TreeNode currentHoverNode = null;
 		private int LastClickedEntryIndex = -1;
-		private const string ViewEntryMenuText = "View Entry";
+		private const string ViewEntryMenuText = "View EntryToEdit";
 		private const string LoadNotebookMenuText = "Load Notebook";
 		private bool RefreshEntry = false;
 
@@ -36,7 +37,7 @@ namespace MyNotebooks.subforms
 
 		public bool ActionTaken { get; private set; }
 
-		public frmLabelsManager(Form parent, bool deleteOrphans = false, Notebook _jrnl = null, Entry currentEntry = null)
+		public frmLabelsManager(Form parent, bool deleteOrphans = false, Entry currentEntry = null)
 		{
 			InitializeComponent();
 			SelectedNotebooks = new List<Notebook>();
@@ -69,7 +70,6 @@ namespace MyNotebooks.subforms
 
 				ResetTree();
 				foreach (TreeNode tn in treeAvailableLabels.Nodes) { tn.Nodes.Add(""); }
-
 			}
 		}
 
@@ -149,16 +149,13 @@ namespace MyNotebooks.subforms
 
 			foreach (TreeNode tn in treeAvailableLabels.Nodes)
 			{
-				if (tn.Nodes.Count > 0)
+				foreach (TreeNode child in tn.Nodes)
 				{
-					foreach (TreeNode child in tn.Nodes)
+					if (child.Checked)
 					{
-						if (child.Checked)
+						if (!lstRtrn.Any(l => l.LabelText == child.Text & l.ParentId == CurrentEntry.Id))
 						{
-							if (!lstRtrn.Any(l => l.LabelText == child.Text & l.ParentId == CurrentEntry.Id))
-							{
-								lstRtrn.Add(new() { CreatedBy = Program.User.Id, LabelText = child.Text, ParentId = CurrentEntry.Id });
-							}
+							lstRtrn.Add(new() { CreatedBy = Program.User.Id, LabelText = child.Text, ParentId = CurrentEntry.Id });
 						}
 					}
 				}
@@ -257,36 +254,6 @@ namespace MyNotebooks.subforms
 			mnuContextLabels.Visible = e.Button == MouseButtons.Right && lstLabels.SelectedIndex > -1;
 		}
 
-		private async void lstOccurrences_DoubleClick(object sender, EventArgs e)
-		{
-
-			//try
-			//{
-			//	var i = lstOccurrences.SelectedIndex;
-			//	KeyValuePair<Notebook, Entry> kvp = (KeyValuePair<Notebook, Entry>)lstEntryObjects.Items[i];
-			//	Utilities.SetProgramPIN(kvp.Key.Name);
-			//	var currentEntry = kvp.Value;
-
-			//	using (frmNewEntry frm = new frmNewEntry(this, kvp.Key, 0, kvp.Value))
-			//	{
-			//		frm.ShowDialog();
-
-			//		if (frm.Saved)
-			//		{
-			//			Entry nbEntry = frm.Entry;
-			//			kvp.Key.ReplaceEntry(currentEntry, nbEntry);
-			//			await kvp.Key.Create();
-			//			var lblIndx = lstLabels.SelectedIndex;
-			//			PopulateOccurrences();
-			//			lstLabels.SelectedIndex = -1;
-			//			lstLabels.SelectedIndex = lblIndx;
-			//			lstOccurrences.SelectedIndex = i;
-			//		}
-			//	}
-			//}
-			//catch (Exception) { }
-		}
-
 		private void lstOccurrences_MouseUp(object sender, MouseEventArgs e)
 		{ PopulateGridViewEntryDetails(e.Y); }
 
@@ -343,31 +310,18 @@ namespace MyNotebooks.subforms
 			//if (DeletingOrphans) { this.Close(); }
 		}
 
-		private async void MenuMove(object sender, EventArgs e)
-		{
-			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
-			var isUp = mnu.Name.ToLower().Contains("up");
-			var sLbl = lstLabels.SelectedItem.ToString();
-			var selIndx = lstLabels.SelectedIndex;
-			lstLabels.Items.RemoveAt(selIndx);
-			lstLabels.Items.Insert(selIndx + (isUp ? -1 : 1), sLbl);
-			lstLabels.SelectedIndex = selIndx + (isUp ? -1 : 1);
-			await LabelsManager.SaveLabelsToFile(lstLabels.Items.OfType<string>().ToList());
-		}
-
 		private void mnuAddCheckedLabelsToEntry_Click(object sender, EventArgs e)
 		{
-			var checkedNodes = GetCheckedNodes(treeAvailableLabels.Nodes) as List<MNLabel>;
-			var v = CurrentEntry.AllLabels;
-
-			foreach (MNLabel lbl in checkedNodes)
+			foreach (MNLabel lbl in GetCheckedNodes(treeAvailableLabels.Nodes))
 			{
 				if (!CurrentEntry.AllLabels.Any(l => l.LabelText == lbl.LabelText & l.ParentId == lbl.ParentId))
-				{ lbl.Create(); RefreshEntry = true; }
+				{ 
+					lbl.Create(); 
+					CurrentEntry.AllLabels.Add(lbl); 
+					RefreshEntry = true; 
+				}
 			}
 
-			CurrentEntry.AllLabels.Clear();
-			CurrentEntry.AllLabels = DbAccess.GetLabelsForEntry(CurrentEntry.Id);
 			ActionTaken = true;
 			this.Close();
 		}
@@ -447,19 +401,19 @@ namespace MyNotebooks.subforms
 		private void mnuContext_GridEntryDetails_Click(object sender, EventArgs e)
 		{
 			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
-			Int32 v = Convert.ToInt32(gridViewEntryDetails.SelectedRows[0].Cells[1].Tag);
+			int v = Convert.ToInt32(gridViewEntryDetails.SelectedRows[0].Cells[1].Tag);
 			var gridIndex = gridViewEntryDetails.SelectedRows[0];
 
 			switch (gridIndex.Index)
 			{
-				case 0:     // View Entry
+				case 0:     // View EntryToEdit
 					using (frmNewEntry frm = new(this, null, 0, DbAccess.GetEntry(v)))
 					{
 						frm.ShowDialog();
 
 						if (frm.Saved)
 						{    // refresh lstOccurrences
-							//treeAvailableLabels.SelectedNode = LastClickedLabelNode;
+							 //treeAvailableLabels.SelectedNode = LastClickedLabelNode;
 							PopulateLabelDetails();
 							lstOccurrences.SelectedIndex = LastClickedEntryIndex;
 							PopulateGridViewEntryDetails();
@@ -497,7 +451,7 @@ namespace MyNotebooks.subforms
 			{
 				frm.ShowDialog(this);
 
-				if (frm.ResultText.Length > 0)
+				if (frm.ResultText != null)
 				{
 					MNLabel lbl = new()
 					{
@@ -515,63 +469,6 @@ namespace MyNotebooks.subforms
 					}
 				}
 			}
-		}
-
-		private void mnuExit_Click(object sender, EventArgs e) { this.Hide(); }
-
-		private async void mnuFindOrphans_Click(object sender, EventArgs e) { await ManageOrphans(); }
-
-		private async void mnuRename_Click(object sender, EventArgs e)
-		{
-			var oldLabelName = lstLabels.Text;
-			var newLabelName = string.Empty;
-
-			var sMsg = "The label '" + lstLabels.SelectedItem + " will be renamed in " +
-				(Program.DictCheckedNotebooks.Count == Program.AllNotebooks.Count ? "all" : "the (" + Program.DictCheckedNotebooks.Count + ") selected" + " notebooks.");
-
-			using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, sMsg, "new label name", this))
-			{
-				frm.ShowDialog();
-				if (frm.Result == frmMessage.ReturnResult.Ok) { newLabelName = frm.ResultText; }
-			}
-
-			if (newLabelName.Length > 0)
-			{
-				List<Notebook> jrnlsToSearch = GetSelectedNotebooks();
-				await LabelsManager.RenameLabelInNotebooksList(oldLabelName, newLabelName, jrnlsToSearch, Program.DictCheckedNotebooks, this);
-
-				if (!lstLabels.Items.OfType<string>().Contains(newLabelName))
-				{
-					if (jrnlsToSearch.Count != Program.AllNotebooks.Count)
-					{
-						var sMsg2 = "The old label name has been left in the list. To completely remove the old label select all notebooks " +
-							", add PINs, then try renaming again.";
-
-						MessageBox.Show(sMsg2, "Renamed but old name might still exist");
-						lstLabels.Items.Add(newLabelName);
-						lstLabels.SelectedIndex = lstLabels.Items.Count - 1;
-					}
-					else
-					{
-						lstLabels.Items.Insert(lstLabels.SelectedIndex, newLabelName);
-						lstLabels.Items.RemoveAt(lstLabels.SelectedIndex);
-					}
-				}
-				else
-				{ lstLabels.Items.RemoveAt(lstLabels.SelectedIndex); }
-
-				await LabelsManager.SaveLabelsToFile(lstLabels.Items.OfType<string>().ToList());
-				ActionTaken = true;
-				lstOccurrences.Items.Clear();
-			}
-		}
-
-		private void mnuSelectNotebooks_Click(object sender, EventArgs e)
-		{
-			using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(this)) { frm.ShowDialog(); }
-			GetSelectedNotebooks();
-			KickLstLabels();
-			ShowPanel(pnlMain);
 		}
 
 		private void PopulateLabelDetails()
@@ -614,7 +511,7 @@ namespace MyNotebooks.subforms
 
 			if (selectedItem != null && selectedItem.Name.StartsWith("  "))
 			{
-				gridViewEntryDetails.Rows[0].Cells[0].Value = "Entry: ";
+				gridViewEntryDetails.Rows[0].Cells[0].Value = "EntryToEdit: ";
 				gridViewEntryDetails.Rows[0].Cells[1].Value = selectedItem.Name.Substring(2, selectedItem.Name.Length - 2);
 				gridViewEntryDetails.Rows[0].Cells[1].Tag = selectedItem.Id;
 				List<KeyValuePair<int, string>> parents = DbAccess.GetEntryParentTree(selectedItem.Id);
@@ -787,11 +684,11 @@ namespace MyNotebooks.subforms
 
 		private void treeAvailableLabels_AfterSelect(object sender, TreeViewEventArgs e)
 		{
-			if (treeAvailableLabels.SelectedNode.Level > 0)
-			{
-				PopulateLabelDetails();
-				LastClickedLabelNode = treeAvailableLabels.SelectedNode;
-			}
+			if (e.Node.Level > 0) 
+			{ 
+				PopulateLabelDetails(); 
+				e.Node.Checked = !e.Node.Checked; 
+			} 
 		}
 
 		private void treeAvailableLabels_AfterExpand(object sender, TreeViewEventArgs e)
@@ -799,6 +696,7 @@ namespace MyNotebooks.subforms
 			// Get labelsForSearch under one of the root nodes.
 			TreeNode tn = e.Node;
 			TreeNode newNode = new();
+			//List<TreeNode> addedNodes = new();
 
 			if (tn.Level == 0 && tn.Nodes[0].Text.Length == 0)
 			{
@@ -809,13 +707,17 @@ namespace MyNotebooks.subforms
 				{
 					TreeNode existingNode = tn.Nodes.OfType<TreeNode>().FirstOrDefault(n => n.Text == label.LabelText);
 
-					if (existingNode == null)
+					if (existingNode != null)
 					{
 						newNode = new() { Text = label.LabelText, Tag = label.Id };
-						//var v = CurrentEntry.AllLabels.FirstOrDefault(n => n.LabelText == label.LabelText);
-						newNode.Checked = CurrentEntry.AllLabels.FirstOrDefault(n => n.LabelText == label.LabelText) != null;
+						
+						var v = CurrentEntry.AllLabels.FirstOrDefault(n => n.LabelText == label.LabelText);
+						newNode.Checked = v == null; //&& !LabelChecked(newNode.Text);
+						//if (newNode.Checked) { addedNodes.Add(newNode); }
+						//newNode.Checked = CurrentEntry.AllLabels.FirstOrDefault(n => n.LabelText == label.LabelText) != null;
 						tn.Nodes.Add(newNode);
 					}
+					else { tn.Nodes.Add(newNode); }
 				}
 			}
 		}
@@ -824,7 +726,8 @@ namespace MyNotebooks.subforms
 		{
 			if (!ProgramaticallyChecking)
 			{
-				TreeNode tn = treeAvailableLabels.SelectedNode;
+				TreeNode tn = e.Node;   // treeAvailableLabels.SelectedNode;
+				mnuLabelsOperations.Enabled = false;
 
 				if (tn != null)
 				{
@@ -846,20 +749,41 @@ namespace MyNotebooks.subforms
 
 						ProgramaticallyChecking = false;
 					}
-					else { LastClickedLabelNode = tn; }
+					else
+					{
+						foreach (TreeNode treeNode in tn.Parent.Nodes)
+						{
+							if (treeNode.Checked) { mnuLabelsOperations.Enabled = true; return; }
+						}
+
+					}
 				}
 			}
 		}
 
 		private void treeAvailableLabels_MouseMove(object sender, MouseEventArgs e)
 		{
-			if (!lstOccurrences.Visible)
-			{
-				TreeNode tn = treeAvailableLabels.GetNodeAt(e.X, e.Y);
-				if (tn != null && tn.Level == 0) { treeAvailableLabels.SelectedNode = tn; }
-			}
+			//if (!lstOccurrences.Visible)
+			//{
+			//currentHoverNode = treeAvailableLabels.GetNodeAt(e.X, e.Y + treeAvailableLabels.TopNode.Index);
+			//if (tn != null && tn.Level == 0) { treeAvailableLabels.SelectedNode = tn; }
+			//}
 
 			gridViewEntryDetails.Visible = false;
+		}
+
+		private bool LabelChecked(string labelText)
+		{
+			bool bRtrn = false;
+
+			foreach(TreeNode tn in treeAvailableLabels.Nodes)
+			{
+				foreach(TreeNode child in tn.Nodes) 
+				{
+					if(child.Text == labelText & child.Checked) { bRtrn = true; break; }
+				}
+			}
+			return bRtrn;
 		}
 	}
 }

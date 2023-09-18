@@ -21,9 +21,9 @@ namespace MyNotebooks.objects
 {
 	public static class Utilities
 	{
-		//public static Entry CreateEntry(string title, string text, string RTF, string labelsForSearch, string notebookName, string PIN)
+		//public static EntryToEdit CreateEntry(string title, string text, string RTF, string labelsForSearch, string notebookName, string PIN)
 		//{
-		//	return new Entry(EncryptDecrypt.Encrypt(title, PIN), EncryptDecrypt.Encrypt(text, PIN), 
+		//	return new EntryToEdit(EncryptDecrypt.Encrypt(title, PIN), EncryptDecrypt.Encrypt(text, PIN), 
 		//		EncryptDecrypt.Encrypt(RTF, PIN), EncryptDecrypt.Encrypt(labelsForSearch, PIN), EncryptDecrypt.Encrypt(notebookName, PIN));
 		//}
 

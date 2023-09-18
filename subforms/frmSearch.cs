@@ -140,16 +140,11 @@ namespace MyNotebooks.subforms
 		{
 			while (Worker.IsBusy) { Thread.Sleep(100); }
 			this.Cursor = Cursors.WaitCursor;
-			var labels = string.Empty;
-			List<Entry> foundEntries = new();
 			EntriesToSearch.Clear();
+			this.FoundEntries.Clear();
 			List<Entry> entries = new();
 			List<Notebook> notebooks = new();
-			//NotebookBoundariesDict.Clear();
-			//Program.User.Notebooks.Clear();	
 
-			//if(Program.User.Notebooks.Count == 0 & FirstSearch)
-			//{
 			foreach (Notebook nb in Program.User.Notebooks)
 			{
 				foreach (Entry entry in nb.Entries)
@@ -161,16 +156,11 @@ namespace MyNotebooks.subforms
 						, txtSearchText.Text, GetCheckedLabels());
 
 					var v = nb.Search(so);
-					if (v.Count > 0) { foundEntries.AddRange(v.Where(e => !foundEntries.Contains(e))); }
+					if (v.Count > 0) { FoundEntries.AddRange(v.Where(e => !FoundEntries.Contains(e))); }
 				}
-				//}
 			}
 
-			//if(FirstSearch) { FirstSearch = false; await DoSearch(); }
-
-			//FirstSearch = true;
-			await Utilities.PopulateEntries(lstFoundEntries, foundEntries, "", "", "", true, 3, true, lstFoundEntries.Width - 25);
-			this.FoundEntries = foundEntries;
+			await Utilities.PopulateEntries(lstFoundEntries, FoundEntries, "", "", "", true, 3, true, lstFoundEntries.Width - 25);
 			if (lstFoundEntries.Items.Count == 0) { lstFoundEntries.Items.Add("no matches found"); }
 			btnExportEntries.Visible = lstFoundEntries.Items.Count > 1;
 			lblNumEntriesFound.Visible = btnExportEntries.Visible;
@@ -325,7 +315,7 @@ namespace MyNotebooks.subforms
 				////if (selectedIndices.Count() > 1) { selectedIndices = selectedIndices.Except(ThreeSelections).ToList(); }
 
 
-				//Entry e2 = FoundEntries[lb.SelectedIndex/4];
+				//EntryToEdit e2 = FoundEntries[lb.SelectedIndex/4];
 
 				////select the entire short entry
 				////lb.SelectedIndices.Clear();
@@ -335,7 +325,7 @@ namespace MyNotebooks.subforms
 
 
 				//Notebook nb = GetEntryNotebook();
-				//Entry currentEntry = Entry.Select(rtb, lb, nb, false, null, false);
+				//EntryToEdit currentEntry = EntryToEdit.Select(rtb, lb, nb, false, null, false);
 				//GetCurrentSelections();
 
 				//if (currentEntry != null)
@@ -396,7 +386,7 @@ namespace MyNotebooks.subforms
 			this.Cursor = Cursors.WaitCursor;
 			Entry fe = lstFoundEntries.SelectedIndex == 0 ? FoundEntries[0] : FoundEntries[lstFoundEntries.SelectedIndex / 4];
 
-			using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Delete '" + fe.Title + "' from '" + fe.NotebookName + "'?", "Delete Entry", this))
+			using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Delete '" + fe.Title + "' from '" + fe.NotebookName + "'?", "Delete EntryToEdit", this))
 			{
 				frm.ShowDialog();
 

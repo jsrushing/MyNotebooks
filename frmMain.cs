@@ -16,7 +16,7 @@
 
 
 	toDo:
-		07/07/22 001 Entry RTB formatting controls.
+		07/07/22 001 EntryToEdit RTB formatting controls.
 				 002 Create .RichText instead of just .Text;
 				002ax Add password char for PIN and show/hide function.
 					1730 Done.
@@ -30,7 +30,7 @@
 					16:50 Done
 				 007x Context menu for entries? (Delete_original, Edit)
 					07/11/22 1445 No. This functionality isn't important since app is destined for mobile UI.
-				 008x Disallow clicking/typing in Selected Entry text on frmMain.
+				 008x Disallow clicking/typing in Selected EntryToEdit text on frmMain.
 					07/10/22 1145 Done.
 				 009x PIN show/hide on frmNewJournal.
 					7/10/22 1400 Done.
@@ -54,7 +54,7 @@
 		003x 11/27/22
 			Replicate sequence: 
 				> Open a PIN-protected journal 
-				> Open Create Entry 
+				> Open Create EntryToEdit 
 				> select Manage Labels 
 				> provide PIN for journals 
 				> Globally delete a label 
@@ -72,8 +72,8 @@
 				->  frmMain is shown in EntrySelected mode but no entry is selected (because they reloaded). Therefore when lblSeperator is clicked on we throw an 'Index out of range' error 
 						because no entry is selected.
 			Fix:
-				Switch to JournalSelected mode when returning from Entry > Create.
-				Tested OK 11/27/22. The mode switch was already programmed for Entry delete and Entry edit modes - just wasn't doing that for Create.
+				Switch to JournalSelected mode when returning from EntryToEdit > Create.
+				Tested OK 11/27/22. The mode switch was already programmed for EntryToEdit delete and EntryToEdit edit modes - just wasn't doing that for Create.
 
 		toDo:
 		07/23/22 001x Related to bug 001.
@@ -170,12 +170,12 @@ namespace MyNotebooks.subforms
 
 		public enum OrgLevelTypes : uint
 		{
-			Entry			= 1,
-			Notebook		= 2,
-			Group			= 3,
-			Department		= 4,
-			Account			= 5,
-			Company			= 6
+			Entry = 1,
+			Notebook = 2,
+			Group = 3,
+			Department = 4,
+			Account = 5,
+			Company = 6
 		}
 
 		public frmMain() { InitializeComponent(); }
@@ -197,9 +197,9 @@ namespace MyNotebooks.subforms
 
 		private async void frmMain_Load(object sender, EventArgs e)
 		{
-			if(Program.NotebooksNamesAndIds.Count == 0)
+			if (Program.NotebooksNamesAndIds.Count == 0)
 			{
-				if(Program.User == null)
+				if (Program.User == null)
 				{
 					using (frmUserLogin frm = new()) { frm.ShowDialog(); }
 
@@ -239,7 +239,7 @@ namespace MyNotebooks.subforms
 
 			//one - time code to create test notebooks
 			//LocalNotebook newNotebook;
-			//Entry newEntry;
+			//EntryToEdit newEntry;
 
 			//for (var i = 0; i < 10; i++)
 			//{
@@ -249,16 +249,16 @@ namespace MyNotebooks.subforms
 			//	//newNotebook.FileName = AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + newNotebook.Name;
 			//	var rnd = new Random(Guid.NewGuid().GetHashCode());
 
-			//	Entry newEntry1 = new Entry("created", "-", "-", "", newNotebook.Name); // Utilities.CreateEntry("created", "-", "-", "", newNotebook.Name, Program.PIN);
+			//	EntryToEdit newEntry1 = new EntryToEdit("created", "-", "-", "", newNotebook.Name); // Utilities.CreateEntry("created", "-", "-", "", newNotebook.Name, Program.PIN);
 			//	newEntry1.CreatedOn = DateTime.Parse("01/01/23 1:00 AM");
 			//	newNotebook.Entries.Add(newEntry1);
 
 			//	for (var j = 0; j < 5; j++)
 			//	{
-			//		newEntry = new Entry("Entry " + j + 1.ToString() + " in " + newNotebook.Name,
+			//		newEntry = new EntryToEdit("EntryToEdit " + j + 1.ToString() + " in " + newNotebook.Name,
 			//			"This is the entry text for entry " + rnd.Next(1, 150), "{rtf", GetRandomLabels(), newNotebook.Name);
 
-			//		//newEntry = Utilities.CreateEntry("Entry " + j + 1.ToString() + " in " + newNotebook.Name,
+			//		//newEntry = Utilities.CreateEntry("EntryToEdit " + j + 1.ToString() + " in " + newNotebook.Name,
 			//		//	"This is the entry text for entry " + rnd.Next(1, 150), "{rtf", GetRandomLabels(), newNotebook.Name, Program.PIN);
 
 			//		newEntry.CreatedOn = DateTime.Now.AddDays(-Convert.ToDouble(rnd.Next(1, 150)));
@@ -274,19 +274,19 @@ namespace MyNotebooks.subforms
 			//LocalNotebook nb = new LocalNotebook("The New Real Thing").Open();
 
 			////fix some entries.RTF property is blank.
-			////List<Entry> v = nb.Entries.Where(e => e.RTF.Length == 0).ToList();
+			////List<EntryToEdit> v = nb.Entries.Where(e => e.RTF.Length == 0).ToList();
 			////v.ForEach(e => e.RTF = "{rtf");
 			////// nb.Entries.ForEach(E => E.NotebookName = EncryptDecrypt.Encrypt("The New Real Thing"));
 			////nb.Create();
 
-			//// fix The New Real Thing problem of Entry[0] is not the 'created' entry.
+			//// fix The New Real Thing problem of EntryToEdit[0] is not the 'created' entry.
 			////LocalNotebook nb = new LocalNotebook("The New Real Thing").Open();
 			////Program.PIN = "0711";
-			//Entry entry = new Entry("created", "-", "{f", "The New Real Thing");
+			//EntryToEdit entry = new EntryToEdit("created", "-", "{f", "The New Real Thing");
 			//entry.CreatedOn = DateTime.Parse("12/01/2021 12:00 AM");
 			//nb.Entries.Insert(0, entry);
 			//nb.Create();
-			//List<Entry> indx = nb.Entries.Where(e => e.Title == EncryptDecrypt.Encrypt("created")).ToList();
+			//List<EntryToEdit> indx = nb.Entries.Where(e => e.Title == EncryptDecrypt.Encrypt("created")).ToList();
 			//nb.FileName = EncryptDecrypt.Encrypt(nb.FileName);
 			//nb.Name = EncryptDecrypt.Encrypt(nb.Name);
 			//nb.Create();
@@ -297,7 +297,7 @@ namespace MyNotebooks.subforms
 
 			//foreach(LocalNotebook nb in Program.AllNotebooks)
 			//{
-			//	foreach(Entry en in nb.Entries)
+			//	foreach(EntryToEdit en in nb.Entries)
 			//	{
 			//		var name = en.NotebookName;
 
@@ -707,7 +707,7 @@ namespace MyNotebooks.subforms
 
 				if (frm.Saved)
 				{
-					CurrentEntry = frm.Entry;
+					CurrentEntry = frm.EntryToEdit;
 					//await CurrentNotebook.Create();
 					CurrentNotebook.Entries.Add(CurrentEntry);
 					await Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries);
@@ -750,10 +750,10 @@ namespace MyNotebooks.subforms
 				frm.Text = "Edit '" + CurrentEntry.Title + "' in '" + CurrentNotebook.Name + "'";
 				frm.ShowDialog(this);
 
-				if (frm.Saved && frm.Entry != null)
+				if (frm.Saved && frm.EntryToEdit != null)
 				{
-					CurrentEntry = frm.Entry;
-					if(CurrentEntry.LabelsToRemove == null) await CurrentNotebook.Save();
+					CurrentEntry = frm.EntryToEdit;
+					if (CurrentEntry.LabelsToRemove == null) await CurrentNotebook.Save();
 					await ProcessDateFiltersAndPopulateEntries();
 					var v = lstEntries.Items.OfType<string>().FirstOrDefault(e => e.StartsWith(CurrentEntry.Title));
 					lstEntries.SelectedIndex = lstEntries.Items.IndexOf(v);
@@ -765,7 +765,7 @@ namespace MyNotebooks.subforms
 
 		private async void mnuLabels_Click(object sender, EventArgs e)
 		{
-			using (frmLabelsManager frm = new frmLabelsManager(this, false, CurrentNotebook, CurrentEntry))
+			using (frmLabelsManager frm = new frmLabelsManager(this, false, CurrentEntry))
 			{
 				frm.ShowDialog();
 

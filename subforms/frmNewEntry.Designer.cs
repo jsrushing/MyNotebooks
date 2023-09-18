@@ -195,9 +195,9 @@ namespace MyNotebooks.subforms
 			lblSortType.ForeColor = System.Drawing.SystemColors.MenuHighlight;
 			lblSortType.Location = new System.Drawing.Point(153, 324);
 			lblSortType.Name = "lblSortType";
-			lblSortType.Size = new System.Drawing.Size(59, 17);
+			lblSortType.Size = new System.Drawing.Size(54, 17);
 			lblSortType.TabIndex = 43;
-			lblSortType.Text = "Sort A-Z";
+			lblSortType.Text = "sort a-z";
 			lblSortType.Click += this.lblSortType_Click;
 			// 
 			// panel1
@@ -360,9 +360,9 @@ namespace MyNotebooks.subforms
 			lblManageLabels.ForeColor = System.Drawing.SystemColors.MenuHighlight;
 			lblManageLabels.Location = new System.Drawing.Point(218, 324);
 			lblManageLabels.Name = "lblManageLabels";
-			lblManageLabels.Size = new System.Drawing.Size(97, 17);
+			lblManageLabels.Size = new System.Drawing.Size(57, 17);
 			lblManageLabels.TabIndex = 40;
-			lblManageLabels.Text = "manage labelsForSearch";
+			lblManageLabels.Text = "manage";
 			lblManageLabels.Click += this.lblManageLabels_Click;
 			// 
 			// txtNewEntryTitle
@@ -398,7 +398,7 @@ namespace MyNotebooks.subforms
 			label4.Name = "label4";
 			label4.Size = new System.Drawing.Size(44, 17);
 			label4.TabIndex = 38;
-			label4.Text = "labelsForSearch";
+			label4.Text = "labels";
 			// 
 			// lblEntryText_Hidden
 			// 
@@ -466,7 +466,7 @@ namespace MyNotebooks.subforms
 			label3.Name = "label3";
 			label3.Size = new System.Drawing.Size(41, 17);
 			label3.TabIndex = 3;
-			label3.Text = "Entry";
+			label3.Text = "EntryToEdit";
 			// 
 			// rtbNewEntry
 			// 
@@ -490,7 +490,7 @@ namespace MyNotebooks.subforms
 			menuStrip1.Name = "menuStrip1";
 			menuStrip1.Size = new System.Drawing.Size(590, 24);
 			menuStrip1.TabIndex = 6;
-			menuStrip1.Text = "Create Entry";
+			menuStrip1.Text = "Create EntryToEdit";
 			// 
 			// mnuSaveEntry
 			// 
@@ -540,7 +540,7 @@ namespace MyNotebooks.subforms
 			MainMenuStrip = menuStrip1;
 			MinimumSize = new System.Drawing.Size(372, 439);
 			Name = "frmNewEntry";
-			Text = "New Entry";
+			Text = "New EntryToEdit";
 			FormClosing += this.frmNewEntry_FormClosing;
 			Load += this.frmNewEntry_Load;
 			grpCreateEntry.ResumeLayout(false);
