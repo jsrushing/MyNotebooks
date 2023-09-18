@@ -32,16 +32,16 @@ namespace MyNotebooks.subforms
 		private void InitializeComponent()
 		{
 			components = new System.ComponentModel.Container();
-			TreeNode treeNode1 = new TreeNode("");
-			TreeNode treeNode2 = new TreeNode("Notebook", new TreeNode[] { treeNode1 });
-			TreeNode treeNode3 = new TreeNode("");
-			TreeNode treeNode4 = new TreeNode("Group", new TreeNode[] { treeNode3 });
-			TreeNode treeNode5 = new TreeNode("");
-			TreeNode treeNode6 = new TreeNode("Department", new TreeNode[] { treeNode5 });
-			TreeNode treeNode7 = new TreeNode("");
-			TreeNode treeNode8 = new TreeNode("Account", new TreeNode[] { treeNode7 });
-			TreeNode treeNode9 = new TreeNode("");
-			TreeNode treeNode10 = new TreeNode("Company", new TreeNode[] { treeNode9 });
+			TreeNode treeNode11 = new TreeNode("");
+			TreeNode treeNode12 = new TreeNode("Notebook", new TreeNode[] { treeNode11 });
+			TreeNode treeNode13 = new TreeNode("");
+			TreeNode treeNode14 = new TreeNode("Group", new TreeNode[] { treeNode13 });
+			TreeNode treeNode15 = new TreeNode("");
+			TreeNode treeNode16 = new TreeNode("Department", new TreeNode[] { treeNode15 });
+			TreeNode treeNode17 = new TreeNode("");
+			TreeNode treeNode18 = new TreeNode("Account", new TreeNode[] { treeNode17 });
+			TreeNode treeNode19 = new TreeNode("");
+			TreeNode treeNode20 = new TreeNode("Company", new TreeNode[] { treeNode19 });
 			pnlMain = new Panel();
 			pnlLabelDetails = new Panel();
 			lstOccurrences = new ListBox();
@@ -143,9 +143,9 @@ namespace MyNotebooks.subforms
 			label6.AutoSize = true;
 			label6.Location = new System.Drawing.Point(4, 4);
 			label6.Name = "label6";
-			label6.Size = new System.Drawing.Size(164, 15);
+			label6.Size = new System.Drawing.Size(127, 15);
 			label6.TabIndex = 11;
-			label6.Text = "Labels in Currently Selected ...";
+			label6.Text = "Labels under current ...";
 			// 
 			// treeAvailableLabels
 			// 
@@ -156,27 +156,27 @@ namespace MyNotebooks.subforms
 			treeAvailableLabels.HotTracking = true;
 			treeAvailableLabels.Location = new System.Drawing.Point(11, 25);
 			treeAvailableLabels.Name = "treeAvailableLabels";
-			treeNode1.Name = "Node0";
-			treeNode1.Text = "";
-			treeNode2.Name = "nodeNotebook";
-			treeNode2.Text = "Notebook";
-			treeNode3.Name = "Node1";
-			treeNode3.Text = "";
-			treeNode4.Name = "nodeGroup";
-			treeNode4.Text = "Group";
-			treeNode5.Name = "Node2";
-			treeNode5.Text = "";
-			treeNode6.Name = "nodeDepartment";
-			treeNode6.Text = "Department";
-			treeNode7.Name = "Node3";
-			treeNode7.Text = "";
-			treeNode8.Name = "nodeAccount";
-			treeNode8.Text = "Account";
-			treeNode9.Name = "Node4";
-			treeNode9.Text = "";
-			treeNode10.Name = "nodeCompany";
-			treeNode10.Text = "Company";
-			treeAvailableLabels.Nodes.AddRange(new TreeNode[] { treeNode2, treeNode4, treeNode6, treeNode8, treeNode10 });
+			treeNode11.Name = "Node0";
+			treeNode11.Text = "";
+			treeNode12.Name = "nodeNotebook";
+			treeNode12.Text = "Notebook";
+			treeNode13.Name = "Node1";
+			treeNode13.Text = "";
+			treeNode14.Name = "nodeGroup";
+			treeNode14.Text = "Group";
+			treeNode15.Name = "Node2";
+			treeNode15.Text = "";
+			treeNode16.Name = "nodeDepartment";
+			treeNode16.Text = "Department";
+			treeNode17.Name = "Node3";
+			treeNode17.Text = "";
+			treeNode18.Name = "nodeAccount";
+			treeNode18.Text = "Account";
+			treeNode19.Name = "Node4";
+			treeNode19.Text = "";
+			treeNode20.Name = "nodeCompany";
+			treeNode20.Text = "Company";
+			treeAvailableLabels.Nodes.AddRange(new TreeNode[] { treeNode12, treeNode14, treeNode16, treeNode18, treeNode20 });
 			treeAvailableLabels.Size = new System.Drawing.Size(318, 264);
 			treeAvailableLabels.TabIndex = 6;
 			treeAvailableLabels.Text = "tree";
@@ -424,7 +424,7 @@ namespace MyNotebooks.subforms
 			mnuMain.Items.AddRange(new ToolStripItem[] { mnuLabelsOperations, mnuMoveTop, toolStripMenuItem1, toolStripMenuItem2, toolStripMenuItem3 });
 			mnuMain.Location = new System.Drawing.Point(0, 0);
 			mnuMain.Name = "mnuMain";
-			mnuMain.Size = new System.Drawing.Size(1067, 24);
+			mnuMain.Size = new System.Drawing.Size(880, 24);
 			mnuMain.TabIndex = 1;
 			mnuMain.Text = "menuStrip1";
 			// 
@@ -546,7 +546,7 @@ namespace MyNotebooks.subforms
 			// 
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new System.Drawing.Size(1067, 636);
+			ClientSize = new System.Drawing.Size(880, 636);
 			Controls.Add(gridViewEntryDetails);
 			Controls.Add(lblEntries2);
 			Controls.Add(panel1);

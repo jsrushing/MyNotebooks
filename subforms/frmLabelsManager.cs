@@ -155,7 +155,8 @@ namespace MyNotebooks.subforms
 					{
 						if (!lstRtrn.Any(l => l.LabelText == child.Text & l.ParentId == CurrentEntry.Id))
 						{
-							lstRtrn.Add(new() { CreatedBy = Program.User.Id, LabelText = child.Text, ParentId = CurrentEntry.Id });
+							MNLabel tmpLbl = new() { CreatedBy = Program.User.Id, LabelText = child.Text, ParentId = CurrentEntry.Id };
+							if (!lstRtrn.Contains(tmpLbl)) { lstRtrn.Add(tmpLbl); }
 						}
 					}
 				}
@@ -315,10 +316,10 @@ namespace MyNotebooks.subforms
 			foreach (MNLabel lbl in GetCheckedNodes(treeAvailableLabels.Nodes))
 			{
 				if (!CurrentEntry.AllLabels.Any(l => l.LabelText == lbl.LabelText & l.ParentId == lbl.ParentId))
-				{ 
-					lbl.Create(); 
-					CurrentEntry.AllLabels.Add(lbl); 
-					RefreshEntry = true; 
+				{
+					lbl.Create();
+					CurrentEntry.AllLabels.Add(lbl);
+					RefreshEntry = true;
 				}
 			}
 
@@ -684,11 +685,11 @@ namespace MyNotebooks.subforms
 
 		private void treeAvailableLabels_AfterSelect(object sender, TreeViewEventArgs e)
 		{
-			if (e.Node.Level > 0) 
-			{ 
-				PopulateLabelDetails(); 
-				e.Node.Checked = !e.Node.Checked; 
-			} 
+			if (e.Node.Level > 0)
+			{
+				PopulateLabelDetails();
+				e.Node.Checked = !e.Node.Checked;
+			}
 		}
 
 		private void treeAvailableLabels_AfterExpand(object sender, TreeViewEventArgs e)
@@ -697,6 +698,7 @@ namespace MyNotebooks.subforms
 			TreeNode tn = e.Node;
 			TreeNode newNode = new();
 			//List<TreeNode> addedNodes = new();
+			this.Cursor = Cursors.WaitCursor;
 
 			if (tn.Level == 0 && tn.Nodes[0].Text.Length == 0)
 			{
@@ -707,19 +709,18 @@ namespace MyNotebooks.subforms
 				{
 					TreeNode existingNode = tn.Nodes.OfType<TreeNode>().FirstOrDefault(n => n.Text == label.LabelText);
 
-					if (existingNode != null)
+					if (existingNode == null)
 					{
 						newNode = new() { Text = label.LabelText, Tag = label.Id };
-						
+
 						var v = CurrentEntry.AllLabels.FirstOrDefault(n => n.LabelText == label.LabelText);
-						newNode.Checked = v == null; //&& !LabelChecked(newNode.Text);
-						//if (newNode.Checked) { addedNodes.Add(newNode); }
-						//newNode.Checked = CurrentEntry.AllLabels.FirstOrDefault(n => n.LabelText == label.LabelText) != null;
+						newNode.Checked = v != null;
 						tn.Nodes.Add(newNode);
 					}
-					else { tn.Nodes.Add(newNode); }
+					//else { tn.Nodes.Add(newNode); }
 				}
 			}
+			this.Cursor = Cursors.Default;
 		}
 
 		private void treeAvailableLabels_AfterCheck(object sender, TreeViewEventArgs e)
@@ -751,11 +752,25 @@ namespace MyNotebooks.subforms
 					}
 					else
 					{
-						foreach (TreeNode treeNode in tn.Parent.Nodes)
+						foreach (TreeNode treeNode in treeAvailableLabels.Nodes)
 						{
-							if (treeNode.Checked) { mnuLabelsOperations.Enabled = true; return; }
-						}
+							foreach (TreeNode childNode in treeNode.Nodes)
+							{
+								if (childNode.Text == tn.Text)
+								{
+									ProgramaticallyChecking = true;
+									childNode.Checked = false;
+								}
+							}
 
+							ProgramaticallyChecking = false;
+
+							if (treeNode.Checked)
+							{
+								mnuLabelsOperations.Enabled = true;
+								return;
+							}
+						}
 					}
 				}
 			}
@@ -770,20 +785,6 @@ namespace MyNotebooks.subforms
 			//}
 
 			gridViewEntryDetails.Visible = false;
-		}
-
-		private bool LabelChecked(string labelText)
-		{
-			bool bRtrn = false;
-
-			foreach(TreeNode tn in treeAvailableLabels.Nodes)
-			{
-				foreach(TreeNode child in tn.Nodes) 
-				{
-					if(child.Text == labelText & child.Checked) { bRtrn = true; break; }
-				}
-			}
-			return bRtrn;
 		}
 	}
 }
