@@ -784,14 +784,15 @@ namespace MyNotebooks.subforms
 			{
 				frm.ShowDialog(this);
 
-				if (frm.LocalNotebook != null && frm.LocalNotebook.Name.Length > 0)
+				if (frm.LocalNotebook != null)	// && frm.LocalNotebook.Name.Length > 0)
 				{
-					//frm.LocalNotebook.EditedOn = DateTime.Now;
-					//frm.LocalNotebook.FileName = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + frm.LocalNotebook.Name;
-					await frm.LocalNotebook.Create();
-					//await Utilities.PopulateAllNotebookNames();
+					frm.LocalNotebook.Id = DbAccess.CRUDNotebook(frm.LocalNotebook).intValue;
+					//ListItem li = new() { Name = frm.LocalNotebook.Name, Id = frm.LocalNotebook.Id };
+					//ddlNotebooks.Items.Add(li);
+					Program.AllNotebooks.Add(frm.LocalNotebook);
+					await Utilities.PopulateAllNotebookNames();
 					LoadNotebooks();
-				}
+				}	
 			}
 		}
 

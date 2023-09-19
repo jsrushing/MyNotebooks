@@ -84,16 +84,16 @@ namespace MyNotebooks
 			}
 		}
 
-		public void			AddEntry(Entry entryToAdd) { Entries.Add(entryToAdd); }
+		//public void			AddEntry(Entry entryToAdd) { Entries.Add(entryToAdd); }
 
-		public void			Backup()
-		{
-			string dir = ConfigurationManager.AppSettings["FolderStructure_NotebookIncrementalBackupsFolder"];
-			if (!System.IO.Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + dir))
-			{ System.IO.Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + dir); }
-			this.Name = FileName.Substring(FileName.LastIndexOf("\\") + 1);
-			File.Copy(this.FileName, AppDomain.CurrentDomain.BaseDirectory + dir + this.Name, true);
-		}
+		//public void			Backup()
+		//{
+		//	string dir = ConfigurationManager.AppSettings["FolderStructure_NotebookIncrementalBackupsFolder"];
+		//	if (!System.IO.Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + dir))
+		//	{ System.IO.Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + dir); }
+		//	this.Name = FileName.Substring(FileName.LastIndexOf("\\") + 1);
+		//	File.Copy(this.FileName, AppDomain.CurrentDomain.BaseDirectory + dir + this.Name, true);
+		//}
 
 		//public void			Backup_Forced()
 		//{

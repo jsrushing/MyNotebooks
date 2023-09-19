@@ -234,30 +234,6 @@ namespace MyNotebooks.subforms
 			//}
 		}
 
-		private void lstLabels_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			//if (lstLabels.SelectedIndex > -1)
-			//{
-			//	//lblEntries1.Text = "";
-			//	//mnuMoveTop.Visible = true;
-			//	//mnuMoveTop.Enabled = true;
-			//	//mnuMoveUp.Visible = lstLabels.SelectedIndex > 0;
-			//	//mnuMoveDown.Visible = lstLabels.SelectedIndex != lstLabels.Items.Count - 1;
-			//	lstOccurrences.Items.Clear();
-			//	//lstEntryObjects.Items.Clear();
-			//	PopulateOccurrences();
-
-			//	if (Program.DictCheckedNotebooks.Count == 0)
-			//	{ lstOccurrences.Items.Clear(); lstOccurrences.Items.Add("no notebooks are selected"); }
-			//}
-		}
-
-		//private void lstLabels_MouseUp(object sender, MouseEventArgs e)
-		//{
-		//	lstLabels.SelectedIndex = e.Button == MouseButtons.Right && lstLabels.SelectedIndex > -1 ? e.Y / 15 : lstLabels.SelectedIndex;
-		//	mnuContextLabels.Visible = e.Button == MouseButtons.Right && lstLabels.SelectedIndex > -1;
-		//}
-
 		private void lstOccurrences_MouseUp(object sender, MouseEventArgs e)
 		{ PopulateGridViewEntryDetails(e.Y); }
 
@@ -317,7 +293,7 @@ namespace MyNotebooks.subforms
 		private void mnuAddCheckedLabelsToEntry_Click(object sender, EventArgs e)
 		{
 			List<MNLabel> existingLabels = new();
-			foreach(var label in CurrentEntry.AllLabels) { existingLabels.Add(label); }
+			foreach (var label in CurrentEntry.AllLabels) { existingLabels.Add(label); }
 
 
 			//var vEntryLabels = CurrentEntry.AllLabels;
@@ -331,10 +307,10 @@ namespace MyNotebooks.subforms
 				RefreshEntry = true;
 			}
 
-			foreach(MNLabel mNLabel in existingLabels.Where(e => !CurrentEntry.AllLabels.Contains(e)))
+			foreach (MNLabel mNLabel in existingLabels.Where(e => !CurrentEntry.AllLabels.Contains(e)))
 			{
 				DbAccess.CRUDLabel(mNLabel, OperationType.Delete);
-				CurrentEntry.AllLabels.Remove(mNLabel); 
+				CurrentEntry.AllLabels.Remove(mNLabel);
 				RefreshEntry = true;
 			}
 
@@ -739,7 +715,6 @@ namespace MyNotebooks.subforms
 						newNode.Checked = v != null;
 						tn.Nodes.Add(newNode);
 					}
-					//else { tn.Nodes.Add(newNode); }
 				}
 			}
 			this.Cursor = Cursors.Default;
@@ -809,5 +784,6 @@ namespace MyNotebooks.subforms
 
 			gridViewEntryDetails.Visible = false;
 		}
+
 	}
 }

@@ -145,7 +145,6 @@ namespace MyNotebooks.objects
 					ok2copy = true;
 				}	
 			}
-			//return filesCopied;
 		}
 
 		public static async Task PopulateAllNotebookNames(List<string> notebookNames = null)
@@ -158,36 +157,18 @@ namespace MyNotebooks.objects
 			}
 			else
 			{
-				//Program.AllNotebookNames.Clear();
 				Program.NotebooksNamesAndIds.Clear();
 
 				foreach (var v2 in Program.AllNotebooks) 
 				{ Program.NotebooksNamesAndIds.Add(v2.Name, v2.Id); }
-
-				//var v = DbAccess.get
-
-				//Program.User.Notebooks.Select(item => item.Name).ToList();
-
-				//List<string> s = Directory.GetFiles(Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"]).ToList();
-				//Program.AllNotebookNames.AddRange(s.Select(s => s[(s.LastIndexOf("\\") + 1)..]));
 			}
 		} 
 
-		public static async Task PopulateAllNotebooks(List<string> notebookNames = null)
-		{
-			Program.AllNotebooks.Clear();
-			await PopulateAllNotebookNames(notebookNames);
-			//if(notebookNames == null) { await PopulateAllNotebookNames(); } else { await PopulateAllNotebookNames(notebookNames); }
-			foreach (var notebookName in Program.AllNotebookNames) { Program.AllNotebooks.Add(new Notebook(notebookName).Open()); }
-		}
-
-		// one-time code to convert Journal objects to LocalNotebook objects
-		//public static List<Journal> AllJournals()
+		//public static async Task PopulateAllNotebooks(List<string> notebookNames = null)
 		//{
-		//	List<Journal> jrnlReturn = new List<Journal>();
-		//	var sJournalsFolder = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"];
-		//	foreach (var s in Directory.GetFiles(sJournalsFolder)) { jrnlReturn.Add(new Journal(s.Replace(sJournalsFolder, "")).Open()); }  // (new Journal(s.Replace(sJournalsFolder, "")).Open()); }
-		//	return jrnlReturn;
+		//	Program.AllNotebooks.Clear();
+		//	await PopulateAllNotebookNames(notebookNames);
+		//	foreach (var notebookName in Program.AllNotebookNames) { Program.AllNotebooks.Add(new Notebook(notebookName).Open()); }
 		//}
 
 		public static void PopulateDictCheckedNotebooks(string name)
@@ -200,57 +181,57 @@ namespace MyNotebooks.objects
 			}
 		}
 
-		public static void PopulatePropertiesFromDataRow(Type targetType, DataTable dt, int rowIndex = 0, string skippedProperties = "")
-		{
-			var value = "";
-			var setProp = true;
+		//public static void PopulatePropertiesFromDataRow(Type targetType, DataTable dt, int rowIndex = 0, string skippedProperties = "")
+		//{
+		//	var value = "";
+		//	var setProp = true;
 
-			foreach (PropertyInfo sPropertyName in targetType.GetProperties())
-			{
-				try
-				{
-					if (!skippedProperties.Contains(sPropertyName.Name) & dt.Columns[sPropertyName.Name] != null)
-					{
-						if (dt.Columns[sPropertyName.Name].DataType == typeof(string))
-						{
-							value = dt.Rows[rowIndex].Field<string>(sPropertyName.Name).ToString();
-						}
-						else if (dt.Columns[sPropertyName.Name].DataType == typeof(Int32))
-						{
-							int iVal = dt.Rows[rowIndex].Field<Int32>(sPropertyName.Name);
-							targetType.GetType().GetProperty(sPropertyName.Name).SetValue(targetType, iVal);
-							setProp = false;
-						}
-						else if (dt.Columns[sPropertyName.Name].DataType == typeof(DateTime))
-						{
-							DateTime dtime = Convert.ToDateTime(dt.Rows[rowIndex].Field<DateTime>(sPropertyName.Name));
-							targetType.GetType().GetProperty(sPropertyName.Name).SetValue(targetType, dtime);
-							setProp = false;
-						}
-						else if (dt.Columns[sPropertyName.Name].DataType == typeof(bool))
-						{
-							bool b = dt.Rows[rowIndex].Field<bool>(sPropertyName.Name);
-							targetType.GetType().GetProperty(sPropertyName.Name).SetValue(targetType, b.ToString() == "1");
-							setProp = false;
-						}
+		//	foreach (PropertyInfo sPropertyName in targetType.GetProperties())
+		//	{
+		//		try
+		//		{
+		//			if (!skippedProperties.Contains(sPropertyName.Name) & dt.Columns[sPropertyName.Name] != null)
+		//			{
+		//				if (dt.Columns[sPropertyName.Name].DataType == typeof(string))
+		//				{
+		//					value = dt.Rows[rowIndex].Field<string>(sPropertyName.Name).ToString();
+		//				}
+		//				else if (dt.Columns[sPropertyName.Name].DataType == typeof(Int32))
+		//				{
+		//					int iVal = dt.Rows[rowIndex].Field<Int32>(sPropertyName.Name);
+		//					targetType.GetType().GetProperty(sPropertyName.Name).SetValue(targetType, iVal);
+		//					setProp = false;
+		//				}
+		//				else if (dt.Columns[sPropertyName.Name].DataType == typeof(DateTime))
+		//				{
+		//					DateTime dtime = Convert.ToDateTime(dt.Rows[rowIndex].Field<DateTime>(sPropertyName.Name));
+		//					targetType.GetType().GetProperty(sPropertyName.Name).SetValue(targetType, dtime);
+		//					setProp = false;
+		//				}
+		//				else if (dt.Columns[sPropertyName.Name].DataType == typeof(bool))
+		//				{
+		//					bool b = dt.Rows[rowIndex].Field<bool>(sPropertyName.Name);
+		//					targetType.GetType().GetProperty(sPropertyName.Name).SetValue(targetType, b.ToString() == "1");
+		//					setProp = false;
+		//				}
 
-						if (setProp) { targetType.GetType().GetProperty(sPropertyName.Name).SetValue(targetType, value); }
-						setProp = true;
-					}
-				}
-				catch (Exception ex)
-				{
-					if (ex.GetType() != typeof(InvalidCastException))
-					{
-						if (!skippedProperties.Contains(sPropertyName.Name))
-						{
-							using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The error '" + ex.Message + "' occurred while processing the " +
-								"property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
-						}
-					}
-				}
-			}
-		}
+		//				if (setProp) { targetType.GetType().GetProperty(sPropertyName.Name).SetValue(targetType, value); }
+		//				setProp = true;
+		//			}
+		//		}
+		//		catch (Exception ex)
+		//		{
+		//			if (ex.GetType() != typeof(InvalidCastException))
+		//			{
+		//				if (!skippedProperties.Contains(sPropertyName.Name))
+		//				{
+		//					using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The error '" + ex.Message + "' occurred while processing the " +
+		//						"property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
+		//				}
+		//			}
+		//		}
+		//	}
+		//}
 
 		public static async Task PopulateEntries(ListBox lbxToPopulate, List<Entry> entries, string notebookName = "", string startDate = "", 
 			string endDate = "", bool clearPrevious = true, int SortBy = 0, bool includeNotebookName = false, int maxWidth = 0, string labelFilter = "")

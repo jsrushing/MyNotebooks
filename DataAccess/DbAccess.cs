@@ -463,33 +463,6 @@ namespace MyNotebooks.DataAccess
 			return lstRtrn;
 		}
 
-		//public static EntryToEdit			GetFullEntry(EntryToEdit entryToComplete) 
-		//{
-		//	using (SqlConnection conn = new(connString))
-		//	{
-		//		conn.Open();
-
-		//		using (SqlCommand cmd = new("sp_GetNotebookEntry_Full", conn))
-		//		{
-		//			cmd.CommandType = CommandType.StoredProcedure;
-		//			cmd.Parameters.AddWithValue("@entryId", entryToComplete.Id);
-
-		//			using (SqlDataReader reader = cmd.ExecuteReader())
-		//			{
-		//				while (reader.Read())
-		//				{
-		//					entryToComplete.Text = reader.GetString("Text");
-		//					entryToComplete.RTF = reader.GetString("RTF");
-		//				}
-		//			}
-		//		}
-
-		//		entryToComplete.AllLabels = GetLabelsForEntry(entryToComplete.Id);
-		//	}
-
-		//	return entryToComplete;
-		//}
-
 		public static List<Notebook> GetNotebooksUnderOrgLevel(frmMain.OrgLevelTypes orgLevel, string orgLevelIds)
 		{
 			try

@@ -240,7 +240,6 @@ namespace MyNotebooks.subforms
 			gridViewEntryDetails.Size = new System.Drawing.Size(269, 150);
 			gridViewEntryDetails.TabIndex = 0;
 			gridViewEntryDetails.Visible = false;
-			gridViewEntryDetails.DoubleClick += this.gridViewEntryDetails_DoubleClick;
 			gridViewEntryDetails.MouseDown += this.gridViewEntryDetails_MouseDown;
 			// 
 			// colItem

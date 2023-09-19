@@ -17,17 +17,17 @@ namespace MyNotebooks.subforms
 	public partial class frmNewEntry : Form
 	{
 		public Entry EntryToEdit { get; set; }
-		private Notebook CurrentNotebook = null;
-		private bool IsEdit = false;
+		public int ParentNotebookId { get; set; }
+		public bool Saved { get; private set; }
+		private readonly Notebook CurrentNotebook = null;
+		private readonly bool IsEdit = false;
 		private int OriginalEntryLength = -1;
 		private bool IsDirty = false;
 		private string OriginalTitle = string.Empty;
 		private string OriginalText_Full = string.Empty;
 		private LabelsManager.LabelsSortType Sort = LabelsManager.LabelsSortType.None;
-		private string LabelLabelsSelected = "({0} selected)";
-		public int ParentNotebookId { get; set; }
-		public bool Saved { get; private set; }
-		private bool PreserveOriginalText;
+		private readonly string LabelLabelsSelected = "({0} selected)";
+		private readonly bool PreserveOriginalText;
 
 		public frmNewEntry(Form parent, Notebook notebook, int parentNotebookId = 0, Entry entryToEdit = null, bool disallowOriginalTextEdit = false)
 		{
@@ -275,6 +275,7 @@ namespace MyNotebooks.subforms
 				}
 
 				var sqlResult = DbAccess.CRUDNotebookEntry(this.EntryToEdit, opType);
+				this.EntryToEdit.Id = sqlResult.intValue;
 				var msg = string.Empty;
 
 				if (sqlResult.intValue < -1)
