@@ -31,15 +31,12 @@ namespace MyNotebooks.subforms
 		{
 			txtName = new System.Windows.Forms.TextBox();
 			label1 = new System.Windows.Forms.Label();
-			label2 = new System.Windows.Forms.Label();
-			txtPIN = new System.Windows.Forms.TextBox();
 			btnCancel = new System.Windows.Forms.Button();
 			btnOk = new System.Windows.Forms.Button();
 			grp1 = new System.Windows.Forms.Panel();
 			txtDescription = new System.Windows.Forms.TextBox();
 			label3 = new System.Windows.Forms.Label();
 			lblNameExists = new System.Windows.Forms.Label();
-			lblShowPIN = new System.Windows.Forms.Label();
 			btnSettings = new System.Windows.Forms.Button();
 			grp1.SuspendLayout();
 			this.SuspendLayout();
@@ -62,28 +59,9 @@ namespace MyNotebooks.subforms
 			label1.TabIndex = 1;
 			label1.Text = "Name:";
 			// 
-			// label2
-			// 
-			label2.AutoSize = true;
-			label2.Location = new System.Drawing.Point(43, 111);
-			label2.Name = "label2";
-			label2.Size = new System.Drawing.Size(29, 15);
-			label2.TabIndex = 2;
-			label2.Text = "PIN:";
-			// 
-			// txtPIN
-			// 
-			txtPIN.Location = new System.Drawing.Point(78, 108);
-			txtPIN.MaxLength = 25;
-			txtPIN.Name = "txtPIN";
-			txtPIN.PasswordChar = '*';
-			txtPIN.Size = new System.Drawing.Size(163, 23);
-			txtPIN.TabIndex = 2;
-			txtPIN.TextChanged += this.txtPIN_TextChanged;
-			// 
 			// btnCancel
 			// 
-			btnCancel.Location = new System.Drawing.Point(164, 152);
+			btnCancel.Location = new System.Drawing.Point(164, 110);
 			btnCancel.Name = "btnCancel";
 			btnCancel.Size = new System.Drawing.Size(75, 23);
 			btnCancel.TabIndex = 5;
@@ -94,7 +72,7 @@ namespace MyNotebooks.subforms
 			// btnOk
 			// 
 			btnOk.Enabled = false;
-			btnOk.Location = new System.Drawing.Point(21, 152);
+			btnOk.Location = new System.Drawing.Point(21, 110);
 			btnOk.Name = "btnOk";
 			btnOk.Size = new System.Drawing.Size(75, 23);
 			btnOk.TabIndex = 4;
@@ -107,16 +85,13 @@ namespace MyNotebooks.subforms
 			grp1.Controls.Add(txtDescription);
 			grp1.Controls.Add(label3);
 			grp1.Controls.Add(lblNameExists);
-			grp1.Controls.Add(lblShowPIN);
-			grp1.Controls.Add(txtPIN);
 			grp1.Controls.Add(btnCancel);
 			grp1.Controls.Add(txtName);
 			grp1.Controls.Add(btnOk);
 			grp1.Controls.Add(label1);
-			grp1.Controls.Add(label2);
 			grp1.Location = new System.Drawing.Point(12, -1);
 			grp1.Name = "grp1";
-			grp1.Size = new System.Drawing.Size(257, 183);
+			grp1.Size = new System.Drawing.Size(257, 143);
 			grp1.TabIndex = 6;
 			// 
 			// txtDescription
@@ -148,18 +123,6 @@ namespace MyNotebooks.subforms
 			lblNameExists.Text = "A notebook with this name already exists.";
 			lblNameExists.Visible = false;
 			// 
-			// lblShowPIN
-			// 
-			lblShowPIN.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
-			lblShowPIN.Location = new System.Drawing.Point(184, 131);
-			lblShowPIN.Name = "lblShowPIN";
-			lblShowPIN.Size = new System.Drawing.Size(35, 13);
-			lblShowPIN.TabIndex = 3;
-			lblShowPIN.Text = "show";
-			lblShowPIN.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			lblShowPIN.Visible = false;
-			lblShowPIN.Click += this.lblShowPIN_Click;
-			// 
 			// btnSettings
 			// 
 			btnSettings.Enabled = false;
@@ -177,13 +140,12 @@ namespace MyNotebooks.subforms
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			CancelButton = btnCancel;
-			ClientSize = new System.Drawing.Size(284, 187);
+			ClientSize = new System.Drawing.Size(280, 153);
 			Controls.Add(grp1);
 			Controls.Add(btnSettings);
 			FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			MaximizeBox = false;
 			MinimizeBox = false;
-			MinimumSize = new System.Drawing.Size(300, 225);
 			Name = "frmNewNotebook";
 			Text = "New Notebook";
 			Activated += this.frmNewJournal_Activated;
@@ -197,12 +159,9 @@ namespace MyNotebooks.subforms
 
 		private System.Windows.Forms.TextBox txtName;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.TextBox txtPIN;
 		private System.Windows.Forms.Button btnCancel;
 		private System.Windows.Forms.Button btnOk;
 		private System.Windows.Forms.Panel grp1;
-		private System.Windows.Forms.Label lblShowPIN;
 		private System.Windows.Forms.Label lblNameExists;
 		private System.Windows.Forms.Button btnSettings;
 		private System.Windows.Forms.TextBox txtDescription;

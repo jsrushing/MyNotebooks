@@ -787,8 +787,6 @@ namespace MyNotebooks.subforms
 				if (frm.LocalNotebook != null)	// && frm.LocalNotebook.Name.Length > 0)
 				{
 					frm.LocalNotebook.Id = DbAccess.CRUDNotebook(frm.LocalNotebook).intValue;
-					//ListItem li = new() { Name = frm.LocalNotebook.Name, Id = frm.LocalNotebook.Id };
-					//ddlNotebooks.Items.Add(li);
 					Program.AllNotebooks.Add(frm.LocalNotebook);
 					await Utilities.PopulateAllNotebookNames();
 					LoadNotebooks();

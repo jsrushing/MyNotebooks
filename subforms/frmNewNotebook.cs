@@ -41,11 +41,11 @@ namespace MyNotebooks.subforms
 			this.LocalNotebook = new Notebook();
 			//NotebookSettings nbs = LocalNotebook.Settings;
 			//LocalNotebook.Settings = nbs;
-			LocalNotebook.PIN			= txtPIN.Text;
-			LocalNotebook.Name			= txtName.Text;
-			LocalNotebook.CreatedOn		= DateTime.Now;
-			LocalNotebook.ParentId		= Program.ActiveNBParentId;
-			LocalNotebook.Description	= txtDescription.Text;
+			LocalNotebook.PIN = txtPIN.Text;
+			LocalNotebook.Name = txtName.Text;
+			LocalNotebook.CreatedOn = DateTime.Now;
+			LocalNotebook.ParentId = Program.ActiveNBParentId;
+			LocalNotebook.Description = txtDescription.Text;
 			//Program.PIN = txtPIN.Text;
 			this.Hide();
 
@@ -57,14 +57,6 @@ namespace MyNotebooks.subforms
 			////Program.PIN = txtPIN.Text;
 			//this.Hide();
 		}
-
-		private void lblShowPIN_Click(object sender, EventArgs e)
-		{
-			txtPIN.PasswordChar = txtPIN.PasswordChar == '*' ? '\0' : '*';
-			lblShowPIN.Text = lblShowPIN.Text == "show" ? "hide" : "show";
-		}
-
-		private void txtPIN_TextChanged(object sender, EventArgs e) { lblShowPIN.Visible = txtPIN.Text.Length > 0; }
 
 		private void txtName_TextChanged(object sender, EventArgs e)
 		{
