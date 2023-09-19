@@ -457,7 +457,8 @@ namespace MyNotebooks.subforms
 						lbl.Create();
 						RefreshEntry = true;
 						ResetTree();
-
+						var l = CurrentEntry.AllLabels.FirstOrDefault(l => l.LabelText == l.LabelText);
+						if(l == null) CurrentEntry.AllLabels.Add(lbl);
 					}
 				}
 			}
@@ -709,11 +710,9 @@ namespace MyNotebooks.subforms
 
 					if (existingNode == null)
 					{
-						newNode = new() { Text = label.LabelText, Tag = label.Id };
-
-						var v = CurrentEntry.AllLabels.FirstOrDefault(n => n.LabelText == label.LabelText);
-						newNode.Checked = v != null;
+						newNode = new() { Text = label.LabelText, Tag = label.Id, Checked = CurrentEntry.AllLabels.Any(n => n.LabelText == label.LabelText) };
 						tn.Nodes.Add(newNode);
+						mnuLabelsOperations.Enabled = !mnuLabelsOperations.Enabled && newNode.Checked;
 					}
 				}
 			}
