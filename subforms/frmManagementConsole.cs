@@ -117,17 +117,16 @@ namespace MyNotebooks.subforms
 				Program.ActiveNBParentId = v == null ? v2.Id : v.Id;
 			}
 
-			if (Program.ManagementConsoleSelections.Count == 0)
-			{
-				foreach (GroupBox gb in OrgLevelGroups_CU)
-				{
-					Program.ManagementConsoleSelections.Add(gb.Controls.OfType<ListBox>().FirstOrDefault());
-				}
+			Program.ManagementConsoleSelections.Clear();
 
-				foreach (GroupBox gb in OrgLevelGroups_MU)
-				{
-					Program.ManagementConsoleSelections.Add(gb.Controls.OfType<ListBox>().FirstOrDefault());
-				}
+			foreach (GroupBox gb in OrgLevelGroups_CU)
+			{
+				Program.ManagementConsoleSelections.Add(gb.Controls.OfType<ListBox>().FirstOrDefault());
+			}
+
+			foreach (GroupBox gb in OrgLevelGroups_MU)
+			{
+				Program.ManagementConsoleSelections.Add(gb.Controls.OfType<ListBox>().FirstOrDefault());
 			}
 		}
 

@@ -180,56 +180,8 @@ namespace MyNotebooks.subforms
 
 		public frmMain() { InitializeComponent(); }
 
-		private string GetRandomLabels()
-		{
-			var rnd = new Random();
-			string[] labels = LabelsManager.GetLabels_NoFileDate();
-			string[] rtrn = { "", "" };
-			rtrn[0] = labels[rnd.Next(labels.Length)];
-			rtrn[1] = labels[rnd.Next(labels.Length)];
-			return string.Join(',', rtrn);
-		}
-
-		private void CheckForNotebooks()
-		{
-			if (ddlNotebooks.Items.Count == 1)
-			{
-				ddlNotebooks.SelectedIndex = 0;
-				ShowHideMenusAndControls(SelectionState.NotebookLoaded);
-			}
-			else if (ddlNotebooks.Items.Count == 0)
-			{
-				using (frmNewNotebook frm = new(this))
-				{
-					frm.ShowDialog(this);
-
-					if (frm.LocalNotebook.CreatedBy > 0)
-					{
-						this.CurrentNotebook = frm.LocalNotebook;
-					}
-					else
-					{
-						var vMsg = "At least one notebook must exist in the Group for it to have any use." + System.Environment.NewLine + "You may create one by clicking 'Notebooks > Create'.";
-						using (frmMessage frm2 = new(frmMessage.OperationType.Message, vMsg, "One Notebook Must Exist", this))
-						{
-							frm2.ShowDialog(this);
-							using (frmManagementConsole frm3 = new(this)) { frm.ShowDialog(); }
-						}
-					}
-				}
-			}
-		}
-
-		private async void frmMain_Activated(object sender, EventArgs e)
-		{
-			//if(Program.AllNotebooks.Count == 0) await Utilities.PopulateAllNotebooks();
-
-		}
-
 		private async void frmMain_Load(object sender, EventArgs e)
 		{
-		//	CheckForNotebooks();
-
 			if (Program.NotebooksNamesAndIds.Count == 0)
 			{
 				if (Program.User == null)
@@ -253,130 +205,8 @@ namespace MyNotebooks.subforms
 			System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
 			System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
 			this.Text = fvi.ProductName + " " + Program.AppVersion + (fvi.FileName.ToLower().Contains("debug") ? " - DEBUG MODE" : "");
-
-			#region one-time code
-
-			// convert Journal objects to LocalNotebook objects
-
-			//using (Stream stream = File.Open("C:\\Users\\js_ru\\source\\repos\\myJournal2022\\bin\\Debug\\netcoreapp3.1\\journals - Copy\\The New Real Thing", FileMode.Open))
-			//{
-			//	BinaryFormatter formatter = new BinaryFormatter();
-			//	Journal jRtrn = (Journal)formatter.Deserialize(stream);
-			//	LocalNotebook nb = new LocalNotebook(jRtrn);
-			//	await nb.Create();
-
-			//	//LocalNotebook nb = (LocalNotebook)formatter.Deserialize(stream);
-			//	//jRtrn.FileName = journalToOpen;
-			//	//jRtrn.Name = journalToOpen.Substring(journalToOpen.LastIndexOf("\\") + 1);
-			//}
-
-			//one - time code to create test notebooks
-			//LocalNotebook newNotebook;
-			//EntryToEdit newEntry;
-
-			//for (var i = 0; i < 10; i++)
-			//{
-			//	Program.PIN = "";
-			//	newNotebook = new("Project " + i.ToString());
-			//	newNotebook.LastSaved = DateTime.Now;
-			//	//newNotebook.FileName = AppDomain.CurrentDomain.BaseDirectory + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + newNotebook.Name;
-			//	var rnd = new Random(Guid.NewGuid().GetHashCode());
-
-			//	EntryToEdit newEntry1 = new EntryToEdit("created", "-", "-", "", newNotebook.Name); // Utilities.CreateEntry("created", "-", "-", "", newNotebook.Name, Program.PIN);
-			//	newEntry1.CreatedOn = DateTime.Parse("01/01/23 1:00 AM");
-			//	newNotebook.Entries.Add(newEntry1);
-
-			//	for (var j = 0; j < 5; j++)
-			//	{
-			//		newEntry = new EntryToEdit("EntryToEdit " + j + 1.ToString() + " in " + newNotebook.Name,
-			//			"This is the entry text for entry " + rnd.Next(1, 150), "{rtf", GetRandomLabels(), newNotebook.Name);
-
-			//		//newEntry = Utilities.CreateEntry("EntryToEdit " + j + 1.ToString() + " in " + newNotebook.Name,
-			//		//	"This is the entry text for entry " + rnd.Next(1, 150), "{rtf", GetRandomLabels(), newNotebook.Name, Program.PIN);
-
-			//		newEntry.CreatedOn = DateTime.Now.AddDays(-Convert.ToDouble(rnd.Next(1, 150)));
-			//		newNotebook.Entries.Add(newEntry);
-			//	}
-
-			//	newNotebook.Settings = new NotebookSettings { AllowCloud = true };
-			//	await newNotebook.Create(false);
-			//}
-
-			// fix The New Real Thing entries
-			//Program.PIN = "0711";
-			//LocalNotebook nb = new LocalNotebook("The New Real Thing").Open();
-
-			////fix some entries.RTF property is blank.
-			////List<EntryToEdit> v = nb.Entries.Where(e => e.RTF.Length == 0).ToList();
-			////v.ForEach(e => e.RTF = "{rtf");
-			////// nb.Entries.ForEach(E => E.NotebookName = EncryptDecrypt.Encrypt("The New Real Thing"));
-			////nb.Create();
-
-			//// fix The New Real Thing problem of EntryToEdit[0] is not the 'created' entry.
-			////LocalNotebook nb = new LocalNotebook("The New Real Thing").Open();
-			////Program.PIN = "0711";
-			//EntryToEdit entry = new EntryToEdit("created", "-", "{f", "The New Real Thing");
-			//entry.CreatedOn = DateTime.Parse("12/01/2021 12:00 AM");
-			//nb.Entries.Insert(0, entry);
-			//nb.Create();
-			//List<EntryToEdit> indx = nb.Entries.Where(e => e.Title == EncryptDecrypt.Encrypt("created")).ToList();
-			//nb.FileName = EncryptDecrypt.Encrypt(nb.FileName);
-			//nb.Name = EncryptDecrypt.Encrypt(nb.Name);
-			//nb.Create();
-
-			// fix all NotebookName values (encrypt them)
-			//Utilities.PopulateAllNotebooks();
-			//Program.PIN = "";
-
-			//foreach(LocalNotebook nb in Program.AllNotebooks)
-			//{
-			//	foreach(EntryToEdit en in nb.Entries)
-			//	{
-			//		var name = en.NotebookName;
-
-			//		en.NotebookName = EncryptDecrypt.Encrypt(nb.Name);
-
-			//	}
-			//	nb.Entries.ForEach(e => e.NotebookName = EncryptDecrypt.Encrypt(nb.Name));
-			//}
-
-			#endregion
-
-			//CheckForSystemDirectories();    // Am I keeping system directories now that the cloud is working? Why or why not? 08/11/23 - No. Cloud only (db) from this date.
-
-			//using (frmAzurePwd frm = new frmAzurePwd(this, frmAzurePwd.Mode.AskingForKey))
-			//{ if (Program.AzurePassword.Length > 0) { frm.Close(); } }
-
-			Program.AzurePassword = string.Empty;   // Kills the Azure synch process for debugging if desired.
-
-			//if (Program.User.AccessLevel < 2)
-			//{
-			//	using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch
-			//		(this, "Select notebooks to work with. Notebooks which are PIN-protected can't be synchronized unless you provide the PIN."))
-			//	{ frm.ShowDialog(); }
-			//}
-			//else
-			//{
-			//	// navigate to the user's notebooks in their assigned group.
-			//}
-
-			// Populate Program.DictCheckedNotebooks
-
-			// program.dictcheckednotebooks should be populated at this point.
-
-			//pnlDateFilters.Left = pnlPin.Left - 11;
 			ShowHideMenusAndControls(SelectionState.HideAll);
-			//await Utilities.PopulateAllNotebookNames();
-
-			//if (Program.AzurePassword.Length > 0)
-			//{
-			//	//CloudSynchronizer cs = new CloudSynchronizer();
-			//	//await cs.SynchWithCloud(false, null, true);
-			//}
-
 			LoadNotebooks();
-			//if (CurrentNotebook != null && CurrentNotebook.Entries.Count == 0) 
-			//{ mnuNotebook_Create_Click(sender, e); }
 			this.Cursor = Cursors.Default;
 		}
 
@@ -394,14 +224,10 @@ namespace MyNotebooks.subforms
 			this.Cursor = Cursors.WaitCursor;
 			lstEntries.Items.Clear();
 			rtbSelectedEntry.Text = string.Empty;
-			//Program.PIN = txtJournalPIN.Text;
-			//lblWrongPin.Visible = false;
 			if (CurrentNotebook != null && Program.DictCheckedNotebooks.Count == 1 && Program.DictCheckedNotebooks.Keys.Contains(CurrentNotebook.Name)) { Program.DictCheckedNotebooks.Clear(); }
 			if (Program.DictCheckedNotebooks.Count == 0) { Program.DictCheckedNotebooks.Add(ddlNotebooks.Text, txtJournalPIN.Text); }
 
 			CurrentNotebook = DbAccess.GetNotebook_OptionalEntries(SelectedNotebookIds.Key);
-
-			//var wrongPIN = true;
 
 			if (CurrentNotebook != null)
 			{
@@ -422,33 +248,14 @@ namespace MyNotebooks.subforms
 				}
 				else
 				{
-					//wrongPIN = CurrentNotebook.WrongPIN;
-
-					//if (!wrongPIN && !Program.AllNotebookNames.Contains(CurrentNotebook.Name))
-					//{
-					//	Program.AllNotebooks.Add(CurrentNotebook);
-					//}
-
-					//if (wrongPIN)
-					//{
-					//	lblWrongPin.Visible = true;
-					//	txtJournalPIN.Focus();
-					//	txtJournalPIN.SelectAll();
-					//}
-					//else
-					//{
 					try
 					{
-						//if (CurrentNotebook != null)
-						//{
 						PopulateShowFromDates();
 						SuppressDateClick = true;
 						await ProcessDateFiltersAndPopulateEntries();
 						SuppressDateClick = false;
 						lstEntries.Height = this.Height - lstEntries.Top - 50;
 						mnuLabels.Enabled = false;
-						//lstEntries.Visible = true;
-						//pnlDateFilters.Visible = true;
 
 						for (var i = 0; i < cbxDatesFrom.Items.Count; i++)
 						{
@@ -461,14 +268,9 @@ namespace MyNotebooks.subforms
 
 						cbxDatesTo.SelectedIndex = 0;
 						ShowHideMenusAndControls(SelectionState.NotebookLoaded);
-						//}
-						//else
-						//{
 						lstEntries.Focus();
-						//}
 					}
 					catch (Exception ex) { Console.Write(ex.Message); }
-					//}
 				}
 			}
 
@@ -622,21 +424,20 @@ namespace MyNotebooks.subforms
 			if (ddlNotebooks.Items.Count > 0)
 			{
 				ddlNotebooks.Enabled = true;
-				//pnlPin.Visible = false;
 
 				if (ddlNotebooks.Items.Count == 1)
 				{
 					ddlNotebooks.SelectedIndex = 0;
-					ShowHideMenusAndControls(SelectionState.NotebookSelectedNotLoaded);
-					txtJournalPIN.Focus();
+					btnLoadNotebook_Click(null, new());
+					//ShowHideMenusAndControls(SelectionState.NotebookSelectedNotLoaded);
 				}
 				else
 				{
 					ShowHideMenusAndControls(SelectionState.NotebookNotSelected);
 				}
-
-				txtJournalPIN.Focus();
 			}
+
+			if (ddlNotebooks.Items.Count == 1) { btnLoadNotebook_Click(null, new()); }
 		}
 
 		private void lstEntries_MouseUp(object sender, MouseEventArgs e)
@@ -703,9 +504,10 @@ namespace MyNotebooks.subforms
 
 				if (Program.ActiveNBParentId > 0)
 				{
-					if(ddlNotebooks.Items.Count == 1) { ddlNotebooks.SelectedIndex = 0; }
+					if (ddlNotebooks.Items.Count == 1) { ddlNotebooks.SelectedIndex = 0; }
 					LoadNotebooks();
-					ShowHideMenusAndControls(SelectionState.NotebookNotSelected);
+					if(ddlNotebooks.Items.Count == 0) { ShowHideMenusAndControls(SelectionState.NotebookNotSelected); }
+					//ShowHideMenusAndControls(SelectionState.NotebookNotSelected);
 				}
 			}
 		}
@@ -739,7 +541,7 @@ namespace MyNotebooks.subforms
 		private async void mnuEntryDelete_Click(object sender, EventArgs e)
 		{
 			this.Cursor = Cursors.WaitCursor;
-			var vMsg = "Do you want to delete " + "'" + CurrentEntry.Title + "'?";
+			var vMsg = "Do you want to delete " + Environment.NewLine + "'" + CurrentEntry.Title + "'?";
 			using (frmMessage frm = new(frmMessage.OperationType.YesNoQuestion, vMsg, "Confirm Delete", this))
 			{
 				frm.ShowDialog(this);
@@ -747,9 +549,7 @@ namespace MyNotebooks.subforms
 				if (frm.Result == frmMessage.ReturnResult.Yes)
 				{
 					CurrentEntry.Delete();
-
 					CurrentNotebook.Entries.Remove(CurrentEntry);
-					//await CurrentNotebook.Save();
 					await ProcessDateFiltersAndPopulateEntries();
 					ShowHideMenusAndControls(SelectionState.NotebookLoaded);
 				}

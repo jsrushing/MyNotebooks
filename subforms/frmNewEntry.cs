@@ -43,10 +43,8 @@ namespace MyNotebooks.subforms
 		private void frmNewEntry_Load(object sender, EventArgs e)
 		{
 			OriginalTitle = this.Text;
-			Sort = LabelsManager.LabelsSortType.None;
-			SortLabels();
-			lblCreatedOn.Visible = false;
-			lblEditedOn.Visible = false;
+			//Sort = LabelsManager.LabelsSortType.None;
+			//SortLabels();
 
 			if (this.EntryToEdit != null & CurrentNotebook != null)
 			{ this.Text = "editing '" + EntryToEdit.Title + "' in '" + CurrentNotebook.Name + "'"; }
@@ -56,9 +54,6 @@ namespace MyNotebooks.subforms
 			if (IsEdit)
 			{
 				txtNewEntryTitle.Text = EntryToEdit.Title;
-				lblCreatedOn.Visible = true;
-				lblEditedOn.Visible = true;
-
 				lblCreatedOn.Text = this.EntryToEdit.CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]);
 				lblEditedOn.Text = this.EntryToEdit.EditedOn < new DateTime(2000, 1, 1) ? "" : this.EntryToEdit.EditedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]);
 
@@ -77,12 +72,11 @@ namespace MyNotebooks.subforms
 					rtbNewEntry.Text = EntryToEdit.Text;
 				}
 
-				//LabelsManager.CheckedLabels_Set(clbLabels, EntryToEdit);	// 08/20/23 : Deprecated. Now using Labels from db.
-				lblNumLabelsSelected.Text = string.Format(LabelLabelsSelected, clbLabels.CheckedItems.Count);
 				rtbNewEntry.Focus();
 				rtbNewEntry.SelectionStart = 0;
 			}
 
+			pnlEntryDates.Visible = IsEdit;
 			SetIsDirty(false);
 		}
 

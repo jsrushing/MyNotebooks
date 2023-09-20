@@ -32,7 +32,6 @@ namespace MyNotebooks.subforms
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmNewEntry));
 			grpCreateEntry = new System.Windows.Forms.GroupBox();
 			lblTitleExists = new System.Windows.Forms.Label();
-			lblNumLabelsSelected = new System.Windows.Forms.Label();
 			pnlEntryDates = new System.Windows.Forms.Panel();
 			lblEditedOn = new System.Windows.Forms.Label();
 			lblCreatedOn = new System.Windows.Forms.Label();
@@ -83,7 +82,6 @@ namespace MyNotebooks.subforms
 			// 
 			grpCreateEntry.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
 			grpCreateEntry.Controls.Add(lblTitleExists);
-			grpCreateEntry.Controls.Add(lblNumLabelsSelected);
 			grpCreateEntry.Controls.Add(pnlEntryDates);
 			grpCreateEntry.Controls.Add(lblSortType);
 			grpCreateEntry.Controls.Add(panel1);
@@ -116,18 +114,6 @@ namespace MyNotebooks.subforms
 			lblTitleExists.Text = "Sorry, this entry title already exists.";
 			lblTitleExists.Visible = false;
 			// 
-			// lblNumLabelsSelected
-			// 
-			lblNumLabelsSelected.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
-			lblNumLabelsSelected.AutoSize = true;
-			lblNumLabelsSelected.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point);
-			lblNumLabelsSelected.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			lblNumLabelsSelected.Location = new System.Drawing.Point(59, 327);
-			lblNumLabelsSelected.Name = "lblNumLabelsSelected";
-			lblNumLabelsSelected.Size = new System.Drawing.Size(75, 15);
-			lblNumLabelsSelected.TabIndex = 49;
-			lblNumLabelsSelected.Text = "({0} selected)";
-			// 
 			// pnlEntryDates
 			// 
 			pnlEntryDates.Controls.Add(lblEditedOn);
@@ -135,7 +121,7 @@ namespace MyNotebooks.subforms
 			pnlEntryDates.Controls.Add(label6);
 			pnlEntryDates.Controls.Add(label8);
 			pnlEntryDates.Controls.Add(label5);
-			pnlEntryDates.Location = new System.Drawing.Point(46, 46);
+			pnlEntryDates.Location = new System.Drawing.Point(55, 46);
 			pnlEntryDates.Name = "pnlEntryDates";
 			pnlEntryDates.Size = new System.Drawing.Size(398, 23);
 			pnlEntryDates.TabIndex = 48;
@@ -394,7 +380,7 @@ namespace MyNotebooks.subforms
 			label4.AutoSize = true;
 			label4.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			label4.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			label4.Location = new System.Drawing.Point(13, 324);
+			label4.Location = new System.Drawing.Point(6, 324);
 			label4.Name = "label4";
 			label4.Size = new System.Drawing.Size(44, 17);
 			label4.TabIndex = 38;
@@ -464,9 +450,9 @@ namespace MyNotebooks.subforms
 			label3.ForeColor = System.Drawing.SystemColors.MenuHighlight;
 			label3.Location = new System.Drawing.Point(6, 50);
 			label3.Name = "label3";
-			label3.Size = new System.Drawing.Size(80, 17);
+			label3.Size = new System.Drawing.Size(41, 17);
 			label3.TabIndex = 3;
-			label3.Text = "EntryToEdit";
+			label3.Text = "Entry";
 			// 
 			// rtbNewEntry
 			// 
@@ -599,7 +585,6 @@ namespace MyNotebooks.subforms
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.Panel pnlEntryDates;
 		private System.Windows.Forms.Label label6;
-		private System.Windows.Forms.Label lblNumLabelsSelected;
 		private System.Windows.Forms.Label lblTitleExists;
 	}
 }
