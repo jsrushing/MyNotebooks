@@ -212,13 +212,13 @@ namespace MyNotebooks.subforms
 			// 
 			mnuContextEntries.Items.AddRange(new ToolStripItem[] { mnuContext_GridEntryDetails });
 			mnuContextEntries.Name = "mnuFoundEntries";
-			mnuContextEntries.Size = new System.Drawing.Size(157, 26);
+			mnuContextEntries.Size = new System.Drawing.Size(181, 48);
 			// 
 			// mnuContext_GridEntryDetails
 			// 
 			mnuContext_GridEntryDetails.Name = "mnuContext_GridEntryDetails";
-			mnuContext_GridEntryDetails.Size = new System.Drawing.Size(156, 22);
-			mnuContext_GridEntryDetails.Text = "Edit EntryToEdit";
+			mnuContext_GridEntryDetails.Size = new System.Drawing.Size(180, 22);
+			mnuContext_GridEntryDetails.Text = "Edit Entry";
 			mnuContext_GridEntryDetails.Click += this.mnuContext_GridEntryDetails_Click;
 			// 
 			// gridViewEntryDetails

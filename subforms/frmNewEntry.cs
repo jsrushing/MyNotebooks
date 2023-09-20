@@ -51,6 +51,8 @@ namespace MyNotebooks.subforms
 			else
 			{ this.Text = this.IsDirty ? OriginalTitle + "*" : OriginalTitle; }
 
+			pnlEntryDates.Visible = IsEdit;
+
 			if (IsEdit)
 			{
 				txtNewEntryTitle.Text = EntryToEdit.Title;
@@ -76,7 +78,6 @@ namespace MyNotebooks.subforms
 				rtbNewEntry.SelectionStart = 0;
 			}
 
-			pnlEntryDates.Visible = IsEdit;
 			SetIsDirty(false);
 		}
 

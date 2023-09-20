@@ -192,7 +192,7 @@ namespace MyNotebooks.subforms
 			label9.ForeColor = System.Drawing.SystemColors.MenuHighlight;
 			label9.Location = new System.Drawing.Point(5, 66);
 			label9.Name = "label9";
-			label9.Size = new System.Drawing.Size(45, 17);
+			label9.Size = new System.Drawing.Size(84, 17);
 			label9.TabIndex = 3;
 			label9.Text = "EntryToEdit:";
 			// 
@@ -573,7 +573,7 @@ namespace MyNotebooks.subforms
 			lblSelectionType.Name = "lblSelectionType";
 			lblSelectionType.Size = new System.Drawing.Size(96, 17);
 			lblSelectionType.TabIndex = 15;
-			lblSelectionType.Text = "Selected EntryToEdit";
+			lblSelectionType.Text = "Selected Entry";
 			// 
 			// mnuEditEntry
 			// 

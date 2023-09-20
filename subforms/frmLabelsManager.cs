@@ -458,7 +458,7 @@ namespace MyNotebooks.subforms
 						RefreshEntry = true;
 						ResetTree();
 						var l = CurrentEntry.AllLabels.FirstOrDefault(l => l.LabelText == l.LabelText);
-						if(l == null) CurrentEntry.AllLabels.Add(lbl);
+						if (l == null) CurrentEntry.AllLabels.Add(lbl);
 					}
 				}
 			}
