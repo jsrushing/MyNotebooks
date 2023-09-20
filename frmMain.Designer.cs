@@ -153,7 +153,7 @@ namespace MyNotebooks.subforms
 			lstEntries.HorizontalScrollbar = true;
 			lstEntries.IntegralHeight = false;
 			lstEntries.ItemHeight = 15;
-			lstEntries.Location = new System.Drawing.Point(12, 106);
+			lstEntries.Location = new System.Drawing.Point(12, 109);
 			lstEntries.Name = "lstEntries";
 			lstEntries.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
 			lstEntries.Size = new System.Drawing.Size(806, 123);
@@ -168,14 +168,14 @@ namespace MyNotebooks.subforms
 			mnuEntryTop.Enabled = false;
 			mnuEntryTop.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuEntryCreate, mnuEntryEdit, mnuEntryDelete });
 			mnuEntryTop.Name = "mnuEntryTop";
-			mnuEntryTop.Size = new System.Drawing.Size(181, 92);
+			mnuEntryTop.Size = new System.Drawing.Size(129, 70);
 			mnuEntryTop.Text = "&EntryToEdit";
 			// 
 			// mnuEntryCreate
 			// 
 			mnuEntryCreate.Enabled = false;
 			mnuEntryCreate.Name = "mnuEntryCreate";
-			mnuEntryCreate.Size = new System.Drawing.Size(180, 22);
+			mnuEntryCreate.Size = new System.Drawing.Size(128, 22);
 			mnuEntryCreate.Text = "&New Entry";
 			mnuEntryCreate.Click += this.mnuEntryCreate_Click;
 			// 
@@ -184,7 +184,7 @@ namespace MyNotebooks.subforms
 			mnuEntryEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuPreserveOriginalText, mnuDiscardOriginalText });
 			mnuEntryEdit.Enabled = false;
 			mnuEntryEdit.Name = "mnuEntryEdit";
-			mnuEntryEdit.Size = new System.Drawing.Size(180, 22);
+			mnuEntryEdit.Size = new System.Drawing.Size(128, 22);
 			mnuEntryEdit.Text = "E&dit";
 			mnuEntryEdit.Click += this.mnuEntryEdit_Click;
 			// 
@@ -206,7 +206,7 @@ namespace MyNotebooks.subforms
 			// 
 			mnuEntryDelete.Enabled = false;
 			mnuEntryDelete.Name = "mnuEntryDelete";
-			mnuEntryDelete.Size = new System.Drawing.Size(180, 22);
+			mnuEntryDelete.Size = new System.Drawing.Size(128, 22);
 			mnuEntryDelete.Text = "Delete";
 			mnuEntryDelete.Click += this.mnuEntryDelete_Click;
 			// 
@@ -396,7 +396,7 @@ namespace MyNotebooks.subforms
 			lblEntries.AutoSize = true;
 			lblEntries.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			lblEntries.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			lblEntries.Location = new System.Drawing.Point(10, 87);
+			lblEntries.Location = new System.Drawing.Point(10, 90);
 			lblEntries.Name = "lblEntries";
 			lblEntries.Size = new System.Drawing.Size(50, 17);
 			lblEntries.TabIndex = 39;
@@ -443,7 +443,7 @@ namespace MyNotebooks.subforms
 			pnlDateFilters.Controls.Add(cbxDatesTo);
 			pnlDateFilters.Controls.Add(cbxDatesFrom);
 			pnlDateFilters.Controls.Add(label2);
-			pnlDateFilters.Location = new System.Drawing.Point(285, 58);
+			pnlDateFilters.Location = new System.Drawing.Point(96, 59);
 			pnlDateFilters.Name = "pnlDateFilters";
 			pnlDateFilters.Size = new System.Drawing.Size(533, 27);
 			pnlDateFilters.TabIndex = 49;
@@ -504,7 +504,7 @@ namespace MyNotebooks.subforms
 			pnlPin.Controls.Add(lblShowPIN);
 			pnlPin.Controls.Add(txtJournalPIN);
 			pnlPin.Controls.Add(lblWrongPin);
-			pnlPin.Location = new System.Drawing.Point(57, 56);
+			pnlPin.Location = new System.Drawing.Point(824, 232);
 			pnlPin.Name = "pnlPin";
 			pnlPin.Size = new System.Drawing.Size(218, 46);
 			pnlPin.TabIndex = 50;

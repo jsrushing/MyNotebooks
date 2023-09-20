@@ -343,7 +343,7 @@ namespace MyNotebooks.DataAccess
 						sda.Fill(ds);
 						DataTable tblEntries = ds.Tables[0];
 						DataTable tblLabels = ds.Tables[1];
-						List<MNLabel> labels = new();
+						//List<MNLabel> labels = new();
 
 						for (int i = 0; i < tblEntries.Rows.Count; i++)
 						{
@@ -560,36 +560,30 @@ namespace MyNotebooks.DataAccess
 		public static void			PopulateNotebookEntries(ref Notebook notebook)
 		{
 			DataTable dt = new();
+			DataSet ds = new();
+			Entry entry = null;
 			notebook.Entries.Clear();
 
 			using (SqlConnection conn = new(connString))
 			{
 				conn.Open();
 
-				using (SqlCommand cmd = new("sp_GetNotebookEntries", conn))
+				using (SqlCommand cmd = new("sp_GetEntriesForNotebook", conn))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 					cmd.Parameters.AddWithValue("@notebookId", notebook.Id);
 					SqlDataAdapter sda = new() { SelectCommand = cmd };
-					sda.Fill(dt);
+					sda.Fill(ds);
+					DataTable tblEntries = ds.Tables[0];
+					DataTable tblLabels = ds.Tables[1];
+					//List<MNLabel> labels = new();
 
-					for (int i = 0; i < dt.Rows.Count; i++)
+					for (int i = 0; i < tblEntries.Rows.Count; i++)
 					{
-						Entry entry = new(dt, i);
+						entry = new(tblEntries, i);
 
-						try
-						{
-							var v = dt.Rows[i].Field<DateTime?>("EditedOn").ToString();
-							if (v != null) { entry.EditedOn = DateTime.Parse(v); }
-						}
-						catch (Exception e)
-						{
-							if (e.GetType() != typeof(System.FormatException))  // 'v' was not a valid datetime
-							{
-								using (frmMessage frm = new(frmMessage.OperationType.Message,
-									"An error occurred getting Entries. " + e.Message, "Error!")) { frm.ShowDialog(); }
-							}
-						}
+						for (int i2 = 0; i2 < tblLabels.Rows.Count; i2++)
+						{ entry.AllLabels.Add(new(tblLabels, i2)); }
 
 						notebook.Entries.Add(entry);
 					}

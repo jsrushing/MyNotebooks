@@ -29,7 +29,7 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void frmNewJournal_Load(object sender, EventArgs e) { this.Size = this.MinimumSize; }
+		private void frmNewJournal_Load(object sender, EventArgs e) { }	//this.Size = this.MinimumSize; }
 
 		private void frmNewJournal_Activated(object sender, EventArgs e) { txtName.Focus(); }
 
@@ -41,12 +41,10 @@ namespace MyNotebooks.subforms
 			this.LocalNotebook = new Notebook();
 			//NotebookSettings nbs = LocalNotebook.Settings;
 			//LocalNotebook.Settings = nbs;
-			LocalNotebook.PIN = txtPIN.Text;
 			LocalNotebook.Name = txtName.Text;
 			LocalNotebook.CreatedOn = DateTime.Now;
 			LocalNotebook.ParentId = Program.ActiveNBParentId;
 			LocalNotebook.Description = txtDescription.Text;
-			//Program.PIN = txtPIN.Text;
 			this.Hide();
 
 			//NotebookSettings nbs = LocalNotebook.Settings;

@@ -370,7 +370,7 @@ namespace MyNotebooks.subforms
 			txtNewEntryTitle.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
 			txtNewEntryTitle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			txtNewEntryTitle.Location = new System.Drawing.Point(46, 19);
-			txtNewEntryTitle.MaxLength = 40;
+			txtNewEntryTitle.MaxLength = 255;
 			txtNewEntryTitle.Multiline = true;
 			txtNewEntryTitle.Name = "txtNewEntryTitle";
 			txtNewEntryTitle.Size = new System.Drawing.Size(510, 23);
@@ -464,7 +464,7 @@ namespace MyNotebooks.subforms
 			label3.ForeColor = System.Drawing.SystemColors.MenuHighlight;
 			label3.Location = new System.Drawing.Point(6, 50);
 			label3.Name = "label3";
-			label3.Size = new System.Drawing.Size(41, 17);
+			label3.Size = new System.Drawing.Size(80, 17);
 			label3.TabIndex = 3;
 			label3.Text = "EntryToEdit";
 			// 
@@ -540,7 +540,7 @@ namespace MyNotebooks.subforms
 			MainMenuStrip = menuStrip1;
 			MinimumSize = new System.Drawing.Size(372, 439);
 			Name = "frmNewEntry";
-			Text = "New EntryToEdit";
+			Text = "New Entry";
 			FormClosing += this.frmNewEntry_FormClosing;
 			Load += this.frmNewEntry_Load;
 			grpCreateEntry.ResumeLayout(false);

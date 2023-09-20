@@ -190,13 +190,46 @@ namespace MyNotebooks.subforms
 			return string.Join(',', rtrn);
 		}
 
+		private void CheckForNotebooks()
+		{
+			if (ddlNotebooks.Items.Count == 1)
+			{
+				ddlNotebooks.SelectedIndex = 0;
+				ShowHideMenusAndControls(SelectionState.NotebookLoaded);
+			}
+			else if (ddlNotebooks.Items.Count == 0)
+			{
+				using (frmNewNotebook frm = new(this))
+				{
+					frm.ShowDialog(this);
+
+					if (frm.LocalNotebook.CreatedBy > 0)
+					{
+						this.CurrentNotebook = frm.LocalNotebook;
+					}
+					else
+					{
+						var vMsg = "At least one notebook must exist in the Group for it to have any use." + System.Environment.NewLine + "You may create one by clicking 'Notebooks > Create'.";
+						using (frmMessage frm2 = new(frmMessage.OperationType.Message, vMsg, "One Notebook Must Exist", this))
+						{
+							frm2.ShowDialog(this);
+							using (frmManagementConsole frm3 = new(this)) { frm.ShowDialog(); }
+						}
+					}
+				}
+			}
+		}
+
 		private async void frmMain_Activated(object sender, EventArgs e)
 		{
 			//if(Program.AllNotebooks.Count == 0) await Utilities.PopulateAllNotebooks();
+
 		}
 
 		private async void frmMain_Load(object sender, EventArgs e)
 		{
+		//	CheckForNotebooks();
+
 			if (Program.NotebooksNamesAndIds.Count == 0)
 			{
 				if (Program.User == null)
@@ -316,56 +349,34 @@ namespace MyNotebooks.subforms
 
 			Program.AzurePassword = string.Empty;   // Kills the Azure synch process for debugging if desired.
 
-			if (Program.User.AccessLevel < 2)
-			{
-				using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch
-					(this, "Select notebooks to work with. Notebooks which are PIN-protected can't be synchronized unless you provide the PIN."))
-				{ frm.ShowDialog(); }
-			}
-			else
-			{
-				// navigate to the user's notebooks in their assigned group.
-			}
+			//if (Program.User.AccessLevel < 2)
+			//{
+			//	using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch
+			//		(this, "Select notebooks to work with. Notebooks which are PIN-protected can't be synchronized unless you provide the PIN."))
+			//	{ frm.ShowDialog(); }
+			//}
+			//else
+			//{
+			//	// navigate to the user's notebooks in their assigned group.
+			//}
 
 			// Populate Program.DictCheckedNotebooks
 
 			// program.dictcheckednotebooks should be populated at this point.
 
-			pnlDateFilters.Left = pnlPin.Left - 11;
+			//pnlDateFilters.Left = pnlPin.Left - 11;
 			ShowHideMenusAndControls(SelectionState.HideAll);
 			//await Utilities.PopulateAllNotebookNames();
 
-			if (Program.AzurePassword.Length > 0)
-			{
-				//CloudSynchronizer cs = new CloudSynchronizer();
-				//await cs.SynchWithCloud(false, null, true);
-			}
-
-			LoadNotebooks();
-
-			//if (ddlNotebooks.Items.Count == 0)
+			//if (Program.AzurePassword.Length > 0)
 			//{
-			//	//using(frmManagementConsole frm = new(this, true)) { frm.ShowDialog(); }
-
-			//	//using (frmNewNotebook frm = new frmNewNotebook(this))
-			//	//{
-			//	//	frm.ShowDialog();
-
-			//	//	if (frm.LocalNotebook != null)
-			//	//	{
-			//	//		await frm.LocalNotebook.Create();
-
-			//	//		LoadNotebooks();
-			//	//	}
-			//	//	else
-			//	//	{
-			//	//		using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.Message, "At least one notebook must exist. " +
-			//	//			"Please re-open the program and create a notebook.", "One LocalNotebook Must Exist", this))
-			//	//		{ frm2.ShowDialog(); this.Close(); }
-			//	//	}
-			//	//}
+			//	//CloudSynchronizer cs = new CloudSynchronizer();
+			//	//await cs.SynchWithCloud(false, null, true);
 			//}
 
+			LoadNotebooks();
+			//if (CurrentNotebook != null && CurrentNotebook.Entries.Count == 0) 
+			//{ mnuNotebook_Create_Click(sender, e); }
 			this.Cursor = Cursors.Default;
 		}
 
@@ -383,14 +394,14 @@ namespace MyNotebooks.subforms
 			this.Cursor = Cursors.WaitCursor;
 			lstEntries.Items.Clear();
 			rtbSelectedEntry.Text = string.Empty;
-			Program.PIN = txtJournalPIN.Text;
-			lblWrongPin.Visible = false;
+			//Program.PIN = txtJournalPIN.Text;
+			//lblWrongPin.Visible = false;
 			if (CurrentNotebook != null && Program.DictCheckedNotebooks.Count == 1 && Program.DictCheckedNotebooks.Keys.Contains(CurrentNotebook.Name)) { Program.DictCheckedNotebooks.Clear(); }
 			if (Program.DictCheckedNotebooks.Count == 0) { Program.DictCheckedNotebooks.Add(ddlNotebooks.Text, txtJournalPIN.Text); }
 
 			CurrentNotebook = DbAccess.GetNotebook_OptionalEntries(SelectedNotebookIds.Key);
 
-			var wrongPIN = true;
+			//var wrongPIN = true;
 
 			if (CurrentNotebook != null)
 			{
@@ -398,57 +409,66 @@ namespace MyNotebooks.subforms
 
 				if (CurrentNotebook.Entries.Count == 0)
 				{
+					using (frmNewEntry frm = new(this, CurrentNotebook))
+					{
+						frm.ShowDialog(this);
+						if (frm.EntryToEdit != null)
+						{
+							CurrentNotebook.Entries.Add(frm.EntryToEdit);
+							await Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries);
+						}
+					}
 					ShowHideMenusAndControls(SelectionState.NotebookLoaded);
 				}
 				else
 				{
-					wrongPIN = CurrentNotebook.WrongPIN;
+					//wrongPIN = CurrentNotebook.WrongPIN;
 
-					if (!wrongPIN && !Program.AllNotebookNames.Contains(CurrentNotebook.Name))
-					{
-						Program.AllNotebooks.Add(CurrentNotebook);
-					}
+					//if (!wrongPIN && !Program.AllNotebookNames.Contains(CurrentNotebook.Name))
+					//{
+					//	Program.AllNotebooks.Add(CurrentNotebook);
+					//}
 
-					if (wrongPIN)
+					//if (wrongPIN)
+					//{
+					//	lblWrongPin.Visible = true;
+					//	txtJournalPIN.Focus();
+					//	txtJournalPIN.SelectAll();
+					//}
+					//else
+					//{
+					try
 					{
-						lblWrongPin.Visible = true;
-						txtJournalPIN.Focus();
-						txtJournalPIN.SelectAll();
-					}
-					else
-					{
-						try
+						//if (CurrentNotebook != null)
+						//{
+						PopulateShowFromDates();
+						SuppressDateClick = true;
+						await ProcessDateFiltersAndPopulateEntries();
+						SuppressDateClick = false;
+						lstEntries.Height = this.Height - lstEntries.Top - 50;
+						mnuLabels.Enabled = false;
+						//lstEntries.Visible = true;
+						//pnlDateFilters.Visible = true;
+
+						for (var i = 0; i < cbxDatesFrom.Items.Count; i++)
 						{
-							if (CurrentNotebook != null)
+							if (DateTime.Parse(cbxDatesFrom.Items[i].ToString()) <= DateTime.Parse(cbxDatesTo.Text).AddDays(-60) || i == cbxDatesFrom.Items.Count - 1)
 							{
-								PopulateShowFromDates();
-								SuppressDateClick = true;
-								await ProcessDateFiltersAndPopulateEntries();
-								SuppressDateClick = false;
-								lstEntries.Height = this.Height - lstEntries.Top - 50;
-								mnuLabels.Enabled = false;
-								//lstEntries.Visible = true;
-								//pnlDateFilters.Visible = true;
-
-								for (var i = 0; i < cbxDatesFrom.Items.Count; i++)
-								{
-									if (DateTime.Parse(cbxDatesFrom.Items[i].ToString()) <= DateTime.Parse(cbxDatesTo.Text).AddDays(-60) || i == cbxDatesFrom.Items.Count - 1)
-									{
-										cbxDatesFrom.SelectedIndex = i;
-										break;
-									}
-								}
-
-								cbxDatesTo.SelectedIndex = 0;
-								ShowHideMenusAndControls(SelectionState.NotebookLoaded);
-							}
-							else
-							{
-								lstEntries.Focus();
+								cbxDatesFrom.SelectedIndex = i;
+								break;
 							}
 						}
-						catch (Exception ex) { Console.Write(ex.Message); }
+
+						cbxDatesTo.SelectedIndex = 0;
+						ShowHideMenusAndControls(SelectionState.NotebookLoaded);
+						//}
+						//else
+						//{
+						lstEntries.Focus();
+						//}
 					}
+					catch (Exception ex) { Console.Write(ex.Message); }
+					//}
 				}
 			}
 
@@ -539,22 +559,17 @@ namespace MyNotebooks.subforms
 
 		private void ddlNotebooks_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			ShowHideMenusAndControls(SelectionState.NotebookSelectedNotLoaded);
-			btnLoadNotebook.Enabled = true;
-			txtJournalPIN.Focus();
+			ShowHideMenusAndControls(SelectionState.NotebookLoaded);
 			CurrentEntry = null;
 			CurrentNotebook = null;
 			cbxDatesFrom.DataSource = null;
-			lblWrongPin.Visible = false;
 			lstEntries.Items.Clear();
 			lstEntries.Visible = false;
 			cbxSortEntriesBy.SelectedIndex = 0;
-			pnlPin.Visible = ddlNotebooks.SelectedIndex > -1;
-			txtJournalPIN.Text = Program.DictCheckedNotebooks.FirstOrDefault(e => e.Key == ddlNotebooks.Text).Value;
-			pnlDateFilters.Visible = false;
 			var v = ddlNotebooks.SelectedItem as ListItem;
 			SelectedNotebookId = v.Id;
 			SelectedNotebookIds = new(v.Id, v.Name);
+			btnLoadNotebook_Click(sender, e);
 		}
 
 		private void ddlNotebooks_Click(object sender, EventArgs e)
@@ -607,7 +622,7 @@ namespace MyNotebooks.subforms
 			if (ddlNotebooks.Items.Count > 0)
 			{
 				ddlNotebooks.Enabled = true;
-				pnlPin.Visible = false;
+				//pnlPin.Visible = false;
 
 				if (ddlNotebooks.Items.Count == 1)
 				{
@@ -688,6 +703,7 @@ namespace MyNotebooks.subforms
 
 				if (Program.ActiveNBParentId > 0)
 				{
+					if(ddlNotebooks.Items.Count == 1) { ddlNotebooks.SelectedIndex = 0; }
 					LoadNotebooks();
 					ShowHideMenusAndControls(SelectionState.NotebookNotSelected);
 				}
@@ -723,15 +739,17 @@ namespace MyNotebooks.subforms
 		private async void mnuEntryDelete_Click(object sender, EventArgs e)
 		{
 			this.Cursor = Cursors.WaitCursor;
-
-			using (frmMessage frm = new frmMessage(frmMessage.OperationType.DeleteEntry, CurrentEntry.Title, "", this))
+			var vMsg = "Do you want to delete " + "'" + CurrentEntry.Title + "'?";
+			using (frmMessage frm = new(frmMessage.OperationType.YesNoQuestion, vMsg, "Confirm Delete", this))
 			{
 				frm.ShowDialog(this);
 
 				if (frm.Result == frmMessage.ReturnResult.Yes)
 				{
+					CurrentEntry.Delete();
+
 					CurrentNotebook.Entries.Remove(CurrentEntry);
-					await CurrentNotebook.Save();
+					//await CurrentNotebook.Save();
 					await ProcessDateFiltersAndPopulateEntries();
 					ShowHideMenusAndControls(SelectionState.NotebookLoaded);
 				}
@@ -784,13 +802,13 @@ namespace MyNotebooks.subforms
 			{
 				frm.ShowDialog(this);
 
-				if (frm.LocalNotebook != null)	// && frm.LocalNotebook.Name.Length > 0)
+				if (frm.LocalNotebook != null)  // && frm.LocalNotebook.Name.Length > 0)
 				{
 					frm.LocalNotebook.Id = DbAccess.CRUDNotebook(frm.LocalNotebook).intValue;
 					Program.AllNotebooks.Add(frm.LocalNotebook);
 					await Utilities.PopulateAllNotebookNames();
 					LoadNotebooks();
-				}	
+				}
 			}
 		}
 
@@ -1023,7 +1041,7 @@ namespace MyNotebooks.subforms
 				mnuLabelsSummary.Enabled = false;
 
 				btnResetLabelFilter.Visible = false;
-				pnlPin.Visible = true;
+				//pnlPin.Visible = true;
 				SetDisplayText();
 			}
 			else if (st == SelectionState.NotebookLoaded)
@@ -1032,7 +1050,10 @@ namespace MyNotebooks.subforms
 
 				lstEntries.Visible = true;
 				lstEntries.Height = this.Height - 160;
-				pnlPin.Visible = false;
+				lstEntries.Top = pnlDateFilters.Top + pnlDateFilters.Height + 5;
+				lblEntries.Top = lstEntries.Top - lblEntries.Height - 3;
+				lblEntries.Visible = true;
+				//pnlPin.Visible = false;
 
 				mnuEntryTop.Enabled = true;
 				mnuEntryCreate.Enabled = true;
@@ -1059,11 +1080,11 @@ namespace MyNotebooks.subforms
 
 				lblSeparator.Visible = true;
 				lblSelectionType.Visible = true;
-				lblEntries.Visible = true;
+				//lblEntries.Visible = true;
 			}
 			else if (st == SelectionState.NotebookNotSelected)
 			{
-				pnlPin.Visible = false;
+				//pnlPin.Visible = false;
 				pnlDateFilters.Visible = false;
 				lblSeparator.Visible = false;
 				lstEntries.Visible = false;

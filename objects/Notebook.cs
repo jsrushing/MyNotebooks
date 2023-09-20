@@ -110,11 +110,11 @@ namespace MyNotebooks
 		//	catch (Exception) { }
 		//}
 
-		public async Task	Create() { GetOperationResult(DbAccess.CRUDNotebook(this), true); }
-		public async Task	Update() { GetOperationResult(DbAccess.CRUDNotebook(this, OperationType.Update)); }
-		public async Task	Delete() { GetOperationResult(DbAccess.CRUDNotebook(this, OperationType.Delete)); }
+		public SQLResult Create() { return GetOperationResult(DbAccess.CRUDNotebook(this), true); }
+		public SQLResult Update() { return GetOperationResult(DbAccess.CRUDNotebook(this, OperationType.Update)); }
+		public SQLResult Delete() { return GetOperationResult(DbAccess.CRUDNotebook(this, OperationType.Delete)); }
 
-		private void		GetOperationResult(SQLResult result, bool isCreate = false)
+		private SQLResult		GetOperationResult(SQLResult result, bool isCreate = false)
 		{
 			if (isCreate)
 			{
@@ -128,6 +128,7 @@ namespace MyNotebooks
 					{ frm.ShowDialog(); }
 				}
 			}
+			return result;
 		}
 
 		public async Task	Create(bool addCreatedOn = true)
@@ -382,15 +383,15 @@ namespace MyNotebooks
 
 			// Encrypt the notebook and entries to save to disk.
 			//this.FileName						= EncryptDecrypt.Encrypt(this.FileName, this.PIN);
-			this.Name		= EncryptDecrypt.Encrypt(this.Name,		this.PIN);
-			this.PIN		= EncryptDecrypt.Encrypt(this.PIN, this.PIN);
-			this.Description = EncryptDecrypt.Encrypt(this.Description, this.PIN);
+			//this.Name		= EncryptDecrypt.Encrypt(this.Name,		this.PIN);
+			//this.PIN		= EncryptDecrypt.Encrypt(this.PIN, this.PIN);
+			//this.Description = EncryptDecrypt.Encrypt(this.Description, this.PIN);
 
-			this.Entries.ForEach(e	=> e.Title	= EncryptDecrypt.Encrypt(e.Title,	this.PIN));
-			this.Entries.ForEach(e	=> e.Text	= EncryptDecrypt.Encrypt(e.Text,	this.PIN));
-			this.Entries.ForEach(e	=> e.Labels = EncryptDecrypt.Encrypt(e.Labels,	this.PIN));
-			this.Entries.ForEach(e	=> e.RTF	= EncryptDecrypt.Encrypt(e.RTF,		this.PIN));
-			this.Entries.ForEach(e	=> e.NotebookName = EncryptDecrypt.Encrypt(e.NotebookName, this.PIN));
+			//this.Entries.ForEach(e	=> e.Title	= EncryptDecrypt.Encrypt(e.Title,	this.PIN));
+			//this.Entries.ForEach(e	=> e.Text	= EncryptDecrypt.Encrypt(e.Text,	this.PIN));
+			//this.Entries.ForEach(e	=> e.Labels = EncryptDecrypt.Encrypt(e.Labels,	this.PIN));
+			//this.Entries.ForEach(e	=> e.RTF	= EncryptDecrypt.Encrypt(e.RTF,		this.PIN));
+			//this.Entries.ForEach(e	=> e.NotebookName = EncryptDecrypt.Encrypt(e.NotebookName, this.PIN));
 
 			if (IsNewNotebook)
 			{
@@ -435,14 +436,14 @@ namespace MyNotebooks
 			this.Name		= nTmp.Name;	// EncryptDecrypt.Decrypt(this.Name, Program.PIN);
 			//this.Entries	= nTmp.Entries;
 
-			if(Program.PIN.Length > 0)
-			{
-				this.Entries.ForEach(e => e.Title	= EncryptDecrypt.Decrypt(e.Title, Program.PIN));
-				this.Entries.ForEach(e => e.Text	= EncryptDecrypt.Decrypt(e.Text, Program.PIN));
-				this.Entries.ForEach(e => e.Labels	= EncryptDecrypt.Decrypt(e.Labels, Program.PIN));
-				this.Entries.ForEach(e => e.RTF		= EncryptDecrypt.Decrypt(e.RTF, Program.PIN));
-				this.Entries.ForEach(e => e.NotebookName = EncryptDecrypt.Decrypt(e.NotebookName, Program.PIN));
-			}
+			//if(Program.PIN.Length > 0)
+			//{
+			//	this.Entries.ForEach(e => e.Title	= EncryptDecrypt.Decrypt(e.Title, Program.PIN));
+			//	this.Entries.ForEach(e => e.Text	= EncryptDecrypt.Decrypt(e.Text, Program.PIN));
+			//	this.Entries.ForEach(e => e.Labels	= EncryptDecrypt.Decrypt(e.Labels, Program.PIN));
+			//	this.Entries.ForEach(e => e.RTF		= EncryptDecrypt.Decrypt(e.RTF, Program.PIN));
+			//	this.Entries.ForEach(e => e.NotebookName = EncryptDecrypt.Decrypt(e.NotebookName, Program.PIN));
+			//}
 
 			//Backup();
 			if (IsNewNotebook) { await Utilities.PopulateAllNotebookNames(); }

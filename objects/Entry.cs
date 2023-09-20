@@ -106,11 +106,11 @@ namespace MyNotebooks
 			}
 		}
 
-		public async Task	Create() { GetOperationResult(DbAccess.CRUDNotebookEntry(this), true); }
-		public async Task	Update() { GetOperationResult(DbAccess.CRUDNotebookEntry(this, OperationType.Update)); }
-		public async Task	Delete() { GetOperationResult(DbAccess.CRUDNotebookEntry(this, OperationType.Delete)); }
+		public SQLResult Create() { return GetOperationResult(DbAccess.CRUDNotebookEntry(this), true); }
+		public SQLResult Update() { return GetOperationResult(DbAccess.CRUDNotebookEntry(this, OperationType.Update)); }
+		public SQLResult Delete() { return GetOperationResult(DbAccess.CRUDNotebookEntry(this, OperationType.Delete)); }
 
-		private void		GetOperationResult(SQLResult result, bool isCreate = false)
+		private SQLResult GetOperationResult(SQLResult result, bool isCreate = false)
 		{
 			if (isCreate)
 			{
@@ -124,6 +124,7 @@ namespace MyNotebooks
 					{ frm.ShowDialog(); }
 				}
 			}
+			return result;
 		}
 
 		public string[]		GetSynopsis(bool includeNotebookName = false, int maxWidth = -1)

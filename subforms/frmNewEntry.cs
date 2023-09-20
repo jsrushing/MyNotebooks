@@ -43,8 +43,6 @@ namespace MyNotebooks.subforms
 		private void frmNewEntry_Load(object sender, EventArgs e)
 		{
 			OriginalTitle = this.Text;
-			//ddlFonts.DataSource = Program.lstFonts;
-			//ddlFonts.DisplayMember = "text";
 			Sort = LabelsManager.LabelsSortType.None;
 			SortLabels();
 			lblCreatedOn.Visible = false;
@@ -115,18 +113,19 @@ namespace MyNotebooks.subforms
 
 		private void lblManageLabels_Click(object sender, EventArgs e)
 		{
-			if(this.EntryToEdit == null)
+			if (this.EntryToEdit == null)
 			{
-				using(frmMessage frm = new(frmMessage.OperationType.YesNoQuestion, "You must save the entry before adding labels. Save now?", "Entry Must Be Saved", this))
+				using (frmMessage frm = new(frmMessage.OperationType.YesNoQuestion, "You must save the entry before adding labels. Save now?", "Entry Must Be Saved", this))
 				{
 					frm.ShowDialog();
 
-					if(frm.Result == frmMessage.ReturnResult.Yes) 
+					if (frm.Result == frmMessage.ReturnResult.Yes)
 					{
 						Entry newEntry =
 							new()
 							{
-								CreatedBy = Program.User.Id, NotebookName = this.CurrentNotebook.Name,
+								CreatedBy = Program.User.Id,
+								NotebookName = this.CurrentNotebook.Name,
 								Title = txtNewEntryTitle.Text,
 								Text = rtbNewEntry.Text,
 								RTF = rtbNewEntry.Rtf,
@@ -141,7 +140,7 @@ namespace MyNotebooks.subforms
 			}
 
 			if (this.EntryToEdit != null)
-			{ 
+			{
 				using (frmLabelsManager frm = new(this, false, this.EntryToEdit))
 				{
 					frm.ShowDialog();

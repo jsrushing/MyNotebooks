@@ -160,7 +160,7 @@ namespace MyNotebooks.objects
 				Program.NotebooksNamesAndIds.Clear();
 
 				foreach (var v2 in Program.AllNotebooks) 
-				{ Program.NotebooksNamesAndIds.Add(v2.Name, v2.Id); }
+				{ try { Program.NotebooksNamesAndIds.Add(v2.Name, v2.Id); } catch { } }
 			}
 		} 
 
