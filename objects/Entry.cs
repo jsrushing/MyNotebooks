@@ -1,6 +1,6 @@
-﻿/* Journal EntryToEdit object
+﻿/* Journal Entry object
  * 8/1//21
- * Refactored to LocalNotebook EntryToEdit object
+ * Refactored to LocalNotebook Entry object
  * 06/10/23
  */
 using System;

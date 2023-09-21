@@ -16,7 +16,7 @@ namespace MyNotebooks.subforms
 {
 	public partial class frmNewEntry : Form
 	{
-		public Entry EntryToEdit { get; set; }
+		public Entry Entry { get; set; }
 		public int ParentNotebookId { get; set; }
 		public bool Saved { get; private set; }
 		private readonly Notebook CurrentNotebook = null;
@@ -29,15 +29,15 @@ namespace MyNotebooks.subforms
 		private readonly string LabelLabelsSelected = "({0} selected)";
 		private readonly bool PreserveOriginalText;
 
-		public frmNewEntry(Form parent, Notebook notebook, int parentNotebookId = 0, Entry entryToEdit = null, bool disallowOriginalTextEdit = false)
+		public frmNewEntry(Form parent, Notebook notebook, int parentNotebookId = 0, Entry entry = null, bool disallowOriginalTextEdit = false)
 		{
 			InitializeComponent();
 			Utilities.SetStartPosition(this, parent);
 			CurrentNotebook = notebook;
 			ParentNotebookId = parentNotebookId;
-			EntryToEdit = entryToEdit;
+			Entry = entry;
 			PreserveOriginalText = disallowOriginalTextEdit;
-			IsEdit = EntryToEdit != null;
+			IsEdit = Entry != null;
 		}
 
 		private void frmNewEntry_Load(object sender, EventArgs e)
@@ -46,8 +46,8 @@ namespace MyNotebooks.subforms
 			//Sort = LabelsManager.LabelsSortType.None;
 			//SortLabels();
 
-			if (this.EntryToEdit != null & CurrentNotebook != null)
-			{ this.Text = "editing '" + EntryToEdit.Title + "' in '" + CurrentNotebook.Name + "'"; }
+			if (this.Entry != null & CurrentNotebook != null)
+			{ this.Text = "editing '" + Entry.Title + "' in '" + CurrentNotebook.Name + "'"; }
 			else
 			{ this.Text = this.IsDirty ? OriginalTitle + "*" : OriginalTitle; }
 
@@ -55,14 +55,14 @@ namespace MyNotebooks.subforms
 
 			if (IsEdit)
 			{
-				txtNewEntryTitle.Text = EntryToEdit.Title;
-				lblCreatedOn.Text = this.EntryToEdit.CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]);
-				lblEditedOn.Text = this.EntryToEdit.EditedOn < new DateTime(2000, 1, 1) ? "" : this.EntryToEdit.EditedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]);
+				txtNewEntryTitle.Text = Entry.Title;
+				lblCreatedOn.Text = this.Entry.CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]);
+				lblEditedOn.Text = this.Entry.EditedOn < new DateTime(2000, 1, 1) ? "" : this.Entry.EditedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]);
 
 				if (PreserveOriginalText)
 				{
 					OriginalText_Full = String.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Editing"],
-						this.EntryToEdit.CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), this.EntryToEdit.Title, this.EntryToEdit.Text);
+						this.Entry.CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]), this.Entry.Title, this.Entry.Text);
 
 					OriginalEntryLength = OriginalText_Full.Length - 1;
 					OriginalText_Full = OriginalText_Full.Substring(OriginalText_Full.Length - OriginalEntryLength + 1);
@@ -71,7 +71,7 @@ namespace MyNotebooks.subforms
 				}
 				else
 				{
-					rtbNewEntry.Text = EntryToEdit.Text;
+					rtbNewEntry.Text = Entry.Text;
 				}
 
 				rtbNewEntry.Focus();
@@ -108,7 +108,7 @@ namespace MyNotebooks.subforms
 
 		private void lblManageLabels_Click(object sender, EventArgs e)
 		{
-			if (this.EntryToEdit == null)
+			if (this.Entry == null)
 			{
 				using (frmMessage frm = new(frmMessage.OperationType.YesNoQuestion, "You must save the entry before adding labels. Save now?", "Entry Must Be Saved", this))
 				{
@@ -128,21 +128,21 @@ namespace MyNotebooks.subforms
 							};
 
 						newEntry.Id = DbAccess.CRUDNotebookEntry(newEntry).intValue;
-						EntryToEdit = newEntry;
+						Entry = newEntry;
 						SetIsDirty(false);
 					}
 				}
 			}
 
-			if (this.EntryToEdit != null)
+			if (this.Entry != null)
 			{
-				using (frmLabelsManager frm = new(this, false, this.EntryToEdit))
+				using (frmLabelsManager frm = new(this, false, this.Entry))
 				{
 					frm.ShowDialog();
 
 					if (frm.ActionTaken)
 					{
-						LabelsManager.PopulateLabelsList(clbLabels, null, LabelsManager.LabelsSortType.None, this.EntryToEdit);
+						LabelsManager.PopulateLabelsList(clbLabels, null, LabelsManager.LabelsSortType.None, this.Entry);
 						SetIsDirty();
 					}
 				}
@@ -172,12 +172,12 @@ namespace MyNotebooks.subforms
 			{
 				using frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Do you want to save your changes?", "", this);
 				frm.ShowDialog(this);
-				if (frm.Result == frmMessage.ReturnResult.No) { EntryToEdit = null; }
+				if (frm.Result == frmMessage.ReturnResult.No) { Entry = null; }
 				else if (frm.Result == frmMessage.ReturnResult.Yes) { await SaveEntry(); }
 			}
 			else
 			{
-				this.EntryToEdit = null;
+				this.Entry = null;
 			}
 
 			this.Hide();
@@ -236,11 +236,11 @@ namespace MyNotebooks.subforms
 				OperationType opType = OperationType.Create;
 				Entry newEntry = new();
 
-				if (this.EntryToEdit != null)
+				if (this.Entry != null)
 				{
-					this.EntryToEdit.Text = rtbNewEntry.Text.Trim();
-					this.EntryToEdit.Title = txtNewEntryTitle.Text.Trim();
-					this.EntryToEdit.Labels = LabelsManager.CheckedLabels_Get(clbLabels);
+					this.Entry.Text = rtbNewEntry.Text.Trim();
+					this.Entry.Title = txtNewEntryTitle.Text.Trim();
+					this.Entry.Labels = LabelsManager.CheckedLabels_Get(clbLabels);
 
 					// remove any un-checked labelsForSearch (with this entryId) from the Labels table
 					var labelsToRemove = string.Empty;
@@ -250,11 +250,11 @@ namespace MyNotebooks.subforms
 						if (!clbLabels.CheckedItems.Contains(clbLabels.Items[i])) { labelsToRemove += clbLabels.Items[i].ToString() + ","; }
 					}
 
-					if (labelsToRemove.Length > 0) { this.EntryToEdit.LabelsToRemove = labelsToRemove; opType = OperationType.Update; }
+					if (labelsToRemove.Length > 0) { this.Entry.LabelsToRemove = labelsToRemove; opType = OperationType.Update; }
 					else
 					{
-						this.EntryToEdit.RTF = rtbNewEntry.Rtf;
-						this.EntryToEdit.EditedOn = DateTime.Now;
+						this.Entry.RTF = rtbNewEntry.Rtf;
+						this.Entry.EditedOn = DateTime.Now;
 						this.ParentNotebookId = CurrentNotebook != null ? CurrentNotebook.Id : 0;
 						opType = OperationType.Update;
 					}
@@ -265,18 +265,18 @@ namespace MyNotebooks.subforms
 						LabelsManager.CheckedLabels_Get(clbLabels), CurrentNotebook.Id, CurrentNotebook.Name);
 
 					newEntry.CreatedBy = Program.User.Id;
-					this.EntryToEdit = newEntry;
+					this.Entry = newEntry;
 				}
 
-				var sqlResult = DbAccess.CRUDNotebookEntry(this.EntryToEdit, opType);
-				this.EntryToEdit.Id = sqlResult.intValue;
+				var sqlResult = DbAccess.CRUDNotebookEntry(this.Entry, opType);
+				this.Entry.Id = sqlResult.intValue;
 				var msg = string.Empty;
 
 				if (sqlResult.intValue < -1)
 				{ msg = "A SQL Error occurred (error number " + (sqlResult.intValue * -1).ToString() + ")               "; }
-				else if (opType == OperationType.Update && (sqlResult.intValue != -1 & sqlResult.intValue != this.EntryToEdit.Id))
+				else if (opType == OperationType.Update && (sqlResult.intValue != -1 & sqlResult.intValue != this.Entry.Id))
 				{ msg = "An error occurred. The entry was not updated. " + sqlResult.strValue; }
-				//else { this.EntryToEdit.Id = sqlResult; }
+				//else { this.Entry.Id = sqlResult; }
 
 				if (msg.Length > 0)
 				{ using (frmMessage frm = new(frmMessage.OperationType.Message, msg, "Error!", this)) { frm.ShowDialog(); } }
@@ -309,17 +309,17 @@ namespace MyNotebooks.subforms
 			switch (Sort)
 			{
 				case LabelsManager.LabelsSortType.None:
-					LabelsManager.PopulateLabelsList(clbLabels, null, LabelsManager.LabelsSortType.None, this.EntryToEdit);
+					LabelsManager.PopulateLabelsList(clbLabels, null, LabelsManager.LabelsSortType.None, this.Entry);
 					lblSortType.Text = "sort a-z";
 					Sort = LabelsManager.LabelsSortType.Ascending;
 					break;
 				case LabelsManager.LabelsSortType.Ascending:
-					LabelsManager.PopulateLabelsList(clbLabels, null, LabelsManager.LabelsSortType.Descending, this.EntryToEdit);
+					LabelsManager.PopulateLabelsList(clbLabels, null, LabelsManager.LabelsSortType.Descending, this.Entry);
 					lblSortType.Text = "sort z-a";
 					Sort = LabelsManager.LabelsSortType.Descending;
 					break;
 				case LabelsManager.LabelsSortType.Descending:
-					LabelsManager.PopulateLabelsList(clbLabels, null, LabelsManager.LabelsSortType.Ascending, this.EntryToEdit);
+					LabelsManager.PopulateLabelsList(clbLabels, null, LabelsManager.LabelsSortType.Ascending, this.Entry);
 					lblSortType.Text = "unsorted";
 					Sort = LabelsManager.LabelsSortType.None;
 					break;

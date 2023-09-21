@@ -315,7 +315,7 @@ namespace MyNotebooks.subforms
 				////if (selectedIndices.Count() > 1) { selectedIndices = selectedIndices.Except(ThreeSelections).ToList(); }
 
 
-				//EntryToEdit e2 = FoundEntries[lb.SelectedIndex/4];
+				//Entry e2 = FoundEntries[lb.SelectedIndex/4];
 
 				////select the entire short entry
 				////lb.SelectedIndices.Clear();
@@ -325,7 +325,7 @@ namespace MyNotebooks.subforms
 
 
 				//Notebook nb = GetEntryNotebook();
-				//EntryToEdit currentEntry = EntryToEdit.Select(rtb, lb, nb, false, null, false);
+				//Entry currentEntry = Entry.Select(rtb, lb, nb, false, null, false);
 				//GetCurrentSelections();
 
 				//if (currentEntry != null)
@@ -386,7 +386,7 @@ namespace MyNotebooks.subforms
 			this.Cursor = Cursors.WaitCursor;
 			Entry fe = lstFoundEntries.SelectedIndex == 0 ? FoundEntries[0] : FoundEntries[lstFoundEntries.SelectedIndex / 4];
 
-			using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Delete '" + fe.Title + "' from '" + fe.NotebookName + "'?", "Delete EntryToEdit", this))
+			using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Delete '" + fe.Title + "' from '" + fe.NotebookName + "'?", "Delete Entry", this))
 			{
 				frm.ShowDialog();
 

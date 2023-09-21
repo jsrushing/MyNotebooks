@@ -97,7 +97,7 @@ namespace MyNotebooks.objects
 					if (ex.GetType() != typeof(InvalidCastException))
 					{
 						using(frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The error '" + ex.Message + "' occurred while processing the " +
-							"property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
+							"User property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
 					}
 				}
 			}

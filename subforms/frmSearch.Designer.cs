@@ -81,6 +81,9 @@ namespace MyNotebooks.subforms
 			lblSelectionType = new Label();
 			mnuEditEntry = new ToolStripMenuItem();
 			bgWorker = new BackgroundWorker();
+			panel1 = new Panel();
+			radioButton1 = new RadioButton();
+			radioButton2 = new RadioButton();
 			grpFindEntry.SuspendLayout();
 			panel5.SuspendLayout();
 			panel4.SuspendLayout();
@@ -88,6 +91,7 @@ namespace MyNotebooks.subforms
 			panel2.SuspendLayout();
 			pnlLabels_AndOr.SuspendLayout();
 			mnuEntryEditTop.SuspendLayout();
+			panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// grpFindEntry
@@ -169,9 +173,9 @@ namespace MyNotebooks.subforms
 			// 
 			txtSearchText.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
 			txtSearchText.BorderStyle = BorderStyle.FixedSingle;
-			txtSearchText.Location = new System.Drawing.Point(53, 64);
+			txtSearchText.Location = new System.Drawing.Point(49, 64);
 			txtSearchText.Name = "txtSearchText";
-			txtSearchText.Size = new System.Drawing.Size(512, 23);
+			txtSearchText.Size = new System.Drawing.Size(516, 23);
 			txtSearchText.TabIndex = 22;
 			// 
 			// label8
@@ -190,11 +194,11 @@ namespace MyNotebooks.subforms
 			label9.AutoSize = true;
 			label9.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			label9.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			label9.Location = new System.Drawing.Point(5, 66);
+			label9.Location = new System.Drawing.Point(8, 66);
 			label9.Name = "label9";
-			label9.Size = new System.Drawing.Size(84, 17);
+			label9.Size = new System.Drawing.Size(38, 17);
 			label9.TabIndex = 3;
-			label9.Text = "EntryToEdit:";
+			label9.Text = "Text:";
 			// 
 			// txtSearchTitle
 			// 
@@ -257,6 +261,7 @@ namespace MyNotebooks.subforms
 			// 
 			// panel3
 			// 
+			panel3.Controls.Add(panel1);
 			panel3.Controls.Add(radDate_Or);
 			panel3.Controls.Add(radDate_And);
 			panel3.Location = new System.Drawing.Point(191, 128);
@@ -579,11 +584,42 @@ namespace MyNotebooks.subforms
 			// 
 			mnuEditEntry.Name = "mnuEditEntry";
 			mnuEditEntry.Size = new System.Drawing.Size(32, 19);
-			mnuEditEntry.Text = "Edit EntryToEdit";
+			mnuEditEntry.Text = "Edit Entry";
 			// 
 			// bgWorker
 			// 
 			bgWorker.WorkerReportsProgress = true;
+			// 
+			// panel1
+			// 
+			panel1.Controls.Add(radioButton1);
+			panel1.Controls.Add(radioButton2);
+			panel1.Location = new System.Drawing.Point(107, 1);
+			panel1.Name = "panel1";
+			panel1.Size = new System.Drawing.Size(90, 25);
+			panel1.TabIndex = 59;
+			// 
+			// radioButton1
+			// 
+			radioButton1.AutoSize = true;
+			radioButton1.Checked = true;
+			radioButton1.Location = new System.Drawing.Point(2, 4);
+			radioButton1.Name = "radioButton1";
+			radioButton1.Size = new System.Drawing.Size(36, 19);
+			radioButton1.TabIndex = 1;
+			radioButton1.TabStop = true;
+			radioButton1.Text = "or";
+			radioButton1.UseVisualStyleBackColor = true;
+			// 
+			// radioButton2
+			// 
+			radioButton2.AutoSize = true;
+			radioButton2.Location = new System.Drawing.Point(39, 4);
+			radioButton2.Name = "radioButton2";
+			radioButton2.Size = new System.Drawing.Size(45, 19);
+			radioButton2.TabIndex = 0;
+			radioButton2.Text = "and";
+			radioButton2.UseVisualStyleBackColor = true;
 			// 
 			// frmSearch
 			// 
@@ -610,6 +646,8 @@ namespace MyNotebooks.subforms
 			pnlLabels_AndOr.ResumeLayout(false);
 			pnlLabels_AndOr.PerformLayout();
 			mnuEntryEditTop.ResumeLayout(false);
+			panel1.ResumeLayout(false);
+			panel1.PerformLayout();
 			this.ResumeLayout(false);
 		}
 
@@ -661,5 +699,8 @@ namespace MyNotebooks.subforms
 		private RadioButton radTitleText_Or;
 		private RadioButton radTitleText_And;
 		private Panel panel4;
+		private Panel panel1;
+		private RadioButton radioButton1;
+		private RadioButton radioButton2;
 	}
 }

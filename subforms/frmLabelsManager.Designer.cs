@@ -72,6 +72,7 @@ namespace MyNotebooks.subforms
 			toolStripMenuItem3 = new ToolStripMenuItem();
 			lstEntryObjects = new ListBox();
 			panel1 = new Panel();
+			bgWorker = new System.ComponentModel.BackgroundWorker();
 			pnlMain.SuspendLayout();
 			pnlLabelDetails.SuspendLayout();
 			mnuContextLabels.SuspendLayout();
@@ -212,12 +213,12 @@ namespace MyNotebooks.subforms
 			// 
 			mnuContextEntries.Items.AddRange(new ToolStripItem[] { mnuContext_GridEntryDetails });
 			mnuContextEntries.Name = "mnuFoundEntries";
-			mnuContextEntries.Size = new System.Drawing.Size(181, 48);
+			mnuContextEntries.Size = new System.Drawing.Size(125, 26);
 			// 
 			// mnuContext_GridEntryDetails
 			// 
 			mnuContext_GridEntryDetails.Name = "mnuContext_GridEntryDetails";
-			mnuContext_GridEntryDetails.Size = new System.Drawing.Size(180, 22);
+			mnuContext_GridEntryDetails.Size = new System.Drawing.Size(124, 22);
 			mnuContext_GridEntryDetails.Text = "Edit Entry";
 			mnuContext_GridEntryDetails.Click += this.mnuContext_GridEntryDetails_Click;
 			// 
@@ -386,6 +387,10 @@ namespace MyNotebooks.subforms
 			panel1.TabIndex = 11;
 			panel1.Visible = false;
 			// 
+			// bgWorker
+			// 
+			bgWorker.WorkerReportsProgress = true;
+			// 
 			// frmLabelsManager
 			// 
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -459,5 +464,6 @@ namespace MyNotebooks.subforms
 		private ToolStripMenuItem toolStripMenuItem1;
 		private ToolStripMenuItem toolStripMenuItem2;
 		private ToolStripMenuItem toolStripMenuItem3;
+		private System.ComponentModel.BackgroundWorker bgWorker;
 	}
 }

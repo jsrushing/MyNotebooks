@@ -476,7 +476,7 @@ namespace MyNotebooks.subforms
 			menuStrip1.Name = "menuStrip1";
 			menuStrip1.Size = new System.Drawing.Size(590, 24);
 			menuStrip1.TabIndex = 6;
-			menuStrip1.Text = "Create EntryToEdit";
+			menuStrip1.Text = "Create Entry";
 			// 
 			// mnuSaveEntry
 			// 

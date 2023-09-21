@@ -26,6 +26,7 @@ namespace MyNotebooks.objects
 		public bool		IsActive { get; set; }
 
 		public MNLabel() { }	
+
 		public MNLabel(DataTable dt, int rowIndex = 0)
 		{
 			var value = "";
@@ -70,7 +71,7 @@ namespace MyNotebooks.objects
 							if (sPropertyName.Name != "EditedOn" && sPropertyName.Name != "Id")
 							{
 								using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The error '" + ex.Message + "' occurred while processing the " +
-									"property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
+									"Label property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
 							}
 						}
 					}

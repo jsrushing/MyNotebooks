@@ -121,7 +121,7 @@ namespace MyNotebooks.subforms
 			lblSelectionType.Name = "lblSelectionType";
 			lblSelectionType.Size = new System.Drawing.Size(135, 17);
 			lblSelectionType.TabIndex = 9;
-			lblSelectionType.Text = "Selected EntryToEdit";
+			lblSelectionType.Text = "Selected Entry";
 			lblSelectionType.Visible = false;
 			// 
 			// ddlNotebooks
@@ -169,7 +169,7 @@ namespace MyNotebooks.subforms
 			mnuEntryTop.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuEntryCreate, mnuEntryEdit, mnuEntryDelete });
 			mnuEntryTop.Name = "mnuEntryTop";
 			mnuEntryTop.Size = new System.Drawing.Size(129, 70);
-			mnuEntryTop.Text = "&EntryToEdit";
+			mnuEntryTop.Text = "&Entry";
 			// 
 			// mnuEntryCreate
 			// 

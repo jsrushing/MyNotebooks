@@ -4,6 +4,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -26,12 +27,60 @@ namespace MyNotebooks.subforms
 		public Entry CurrentEntry { get; set; }
 		private bool FirstDetailsLoad = true;
 		private bool ProgramaticallyChecking = false;
-		//private TreeNode LastClickedLabelNode = null;
-		private TreeNode currentHoverNode = null;
 		private int LastClickedEntryIndex = -1;
-		private const string ViewEntryMenuText = "View EntryToEdit";
+		private const string ViewEntryMenuText = "View Entry";
 		private const string LoadNotebookMenuText = "Load Notebook";
-		private bool RefreshEntry = false;
+		private BackgroundWorker Worker;
+		private List<MNLabel> LblsUnderEntry = new();
+		private List<MNLabel> LblsUnderNotebook = new();
+		private List<MNLabel> LblsUnderGroup = new();
+		private List<MNLabel> LblsUnderDepartment = new();
+		private List<MNLabel> LblsUnderAccount = new();
+		private List<MNLabel> LblsUnderCompany = new();
+
+		private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
+		{
+			LblsUnderEntry		= DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 1);
+			LblsUnderNotebook	= DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 2);
+			LblsUnderGroup		= DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 3);
+			LblsUnderDepartment = DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 4);
+			LblsUnderAccount	= DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 5);
+			LblsUnderCompany	= DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 6);
+		}
+
+		private void bgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+		{
+			this.Text = e.ProgressPercentage.ToString() + "%";
+		}
+
+		private void bgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		{
+			TreeNode tn = new TreeNode();
+
+			foreach (MNLabel label in LblsUnderNotebook)	PopulateTreeWithLabels(0, label);
+			foreach (MNLabel label in LblsUnderGroup)		PopulateTreeWithLabels(1, label);	//{ treeAvailableLabels.Nodes[1].Nodes.Add(label.Id.ToString(), label.LabelText); }
+			foreach (MNLabel label in LblsUnderDepartment)	PopulateTreeWithLabels(2, label);	//{ treeAvailableLabels.Nodes[2].Nodes.Add(label.Id.ToString(), label.LabelText); }
+			foreach (MNLabel label in LblsUnderAccount)		PopulateTreeWithLabels(3, label);	//{ treeAvailableLabels.Nodes[3].Nodes.Add(label.Id.ToString(), label.LabelText); }
+			foreach (MNLabel label in LblsUnderCompany)		PopulateTreeWithLabels(4, label);	//{ treeAvailableLabels.Nodes[4].Nodes.Add(label.Id.ToString(), label.LabelText); }
+
+			foreach(TreeNode tn2 in treeAvailableLabels.Nodes)
+			{ if(tn2.Nodes.Count == 0) { tn2.Nodes.Add(""); } }
+		}
+
+		private void PopulateTreeWithLabels(int nodeIndex, MNLabel lbl)
+		{
+			TreeNode tn = new();
+			bool exists = false;
+			tn.Text = lbl.LabelText;
+			tn.Tag = lbl.Id.ToString();
+
+			foreach(TreeNode childInTgt in treeAvailableLabels.Nodes[nodeIndex].Nodes)
+			{
+				if(childInTgt.Text ==  lbl.LabelText) { exists = true; break; }	
+			}
+
+			if (!exists) { treeAvailableLabels.Nodes[nodeIndex].Nodes.Add(tn); }
+		}
 
 		private List<Notebook> SelectedNotebooks { get; set; }
 
@@ -48,10 +97,7 @@ namespace MyNotebooks.subforms
 
 		private async void frmLabelsManager_Load(object sender, EventArgs e)
 		{
-			//if (DeletingOrphans)    // See testing.txt
-			//{ this.Visible = false; await ManageOrphans(); this.Close(); }
-			//else
-			//{
+
 			if (Program.DictCheckedNotebooks.Count == 0)
 			{
 				//var msg = "The labelsForSearch in the deleted notebook will be deleted from all selected notebooks." + Environment.NewLine + "Specify a PIN for any protected notebooks you select.";
@@ -65,8 +111,12 @@ namespace MyNotebooks.subforms
 			sort = LabelsManager.LabelsSortType.None;
 			lblSortType_Click(null, null);
 			ResetTree();
-			foreach (TreeNode tn in treeAvailableLabels.Nodes) { tn.Nodes.Add(""); }
-			//}
+			Worker = new BackgroundWorker();
+			Worker.DoWork += new DoWorkEventHandler(bgWorker_DoWork);
+			Worker.WorkerReportsProgress = true;
+			Worker.ProgressChanged += new ProgressChangedEventHandler(bgWorker_ProgressChanged);
+			Worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgWorker_RunWorkerCompleted);
+			Worker.RunWorkerAsync();
 		}
 
 		private void frmLabelsManager_Resize(object sender, EventArgs e) { ShowHideOccurrences(); }
@@ -105,39 +155,6 @@ namespace MyNotebooks.subforms
 
 			this.Cursor = Cursors.Default;
 		}
-
-		//private async void btnRemoveSelectedOrphans_Click(object sender, EventArgs e)
-		//{
-		//	if (lstOrphanedLabels.SelectedItems.Count > 0)
-		//	{
-		//		using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Are you sure you want to delete the lables? This action cannot be undone!", "", this))
-		//		{
-		//			frm.ShowDialog(this);
-
-		//			if (frm.Result == frmMessage.ReturnResult.Yes)
-		//			{ await RemoveOrphans(); }
-
-		//			if (lstOrphanedLabels.SelectedItems.Count > 0)
-		//			{
-		//				LabelsManager.PopulateLabelsList(null, lstLabels);
-		//				ShowHideOccurrences();
-		//			}
-
-		//			lstLabels.SelectedItems.Clear();
-		//			lstOccurrences.Items.Clear();
-		//			this.ShowPanel(pnlMain);
-		//		}
-		//	}
-		//}
-
-		//private void chkSelectAllOrphans_CheckedChanged(object sender, EventArgs e)
-		//{
-		//	if (chkSelectAllOrphans.Checked)
-		//	{
-		//		for (var i = 0; i < lstOrphanedLabels.Items.Count; i++) { lstOrphanedLabels.SelectedItems.Add(lstOrphanedLabels.Items[i]); }
-		//	}
-		//	else { lstOrphanedLabels.SelectedItems.Clear(); }
-		//}
 
 		public List<MNLabel> GetCheckedNodes()
 		{
@@ -202,16 +219,6 @@ namespace MyNotebooks.subforms
 			mnuContext_GridEntryDetails.Text = v2;
 		}
 
-		//private void KickLstLabels(int previousIndex = -1)
-		//{
-		//	if (lstLabels.SelectedItems.Count == 1 | previousIndex > -1)
-		//	{
-		//		var indx = previousIndex > -1 ? previousIndex : lstLabels.SelectedIndex;
-		//		lstLabels.SelectedIndex = -1;
-		//		lstLabels.SelectedIndex = indx;
-		//	}
-		//}
-
 		private void lblSortType_Click(object sender, EventArgs e)
 		{
 			//switch (sort)
@@ -237,59 +244,6 @@ namespace MyNotebooks.subforms
 		private void lstOccurrences_MouseUp(object sender, MouseEventArgs e)
 		{ PopulateGridViewEntryDetails(e.Y); }
 
-		//private async Task ManageOrphans()
-		//{
-		//	//List<string> lstOrphans = LabelsManager.FindOrphansInSelectedNotebooks();
-
-		//	var label = lstLabels.Text;
-		//	List<Notebook> nbList = Utilities.GetCheckedNotebooks();
-
-		//	List<Notebook> booksWithLabel = nbList.Where(c => c.HasLabel(label)).ToList();
-
-		//	foreach (Notebook nb in booksWithLabel) { await nb.DeleteLabelFromNotebook(label); }
-
-		//	//booksWithLabel.ForEach(b => b.DeleteLabelFromNotebook(label));	// How to await this call?
-
-		//	var sMsg = nbList.Count + " notebooks were scanned and the label '" + label + "' was found and deleted ";
-
-
-		//	if (DeletingOrphans)
-		//	{
-		//		chkSelectAllOrphans.Checked = true;
-		//		await RemoveOrphans();
-		//		sMsg += " in all which were scanned. ";
-		//	}
-		//	else
-		//	{
-		//		lstOrphanedLabels.Items.Clear();
-		//		lstOrphanedLabels.Items.Add(lstOrphanedLabels);
-		//		ShowPanel(pnlOrphanedLabels);
-		//	}
-
-		//	if (!pnlOrphanedLabels.Visible) { ShowMessage(sMsg); this.Close(); }
-
-
-		//	//if (lstOrphans.Count > 0)
-		//	//{
-		//	//	lstOrphanedLabels.Items.AddRange(lstOrphans.ToArray());
-
-		//	//	if (DeletingOrphans)
-		//	//	{
-		//	//	}
-		//	//	else { ShowPanel(pnlOrphanedLabels); }
-		//	//}
-		//	//else
-		//	//{
-		//	//	if(!DeletingOrphans)
-		//	//	{
-		//	//		using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message,
-		//	//			"No orphaned labelsForSearch were found.", Application.ProductName, this)) { frm.ShowDialog(); }
-		//	//	}
-		//	//}
-
-		//	//if (DeletingOrphans) { this.Close(); }
-		//}
-
 		private void mnuAddCheckedLabelsToEntry_Click(object sender, EventArgs e)
 		{
 			List<MNLabel> existingLabels = new();
@@ -304,14 +258,12 @@ namespace MyNotebooks.subforms
 				{ lbl.Create(); }
 
 				CurrentEntry.AllLabels.Add(lbl);
-				RefreshEntry = true;
 			}
 
 			foreach (MNLabel mNLabel in existingLabels.Where(e => !CurrentEntry.AllLabels.Contains(e)))
 			{
 				DbAccess.CRUDLabel(mNLabel, OperationType.Delete);
 				CurrentEntry.AllLabels.Remove(mNLabel);
-				RefreshEntry = true;
 			}
 
 			ActionTaken = true;
@@ -398,7 +350,7 @@ namespace MyNotebooks.subforms
 
 			switch (gridIndex.Index)
 			{
-				case 0:     // View EntryToEdit
+				case 0:     // View Entry
 					using (frmNewEntry frm = new(this, null, 0, DbAccess.GetEntry(v)))
 					{
 						frm.ShowDialog();
@@ -445,6 +397,9 @@ namespace MyNotebooks.subforms
 
 				if (frm.ResultText != null)
 				{
+					// insure label name doesn't exist for the Company above the current Entry
+
+
 					MNLabel lbl = new()
 					{
 						CreatedBy = Program.User.Id,
@@ -455,7 +410,6 @@ namespace MyNotebooks.subforms
 					if (!CurrentEntry.AllLabels.Any(l => l.LabelText == lbl.LabelText & l.ParentId == lbl.ParentId))
 					{
 						lbl.Create();
-						RefreshEntry = true;
 						ResetTree();
 						var l = CurrentEntry.AllLabels.FirstOrDefault(l => l.LabelText == l.LabelText);
 						if (l == null) CurrentEntry.AllLabels.Add(lbl);
@@ -506,7 +460,7 @@ namespace MyNotebooks.subforms
 
 			if (selectedItem != null && selectedItem.Name.StartsWith("  "))
 			{
-				gridViewEntryDetails.Rows[0].Cells[0].Value = "EntryToEdit: ";
+				gridViewEntryDetails.Rows[0].Cells[0].Value = "Entry: ";
 				gridViewEntryDetails.Rows[0].Cells[1].Value = selectedItem.Name.Substring(2, selectedItem.Name.Length - 2);
 				gridViewEntryDetails.Rows[0].Cells[1].Tag = selectedItem.Id;
 				List<KeyValuePair<int, string>> parents = DbAccess.GetEntryParentTree(selectedItem.Id);
@@ -617,15 +571,15 @@ namespace MyNotebooks.subforms
 		{
 			treeAvailableLabels.Nodes.Clear();
 			treeAvailableLabels.Nodes.Add("Notebook '" + Program.SelectedNotebookName + "'");
-			treeAvailableLabels.Nodes[0].Nodes.Add("");
+			//treeAvailableLabels.Nodes[0].Nodes.Add("");
 			treeAvailableLabels.Nodes.Add("Group '" + Program.SelectedGroupName + "'");
-			treeAvailableLabels.Nodes[1].Nodes.Add("");
+			//treeAvailableLabels.Nodes[1].Nodes.Add("");
 			treeAvailableLabels.Nodes.Add("Department '" + Program.SelectedDepartmentName + "'");
-			treeAvailableLabels.Nodes[2].Nodes.Add("");
+			//treeAvailableLabels.Nodes[2].Nodes.Add("");
 			treeAvailableLabels.Nodes.Add("Account '" + Program.SelectedAccountName + "'");
-			treeAvailableLabels.Nodes[3].Nodes.Add("");
+			//treeAvailableLabels.Nodes[3].Nodes.Add("");
 			treeAvailableLabels.Nodes.Add("Company '" + Program.SelectedCompanyName + "'");
-			treeAvailableLabels.Nodes[4].Nodes.Add("");
+			//treeAvailableLabels.Nodes[4].Nodes.Add("");
 		}
 
 		private void ShowMessage(string sMsg)
@@ -693,30 +647,8 @@ namespace MyNotebooks.subforms
 
 		private void treeAvailableLabels_AfterExpand(object sender, TreeViewEventArgs e)
 		{
-			// Get labelsForSearch under one of the root nodes.
-			TreeNode tn = e.Node;
-			TreeNode newNode = new();
-			//List<TreeNode> addedNodes = new();
-			this.Cursor = Cursors.WaitCursor;
-
-			if (tn.Level == 0 && tn.Nodes[0].Text.Length == 0)
-			{
-				tn.Nodes.Clear();
-				var orgLevel = Convert.ToInt32(Enum.Parse(typeof(frmMain.OrgLevelTypes), tn.Text.AsSpan(0, tn.Text.IndexOf(" "))));
-
-				foreach (MNLabel label in DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, orgLevel))
-				{
-					TreeNode existingNode = tn.Nodes.OfType<TreeNode>().FirstOrDefault(n => n.Text == label.LabelText);
-
-					if (existingNode == null)
-					{
-						newNode = new() { Text = label.LabelText, Tag = label.Id, Checked = CurrentEntry.AllLabels.Any(n => n.LabelText == label.LabelText) };
-						tn.Nodes.Add(newNode);
-						mnuLabelsOperations.Enabled = !mnuLabelsOperations.Enabled && newNode.Checked;
-					}
-				}
-			}
-			this.Cursor = Cursors.Default;
+			while(Worker.IsBusy) { Thread.Sleep(300); }
+			if(e.Node.Nodes.Count == 1 && e.Node.Nodes[0].Text == "") { e.Node.Nodes.Clear(); }
 		}
 
 		private void treeAvailableLabels_AfterCheck(object sender, TreeViewEventArgs e)

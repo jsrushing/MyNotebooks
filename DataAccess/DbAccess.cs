@@ -294,11 +294,11 @@ namespace MyNotebooks.DataAccess
 			return lstRtrn;
 		}
 
-		//public static List<EntryToEdit>	GetEntriesCreatedByUser()
+		//public static List<Entry>	GetEntriesCreatedByUser()
 		//{
 		//	try
 		//	{
-		//		List<EntryToEdit> entries = new();
+		//		List<Entry> entries = new();
 		//		DataTable dt = new();
 
 		//		using (SqlConnection conn = new(connString))
@@ -576,7 +576,6 @@ namespace MyNotebooks.DataAccess
 					sda.Fill(ds);
 					DataTable tblEntries = ds.Tables[0];
 					DataTable tblLabels = ds.Tables[1];
-					//List<MNLabel> labels = new();
 
 					for (int i = 0; i < tblEntries.Rows.Count; i++)
 					{

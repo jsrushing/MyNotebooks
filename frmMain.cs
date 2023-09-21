@@ -238,9 +238,9 @@ namespace MyNotebooks.subforms
 					using (frmNewEntry frm = new(this, CurrentNotebook))
 					{
 						frm.ShowDialog(this);
-						if (frm.EntryToEdit != null)
+						if (frm.Entry != null)
 						{
-							CurrentNotebook.Entries.Add(frm.EntryToEdit);
+							CurrentNotebook.Entries.Add(frm.Entry);
 							await Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries);
 						}
 					}
@@ -525,7 +525,7 @@ namespace MyNotebooks.subforms
 
 				if (frm.Saved)
 				{
-					CurrentEntry = frm.EntryToEdit;
+					CurrentEntry = frm.Entry;
 					//await CurrentNotebook.Create();
 					CurrentNotebook.Entries.Add(CurrentEntry);
 					await Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries);
@@ -568,9 +568,9 @@ namespace MyNotebooks.subforms
 				frm.Text = "Edit '" + CurrentEntry.Title + "' in '" + CurrentNotebook.Name + "'";
 				frm.ShowDialog(this);
 
-				if (frm.Saved && frm.EntryToEdit != null)
+				if (frm.Saved && frm.Entry != null)
 				{
-					CurrentEntry = frm.EntryToEdit;
+					CurrentEntry = frm.Entry;
 					if (CurrentEntry.LabelsToRemove == null) await CurrentNotebook.Save();
 					await ProcessDateFiltersAndPopulateEntries();
 					var v = lstEntries.Items.OfType<string>().FirstOrDefault(e => e.StartsWith(CurrentEntry.Title));
