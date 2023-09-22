@@ -4,20 +4,15 @@
  * 06/10/23
  */
 using System;
-using System.Configuration;
-using System.Linq;
-using Encryption;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
-using System.Text;
-using MyNotebooks.subforms;
-using System.Windows.Forms;
-using System.Runtime.CompilerServices;
-using MyNotebooks.objects;
+using System.Linq;
 using System.Reflection;
+using System.Windows.Forms;
 using MyNotebooks.DataAccess;
-using Org.BouncyCastle.Bcpg.Sig;
-using System.Threading.Tasks;
+using MyNotebooks.objects;
+using MyNotebooks.subforms;
 
 namespace MyNotebooks
 {
@@ -99,7 +94,7 @@ namespace MyNotebooks
 						if(sPropertyName.Name != "EditedOn" && sPropertyName.Name != "Id")
 						{
 							using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The error '" + ex.Message + "' occurred while processing the " +
-								"property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
+								"Entry property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
 						}
 					}
 				}

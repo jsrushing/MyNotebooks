@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using MyNotebooks.subforms;
-using MyNotebooks.objects;
 
 namespace MyNotebooks.objects
 {
@@ -46,7 +41,7 @@ namespace MyNotebooks.objects
 						if (ex.GetType() != typeof(InvalidCastException))
 						{
 							using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The error '" + ex.Message +
-							"' occurred while processing the property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
+							"' occurred while processing the Department property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
 						}
 					}
 				}

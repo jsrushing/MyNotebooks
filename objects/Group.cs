@@ -2,7 +2,6 @@
 using System.Data;
 using System.Reflection;
 using MyNotebooks.subforms;
-using MyNotebooks.objects;
 
 namespace MyNotebooks.objects
 {
@@ -42,7 +41,7 @@ namespace MyNotebooks.objects
 						if (ex.GetType() != typeof(InvalidCastException))
 						{
 							using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The error '" + ex.Message +
-							"' occurred while processing the property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
+							"' occurred while processing the Group property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
 						}
 					}
 				}
