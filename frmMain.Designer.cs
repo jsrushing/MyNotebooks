@@ -78,6 +78,7 @@ namespace MyNotebooks.subforms
 			cbxDatesTo = new System.Windows.Forms.ComboBox();
 			pnlPin = new System.Windows.Forms.Panel();
 			btnResetLabelFilter = new System.Windows.Forms.Button();
+			bgWorker = new System.ComponentModel.BackgroundWorker();
 			mnuEntryTop.SuspendLayout();
 			menuStrip1.SuspendLayout();
 			pnlDateFilters.SuspendLayout();
@@ -119,7 +120,7 @@ namespace MyNotebooks.subforms
 			lblSelectionType.ForeColor = System.Drawing.SystemColors.MenuHighlight;
 			lblSelectionType.Location = new System.Drawing.Point(12, 252);
 			lblSelectionType.Name = "lblSelectionType";
-			lblSelectionType.Size = new System.Drawing.Size(135, 17);
+			lblSelectionType.Size = new System.Drawing.Size(96, 17);
 			lblSelectionType.TabIndex = 9;
 			lblSelectionType.Text = "Selected Entry";
 			lblSelectionType.Visible = false;
@@ -257,7 +258,7 @@ namespace MyNotebooks.subforms
 			// 
 			mnuNotebooks_Select.Enabled = false;
 			mnuNotebooks_Select.Name = "mnuNotebooks_Select";
-			mnuNotebooks_Select.Size = new System.Drawing.Size(180, 22);
+			mnuNotebooks_Select.Size = new System.Drawing.Size(161, 22);
 			mnuNotebooks_Select.Text = "Se&lect";
 			mnuNotebooks_Select.Visible = false;
 			mnuNotebooks_Select.Click += this.mnuNotebooks_Select_Click;
@@ -265,7 +266,7 @@ namespace MyNotebooks.subforms
 			// mnuNotebook_Create
 			// 
 			mnuNotebook_Create.Name = "mnuNotebook_Create";
-			mnuNotebook_Create.Size = new System.Drawing.Size(180, 22);
+			mnuNotebook_Create.Size = new System.Drawing.Size(161, 22);
 			mnuNotebook_Create.Text = "&Create";
 			mnuNotebook_Create.Click += this.mnuNotebook_Create_Click;
 			// 
@@ -273,14 +274,14 @@ namespace MyNotebooks.subforms
 			// 
 			mnuNotebook_Delete.Enabled = false;
 			mnuNotebook_Delete.Name = "mnuNotebook_Delete";
-			mnuNotebook_Delete.Size = new System.Drawing.Size(180, 22);
+			mnuNotebook_Delete.Size = new System.Drawing.Size(161, 22);
 			mnuNotebook_Delete.Text = "Delete";
 			mnuNotebook_Delete.Click += this.mnuNotebook_Delete_Click;
 			// 
 			// mnuNotebook_Search
 			// 
 			mnuNotebook_Search.Name = "mnuNotebook_Search";
-			mnuNotebook_Search.Size = new System.Drawing.Size(180, 22);
+			mnuNotebook_Search.Size = new System.Drawing.Size(161, 22);
 			mnuNotebook_Search.Text = "&Search";
 			mnuNotebook_Search.Click += this.mnuNotebook_Search_Click;
 			// 
@@ -288,7 +289,7 @@ namespace MyNotebooks.subforms
 			// 
 			mnuNotebook_Rename.Enabled = false;
 			mnuNotebook_Rename.Name = "mnuNotebook_Rename";
-			mnuNotebook_Rename.Size = new System.Drawing.Size(180, 22);
+			mnuNotebook_Rename.Size = new System.Drawing.Size(161, 22);
 			mnuNotebook_Rename.Text = "Rename";
 			mnuNotebook_Rename.Click += this.mnuNotebook_Rename_Click;
 			// 
@@ -296,7 +297,7 @@ namespace MyNotebooks.subforms
 			// 
 			mnuNotebook_ForceBackup.Enabled = false;
 			mnuNotebook_ForceBackup.Name = "mnuNotebook_ForceBackup";
-			mnuNotebook_ForceBackup.Size = new System.Drawing.Size(180, 22);
+			mnuNotebook_ForceBackup.Size = new System.Drawing.Size(161, 22);
 			mnuNotebook_ForceBackup.Text = "Force &Backup";
 			mnuNotebook_ForceBackup.Visible = false;
 			mnuNotebook_ForceBackup.Click += this.mnuNotebook_ForceBackup_Click;
@@ -305,7 +306,7 @@ namespace MyNotebooks.subforms
 			// 
 			mnuNotebook_RestoreBackups.Enabled = false;
 			mnuNotebook_RestoreBackups.Name = "mnuNotebook_RestoreBackups";
-			mnuNotebook_RestoreBackups.Size = new System.Drawing.Size(180, 22);
+			mnuNotebook_RestoreBackups.Size = new System.Drawing.Size(161, 22);
 			mnuNotebook_RestoreBackups.Text = "&Restore Backups";
 			mnuNotebook_RestoreBackups.Visible = false;
 			mnuNotebook_RestoreBackups.Click += this.mnuNotebook_RestoreBackups_Click;
@@ -314,7 +315,7 @@ namespace MyNotebooks.subforms
 			// 
 			mnuNotebook_Import.Enabled = false;
 			mnuNotebook_Import.Name = "mnuNotebook_Import";
-			mnuNotebook_Import.Size = new System.Drawing.Size(180, 22);
+			mnuNotebook_Import.Size = new System.Drawing.Size(161, 22);
 			mnuNotebook_Import.Text = "Import";
 			mnuNotebook_Import.Click += this.mnuNotebook_Import_Click;
 			// 
@@ -322,7 +323,7 @@ namespace MyNotebooks.subforms
 			// 
 			mnuNotebook_Export.Enabled = false;
 			mnuNotebook_Export.Name = "mnuNotebook_Export";
-			mnuNotebook_Export.Size = new System.Drawing.Size(180, 22);
+			mnuNotebook_Export.Size = new System.Drawing.Size(161, 22);
 			mnuNotebook_Export.Text = "Synch";
 			mnuNotebook_Export.Visible = false;
 			mnuNotebook_Export.Click += this.mnuNotebook_Export_Click;
@@ -331,7 +332,7 @@ namespace MyNotebooks.subforms
 			// 
 			mnuNotebook_Settings.Enabled = false;
 			mnuNotebook_Settings.Name = "mnuNotebook_Settings";
-			mnuNotebook_Settings.Size = new System.Drawing.Size(180, 22);
+			mnuNotebook_Settings.Size = new System.Drawing.Size(161, 22);
 			mnuNotebook_Settings.Text = "Settings";
 			mnuNotebook_Settings.Visible = false;
 			mnuNotebook_Settings.Click += this.mnuNotebook_Settings_Click;
@@ -340,7 +341,7 @@ namespace MyNotebooks.subforms
 			// 
 			mnuNotebook_ResetPIN.Enabled = false;
 			mnuNotebook_ResetPIN.Name = "mnuNotebook_ResetPIN";
-			mnuNotebook_ResetPIN.Size = new System.Drawing.Size(180, 22);
+			mnuNotebook_ResetPIN.Size = new System.Drawing.Size(161, 22);
 			mnuNotebook_ResetPIN.Text = "Reset &PIN";
 			mnuNotebook_ResetPIN.Visible = false;
 			mnuNotebook_ResetPIN.Click += this.mnuNotebook_ResetPIN_Click;
@@ -349,7 +350,7 @@ namespace MyNotebooks.subforms
 			// 
 			mnuLabelsSummary.Enabled = false;
 			mnuLabelsSummary.Name = "mnuLabelsSummary";
-			mnuLabelsSummary.Size = new System.Drawing.Size(180, 22);
+			mnuLabelsSummary.Size = new System.Drawing.Size(161, 22);
 			mnuLabelsSummary.Text = "Labels Summary";
 			mnuLabelsSummary.Visible = false;
 			// 
@@ -532,6 +533,10 @@ namespace MyNotebooks.subforms
 			btnResetLabelFilter.Visible = false;
 			btnResetLabelFilter.Click += this.btnResetLabelFilter_Click;
 			// 
+			// bgWorker
+			// 
+			bgWorker.WorkerReportsProgress = true;
+			// 
 			// frmMain
 			// 
 			AcceptButton = btnLoadNotebook;
@@ -615,5 +620,6 @@ namespace MyNotebooks.subforms
 		private System.Windows.Forms.ToolStripMenuItem mnuLabelsSummary;
 		private System.Windows.Forms.Button btnResetLabelFilter;
 		private System.Windows.Forms.ToolStripMenuItem mnuAdministratorConsole;
+		private System.ComponentModel.BackgroundWorker bgWorker;
 	}
 }

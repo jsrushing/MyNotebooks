@@ -146,6 +146,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MyNotebooks.objects;
 using MyNotebooks.DataAccess;
+using System.ComponentModel;
+using System.Threading;
 
 namespace MyNotebooks.subforms
 {
@@ -158,6 +160,7 @@ namespace MyNotebooks.subforms
 		string FoundCountString = "showing {0} of {1} entries";
 		private int SelectedNotebookId;
 		private KeyValuePair<int, string> SelectedNotebookIds;
+		private BackgroundWorker Worker;
 
 		private enum SelectionState
 		{
@@ -178,28 +181,37 @@ namespace MyNotebooks.subforms
 			Company = 6
 		}
 
-		public frmMain() { InitializeComponent(); }
+		public frmMain()
+		{
+			InitializeComponent();
+			Worker = new BackgroundWorker();
+			Worker.DoWork += new DoWorkEventHandler(bgWorker_DoWork);
+			Worker.WorkerReportsProgress = true;
+			Worker.ProgressChanged += new ProgressChangedEventHandler(bgWorker_ProgressChanged);
+			Worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgWorker_RunWorkerCompleted);
+		}
+		private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
+		{
+			if(CurrentEntry != null)
+			{
+				Program.LblsUnderEntry		??= new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 1)); 
+				Program.LblsUnderNotebook	??= new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 2));
+				Program.LblsUnderGroup		??= new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 3));
+				Program.LblsUnderDepartment ??= new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 4));
+				Program.LblsUnderAccount	??= new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 5));
+				Program.LblsUnderCompany	??= new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 6));
+			}
+		}
+
+		private void bgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e) { }
+
+		private void bgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) { }
 
 		private async void frmMain_Load(object sender, EventArgs e)
 		{
-			if (Program.NotebooksNamesAndIds.Count == 0)
-			{
-				if (Program.User == null)
-				{
-					using (frmUserLogin frm = new()) { frm.ShowDialog(); }
-
-					// if we don't have a user, disable all main menus except mnuSwitchAccounts
-					if (Program.User == null)
-					{
-						foreach (ToolStripItem mnu in menuStrip1.Items) { mnu.Enabled = false; }
-						mnuSwitchAccount.Enabled = true;
-					}
-
-					using (frmManagementConsole frm = new(this, true)) { frm.ShowDialog(); }
-
-					if (Program.ActiveNBParentId == -1) { this.Close(); return; }
-				}
-			}
+			Program.LblsUnderEntry = null;
+			Program.LblsUnderNotebook = null;
+			Program.LblsUnderGroup = null;
 
 			this.Cursor = Cursors.WaitCursor;
 			System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
@@ -232,6 +244,7 @@ namespace MyNotebooks.subforms
 			if (CurrentNotebook != null)
 			{
 				Program.SelectedNotebookName = CurrentNotebook.Name;
+				//Worker.RunWorkerAsync(new DoWorkEventArgs("GetNotebooks"));
 
 				if (CurrentNotebook.Entries.Count == 0)
 				{
@@ -410,26 +423,30 @@ namespace MyNotebooks.subforms
 		{
 			ddlNotebooks.Items.Clear();
 			ddlNotebooks.Text = string.Empty;
-			if (Program.NotebooksNamesAndIds.Count == 0) await Utilities.PopulateAllNotebookNames();
+			//if (Program.NotebooksNamesAndIds.Count == 0) await Utilities.PopulateAllNotebookNames();
 
-			foreach (var v in Program.NotebooksNamesAndIds)
+			//foreach (var v in Program.NotebooksNamesAndIds)
+			//{
+			//	ListItem lvi = new ListItem() { Name = v.Key, Id = v.Value };
+			//	ddlNotebooks.Items.Add(lvi);
+			//}
+
+			foreach(Notebook n in Program.AllNotebooks)
 			{
-				ListItem lvi = new ListItem() { Name = v.Key, Id = v.Value };
+				ListItem lvi = new ListItem() { Name = n.Name, Id = n.Id };
 				ddlNotebooks.Items.Add(lvi);
 			}
 
 			ddlNotebooks.DisplayMember = "Name";
 			ddlNotebooks.ValueMember = "Id";
+			ddlNotebooks.Enabled = ddlNotebooks.Items.Count > 0;
 
 			if (ddlNotebooks.Items.Count > 0)
 			{
-				ddlNotebooks.Enabled = true;
-
 				if (ddlNotebooks.Items.Count == 1)
 				{
 					ddlNotebooks.SelectedIndex = 0;
 					btnLoadNotebook_Click(null, new());
-					//ShowHideMenusAndControls(SelectionState.NotebookSelectedNotLoaded);
 				}
 				else
 				{
@@ -470,6 +487,7 @@ namespace MyNotebooks.subforms
 					Utilities.ResizeListsAndRTBs(lstEntries, rtbSelectedEntry, lblSeparator, lblSelectionType, this);
 					ShowHideMenusAndControls(SelectionState.EntrySelected);
 					mnuLabels.Enabled = true;
+					Worker.RunWorkerAsync(new DoWorkEventArgs("GetEntries"));
 				}
 				else
 				{
@@ -496,21 +514,7 @@ namespace MyNotebooks.subforms
 			frm.ShowDialog(this);
 		}
 
-		private async void mnuAdministratorConsole_Click(object sender, EventArgs e)
-		{
-			using (frmManagementConsole frm = new(this))
-			{
-				frm.ShowDialog();
-
-				if (Program.ActiveNBParentId > 0)
-				{
-					if (ddlNotebooks.Items.Count == 1) { ddlNotebooks.SelectedIndex = 0; }
-					LoadNotebooks();
-					if(ddlNotebooks.Items.Count == 0) { ShowHideMenusAndControls(SelectionState.NotebookNotSelected); }
-					//ShowHideMenusAndControls(SelectionState.NotebookNotSelected);
-				}
-			}
-		}
+		private async void mnuAdministratorConsole_Click(object sender, EventArgs e) { this.Close(); }
 
 		private async void mnuEntryCreate_Click(object sender, EventArgs e)
 		{
@@ -583,7 +587,9 @@ namespace MyNotebooks.subforms
 
 		private async void mnuLabels_Click(object sender, EventArgs e)
 		{
-			using (frmLabelsManager frm = new frmLabelsManager(this, CurrentEntry))
+			while(Worker.IsBusy) { Thread.Sleep(300); }
+
+			using (frmLabelsManager frm = new(this, CurrentEntry))
 			{
 				frm.ShowDialog();
 

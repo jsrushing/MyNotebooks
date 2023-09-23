@@ -30,41 +30,6 @@ namespace MyNotebooks.subforms
 		private int LastClickedEntryIndex = -1;
 		private const string ViewEntryMenuText = "View Entry";
 		private const string LoadNotebookMenuText = "Load Notebook";
-		private BackgroundWorker Worker;
-		private List<MNLabel> LblsUnderEntry = new();
-		private List<MNLabel> LblsUnderNotebook = new();
-		private List<MNLabel> LblsUnderGroup = new();
-		private List<MNLabel> LblsUnderDepartment = new();
-		private List<MNLabel> LblsUnderAccount = new();
-		private List<MNLabel> LblsUnderCompany = new();
-
-		private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
-		{
-			LblsUnderEntry		= DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 1);
-			LblsUnderNotebook	= DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 2);
-			LblsUnderGroup		= DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 3);
-			LblsUnderDepartment = DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 4);
-			LblsUnderAccount	= DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 5);
-			LblsUnderCompany	= DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 6);
-		}
-
-		private void bgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
-		{
-			this.Text = e.ProgressPercentage.ToString() + "%";
-		}
-
-		private void bgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-		{
-			TreeNode tn = new();
-			foreach (MNLabel label in LblsUnderNotebook) PopulateTreeWithLabels(0, label);
-			foreach (MNLabel label in LblsUnderGroup) PopulateTreeWithLabels(1, label); //{ treeAvailableLabels.Nodes[1].Nodes.Add(label.Id.ToString(), label.LabelText); }
-			foreach (MNLabel label in LblsUnderDepartment) PopulateTreeWithLabels(2, label);    //{ treeAvailableLabels.Nodes[2].Nodes.Add(label.Id.ToString(), label.LabelText); }
-			foreach (MNLabel label in LblsUnderAccount) PopulateTreeWithLabels(3, label);   //{ treeAvailableLabels.Nodes[3].Nodes.Add(label.Id.ToString(), label.LabelText); }
-			foreach (MNLabel label in LblsUnderCompany) PopulateTreeWithLabels(4, label);   //{ treeAvailableLabels.Nodes[4].Nodes.Add(label.Id.ToString(), label.LabelText); }
-
-			foreach (TreeNode tn2 in treeAvailableLabels.Nodes)
-			{ if(tn2.Nodes.Count == 0) { tn2.Nodes.Add(""); } }
-		}
 
 		private List<Notebook> SelectedNotebooks { get; set; }
 
@@ -80,7 +45,6 @@ namespace MyNotebooks.subforms
 
 		private async void frmLabelsManager_Load(object sender, EventArgs e)
 		{
-
 			if (Program.DictCheckedNotebooks.Count == 0)
 			{
 				//var msg = "The labelsForSearch in the deleted notebook will be deleted from all selected notebooks." + Environment.NewLine + "Specify a PIN for any protected notebooks you select.";
@@ -93,11 +57,6 @@ namespace MyNotebooks.subforms
 			this.Size = new Size(pnlMain.Width + 25, pnlMain.Height + 25);
 			sort = LabelsManager.LabelsSortType.None;
 			lblSortType_Click(null, null);
-			Worker = new BackgroundWorker();
-			Worker.DoWork += new DoWorkEventHandler(bgWorker_DoWork);
-			Worker.WorkerReportsProgress = true;
-			Worker.ProgressChanged += new ProgressChangedEventHandler(bgWorker_ProgressChanged);
-			Worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgWorker_RunWorkerCompleted);
 			ResetTree();
 		}
 
@@ -383,17 +342,17 @@ namespace MyNotebooks.subforms
 						ParentId = CurrentEntry.Id
 					};
 
-					if (!LblsUnderNotebook.Any(l => l.LabelText == lbl.LabelText))
+					if (!Program.LblsUnderNotebook.Any(l => l.LabelText == lbl.LabelText))
 					{
 						lbl.Create();
 						CurrentEntry.AllLabels.Add(lbl);
-						LblsUnderEntry.Add(lbl);
-						LblsUnderNotebook.Add(lbl);
-						LblsUnderGroup.Add(lbl);
-						LblsUnderDepartment.Add(lbl);
-						LblsUnderAccount.Add(lbl);
-						LblsUnderCompany.Add(lbl);
-						ResetText();
+						Program.LblsUnderEntry.Add(lbl);
+						Program.LblsUnderNotebook.Add(lbl);
+						Program.LblsUnderGroup.Add(lbl);
+						Program.LblsUnderDepartment.Add(lbl);
+						Program.LblsUnderAccount.Add(lbl);
+						Program.LblsUnderCompany.Add(lbl);
+						ResetTree();
 					}
 					else
 					{
@@ -520,30 +479,28 @@ namespace MyNotebooks.subforms
 				if (childInTgt.Text == lbl.LabelText) { exists = true; break; }
 			}
 
-			if (!exists) { treeAvailableLabels.Nodes[nodeIndex].Nodes.Add(tn); }
+			if (!exists) 
+			{ 
+				tn.Checked = CurrentEntry.AllLabels.Select(e => e.LabelText).Contains(lbl.LabelText);
+				treeAvailableLabels.Nodes[nodeIndex].Nodes.Add(tn); 
+			}
 		}
 
 		private void ResetTree()
 		{
-			if(LblsUnderCompany.Count == 0) { Worker.RunWorkerAsync(); }
 			treeAvailableLabels.Nodes.Clear();
 			treeAvailableLabels.Nodes.Add("Notebook '"		+ Program.SelectedNotebookName + "'");	
 			treeAvailableLabels.Nodes.Add("Group '"			+ Program.SelectedGroupName + "'");
 			treeAvailableLabels.Nodes.Add("Department '"	+ Program.SelectedDepartmentName + "'");
 			treeAvailableLabels.Nodes.Add("Account '"		+ Program.SelectedAccountName + "'");
 			treeAvailableLabels.Nodes.Add("Company '"		+ Program.SelectedCompanyName + "'");
-		}
 
-		private void ShowMessage(string sMsg)
-		{
-			sMsg += Utilities.GetCheckedNotebooks().Count == Program.AllNotebookNames.Count ?
-				" from "
-				: "Since all notebooks in your collection were not selected for the search the label has been retained in ";
+			foreach (MNLabel label in Program.LblsUnderNotebook)	PopulateTreeWithLabels(0, label);
+			foreach (MNLabel label in Program.LblsUnderGroup)		PopulateTreeWithLabels(1, label);
+			foreach (MNLabel label in Program.LblsUnderDepartment)	PopulateTreeWithLabels(2, label);
+			foreach (MNLabel label in Program.LblsUnderAccount)		PopulateTreeWithLabels(3, label);
+			foreach (MNLabel label in Program.LblsUnderCompany)		PopulateTreeWithLabels(4, label);
 
-			sMsg += "your Labels collection.";
-
-			using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "MNLabel Delete_original Successful", this))
-			{ frm.ShowDialog(); }
 		}
 
 		private void ShowPanel(Panel panelToShow)
@@ -599,7 +556,6 @@ namespace MyNotebooks.subforms
 
 		private void treeAvailableLabels_AfterExpand(object sender, TreeViewEventArgs e)
 		{
-			while(Worker.IsBusy) { Thread.Sleep(300); }
 			if(e.Node.Nodes.Count == 1 && e.Node.Nodes[0].Text == "") { e.Node.Nodes.Clear(); }
 		}
 

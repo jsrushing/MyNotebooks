@@ -585,7 +585,7 @@ namespace MyNotebooks.subforms
 			Program.AllNotebooks.Clear();
 			Program.AllNotebooks.AddRange(notebooks);
 			//this.Close();
-			this.Close();
+			using (frmMain frm = new()) { frm.ShowDialog(); }
 		}
 
 		private void PopulateBaseOrgLevels()

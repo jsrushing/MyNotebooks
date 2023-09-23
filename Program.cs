@@ -26,6 +26,14 @@ namespace MyNotebooks
 		public static List<string>	AzureRenameCommands		= new List<string>();
 		public static List<string>	AzurePinFileNames		= new List<string>();
 		public static string		GroupsFolder			= Program.AppRoot + "groups\\";
+
+		public static List<MNLabel> LblsUnderEntry;
+		public static List<MNLabel> LblsUnderNotebook;
+		public static List<MNLabel> LblsUnderGroup;
+		public static List<MNLabel> LblsUnderDepartment;
+		public static List<MNLabel> LblsUnderAccount;
+		public static List<MNLabel> LblsUnderCompany;
+
 		public static List<ListBox> ManagementConsoleSelections = new();
 		//public static string		InvalidFileName			= "Sorry, notebook names may not contain characters which are not allowed in file names, for example *, <, >, {, }, |, :, ?, /, \\ (and others).";
 		public static string		SelectedCompanyName		= string.Empty;
@@ -49,7 +57,7 @@ namespace MyNotebooks
 			Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new frmMain());
+			Application.Run(new frmUserLogin());
 		}
     }
 }

@@ -21,7 +21,14 @@ namespace MyNotebooks.subforms
 			if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)    // the user was found
 			{
 				Program.User = new(ds.Tables[0]) { Permissions = new(ds.Tables[1]) };
-				if (Program.User != null) { this.Close(); }
+
+				if (Program.User == null) { this.Close(); }
+				else
+				{
+					this.Hide();
+					using (frmManagementConsole frm = new(this, true)) { frm.ShowDialog(); }
+					if (Program.ActiveNBParentId == -1) { this.Close(); }
+				}
 			}
 			else
 			{
