@@ -56,12 +56,11 @@ namespace MyNotebooks.subforms
 		private void bgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
 			TreeNode tn = new();
-			PopulateTreeWithLabels();
-			//foreach (MNLabel label in LblsUnderNotebook) PopulateTreeWithLabels(0, label);
-			//foreach (MNLabel label in LblsUnderGroup) PopulateTreeWithLabels(1, label); //{ treeAvailableLabels.Nodes[1].Nodes.Add(label.Id.ToString(), label.LabelText); }
-			//foreach (MNLabel label in LblsUnderDepartment) PopulateTreeWithLabels(2, label);    //{ treeAvailableLabels.Nodes[2].Nodes.Add(label.Id.ToString(), label.LabelText); }
-			//foreach (MNLabel label in LblsUnderAccount) PopulateTreeWithLabels(3, label);   //{ treeAvailableLabels.Nodes[3].Nodes.Add(label.Id.ToString(), label.LabelText); }
-			//foreach (MNLabel label in LblsUnderCompany) PopulateTreeWithLabels(4, label);   //{ treeAvailableLabels.Nodes[4].Nodes.Add(label.Id.ToString(), label.LabelText); }
+			foreach (MNLabel label in LblsUnderNotebook) PopulateTreeWithLabels(0, label);
+			foreach (MNLabel label in LblsUnderGroup) PopulateTreeWithLabels(1, label); //{ treeAvailableLabels.Nodes[1].Nodes.Add(label.Id.ToString(), label.LabelText); }
+			foreach (MNLabel label in LblsUnderDepartment) PopulateTreeWithLabels(2, label);    //{ treeAvailableLabels.Nodes[2].Nodes.Add(label.Id.ToString(), label.LabelText); }
+			foreach (MNLabel label in LblsUnderAccount) PopulateTreeWithLabels(3, label);   //{ treeAvailableLabels.Nodes[3].Nodes.Add(label.Id.ToString(), label.LabelText); }
+			foreach (MNLabel label in LblsUnderCompany) PopulateTreeWithLabels(4, label);   //{ treeAvailableLabels.Nodes[4].Nodes.Add(label.Id.ToString(), label.LabelText); }
 
 			foreach (TreeNode tn2 in treeAvailableLabels.Nodes)
 			{ if(tn2.Nodes.Count == 0) { tn2.Nodes.Add(""); } }
@@ -71,12 +70,11 @@ namespace MyNotebooks.subforms
 
 		public bool ActionTaken { get; private set; }
 
-		public frmLabelsManager(Form parent, bool deleteOrphans = false, Entry currentEntry = null)
+		public frmLabelsManager(Form parent, Entry currentEntry = null)
 		{
 			InitializeComponent();
 			SelectedNotebooks = new List<Notebook>();
 			Utilities.SetStartPosition(this, parent);
-			DeletingOrphans = deleteOrphans;
 			CurrentEntry = currentEntry;
 		}
 
@@ -501,72 +499,19 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void PopulateTreeWithLabels()
+		private void PopulateTreeWithLabels(int nodeIndex, MNLabel lbl)
 		{
 			TreeNode tn = new();
 			bool exists = false;
+			tn.Text = lbl.LabelText;
+			tn.Tag = lbl.Id.ToString();
 
-			foreach (MNLabel lbl in LblsUnderNotebook)
+			foreach (TreeNode childInTgt in treeAvailableLabels.Nodes[nodeIndex].Nodes)
 			{
-				tn.Text = lbl.LabelText;
-				tn.Tag = lbl.Id.ToString();
-
-				foreach (TreeNode childInTgt in treeAvailableLabels.Nodes[0].Nodes)
-				{
-					if (childInTgt.Text == lbl.LabelText) { exists = true; break; }
-				}
-
-				if (!exists) { treeAvailableLabels.Nodes[0].Nodes.Add(tn); }
-			}
-			foreach (MNLabel lbl in LblsUnderGroup)
-			{
-				tn.Text = lbl.LabelText;
-				tn.Tag = lbl.Id.ToString();
-
-				foreach (TreeNode childInTgt in treeAvailableLabels.Nodes[1].Nodes)
-				{
-					if (childInTgt.Text == lbl.LabelText) { exists = true; break; }
-				}
-
-				if (!exists) { treeAvailableLabels.Nodes[1].Nodes.Add(tn); }
-			}
-			foreach (MNLabel lbl in LblsUnderDepartment)
-			{
-				tn.Text = lbl.LabelText;
-				tn.Tag = lbl.Id.ToString();
-
-				foreach (TreeNode childInTgt in treeAvailableLabels.Nodes[2].Nodes)
-				{
-					if (childInTgt.Text == lbl.LabelText) { exists = true; break; }
-				}
-
-				if (!exists) { treeAvailableLabels.Nodes[2].Nodes.Add(tn); }
-			}
-			foreach (MNLabel lbl in LblsUnderAccount)
-			{
-				tn.Text = lbl.LabelText;
-				tn.Tag = lbl.Id.ToString();
-
-				foreach (TreeNode childInTgt in treeAvailableLabels.Nodes[3].Nodes)
-				{
-					if (childInTgt.Text == lbl.LabelText) { exists = true; break; }
-				}
-
-				if (!exists) { treeAvailableLabels.Nodes[3].Nodes.Add(tn); }
-			}
-			foreach (MNLabel lbl in LblsUnderCompany)
-			{
-				tn.Text = lbl.LabelText;
-				tn.Tag = lbl.Id.ToString();
-
-				foreach (TreeNode childInTgt in treeAvailableLabels.Nodes[4].Nodes)
-				{
-					if (childInTgt.Text == lbl.LabelText) { exists = true; break; }
-				}
-
-				if (!exists) { treeAvailableLabels.Nodes[4].Nodes.Add(tn); }
+				if (childInTgt.Text == lbl.LabelText) { exists = true; break; }
 			}
 
+			if (!exists) { treeAvailableLabels.Nodes[nodeIndex].Nodes.Add(tn); }
 		}
 
 		private void ResetTree()
@@ -578,7 +523,6 @@ namespace MyNotebooks.subforms
 			treeAvailableLabels.Nodes.Add("Department '"	+ Program.SelectedDepartmentName + "'");
 			treeAvailableLabels.Nodes.Add("Account '"		+ Program.SelectedAccountName + "'");
 			treeAvailableLabels.Nodes.Add("Company '"		+ Program.SelectedCompanyName + "'");
-			PopulateTreeWithLabels();
 		}
 
 		private void ShowMessage(string sMsg)

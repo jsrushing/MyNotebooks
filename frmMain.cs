@@ -461,7 +461,7 @@ namespace MyNotebooks.subforms
 				lb.SelectedIndexChanged -= new System.EventHandler(this.lstEntries_SelectEntry);
 				CurrentEntry = Entry.Select(rtb, lb, CurrentNotebook, FirstSelection, null, true);
 
-				if (CurrentEntry != null)       //&& !CurrentEntry.Id.Equals(currentId)) // Disallow modification of the 'created' entry.
+				if (CurrentEntry != null)
 				{
 					//CurrentEntry = DbAccess.GetFullEntry(CurrentEntry);
 					FirstSelection = false;
@@ -583,7 +583,7 @@ namespace MyNotebooks.subforms
 
 		private async void mnuLabels_Click(object sender, EventArgs e)
 		{
-			using (frmLabelsManager frm = new frmLabelsManager(this, false, CurrentEntry))
+			using (frmLabelsManager frm = new frmLabelsManager(this, CurrentEntry))
 			{
 				frm.ShowDialog();
 

@@ -249,6 +249,7 @@ namespace MyNotebooks.DataAccess
 		public static Entry			GetEntry(int entryId)
 		{
 			Entry entryRtrn = new();
+			DataSet ds = new();
 			DataTable dt = new();
 
 			using (SqlConnection conn = new(connString))
@@ -260,9 +261,13 @@ namespace MyNotebooks.DataAccess
 					cmd.CommandType = CommandType.StoredProcedure;
 					cmd.Parameters.AddWithValue("@entryId", entryId);
 					SqlDataAdapter sda = new() { SelectCommand = cmd };
-					sda.Fill(dt);
-					entryRtrn = new(dt);
-					entryRtrn.AllLabels = DbAccess.GetLabelsForEntry(entryId);
+					sda.Fill(ds);
+					entryRtrn = new(ds.Tables[0]);
+					DataTable tblLabels = ds.Tables[1];
+
+					for (int i2 = 0; i2 < tblLabels.Rows.Count; i2++)
+					{ entryRtrn.AllLabels.Add(new(tblLabels, i2)); }
+
 				}
 			}
 

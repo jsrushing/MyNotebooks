@@ -43,8 +43,8 @@ namespace MyNotebooks.subforms
 		private void frmNewEntry_Load(object sender, EventArgs e)
 		{
 			OriginalTitle = this.Text;
-			//Sort = LabelsManager.LabelsSortType.None;
-			//SortLabels();
+			Sort = LabelsManager.LabelsSortType.None;
+			SortLabels();
 
 			if (this.Entry != null & CurrentNotebook != null)
 			{ this.Text = "editing '" + Entry.Title + "' in '" + CurrentNotebook.Name + "'"; }
@@ -136,7 +136,7 @@ namespace MyNotebooks.subforms
 
 			if (this.Entry != null)
 			{
-				using (frmLabelsManager frm = new(this, false, this.Entry))
+				using (frmLabelsManager frm = new(this, this.Entry))
 				{
 					frm.ShowDialog();
 
