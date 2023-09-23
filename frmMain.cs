@@ -499,15 +499,6 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private async void menuLabelsSummary_Click(object sender, System.EventArgs e)
-		{
-			ToolStripMenuItem item = (ToolStripMenuItem)sender;
-			List<Entry> v = CurrentNotebook.Entries.Where(e => e.Labels.Contains(item.Tag.ToString())).ToList();
-			await Utilities.PopulateEntries(lstEntries, v, "", "", "", true, 0, false, 0, item.Tag.ToString());
-			btnResetLabelFilter.Visible = true;
-			lblEntriesCount.Text = string.Format(FoundCountString, (lstEntries.Items.Count / 4).ToString(), CurrentNotebook.Entries.Count.ToString());
-		}
-
 		private void mnuAbout_Click(object sender, EventArgs e)
 		{
 			Form frm = new frmAbout(this);
@@ -587,7 +578,8 @@ namespace MyNotebooks.subforms
 
 		private async void mnuLabels_Click(object sender, EventArgs e)
 		{
-			while(Worker.IsBusy) { Thread.Sleep(300); }
+			DateTime start = DateTime.Now;
+			while(Worker.IsBusy && start.AddSeconds(5) > DateTime.Now ) { Thread.Sleep(300); }
 
 			using (frmLabelsManager frm = new(this, CurrentEntry))
 			{

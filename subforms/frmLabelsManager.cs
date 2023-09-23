@@ -51,10 +51,10 @@ namespace MyNotebooks.subforms
 				using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(this)) { frm.ShowDialog(); }
 			}
 
-			foreach (Control c in this.Controls) if (c.GetType() == typeof(Panel)) c.Location = new Point(0, 25);
+			//foreach (Control c in this.Controls) if (c.GetType() == typeof(Panel)) c.Location = new Point(0, 25);
 			ShowPanel(pnlMain);
 			ShowHideOccurrences();
-			this.Size = new Size(pnlMain.Width + 25, pnlMain.Height + 25);
+			this.Size = new Size(pnlMain.Width + 25, pnlMain.Height + 40);
 			sort = LabelsManager.LabelsSortType.None;
 			lblSortType_Click(null, null);
 			ResetTree();
@@ -292,7 +292,7 @@ namespace MyNotebooks.subforms
 			switch (gridIndex.Index)
 			{
 				case 0:     // View Entry
-					using (frmNewEntry frm = new(this, null, 0, DbAccess.GetEntry(v)))
+					using (frmNewEntry frm = new(this, null , 0, DbAccess.GetEntry(v)))
 					{
 						frm.ShowDialog();
 
@@ -392,9 +392,10 @@ namespace MyNotebooks.subforms
 				lstOccurrences.Items.Add("Created By: " + v.Value.Name.ToString() + " (" + v.Value.Email + ")");
 				lstOccurrences.Items.Add("Created On: " + v.Value.CreatedOn.ToString());
 				lstOccurrences.Items.Add("Found in Entries ...");
+
 				foreach (Entry entry in DbAccess.GetEntriesWithLabel(v.Key))
 				{
-					ListItem item = new() { Id = entry.Id, Name = "  " + entry.Title };
+					ListItem item = new() { Id = entry.Id, Name = "  " + entry.Title + " (in '" + entry.NotebookName + "')" };
 					lstOccurrences.Items.Add(item);
 				}
 
@@ -418,7 +419,7 @@ namespace MyNotebooks.subforms
 			if (selectedItem != null && selectedItem.Name.StartsWith("  "))
 			{
 				gridViewEntryDetails.Rows[0].Cells[0].Value = "Entry: ";
-				gridViewEntryDetails.Rows[0].Cells[1].Value = selectedItem.Name.Substring(2, selectedItem.Name.Length - 2);
+				gridViewEntryDetails.Rows[0].Cells[1].Value = selectedItem.Name.Substring(2, selectedItem.Name.IndexOf(" (") - 2);
 				gridViewEntryDetails.Rows[0].Cells[1].Tag = selectedItem.Id;
 				List<KeyValuePair<int, string>> parents = DbAccess.GetEntryParentTree(selectedItem.Id);
 
@@ -505,20 +506,14 @@ namespace MyNotebooks.subforms
 
 		private void ShowPanel(Panel panelToShow)
 		{   // starting height 631
-			foreach (Control c in this.Controls) { if (c.GetType() == typeof(Panel)) { c.Visible = false; } }
+			//foreach (Control c in this.Controls) { if (c.GetType() == typeof(Panel)) { c.Visible = false; } }
 
-			//if (panelToShow == pnlMain)
-			//{
-			//	treeAvailableLabels.Height = lstOccurrences.Items.Count > 0 ?
-			//		pnlMain.Height + pnlMain.Top + treeAvailableLabels.Top - pnlLabelDetails.Top - 25:
-			//		pnlMain.Height + pnlMain.Top + pnlMain.Height;
-			//}
-
-			//if (panelToShow == pnlOrphanedLabels)
-			//{
-			//	lstLabels.SelectedIndices.Clear();
-			//	this.Size = new Size(panelToShow.Left + panelToShow.Width + 15, panelToShow.Height + panelToShow.Top + 40);
-			//}
+			if (panelToShow == pnlMain)
+			{
+				treeAvailableLabels.Height = lstOccurrences.Items.Count > 0 ?
+					pnlMain.Height + pnlMain.Top + treeAvailableLabels.Top - pnlLabelDetails.Top - 25 :
+					pnlMain.Height + pnlMain.Top + pnlMain.Height - 30;
+			}
 			panelToShow.Visible = true;
 		}
 
@@ -532,7 +527,7 @@ namespace MyNotebooks.subforms
 			}
 			else
 			{
-				treeAvailableLabels.Height = pnlMain.Height;
+				treeAvailableLabels.Height = pnlMain.Height - 40;
 				lstOccurrences.Visible = false;
 			}
 

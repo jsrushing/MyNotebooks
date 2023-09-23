@@ -26,7 +26,7 @@ namespace MyNotebooks.subforms
 				else
 				{
 					this.Hide();
-					using (frmManagementConsole frm = new(this, true)) { frm.ShowDialog(); }
+					using (frmManagementConsole frm = new(this, true)) { frm.ShowDialog(); this.Close(); }
 					if (Program.ActiveNBParentId == -1) { this.Close(); }
 				}
 			}
