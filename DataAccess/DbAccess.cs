@@ -375,7 +375,7 @@ namespace MyNotebooks.DataAccess
 			{
 				conn.Open();
 
-				using (SqlCommand cmd = new("sp_GetEntriesWithLabel", conn))	// PARENT PATH NOT RETURNING FROM HERE <<< !!!
+				using (SqlCommand cmd = new("sp_GetEntriesWithLabel", conn))
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 					cmd.Parameters.AddWithValue("@labelText", label.LabelText);

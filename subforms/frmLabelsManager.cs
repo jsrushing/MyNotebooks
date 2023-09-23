@@ -521,7 +521,7 @@ namespace MyNotebooks.subforms
 		{
 			if (lstOccurrences.Items.Count > 0)
 			{
-				treeAvailableLabels.Height = pnlMain.Top + pnlLabelDetails.Top - 25;
+				treeAvailableLabels.Height = pnlMain.Top + pnlLabelDetails.Top - 55;
 				lstOccurrences.Height = pnlMain.Height - 250;
 				pnlLabelDetails.Visible = true;
 			}
@@ -545,7 +545,7 @@ namespace MyNotebooks.subforms
 			if (e.Node.Level > 0)
 			{
 				PopulateLabelDetails();
-				e.Node.Checked = !e.Node.Checked;
+				//e.Node.Checked = !e.Node.Checked;
 			}
 		}
 
