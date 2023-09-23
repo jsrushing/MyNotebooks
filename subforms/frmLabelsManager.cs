@@ -338,16 +338,13 @@ namespace MyNotebooks.subforms
 						frm.ShowDialog();
 
 						if (frm.Saved)
-						{    // refresh lstOccurrences
-							 //treeAvailableLabels.SelectedNode = LastClickedLabelNode;
-							PopulateLabelDetails();
+						{	PopulateLabelDetails();
 							lstOccurrences.SelectedIndex = LastClickedEntryIndex;
 							PopulateGridViewEntryDetails();
 						}
 					}
 					break;
 				case 1:     // Load Notebook
-							// Launch frmMain with Program.NotebooksNamesAndIds pre-loaded with the target Notebook.
 					Program.NotebooksNamesAndIds.Clear();
 					Program.NotebooksNamesAndIds.Add(gridViewEntryDetails.Rows[1].Cells[1].Value.ToString(),
 						Convert.ToInt32(gridViewEntryDetails.Rows[1].Cells[1].Tag));
@@ -386,7 +383,7 @@ namespace MyNotebooks.subforms
 						ParentId = CurrentEntry.Id
 					};
 
-					if (!CurrentEntry.AllLabels.Any(l => l.LabelText == lbl.LabelText & l.ParentId == lbl.ParentId))
+					if (!LblsUnderNotebook.Any(l => l.LabelText == lbl.LabelText))
 					{
 						lbl.Create();
 						CurrentEntry.AllLabels.Add(lbl);
@@ -400,8 +397,20 @@ namespace MyNotebooks.subforms
 					}
 					else
 					{
-						using (frmMessage frm2 = new(frmMessage.OperationType.Message, "The Label " + lbl.LabelText + 
-							" already exists in the current entry.", "Label Already Exists", this)) { frm2.ShowDialog(this); }
+						using (frmMessage frm2 = new(frmMessage.OperationType.YesNoQuestion, "The Label " + lbl.LabelText + 
+							" already exists in the current notebook. Would you like to select it?", "No Duplicate Labels Allowed in Notebooks", this)) 
+						{ 
+							frm2.ShowDialog(this); 
+							
+							if(frm2.Result == frmMessage.ReturnResult.Yes)
+							{
+								treeAvailableLabels.Nodes[0].Expand();
+								foreach(TreeNode tn in treeAvailableLabels.Nodes[0].Nodes)
+								{
+									if(tn.Text == lbl.LabelText) { tn.Checked = true; break; }
+								}
+							}
+						}
 					}
 				}
 			}
