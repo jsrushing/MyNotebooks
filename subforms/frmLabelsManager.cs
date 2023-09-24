@@ -216,52 +216,18 @@ namespace MyNotebooks.subforms
 			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
 			var commandText = mnu.Text.ToLower().Contains("rename") ? "rename" : "delete";
 			var newLabelName = string.Empty;
-			List<Notebook> notebooksToEdit = Utilities.GetCheckedNotebooks();
-			var editingOneNotebook = mnu.Name.Contains("Entries");
-			var sMsg = string.Empty;    // "Do you want to " + commandText + " the label '" + lstLabels.SelectedItem.ToString() + "' ";
+			var sMsg = string.Empty;
+			var oldLabelName = treeAvailableLabels.SelectedNode.Text.Trim(new char[] {' ', '(', '+', ')'});
 			this.Cursor = Cursors.WaitCursor;
-
-			if (editingOneNotebook)
-			{
-				notebooksToEdit.Clear();
-
-				var notebookName = lstOccurrences.Text;
-				notebookName = notebookName.Substring(4, notebookName.Length - 5);
-				Utilities.SetProgramPIN(notebookName);
-
-				notebooksToEdit.Add(new Notebook(notebookName, null).Open());
-				sMsg += "in the notebook '" + notebookName + "'?";
-			}
-			else
-			{
-				sMsg += "in all " + (notebooksToEdit.Count == Program.AllNotebookNames.Count ? "" : notebooksToEdit.Count.ToString() + " selected ") + "notebooks?";
-			}
 
 			if (commandText == "rename")
 			{
 				// choose the org level for the rename
-				var v = treeAvailableLabels.SelectedNode.Parent.Index;
-				switch (v)
-				{
-					case 0:     // Entry
-						break;
-					case 1:     // Notebook
-						break;
-					case 2:     // Group
-						break;
-					case 3:     // Department
-						break;
-					case 4:     // Account
-						break;
-					case 5:     // Company
-						break;
-				}
 
-				var msg = "";   // "You are renaming '" +
-								//lstLabels.SelectedItem.ToString() + "' in " + (notebooksToEdit.Count() == Program.AllNotebookNames.Count ? " all " : notebooksToEdit.Count.ToString())
-								//+ " notebooks." + Environment.NewLine + "What's the new label name?";
+				var rootNode = treeAvailableLabels.SelectedNode.Parent.Text;
+				var msg = "You are renaming the Label '" + oldLabelName + "' in the " + rootNode + ". Enter the new Label name and press 'OK'." ;
 
-				using (frmMessage frm = new frmMessage(frmMessage.OperationType.LabelNameInputBox, msg))
+				using (frmMessage frm = new(frmMessage.OperationType.LabelNameInputBox, msg))
 				{
 					frm.ShowDialog();
 					newLabelName = frm.ResultText;
@@ -279,23 +245,40 @@ namespace MyNotebooks.subforms
 
 			if (ActionTaken)
 			{
-				var pIndex = 0; // lstLabels.SelectedIndex;
-
 				if (commandText.Equals("rename"))
 				{
-					//await LabelsManager.RenameLabelInNotebooksList(lstLabels.SelectedItem.ToString(), newLabelName, notebooksToEdit, Program.DictCheckedNotebooks, this);
+					List<MNLabel> labelsToEdit = new();
+					//var oldLabelName = treeAvailableLabels.SelectedNode.Text;
 
-					if (notebooksToEdit.Count < Program.AllNotebookNames.Count)
+					switch (treeAvailableLabels.SelectedNode.Parent.Index)
 					{
-						sMsg = "";
+						case 0:
+							labelsToEdit = Program.LblsUnderNotebook;
+							break;
+						case 1:
+							labelsToEdit = Program.LblsUnderGroup;
+							break;
+						case 2:
+							labelsToEdit = Program.LblsUnderDepartment;
+							break;
+						case 3:
+							labelsToEdit = Program.LblsUnderAccount;
+							break;
+						case 4:
+							labelsToEdit = Program.LblsUnderCompany;
+							break;
 					}
+
+					var vLblsToEdit = labelsToEdit.Where(l => l.LabelText.StartsWith(oldLabelName)).ToList();
+					var vIdsToEdit = string.Join(",", vLblsToEdit.Select(l => l.Id.ToString()).ToList());
+					this.Text = vIdsToEdit;
 
 				}
 				else
 				{ /*await LabelsManager.DeleteLabelInNotebooksList(lstLabels.SelectedItem.ToString(), notebooksToEdit, this);*/ }
 
-				lblSortType_Click(null, null);
-				lstOccurrences.Items.Clear();
+				//lblSortType_Click(null, null);
+				//lstOccurrences.Items.Clear();
 			}
 
 			this.Cursor = Cursors.Default;
@@ -629,14 +612,20 @@ namespace MyNotebooks.subforms
 
 		private void treeAvailableLabels_MouseMove(object sender, MouseEventArgs e)
 		{
-			//if (!lstOccurrences.Visible)
-			//{
-			//currentHoverNode = treeAvailableLabels.GetNodeAt(e.X, e.Y + treeAvailableLabels.TopNode.Index);
-			//if (tn != null && tn.Level == 0) { treeAvailableLabels.SelectedNode = tn; }
-			//}
-
 			gridViewEntryDetails.Visible = false;
 		}
 
+		private void treeAvailableLabels_MouseDown(object sender, MouseEventArgs e)
+		{
+			if(e.Button == MouseButtons.Right) 
+			{
+				var vNode = treeAvailableLabels.GetNodeAt(e.X, e.Y);
+				treeAvailableLabels.SelectedNode = vNode;
+				mnuContextLabels.Enabled = true;
+
+				if (vNode.Level == 0) { mnuContextLabels.Enabled = false; }
+				//else { treeAvailableLabels.SelectedNode = vNode; }
+			}
+		}
 	}
 }

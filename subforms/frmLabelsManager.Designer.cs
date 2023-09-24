@@ -173,6 +173,7 @@ namespace MyNotebooks.subforms
 			treeAvailableLabels.AfterCheck += this.treeAvailableLabels_AfterCheck;
 			treeAvailableLabels.AfterExpand += this.treeAvailableLabels_AfterExpand;
 			treeAvailableLabels.AfterSelect += this.treeAvailableLabels_AfterSelect;
+			treeAvailableLabels.MouseDown += this.treeAvailableLabels_MouseDown;
 			treeAvailableLabels.MouseMove += this.treeAvailableLabels_MouseMove;
 			// 
 			// mnuContextLabels
