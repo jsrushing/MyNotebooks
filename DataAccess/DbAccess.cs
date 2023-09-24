@@ -31,14 +31,14 @@ namespace MyNotebooks.DataAccess
 				using (SqlConnection conn = new(connString))
 				{
 					conn.Open();
-					using (SqlCommand cmd = new SqlCommand("sp_CRUD_Label", conn))
+					using (SqlCommand cmd = new("sp_CRUD_Label", conn))
 					{
 						cmd.CommandType = CommandType.StoredProcedure;
 						cmd.Parameters.AddWithValue("@labelText",label.LabelText);
 						cmd.Parameters.AddWithValue("@parentId", label.ParentId);
 						cmd.Parameters.AddWithValue("@opType",	opType == OperationType.Delete ? 2 : (int)opType);
 						if (opType == OperationType.Create)		cmd.Parameters.AddWithValue("@createdBy",	Program.User.Id);
-						if(opType != OperationType.Create)		cmd.Parameters.AddWithValue("@labelId",		label.Id);
+						if (opType != OperationType.Create)		cmd.Parameters.AddWithValue("@labelId",		label.Id);
 						if (opType == OperationType.Delete)		cmd.Parameters.AddWithValue("isActive",		0);
 						GetSqlReturn(ref rtrn, cmd);
 					}
