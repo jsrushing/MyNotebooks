@@ -239,6 +239,24 @@ namespace MyNotebooks.subforms
 
 			if (commandText == "rename")
 			{
+				// choose the org level for the rename
+				var v = treeAvailableLabels.SelectedNode.Parent.Index;
+				switch (v)
+				{
+					case 0:     // Entry
+						break;
+					case 1:     // Notebook
+						break;
+					case 2:     // Group
+						break;
+					case 3:     // Department
+						break;
+					case 4:     // Account
+						break;
+					case 5:     // Company
+						break;
+				}
+
 				var msg = "";   // "You are renaming '" +
 								//lstLabels.SelectedItem.ToString() + "' in " + (notebooksToEdit.Count() == Program.AllNotebookNames.Count ? " all " : notebooksToEdit.Count.ToString())
 								//+ " notebooks." + Environment.NewLine + "What's the new label name?";
@@ -292,12 +310,13 @@ namespace MyNotebooks.subforms
 			switch (gridIndex.Index)
 			{
 				case 0:     // View Entry
-					using (frmNewEntry frm = new(this, null , 0, DbAccess.GetEntry(v)))
+					using (frmNewEntry frm = new(this, null, 0, DbAccess.GetEntry(v)))
 					{
 						frm.ShowDialog();
 
 						if (frm.Saved)
-						{	PopulateLabelDetails();
+						{
+							PopulateLabelDetails();
 							lstOccurrences.SelectedIndex = LastClickedEntryIndex;
 							PopulateGridViewEntryDetails();
 						}
@@ -356,17 +375,17 @@ namespace MyNotebooks.subforms
 					}
 					else
 					{
-						using (frmMessage frm2 = new(frmMessage.OperationType.YesNoQuestion, "The Label " + lbl.LabelText + 
-							" already exists in the current notebook. Would you like to select it?", "No Duplicate Labels Allowed in Notebooks", this)) 
-						{ 
-							frm2.ShowDialog(this); 
-							
-							if(frm2.Result == frmMessage.ReturnResult.Yes)
+						using (frmMessage frm2 = new(frmMessage.OperationType.YesNoQuestion, "The Label " + lbl.LabelText +
+							" already exists in the current notebook. Would you like to select it?", "No Duplicate Labels Allowed in Notebooks", this))
+						{
+							frm2.ShowDialog(this);
+
+							if (frm2.Result == frmMessage.ReturnResult.Yes)
 							{
 								treeAvailableLabels.Nodes[0].Expand();
-								foreach(TreeNode tn in treeAvailableLabels.Nodes[0].Nodes)
+								foreach (TreeNode tn in treeAvailableLabels.Nodes[0].Nodes)
 								{
-									if(tn.Text == lbl.LabelText) { tn.Checked = true; break; }
+									if (tn.Text == lbl.LabelText) { tn.Checked = true; break; }
 								}
 							}
 						}
@@ -462,9 +481,6 @@ namespace MyNotebooks.subforms
 				gridViewEntryDetails.Columns[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 				if (mouseY > -1) gridViewEntryDetails.Top = mouseY + gridViewEntryDetails.Height + 40;
 				if (FirstDetailsLoad) { FirstDetailsLoad = false; PopulateGridViewEntryDetails(mouseY); }
-
-
-				//lstEntryParents.Visible = true;
 			}
 		}
 
@@ -474,40 +490,45 @@ namespace MyNotebooks.subforms
 			bool exists = false;
 			tn.Text = lbl.LabelText;
 			tn.Tag = lbl.Id.ToString();
+			TreeNodeCollection firstChildren = treeAvailableLabels.Nodes[nodeIndex].Nodes;
 
-			foreach (TreeNode childInTgt in treeAvailableLabels.Nodes[nodeIndex].Nodes)
+			for (int i = 0; i < firstChildren.Count; i++)
 			{
-				if (childInTgt.Text == lbl.LabelText) { exists = true; break; }
+				var v = firstChildren[i].Text;
+
+				if (v.StartsWith(lbl.LabelText))
+				{
+					if (!v.EndsWith("(+)")) { firstChildren[i].Text += " (+)"; }
+					exists = true;
+					break;
+				}
 			}
 
-			if (!exists) 
-			{ 
+			if (!exists)
+			{
 				tn.Checked = CurrentEntry.AllLabels.Select(e => e.LabelText).Contains(lbl.LabelText);
-				treeAvailableLabels.Nodes[nodeIndex].Nodes.Add(tn); 
+				treeAvailableLabels.Nodes[nodeIndex].Nodes.Add(tn);
 			}
 		}
 
 		private void ResetTree()
 		{
 			treeAvailableLabels.Nodes.Clear();
-			treeAvailableLabels.Nodes.Add("Notebook '"		+ Program.SelectedNotebookName + "'");	
-			treeAvailableLabels.Nodes.Add("Group '"			+ Program.SelectedGroupName + "'");
-			treeAvailableLabels.Nodes.Add("Department '"	+ Program.SelectedDepartmentName + "'");
-			treeAvailableLabels.Nodes.Add("Account '"		+ Program.SelectedAccountName + "'");
-			treeAvailableLabels.Nodes.Add("Company '"		+ Program.SelectedCompanyName + "'");
+			treeAvailableLabels.Nodes.Add("Notebook '" + Program.SelectedNotebookName + "'");
+			treeAvailableLabels.Nodes.Add("Group '" + Program.SelectedGroupName + "'");
+			treeAvailableLabels.Nodes.Add("Department '" + Program.SelectedDepartmentName + "'");
+			treeAvailableLabels.Nodes.Add("Account '" + Program.SelectedAccountName + "'");
+			treeAvailableLabels.Nodes.Add("Company '" + Program.SelectedCompanyName + "'");
 
-			foreach (MNLabel label in Program.LblsUnderNotebook)	PopulateTreeWithLabels(0, label);
-			foreach (MNLabel label in Program.LblsUnderGroup)		PopulateTreeWithLabels(1, label);
-			foreach (MNLabel label in Program.LblsUnderDepartment)	PopulateTreeWithLabels(2, label);
-			foreach (MNLabel label in Program.LblsUnderAccount)		PopulateTreeWithLabels(3, label);
-			foreach (MNLabel label in Program.LblsUnderCompany)		PopulateTreeWithLabels(4, label);
-
+			foreach (MNLabel label in Program.LblsUnderNotebook) PopulateTreeWithLabels(0, label);
+			foreach (MNLabel label in Program.LblsUnderGroup) PopulateTreeWithLabels(1, label);
+			foreach (MNLabel label in Program.LblsUnderDepartment) PopulateTreeWithLabels(2, label);
+			foreach (MNLabel label in Program.LblsUnderAccount) PopulateTreeWithLabels(3, label);
+			foreach (MNLabel label in Program.LblsUnderCompany) PopulateTreeWithLabels(4, label);
 		}
 
 		private void ShowPanel(Panel panelToShow)
-		{   // starting height 631
-			//foreach (Control c in this.Controls) { if (c.GetType() == typeof(Panel)) { c.Visible = false; } }
-
+		{
 			if (panelToShow == pnlMain)
 			{
 				treeAvailableLabels.Height = lstOccurrences.Items.Count > 0 ?
@@ -536,8 +557,6 @@ namespace MyNotebooks.subforms
 			if (lstOccurrences.Items.Count == 1)
 			{ msg = ""; }
 			else { msg = "Found " + (lstOccurrences.Items.Count - (OccurenceTitleIndicies.Count * 2)).ToString("###,###,###") + " entries in " + (OccurenceTitleIndicies.Count).ToString() + " notebooks"; }
-
-			//lblEntries1.Text = lstOccurrences.Items.Count == 0 ? "Found 0 Entries" : msg;
 		}
 
 		private void treeAvailableLabels_AfterSelect(object sender, TreeViewEventArgs e)
@@ -551,7 +570,7 @@ namespace MyNotebooks.subforms
 
 		private void treeAvailableLabels_AfterExpand(object sender, TreeViewEventArgs e)
 		{
-			if(e.Node.Nodes.Count == 1 && e.Node.Nodes[0].Text == "") { e.Node.Nodes.Clear(); }
+			if (e.Node.Nodes.Count == 1 && e.Node.Nodes[0].Text == "") { e.Node.Nodes.Clear(); }
 		}
 
 		private void treeAvailableLabels_AfterCheck(object sender, TreeViewEventArgs e)

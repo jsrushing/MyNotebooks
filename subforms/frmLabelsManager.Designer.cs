@@ -228,6 +228,7 @@ namespace MyNotebooks.subforms
 			gridViewEntryDetails.AllowUserToDeleteRows = false;
 			gridViewEntryDetails.AllowUserToResizeColumns = false;
 			gridViewEntryDetails.AllowUserToResizeRows = false;
+			gridViewEntryDetails.Anchor = AnchorStyles.Top | AnchorStyles.Right;
 			gridViewEntryDetails.ColumnHeadersVisible = false;
 			gridViewEntryDetails.Columns.AddRange(new DataGridViewColumn[] { colItem, colIdentifier });
 			gridViewEntryDetails.ContextMenuStrip = mnuContextEntries;
