@@ -184,17 +184,19 @@ namespace MyNotebooks.subforms
 		public frmMain()
 		{
 			InitializeComponent();
-			Worker = new BackgroundWorker();
-			Worker.DoWork += new DoWorkEventHandler(bgWorker_DoWork);
-			Worker.WorkerReportsProgress = true;
-			Worker.ProgressChanged += new ProgressChangedEventHandler(bgWorker_ProgressChanged);
-			Worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgWorker_RunWorkerCompleted);
+			Program.BgWorker.DoWork += new DoWorkEventHandler(bgWorker_DoWork);
+			//Worker = new BackgroundWorker();
+			//Worker.DoWork += new DoWorkEventHandler(bgWorker_DoWork);
+			//Worker.WorkerReportsProgress = true;
+			//Worker.ProgressChanged += new ProgressChangedEventHandler(bgWorker_ProgressChanged);
+			//Worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgWorker_RunWorkerCompleted);
 		}
+
 		private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
-		{
+		{	
 			if(CurrentEntry != null)
 			{
-				Program.LblsUnderEntry		??= new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 1)); 
+				Program.LblsUnderEntry		= new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 1)); 
 				Program.LblsUnderNotebook	??= new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 2));
 				Program.LblsUnderGroup		??= new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 3));
 				Program.LblsUnderDepartment ??= new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 4));
@@ -209,10 +211,6 @@ namespace MyNotebooks.subforms
 
 		private async void frmMain_Load(object sender, EventArgs e)
 		{
-			Program.LblsUnderEntry = null;
-			Program.LblsUnderNotebook = null;
-			Program.LblsUnderGroup = null;
-
 			this.Cursor = Cursors.WaitCursor;
 			System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
 			System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
@@ -487,7 +485,14 @@ namespace MyNotebooks.subforms
 					Utilities.ResizeListsAndRTBs(lstEntries, rtbSelectedEntry, lblSeparator, lblSelectionType, this);
 					ShowHideMenusAndControls(SelectionState.EntrySelected);
 					mnuLabels.Enabled = true;
-					Worker.RunWorkerAsync(new DoWorkEventArgs("GetEntries"));
+					if (!Program.BgWorker.IsBusy) { Program.BgWorker.RunWorkerAsync(); } // new DoWorkEventArgs("GetEntries"));
+					else
+					{
+						using(frmMessage frm = new(frmMessage.OperationType.Message, 
+							"BgWorker is already running in frmMain.lstEntries_SelectEntry()")) {  frm.ShowDialog(); }
+					}
+
+					//Worker.RunWorkerAsync();
 				}
 				else
 				{
@@ -579,7 +584,7 @@ namespace MyNotebooks.subforms
 		private async void mnuLabels_Click(object sender, EventArgs e)
 		{
 			DateTime start = DateTime.Now;
-			while(Worker.IsBusy && start.AddSeconds(5) > DateTime.Now ) { Thread.Sleep(300); }
+			while(Program.BgWorker.IsBusy && start.AddSeconds(4) > DateTime.Now ) { Thread.Sleep(300); }
 
 			using (frmLabelsManager frm = new(this, CurrentEntry))
 			{

@@ -2,6 +2,7 @@
  * 6/15/22
  */
 using System;
+using System.ComponentModel;
 using System.Configuration;
 using System.Drawing;
 using System.Linq;
@@ -28,6 +29,7 @@ namespace MyNotebooks.subforms
 		private LabelsManager.LabelsSortType Sort = LabelsManager.LabelsSortType.None;
 		private readonly string LabelLabelsSelected = "({0} selected)";
 		private readonly bool PreserveOriginalText;
+		private readonly BackgroundWorker Worker;
 
 		public frmNewEntry(Form parent, Notebook notebook, int parentNotebookId = 0, Entry entry = null, bool disallowOriginalTextEdit = false)
 		{
@@ -36,8 +38,23 @@ namespace MyNotebooks.subforms
 			CurrentNotebook = notebook;
 			ParentNotebookId = parentNotebookId;
 			Entry = entry;
+			Worker = new BackgroundWorker();
+
+			//Worker.DoWork += new DoWorkEventHandler(bgWorker_DoWork);	
+			Program.BgWorker.DoWork += new DoWorkEventHandler(bgWorker_DoWork);
+
 			PreserveOriginalText = disallowOriginalTextEdit;
 			IsEdit = Entry != null;
+		}
+
+		private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
+		{
+			Program.LblsUnderEntry = new(DbAccess.GetLabelsUnderOrgLevel(Entry.Id, 1));
+			Program.LblsUnderNotebook = new(DbAccess.GetLabelsUnderOrgLevel(Entry.Id, 2));
+			Program.LblsUnderGroup = new(DbAccess.GetLabelsUnderOrgLevel(Entry.Id, 3));
+			Program.LblsUnderDepartment = new(DbAccess.GetLabelsUnderOrgLevel(Entry.Id, 4));
+			Program.LblsUnderAccount = new(DbAccess.GetLabelsUnderOrgLevel(Entry.Id, 5));
+			Program.LblsUnderCompany = new(DbAccess.GetLabelsUnderOrgLevel(Entry.Id, 6));
 		}
 
 		private void frmNewEntry_Load(object sender, EventArgs e)
@@ -116,7 +133,8 @@ namespace MyNotebooks.subforms
 
 					if (frm.Result == frmMessage.ReturnResult.Yes)
 					{
-						Entry newEntry =
+
+						this.Entry =
 							new()
 							{
 								CreatedBy = Program.User.Id,
@@ -127,24 +145,33 @@ namespace MyNotebooks.subforms
 								ParentId = this.CurrentNotebook.Id
 							};
 
-						newEntry.Id = DbAccess.CRUDNotebookEntry(newEntry).intValue;
-						Entry = newEntry;
+						this.Entry.Id = DbAccess.CRUDNotebookEntry(this.Entry).intValue;
+
+						// If user opens notebook > clicks 'Add Entry', load Program.LblsUnder... lists will not be populated.
+						// Catch the null here and populate those lists.
+						if (Program.LblsUnderCompany == null)
+						{
+							if (!Program.BgWorker.IsBusy) Program.BgWorker.RunWorkerAsync();
+							else
+							{
+								using (frmMessage frm2 = new(frmMessage.OperationType.Message,
+									"BgWorker is already running in frmNewEntry.lblManageLabels_Click()")) { frm2.ShowDialog(); }
+							}
+						}
+
 						SetIsDirty(false);
 					}
 				}
 			}
 
-			if (this.Entry != null)
+			using (frmLabelsManager frm = new(this, this.Entry))
 			{
-				using (frmLabelsManager frm = new(this, this.Entry))
-				{
-					frm.ShowDialog();
+				frm.ShowDialog();
 
-					if (frm.ActionTaken)
-					{
-						LabelsManager.PopulateLabelsList(clbLabels, null, LabelsManager.LabelsSortType.None, this.Entry);
-						SetIsDirty();
-					}
+				if (frm.ActionTaken)
+				{
+					LabelsManager.PopulateLabelsList(clbLabels, null, LabelsManager.LabelsSortType.None, this.Entry);
+					SetIsDirty();
 				}
 			}
 		}

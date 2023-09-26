@@ -45,13 +45,6 @@ namespace MyNotebooks.subforms
 
 		private async void frmLabelsManager_Load(object sender, EventArgs e)
 		{
-			if (Program.DictCheckedNotebooks.Count == 0)
-			{
-				//var msg = "The labelsForSearch in the deleted notebook will be deleted from all selected notebooks." + Environment.NewLine + "Specify a PIN for any protected notebooks you select.";
-				using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(this)) { frm.ShowDialog(); }
-			}
-
-			//foreach (Control c in this.Controls) if (c.GetType() == typeof(Panel)) c.Location = new Point(0, 25);
 			ShowPanel(pnlMain);
 			ShowHideOccurrences();
 			this.Size = new Size(pnlMain.Width + 25, pnlMain.Height + 40);
@@ -107,9 +100,9 @@ namespace MyNotebooks.subforms
 				{
 					if (child.Checked)
 					{
-						if (!lstRtrn.Any(l => l.LabelText == child.Text & l.ParentId == CurrentEntry.Id))
+						if (!lstRtrn.Any(l => l.LabelText == child.Text.Replace(" (+)", "") & l.ParentId == CurrentEntry.Id))
 						{
-							MNLabel tmpLbl = new() { CreatedBy = Program.User.Id, LabelText = child.Text, ParentId = CurrentEntry.Id };
+							MNLabel tmpLbl = new() { CreatedBy = Program.User.Id, LabelText = child.Text.Replace(" (+)", ""), ParentId = CurrentEntry.Id };
 							var v = CurrentEntry.AllLabels.Where(l => l.LabelText.Equals(child.Text)).Any();
 							if (!v && !lstRtrn.Contains(tmpLbl)) { lstRtrn.Add(tmpLbl); }
 						}
@@ -117,7 +110,7 @@ namespace MyNotebooks.subforms
 					else
 					{
 						// remove from AllLabels if exists.
-						var label = CurrentEntry.AllLabels.Where(l => l.LabelText == child.Text).FirstOrDefault();
+						var label = CurrentEntry.AllLabels.Where(l => l.LabelText == child.Text.Replace(" (+)", "")).FirstOrDefault();
 						CurrentEntry.AllLabels.Remove(label);
 					}
 				}
@@ -189,7 +182,6 @@ namespace MyNotebooks.subforms
 		{
 			List<MNLabel> existingLabels = new();
 			foreach (var label in CurrentEntry.AllLabels) { existingLabels.Add(label); }
-
 
 			//var vEntryLabels = CurrentEntry.AllLabels;
 
@@ -269,7 +261,7 @@ namespace MyNotebooks.subforms
 					}
 
 					var vLblsToEdit = labelsToEdit.Where(l => l.LabelText.Equals(oldLabelName)).ToList();
-					//var vIdsToEdit = string.Join(",", vLblsToEdit.Select(l => l.Id.ToString()).ToList());
+					var vIdsToEdit = string.Join(",", vLblsToEdit.Select(l => l.Id.ToString()).ToList());
 					foreach(var v in vLblsToEdit) { v.LabelText = newLabelName; DbAccess.CRUDLabel(v, OperationType.Update); }
 
 					//this.Text = vIdsToEdit;
@@ -503,6 +495,9 @@ namespace MyNotebooks.subforms
 			treeAvailableLabels.Nodes.Add("Department '" + Program.SelectedDepartmentName + "'");
 			treeAvailableLabels.Nodes.Add("Account '" + Program.SelectedAccountName + "'");
 			treeAvailableLabels.Nodes.Add("Company '" + Program.SelectedCompanyName + "'");
+
+			DateTime now = DateTime.Now;
+			while(Program.BgWorker.IsBusy & now.AddSeconds(4) > DateTime.Now) { Thread.Sleep(300); }
 
 			foreach (MNLabel label in Program.LblsUnderNotebook) PopulateTreeWithLabels(0, label);
 			foreach (MNLabel label in Program.LblsUnderGroup) PopulateTreeWithLabels(1, label);

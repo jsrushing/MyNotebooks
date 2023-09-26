@@ -3,6 +3,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.IO;
@@ -179,6 +180,16 @@ namespace MyNotebooks.objects
 			{
 				Program.DictCheckedNotebooks.Add(EncryptDecrypt.Decrypt(items[0]), EncryptDecrypt.Decrypt(items[1]));
 			}
+		}
+
+		public static void PopulateLabelsLists(Entry CurrentEntry)
+		{
+			Program.LblsUnderEntry ??= new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 1));
+			Program.LblsUnderNotebook ??= new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 2));
+			Program.LblsUnderGroup ??= new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 3));
+			Program.LblsUnderDepartment ??= new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 4));
+			Program.LblsUnderAccount ??= new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 5));
+			Program.LblsUnderCompany ??= new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 6));
 		}
 
 		//public static void PopulatePropertiesFromDataRow(Type targetType, DataTable dt, int rowIndex = 0, string skippedProperties = "")

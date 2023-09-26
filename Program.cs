@@ -3,6 +3,8 @@ using System.Windows.Forms;
 using MyNotebooks.subforms;
 using System.Collections.Generic;
 using MyNotebooks.objects;
+using System.ComponentModel;
+using MyNotebooks.DataAccess;
 
 namespace MyNotebooks
 {
@@ -25,6 +27,7 @@ namespace MyNotebooks
 		public static List<string>	AzureNotebookNames		= new List<string>();
 		public static List<string>	AzureRenameCommands		= new List<string>();
 		public static List<string>	AzurePinFileNames		= new List<string>();
+		public static BackgroundWorker BgWorker				= new();
 		public static string		GroupsFolder			= Program.AppRoot + "groups\\";
 
 		public static List<MNLabel> LblsUnderEntry;
@@ -59,5 +62,6 @@ namespace MyNotebooks
             Application.SetCompatibleTextRenderingDefault(false);
 			Application.Run(new frmUserLogin());
 		}
-    }
+
+	}
 }

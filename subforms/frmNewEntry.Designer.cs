@@ -71,6 +71,7 @@ namespace MyNotebooks.subforms
 			mnuFind = new System.Windows.Forms.ToolStripMenuItem();
 			txtFind = new System.Windows.Forms.ToolStripTextBox();
 			mnuCancelExit = new System.Windows.Forms.ToolStripMenuItem();
+			bgWorker = new System.ComponentModel.BackgroundWorker();
 			grpCreateEntry.SuspendLayout();
 			pnlEntryDates.SuspendLayout();
 			panel1.SuspendLayout();
@@ -516,6 +517,10 @@ namespace MyNotebooks.subforms
 			mnuCancelExit.Text = "E&xit";
 			mnuCancelExit.Click += this.mnuCancelExit_Click;
 			// 
+			// bgWorker
+			// 
+			bgWorker.WorkerReportsProgress = true;
+			// 
 			// frmNewEntry
 			// 
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -586,5 +591,6 @@ namespace MyNotebooks.subforms
 		private System.Windows.Forms.Panel pnlEntryDates;
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.Label lblTitleExists;
+		private System.ComponentModel.BackgroundWorker bgWorker;
 	}
 }
