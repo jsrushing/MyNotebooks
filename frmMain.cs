@@ -161,6 +161,7 @@ namespace MyNotebooks.subforms
 		private int SelectedNotebookId;
 		private KeyValuePair<int, string> SelectedNotebookIds;
 		private BackgroundWorker Worker;
+		private bool notebookChanged;
 
 		private enum SelectionState
 		{
@@ -178,13 +179,14 @@ namespace MyNotebooks.subforms
 			Group = 3,
 			Department = 4,
 			Account = 5,
-			Company = 6
+			Company = 6, 
+			None = 7
 		}
 
 		public frmMain()
 		{
 			InitializeComponent();
-			Program.BgWorker.DoWork += new DoWorkEventHandler(bgWorker_DoWork);
+			//Program.BgWorker.DoWork += new DoWorkEventHandler(bgWorker_DoWork);
 			//Worker = new BackgroundWorker();
 			//Worker.DoWork += new DoWorkEventHandler(bgWorker_DoWork);
 			//Worker.WorkerReportsProgress = true;
@@ -192,22 +194,24 @@ namespace MyNotebooks.subforms
 			//Worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgWorker_RunWorkerCompleted);
 		}
 
-		private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
-		{	
-			if(CurrentEntry != null)
-			{
-				Program.LblsUnderEntry		= new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 1)); 
-				Program.LblsUnderNotebook	??= new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 2));
-				Program.LblsUnderGroup		??= new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 3));
-				Program.LblsUnderDepartment ??= new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 4));
-				Program.LblsUnderAccount	??= new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 5));
-				Program.LblsUnderCompany	??= new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 6));
-			}
-		}
+		//private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
+		//{
+		//	DbAccess.GetLabels();
 
-		private void bgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e) { }
+		//	if (CurrentEntry != null)
+		//	{
+		//		Program.LblsUnderEntry = new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 1));
+		//		Program.LblsUnderNotebook = new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 2));
+		//		Program.LblsUnderGroup = new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 3));
+		//		Program.LblsUnderDepartment = new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 4));
+		//		Program.LblsUnderAccount = new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 5));
+		//		Program.LblsUnderCompany = new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 6));
+		//	}
+		//}
 
-		private void bgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) { }
+		//private void bgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e) { }
+
+		//private void bgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) { }
 
 		private async void frmMain_Load(object sender, EventArgs e)
 		{
@@ -218,6 +222,10 @@ namespace MyNotebooks.subforms
 			ShowHideMenusAndControls(SelectionState.HideAll);
 			LoadNotebooks();
 			this.Cursor = Cursors.Default;
+
+			Program.LblsUnderAccount	= Program.LblsUnderCompany.Where(l => l.AccountId		== Program.SelectedAccountId).ToList();
+			Program.LblsUnderDepartment = Program.LblsUnderCompany.Where(l => l.DepartmentId	== Program.SelectedDepartmentId).ToList();
+			Program.LblsUnderGroup		= Program.LblsUnderCompany.Where(l => l.GroupId			== Program.SelectedGroupId).ToList();
 		}
 
 		private void frmMain_Resize(object sender, EventArgs e)
@@ -242,7 +250,6 @@ namespace MyNotebooks.subforms
 			if (CurrentNotebook != null)
 			{
 				Program.SelectedNotebookName = CurrentNotebook.Name;
-				//Worker.RunWorkerAsync(new DoWorkEventArgs("GetNotebooks"));
 
 				if (CurrentNotebook.Entries.Count == 0)
 				{
@@ -381,8 +388,10 @@ namespace MyNotebooks.subforms
 			cbxSortEntriesBy.SelectedIndex = 0;
 			var v = ddlNotebooks.SelectedItem as ListItem;
 			SelectedNotebookId = v.Id;
+			Program.LblsUnderNotebook = Program.LblsUnderCompany.Where(l => l.NotebookId == SelectedNotebookId).ToList();
 			SelectedNotebookIds = new(v.Id, v.Name);
 			btnLoadNotebook_Click(sender, e);
+			notebookChanged = true;
 		}
 
 		private void ddlNotebooks_Click(object sender, EventArgs e)
@@ -474,25 +483,29 @@ namespace MyNotebooks.subforms
 			if (lb.SelectedIndex > -1)
 			{
 				lb.SelectedIndexChanged -= new System.EventHandler(this.lstEntries_SelectEntry);
+				
+				CurrentEntry = null;
 				CurrentEntry = Entry.Select(rtb, lb, CurrentNotebook, FirstSelection, null, true);
+				Program.LblsUnderEntry = Program.LblsUnderCompany.Where(l => l.ParentId == CurrentEntry.Id).ToList();
 
 				if (CurrentEntry != null)
 				{
-					//CurrentEntry = DbAccess.GetFullEntry(CurrentEntry);
 					FirstSelection = false;
 					lblSelectionType.Visible = rtb.Text.Length > 0;
 					lblSeparator.Visible = rtb.Text.Length > 0;
 					Utilities.ResizeListsAndRTBs(lstEntries, rtbSelectedEntry, lblSeparator, lblSelectionType, this);
 					ShowHideMenusAndControls(SelectionState.EntrySelected);
 					mnuLabels.Enabled = true;
-					if (!Program.BgWorker.IsBusy) { Program.BgWorker.RunWorkerAsync(); } // new DoWorkEventArgs("GetEntries"));
+
+					if (!Program.BgWorker.IsBusy && notebookChanged) { Program.BgWorker.RunWorkerAsync(); notebookChanged = false; } // new DoWorkEventArgs("GetEntries"));
 					else
 					{
-						using(frmMessage frm = new(frmMessage.OperationType.Message, 
-							"BgWorker is already running in frmMain.lstEntries_SelectEntry()")) {  frm.ShowDialog(); }
+						if (Program.BgWorker.IsBusy)
+						{
+							using (frmMessage frm = new(frmMessage.OperationType.Message,
+								"BgWorker is already running in frmMain.lstEntries_SelectEntry()")) { frm.ShowDialog(); }
+						}
 					}
-
-					//Worker.RunWorkerAsync();
 				}
 				else
 				{

@@ -5,6 +5,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -42,6 +43,11 @@ namespace MyNotebooks.subforms
 		private bool IsQuickStart;
 		private bool ForceClose;
 
+		private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
+		{
+			DbAccess.GetLabels();
+		}
+
 		public frmManagementConsole(Form parent, bool isQuickStart = false)
 		{
 			InitializeComponent();
@@ -58,6 +64,7 @@ namespace MyNotebooks.subforms
 			OrgLevelGroups_CU.AddRange(new GroupBox[] { grpCompany_CU, grpAccount_CU, grpDepartment_CU, grpGroup_CU });
 			OrgLevelLists_MU.AddRange(new ListBox[] { lstCompanies_MU, lstAccounts_MU, lstDepartments_MU, lstGroups_MU });
 			OrgLevelLists_CU.AddRange(new ListBox[] { lstCompanies_CU, lstAccounts_CU, lstDepartments_CU, lstGroups_CU });
+			Program.BgWorker.DoWork += new DoWorkEventHandler(bgWorker_DoWork);
 
 			if (Program.ManagementConsoleSelections.Count > 0)
 			{
@@ -90,7 +97,7 @@ namespace MyNotebooks.subforms
 		{
 			System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
 			System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
-			txtPwd.Text = fvi.FileName.ToLower().Contains("debug") ? "boy" : "";
+			//txtPwd.Text = fvi.FileName.ToLower().Contains("debug") ? "" : "";
 
 			if (IsQuickStart)
 			{
@@ -395,7 +402,10 @@ namespace MyNotebooks.subforms
 		}
 
 		private async void lstGroups_MU_DoubleClick(object sender, EventArgs e)
-		{ mnuManageNotebooks_Click(null, null); await Utilities.PopulateAllNotebookNames(); }
+		{ 
+			mnuManageNotebooks_Click(null, null); 
+			await Utilities.PopulateAllNotebookNames(); 
+		}
 
 		private void lstMU_DragLeave(object sender, EventArgs e)
 		{
@@ -421,10 +431,22 @@ namespace MyNotebooks.subforms
 
 			if (lb.Name.EndsWith("MU"))
 			{
-				if (lb.Name.ToLower().Contains("group")) { Program.SelectedGroupName = CurrentMouseListBox.Text.Trim(); }
-				else if (lb.Name.ToLower().Contains("department")) { Program.SelectedDepartmentName = CurrentMouseListBox.Text.Trim(); }
-				else if (lb.Name.ToLower().Contains("account")) { Program.SelectedAccountName = CurrentMouseListBox.Text.Trim(); }
-				else if (lb.Name.ToLower().Contains("companies")) { Program.SelectedCompanyName = CurrentMouseListBox.Text.Trim(); }
+				if(CurrentMouseListBox.SelectedItem != null)
+				{
+					var txt = CurrentMouseListBox.Text.Trim();
+					var id = ((ListItem)CurrentMouseListBox.SelectedItem).Id;	//
+
+					if (lb.Name.ToLower().Contains("group"))			{ Program.SelectedGroupName		 = txt;	Program.SelectedGroupId		 = id; }
+					else if (lb.Name.ToLower().Contains("department"))	{ Program.SelectedDepartmentName = txt; Program.SelectedDepartmentId = id; }
+					else if (lb.Name.ToLower().Contains("account"))		{ Program.SelectedAccountName	 = txt; Program.SelectedAccountId	 = id; }
+					else if (lb.Name.ToLower().Contains("companies"))	
+					{ 
+						Program.SelectedCompanyName = txt; 
+						Program.SelectedCompanyId = id;
+						if (Program.BgWorker.IsBusy) { Program.BgWorker.CancelAsync(); }
+						Program.BgWorker.RunWorkerAsync();
+					}
+				}
 			}
 
 			if (e.Button == MouseButtons.Right)
@@ -462,15 +484,6 @@ namespace MyNotebooks.subforms
 				mnuDelete.Text = vMouseListSelectedItemName != null ? "Delete_original '" + vMouseListSelectedItemName + "'" : "Delete_original";
 
 				mnuManageNotebooks.Visible = vGrp.Name.ToLower().Contains("group");
-				//}
-				//else
-				//{
-				//	mnuCreateNew.Enabled = CurrentMouseListBox.Items.Count == 0;
-				//	mnuAssignUser.Enabled = false;
-				//	mnuEdit.Enabled = false;
-				//	mnuDelete.Enabled = false;
-				//	mnuManageNotebooks.Visible = false;
-				//}
 			}
 			else
 			{

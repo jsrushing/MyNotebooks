@@ -9,6 +9,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -29,6 +30,17 @@ namespace MyNotebooks.objects
 		//}
 
 		public static bool FileNameIsValid(string proposedFileName) { return proposedFileName.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) == -1; }
+
+		public static List<TreeNode> GetAllNodes(this TreeNode _self)
+		{
+			List<TreeNode> result = new List<TreeNode>();
+			result.Add(_self);
+			foreach (TreeNode child in _self.Nodes)
+			{
+				result.AddRange(child.GetAllNodes());
+			}
+			return result;
+		}
 
 		public static List<Notebook> GetCheckedNotebooks()
 		{
@@ -182,16 +194,6 @@ namespace MyNotebooks.objects
 			}
 		}
 
-		public static void PopulateLabelsLists(Entry CurrentEntry)
-		{
-			Program.LblsUnderEntry ??= new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 1));
-			Program.LblsUnderNotebook ??= new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 2));
-			Program.LblsUnderGroup ??= new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 3));
-			Program.LblsUnderDepartment ??= new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 4));
-			Program.LblsUnderAccount ??= new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 5));
-			Program.LblsUnderCompany ??= new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 6));
-		}
-
 		//public static void PopulatePropertiesFromDataRow(Type targetType, DataTable dt, int rowIndex = 0, string skippedProperties = "")
 		//{
 		//	var value = "";
@@ -280,6 +282,77 @@ namespace MyNotebooks.objects
 				var synopsis = nbEntry.GetSynopsis(includeNotebookName, maxWidth);
 				for(int i = 0; i < synopsis.Length; i++) { lbxToPopulate.Items.Add(synopsis[i]); } 
 			}
+		}
+
+		private static void PopulateTreeWithLabels(TreeView treeView, Entry currentEntry, int nodeIndex, MNLabel lbl)
+		{
+			TreeNode tn = new();
+			bool exists = false;
+			tn.Text = lbl.LabelText;
+			tn.Tag = lbl.Id.ToString();
+
+			List<string> childrenNames = new();
+
+			foreach(TreeNode Level0Nodes in  treeView.Nodes)
+			{
+				foreach(TreeNode Level1Nodes in Level0Nodes.Nodes)
+				{
+					childrenNames.Add(Level1Nodes.Text);
+				}
+			}
+
+			TreeNodeCollection firstChildren = treeView.Nodes[nodeIndex].Nodes;
+
+			for (int i = 1; i < firstChildren.Count; i++)
+			{
+				var v = firstChildren[i].Text;
+				//exists = childrenNames.Contains(firstChildren[i].Text);
+
+
+				if (v.StartsWith(lbl.LabelText))
+				{
+					//if (!v.EndsWith("(+)")) { firstChildren[i].Text += " (+)"; }
+					exists = true;
+					break;
+				}
+			}
+
+			//foreach(TreeNode tn2 in treeView.Nodes)
+			//{
+			//	var nodes = tn2.Nodes.Cast<TreeNode>().ToArray();
+			//	exists = nodes.Select(n => n.Text.StartsWith(lbl.LabelText)).Any();
+			//	if (exists) { exists = false; break; }
+			//}
+
+			if (!exists)
+			{
+				tn.Checked = currentEntry.AllLabels.Select(e => e.LabelText).Contains(lbl.LabelText);
+				if (!tn.Checked | nodeIndex == 0) { treeView.Nodes[nodeIndex].Nodes.Add(tn); }
+			}
+		}
+
+		public static void ResetTree(TreeView treeView, Entry currentEntry, frmMain.OrgLevelTypes orgLevelType = frmMain.OrgLevelTypes.None)
+		{
+			treeView.Nodes.Clear();
+			treeView.Nodes.Add("Notebook '"		+ Program.SelectedNotebookName		+ "'");
+			treeView.Nodes.Add("Group '"		+ Program.SelectedGroupName			+ "'");
+			treeView.Nodes.Add("Department '"	+ Program.SelectedDepartmentName	+ "'");
+			treeView.Nodes.Add("Account '"		+ Program.SelectedAccountName		+ "'");
+			treeView.Nodes.Add("Company '"		+ Program.SelectedCompanyName		+ "'");
+
+			DateTime now = DateTime.Now;
+			while (Program.BgWorker.IsBusy & now.AddSeconds(4) > DateTime.Now) { Thread.Sleep(300); }
+			
+			if(orgLevelType == frmMain.OrgLevelTypes.None)
+			{
+				foreach (MNLabel label in Program.LblsUnderNotebook)	PopulateTreeWithLabels	(treeView, currentEntry,	0, label);
+				foreach (MNLabel label in Program.LblsUnderGroup)		PopulateTreeWithLabels	(treeView, currentEntry,	1, label);
+				foreach (MNLabel label in Program.LblsUnderDepartment)	PopulateTreeWithLabels	(treeView, currentEntry,	2, label);
+				foreach (MNLabel label in Program.LblsUnderAccount)		PopulateTreeWithLabels	(treeView, currentEntry,	3, label);
+				foreach (MNLabel label in Program.LblsUnderCompany)		PopulateTreeWithLabels	(treeView, currentEntry,	4, label);
+			}
+
+
 		}
 
 		public static void ResizeListsAndRTBs(ListBox entriesList, RichTextBox entryRTB, Label seperatorLabel, Label typeLabel, Form callingForm)

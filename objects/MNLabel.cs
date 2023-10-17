@@ -21,6 +21,11 @@ namespace MyNotebooks.objects
 		public DateTime CreatedOn { get; set; }
 		public DateTime? EditedOn { get; set; }
 		public int		ParentId { get; set; }
+		public int		NotebookId { get; set; }
+		public int		DepartmentId { get; set; }
+		public int		GroupId { get; set; }
+		public int		AccountId { get; set; }
+
 		public int		Id { get; set; }
 		public string	LabelText { get; set; }
 		public bool		IsActive { get; set; }
@@ -42,6 +47,7 @@ namespace MyNotebooks.objects
 						{
 							value = dt.Rows[rowIndex].Field<string>(sPropertyName.Name).ToString();
 						}
+
 						else if (dt.Columns[sPropertyName.Name].DataType == typeof(Int32))
 						{
 							int iVal = dt.Rows[rowIndex].Field<Int32>(sPropertyName.Name);

@@ -50,11 +50,11 @@ namespace MyNotebooks.subforms
 
 		private void frmSearch_Load(object sender, EventArgs e)
 		{
-			Worker = new BackgroundWorker();
-			Worker.DoWork += new DoWorkEventHandler(bgWorker_DoWork);
-			Worker.WorkerReportsProgress = true;
-			Worker.ProgressChanged += new ProgressChangedEventHandler(bgWorker_ProgressChanged);
-			Worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgWorker_RunWorkerCompleted);
+			//Worker = new BackgroundWorker();
+			//Worker.DoWork += new DoWorkEventHandler(bgWorker_DoWork);
+			//Worker.WorkerReportsProgress = true;
+			//Worker.ProgressChanged += new ProgressChangedEventHandler(bgWorker_ProgressChanged);
+			//Worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgWorker_RunWorkerCompleted);
 
 			using (frmSearch_SelectOrgLevel frm = new(this))
 			{
@@ -71,50 +71,52 @@ namespace MyNotebooks.subforms
 			{
 				orgLevel.Name = orgLevel.Name.Trim();
 				ccb.Items.Add(new { orgLevel.Id, orgLevel.Name });
-
 			}
 			ccb.CheckUncheckAll(true);
 			this.Text = string.Format(LblSearchingInText, this.OrgLevels.Count.ToString(), this.OrgLevels[0].OrgLevelType.ToString());
-			if (!Program.BgWorker.IsBusy) Program.BgWorker.RunWorkerAsync();
+
+			if (!Program.BgWorker.IsBusy && Program.LblsUnderCompany.Count == 0) Program.BgWorker.RunWorkerAsync();
 			else
 			{
+				
+
 				using (frmMessage frm = new(frmMessage.OperationType.Message, 
 					"BgWorker is already running in frmSearch.frmSearch_Load()")) { frm.ShowDialog(); }
 			}
 		}
 
-		private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
-		{
-			Program.User.Notebooks.Clear();
-			Program.User.Notebooks.AddRange(DbAccess.GetNotebooksUnderOrgLevel(OrgLevels[0].OrgLevelType, GetCheckedIds()));
-			//List<Notebook> SortedNotebooks = Program.User.Notebooks.OrderBy(x => x.Name).ToList();
-			Program.User.Notebooks.Sort((x, y) => x.Name.CompareTo(y.Name));
+		//private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
+		//{
+		//	Program.User.Notebooks.Clear();
+		//	Program.User.Notebooks.AddRange(DbAccess.GetNotebooksUnderOrgLevel(OrgLevels[0].OrgLevelType, GetCheckedIds()));
+		//	//List<Notebook> SortedNotebooks = Program.User.Notebooks.OrderBy(x => x.Name).ToList();
+		//	Program.User.Notebooks.Sort((x, y) => x.Name.CompareTo(y.Name));
 
-			foreach (Notebook nb in Program.User.Notebooks)
-			{
-				nb.Entries = DbAccess.GetEntriesInNotebook(nb.Id);
+		//	foreach (Notebook nb in Program.User.Notebooks)
+		//	{
+		//		nb.Entries = DbAccess.GetEntriesInNotebook(nb.Id);
 
-				foreach (Entry entry in nb.Entries)
-				{
-					List<MNLabel> v = entry.AllLabels.Where(e => !FoundLabelsAsListItems.Select(e => e.Name).Contains(e.LabelText)).ToList();
+		//		foreach (Entry entry in nb.Entries)
+		//		{
+		//			List<MNLabel> v = entry.AllLabels.Where(e => !FoundLabelsAsListItems.Select(e => e.Name).Contains(e.LabelText)).ToList();
 
-					foreach (MNLabel label in v) { FoundLabelsAsListItems.Add(new() { Name = label.LabelText, Id = label.Id }); }
-					//lstLabelsForSearch.Items.Add(new ListItem() { Id = label.Id, Name = label.LabelText }); }
-				}
+		//			foreach (MNLabel label in v) { FoundLabelsAsListItems.Add(new() { Name = label.LabelText, Id = label.Id }); }
+		//			//lstLabelsForSearch.Items.Add(new ListItem() { Id = label.Id, Name = label.LabelText }); }
+		//		}
 
-			}
-		}
+		//	}
+		//}
 
-		private void bgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
-		{
-			this.Text += e.ProgressPercentage;
-		}
+		//private void bgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+		//{
+		//	this.Text += e.ProgressPercentage;
+		//}
 
-		private void bgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-		{
-			lstLabelsForSearch.Items.AddRange(FoundLabelsAsListItems.ToArray());
-			btnSearch.Enabled = true;
-		}
+		//private void bgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		//{
+		//	lstLabelsForSearch.Items.AddRange(FoundLabelsAsListItems.ToArray());
+		//	btnSearch.Enabled = true;
+		//}
 
 		private async void btnSearch_Click(object sender, EventArgs e) { await DoSearch(); }
 

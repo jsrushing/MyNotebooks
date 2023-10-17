@@ -39,6 +39,10 @@ namespace MyNotebooks
 
 		public static List<ListBox> ManagementConsoleSelections = new();
 		//public static string		InvalidFileName			= "Sorry, notebook names may not contain characters which are not allowed in file names, for example *, <, >, {, }, |, :, ?, /, \\ (and others).";
+		public static int			SelectedCompanyId		= 0;
+		public static int			SelectedAccountId		= 0;
+		public static int			SelectedDepartmentId	= 0;
+		public static int			SelectedGroupId			= 0;
 		public static string		SelectedCompanyName		= string.Empty;
 		public static string		SelectedAccountName		= string.Empty;
 		public static string		SelectedDepartmentName	= string.Empty;

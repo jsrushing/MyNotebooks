@@ -415,6 +415,29 @@ namespace MyNotebooks.DataAccess
 			return kvpRtrn;
 		}
 
+		public static void GetLabels()
+		{
+			if (Program.LblsUnderCompany == null) { Program.LblsUnderCompany = new(); } else { Program.LblsUnderCompany.Clear(); }
+			DataTable dataTable = new();
+
+			using (SqlConnection conn = new(connString))
+			{
+				conn.Open();
+
+				using (SqlCommand cmd = new("sp_GetLabelsUnderCompany", conn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					cmd.Parameters.AddWithValue("@companyId", Program.SelectedCompanyId);
+
+					SqlDataAdapter sda = new() { SelectCommand = cmd };
+					sda.Fill(dataTable);
+
+					for (int i = 0; i < dataTable.Rows.Count; i++)
+					{ Program.LblsUnderCompany.Add(new(dataTable, i)); }
+				}
+			}
+		}
+
 		public static List<MNLabel> GetLabelsForEntry(int entryId)
 		{
 			List<MNLabel> lstRtrn = new();
@@ -442,7 +465,7 @@ namespace MyNotebooks.DataAccess
 			return lstRtrn;
 		}
 
-		public static List<MNLabel> GetLabelsUnderOrgLevel(int entryId, int orgLevel)
+		public static List<MNLabel> GetLabelsUnderOrgLevel(int entryId, int orgLevel, string[] currentLabels = null)
 		{
 			List<MNLabel> lstRtrn = new();
 			DataTable dataTable = new();
@@ -461,7 +484,18 @@ namespace MyNotebooks.DataAccess
 					sda.Fill(dataTable);
 
 					for (int i = 0; i < dataTable.Rows.Count; i++)
-					{ lstRtrn.Add(new(dataTable, i)); }
+					{
+						if (currentLabels != null)
+						{
+							var value = dataTable.Rows[i][0];
+
+							if (!currentLabels.Contains(dataTable.Rows[i][0].ToString()))
+							{
+								lstRtrn.Add(new(dataTable, i));
+							}
+						}
+						else { lstRtrn.Add(new(dataTable, i)); }
+					}
 				}
 			}
 
@@ -586,8 +620,10 @@ namespace MyNotebooks.DataAccess
 					{
 						entry = new(tblEntries, i);
 
-						for (int i2 = 0; i2 < tblLabels.Rows.Count; i2++)
-						{ entry.AllLabels.Add(new(tblLabels, i2)); }
+						entry.AllLabels.AddRange(Program.LblsUnderCompany.Where(l => l.ParentId == entry.Id));
+
+						//for (int i2 = 0; i2 < tblLabels.Rows.Count; i2++)
+						//{ entry.AllLabels.Add(new(tblLabels, i2)); }
 
 						notebook.Entries.Add(entry);
 					}

@@ -214,8 +214,6 @@ namespace MyNotebooks.subforms
 
 			if (commandText == "rename")
 			{
-				// choose the org level for the rename
-
 				var rootNode = treeAvailableLabels.SelectedNode.Parent.Text;
 				var msg = "You are renaming the Label '" + oldLabelName + "' in the " + rootNode + ". Enter the new Label name and press 'OK'." ;
 
@@ -359,10 +357,15 @@ namespace MyNotebooks.subforms
 							if (frm2.Result == frmMessage.ReturnResult.Yes)
 							{
 								treeAvailableLabels.Nodes[0].Expand();
-								foreach (TreeNode tn in treeAvailableLabels.Nodes[0].Nodes)
-								{
-									if (tn.Text == lbl.LabelText) { tn.Checked = true; break; }
-								}
+
+								TreeNode[] v = treeAvailableLabels.Nodes[0].Nodes.Find(lbl.LabelText, false);
+
+								if(v != null) { v[0].Checked = true; }
+
+								//foreach (TreeNode tn in treeAvailableLabels.Nodes[0].Nodes)
+								//{
+								//	if (tn.Text == lbl.LabelText) { tn.Checked = true; break; }
+								//}
 							}
 						}
 					}
@@ -460,51 +463,7 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void PopulateTreeWithLabels(int nodeIndex, MNLabel lbl)
-		{
-			TreeNode tn = new();
-			bool exists = false;
-			tn.Text = lbl.LabelText;
-			tn.Tag = lbl.Id.ToString();
-			TreeNodeCollection firstChildren = treeAvailableLabels.Nodes[nodeIndex].Nodes;
-
-			for (int i = 0; i < firstChildren.Count; i++)
-			{
-				var v = firstChildren[i].Text;
-
-				if (v.StartsWith(lbl.LabelText))
-				{
-					if (!v.EndsWith("(+)")) { firstChildren[i].Text += " (+)"; }
-					exists = true;
-					break;
-				}
-			}
-
-			if (!exists)
-			{
-				tn.Checked = CurrentEntry.AllLabels.Select(e => e.LabelText).Contains(lbl.LabelText);
-				treeAvailableLabels.Nodes[nodeIndex].Nodes.Add(tn);
-			}
-		}
-
-		private void ResetTree()
-		{
-			treeAvailableLabels.Nodes.Clear();
-			treeAvailableLabels.Nodes.Add("Notebook '" + Program.SelectedNotebookName + "'");
-			treeAvailableLabels.Nodes.Add("Group '" + Program.SelectedGroupName + "'");
-			treeAvailableLabels.Nodes.Add("Department '" + Program.SelectedDepartmentName + "'");
-			treeAvailableLabels.Nodes.Add("Account '" + Program.SelectedAccountName + "'");
-			treeAvailableLabels.Nodes.Add("Company '" + Program.SelectedCompanyName + "'");
-
-			DateTime now = DateTime.Now;
-			while(Program.BgWorker.IsBusy & now.AddSeconds(4) > DateTime.Now) { Thread.Sleep(300); }
-
-			foreach (MNLabel label in Program.LblsUnderNotebook) PopulateTreeWithLabels(0, label);
-			foreach (MNLabel label in Program.LblsUnderGroup) PopulateTreeWithLabels(1, label);
-			foreach (MNLabel label in Program.LblsUnderDepartment) PopulateTreeWithLabels(2, label);
-			foreach (MNLabel label in Program.LblsUnderAccount) PopulateTreeWithLabels(3, label);
-			foreach (MNLabel label in Program.LblsUnderCompany) PopulateTreeWithLabels(4, label);
-		}
+		private void ResetTree() { Utilities.ResetTree(treeAvailableLabels, CurrentEntry); }
 
 		private void ShowPanel(Panel panelToShow)
 		{

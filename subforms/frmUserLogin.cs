@@ -10,6 +10,7 @@ namespace MyNotebooks.subforms
 		public frmUserLogin()
 		{
 			InitializeComponent();
+			
 		}
 
 		private void btnOk_Click(object sender, EventArgs e)
