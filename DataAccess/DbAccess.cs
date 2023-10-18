@@ -182,10 +182,13 @@ namespace MyNotebooks.DataAccess
 					{ cmd.Parameters.AddWithValue("@labelsToRemove", entry.LabelsToRemove); }
 					else
 					{
-						cmd.Parameters.AddWithValue("@RTF",			entry.RTF);
-						cmd.Parameters.AddWithValue("@text",		entry.Text);
-						cmd.Parameters.AddWithValue("@title",		entry.Title);
-						cmd.Parameters.AddWithValue("@opType",		opType == OperationType.Delete ? 2: (int)opType);
+						cmd.Parameters.AddWithValue("@RTF",		entry.RTF);
+						cmd.Parameters.AddWithValue("@text",	entry.Text);
+						cmd.Parameters.AddWithValue("@title",	entry.Title);
+						//cmd.Parameters.AddWithValue("@RTF",	EncryptDecrypt.Encrypt(entry.RTF, Program.User.Password));
+						//cmd.Parameters.AddWithValue("@text",	EncryptDecrypt.Encrypt(entry.Text, Program.User.Password));
+						//cmd.Parameters.AddWithValue("@title",	EncryptDecrypt.Encrypt(entry.Title, Program.User.Password));
+						cmd.Parameters.AddWithValue("@opType",	opType == OperationType.Delete ? 2: (int)opType);
 					}
 
 					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@createdBy"	, Program.User.Id);
@@ -619,12 +622,7 @@ namespace MyNotebooks.DataAccess
 					for (int i = 0; i < tblEntries.Rows.Count; i++)
 					{
 						entry = new(tblEntries, i);
-
 						entry.AllLabels.AddRange(Program.LblsUnderCompany.Where(l => l.ParentId == entry.Id));
-
-						//for (int i2 = 0; i2 < tblLabels.Rows.Count; i2++)
-						//{ entry.AllLabels.Add(new(tblLabels, i2)); }
-
 						notebook.Entries.Add(entry);
 					}
 				}

@@ -403,6 +403,7 @@ namespace MyNotebooks.subforms
 
 		private async void lstGroups_MU_DoubleClick(object sender, EventArgs e)
 		{ 
+			if(Program.LblsUnderCompany == null) { Program.BgWorker.RunWorkerAsync(); }
 			mnuManageNotebooks_Click(null, null); 
 			await Utilities.PopulateAllNotebookNames(); 
 		}

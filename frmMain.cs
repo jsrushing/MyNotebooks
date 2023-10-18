@@ -186,32 +186,7 @@ namespace MyNotebooks.subforms
 		public frmMain()
 		{
 			InitializeComponent();
-			//Program.BgWorker.DoWork += new DoWorkEventHandler(bgWorker_DoWork);
-			//Worker = new BackgroundWorker();
-			//Worker.DoWork += new DoWorkEventHandler(bgWorker_DoWork);
-			//Worker.WorkerReportsProgress = true;
-			//Worker.ProgressChanged += new ProgressChangedEventHandler(bgWorker_ProgressChanged);
-			//Worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgWorker_RunWorkerCompleted);
 		}
-
-		//private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
-		//{
-		//	DbAccess.GetLabels();
-
-		//	if (CurrentEntry != null)
-		//	{
-		//		Program.LblsUnderEntry = new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 1));
-		//		Program.LblsUnderNotebook = new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 2));
-		//		Program.LblsUnderGroup = new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 3));
-		//		Program.LblsUnderDepartment = new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 4));
-		//		Program.LblsUnderAccount = new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 5));
-		//		Program.LblsUnderCompany = new(DbAccess.GetLabelsUnderOrgLevel(CurrentEntry.Id, 6));
-		//	}
-		//}
-
-		//private void bgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e) { }
-
-		//private void bgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) { }
 
 		private async void frmMain_Load(object sender, EventArgs e)
 		{
@@ -222,6 +197,8 @@ namespace MyNotebooks.subforms
 			ShowHideMenusAndControls(SelectionState.HideAll);
 			LoadNotebooks();
 			this.Cursor = Cursors.Default;
+
+			while(Program.LblsUnderCompany == null) { Thread.Sleep(300); }
 
 			Program.LblsUnderAccount	= Program.LblsUnderCompany.Where(l => l.AccountId		== Program.SelectedAccountId).ToList();
 			Program.LblsUnderDepartment = Program.LblsUnderCompany.Where(l => l.DepartmentId	== Program.SelectedDepartmentId).ToList();
@@ -450,18 +427,18 @@ namespace MyNotebooks.subforms
 
 			if (ddlNotebooks.Items.Count > 0)
 			{
-				if (ddlNotebooks.Items.Count == 1)
-				{
-					ddlNotebooks.SelectedIndex = 0;
-					btnLoadNotebook_Click(null, new());
-				}
-				else
-				{
+				//if (ddlNotebooks.Items.Count == 1)
+				//{
+				//	try { ddlNotebooks.SelectedIndex = 0; } catch(Exception e) { var i = e.Message; }
+				//	btnLoadNotebook_Click(null, new());
+				//}
+				//else
+				//{
 					ShowHideMenusAndControls(SelectionState.NotebookNotSelected);
-				}
+				//}
 			}
 
-			if (ddlNotebooks.Items.Count == 1) { btnLoadNotebook_Click(null, new()); }
+			//if (ddlNotebooks.Items.Count == 1) { btnLoadNotebook_Click(null, new()); }
 		}
 
 		private void lstEntries_MouseUp(object sender, MouseEventArgs e)

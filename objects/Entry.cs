@@ -28,7 +28,8 @@ namespace MyNotebooks
 		public string		LabelsToRemove { get; set; }
 		public string		NotebookName { get; set; }
 		public int			ParentId { get; set; }
-		public string		ParentPath { get; set; }
+
+		public string		ParentPath = null;
 		public string		RTF { get; set; }
 		public string		Text { get; set; }
 		public string		Text_Shortened { get; set; }
