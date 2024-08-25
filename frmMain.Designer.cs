@@ -559,6 +559,7 @@ namespace MyNotebooks.subforms
 			MinimumSize = new System.Drawing.Size(650, 441);
 			Name = "frmMain";
 			Text = "MyJournal";
+			FormClosed += this.frmMain_FormClosed;
 			Load += this.frmMain_Load;
 			Resize += this.frmMain_Resize;
 			mnuEntryTop.ResumeLayout(false);

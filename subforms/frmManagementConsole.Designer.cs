@@ -125,7 +125,7 @@ namespace MyNotebooks.subforms
 			btnCreateUser.Name = "btnCreateUser";
 			btnCreateUser.Size = new System.Drawing.Size(157, 23);
 			btnCreateUser.TabIndex = 20;
-			btnCreateUser.Text = "Assign Organizations";
+			btnCreateUser.Text = "Create User";
 			btnCreateUser.UseVisualStyleBackColor = true;
 			btnCreateUser.Click += this.btnCreateUser_Click;
 			// 

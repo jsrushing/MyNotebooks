@@ -74,11 +74,11 @@ namespace MyNotebooks.objects
 					{
 						if (ex.GetType() != typeof(InvalidCastException))
 						{
-							if (sPropertyName.Name != "EditedOn" && sPropertyName.Name != "Id")
-							{
-								using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The error '" + ex.Message + "' occurred while processing the " +
-									"Label property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
-							}
+							//if (sPropertyName.Name != "EditedOn" && sPropertyName.Name != "Id")
+							//{
+							//	using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The error '" + ex.Message + "' occurred while processing the " +
+							//		"Label property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
+							//}
 						}
 					}
 				}

@@ -40,6 +40,7 @@
 					1130 Done.
 
 	07/13/22 Dev. closed. v1.0 released.
+	08/25/24 Removed all multi-notebook features in 10/2023. 
 
 	bugs/hotfixes:
 		bugs: 
@@ -179,13 +180,21 @@ namespace MyNotebooks.subforms
 			Group = 3,
 			Department = 4,
 			Account = 5,
-			Company = 6, 
+			Company = 6,
 			None = 7
 		}
 
 		public frmMain()
 		{
 			InitializeComponent();
+		}
+
+		private void frmMain_FormClosed(object sender, FormClosedEventArgs e)
+		{
+			foreach (Form f in Application.OpenForms)
+			{
+				f.Close();
+			}
 		}
 
 		private async void frmMain_Load(object sender, EventArgs e)
@@ -198,11 +207,11 @@ namespace MyNotebooks.subforms
 			LoadNotebooks();
 			this.Cursor = Cursors.Default;
 
-			while(Program.LblsUnderCompany == null) { Thread.Sleep(300); }
+			while (Program.LblsUnderCompany == null) { Thread.Sleep(300); }
 
-			Program.LblsUnderAccount	= Program.LblsUnderCompany.Where(l => l.AccountId		== Program.SelectedAccountId).ToList();
-			Program.LblsUnderDepartment = Program.LblsUnderCompany.Where(l => l.DepartmentId	== Program.SelectedDepartmentId).ToList();
-			Program.LblsUnderGroup		= Program.LblsUnderCompany.Where(l => l.GroupId			== Program.SelectedGroupId).ToList();
+			Program.LblsUnderAccount = Program.LblsUnderCompany.Where(l => l.AccountId == Program.SelectedAccountId).ToList();
+			Program.LblsUnderDepartment = Program.LblsUnderCompany.Where(l => l.DepartmentId == Program.SelectedDepartmentId).ToList();
+			Program.LblsUnderGroup = Program.LblsUnderCompany.Where(l => l.GroupId == Program.SelectedGroupId).ToList();
 		}
 
 		private void frmMain_Resize(object sender, EventArgs e)
@@ -415,7 +424,7 @@ namespace MyNotebooks.subforms
 			//	ddlNotebooks.Items.Add(lvi);
 			//}
 
-			foreach(Notebook n in Program.AllNotebooks)
+			foreach (Notebook n in Program.AllNotebooks)
 			{
 				ListItem lvi = new ListItem() { Name = n.Name, Id = n.Id };
 				ddlNotebooks.Items.Add(lvi);
@@ -434,7 +443,7 @@ namespace MyNotebooks.subforms
 				//}
 				//else
 				//{
-					ShowHideMenusAndControls(SelectionState.NotebookNotSelected);
+				ShowHideMenusAndControls(SelectionState.NotebookNotSelected);
 				//}
 			}
 
@@ -460,7 +469,7 @@ namespace MyNotebooks.subforms
 			if (lb.SelectedIndex > -1)
 			{
 				lb.SelectedIndexChanged -= new System.EventHandler(this.lstEntries_SelectEntry);
-				
+
 				CurrentEntry = null;
 				CurrentEntry = Entry.Select(rtb, lb, CurrentNotebook, FirstSelection, null, true);
 				Program.LblsUnderEntry = Program.LblsUnderCompany.Where(l => l.ParentId == CurrentEntry.Id).ToList();
@@ -531,7 +540,7 @@ namespace MyNotebooks.subforms
 		private async void mnuEntryDelete_Click(object sender, EventArgs e)
 		{
 			this.Cursor = Cursors.WaitCursor;
-			var vMsg = "Do you want to delete " + Environment.NewLine + "'" + CurrentEntry.Title + "'?";
+			var vMsg = "Do you want to delete " + "'" + CurrentEntry.Title + "'?";
 			using (frmMessage frm = new(frmMessage.OperationType.YesNoQuestion, vMsg, "Confirm Delete", this))
 			{
 				frm.ShowDialog(this);
@@ -574,7 +583,7 @@ namespace MyNotebooks.subforms
 		private async void mnuLabels_Click(object sender, EventArgs e)
 		{
 			DateTime start = DateTime.Now;
-			while(Program.BgWorker.IsBusy && start.AddSeconds(4) > DateTime.Now ) { Thread.Sleep(300); }
+			while (Program.BgWorker.IsBusy && start.AddSeconds(4) > DateTime.Now) { Thread.Sleep(300); }
 
 			using (frmLabelsManager frm = new(this, CurrentEntry))
 			{

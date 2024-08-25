@@ -105,36 +105,40 @@ namespace MyNotebooks.subforms
 				btnLogin_Click(null, null);
 				IsQuickStart = false;
 			}
+
+			lstGroups_MU.SelectedIndex = 1;
+			CurrentMouseListBox = lstGroups_MU;
+			lstGroups_MU_DoubleClick(null, null);
 		}
 
 		private void frmManagementConsole_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			if (lstGroups_CU.SelectedItem == null & lstGroups_MU.SelectedItem == null)
-			{
-				if (!ForceClose && this.Size != SmallSize)
-				{
-					using (frmMessage frm = new(frmMessage.OperationType.Message, "You must select a group.", "Group Selection Required", this)) { frm.ShowDialog(); }
-					e.Cancel = true;
-				}
-			}
-			else
-			{
-				var v = lstGroups_MU.SelectedItem as ListItem;
-				var v2 = lstGroups_CU.SelectedItem as ListItem;
-				Program.ActiveNBParentId = v == null ? v2.Id : v.Id;
-			}
+			//if (lstGroups_CU.SelectedItem == null & lstGroups_MU.SelectedItem == null)
+			//{
+			//	if (!ForceClose && this.Size != SmallSize)
+			//	{
+			//		using (frmMessage frm = new(frmMessage.OperationType.Message, "You must select a group.", "Group Selection Required", this)) { frm.ShowDialog(); }
+			//		e.Cancel = true;
+			//	}
+			//}
+			//else
+			//{
+			//	var v = lstGroups_MU.SelectedItem as ListItem;
+			//	var v2 = lstGroups_CU.SelectedItem as ListItem;
+			//	Program.ActiveNBParentId = v == null ? v2.Id : v.Id;
+			//}
 
-			Program.ManagementConsoleSelections.Clear();
+			//Program.ManagementConsoleSelections.Clear();
 
-			foreach (GroupBox gb in OrgLevelGroups_CU)
-			{
-				Program.ManagementConsoleSelections.Add(gb.Controls.OfType<ListBox>().FirstOrDefault());
-			}
+			//foreach (GroupBox gb in OrgLevelGroups_CU)
+			//{
+			//	Program.ManagementConsoleSelections.Add(gb.Controls.OfType<ListBox>().FirstOrDefault());
+			//}
 
-			foreach (GroupBox gb in OrgLevelGroups_MU)
-			{
-				Program.ManagementConsoleSelections.Add(gb.Controls.OfType<ListBox>().FirstOrDefault());
-			}
+			//foreach (GroupBox gb in OrgLevelGroups_MU)
+			//{
+			//	Program.ManagementConsoleSelections.Add(gb.Controls.OfType<ListBox>().FirstOrDefault());
+			//}
 		}
 
 		private void frmManagementConsole_Activated(object sender, EventArgs e) { txtPwd.Focus(); }
@@ -265,14 +269,14 @@ namespace MyNotebooks.subforms
 				//PopulatePermissions();
 				ListBox lb2Populate = new();
 				ddlAccessLevels.SelectedIndex = CurrentUser.AccessLevel - 1;
-				btnCreateUser.Text = CreateUserButton_UpdateUser;
+				btnCreateUser.Text = CreateUserButton_CreateUser;	// CreateUserButton_UpdateUser;
 				ddlAccessLevels.Enabled = false;
 				PopulateTopLevels();
 
 				//treeUser.Nodes.Cast<TreeNode>().Where(e => e.Text == vOrgLevelName).First().Nodes.AddRange(Program.User.GetHighestNodeItems().ToArray());
 				//treeUser.ExpandAll();
 
-				btnCreateUser.Visible = !CurrentUser.Equals(Program.User);
+				//btnCreateUser.Visible = !CurrentUser.Equals(Program.User);
 				clbPermissions.Enabled = CurrentUser.HasPermission(UserPermissions.Permissions.ManageUserPermissions);
 				this.Size = CurrentUser.Equals(Program.User) ? OneUserSize : FullSize;
 				btnLogin.Enabled = false;
@@ -402,10 +406,10 @@ namespace MyNotebooks.subforms
 		}
 
 		private async void lstGroups_MU_DoubleClick(object sender, EventArgs e)
-		{ 
-			if(Program.LblsUnderCompany == null) { Program.BgWorker.RunWorkerAsync(); }
-			mnuManageNotebooks_Click(null, null); 
-			await Utilities.PopulateAllNotebookNames(); 
+		{
+			if (Program.LblsUnderCompany == null) { Program.BgWorker.RunWorkerAsync(); }
+			mnuManageNotebooks_Click(null, null);
+			await Utilities.PopulateAllNotebookNames();
 		}
 
 		private void lstMU_DragLeave(object sender, EventArgs e)
@@ -432,17 +436,17 @@ namespace MyNotebooks.subforms
 
 			if (lb.Name.EndsWith("MU"))
 			{
-				if(CurrentMouseListBox.SelectedItem != null)
+				if (CurrentMouseListBox.SelectedItem != null)
 				{
 					var txt = CurrentMouseListBox.Text.Trim();
-					var id = ((ListItem)CurrentMouseListBox.SelectedItem).Id;	//
+					var id = ((ListItem)CurrentMouseListBox.SelectedItem).Id;   //
 
-					if (lb.Name.ToLower().Contains("group"))			{ Program.SelectedGroupName		 = txt;	Program.SelectedGroupId		 = id; }
-					else if (lb.Name.ToLower().Contains("department"))	{ Program.SelectedDepartmentName = txt; Program.SelectedDepartmentId = id; }
-					else if (lb.Name.ToLower().Contains("account"))		{ Program.SelectedAccountName	 = txt; Program.SelectedAccountId	 = id; }
-					else if (lb.Name.ToLower().Contains("companies"))	
-					{ 
-						Program.SelectedCompanyName = txt; 
+					if (lb.Name.ToLower().Contains("group")) { Program.SelectedGroupName = txt; Program.SelectedGroupId = id; }
+					else if (lb.Name.ToLower().Contains("department")) { Program.SelectedDepartmentName = txt; Program.SelectedDepartmentId = id; }
+					else if (lb.Name.ToLower().Contains("account")) { Program.SelectedAccountName = txt; Program.SelectedAccountId = id; }
+					else if (lb.Name.ToLower().Contains("companies"))
+					{
+						Program.SelectedCompanyName = txt;
 						Program.SelectedCompanyId = id;
 						if (Program.BgWorker.IsBusy) { Program.BgWorker.CancelAsync(); }
 						Program.BgWorker.RunWorkerAsync();
@@ -598,8 +602,9 @@ namespace MyNotebooks.subforms
 
 			Program.AllNotebooks.Clear();
 			Program.AllNotebooks.AddRange(notebooks);
-			//this.Close();
+			//this.Hide();
 			using (frmMain frm = new()) { frm.ShowDialog(); }
+			//this.Close();
 		}
 
 		private void PopulateBaseOrgLevels()

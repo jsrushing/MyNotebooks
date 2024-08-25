@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using MyNotebooks.objects;
 using System.ComponentModel;
 using MyNotebooks.DataAccess;
+using System.Runtime.CompilerServices;
 
 namespace MyNotebooks
 {
@@ -64,7 +65,11 @@ namespace MyNotebooks
 			Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new frmUserLogin());
+			try
+			{
+				Application.Run(new frmUserLogin());
+			}
+			catch { }
 		}
 
 	}

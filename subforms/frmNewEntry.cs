@@ -53,10 +53,10 @@ namespace MyNotebooks.subforms
 			{
 				Program.LblsUnderEntry = new(DbAccess.GetLabelsUnderOrgLevel(Entry.Id, 1));
 				Program.LblsUnderNotebook = new(DbAccess.GetLabelsUnderOrgLevel(Entry.Id, 2));
-				Program.LblsUnderGroup = new(DbAccess.GetLabelsUnderOrgLevel(Entry.Id, 3));
-				Program.LblsUnderDepartment = new(DbAccess.GetLabelsUnderOrgLevel(Entry.Id, 4));
-				Program.LblsUnderAccount = new(DbAccess.GetLabelsUnderOrgLevel(Entry.Id, 5));
-				Program.LblsUnderCompany = new(DbAccess.GetLabelsUnderOrgLevel(Entry.Id, 6));
+				//Program.LblsUnderGroup = new(DbAccess.GetLabelsUnderOrgLevel(Entry.Id, 3));
+				//Program.LblsUnderDepartment = new(DbAccess.GetLabelsUnderOrgLevel(Entry.Id, 4));
+				//Program.LblsUnderAccount = new(DbAccess.GetLabelsUnderOrgLevel(Entry.Id, 5));
+				//Program.LblsUnderCompany = new(DbAccess.GetLabelsUnderOrgLevel(Entry.Id, 6));
 			}
 		}
 
