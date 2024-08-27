@@ -473,7 +473,9 @@ namespace MyNotebooks.subforms
 
 				CurrentEntry = null;
 				CurrentEntry = Entry.Select(rtb, lb, CurrentNotebook, FirstSelection, null, true);
-				Program.LblsUnderEntry = Program.LblsUnderCompany.Where(l => l.ParentId == CurrentEntry.Id).ToList();
+				//Program.LblsUnderEntry = Program.LblsUnderCompany.Where(l => l.ParentId == CurrentEntry.Id).ToList();
+
+				DbAccess.GetLabelsForEntry(CurrentEntry.Id);
 
 				if (CurrentEntry != null)
 				{
@@ -484,15 +486,15 @@ namespace MyNotebooks.subforms
 					ShowHideMenusAndControls(SelectionState.EntrySelected);
 					mnuLabels.Enabled = true;
 
-					if (!Program.BgWorker.IsBusy && notebookChanged) { Program.BgWorker.RunWorkerAsync(); notebookChanged = false; } // new DoWorkEventArgs("GetEntries"));
-					else
-					{
-						if (Program.BgWorker.IsBusy)
-						{
-							using (frmMessage frm = new(frmMessage.OperationType.Message,
-								"BgWorker is already running in frmMain.lstEntries_SelectEntry()")) { frm.ShowDialog(); }
-						}
-					}
+					//if (!Program.BgWorker.IsBusy && notebookChanged) { Program.BgWorker.RunWorkerAsync(); notebookChanged = false; } // new DoWorkEventArgs("GetEntries"));
+					//else
+					//{
+					//	if (Program.BgWorker.IsBusy)
+					//	{
+					//		using (frmMessage frm = new(frmMessage.OperationType.Message,
+					//			"BgWorker is already running in frmMain.lstEntries_SelectEntry()")) { frm.ShowDialog(); }
+					//	}
+					//}
 				}
 				else
 				{
