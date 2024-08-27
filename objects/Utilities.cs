@@ -160,6 +160,14 @@ namespace MyNotebooks.objects
 			}
 		}
 
+		public static async Task PopulateAllNotebooks()
+		{
+			List<Notebook> notebooks = DbAccess.GetAllNotebookNamesAndIds();
+			Program.AllNotebooks.Clear();
+			Program.AllNotebooks.AddRange(notebooks);
+		}
+
+
 		public static async Task PopulateAllNotebookNames(List<string> notebookNames = null)
 		{
 

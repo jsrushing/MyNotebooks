@@ -603,7 +603,7 @@ namespace MyNotebooks.subforms
 			Program.AllNotebooks.Clear();
 			Program.AllNotebooks.AddRange(notebooks);
 			//this.Hide();
-			using (frmMain frm = new()) { frm.ShowDialog(); }
+			//using (frmMain frm = new()) { frm.ShowDialog(); }
 			//this.Close();
 		}
 

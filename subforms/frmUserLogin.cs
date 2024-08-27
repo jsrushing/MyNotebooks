@@ -9,10 +9,15 @@ namespace MyNotebooks.subforms
 	{
 		public frmUserLogin()
 		{
-			InitializeComponent();
-			txtUserName.Text = "agFinder";
-			txtPwd.Text = "myJournal1!";
-			btnOk_Click(null, null);
+			this.Hide();
+			using (frmMain frm = new()) { frm.ShowDialog(); }
+			this.Close();
+
+			//InitializeComponent();
+			//txtUserName.Text = "agFinder";
+			//txtPwd.Text = "myJournal1!";
+			//btnOk_Click(null, null);
+
 		}
 
 		private void btnOk_Click(object sender, EventArgs e)

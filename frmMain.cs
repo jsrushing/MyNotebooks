@@ -204,14 +204,15 @@ namespace MyNotebooks.subforms
 			System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
 			this.Text = fvi.ProductName + " " + Program.AppVersion + (fvi.FileName.ToLower().Contains("debug") ? " - DEBUG MODE" : "");
 			ShowHideMenusAndControls(SelectionState.HideAll);
+			await Utilities.PopulateAllNotebooks();
 			LoadNotebooks();
 			this.Cursor = Cursors.Default;
 
-			while (Program.LblsUnderCompany == null) { Thread.Sleep(300); }
+			//while (Program.LblsUnderCompany == null) { Thread.Sleep(300); }
 
-			Program.LblsUnderAccount = Program.LblsUnderCompany.Where(l => l.AccountId == Program.SelectedAccountId).ToList();
-			Program.LblsUnderDepartment = Program.LblsUnderCompany.Where(l => l.DepartmentId == Program.SelectedDepartmentId).ToList();
-			Program.LblsUnderGroup = Program.LblsUnderCompany.Where(l => l.GroupId == Program.SelectedGroupId).ToList();
+			//Program.LblsUnderAccount = Program.LblsUnderCompany.Where(l => l.AccountId == Program.SelectedAccountId).ToList();
+			//Program.LblsUnderDepartment = Program.LblsUnderCompany.Where(l => l.DepartmentId == Program.SelectedDepartmentId).ToList();
+			//Program.LblsUnderGroup = Program.LblsUnderCompany.Where(l => l.GroupId == Program.SelectedGroupId).ToList();
 		}
 
 		private void frmMain_Resize(object sender, EventArgs e)
@@ -373,8 +374,8 @@ namespace MyNotebooks.subforms
 			lstEntries.Visible = false;
 			cbxSortEntriesBy.SelectedIndex = 0;
 			var v = ddlNotebooks.SelectedItem as ListItem;
-			SelectedNotebookId = v.Id;
-			Program.LblsUnderNotebook = Program.LblsUnderCompany.Where(l => l.NotebookId == SelectedNotebookId).ToList();
+			DbAccess.PopulateLabelsUnderNotebook(v.Id);
+			//Program.LblsUnderNotebook = Program.LblsUnderCompany.Where(l => l.NotebookId == v.Id).ToList();
 			SelectedNotebookIds = new(v.Id, v.Name);
 			btnLoadNotebook_Click(sender, e);
 			notebookChanged = true;

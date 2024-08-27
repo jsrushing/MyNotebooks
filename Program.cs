@@ -31,8 +31,8 @@ namespace MyNotebooks
 		public static BackgroundWorker BgWorker				= new();
 		public static string		GroupsFolder			= Program.AppRoot + "groups\\";
 
-		public static List<MNLabel> LblsUnderEntry;
-		public static List<MNLabel> LblsUnderNotebook;
+		public static List<MNLabel> LblsUnderEntry = new();
+		public static List<MNLabel> LblsUnderNotebook = new();
 		public static List<MNLabel> LblsUnderGroup;
 		public static List<MNLabel> LblsUnderDepartment;
 		public static List<MNLabel> LblsUnderAccount;

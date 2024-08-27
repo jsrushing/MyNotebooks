@@ -468,6 +468,31 @@ namespace MyNotebooks.DataAccess
 			return lstRtrn;
 		}
 
+		public static void PopulateLabelsUnderNotebook(int notebookId) 
+		{
+			DataTable dataTable = new();
+			Program.LblsUnderNotebook.Clear();
+			
+			using (SqlConnection conn = new(connString))
+			{
+				conn.Open();
+
+				using (SqlCommand cmd = new("sp_GetLabelsUnderNotebook", conn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					cmd.Parameters.AddWithValue("@notebookId", notebookId);
+
+					SqlDataAdapter sda = new() { SelectCommand = cmd };
+					sda.Fill(dataTable);
+
+					for (int i = 0; i < dataTable.Rows.Count; i++)
+					{
+						Program.LblsUnderNotebook.Add(new(dataTable, i)); }
+					}
+				}
+			}
+
+
 		public static List<MNLabel> GetLabelsUnderOrgLevel(int entryId, int orgLevel, string[] currentLabels = null)
 		{
 			List<MNLabel> lstRtrn = new();
@@ -622,7 +647,7 @@ namespace MyNotebooks.DataAccess
 					for (int i = 0; i < tblEntries.Rows.Count; i++)
 					{
 						entry = new(tblEntries, i);
-						entry.AllLabels.AddRange(Program.LblsUnderCompany.Where(l => l.ParentId == entry.Id));
+						//entry.AllLabels.AddRange(Program.LblsUnderCompany.Where(l => l.ParentId == entry.Id));
 						notebook.Entries.Add(entry);
 					}
 				}
@@ -656,6 +681,40 @@ namespace MyNotebooks.DataAccess
 
 								lstReturn.Add(nb);
 							}	
+						}
+					}
+				}
+			}
+
+			return lstReturn;
+		}
+
+		public static List<Notebook> GetAllNotebookNamesAndIds()
+		{
+			List<Notebook> lstReturn = new List<Notebook>();
+
+			using (SqlConnection conn = new(connString))
+			{
+				conn.Open();
+
+				using (SqlCommand cmd = new("sp_GetAllNotebookNamesAndIds", conn))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+
+					using (SqlDataReader reader = cmd.ExecuteReader())
+					{
+						if (reader.HasRows)
+						{
+							while (reader.Read())
+							{
+								Notebook nb = new Notebook()
+								{
+									Id = reader.GetInt32("Id"),
+									Name = reader.GetString("Name")
+								};
+
+								lstReturn.Add(nb);
+							}
 						}
 					}
 				}
