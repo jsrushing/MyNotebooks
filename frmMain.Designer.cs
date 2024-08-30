@@ -430,7 +430,7 @@ namespace MyNotebooks.subforms
 			cbxDatesFrom.FormattingEnabled = true;
 			cbxDatesFrom.Location = new System.Drawing.Point(39, 2);
 			cbxDatesFrom.Name = "cbxDatesFrom";
-			cbxDatesFrom.Size = new System.Drawing.Size(86, 23);
+			cbxDatesFrom.Size = new System.Drawing.Size(70, 23);
 			cbxDatesFrom.TabIndex = 44;
 			cbxDatesFrom.SelectedIndexChanged += this.cbxDates_SelectedIndexChanged;
 			// 
@@ -461,7 +461,7 @@ namespace MyNotebooks.subforms
 			// lblEntriesCount
 			// 
 			lblEntriesCount.AutoSize = true;
-			lblEntriesCount.Location = new System.Drawing.Point(385, 6);
+			lblEntriesCount.Location = new System.Drawing.Point(366, 5);
 			lblEntriesCount.Name = "lblEntriesCount";
 			lblEntriesCount.Size = new System.Drawing.Size(140, 15);
 			lblEntriesCount.TabIndex = 41;
@@ -472,7 +472,7 @@ namespace MyNotebooks.subforms
 			// 
 			cbxSortEntriesBy.FormattingEnabled = true;
 			cbxSortEntriesBy.Items.AddRange(new object[] { "Created On", "Edited On", "Title" });
-			cbxSortEntriesBy.Location = new System.Drawing.Point(288, 2);
+			cbxSortEntriesBy.Location = new System.Drawing.Point(269, 1);
 			cbxSortEntriesBy.Name = "cbxSortEntriesBy";
 			cbxSortEntriesBy.Size = new System.Drawing.Size(91, 23);
 			cbxSortEntriesBy.TabIndex = 52;
@@ -482,7 +482,7 @@ namespace MyNotebooks.subforms
 			// label5
 			// 
 			label5.AutoSize = true;
-			label5.Location = new System.Drawing.Point(242, 7);
+			label5.Location = new System.Drawing.Point(223, 6);
 			label5.Name = "label5";
 			label5.Size = new System.Drawing.Size(46, 15);
 			label5.TabIndex = 51;
@@ -502,7 +502,7 @@ namespace MyNotebooks.subforms
 			cbxDatesTo.FormattingEnabled = true;
 			cbxDatesTo.Location = new System.Drawing.Point(146, 2);
 			cbxDatesTo.Name = "cbxDatesTo";
-			cbxDatesTo.Size = new System.Drawing.Size(86, 23);
+			cbxDatesTo.Size = new System.Drawing.Size(70, 23);
 			cbxDatesTo.TabIndex = 45;
 			cbxDatesTo.SelectedIndexChanged += this.cbxDates_SelectedIndexChanged;
 			// 

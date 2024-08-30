@@ -778,9 +778,10 @@ namespace MyNotebooks.subforms
 			SuppressDateClick = true;
 			cbxDatesFrom.DataSource = null;
 			cbxDatesTo.Items.Clear();
-			List<string> l = CurrentNotebook.Entries.Select(e => e.CreatedOn.ToShortDateString()).Distinct().ToList();
+			List<string> l = CurrentNotebook.Entries.Select(e => e.CreatedOn.ToString(ConfigurationManager.AppSettings["ShortDateFormat"])).Distinct().ToList();
 			l.Sort((x, y) => -DateTime.Parse(x).CompareTo(DateTime.Parse(y)));
 			cbxDatesFrom.DataSource = l;
+			//cbxDatesTo.DataSource = l;
 			//cbxDatesTo.Items.AddRange(cbxDates.Items.Cast<Object>().ToArray());
 			foreach (string s in cbxDatesFrom.Items) { cbxDatesTo.Items.Add(s); }
 			cbxDatesTo.SelectedIndex = 0;
