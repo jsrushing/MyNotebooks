@@ -191,7 +191,7 @@ namespace MyNotebooks.DataAccess
 						cmd.Parameters.AddWithValue("@opType",	opType == OperationType.Delete ? 2: (int)opType);
 					}
 
-					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@createdBy"	, Program.User.Id);
+					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@createdBy", 1000);	// Program.User.Id);
 					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@parentId"		, entry.ParentId);
 					if (opType != OperationType.Create)			cmd.Parameters.AddWithValue("@entryId"		, entry.Id);
 					if (opType == OperationType.Delete)			cmd.Parameters.AddWithValue("isActive"		, 0);

@@ -294,7 +294,7 @@ namespace MyNotebooks.subforms
 					newEntry = new(txtNewEntryTitle.Text.Trim(), rtbNewEntry.Text.Trim(), rtbNewEntry.Rtf,
 						LabelsManager.CheckedLabels_Get(clbLabels), CurrentNotebook.Id, CurrentNotebook.Name);
 
-					newEntry.CreatedBy = Program.User.Id;
+					//newEntry.CreatedBy = Program.User.Id;
 					this.Entry = newEntry;
 				}
 

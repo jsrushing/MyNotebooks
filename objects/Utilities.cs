@@ -343,22 +343,23 @@ namespace MyNotebooks.objects
 		{
 			treeView.Nodes.Clear();
 			treeView.Nodes.Add("Notebook '"		+ Program.SelectedNotebookName		+ "'");
-			treeView.Nodes.Add("Group '"		+ Program.SelectedGroupName			+ "'");
-			treeView.Nodes.Add("Department '"	+ Program.SelectedDepartmentName	+ "'");
-			treeView.Nodes.Add("Account '"		+ Program.SelectedAccountName		+ "'");
-			treeView.Nodes.Add("Company '"		+ Program.SelectedCompanyName		+ "'");
+			//treeView.Nodes.Add("Group '"		+ Program.SelectedGroupName			+ "'");
+			//treeView.Nodes.Add("Department '"	+ Program.SelectedDepartmentName	+ "'");
+			//treeView.Nodes.Add("Account '"		+ Program.SelectedAccountName		+ "'");
+			//treeView.Nodes.Add("Company '"		+ Program.SelectedCompanyName		+ "'");
 
 			DateTime now = DateTime.Now;
-			while (Program.BgWorker.IsBusy & now.AddSeconds(4) > DateTime.Now) { Thread.Sleep(300); }
-			
-			if(orgLevelType == frmMain.OrgLevelTypes.None)
-			{
-				foreach (MNLabel label in Program.LblsUnderNotebook)	PopulateTreeWithLabels	(treeView, currentEntry,	0, label);
-				foreach (MNLabel label in Program.LblsUnderGroup)		PopulateTreeWithLabels	(treeView, currentEntry,	1, label);
-				foreach (MNLabel label in Program.LblsUnderDepartment)	PopulateTreeWithLabels	(treeView, currentEntry,	2, label);
-				foreach (MNLabel label in Program.LblsUnderAccount)		PopulateTreeWithLabels	(treeView, currentEntry,	3, label);
-				foreach (MNLabel label in Program.LblsUnderCompany)		PopulateTreeWithLabels	(treeView, currentEntry,	4, label);
-			}
+			//while (Program.BgWorker.IsBusy & now.AddSeconds(4) > DateTime.Now) { Thread.Sleep(300); }
+			foreach (MNLabel label in Program.LblsUnderNotebook) PopulateTreeWithLabels(treeView, currentEntry, 0, label);
+
+			//if (orgLevelType == frmMain.OrgLevelTypes.None)
+			//{
+			//	foreach (MNLabel label in Program.LblsUnderNotebook)	PopulateTreeWithLabels	(treeView, currentEntry,	0, label);
+			//	//foreach (MNLabel label in Program.LblsUnderGroup)		PopulateTreeWithLabels	(treeView, currentEntry,	1, label);
+			//	//foreach (MNLabel label in Program.LblsUnderDepartment)	PopulateTreeWithLabels	(treeView, currentEntry,	2, label);
+			//	//foreach (MNLabel label in Program.LblsUnderAccount)		PopulateTreeWithLabels	(treeView, currentEntry,	3, label);
+			//	//foreach (MNLabel label in Program.LblsUnderCompany)		PopulateTreeWithLabels	(treeView, currentEntry,	4, label);
+			//}
 
 
 		}
