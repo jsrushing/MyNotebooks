@@ -334,8 +334,16 @@ namespace MyNotebooks.objects
 
 			if (!exists)
 			{
-				tn.Checked = currentEntry.AllLabels.Select(e => e.LabelText).Contains(lbl.LabelText);
-				if (!tn.Checked | nodeIndex == 0) { treeView.Nodes[nodeIndex].Nodes.Add(tn); }
+				if(currentEntry != null)
+				{
+					tn.Checked = currentEntry.AllLabels.Select(e => e.LabelText).Contains(lbl.LabelText);
+					if (!tn.Checked | nodeIndex == 0) { treeView.Nodes[nodeIndex].Nodes.Add(tn); }
+				}
+				else
+				{
+					treeView.Nodes[nodeIndex].Nodes.Add(tn);
+				}
+
 			}
 		}
 
@@ -343,6 +351,7 @@ namespace MyNotebooks.objects
 		{
 			treeView.Nodes.Clear();
 			treeView.Nodes.Add("Notebook '"		+ Program.SelectedNotebookName		+ "'");
+			treeView.Nodes.Add("All Notebooks");
 			//treeView.Nodes.Add("Group '"		+ Program.SelectedGroupName			+ "'");
 			//treeView.Nodes.Add("Department '"	+ Program.SelectedDepartmentName	+ "'");
 			//treeView.Nodes.Add("Account '"		+ Program.SelectedAccountName		+ "'");

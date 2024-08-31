@@ -50,7 +50,7 @@ namespace MyNotebooks
 		public static string		SelectedGroupName		= string.Empty;
 		public static string		SelectedNotebookName	= string.Empty;
 		public static bool			SkipFileSizeComparison	= false;
-		public static MNUser		User					= null;
+		public static MNUser		User					= new();
 		public static Dictionary<string, string> DictCheckedNotebooks = new Dictionary<string, string>();
 		public static Dictionary<string, int>	 NotebooksNamesAndIds = new Dictionary<string, int>();
 

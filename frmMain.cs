@@ -207,6 +207,7 @@ namespace MyNotebooks.subforms
 			await Utilities.PopulateAllNotebooks();
 			LoadNotebooks();
 			this.Cursor = Cursors.Default;
+			Program.User.Id = 1000;
 
 			//while (Program.LblsUnderCompany == null) { Thread.Sleep(300); }
 
@@ -260,7 +261,7 @@ namespace MyNotebooks.subforms
 						await ProcessDateFiltersAndPopulateEntries();
 						SuppressDateClick = false;
 						lstEntries.Height = this.Height - lstEntries.Top - 50;
-						mnuLabels.Enabled = false;
+						//mnuLabels.Enabled = false;
 
 						for (var i = 0; i < cbxDatesFrom.Items.Count; i++)
 						{
@@ -364,6 +365,9 @@ namespace MyNotebooks.subforms
 			}
 		}
 
+		private void ddlNotebooks_Click(object sender, EventArgs e)
+		{ if (ddlNotebooks.Items.Count > 0) { ddlNotebooks.DroppedDown = true; } }
+
 		private void ddlNotebooks_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			ShowHideMenusAndControls(SelectionState.NotebookLoaded);
@@ -374,15 +378,12 @@ namespace MyNotebooks.subforms
 			lstEntries.Visible = false;
 			cbxSortEntriesBy.SelectedIndex = 0;
 			var v = ddlNotebooks.SelectedItem as ListItem;
-			DbAccess.PopulateLabelsUnderNotebook(v.Id);
+			//DbAccess.PopulateLabelsUnderNotebook(v.Id);
 			//Program.LblsUnderNotebook = Program.LblsUnderCompany.Where(l => l.NotebookId == v.Id).ToList();
 			SelectedNotebookIds = new(v.Id, v.Name);
 			btnLoadNotebook_Click(sender, e);
 			notebookChanged = true;
 		}
-
-		private void ddlNotebooks_Click(object sender, EventArgs e)
-		{ if (ddlNotebooks.Items.Count > 0) { ddlNotebooks.DroppedDown = true; } }
 
 		private void lblSeparator_MouseMove(object sender, MouseEventArgs e)
 		{

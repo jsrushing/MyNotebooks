@@ -158,7 +158,7 @@ namespace MyNotebooks.subforms
 			//switch (sort)
 			//{
 			//	case LabelsManager.LabelsSortType.None:
-			//		LabelsManager.PopulateLabelsList(null, lstLabels, LabelsManager.LabelsSortType.None, this.CurrentEntry);
+			//		LabelsManager.PopulateLabelsList(null, , LabelsManager.LabelsSortType.None, this.CurrentEntry);
 			//		lblSortType.Text = "sort A-Z";
 			//		sort = LabelsManager.LabelsSortType.Ascending;
 			//		break;
@@ -330,7 +330,7 @@ namespace MyNotebooks.subforms
 				{
 					MNLabel lbl = new()
 					{
-						CreatedBy = Program.User.Id,
+						CreatedBy = 1000,
 						LabelText = frm.ResultText,
 						ParentId = CurrentEntry.Id
 					};

@@ -191,7 +191,7 @@ namespace MyNotebooks.DataAccess
 						cmd.Parameters.AddWithValue("@opType",	opType == OperationType.Delete ? 2: (int)opType);
 					}
 
-					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@createdBy", 1000);	// Program.User.Id);
+					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@createdBy",	Program.User.Id);
 					if (opType == OperationType.Create)			cmd.Parameters.AddWithValue("@parentId"		, entry.ParentId);
 					if (opType != OperationType.Create)			cmd.Parameters.AddWithValue("@entryId"		, entry.Id);
 					if (opType == OperationType.Delete)			cmd.Parameters.AddWithValue("isActive"		, 0);
@@ -581,6 +581,7 @@ namespace MyNotebooks.DataAccess
 					if (getEntries)
 					{
 						PopulateNotebookEntries(ref nbRtrn);
+						//PopulateLabelsUnderNotebook(nbRtrn.Id);
 					}
 				}
 			}
@@ -630,6 +631,7 @@ namespace MyNotebooks.DataAccess
 			DataSet ds = new();
 			Entry entry = null;
 			notebook.Entries.Clear();
+			Program.LblsUnderNotebook.Clear();
 
 			using (SqlConnection conn = new(connString))
 			{
@@ -649,6 +651,11 @@ namespace MyNotebooks.DataAccess
 						entry = new(tblEntries, i);
 						//entry.AllLabels.AddRange(Program.LblsUnderCompany.Where(l => l.ParentId == entry.Id));
 						notebook.Entries.Add(entry);
+						foreach(MNLabel label in GetLabelsForEntry(entry.Id)) 
+						{
+							entry.AllLabels.Add(label);
+							if(!Program.LblsUnderNotebook.Contains(label)) { Program.LblsUnderNotebook.Add(label);}
+						}
 					}
 				}
 			}
