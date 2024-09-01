@@ -245,7 +245,7 @@ namespace MyNotebooks.subforms
 							labelsToEdit = Program.LblsUnderNotebook;
 							break;
 						case 1:
-							labelsToEdit = Program.LblsInAllNotebooks;
+							//labelsToEdit = Program.LblsInAllNotebooks;
 							break;
 					}
 
@@ -332,7 +332,7 @@ namespace MyNotebooks.subforms
 						CurrentEntry.AllLabels.Add(lbl);
 						Program.LblsUnderEntry.Add(lbl);
 						Program.LblsUnderNotebook.Add(lbl);
-						Program.LblsInAllNotebooks.Add(lbl);
+						Program.LblsInAllNotebooks.Add(lbl.LabelText);
 						ResetTree();
 					}
 					else

@@ -165,6 +165,7 @@ namespace MyNotebooks.objects
 			List<Notebook> notebooks = DbAccess.GetAllNotebookNamesAndIds();
 			Program.AllNotebooks.Clear();
 			Program.AllNotebooks.AddRange(notebooks);
+			DbAccess.PopulateLabelsInAllNotebooks();
 		}
 
 
@@ -293,55 +294,21 @@ namespace MyNotebooks.objects
 		private static void PopulateTreeWithLabels(TreeView treeView, Entry currentEntry, int nodeIndex, MNLabel lbl)
 		{
 			TreeNode tn = new();
-			bool exists = false;
 			tn.Text = lbl.LabelText;
-			tn.Tag = lbl.Id.ToString();
 
-			List<string> childrenNames = new();
-
-			foreach(TreeNode Level0Nodes in  treeView.Nodes)
+			if (currentEntry != null)
 			{
-				foreach(TreeNode Level1Nodes in Level0Nodes.Nodes)
-				{
-					childrenNames.Add(Level1Nodes.Text);
-				}
+				tn.Checked = currentEntry.AllLabels.Select(e => e.LabelText).Contains(lbl.LabelText);
+				if (!tn.Checked | nodeIndex == 0) { treeView.Nodes[nodeIndex].Nodes.Add(tn); }
+			}
+			else
+			{
+				treeView.Nodes[nodeIndex].Nodes.Add(tn);
 			}
 
-			TreeNodeCollection firstChildren = treeView.Nodes[nodeIndex].Nodes;
-
-			for (int i = 1; i < firstChildren.Count; i++)
+			if (nodeIndex > 0)
 			{
-				var v = firstChildren[i].Text;
-				//exists = childrenNames.Contains(firstChildren[i].Text);
-
-
-				if (v.StartsWith(lbl.LabelText))
-				{
-					//if (!v.EndsWith("(+)")) { firstChildren[i].Text += " (+)"; }
-					exists = true;
-					break;
-				}
-			}
-
-			//foreach(TreeNode tn2 in treeView.Nodes)
-			//{
-			//	var nodes = tn2.Nodes.Cast<TreeNode>().ToArray();
-			//	exists = nodes.Select(n => n.Text.StartsWith(lbl.LabelText)).Any();
-			//	if (exists) { exists = false; break; }
-			//}
-
-			if (!exists)
-			{
-				if(currentEntry != null)
-				{
-					tn.Checked = currentEntry.AllLabels.Select(e => e.LabelText).Contains(lbl.LabelText);
-					if (!tn.Checked | nodeIndex == 0) { treeView.Nodes[nodeIndex].Nodes.Add(tn); }
-				}
-				else
-				{
-					treeView.Nodes[nodeIndex].Nodes.Add(tn);
-				}
-
+				treeView.Nodes[nodeIndex].Nodes.Add(lbl.LabelText);
 			}
 		}
 
@@ -350,25 +317,9 @@ namespace MyNotebooks.objects
 			treeView.Nodes.Clear();
 			treeView.Nodes.Add("Notebook '"		+ Program.SelectedNotebookName		+ "'");
 			treeView.Nodes.Add("All Notebooks");
-			//treeView.Nodes.Add("Group '"		+ Program.SelectedGroupName			+ "'");
-			//treeView.Nodes.Add("Department '"	+ Program.SelectedDepartmentName	+ "'");
-			//treeView.Nodes.Add("Account '"		+ Program.SelectedAccountName		+ "'");
-			//treeView.Nodes.Add("Company '"		+ Program.SelectedCompanyName		+ "'");
-
 			DateTime now = DateTime.Now;
-			//while (Program.BgWorker.IsBusy & now.AddSeconds(4) > DateTime.Now) { Thread.Sleep(300); }
 			foreach (MNLabel label in Program.LblsUnderNotebook) PopulateTreeWithLabels(treeView, currentEntry, 0, label);
-
-			//if (orgLevelType == frmMain.OrgLevelTypes.None)
-			//{
-			//	foreach (MNLabel label in Program.LblsUnderNotebook)	PopulateTreeWithLabels	(treeView, currentEntry,	0, label);
-			//	//foreach (MNLabel label in Program.LblsUnderGroup)		PopulateTreeWithLabels	(treeView, currentEntry,	1, label);
-			//	//foreach (MNLabel label in Program.LblsUnderDepartment)	PopulateTreeWithLabels	(treeView, currentEntry,	2, label);
-			//	//foreach (MNLabel label in Program.LblsUnderAccount)		PopulateTreeWithLabels	(treeView, currentEntry,	3, label);
-			//	//foreach (MNLabel label in Program.LblsUnderCompany)		PopulateTreeWithLabels	(treeView, currentEntry,	4, label);
-			//}
-
-
+			foreach (string labelText in Program.LblsInAllNotebooks) treeView.Nodes[1].Nodes.Add(labelText);
 		}
 
 		public static void ResizeListsAndRTBs(ListBox entriesList, RichTextBox entryRTB, Label seperatorLabel, Label typeLabel, Form callingForm)
@@ -391,12 +342,6 @@ namespace MyNotebooks.objects
 		{ 
 			formToInitialize.StartPosition = FormStartPosition.Manual;	
 			formToInitialize.Location = new System.Drawing.Point(parentForm.Location.X + 25, parentForm.Location.Y + 25); 
-		}
-
-		public static void UpdateLabelsUnderNotebook(Entry entry)
-		{
-			var v = Program.LblsUnderNotebook.Where(l => entry.AllLabels.All(l1 => l.Id != l1.Id));
-
 		}
 	}
 }

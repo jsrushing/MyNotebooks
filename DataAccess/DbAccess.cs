@@ -418,6 +418,40 @@ namespace MyNotebooks.DataAccess
 			return kvpRtrn;
 		}
 
+		public static void PopulateLabelsInAllNotebooks()
+		{
+			DataTable dt = new DataTable();
+
+			try
+			{
+				using (SqlConnection conn = new(connString))
+				{
+					conn.Open();
+					using (SqlCommand cmd = new("sp_GetAllLabels", conn))
+					{
+						cmd.CommandType = CommandType.StoredProcedure;
+
+						using SqlDataReader reader = cmd.ExecuteReader();
+						{
+							while (reader.Read())
+							{ Program.LblsInAllNotebooks.Add(reader.GetString(0)); }
+						}
+
+						//SqlDataAdapter adapter = new() { SelectCommand = cmd };
+						//adapter.Fill(dt);
+
+						//foreach (DataRow dr in dt.Rows)
+						//{
+						//	Notebook nb = new(dt);
+						//	if (getEntries) { PopulateNotebookEntries(ref nb); }
+						//	Program.User.Notebooks.Add(nb);
+						//}
+					}
+				}
+
+			}
+			catch (Exception ex) { }
+		}
 
 		public static List<MNLabel> GetLabelsForEntry(int entryId)
 		{
