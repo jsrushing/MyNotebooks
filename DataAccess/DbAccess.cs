@@ -468,29 +468,30 @@ namespace MyNotebooks.DataAccess
 			return lstRtrn;
 		}
 
-		public static void PopulateLabelsUnderNotebook(int notebookId) 
-		{
-			DataTable dataTable = new();
-			Program.LblsUnderNotebook.Clear();
-			
-			using (SqlConnection conn = new(connString))
-			{
-				conn.Open();
+		//public static void PopulateLabelsUnderNotebook(int notebookId)
+		//{
+		//	DataTable dataTable = new();
+		//	Program.LblsUnderNotebook.Clear();
 
-				using (SqlCommand cmd = new("sp_GetLabelsUnderNotebook", conn))
-				{
-					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@notebookId", notebookId);
+		//	using (SqlConnection conn = new(connString))
+		//	{
+		//		conn.Open();
 
-					SqlDataAdapter sda = new() { SelectCommand = cmd };
-					sda.Fill(dataTable);
+		//		using (SqlCommand cmd = new("sp_GetLabelsUnderNotebook", conn))
+		//		{
+		//			cmd.CommandType = CommandType.StoredProcedure;
+		//			cmd.Parameters.AddWithValue("@notebookId", notebookId);
 
-					for (int i = 0; i < dataTable.Rows.Count; i++)
-					{
-						Program.LblsUnderNotebook.Add(new(dataTable, i)); }
-					}
-				}
-			}
+		//			SqlDataAdapter sda = new() { SelectCommand = cmd };
+		//			sda.Fill(dataTable);
+
+		//			for (int i = 0; i < dataTable.Rows.Count; i++)
+		//			{
+		//				Program.LblsUnderNotebook.Add(new(dataTable, i));
+		//			}
+		//		}
+		//	}
+		//}
 
 
 		public static List<MNLabel> GetLabelsUnderOrgLevel(int entryId, int orgLevel, string[] currentLabels = null)
@@ -630,6 +631,7 @@ namespace MyNotebooks.DataAccess
 			DataTable dt = new();
 			DataSet ds = new();
 			Entry entry = null;
+			MNLabel label1 = null;
 			notebook.Entries.Clear();
 			Program.LblsUnderNotebook.Clear();
 
@@ -649,13 +651,20 @@ namespace MyNotebooks.DataAccess
 					for (int i = 0; i < tblEntries.Rows.Count; i++)
 					{
 						entry = new(tblEntries, i);
-						//entry.AllLabels.AddRange(Program.LblsUnderCompany.Where(l => l.ParentId == entry.Id));
+						//entry.AllLabels.AddRange(Program.LblsUnderNotebook.Where(l => l.ParentId == entry.Id));
+						entry.AllLabels = GetLabelsForEntry(entry.Id);
+
+						foreach(MNLabel l  in entry.AllLabels) { if(!Program.LblsUnderNotebook.Contains(l)) Program.LblsUnderNotebook.Add(l); }
+
 						notebook.Entries.Add(entry);
-						foreach(MNLabel label in GetLabelsForEntry(entry.Id)) 
-						{
-							entry.AllLabels.Add(label);
-							if(!Program.LblsUnderNotebook.Contains(label)) { Program.LblsUnderNotebook.Add(label);}
-						}
+					
+
+						//for (int j = 0; j < tblLabels.Rows.Count; j++) 
+						//{
+						//	label1 = new MNLabel(tblLabels,j);
+						//	if (!entry.AllLabels.Contains(label1)) { entry.AllLabels.Add(label1); }
+						//	if (!Program.LblsUnderNotebook.Contains(label1)) { Program.LblsUnderNotebook.Add(label1); }
+						//}
 					}
 				}
 			}

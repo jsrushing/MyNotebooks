@@ -285,7 +285,7 @@ namespace MyNotebooks.objects
 
 			foreach (Entry nbEntry in tmpEntries)
 			{
-				nbEntry.PopulateLabels();
+				//nbEntry.PopulateLabels();
 				//nbEntry.NotebookName += "' " + nbEntry.ParentPath;
 				var synopsis = nbEntry.GetSynopsis(includeNotebookName, maxWidth);
 				for(int i = 0; i < synopsis.Length; i++) { lbxToPopulate.Items.Add(synopsis[i]); } 

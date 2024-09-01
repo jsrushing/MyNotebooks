@@ -238,6 +238,7 @@ namespace MyNotebooks.subforms
 			if (CurrentNotebook != null)
 			{
 				Program.SelectedNotebookName = CurrentNotebook.Name;
+				//DbAccess.PopulateLabelsUnderNotebook(CurrentNotebook.Id);
 
 				if (CurrentNotebook.Entries.Count == 0)
 				{
@@ -477,6 +478,8 @@ namespace MyNotebooks.subforms
 				//Program.LblsUnderEntry = Program.LblsUnderCompany.Where(l => l.ParentId == CurrentEntry.Id).ToList();
 
 				DbAccess.GetLabelsForEntry(CurrentEntry.Id);
+
+				var v = CurrentEntry.AllLabels.Where(l => l.ParentId == CurrentEntry.Id).ToList();
 
 				if (CurrentEntry != null)
 				{
