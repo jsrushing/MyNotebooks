@@ -149,19 +149,6 @@ namespace MyNotebooks.subforms
 							};
 
 						this.Entry.Id = DbAccess.CRUDNotebookEntry(this.Entry).intValue;
-
-						// If user opens notebook > clicks 'Add Entry', load Program.LblsUnder... lists will not be populated.
-						// Catch the null here and populate those lists.
-						if (Program.LblsUnderCompany == null)
-						{
-							if (!Program.BgWorker.IsBusy) Program.BgWorker.RunWorkerAsync();
-							else
-							{
-								using (frmMessage frm2 = new(frmMessage.OperationType.Message,
-									"BgWorker is already running in frmNewEntry.lblManageLabels_Click()")) { frm2.ShowDialog(); }
-							}
-						}
-
 						SetIsDirty(false);
 					}
 				}

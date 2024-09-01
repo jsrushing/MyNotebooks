@@ -43,11 +43,6 @@ namespace MyNotebooks.subforms
 		private bool IsQuickStart;
 		private bool ForceClose;
 
-		private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
-		{
-			DbAccess.GetLabels();
-		}
-
 		public frmManagementConsole(Form parent, bool isQuickStart = false)
 		{
 			InitializeComponent();
@@ -64,7 +59,6 @@ namespace MyNotebooks.subforms
 			OrgLevelGroups_CU.AddRange(new GroupBox[] { grpCompany_CU, grpAccount_CU, grpDepartment_CU, grpGroup_CU });
 			OrgLevelLists_MU.AddRange(new ListBox[] { lstCompanies_MU, lstAccounts_MU, lstDepartments_MU, lstGroups_MU });
 			OrgLevelLists_CU.AddRange(new ListBox[] { lstCompanies_CU, lstAccounts_CU, lstDepartments_CU, lstGroups_CU });
-			Program.BgWorker.DoWork += new DoWorkEventHandler(bgWorker_DoWork);
 
 			if (Program.ManagementConsoleSelections.Count > 0)
 			{
@@ -407,7 +401,6 @@ namespace MyNotebooks.subforms
 
 		private async void lstGroups_MU_DoubleClick(object sender, EventArgs e)
 		{
-			if (Program.LblsUnderCompany == null) { Program.BgWorker.RunWorkerAsync(); }
 			mnuManageNotebooks_Click(null, null);
 			await Utilities.PopulateAllNotebookNames();
 		}

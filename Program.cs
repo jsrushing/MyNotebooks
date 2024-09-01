@@ -31,12 +31,9 @@ namespace MyNotebooks
 		public static BackgroundWorker BgWorker				= new();
 		public static string		GroupsFolder			= Program.AppRoot + "groups\\";
 
-		public static List<MNLabel> LblsUnderEntry = new();
-		public static List<MNLabel> LblsUnderNotebook = new();
-		public static List<MNLabel> LblsUnderGroup;
-		public static List<MNLabel> LblsUnderDepartment;
-		public static List<MNLabel> LblsUnderAccount;
-		public static List<MNLabel> LblsUnderCompany;
+		public static List<MNLabel> LblsUnderEntry			= new();
+		public static List<MNLabel> LblsUnderNotebook		= new();
+		public static List<MNLabel> LblsInAllNotebooks		= new();
 
 		public static List<ListBox> ManagementConsoleSelections = new();
 		//public static string		InvalidFileName			= "Sorry, notebook names may not contain characters which are not allowed in file names, for example *, <, >, {, }, |, :, ?, /, \\ (and others).";

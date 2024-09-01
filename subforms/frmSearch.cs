@@ -74,15 +74,6 @@ namespace MyNotebooks.subforms
 			}
 			ccb.CheckUncheckAll(true);
 			this.Text = string.Format(LblSearchingInText, this.OrgLevels.Count.ToString(), this.OrgLevels[0].OrgLevelType.ToString());
-
-			if (!Program.BgWorker.IsBusy && Program.LblsUnderCompany.Count == 0) Program.BgWorker.RunWorkerAsync();
-			else
-			{
-				
-
-				using (frmMessage frm = new(frmMessage.OperationType.Message, 
-					"BgWorker is already running in frmSearch.frmSearch_Load()")) { frm.ShowDialog(); }
-			}
 		}
 
 		//private void bgWorker_DoWork(object sender, DoWorkEventArgs e)

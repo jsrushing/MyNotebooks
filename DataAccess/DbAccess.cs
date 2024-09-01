@@ -418,28 +418,6 @@ namespace MyNotebooks.DataAccess
 			return kvpRtrn;
 		}
 
-		public static void GetLabels()
-		{
-			if (Program.LblsUnderCompany == null) { Program.LblsUnderCompany = new(); } else { Program.LblsUnderCompany.Clear(); }
-			DataTable dataTable = new();
-
-			using (SqlConnection conn = new(connString))
-			{
-				conn.Open();
-
-				using (SqlCommand cmd = new("sp_GetLabelsUnderCompany", conn))
-				{
-					cmd.CommandType = CommandType.StoredProcedure;
-					cmd.Parameters.AddWithValue("@companyId", Program.SelectedCompanyId);
-
-					SqlDataAdapter sda = new() { SelectCommand = cmd };
-					sda.Fill(dataTable);
-
-					for (int i = 0; i < dataTable.Rows.Count; i++)
-					{ Program.LblsUnderCompany.Add(new(dataTable, i)); }
-				}
-			}
-		}
 
 		public static List<MNLabel> GetLabelsForEntry(int entryId)
 		{
@@ -563,12 +541,6 @@ namespace MyNotebooks.DataAccess
 			return nbRtrn;
 		}
 
-		/// <summary>
-		/// Populate Program.User.Notebooks. Include 
-		/// </summary>
-		/// <param name="orgLevelType"></param>
-		/// <param name="orgLevelIds"></param>
-//		public static void		PopulateNotebooksByUserAndDescendants(frmMain.OrgLevelTypes orgLevelType, string orgLevelIds, bool getEntries = true)
 		public static void			PopulateNotebooksByUserAndDescendants(bool getEntries)
 		{
 			List<OrgLevel> lstRtrn = new();
