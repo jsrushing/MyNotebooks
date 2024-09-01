@@ -54,6 +54,7 @@ namespace MyNotebooks
 		{
 			var value = "";
 			var setProp = true;
+			var err = false;
 
 			foreach (PropertyInfo sPropertyName in typeof(Entry).GetProperties())
 			{
@@ -97,9 +98,12 @@ namespace MyNotebooks
 							using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The error '" + ex.Message + "' occurred while processing the " +
 								"Entry property '" + sPropertyName + "'.", "Error Occurred")) { frm.ShowDialog(); }
 						}
+						err = true;
 					}
 				}
 			}
+
+			if(!err) this.AllLabels = DbAccess.GetLabelsForEntry(this.Id);
 		}
 
 		public SQLResult Create() { return GetOperationResult(DbAccess.CRUDNotebookEntry(this), true); }
@@ -159,16 +163,6 @@ namespace MyNotebooks
 			////}
 			return sRtrn;
 		}
-
-		//public void PopulateLabels()
-		//{
-		//	////this.AllLabels.Clear();
-		//	//this.AllLabels = Program.LblsUnderNotebook.Where(l => l.ParentId == this.Id).ToList();
-
-		//	//var v = this.AllLabels.Where(l => l.ParentId == 37).ToList();
-
-		//	//this.AllLabels = DbAccess.GetLabelsForEntry(Convert.ToInt32(this.Id));
-		//}
 
 		public bool			RemoveOrReplaceLabel(string newLabelName, string oldLabelName, bool renaming = true)
 		{

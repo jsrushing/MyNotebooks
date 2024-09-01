@@ -285,8 +285,6 @@ namespace MyNotebooks.objects
 
 			foreach (Entry nbEntry in tmpEntries)
 			{
-				//nbEntry.PopulateLabels();
-				//nbEntry.NotebookName += "' " + nbEntry.ParentPath;
 				var synopsis = nbEntry.GetSynopsis(includeNotebookName, maxWidth);
 				for(int i = 0; i < synopsis.Length; i++) { lbxToPopulate.Items.Add(synopsis[i]); } 
 			}
@@ -393,6 +391,12 @@ namespace MyNotebooks.objects
 		{ 
 			formToInitialize.StartPosition = FormStartPosition.Manual;	
 			formToInitialize.Location = new System.Drawing.Point(parentForm.Location.X + 25, parentForm.Location.Y + 25); 
+		}
+
+		public static void UpdateLabelsUnderNotebook(Entry entry)
+		{
+			var v = Program.LblsUnderNotebook.Where(l => entry.AllLabels.All(l1 => l.Id != l1.Id));
+
 		}
 	}
 }

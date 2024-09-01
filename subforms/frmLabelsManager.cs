@@ -463,7 +463,11 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void ResetTree() { Utilities.ResetTree(treeAvailableLabels, CurrentEntry); }
+		private void ResetTree() 
+		{ 
+			Utilities.ResetTree(treeAvailableLabels, CurrentEntry);
+			treeAvailableLabels.Nodes[0].Expand();
+		}
 
 		private void ShowPanel(Panel panelToShow)
 		{
