@@ -51,6 +51,7 @@ namespace MyNotebooks.subforms
 			sort = LabelsManager.LabelsSortType.None;
 			lblSortType_Click(null, null);
 			ResetTree();
+			mnuAddToCurrentEntry.Enabled = CurrentEntry != null;
 		}
 
 		private void frmLabelsManager_Resize(object sender, EventArgs e) { ShowHideOccurrences(); }
@@ -85,6 +86,67 @@ namespace MyNotebooks.subforms
 				//lstOccurrences.Items.Clear();
 				//this.ShowHideOccurrences();
 				//this.ShowPanel(pnlMain);
+			}
+
+			this.Cursor = Cursors.Default;
+		}
+
+		private async void DeleteOrRename(object sender, EventArgs e)
+		{
+			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
+			var isRename = mnu.Text.ToLower().Contains("rename");
+			var newLabelName = string.Empty;
+			var sMsg = string.Empty;
+			var oldLabelName = treeAvailableLabels.SelectedNode.Text.Replace(" (+)", "");
+			this.Cursor = Cursors.WaitCursor;
+
+			if (isRename)
+			{
+				var rootNode = treeAvailableLabels.SelectedNode.Parent.Text;
+				var msg = "You are renaming the Label '" + oldLabelName + "' in the " + rootNode + ". Enter the new Label name and press 'OK'.";
+
+				using (frmMessage frm = new(frmMessage.OperationType.InputBox, msg))
+				{
+					frm.ShowDialog();
+					newLabelName = frm.ResultText;
+					ActionTaken = newLabelName != null;
+				}
+			}
+			else
+			{
+				using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, sMsg, "Confirm Action", this))
+				{
+					frm.ShowDialog();
+					ActionTaken = frm.Result == frmMessage.ReturnResult.Yes;
+				}
+			}
+
+			if (ActionTaken)
+			{
+				if (isRename)
+				{
+					List<MNLabel> labelsToEdit = new();
+
+					switch (treeAvailableLabels.SelectedNode.Parent.Index)
+					{
+						case 0:
+							labelsToEdit = Program.LblsUnderNotebook;
+							break;
+						case 1:
+							//labelsToEdit = Program.LblsInAllNotebooks;
+							break;
+					}
+
+					var vLblsToEdit = labelsToEdit.Where(l => l.LabelText.Equals(oldLabelName)).ToList();
+					var vIdsToEdit = string.Join(",", vLblsToEdit.Select(l => l.Id.ToString()).ToList());
+					foreach (var v in vLblsToEdit) { v.LabelText = newLabelName; DbAccess.CRUDLabel(v, OperationType.Update); }
+					ResetTree();
+				}
+				else
+				{ /*await LabelsManager.DeleteLabelInNotebooksList(lstLabels.SelectedItem.ToString(), notebooksToEdit, this);*/ }
+
+				//lblSortType_Click(null, null);
+				//lstOccurrences.Items.Clear();
 			}
 
 			this.Cursor = Cursors.Default;
@@ -178,7 +240,7 @@ namespace MyNotebooks.subforms
 		private void lstOccurrences_MouseUp(object sender, MouseEventArgs e)
 		{ PopulateGridViewEntryDetails(e.Y); }
 
-		private void mnuAddCheckedLabelsToEntry_Click(object sender, EventArgs e)
+		private void mnuAddToCurrentEntry_Click(object sender, EventArgs e)
 		{
 			List<MNLabel> existingLabels = new();
 			foreach (var label in CurrentEntry.AllLabels) { existingLabels.Add(label); }
@@ -201,69 +263,6 @@ namespace MyNotebooks.subforms
 
 			ActionTaken = true;
 			this.Close();
-		}
-
-		private async void DeleteOrRename(object sender, EventArgs e)
-		{
-			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
-			var commandText = mnu.Text.ToLower().Contains("rename") ? "rename" : "delete";
-			var newLabelName = string.Empty;
-			var sMsg = string.Empty;
-			var oldLabelName = treeAvailableLabels.SelectedNode.Text.Replace(" (+)", "");
-			this.Cursor = Cursors.WaitCursor;
-
-			if (commandText == "rename")
-			{
-				var rootNode = treeAvailableLabels.SelectedNode.Parent.Text;
-				var msg = "You are renaming the Label '" + oldLabelName + "' in the " + rootNode + ". Enter the new Label name and press 'OK'." ;
-
-				using (frmMessage frm = new(frmMessage.OperationType.InputBox, msg))
-				{
-					frm.ShowDialog();
-					newLabelName = frm.ResultText;
-					ActionTaken = newLabelName != null;
-				}
-			}
-			else
-			{
-				using (frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, sMsg, "Confirm Action", this))
-				{
-					frm.ShowDialog();
-					ActionTaken = frm.Result == frmMessage.ReturnResult.Yes;
-				}
-			}
-
-			if (ActionTaken)
-			{
-				if (commandText.Equals("rename"))
-				{
-					List<MNLabel> labelsToEdit = new();
-
-					switch (treeAvailableLabels.SelectedNode.Parent.Index)
-					{
-						case 0:
-							labelsToEdit = Program.LblsUnderNotebook;
-							break;
-						case 1:
-							//labelsToEdit = Program.LblsInAllNotebooks;
-							break;
-					}
-
-					var vLblsToEdit = labelsToEdit.Where(l => l.LabelText.Equals(oldLabelName)).ToList();
-					var vIdsToEdit = string.Join(",", vLblsToEdit.Select(l => l.Id.ToString()).ToList());
-					foreach(var v in vLblsToEdit) { v.LabelText = newLabelName; DbAccess.CRUDLabel(v, OperationType.Update); }
-
-					//this.Text = vIdsToEdit;
-					ResetTree();
-				}
-				else
-				{ /*await LabelsManager.DeleteLabelInNotebooksList(lstLabels.SelectedItem.ToString(), notebooksToEdit, this);*/ }
-
-				//lblSortType_Click(null, null);
-				//lstOccurrences.Items.Clear();
-			}
-
-			this.Cursor = Cursors.Default;
 		}
 
 		private void mnuContext_GridEntryDetails_Click(object sender, EventArgs e)
@@ -348,7 +347,7 @@ namespace MyNotebooks.subforms
 
 								TreeNode[] v = treeAvailableLabels.Nodes[0].Nodes.Find(lbl.LabelText, false);
 
-								if(v != null) { v[0].Checked = true; }
+								if (v != null) { v[0].Checked = true; }
 
 								//foreach (TreeNode tn in treeAvailableLabels.Nodes[0].Nodes)
 								//{
@@ -451,8 +450,8 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void ResetTree() 
-		{ 
+		private void ResetTree()
+		{
 			Utilities.ResetTree(treeAvailableLabels, CurrentEntry);
 			treeAvailableLabels.Nodes[0].Expand();
 		}
@@ -490,7 +489,7 @@ namespace MyNotebooks.subforms
 		}
 
 		private void treeAvailableLabels_AfterSelect(object sender, TreeViewEventArgs e)
-		{ if (e.Node.Level > 0) { PopulateLabelInformation(); }	}
+		{ if (e.Node.Level > 0) { PopulateLabelInformation(); } }
 
 		private void treeAvailableLabels_AfterExpand(object sender, TreeViewEventArgs e)
 		{ if (e.Node.Nodes.Count == 1 && e.Node.Nodes[0].Text == "") { e.Node.Nodes.Clear(); } }
@@ -499,7 +498,7 @@ namespace MyNotebooks.subforms
 		{
 			if (!ProgramaticallyChecking)
 			{
-				TreeNode tn = e.Node; 
+				TreeNode tn = e.Node;
 				mnuLabelsOperations.Enabled = false;
 
 				if (tn != null)
@@ -556,7 +555,7 @@ namespace MyNotebooks.subforms
 
 		private void treeAvailableLabels_MouseDown(object sender, MouseEventArgs e)
 		{
-			if(e.Button == MouseButtons.Right) 
+			if (e.Button == MouseButtons.Right)
 			{
 				var vNode = treeAvailableLabels.GetNodeAt(e.X, e.Y);
 				treeAvailableLabels.SelectedNode = vNode;
@@ -571,6 +570,5 @@ namespace MyNotebooks.subforms
 		{
 			gridViewEntryDetails.Visible = false;
 		}
-
 	}
 }

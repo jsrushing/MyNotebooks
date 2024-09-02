@@ -436,16 +436,6 @@ namespace MyNotebooks.DataAccess
 							while (reader.Read())
 							{ Program.LblsInAllNotebooks.Add(reader.GetString(0)); }
 						}
-
-						//SqlDataAdapter adapter = new() { SelectCommand = cmd };
-						//adapter.Fill(dt);
-
-						//foreach (DataRow dr in dt.Rows)
-						//{
-						//	Notebook nb = new(dt);
-						//	if (getEntries) { PopulateNotebookEntries(ref nb); }
-						//	Program.User.Notebooks.Add(nb);
-						//}
 					}
 				}
 
@@ -605,7 +595,7 @@ namespace MyNotebooks.DataAccess
 			catch (Exception ex) { }
 		}
 
-		public static void			PopulateNotebookEntries(ref Notebook notebook)
+		public static void			PopulateNotebookEntries(ref Notebook notebook)	// also populates Program.LblsUnderNotebook!
 		{
 			DataTable dt = new();
 			DataSet ds = new();
@@ -624,14 +614,12 @@ namespace MyNotebooks.DataAccess
 					SqlDataAdapter sda = new() { SelectCommand = cmd };
 					sda.Fill(ds);
 					DataTable tblEntries = ds.Tables[0];
-					DataTable tblLabels = ds.Tables[1];
 
 					for (int i = 0; i < tblEntries.Rows.Count; i++)
 					{
 						entry = new(tblEntries, i);
 						notebook.Entries.Add(entry);
-						foreach(MNLabel l  in entry.AllLabels) // populate LblsUnderNotebook
-						{ if(!Program.LblsUnderNotebook.Contains(l)) Program.LblsUnderNotebook.Add(l); }
+						Program.LblsUnderNotebook.AddRange(entry.AllLabels.Where(l => !Program.LblsUnderNotebook.Select(l => l.LabelText).ToList().Contains(l.LabelText)));
 					}
 				}
 			}

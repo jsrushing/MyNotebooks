@@ -38,7 +38,6 @@ namespace MyNotebooks.subforms
 			pnlLabelDetails = new Panel();
 			lstOccurrences = new ListBox();
 			label7 = new Label();
-			label6 = new Label();
 			treeAvailableLabels = new TreeView();
 			mnuContextLabels = new ContextMenuStrip(components);
 			mnuContextRename_lstLables = new ToolStripMenuItem();
@@ -58,6 +57,9 @@ namespace MyNotebooks.subforms
 			label5 = new Label();
 			mnuMain = new MenuStrip();
 			mnuLabelsOperations = new ToolStripMenuItem();
+			mnuAddToCurrentEntry = new ToolStripMenuItem();
+			mnuRename = new ToolStripMenuItem();
+			mnuDelete = new ToolStripMenuItem();
 			mnuMoveTop = new ToolStripMenuItem();
 			toolStripMenuItem1 = new ToolStripMenuItem();
 			toolStripMenuItem2 = new ToolStripMenuItem();
@@ -78,7 +80,6 @@ namespace MyNotebooks.subforms
 			// 
 			pnlMain.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
 			pnlMain.Controls.Add(pnlLabelDetails);
-			pnlMain.Controls.Add(label6);
 			pnlMain.Controls.Add(treeAvailableLabels);
 			pnlMain.Controls.Add(lblSortType);
 			pnlMain.Location = new System.Drawing.Point(7, 25);
@@ -119,15 +120,6 @@ namespace MyNotebooks.subforms
 			label7.Size = new System.Drawing.Size(182, 15);
 			label7.TabIndex = 12;
 			label7.Text = "Label Details, Entries, and Parents";
-			// 
-			// label6
-			// 
-			label6.AutoSize = true;
-			label6.Location = new System.Drawing.Point(4, 4);
-			label6.Name = "label6";
-			label6.Size = new System.Drawing.Size(127, 15);
-			label6.TabIndex = 11;
-			label6.Text = "Labels under current ...";
 			// 
 			// treeAvailableLabels
 			// 
@@ -317,11 +309,32 @@ namespace MyNotebooks.subforms
 			// 
 			// mnuLabelsOperations
 			// 
+			mnuLabelsOperations.DropDownItems.AddRange(new ToolStripItem[] { mnuAddToCurrentEntry, mnuRename, mnuDelete });
 			mnuLabelsOperations.Enabled = false;
 			mnuLabelsOperations.Name = "mnuLabelsOperations";
-			mnuLabelsOperations.Size = new System.Drawing.Size(170, 20);
-			mnuLabelsOperations.Text = "&Add Checked Labels to Entry";
-			mnuLabelsOperations.Click += this.mnuAddCheckedLabelsToEntry_Click;
+			mnuLabelsOperations.Size = new System.Drawing.Size(109, 20);
+			mnuLabelsOperations.Text = "&Checked Label(s)";
+			// 
+			// mnuAddToCurrentEntry
+			// 
+			mnuAddToCurrentEntry.Name = "mnuAddToCurrentEntry";
+			mnuAddToCurrentEntry.Size = new System.Drawing.Size(183, 22);
+			mnuAddToCurrentEntry.Text = "&Add to Current Entry";
+			mnuAddToCurrentEntry.Click += this.mnuAddToCurrentEntry_Click;
+			// 
+			// mnuRename
+			// 
+			mnuRename.Name = "mnuRename";
+			mnuRename.Size = new System.Drawing.Size(183, 22);
+			mnuRename.Text = "&Rename";
+			mnuRename.Click += this.DeleteOrRename;
+			// 
+			// mnuDelete
+			// 
+			mnuDelete.Name = "mnuDelete";
+			mnuDelete.Size = new System.Drawing.Size(183, 22);
+			mnuDelete.Text = "&Delete";
+			mnuDelete.Click += this.DeleteOrRename;
 			// 
 			// mnuMoveTop
 			// 
@@ -431,7 +444,6 @@ namespace MyNotebooks.subforms
 		private ToolStripMenuItem mnuContextDelete_lstLabels;
 		private ToolStripMenuItem mnuContext_GridEntryDetails;
 		private TreeView treeAvailableLabels;
-		private Label label6;
 		private Panel panel1;
 		private Label label7;
 		private Panel pnlLabelDetails;
@@ -443,5 +455,11 @@ namespace MyNotebooks.subforms
 		private ToolStripMenuItem toolStripMenuItem2;
 		private ToolStripMenuItem toolStripMenuItem3;
 		private System.ComponentModel.BackgroundWorker bgWorker;
+		private ToolStripMenuItem addToCurrentEntryToolStripMenuItem;
+		private ToolStripMenuItem renameToolStripMenuItem;
+		private ToolStripMenuItem deleteToolStripMenuItem;
+		private ToolStripMenuItem mnuAddToCurrentEntry;
+		private ToolStripMenuItem mnuRename;
+		private ToolStripMenuItem mnuDelete;
 	}
 }
