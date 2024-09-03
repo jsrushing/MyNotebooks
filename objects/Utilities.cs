@@ -72,39 +72,6 @@ namespace MyNotebooks.objects
 		//}
 	//}
 
-		public static string[] GetTitleAndDate(string searchString, int startPosition = 0)
-		{
-			var result = new string[2];
-			var paren1 = searchString.LastIndexOf("(") + 1;	// Has to be .LastIndexOf or poarentheses would have to be disallowed in the title.
-			var paren2 = searchString.LastIndexOf(')');
-			
-			// This work is to abstract AppSettings.DisplayedDateFormat to take varying formats.
-			// The format can't include parantheses because of the setting of paren1 & paren2 above.
-			// It fails at DateTime.TryParse below on some formats (such as "MMM[MM] dd \'yy")
-			var f = ConfigurationManager.AppSettings["DisplayedDateFormat"].Replace("\\", "").Length;
-
-			try
-			{
-				if (paren2 - paren1 == f)
-				{
-					DateTime.TryParse(searchString.Substring(paren1, paren2 - paren1), out DateTime tryDate);
-
-					if (tryDate > DateTime.MinValue)
-					{
-						result[0] = searchString.Substring(0, paren1 + 1 - 1).Trim();
-						result[1] = tryDate.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]);
-					}
-				}
-				else
-				{
-					//using(frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "There is a problem with this entry. The CreatedOn can not be found.", "")) { frm.ShowDialog(); }
-				}
-			}
-			catch (Exception) { }
-
-			return result;
-		}
-
 		public async static Task ImportNotebooks(Form parent)
 		{
 			OpenFileDialog ofd = new OpenFileDialog { Multiselect = true };
@@ -264,6 +231,7 @@ namespace MyNotebooks.objects
 			string endDate = "", bool clearPrevious = true, int SortBy = 0, bool includeNotebookName = false, int maxWidth = 0, string labelFilter = "")
 		{
 			if(clearPrevious) lbxToPopulate.Items.Clear();
+			Program.CurrentEntries.Clear();
 			List<Entry> tmpEntries = null;
 			tmpEntries = startDate.Length > 0 ? entries.Where(d => DateTime.Parse(d.CreatedOn.ToShortDateString()) >= DateTime.Parse(startDate)).ToList() : entries;
 			tmpEntries = endDate.Length > 0 ? tmpEntries.Where(d => DateTime.Parse(d.CreatedOn.ToShortDateString()) <= DateTime.Parse(endDate)).ToList() : tmpEntries;

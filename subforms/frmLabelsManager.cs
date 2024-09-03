@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MyNotebooks.DataAccess;
 using MyNotebooks.objects;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace MyNotebooks.subforms
 {
@@ -30,6 +31,8 @@ namespace MyNotebooks.subforms
 		private int LastClickedEntryIndex = -1;
 		private const string ViewEntryMenuText = "View Entry";
 		private const string LoadNotebookMenuText = "Load Notebook";
+
+		private int CheckedNodeCount;
 
 		private List<Notebook> SelectedNotebooks { get; set; }
 
@@ -52,6 +55,9 @@ namespace MyNotebooks.subforms
 			lblSortType_Click(null, null);
 			ResetTree();
 			mnuAddToCurrentEntry.Enabled = CurrentEntry != null;
+			var v = GetCheckedNodes(treeAvailableLabels.Nodes);
+			mnuLabelsOperations.Enabled = v > 0;
+			mnuRename.Enabled = v == 1;
 		}
 
 		private void frmLabelsManager_Resize(object sender, EventArgs e) { ShowHideOccurrences(); }
@@ -100,6 +106,9 @@ namespace MyNotebooks.subforms
 			var oldLabelName = treeAvailableLabels.SelectedNode.Text.Replace(" (+)", "");
 			this.Cursor = Cursors.WaitCursor;
 
+			// 
+
+
 			if (isRename)
 			{
 				var rootNode = treeAvailableLabels.SelectedNode.Parent.Text;
@@ -126,6 +135,10 @@ namespace MyNotebooks.subforms
 				if (isRename)
 				{
 					List<MNLabel> labelsToEdit = new();
+
+					// find all entries with label
+
+					// 
 
 					switch (treeAvailableLabels.SelectedNode.Parent.Index)
 					{
@@ -496,6 +509,8 @@ namespace MyNotebooks.subforms
 
 		private void treeAvailableLabels_AfterCheck(object sender, TreeViewEventArgs e)
 		{
+			var checkedNodeCount = 0;
+
 			if (!ProgramaticallyChecking)
 			{
 				TreeNode tn = e.Node;
@@ -515,7 +530,7 @@ namespace MyNotebooks.subforms
 						{
 							if (tn.Checked)
 							{
-								foreach (TreeNode tn2 in tn.Nodes) { tn2.Checked = true; }
+								foreach (TreeNode tn2 in tn.Nodes) { tn2.Checked = true; checkedNodeCount += 1; }
 							}
 							else
 							{
@@ -526,29 +541,10 @@ namespace MyNotebooks.subforms
 
 						ProgramaticallyChecking = false;
 					}
-					else
-					{
-						foreach (TreeNode treeNode in treeAvailableLabels.Nodes)
-						{
-							foreach (TreeNode childNode in treeNode.Nodes)
-							{
-								if (childNode.Text == tn.Text)
-								{
-									ProgramaticallyChecking = true;
-									childNode.Checked = tn.Checked;
-								}
-							}
 
-							ProgramaticallyChecking = false;
-
-						}
-					}
-
-					if (tn.Checked)
-					{
-						//return;
-					}
 					mnuLabelsOperations.Enabled = true;
+					CheckedNodeCount = 0;
+					mnuRename.Enabled = GetCheckedNodes(treeAvailableLabels.Nodes) == 1;
 				}
 			}
 		}
@@ -560,15 +556,27 @@ namespace MyNotebooks.subforms
 				var vNode = treeAvailableLabels.GetNodeAt(e.X, e.Y);
 				treeAvailableLabels.SelectedNode = vNode;
 				mnuContextLabels.Enabled = true;
-
 				if (vNode.Level == 0) { mnuContextLabels.Enabled = false; }
-				//else { treeAvailableLabels.SelectedNode = vNode; }
 			}
 		}
 
 		private void treeAvailableLabels_MouseMove(object sender, MouseEventArgs e)
 		{
 			gridViewEntryDetails.Visible = false;
+		}
+
+		public int GetCheckedNodes(TreeNodeCollection nodes)
+		{
+			foreach (System.Windows.Forms.TreeNode aNode in nodes)
+			{
+				if (aNode.Checked)
+				{ CheckedNodeCount++; }
+
+				if (aNode.Nodes.Count != 0)
+					GetCheckedNodes(aNode.Nodes);
+			}
+
+			return CheckedNodeCount;
 		}
 	}
 }

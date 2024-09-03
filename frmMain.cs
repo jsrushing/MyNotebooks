@@ -208,12 +208,6 @@ namespace MyNotebooks.subforms
 			LoadNotebooks();
 			this.Cursor = Cursors.Default;
 			Program.User.Id = 1000;
-
-			//while (Program.LblsUnderCompany == null) { Thread.Sleep(300); }
-
-			//Program.LblsUnderAccount = Program.LblsUnderCompany.Where(l => l.AccountId == Program.SelectedAccountId).ToList();
-			//Program.LblsUnderDepartment = Program.LblsUnderCompany.Where(l => l.DepartmentId == Program.SelectedDepartmentId).ToList();
-			//Program.LblsUnderGroup = Program.LblsUnderCompany.Where(l => l.GroupId == Program.SelectedGroupId).ToList();
 		}
 
 		private void frmMain_Resize(object sender, EventArgs e)
@@ -238,7 +232,6 @@ namespace MyNotebooks.subforms
 			if (CurrentNotebook != null)
 			{
 				Program.SelectedNotebookName = CurrentNotebook.Name;
-				//DbAccess.PopulateLabelsUnderNotebook(CurrentNotebook.Id);
 
 				if (CurrentNotebook.Entries.Count == 0)
 				{
@@ -262,7 +255,6 @@ namespace MyNotebooks.subforms
 						await ProcessDateFiltersAndPopulateEntries();
 						SuppressDateClick = false;
 						lstEntries.Height = this.Height - lstEntries.Top - 50;
-						//mnuLabels.Enabled = false;
 
 						for (var i = 0; i < cbxDatesFrom.Items.Count; i++)
 						{
@@ -379,8 +371,6 @@ namespace MyNotebooks.subforms
 			lstEntries.Visible = false;
 			cbxSortEntriesBy.SelectedIndex = 0;
 			var v = ddlNotebooks.SelectedItem as ListItem;
-			//DbAccess.PopulateLabelsUnderNotebook(v.Id);
-			//Program.LblsUnderNotebook = Program.LblsUnderCompany.Where(l => l.NotebookId == v.Id).ToList();
 			SelectedNotebookIds = new(v.Id, v.Name);
 			btnLoadNotebook_Click(sender, e);
 			notebookChanged = true;
@@ -467,27 +457,19 @@ namespace MyNotebooks.subforms
 		private void lstEntries_SelectEntry(object sender, EventArgs e)
 		{
 			ListBox lb = (ListBox)sender;
-			//RichTextBox rtb = rtbSelectedEntry;
 
 			if (lb.SelectedIndex > -1)
 			{
 				lb.SelectedIndexChanged -= new System.EventHandler(this.lstEntries_SelectEntry);
 
 				CurrentEntry = null;
-				//CurrentEntry = Entry.Select(rtb, lb, CurrentNotebook, FirstSelection, null, true);
-
 				SelectShortEntry(sender);
 				var idx = lb.SelectedIndex;
 				while (idx % 4 != 0) { idx--; }
 				CurrentEntry = Program.CurrentEntries[idx == 0 ? 0 : idx / 4];
-				//CurrentEntry.Select(lb);
 				rtbSelectedEntry.Text = CurrentEntry.RTBText;
 
-				//Program.LblsUnderEntry = Program.LblsUnderCompany.Where(l => l.ParentId == CurrentEntry.Id).ToList();
-
 				DbAccess.GetLabelsForEntry(CurrentEntry.Id);
-
-				//var v = CurrentEntry.AllLabels.Where(l => l.ParentId == CurrentEntry.Id).ToList();
 
 				if (CurrentEntry != null)
 				{
@@ -497,16 +479,6 @@ namespace MyNotebooks.subforms
 					Utilities.ResizeListsAndRTBs(lstEntries, rtbSelectedEntry, lblSeparator, lblSelectionType, this);
 					ShowHideMenusAndControls(SelectionState.EntrySelected);
 					mnuLabels.Enabled = true;
-
-					//if (!Program.BgWorker.IsBusy && notebookChanged) { Program.BgWorker.RunWorkerAsync(); notebookChanged = false; } // new DoWorkEventArgs("GetEntries"));
-					//else
-					//{
-					//	if (Program.BgWorker.IsBusy)
-					//	{
-					//		using (frmMessage frm = new(frmMessage.OperationType.Message,
-					//			"BgWorker is already running in frmMain.lstEntries_SelectEntry()")) { frm.ShowDialog(); }
-					//	}
-					//}
 				}
 				else
 				{

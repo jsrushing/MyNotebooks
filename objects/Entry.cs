@@ -111,7 +111,7 @@ namespace MyNotebooks
 		public SQLResult Update() { return GetOperationResult(DbAccess.CRUDNotebookEntry(this, OperationType.Update)); }
 		public SQLResult Delete() { return GetOperationResult(DbAccess.CRUDNotebookEntry(this, OperationType.Delete)); }
 
-		private SQLResult GetOperationResult(SQLResult result, bool isCreate = false)
+		private SQLResult	GetOperationResult(SQLResult result, bool isCreate = false)
 		{
 			if (isCreate)
 			{
@@ -165,7 +165,7 @@ namespace MyNotebooks
 			return sRtrn;
 		}
 
-		private string GetRTBText()
+		private string		GetRTBText()
 		{
 			return string.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
 				, this.Title, this.CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"])
@@ -200,156 +200,6 @@ namespace MyNotebooks
 				}
 			}
 			return bLabelEdited;
-		}
-
-//		public void Select(RichTextBox rtb, ListBox lb, Notebook currentNotebook, bool firstSelection = false, Entry je = null, bool resetTopIndex = true)
-		public void Select(ListBox lb, bool firstSelection = false, bool resetTopIndex = true)
-		{
-			List<int> targets = new List<int>();
-
-			try
-			{
-				if (lb.SelectedIndices.Count > 1)
-				{
-					for (var i = 0; i < lb.SelectedIndices.Count - 1; i++)
-					{
-						if (lb.SelectedIndices[i] == lb.SelectedIndices[i + 1] - 1)
-						{
-							targets.Add(lb.SelectedIndices[i]);
-							targets.Add(lb.SelectedIndices[i + 1]);
-							targets.Add(lb.SelectedIndices[i + 2]);
-							break;
-						}
-					}
-				}
-			}
-			catch (Exception) { }
-
-			if (targets.Count == 3)
-			{
-				foreach (var i in targets)
-				{
-					lb.SelectedIndices.Remove(i);
-				}
-			}
-
-			var ctr = lb.SelectedIndex;
-
-			if (lb.Items[ctr].ToString().StartsWith("--")) { ctr--; }
-
-			while (!lb.Items[ctr].ToString().StartsWith("--") & ctr > 0)
-			{
-				ctr--;
-				if (ctr < 0) break;
-			}
-
-			if (ctr > 0) { ctr += 1; }
-			lb.SelectedIndices.Clear();                             // Select the whole short entry ...
-			lb.SelectedIndices.Add(ctr);
-			lb.SelectedIndices.Add(ctr + 1);
-			lb.SelectedIndices.Add(ctr + 2);                        //
-
-
-			//Entry entryRtrn = null;
-
-			//if (je != null)
-			//{
-			//	entryRtrn = je;
-
-			//	for (var i = 0; i < lb.Items.Count; i++)
-			//	{
-			//		if (lb.Items[i].ToString().StartsWith(je.GetSynopsis(false)[0].ToString()))
-			//		{
-			//			lb.SelectedIndices.Add(i);
-			//			lb.SelectedIndices.Add(i + 1);
-			//			lb.SelectedIndices.Add(i + 2);
-			//			rtb.Text = je.DisplayText;
-			//			break;
-			//		}
-			//	}
-			//}
-			//else
-			//{
-			//	try
-			//	{
-			//		if (lb.SelectedIndices.Count > 1)
-			//		{
-			//			for (var i = 0; i < lb.SelectedIndices.Count - 1; i++)
-			//			{
-			//				if (lb.SelectedIndices[i] == lb.SelectedIndices[i + 1] - 1)
-			//				{
-			//					targets.Add(lb.SelectedIndices[i]);
-			//					targets.Add(lb.SelectedIndices[i + 1]);
-			//					targets.Add(lb.SelectedIndices[i + 2]);
-			//					break;
-			//				}
-			//			}
-			//		}
-			//	}
-			//	catch (Exception) { }
-
-			//	if (targets.Count == 3)
-			//	{
-			//		foreach (var i in targets)
-			//		{
-			//			lb.SelectedIndices.Remove(i);
-			//		}
-			//	}
-
-			//	var ctr = lb.SelectedIndex;
-
-			//	if (lb.Items[ctr].ToString().StartsWith("--")) { ctr--; }
-
-			//	while (!lb.Items[ctr].ToString().StartsWith("--") & ctr > 0)
-			//	{
-			//		ctr--;
-			//		if (ctr < 0) break;
-			//	}
-
-			//	if (ctr > 0) { ctr += 1; }
-			//	lb.SelectedIndices.Clear();                             // Select the whole short entry ...
-			//	lb.SelectedIndices.Add(ctr);
-			//	lb.SelectedIndices.Add(ctr + 1);
-			//	lb.SelectedIndices.Add(ctr + 2);                        //
-
-				//entryRtrn = Program.CurrentEntries[ctr == 0 ? 0 : ctr / 4];
-
-				//rtb.Text = string.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
-				//	, entryRtrn.Title, entryRtrn.CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"])
-				//	, string.Join(",", entryRtrn.AllLabels.Select(e => e.LabelText).ToArray()), entryRtrn.Text);
-
-				//if (resetTopIndex) { if (rtb.Text.Length == 0) { lb.TopIndex = lb.Top + lb.Height < rtb.Top ? ctr : lb.TopIndex; } }
-				//lb.Height = rtb.Text.Length > 0 ? rtb.Top - 132 : 100;
-				//if (firstSelection) { lb.TopIndex = lb.Top + lb.Height < rtb.Top ? ctr : lb.TopIndex; }
-
-				//rtb.Visible = rtb.Text.Length > 0;
-
-
-				//var sTitleAndDate = lb.Items[ctr].ToString().Replace(" - EDITED", "");        // Use the title and date of the entry to create a JournalEntry object whose .ClearText will populate the display
-
-				//string[] titleAndDate = Utilities.GetTitleAndDate(sTitleAndDate);
-
-				//if (titleAndDate[0] != null && titleAndDate[1] != null)
-				//{
-				//	DateTime.TryParse(titleAndDate[1], out DateTime dt);
-
-				//	entryRtrn = currentNotebook.GetEntry(titleAndDate[0], titleAndDate[1]);	// DbAccess.GetFullEntry(currentNotebook.GetEntry(titleAndDate[0], titleAndDate[1]));
-
-				//	if(entryRtrn != null)
-				//	{
-				//		rtb.Text = string.Format(ConfigurationManager.AppSettings["EntryOutputFormat_Printing"]
-				//		, entryRtrn.Title, entryRtrn.CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"])
-				//		, string.Join(",", entryRtrn.AllLabels.Select(e => e.LabelText).ToArray()), entryRtrn.Text);
-				//	}
-
-				//	if (resetTopIndex) { if (rtb.Text.Length == 0) { lb.TopIndex = lb.Top + lb.Height < rtb.Top ? ctr : lb.TopIndex; } }
-				//	lb.Height = rtb.Text.Length > 0 ? rtb.Top - 132 : 100;
-				//	if (firstSelection) { lb.TopIndex = lb.Top + lb.Height < rtb.Top ? ctr : lb.TopIndex; }
-
-				//	rtb.Visible = rtb.Text.Length > 0;
-				//}
-			//}
-			//return entryRtrn;
 		}
 	}
 }
