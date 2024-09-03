@@ -35,6 +35,8 @@ namespace MyNotebooks
 		public static List<MNLabel> LblsUnderNotebook		= new();
 		public static List<string>	LblsInAllNotebooks		= new();
 
+		public static List<Entry>	CurrentEntries			= new();
+
 		public static List<ListBox> ManagementConsoleSelections = new();
 		//public static string		InvalidFileName			= "Sorry, notebook names may not contain characters which are not allowed in file names, for example *, <, >, {, }, |, :, ?, /, \\ (and others).";
 		public static int			SelectedCompanyId		= 0;

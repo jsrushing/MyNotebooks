@@ -75,12 +75,17 @@ namespace MyNotebooks.objects
 		public static string[] GetTitleAndDate(string searchString, int startPosition = 0)
 		{
 			var result = new string[2];
-			var paren1 = searchString.LastIndexOf("(") + 1;
+			var paren1 = searchString.LastIndexOf("(") + 1;	// Has to be .LastIndexOf or poarentheses would have to be disallowed in the title.
 			var paren2 = searchString.LastIndexOf(')');
+			
+			// This work is to abstract AppSettings.DisplayedDateFormat to take varying formats.
+			// The format can't include parantheses because of the setting of paren1 & paren2 above.
+			// It fails at DateTime.TryParse below on some formats (such as "MMM[MM] dd \'yy")
+			var f = ConfigurationManager.AppSettings["DisplayedDateFormat"].Replace("\\", "").Length;
 
 			try
 			{
-				if (paren2 - paren1 == 17)
+				if (paren2 - paren1 == f)
 				{
 					DateTime.TryParse(searchString.Substring(paren1, paren2 - paren1), out DateTime tryDate);
 
@@ -288,6 +293,8 @@ namespace MyNotebooks.objects
 			{
 				var synopsis = nbEntry.GetSynopsis(includeNotebookName, maxWidth);
 				for(int i = 0; i < synopsis.Length; i++) { lbxToPopulate.Items.Add(synopsis[i]); } 
+
+				Program.CurrentEntries.Add(nbEntry);
 			}
 		}
 

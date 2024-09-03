@@ -467,25 +467,33 @@ namespace MyNotebooks.subforms
 		private void lstEntries_SelectEntry(object sender, EventArgs e)
 		{
 			ListBox lb = (ListBox)sender;
-			RichTextBox rtb = rtbSelectedEntry;
+			//RichTextBox rtb = rtbSelectedEntry;
 
 			if (lb.SelectedIndex > -1)
 			{
 				lb.SelectedIndexChanged -= new System.EventHandler(this.lstEntries_SelectEntry);
 
 				CurrentEntry = null;
-				CurrentEntry = Entry.Select(rtb, lb, CurrentNotebook, FirstSelection, null, true);
+				//CurrentEntry = Entry.Select(rtb, lb, CurrentNotebook, FirstSelection, null, true);
+
+				SelectShortEntry(sender);
+				var idx = lb.SelectedIndex;
+				while (idx % 4 != 0) { idx--; }
+				CurrentEntry = Program.CurrentEntries[idx == 0 ? 0 : idx / 4];
+				//CurrentEntry.Select(lb);
+				rtbSelectedEntry.Text = CurrentEntry.RTBText;
+
 				//Program.LblsUnderEntry = Program.LblsUnderCompany.Where(l => l.ParentId == CurrentEntry.Id).ToList();
 
 				DbAccess.GetLabelsForEntry(CurrentEntry.Id);
 
-				var v = CurrentEntry.AllLabels.Where(l => l.ParentId == CurrentEntry.Id).ToList();
+				//var v = CurrentEntry.AllLabels.Where(l => l.ParentId == CurrentEntry.Id).ToList();
 
 				if (CurrentEntry != null)
 				{
 					FirstSelection = false;
-					lblSelectionType.Visible = rtb.Text.Length > 0;
-					lblSeparator.Visible = rtb.Text.Length > 0;
+					lblSelectionType.Visible = rtbSelectedEntry.Text.Length > 0;
+					lblSeparator.Visible = rtbSelectedEntry.Text.Length > 0;
 					Utilities.ResizeListsAndRTBs(lstEntries, rtbSelectedEntry, lblSeparator, lblSelectionType, this);
 					ShowHideMenusAndControls(SelectionState.EntrySelected);
 					mnuLabels.Enabled = true;
@@ -806,8 +814,8 @@ namespace MyNotebooks.subforms
 					await Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, CurrentNotebook.Name,
 						cbxDatesFrom.Text, cbxDatesTo.Text, true, cbxSortEntriesBy.SelectedIndex, false, lstEntries.Width - 85);
 
-					if (lstEntries.SelectedIndex == -1 && CurrentNotebook.Entries.Contains(CurrentEntry))
-					{ Entry.Select(rtbSelectedEntry, lstEntries, null, true, CurrentEntry, true); }
+					//if (lstEntries.SelectedIndex == -1 && CurrentNotebook.Entries.Contains(CurrentEntry))
+					//{ Entry.Select(rtbSelectedEntry, lstEntries, null, true, CurrentEntry, true); }
 
 					lblEntriesCount.Text = string.Format(FoundCountString, (lstEntries.Items.Count / 4).ToString(), CurrentNotebook.Entries.Count.ToString());
 				}
@@ -817,6 +825,54 @@ namespace MyNotebooks.subforms
 		private void rtbSelectedEntry_MouseDown(object sender, MouseEventArgs e)
 		{
 			lstEntries.Focus();
+		}
+
+		private void SelectShortEntry(object sender)
+		{
+			List<int> targets = new List<int>();
+			ListBox lb = (ListBox)sender;
+
+			try
+			{
+				if (lb.SelectedIndices.Count > 1)
+				{
+					for (var i = 0; i < lb.SelectedIndices.Count - 1; i++)
+					{
+						if (lb.SelectedIndices[i] == lb.SelectedIndices[i + 1] - 1)
+						{
+							targets.Add(lb.SelectedIndices[i]);
+							targets.Add(lb.SelectedIndices[i + 1]);
+							targets.Add(lb.SelectedIndices[i + 2]);
+							break;
+						}
+					}
+				}
+			}
+			catch (Exception) { }
+
+			if (targets.Count == 3)
+			{
+				foreach (var i in targets)
+				{
+					lb.SelectedIndices.Remove(i);
+				}
+			}
+
+			var ctr = lb.SelectedIndex;
+
+			if (lb.Items[ctr].ToString().StartsWith("--")) { ctr--; }
+
+			while (!lb.Items[ctr].ToString().StartsWith("--") & ctr > 0)
+			{
+				ctr--;
+				if (ctr < 0) break;
+			}
+
+			if (ctr > 0) { ctr += 1; }
+			lb.SelectedIndices.Clear();                             // Select the whole short entry ...
+			lb.SelectedIndices.Add(ctr);
+			lb.SelectedIndices.Add(ctr + 1);
+			lb.SelectedIndices.Add(ctr + 2);                        //
 		}
 
 		private void SetDisplayText()
