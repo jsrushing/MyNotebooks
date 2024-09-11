@@ -48,13 +48,6 @@ namespace MyNotebooks.subforms
 			gridViewEntryDetails = new DataGridView();
 			colItem = new DataGridViewTextBoxColumn();
 			colIdentifier = new DataGridViewTextBoxColumn();
-			pnlNewLabelName = new Panel();
-			txtLabelName = new TextBox();
-			lblLabelExists = new Label();
-			btnOK = new Button();
-			btnCancel = new Button();
-			lblOperation = new Label();
-			label5 = new Label();
 			mnuMain = new MenuStrip();
 			mnuLabelsOperations = new ToolStripMenuItem();
 			mnuAddToCurrentEntry = new ToolStripMenuItem();
@@ -64,27 +57,32 @@ namespace MyNotebooks.subforms
 			toolStripMenuItem1 = new ToolStripMenuItem();
 			toolStripMenuItem2 = new ToolStripMenuItem();
 			toolStripMenuItem3 = new ToolStripMenuItem();
-			lstEntryObjects = new ListBox();
-			panel1 = new Panel();
 			bgWorker = new System.ComponentModel.BackgroundWorker();
+			pnlRenameDeleteManager = new Panel();
+			btnCancel = new Button();
+			btnContinue = new Button();
+			lblRenameDeleteInfo = new Label();
+			lblSelectAll = new Label();
+			treeEntriesToEdit = new TreeView();
+			label1 = new Label();
 			pnlMain.SuspendLayout();
 			pnlLabelDetails.SuspendLayout();
 			mnuContextLabels.SuspendLayout();
 			mnuContextEntries.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)gridViewEntryDetails).BeginInit();
-			pnlNewLabelName.SuspendLayout();
 			mnuMain.SuspendLayout();
+			pnlRenameDeleteManager.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// pnlMain
 			// 
-			pnlMain.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+			pnlMain.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
 			pnlMain.Controls.Add(pnlLabelDetails);
 			pnlMain.Controls.Add(treeAvailableLabels);
 			pnlMain.Controls.Add(lblSortType);
 			pnlMain.Location = new System.Drawing.Point(7, 25);
 			pnlMain.Name = "pnlMain";
-			pnlMain.Size = new System.Drawing.Size(349, 554);
+			pnlMain.Size = new System.Drawing.Size(278, 554);
 			pnlMain.TabIndex = 0;
 			// 
 			// pnlLabelDetails
@@ -95,7 +93,7 @@ namespace MyNotebooks.subforms
 			pnlLabelDetails.Controls.Add(label7);
 			pnlLabelDetails.Location = new System.Drawing.Point(4, 295);
 			pnlLabelDetails.Name = "pnlLabelDetails";
-			pnlLabelDetails.Size = new System.Drawing.Size(339, 250);
+			pnlLabelDetails.Size = new System.Drawing.Size(268, 250);
 			pnlLabelDetails.TabIndex = 13;
 			pnlLabelDetails.Visible = false;
 			// 
@@ -107,7 +105,7 @@ namespace MyNotebooks.subforms
 			lstOccurrences.ItemHeight = 15;
 			lstOccurrences.Location = new System.Drawing.Point(6, 22);
 			lstOccurrences.Name = "lstOccurrences";
-			lstOccurrences.Size = new System.Drawing.Size(327, 225);
+			lstOccurrences.Size = new System.Drawing.Size(256, 225);
 			lstOccurrences.TabIndex = 3;
 			lstOccurrences.MouseUp += this.lstOccurrences_MouseUp;
 			// 
@@ -135,7 +133,7 @@ namespace MyNotebooks.subforms
 			treeNode2.Name = "nodeNotebook";
 			treeNode2.Text = "Notebook";
 			treeAvailableLabels.Nodes.AddRange(new TreeNode[] { treeNode2 });
-			treeAvailableLabels.Size = new System.Drawing.Size(327, 264);
+			treeAvailableLabels.Size = new System.Drawing.Size(256, 264);
 			treeAvailableLabels.TabIndex = 6;
 			treeAvailableLabels.Text = "tree";
 			treeAvailableLabels.AfterCheck += this.treeAvailableLabels_AfterCheck;
@@ -202,7 +200,7 @@ namespace MyNotebooks.subforms
 			gridViewEntryDetails.Columns.AddRange(new DataGridViewColumn[] { colItem, colIdentifier });
 			gridViewEntryDetails.ContextMenuStrip = mnuContextEntries;
 			gridViewEntryDetails.EditMode = DataGridViewEditMode.EditProgrammatically;
-			gridViewEntryDetails.Location = new System.Drawing.Point(84, 257);
+			gridViewEntryDetails.Location = new System.Drawing.Point(342, 257);
 			gridViewEntryDetails.MultiSelect = false;
 			gridViewEntryDetails.Name = "gridViewEntryDetails";
 			gridViewEntryDetails.ReadOnly = true;
@@ -225,85 +223,12 @@ namespace MyNotebooks.subforms
 			colIdentifier.Name = "colIdentifier";
 			colIdentifier.ReadOnly = true;
 			// 
-			// pnlNewLabelName
-			// 
-			pnlNewLabelName.BackColor = System.Drawing.SystemColors.ActiveCaption;
-			pnlNewLabelName.Controls.Add(txtLabelName);
-			pnlNewLabelName.Controls.Add(lblLabelExists);
-			pnlNewLabelName.Controls.Add(btnOK);
-			pnlNewLabelName.Controls.Add(btnCancel);
-			pnlNewLabelName.Controls.Add(lblOperation);
-			pnlNewLabelName.Controls.Add(label5);
-			pnlNewLabelName.Location = new System.Drawing.Point(361, 33);
-			pnlNewLabelName.Name = "pnlNewLabelName";
-			pnlNewLabelName.Size = new System.Drawing.Size(204, 110);
-			pnlNewLabelName.TabIndex = 2;
-			pnlNewLabelName.Visible = false;
-			// 
-			// txtLabelName
-			// 
-			txtLabelName.Location = new System.Drawing.Point(26, 34);
-			txtLabelName.Name = "txtLabelName";
-			txtLabelName.Size = new System.Drawing.Size(154, 23);
-			txtLabelName.TabIndex = 0;
-			// 
-			// lblLabelExists
-			// 
-			lblLabelExists.AutoSize = true;
-			lblLabelExists.BackColor = System.Drawing.SystemColors.ButtonFace;
-			lblLabelExists.ForeColor = System.Drawing.Color.Red;
-			lblLabelExists.Location = new System.Drawing.Point(37, 56);
-			lblLabelExists.Name = "lblLabelExists";
-			lblLabelExists.Size = new System.Drawing.Size(111, 15);
-			lblLabelExists.TabIndex = 4;
-			lblLabelExists.Text = "Label already exists.";
-			lblLabelExists.Visible = false;
-			// 
-			// btnOK
-			// 
-			btnOK.Location = new System.Drawing.Point(18, 71);
-			btnOK.Name = "btnOK";
-			btnOK.Size = new System.Drawing.Size(75, 23);
-			btnOK.TabIndex = 2;
-			btnOK.Text = "&Ok";
-			btnOK.UseVisualStyleBackColor = true;
-			btnOK.Click += this.btnOK_Click;
-			// 
-			// btnCancel
-			// 
-			btnCancel.Location = new System.Drawing.Point(105, 71);
-			btnCancel.Name = "btnCancel";
-			btnCancel.Size = new System.Drawing.Size(75, 23);
-			btnCancel.TabIndex = 3;
-			btnCancel.Text = "&Cancel";
-			btnCancel.UseVisualStyleBackColor = true;
-			btnCancel.Click += this.btnCancel_Click;
-			// 
-			// lblOperation
-			// 
-			lblOperation.AutoSize = true;
-			lblOperation.BackColor = System.Drawing.SystemColors.ButtonFace;
-			lblOperation.Location = new System.Drawing.Point(26, 15);
-			lblOperation.Name = "lblOperation";
-			lblOperation.Size = new System.Drawing.Size(100, 15);
-			lblOperation.TabIndex = 1;
-			lblOperation.Text = "New Label Name:";
-			lblOperation.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label5
-			// 
-			label5.BackColor = System.Drawing.SystemColors.ButtonFace;
-			label5.Location = new System.Drawing.Point(11, 7);
-			label5.Name = "label5";
-			label5.Size = new System.Drawing.Size(182, 93);
-			label5.TabIndex = 5;
-			// 
 			// mnuMain
 			// 
 			mnuMain.Items.AddRange(new ToolStripItem[] { mnuLabelsOperations, mnuMoveTop, toolStripMenuItem1, toolStripMenuItem2, toolStripMenuItem3 });
 			mnuMain.Location = new System.Drawing.Point(0, 0);
 			mnuMain.Name = "mnuMain";
-			mnuMain.Size = new System.Drawing.Size(359, 24);
+			mnuMain.Size = new System.Drawing.Size(617, 24);
 			mnuMain.TabIndex = 1;
 			mnuMain.Text = "menuStrip1";
 			// 
@@ -358,39 +283,87 @@ namespace MyNotebooks.subforms
 			toolStripMenuItem3.Name = "toolStripMenuItem3";
 			toolStripMenuItem3.Size = new System.Drawing.Size(12, 20);
 			// 
-			// lstEntryObjects
-			// 
-			lstEntryObjects.FormattingEnabled = true;
-			lstEntryObjects.IntegralHeight = false;
-			lstEntryObjects.ItemHeight = 15;
-			lstEntryObjects.Location = new System.Drawing.Point(414, 289);
-			lstEntryObjects.Name = "lstEntryObjects";
-			lstEntryObjects.Size = new System.Drawing.Size(127, 25);
-			lstEntryObjects.TabIndex = 4;
-			lstEntryObjects.Visible = false;
-			// 
-			// panel1
-			// 
-			panel1.BackColor = System.Drawing.SystemColors.ActiveCaption;
-			panel1.Location = new System.Drawing.Point(379, 158);
-			panel1.Name = "panel1";
-			panel1.Size = new System.Drawing.Size(186, 110);
-			panel1.TabIndex = 11;
-			panel1.Visible = false;
-			// 
 			// bgWorker
 			// 
 			bgWorker.WorkerReportsProgress = true;
+			// 
+			// pnlRenameDeleteManager
+			// 
+			pnlRenameDeleteManager.Controls.Add(btnCancel);
+			pnlRenameDeleteManager.Controls.Add(btnContinue);
+			pnlRenameDeleteManager.Controls.Add(lblRenameDeleteInfo);
+			pnlRenameDeleteManager.Controls.Add(lblSelectAll);
+			pnlRenameDeleteManager.Controls.Add(treeEntriesToEdit);
+			pnlRenameDeleteManager.Controls.Add(label1);
+			pnlRenameDeleteManager.Location = new System.Drawing.Point(321, 25);
+			pnlRenameDeleteManager.Name = "pnlRenameDeleteManager";
+			pnlRenameDeleteManager.Size = new System.Drawing.Size(278, 554);
+			pnlRenameDeleteManager.TabIndex = 2;
+			pnlRenameDeleteManager.Visible = false;
+			// 
+			// btnCancel
+			// 
+			btnCancel.Location = new System.Drawing.Point(196, 527);
+			btnCancel.Name = "btnCancel";
+			btnCancel.Size = new System.Drawing.Size(75, 23);
+			btnCancel.TabIndex = 9;
+			btnCancel.Text = "&Cancel";
+			btnCancel.UseVisualStyleBackColor = true;
+			// 
+			// btnContinue
+			// 
+			btnContinue.Location = new System.Drawing.Point(13, 524);
+			btnContinue.Name = "btnContinue";
+			btnContinue.Size = new System.Drawing.Size(132, 23);
+			btnContinue.TabIndex = 8;
+			btnContinue.Text = "{0} in Selections";
+			btnContinue.UseVisualStyleBackColor = true;
+			// 
+			// lblRenameDeleteInfo
+			// 
+			lblRenameDeleteInfo.Location = new System.Drawing.Point(5, 6);
+			lblRenameDeleteInfo.Name = "lblRenameDeleteInfo";
+			lblRenameDeleteInfo.Size = new System.Drawing.Size(268, 15);
+			lblRenameDeleteInfo.TabIndex = 7;
+			lblRenameDeleteInfo.Text = "{0} {1} in {2} {3}";
+			// 
+			// lblSelectAll
+			// 
+			lblSelectAll.AutoSize = true;
+			lblSelectAll.Cursor = Cursors.Hand;
+			lblSelectAll.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+			lblSelectAll.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			lblSelectAll.Location = new System.Drawing.Point(196, 27);
+			lblSelectAll.Name = "lblSelectAll";
+			lblSelectAll.Size = new System.Drawing.Size(66, 13);
+			lblSelectAll.TabIndex = 6;
+			lblSelectAll.Text = "select none";
+			lblSelectAll.Visible = false;
+			// 
+			// treeEntriesToEdit
+			// 
+			treeEntriesToEdit.HideSelection = false;
+			treeEntriesToEdit.Location = new System.Drawing.Point(5, 43);
+			treeEntriesToEdit.Name = "treeEntriesToEdit";
+			treeEntriesToEdit.Size = new System.Drawing.Size(268, 475);
+			treeEntriesToEdit.TabIndex = 1;
+			// 
+			// label1
+			// 
+			label1.AutoSize = true;
+			label1.Location = new System.Drawing.Point(5, 25);
+			label1.Name = "label1";
+			label1.Size = new System.Drawing.Size(168, 15);
+			label1.TabIndex = 0;
+			label1.Text = "Please select the entries to edit";
 			// 
 			// frmLabelsManager
 			// 
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new System.Drawing.Size(359, 585);
+			ClientSize = new System.Drawing.Size(617, 585);
+			Controls.Add(pnlRenameDeleteManager);
 			Controls.Add(gridViewEntryDetails);
-			Controls.Add(panel1);
-			Controls.Add(pnlNewLabelName);
-			Controls.Add(lstEntryObjects);
 			Controls.Add(pnlMain);
 			Controls.Add(mnuMain);
 			FormBorderStyle = FormBorderStyle.SizableToolWindow;
@@ -409,10 +382,10 @@ namespace MyNotebooks.subforms
 			mnuContextLabels.ResumeLayout(false);
 			mnuContextEntries.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)gridViewEntryDetails).EndInit();
-			pnlNewLabelName.ResumeLayout(false);
-			pnlNewLabelName.PerformLayout();
 			mnuMain.ResumeLayout(false);
 			mnuMain.PerformLayout();
+			pnlRenameDeleteManager.ResumeLayout(false);
+			pnlRenameDeleteManager.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
@@ -423,20 +396,12 @@ namespace MyNotebooks.subforms
 		private MenuStrip mnuMain;
 		private ToolStripMenuItem mnuMoveUp;
 		private ToolStripMenuItem mnuMoveDown;
-		private Panel pnlNewLabelName;
-		private Button btnCancel;
-		private Button btnOK;
-		private Label lblOperation;
-		private TextBox txtLabelName;
 		private ListBox lstOccurrences;
 		private ToolStripMenuItem mnuAssignPINs;
-		private Label lblLabelExists;
 		private Label lblSortType;
-		private ListBox lstEntryObjects;
 		private ToolStripMenuItem mnuLabelsOperations;
 		private ToolStripMenuItem mnuMoveTop;
 		private ToolStripMenuItem mnuAddCheckedLabelsToEntry;
-		private Label label5;
 
 		private ContextMenuStrip mnuContextEntries;
 		private ContextMenuStrip mnuContextLabels;
@@ -444,7 +409,6 @@ namespace MyNotebooks.subforms
 		private ToolStripMenuItem mnuContextDelete_lstLabels;
 		private ToolStripMenuItem mnuContext_GridEntryDetails;
 		private TreeView treeAvailableLabels;
-		private Panel panel1;
 		private Label label7;
 		private Panel pnlLabelDetails;
 		private DataGridView gridViewEntryDetails;
@@ -461,5 +425,12 @@ namespace MyNotebooks.subforms
 		private ToolStripMenuItem mnuAddToCurrentEntry;
 		private ToolStripMenuItem mnuRename;
 		private ToolStripMenuItem mnuDelete;
+		private Panel pnlRenameDeleteManager;
+		private Label lblSelectAll;
+		private TreeView treeEntriesToEdit;
+		private Label label1;
+		private Button btnCancel;
+		private Button btnContinue;
+		private Label lblRenameDeleteInfo;
 	}
 }

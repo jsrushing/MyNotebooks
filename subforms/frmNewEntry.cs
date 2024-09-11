@@ -154,7 +154,7 @@ namespace MyNotebooks.subforms
 				}
 			}
 
-			using (frmLabelsManager frm = new(this, this.Entry))
+			using (frmLabelsManager frm = new(this, CurrentNotebook, this.Entry))
 			{
 				frm.ShowDialog();
 

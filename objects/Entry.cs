@@ -107,6 +107,12 @@ namespace MyNotebooks
 			if(!err) this.AllLabels = DbAccess.GetLabelsForEntry(this.Id);
 		}
 
+		public void AddLabel(MNLabel label, bool createLabel)
+		{
+			this.AllLabels.Add(label);
+			if (createLabel) DbAccess.CRUDLabel(label, OperationType.Create);
+		}
+
 		public SQLResult Create() { return GetOperationResult(DbAccess.CRUDNotebookEntry(this), true); }
 		public SQLResult Update() { return GetOperationResult(DbAccess.CRUDNotebookEntry(this, OperationType.Update)); }
 		public SQLResult Delete() { return GetOperationResult(DbAccess.CRUDNotebookEntry(this, OperationType.Delete)); }
@@ -172,33 +178,32 @@ namespace MyNotebooks
 				, string.Join(",", this.AllLabels.Select(e => e.LabelText).ToArray()), this.Text);
 		}
 
-		public bool			RemoveOrReplaceLabel(string newLabelName, string oldLabelName, bool renaming = true)
+		public bool RemoveOrReplaceLabel(string oldLabelName, string newLabelName = "", bool renaming = true)
 		{
 			var labels = this.Labels;
 			var bLabelEdited = false;
+			var l = (MNLabel)this.AllLabels.Where(l => l.LabelText == oldLabelName);
 
-			if (labels.Length > 0)
+			try
 			{
-				List<string> arrLabels = labels.Split(',').ToList();
-				var iLabelIndex = arrLabels.IndexOf(oldLabelName);
-
-				if (iLabelIndex > -1)
+				if (renaming)
 				{
-					if (renaming)
-					{
-						arrLabels.RemoveAt(iLabelIndex);
-						arrLabels.Insert(iLabelIndex, newLabelName);
-					}
-					else
-					{
-						arrLabels.RemoveAt(iLabelIndex);
-					}
-
-					var finalLabelsString = string.Join(",", arrLabels).Trim(',').Replace(",,", "");
-					this.Labels = finalLabelsString.Length > 0 ? finalLabelsString : string.Empty;
-					bLabelEdited = true;
+					l.LabelText = newLabelName;
+					DbAccess.CRUDLabel(l, OperationType.Update);
 				}
+				else
+				{
+					this.AllLabels.Remove(l);
+					DbAccess.CRUDLabel(l, OperationType.Delete);
+				}
+				bLabelEdited = true;
 			}
+			catch (Exception ex)
+			{
+				frmMessage f = new(frmMessage.OperationType.Message, ex.Message, "Error Updating Label");
+				f.ShowDialog();
+			}
+
 			return bLabelEdited;
 		}
 	}

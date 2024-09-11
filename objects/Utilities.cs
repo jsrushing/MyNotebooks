@@ -266,35 +266,35 @@ namespace MyNotebooks.objects
 			}
 		}
 
-		private static void PopulateTreeWithLabels(TreeView treeView, Entry currentEntry, int nodeIndex, MNLabel lbl)
+		public static void PopulateTreeWithLabels(TreeView treeView, Entry currentEntry, int nodeIndex, MNLabel lbl)
 		{
 			TreeNode tn = new();
 			tn.Text = lbl.LabelText;
+			tn.Checked = nodeIndex == 0;
 
 			if (currentEntry != null)
 			{
-				tn.Checked = currentEntry.AllLabels.Select(e => e.LabelText).Contains(lbl.LabelText);
 				if (!tn.Checked | nodeIndex == 0) { treeView.Nodes[nodeIndex].Nodes.Add(tn); }
 			}
 			else
 			{
 				treeView.Nodes[nodeIndex].Nodes.Add(tn);
 			}
-
-			if (nodeIndex > 0)
-			{
-				treeView.Nodes[nodeIndex].Nodes.Add(lbl.LabelText);
-			}
 		}
 
 		public static void ResetTree(TreeView treeView, Entry currentEntry, frmMain.OrgLevelTypes orgLevelType = frmMain.OrgLevelTypes.None)
 		{
 			treeView.Nodes.Clear();
+			treeView.Nodes.Add("Entry '" + (currentEntry == null ? "n/a" : currentEntry.Title) + "'"); 
 			treeView.Nodes.Add("Notebook '"		+ Program.SelectedNotebookName		+ "'");
 			treeView.Nodes.Add("All Notebooks");
 			DateTime now = DateTime.Now;
-			foreach (MNLabel label in Program.LblsUnderNotebook) PopulateTreeWithLabels(treeView, currentEntry, 0, label);
-			foreach (string labelText in Program.LblsInAllNotebooks) treeView.Nodes[1].Nodes.Add(labelText);
+			
+			if(currentEntry != null)
+			{ foreach (MNLabel lbl in currentEntry.AllLabels) PopulateTreeWithLabels(treeView, currentEntry, 0, lbl); }
+
+			foreach (MNLabel label in Program.LblsUnderNotebook) PopulateTreeWithLabels(treeView, null, 1, label);
+			foreach (string labelText in Program.LblsInAllNotebooks) treeView.Nodes[2].Nodes.Add(labelText);
 		}
 
 		public static void ResizeListsAndRTBs(ListBox entriesList, RichTextBox entryRTB, Label seperatorLabel, Label typeLabel, Form callingForm)

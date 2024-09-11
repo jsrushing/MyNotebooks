@@ -572,7 +572,7 @@ namespace MyNotebooks.subforms
 			DateTime start = DateTime.Now;
 			while (Program.BgWorker.IsBusy && start.AddSeconds(4) > DateTime.Now) { Thread.Sleep(300); }
 
-			using (frmLabelsManager frm = new(this, CurrentEntry))
+			using (frmLabelsManager frm = new(this, CurrentNotebook, CurrentEntry))
 			{
 				frm.ShowDialog();
 

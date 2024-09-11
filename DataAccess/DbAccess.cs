@@ -418,7 +418,7 @@ namespace MyNotebooks.DataAccess
 			return kvpRtrn;
 		}
 
-		public static void PopulateLabelsInAllNotebooks()
+		public static void			PopulateLabelsInAllNotebooks()
 		{
 			DataTable dt = new DataTable();
 

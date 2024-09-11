@@ -188,7 +188,7 @@ namespace MyNotebooks
 		{
 			var saveJournal = false;
 			foreach (Entry entry in this.Entries.Where(e => e.Labels.Contains(label)).ToList())
-			{ saveJournal = entry.RemoveOrReplaceLabel("", label, false); } 
+			{ saveJournal = entry.RemoveOrReplaceLabel(label, "", false); } 
 			
 			if(saveJournal) { await this.Save(); } 
 		}
@@ -326,7 +326,7 @@ namespace MyNotebooks
 		{
 			var saveJournal = false;
 			foreach(Entry entry in this.Entries.Where(e => e.Labels.Contains(oldName)).ToList()) 
-			{ saveJournal = entry.RemoveOrReplaceLabel(newName, oldName); }
+			{ saveJournal = entry.RemoveOrReplaceLabel(oldName, newName); }
 
 			if(saveJournal ) { await this.Save(); }
 		}
