@@ -41,7 +41,7 @@ namespace MyNotebooks.subforms
 			None
 		}
 
-		public frmMessage(OperationType type, string message = "", string defaultText = "", Form parent = null, string[] dropDownItems = null)
+		public frmMessage(OperationType type, string message = "", string defaultText = "", Form parent = null, string[] dropDownItems = null, int maxInput = 0)
 		{
 			InitializeComponent();
 			opType = type;
@@ -54,6 +54,8 @@ namespace MyNotebooks.subforms
 				ddlItemsToSelect.Items.AddRange(dropDownItems);
 				ddlItemsToSelect.Visible = true;
 			}
+
+			txtInput.MaxLength = maxInput > 0 ? maxInput : 2500;
 		}
 
 		private void frmMessage_Activated(object sender, EventArgs e)
