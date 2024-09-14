@@ -63,7 +63,6 @@ namespace MyNotebooks.subforms
 			btnContinue = new Button();
 			lblSelectAll = new Label();
 			treeEntriesToEdit = new TreeView();
-			label1 = new Label();
 			pnlMain.SuspendLayout();
 			pnlLabelDetails.SuspendLayout();
 			mnuContextLabels.SuspendLayout();
@@ -134,7 +133,7 @@ namespace MyNotebooks.subforms
 			treeAvailableLabels.Size = new System.Drawing.Size(266, 283);
 			treeAvailableLabels.TabIndex = 6;
 			treeAvailableLabels.Text = "tree";
-			treeAvailableLabels.AfterCheck += this.treeAvailableLabels_AfterCheck;
+			treeAvailableLabels.AfterCheck += this.treeLabels_AfterCheck;
 			treeAvailableLabels.AfterExpand += this.treeAvailableLabels_AfterExpand;
 			treeAvailableLabels.AfterSelect += this.treeAvailableLabels_AfterSelect;
 			treeAvailableLabels.MouseDown += this.treeAvailableLabels_MouseDown;
@@ -292,7 +291,6 @@ namespace MyNotebooks.subforms
 			pnlRenameDeleteManager.Controls.Add(btnContinue);
 			pnlRenameDeleteManager.Controls.Add(lblSelectAll);
 			pnlRenameDeleteManager.Controls.Add(treeEntriesToEdit);
-			pnlRenameDeleteManager.Controls.Add(label1);
 			pnlRenameDeleteManager.Location = new System.Drawing.Point(321, 5);
 			pnlRenameDeleteManager.Name = "pnlRenameDeleteManager";
 			pnlRenameDeleteManager.Size = new System.Drawing.Size(292, 568);
@@ -301,8 +299,8 @@ namespace MyNotebooks.subforms
 			// 
 			// btnCancelRenameDelete
 			// 
-			btnCancelRenameDelete.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-			btnCancelRenameDelete.Location = new System.Drawing.Point(189, 533);
+			btnCancelRenameDelete.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			btnCancelRenameDelete.Location = new System.Drawing.Point(175, 535);
 			btnCancelRenameDelete.Name = "btnCancelRenameDelete";
 			btnCancelRenameDelete.Size = new System.Drawing.Size(75, 23);
 			btnCancelRenameDelete.TabIndex = 9;
@@ -312,25 +310,27 @@ namespace MyNotebooks.subforms
 			// 
 			// btnContinue
 			// 
-			btnContinue.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-			btnContinue.Location = new System.Drawing.Point(6, 530);
+			btnContinue.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			btnContinue.Location = new System.Drawing.Point(14, 535);
 			btnContinue.Name = "btnContinue";
 			btnContinue.Size = new System.Drawing.Size(132, 23);
 			btnContinue.TabIndex = 8;
 			btnContinue.Text = "{0} in Selections";
 			btnContinue.UseVisualStyleBackColor = true;
+			btnContinue.Click += this.btnContinue_Click;
 			// 
 			// lblSelectAll
 			// 
+			lblSelectAll.Anchor = AnchorStyles.Top | AnchorStyles.Right;
 			lblSelectAll.AutoSize = true;
 			lblSelectAll.Cursor = Cursors.Hand;
 			lblSelectAll.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
 			lblSelectAll.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			lblSelectAll.Location = new System.Drawing.Point(196, 9);
+			lblSelectAll.Location = new System.Drawing.Point(211, 6);
 			lblSelectAll.Name = "lblSelectAll";
-			lblSelectAll.Size = new System.Drawing.Size(66, 13);
+			lblSelectAll.Size = new System.Drawing.Size(51, 13);
 			lblSelectAll.TabIndex = 6;
-			lblSelectAll.Text = "select none";
+			lblSelectAll.Text = "select all";
 			lblSelectAll.Click += this.lblSelectAll_Click;
 			// 
 			// treeEntriesToEdit
@@ -338,19 +338,11 @@ namespace MyNotebooks.subforms
 			treeEntriesToEdit.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
 			treeEntriesToEdit.CheckBoxes = true;
 			treeEntriesToEdit.HideSelection = false;
-			treeEntriesToEdit.Location = new System.Drawing.Point(11, 26);
+			treeEntriesToEdit.Location = new System.Drawing.Point(11, 24);
 			treeEntriesToEdit.Name = "treeEntriesToEdit";
-			treeEntriesToEdit.Size = new System.Drawing.Size(270, 494);
+			treeEntriesToEdit.Size = new System.Drawing.Size(270, 503);
 			treeEntriesToEdit.TabIndex = 1;
-			// 
-			// label1
-			// 
-			label1.AutoSize = true;
-			label1.Location = new System.Drawing.Point(5, 6);
-			label1.Name = "label1";
-			label1.Size = new System.Drawing.Size(166, 15);
-			label1.TabIndex = 0;
-			label1.Text = "Please select the Labels to edit";
+			treeEntriesToEdit.AfterCheck += this.treeLabels_AfterCheck;
 			// 
 			// frmLabelsManager
 			// 
@@ -423,7 +415,6 @@ namespace MyNotebooks.subforms
 		private Panel pnlRenameDeleteManager;
 		private Label lblSelectAll;
 		private TreeView treeEntriesToEdit;
-		private Label label1;
 		private Button btnCancelRenameDelete;
 		private Button btnContinue;
 	}
