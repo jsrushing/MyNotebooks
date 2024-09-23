@@ -204,10 +204,22 @@ namespace MyNotebooks.subforms
 			System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
 			this.Text = fvi.ProductName + " " + Program.AppVersion + (fvi.FileName.ToLower().Contains("debug") ? " - DEBUG MODE" : "");
 			ShowHideMenusAndControls(SelectionState.HideAll);
-			await Utilities.PopulateAllNotebooks();
-			LoadNotebooks();
-			this.Cursor = Cursors.Default;
+
+			try
+			{
+				await Utilities.PopulateAllNotebooks();
+				LoadNotebooks();
+			}
+			catch (Exception ex)	// This catches no SQL connection then exits.
+			{
+				using (frmMessage frm = new(frmMessage.OperationType.Message, 
+					"An error occurred loading Notebook names and Ids. " + Environment.NewLine + ex.Message, "Error"))
+				{ frm.ShowDialog(); }
+
+				this.Close();
+			}
 			Program.User.Id = 1000;
+			this.Cursor = Cursors.Default;
 		}
 
 		private void frmMain_Resize(object sender, EventArgs e)

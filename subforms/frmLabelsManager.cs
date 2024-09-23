@@ -118,105 +118,27 @@ namespace MyNotebooks.subforms
 		{
 			this.Cursor = Cursors.WaitCursor;
 			var checkedLabels = GetCheckedNodesAsNodes(treeAvailableLabels);
-			List<string> vAllNbs = checkedLabels.Where(n => n.Parent.Index == 2).ToList().Select(n => n.Text).ToList();
-			List<string> vNb = checkedLabels.Where(n => n.Parent.Index == 1).ToList().Select(n => n.Text).ToList();
-			List<string> vE = checkedLabels.Where(n => n.Parent.Index == 0).ToList().Select(n => n.Text).ToList();
+			var vE =		checkedLabels.Where(n => n.Parent.Index == 0).ToList().Select(n => n.Text).ToList();
+			var vNb =		checkedLabels.Where(n => n.Parent.Index == 1).ToList().Select(n => n.Text).ToList();
+			var vAllNbs =	checkedLabels.Where(n => n.Parent.Index == 2).ToList().Select(n => n.Text).ToList();
 
 			treeEntriesToEdit.Nodes.Clear();
-			treeEntriesToEdit.Nodes.Add("In Entry '" + CurrentEntry.Title + "'");
+			treeEntriesToEdit.Nodes.Add("In Entry '"	+ (CurrentEntry == null ? "n/a" : CurrentEntry.Title + "'"));
 			treeEntriesToEdit.Nodes.Add("In Notebook '" + CurrentNotebook.Name + "'");
 			treeEntriesToEdit.Nodes.Add("In All Notebooks");
 
-			try
-			{
-				foreach (var node in vAllNbs) { treeEntriesToEdit.Nodes[2].Nodes.Add((node)); }
+			foreach (var node in vAllNbs) { treeEntriesToEdit.Nodes[2].Nodes.Add((node)); }
 
-				foreach (var node in vNb)
-				{ if (!vAllNbs.Contains(node)) treeEntriesToEdit.Nodes[1].Nodes.Add((node)); }
+			foreach (var node in vNb)
+			{ if (!vAllNbs.Contains(node)) treeEntriesToEdit.Nodes[1].Nodes.Add((node)); }
 
-				foreach (var node in vE)
-				{ if (!vAllNbs.Contains(node) & !vNb.Contains(node)) { treeEntriesToEdit.Nodes[0].Nodes.Add(node); } }
+			foreach (var node in vE)
+			{ if (!vAllNbs.Contains(node) & !vNb.Contains(node)) { treeEntriesToEdit.Nodes[0].Nodes.Add(node); } }
 
-				lblSelectAll_Click(null, null);
-			}
-			catch (Exception ex)
-			{
-				var s = ex.Message;
-				//throw;
-			}
-
+			lblSelectAll_Click(null, null);
 			btnContinue.Text = ((ToolStripMenuItem)sender).Text + " Labels";
 			treeEntriesToEdit.ExpandAll();
-			pnlRenameDeleteManager.Size = pnlMain.Size;
 			ShowPanel(pnlRenameDeleteManager);
-
-			//if (((ToolStripMenuItem)sender).Text.ToLower().Contains("rename")) { RenameLabels(); }
-			//else { DeleteLabels(); }
-
-			//if (ActionTaken)
-			//{
-			//	if (isRename)
-			//	{
-			//		List<MNLabel> labelsToEdit = new();
-
-			//		switch(treeAvailableLabels.SelectedNode.Parent.Index)
-			//		{
-			//			case 0:		// renaming in entry
-			//				CurrentEntry.RemoveOrReplaceLabel(oldLabelName, newLabelName);
-			//				break;
-			//			case 1:     // renaming in notebook
-			//						// get all entries with label
-			//				EntriesToEdit = new();
-
-			//				var v = CurrentNotebook.Entries.Select(e => e.AllLabels[0]).Select(l => l.LabelText == oldLabelName);
-
-			//				//EntriesToEdit.Add(v);
-
-			//				foreach (Entry entry in CurrentNotebook.Entries)
-			//				{
-			//					if(entry.AllLabels.Select(e => e.LabelText).Contains(oldLabelName))
-			//					{ EntriesToEdit.Add(entry); }
-			//				}
-
-			//				foreach(Entry entry in EntriesToEdit)
-			//				{
-			//					treeEntriesToEdit.Nodes.Add(entry.Title);
-			//				}
-
-			//				treeEntriesToEdit.Visible = true;
-			//				pnlRenameDeleteManager.Visible = true;
-
-			//						// Notebook.RemoveOrReplaceLabel(newLabelName, oldLabelName)
-			//				break;
-			//			case 2:		// renaming in all notebooks
-			//				break;
-			//		}					
-
-
-			//		switch (treeAvailableLabels.SelectedNode.Parent.Index)
-			//		{
-			//			case 0:
-			//				labelsToEdit = Program.LblsUnderNotebook;
-			//				break;
-			//			case 1:
-			//				//labelsToEdit = Program.LblsInAllNotebooks;
-			//				break;
-			//		}
-
-			//		var vLblsToEdit = labelsToEdit.Where(l => l.LabelText.Equals(oldLabelName)).ToList();
-			//		var vIdsToEdit = string.Join(",", vLblsToEdit.Select(l => l.Id.ToString()).ToList());
-			//		foreach (var v in vLblsToEdit) { v.LabelText = newLabelName; DbAccess.CRUDLabel(v, OperationType.Update); }
-			//		ResetTree();
-			//}
-			//else
-			//{ /*await LabelsManager.DeleteLabelInNotebooksList(lstLabels.SelectedItem.ToString(), notebooksToEdit, this);*/ 
-
-			//}
-
-			//lblSortType_Click(null, null);
-			//lstOccurrences.Items.Clear();
-			//}
-
 			this.Cursor = Cursors.Default;
 		}
 
