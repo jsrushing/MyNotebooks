@@ -136,33 +136,37 @@ namespace MyNotebooks.subforms
 
 					if (frm.Result == frmMessage.ReturnResult.Yes)
 					{
-
-						this.Entry =
-							new()
-							{
-								CreatedBy = Program.User.Id,
-								NotebookName = this.CurrentNotebook.Name,
-								Title = txtNewEntryTitle.Text,
-								Text = rtbNewEntry.Text,
-								RTF = rtbNewEntry.Rtf,
-								ParentId = this.CurrentNotebook.Id
-							};
+						this.Entry = new()
+						{
+							RTF = rtbNewEntry.Rtf,
+							Text = rtbNewEntry.Text,
+							Title = txtNewEntryTitle.Text,
+							ParentId = this.CurrentNotebook.Id,
+							CreatedBy = Program.User.Id,
+							NotebookName = this.CurrentNotebook.Name
+						};
 
 						this.Entry.Id = DbAccess.CRUDNotebookEntry(this.Entry).intValue;
 						SetIsDirty(false);
+						frm.Close();
 					}
 				}
 			}
 
-			using (frmLabelsManager frm = new(this, CurrentNotebook, this.Entry))
-			{
-				frm.ShowDialog();
-
-				if (frm.ActionTaken)
+			if (this.Entry != null) 
+			{ 
+				using (frmLabelsManager frm2 = new(this, CurrentNotebook, this.Entry))
 				{
-					LabelsManager.PopulateLabelsList(clbLabels, null, LabelsManager.LabelsSortType.None, this.Entry);
-					SetIsDirty();
-				}
+					frm2.ShowDialog();
+
+					if (frm2.ActionTaken)
+					{
+						LabelsManager.PopulateLabelsList(clbLabels, null, LabelsManager.LabelsSortType.None, this.Entry);
+						SetIsDirty();
+					}
+
+					frm2.Close();
+				}					
 			}
 		}
 
@@ -183,7 +187,7 @@ namespace MyNotebooks.subforms
 			rtbNewEntry.SelectionStart = 0;
 		}
 
-		private async void mnuCancelExit_Click(object sender, EventArgs e)
+		private async void	mnuCancelExit_Click(object sender, EventArgs e)
 		{
 			if (IsDirty)
 			{
@@ -200,24 +204,24 @@ namespace MyNotebooks.subforms
 			this.Hide();
 		}
 
-		private void mnuFindTextBox_TextChanged(object sender, EventArgs e)
+		private void		mnuFindTextBox_TextChanged(object sender, EventArgs e)
 		{
 			// do find operation here
 		}
 
-		private void mnuFind_Click(object sender, EventArgs e)
+		private void		mnuFind_Click(object sender, EventArgs e)
 		{
 			txtFind.Text = string.Empty;
 			txtFind.Focus();
 		}
 
-		private async void mnuSaveAndExit_Click(object sender, EventArgs e)
+		private async void	mnuSaveAndExit_Click(object sender, EventArgs e)
 		{
 			await SaveEntry();
 			this.Hide();
 		}
 
-		private async void mnuSaveEntry_Click(object sender, EventArgs e)
+		private async void	mnuSaveEntry_Click(object sender, EventArgs e)
 		{
 			if (rtbNewEntry.Text.Length > 0 && txtNewEntryTitle.Text.Length > 0 && IsDirty)
 			{
@@ -259,22 +263,32 @@ namespace MyNotebooks.subforms
 					this.Entry.Title = txtNewEntryTitle.Text.Trim();
 					this.Entry.Labels = LabelsManager.CheckedLabels_Get(clbLabels);
 
+					this.Entry.AllLabels.Clear();
+
+					for(int x = 0; x < clbLabels.Items.Count; x++)
+					{
+						if (clbLabels.CheckedIndices.Contains(x))
+						{
+							this.Entry.AllLabels.Add(new MNLabel() { LabelText = clbLabels.Items[x].ToString(), ParentId = Entry.ParentId });
+						}
+					}
+
 					// remove any un-checked labelsForSearch (with this entryId) from the Labels table
-					var labelsToRemove = string.Empty;
+					//var labelsToRemove = string.Empty;
 
-					for (var i = 0; i < clbLabels.Items.Count; i++)
-					{
-						if (!clbLabels.CheckedItems.Contains(clbLabels.Items[i])) { labelsToRemove += clbLabels.Items[i].ToString() + ","; }
-					}
+					//for (var i = 0; i < clbLabels.Items.Count; i++)
+					//{
+					//	if (!clbLabels.CheckedItems.Contains(clbLabels.Items[i])) { labelsToRemove += clbLabels.Items[i].ToString() + ","; }
+					//}
 
-					if (labelsToRemove.Length > 0) { this.Entry.LabelsToRemove = labelsToRemove; opType = OperationType.Update; }
-					else
-					{
-						this.Entry.RTF = rtbNewEntry.Rtf;
-						this.Entry.EditedOn = DateTime.Now;
-						this.ParentNotebookId = CurrentNotebook != null ? CurrentNotebook.Id : 0;
-						opType = OperationType.Update;
-					}
+					//if (labelsToRemove.Length > 0) { this.Entry.LabelsToRemove = labelsToRemove; opType = OperationType.Update; }
+					//else
+					//{
+					//	this.Entry.RTF = rtbNewEntry.Rtf;
+					//	this.Entry.EditedOn = DateTime.Now;
+					//	this.ParentNotebookId = CurrentNotebook != null ? CurrentNotebook.Id : 0;
+					//	opType = OperationType.Update;
+					//}
 				}
 				else
 				{

@@ -23,31 +23,28 @@ namespace MyNotebooks.subforms
 	public partial class frmLabelsManager : Form
 	{
 		private LabelsManager.LabelsSortType sort = LabelsManager.LabelsSortType.None;
-		private List<int> OccurenceTitleIndicies = new List<int>();
-		private bool DeletingOrphans;
-		private string strSeperator = "-----------------------";
-		public Entry CurrentEntry { get; set; }
-		public Notebook CurrentNotebook { get; set; }
-		private List<Entry> EntriesToEdit;
-		private bool FirstDetailsLoad = true;
-		private bool ProgramaticallyChecking = false;
-		private int LastClickedEntryIndex = -1;
-		private const string ViewEntryMenuText = "View Entry";
-		private const string LoadNotebookMenuText = "Load Notebook";
-
-		private int CheckedNodeCount;
-
+		private List<int>		OccurenceTitleIndicies = new List<int>();
+		private bool			DeletingOrphans;
+		private string			strSeperator = "-----------------------";
+		public Entry			CurrentEntry { get; set; }
+		public Notebook			CurrentNotebook { get; set; }
+		private List<Entry>		EntriesToEdit;
+		private bool			FirstDetailsLoad = true;
+		private bool			ProgramaticallyChecking = false;
+		private int				LastClickedEntryIndex = -1;
+		private const string	ViewEntryMenuText = "View Entry";
+		private const string	LoadNotebookMenuText = "Load Notebook";
+		private int				CheckedNodeCount;
 		private List<Notebook> SelectedNotebooks { get; set; }
+		public bool				ActionTaken { get; private set; }
 
-		public bool ActionTaken { get; private set; }
-
-		private void btnCancelRenameDelete_Click(object sender, EventArgs e)
+		private void			btnCancelRenameDelete_Click(object sender, EventArgs e)
 		{
 			lblSelectAll.Text = "select all";
 			ShowPanel(pnlMain);
 		}
 
-		private void btnContinue_Click(object sender, EventArgs e)
+		private void			btnContinue_Click(object sender, EventArgs e)
 		{
 			if (btnContinue.Text.ToLower().Contains("delete"))
 			{ DeleteLabels(); }
@@ -63,7 +60,7 @@ namespace MyNotebooks.subforms
 			CurrentNotebook = nb;
 		}
 
-		private async void frmLabelsManager_Load(object sender, EventArgs e)
+		private async void		frmLabelsManager_Load(object sender, EventArgs e)
 		{
 			pnlRenameDeleteManager.Left = pnlMain.Left;
 			//ShowHideOccurrences();
@@ -76,20 +73,17 @@ namespace MyNotebooks.subforms
 			mnuAddToCurrentEntry.Enabled = CurrentEntry != null;
 		}
 
-		private void frmLabelsManager_Resize(object sender, EventArgs e) { ShowHideOccurrences(); }
+		private void			frmLabelsManager_Resize(object sender, EventArgs e) { ShowHideOccurrences(); }
 
-		private void btnExitOrphans_Click(object sender, EventArgs e)
+		private void			btnExitOrphans_Click(object sender, EventArgs e)
 		{ lstOccurrences.Items.Clear(); ShowHideOccurrences(); ShowPanel(pnlMain); }
 
-		private void DeselectDuplicateCheckedLabels()
-		{
-		}
-		private void DeleteLabels()
+		private void			DeleteLabels()
 		{
 			
 		}
 
-		private void RenameLabels()
+		private void			RenameLabels()
 		{
 			var checkedLabels = GetCheckedNodesAsNodes(treeEntriesToEdit);
 			StringBuilder prompt = new();
@@ -114,7 +108,7 @@ namespace MyNotebooks.subforms
 			//}
 		}
 
-		private async void DeleteOrRename(object sender, EventArgs e)
+		private async void		DeleteOrRename(object sender, EventArgs e)
 		{
 			this.Cursor = Cursors.WaitCursor;
 			var checkedLabels = GetCheckedNodesAsNodes(treeAvailableLabels);
@@ -142,7 +136,7 @@ namespace MyNotebooks.subforms
 			this.Cursor = Cursors.Default;
 		}
 
-		public int GetCheckedNodeCount(TreeNodeCollection nodes)
+		public int				GetCheckedNodeCount(TreeNodeCollection nodes)
 		{
 			foreach (System.Windows.Forms.TreeNode aNode in nodes)
 			{
@@ -156,7 +150,7 @@ namespace MyNotebooks.subforms
 			return CheckedNodeCount;
 		}
 
-		public List<TreeNode> GetCheckedNodesAsNodes(System.Windows.Forms.TreeView tree)
+		public List<TreeNode>	GetCheckedNodesAsNodes(System.Windows.Forms.TreeView tree)
 		{
 			List<TreeNode> selectedNodes = new List<TreeNode>();
 
@@ -170,13 +164,15 @@ namespace MyNotebooks.subforms
 			return selectedNodes;
 		}
 
-		public List<MNLabel> GetCheckedNodesAsLabels()
+		public List<MNLabel>	GetCheckedNodesAsLabels(System.Windows.Forms.TreeView tv = null)
 		{
 			List<MNLabel> lstRtrn = new();
+			List<string> lstRtrnString = new();
 			MNLabel tmpLbl = null;
 			var lblId = 0;
+			if (tv == null) tv = treeAvailableLabels;
 
-			foreach (TreeNode tn in treeAvailableLabels.Nodes)
+			foreach (TreeNode tn in tv.Nodes)
 			{
 				foreach (TreeNode child in tn.Nodes)
 				{
@@ -188,22 +184,18 @@ namespace MyNotebooks.subforms
 						{
 							tmpLbl = new() { CreatedBy = 1000, LabelText = child.Text.Replace(" (+)", ""), ParentId = lblId };
 							//tmpLbl = new() { CreatedBy = Program.User.Id, LabelText = child.Text.Replace(" (+)", ""), ParentId = CurrentEntry.Id };
-							if (!CurrentEntry.AllLabels.Where(l => l.LabelText.Equals(child.Text)).Any() && !lstRtrn.Contains(tmpLbl)) { lstRtrn.Add(tmpLbl); }
+							//if (!CurrentEntry.AllLabels.Where(l => l.LabelText.Equals(child.Text)).Any() && !lstRtrn.Contains(tmpLbl)) { lstRtrn.Add(tmpLbl); }
+
+							if (!lstRtrn.Contains(tmpLbl)) lstRtrn.Add(tmpLbl);
 						}
 					}
-					//else
-					//{
-					//	// remove from AllLabels if exists.
-					//	var label = CurrentEntry.AllLabels.Where(l => l.LabelText == child.Text.Replace(" (+)", "")).FirstOrDefault();
-					//	CurrentEntry.AllLabels.Remove(label);
-					//}
 				}
 			}
 
 			return lstRtrn;
 		}
 
-		private void gridViewEntryDetails_MouseDown(object sender, MouseEventArgs e)
+		private void			gridViewEntryDetails_MouseDown(object sender, MouseEventArgs e)
 		{
 			var vRowIndex = e.Y / gridViewEntryDetails.RowTemplate.Height;
 			gridViewEntryDetails.Rows[vRowIndex].Selected = true;
@@ -225,7 +217,7 @@ namespace MyNotebooks.subforms
 			mnuContext_GridEntryDetails.Text = v2;
 		}
 
-		private void lblSelectAll_Click(object sender, EventArgs e)
+		private void			lblSelectAll_Click(object sender, EventArgs e)
 		{
 			lblSelectAll.Text = "select " + (lblSelectAll.Text.Contains("all") ? "none" : "all");
 
@@ -233,7 +225,7 @@ namespace MyNotebooks.subforms
 			{ foreach (TreeNode ch in parent.Nodes) { ch.Checked = lblSelectAll.Text.Contains("none"); } }
 		}
 
-		private void lblSortType_Click(object sender, EventArgs e)
+		private void			lblSortType_Click(object sender, EventArgs e)
 		{
 			//switch (sort)
 			//{
@@ -255,19 +247,26 @@ namespace MyNotebooks.subforms
 			//}
 		}
 
-		private void lstOccurrences_MouseUp(object sender, MouseEventArgs e)
+		private void			lstOccurrences_MouseUp(object sender, MouseEventArgs e)
 		{ PopulateGridViewEntryDetails(e.Y); }
 
-		private void mnuAddToCurrentEntry_Click(object sender, EventArgs e)
+		private void			mnuAddToCurrentEntry_Click(object sender, EventArgs e)
 		{
-			foreach (MNLabel l in GetCheckedNodesAsLabels().Where(l => !CurrentEntry.AllLabels.Contains(l)).ToList())
-			{ CurrentEntry.AddLabel(l, Program.LblsInAllNotebooks.Contains(l.LabelText)); }
+			var a = GetCheckedNodesAsLabels().Select(l => l.LabelText);
+			var b = CurrentEntry.AllLabels.Select(l => l.LabelText);
+			//var x = b.Except(a);
 
-			treeAvailableLabels.Nodes[0].Nodes.Clear();
-			foreach (MNLabel lbl2 in CurrentEntry.AllLabels) { Utilities.PopulateTreeWithLabels(treeAvailableLabels, CurrentEntry, 0, lbl2); }
+			foreach (var v in a.Except(b))
+			{ CurrentEntry.AddLabel(new MNLabel() { LabelText = v }, Program.LblsInAllNotebooks.Contains(v)); }
+
+			//foreach(var v in x)
+			//{ CurrentEntry.RemoveOrReplaceLabel(v,"",false); }
+
+			this.ActionTaken = true;
+			this.Hide();
 		}
 
-		private void mnuContext_GridEntryDetails_Click(object sender, EventArgs e)
+		private void			mnuContext_GridEntryDetails_Click(object sender, EventArgs e)
 		{
 			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
 			int v = Convert.ToInt32(gridViewEntryDetails.SelectedRows[0].Cells[1].Tag);
@@ -309,7 +308,7 @@ namespace MyNotebooks.subforms
 
 		}
 
-		private void mnuCreateNewLabel_Click(object sender, EventArgs e)
+		private void			mnuCreateNewLabel_Click(object sender, EventArgs e)
 		{
 			var msg = "What is the Label text?";
 
@@ -362,7 +361,7 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void PopulateLabelInformation()
+		private void			PopulateLabelInformation()
 		{
 			// Populate and display details about the selected label
 			TreeNode tn = treeAvailableLabels.SelectedNode;
@@ -393,7 +392,7 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void PopulateGridViewEntryDetails(int mouseY = -1)
+		private void			PopulateGridViewEntryDetails(int mouseY = -1)
 		{
 			// Populate and display the label Parent data grid.
 			gridViewEntryDetails.Rows.Clear();
@@ -452,13 +451,13 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void ResetTree()
+		private void			ResetTree()
 		{
 			Utilities.ResetTree(treeAvailableLabels, CurrentEntry);
 			treeAvailableLabels.Nodes[0].Expand();
 		}
 
-		private void ShowPanel(Panel panelToShow)
+		private void			ShowPanel(Panel panelToShow)
 		{
 			foreach (Control c in this.Controls) { if (c.GetType() == typeof(Panel)) { c.Visible = false; } }
 			pnlMain.Height = this.Height - pnlMain.Top - 25;
@@ -471,7 +470,7 @@ namespace MyNotebooks.subforms
 			panelToShow.Visible = true;
 		}
 
-		private void ShowHideOccurrences()
+		private void			ShowHideOccurrences()
 		{
 			//if (lstOccurrences.Items.Count > 0)
 			//{
@@ -492,15 +491,15 @@ namespace MyNotebooks.subforms
 			//else { msg = "Found " + (lstOccurrences.Items.Count - (OccurenceTitleIndicies.Count * 2)).ToString("###,###,###") + " entries in " + (OccurenceTitleIndicies.Count).ToString() + " notebooks"; }
 		}
 
-		private void treeAvailableLabels_AfterSelect(object sender, TreeViewEventArgs e)
+		private void			treeAvailableLabels_AfterSelect(object sender, TreeViewEventArgs e)
 		{ //if (e.Node.Level > 0) { PopulateLabelInformation(); }
 		}
 
-		private void treeAvailableLabels_AfterExpand(object sender, TreeViewEventArgs e)
+		private void			treeAvailableLabels_AfterExpand(object sender, TreeViewEventArgs e)
 		{ if (e.Node.Nodes.Count == 1 && e.Node.Nodes[0].Text == "") { e.Node.Nodes.Clear(); } }
 
-		private void treeLabels_AfterCheck(object sender, TreeViewEventArgs e) // Implment checking/un-checking all subnodes when a parent is clicked and suppressing level 0 node clicks for Rename/Delete mgr.
-		{
+		private void			treeLabels_AfterCheck(object sender, TreeViewEventArgs e)
+		{// Implment checking/un-checking all subnodes when a parent is clicked and suppressing level 0 node clicks for Rename/Delete mgr.
 			if (!ProgramaticallyChecking)
 			{
 				TreeNode tn = e.Node;
@@ -526,12 +525,20 @@ namespace MyNotebooks.subforms
 						ProgramaticallyChecking = false;
 					}
 
+					if(tn.Parent.Level == 0 & !tn.Checked)
+					{
+						//using(frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "To remove labels, uncheck them in the Entry Edit screen then save the Entry.       ", ""))
+						//{ frm.ShowDialog(this); tn.Checked = true; }
+
+						tn.Checked = true;
+					}
+
 					mnuLabelsOperations.Enabled = true;
 				}
 			}
 		}
 
-		private void treeAvailableLabels_MouseDown(object sender, MouseEventArgs e)
+		private void			treeAvailableLabels_MouseDown(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Right)
 			{
@@ -542,7 +549,7 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void treeAvailableLabels_MouseMove(object sender, MouseEventArgs e)
+		private void			treeAvailableLabels_MouseMove(object sender, MouseEventArgs e)
 		{
 			gridViewEntryDetails.Visible = false;
 		}

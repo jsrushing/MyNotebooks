@@ -569,7 +569,8 @@ namespace MyNotebooks.subforms
 				if (frm.Saved && frm.Entry != null)
 				{
 					CurrentEntry = frm.Entry;
-					if (CurrentEntry.LabelsToRemove == null) await CurrentNotebook.Save();
+					//if (CurrentEntry.LabelsToRemove == null) await CurrentNotebook.Save();
+					await CurrentNotebook.Save();
 					await ProcessDateFiltersAndPopulateEntries();
 					var v = lstEntries.Items.OfType<string>().FirstOrDefault(e => e.StartsWith(CurrentEntry.Title));
 					lstEntries.SelectedIndex = lstEntries.Items.IndexOf(v);

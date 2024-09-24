@@ -34,6 +34,7 @@ namespace MyNotebooks.subforms
 			components = new System.ComponentModel.Container();
 			TreeNode treeNode1 = new TreeNode("");
 			TreeNode treeNode2 = new TreeNode("Notebook", new TreeNode[] { treeNode1 });
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmLabelsManager));
 			pnlMain = new Panel();
 			pnlLabelDetails = new Panel();
 			lstOccurrences = new ListBox();
@@ -355,6 +356,7 @@ namespace MyNotebooks.subforms
 			Controls.Add(pnlMain);
 			Controls.Add(mnuMain);
 			FormBorderStyle = FormBorderStyle.SizableToolWindow;
+			Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
 			MainMenuStrip = mnuMain;
 			MaximizeBox = false;
 			MinimizeBox = false;

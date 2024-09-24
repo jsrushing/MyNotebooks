@@ -528,6 +528,7 @@ namespace MyNotebooks.subforms
 			ClientSize = new System.Drawing.Size(590, 517);
 			Controls.Add(grpCreateEntry);
 			Controls.Add(menuStrip1);
+			Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
 			MainMenuStrip = menuStrip1;
 			MinimumSize = new System.Drawing.Size(372, 439);
 			Name = "frmNewEntry";

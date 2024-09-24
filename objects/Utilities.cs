@@ -140,7 +140,6 @@ namespace MyNotebooks.objects
 			DbAccess.PopulateLabelsInAllNotebooks();
 		}
 
-
 		public static async Task PopulateAllNotebookNames(List<string> notebookNames = null)
 		{
 

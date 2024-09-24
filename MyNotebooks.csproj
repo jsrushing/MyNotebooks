@@ -10,13 +10,18 @@
     <UseWindowsForms>true</UseWindowsForms>	  
     <StartupObject>MyNotebooks.Program</StartupObject>	  
     <SignAssembly>False</SignAssembly>	  
-    <UserSecretsId>dfb5f457-7b97-42bf-a325-9fb644e0cb5b</UserSecretsId>
+    <UserSecretsId>dfb5f457-7b97-42bf-a325-9fb644e0cb5b</UserSecretsId>	  
+    <ApplicationIcon>notepad_bloc_notes_15549.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="Journal.cs" />
     <Compile Remove="JournalEntry.cs" />
     <Compile Remove="JournalSettings.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="notepad_bloc_notes_15549.ico" />
   </ItemGroup>
 
   <ItemGroup>

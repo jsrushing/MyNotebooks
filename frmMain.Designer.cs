@@ -554,6 +554,7 @@ namespace MyNotebooks.subforms
 			Controls.Add(label1);
 			Controls.Add(ddlNotebooks);
 			Controls.Add(menuStrip1);
+			Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
 			MainMenuStrip = menuStrip1;
 			MinimumSize = new System.Drawing.Size(650, 441);
 			Name = "frmMain";

@@ -29,6 +29,7 @@ namespace MyNotebooks.subforms
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmNewNotebook));
 			txtName = new System.Windows.Forms.TextBox();
 			label1 = new System.Windows.Forms.Label();
 			btnCancel = new System.Windows.Forms.Button();
@@ -144,6 +145,7 @@ namespace MyNotebooks.subforms
 			Controls.Add(grp1);
 			Controls.Add(btnSettings);
 			FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
 			MaximizeBox = false;
 			MinimizeBox = false;
 			Name = "frmNewNotebook";

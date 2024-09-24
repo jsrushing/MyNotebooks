@@ -178,11 +178,11 @@ namespace MyNotebooks
 				, string.Join(",", this.AllLabels.Select(e => e.LabelText).ToArray()), this.Text);
 		}
 
-		public bool RemoveOrReplaceLabel(string oldLabelName, string newLabelName = "", bool renaming = true)
+		public bool			RemoveOrReplaceLabel(string oldLabelName, string newLabelName = "", bool renaming = true)
 		{
 			var labels = this.Labels;
 			var bLabelEdited = false;
-			var l = (MNLabel)this.AllLabels.Where(l => l.LabelText == oldLabelName);
+			var l = (MNLabel)this.AllLabels.FirstOrDefault(l => l.LabelText == oldLabelName);
 
 			try
 			{

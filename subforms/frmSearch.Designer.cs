@@ -50,6 +50,9 @@ namespace MyNotebooks.subforms
 			chkMatchWholeWord = new CheckBox();
 			label2 = new Label();
 			panel3 = new Panel();
+			panel1 = new Panel();
+			radioButton1 = new RadioButton();
+			radioButton2 = new RadioButton();
 			radDate_Or = new RadioButton();
 			radDate_And = new RadioButton();
 			panel2 = new Panel();
@@ -81,17 +84,14 @@ namespace MyNotebooks.subforms
 			lblSelectionType = new Label();
 			mnuEditEntry = new ToolStripMenuItem();
 			bgWorker = new BackgroundWorker();
-			panel1 = new Panel();
-			radioButton1 = new RadioButton();
-			radioButton2 = new RadioButton();
 			grpFindEntry.SuspendLayout();
 			panel5.SuspendLayout();
 			panel4.SuspendLayout();
 			panel3.SuspendLayout();
+			panel1.SuspendLayout();
 			panel2.SuspendLayout();
 			pnlLabels_AndOr.SuspendLayout();
 			mnuEntryEditTop.SuspendLayout();
-			panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// grpFindEntry
@@ -268,6 +268,37 @@ namespace MyNotebooks.subforms
 			panel3.Name = "panel3";
 			panel3.Size = new System.Drawing.Size(90, 25);
 			panel3.TabIndex = 58;
+			// 
+			// panel1
+			// 
+			panel1.Controls.Add(radioButton1);
+			panel1.Controls.Add(radioButton2);
+			panel1.Location = new System.Drawing.Point(107, 1);
+			panel1.Name = "panel1";
+			panel1.Size = new System.Drawing.Size(90, 25);
+			panel1.TabIndex = 59;
+			// 
+			// radioButton1
+			// 
+			radioButton1.AutoSize = true;
+			radioButton1.Checked = true;
+			radioButton1.Location = new System.Drawing.Point(2, 4);
+			radioButton1.Name = "radioButton1";
+			radioButton1.Size = new System.Drawing.Size(36, 19);
+			radioButton1.TabIndex = 1;
+			radioButton1.TabStop = true;
+			radioButton1.Text = "or";
+			radioButton1.UseVisualStyleBackColor = true;
+			// 
+			// radioButton2
+			// 
+			radioButton2.AutoSize = true;
+			radioButton2.Location = new System.Drawing.Point(39, 4);
+			radioButton2.Name = "radioButton2";
+			radioButton2.Size = new System.Drawing.Size(45, 19);
+			radioButton2.TabIndex = 0;
+			radioButton2.Text = "and";
+			radioButton2.UseVisualStyleBackColor = true;
 			// 
 			// radDate_Or
 			// 
@@ -590,37 +621,6 @@ namespace MyNotebooks.subforms
 			// 
 			bgWorker.WorkerReportsProgress = true;
 			// 
-			// panel1
-			// 
-			panel1.Controls.Add(radioButton1);
-			panel1.Controls.Add(radioButton2);
-			panel1.Location = new System.Drawing.Point(107, 1);
-			panel1.Name = "panel1";
-			panel1.Size = new System.Drawing.Size(90, 25);
-			panel1.TabIndex = 59;
-			// 
-			// radioButton1
-			// 
-			radioButton1.AutoSize = true;
-			radioButton1.Checked = true;
-			radioButton1.Location = new System.Drawing.Point(2, 4);
-			radioButton1.Name = "radioButton1";
-			radioButton1.Size = new System.Drawing.Size(36, 19);
-			radioButton1.TabIndex = 1;
-			radioButton1.TabStop = true;
-			radioButton1.Text = "or";
-			radioButton1.UseVisualStyleBackColor = true;
-			// 
-			// radioButton2
-			// 
-			radioButton2.AutoSize = true;
-			radioButton2.Location = new System.Drawing.Point(39, 4);
-			radioButton2.Name = "radioButton2";
-			radioButton2.Size = new System.Drawing.Size(45, 19);
-			radioButton2.TabIndex = 0;
-			radioButton2.Text = "and";
-			radioButton2.UseVisualStyleBackColor = true;
-			// 
 			// frmSearch
 			// 
 			AcceptButton = btnSearch;
@@ -628,6 +628,7 @@ namespace MyNotebooks.subforms
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new System.Drawing.Size(815, 672);
 			Controls.Add(grpFindEntry);
+			Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
 			MinimumSize = new System.Drawing.Size(831, 550);
 			Name = "frmSearch";
 			Text = "Search";
@@ -641,13 +642,13 @@ namespace MyNotebooks.subforms
 			panel4.PerformLayout();
 			panel3.ResumeLayout(false);
 			panel3.PerformLayout();
+			panel1.ResumeLayout(false);
+			panel1.PerformLayout();
 			panel2.ResumeLayout(false);
 			panel2.PerformLayout();
 			pnlLabels_AndOr.ResumeLayout(false);
 			pnlLabels_AndOr.PerformLayout();
 			mnuEntryEditTop.ResumeLayout(false);
-			panel1.ResumeLayout(false);
-			panel1.PerformLayout();
 			this.ResumeLayout(false);
 		}
 
