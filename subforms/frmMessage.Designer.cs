@@ -29,6 +29,7 @@ namespace MyNotebooks.subforms
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMessage));
 			lblMessage = new System.Windows.Forms.Label();
 			pnlYesNoCancel = new System.Windows.Forms.Panel();
 			btnNo1 = new System.Windows.Forms.Button();
@@ -253,7 +254,8 @@ namespace MyNotebooks.subforms
 			Controls.Add(pnlYesNo);
 			Controls.Add(pnlYesNoCancel);
 			Controls.Add(lblMessage);
-			FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+			FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
 			Name = "frmMessage";
 			Text = "Please Confirm";
 			Activated += this.frmMessage_Activated;

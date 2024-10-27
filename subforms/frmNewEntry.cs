@@ -226,7 +226,7 @@ namespace MyNotebooks.subforms
 			if (rtbNewEntry.Text.Length > 0 && txtNewEntryTitle.Text.Length > 0 && IsDirty)
 			{
 				if (CurrentNotebook.Entries.Count == 1 & rtbNewEntry.Text.IndexOf(" ") > 49)
-				{   // Bad PINs are detected by checking that the decrypted text in the 0th notebook doesn't start w/ a word 50 chars long. See frmMain.btnLoadNotebook_Click().
+				{   // Bad PINs are detected by checking that the decrypted text in the 0th notebook doesn't start w/ a word 50 chars long. See frmMain.loadSelectedNotebook().
 					using frmMessage frm = new frmMessage(frmMessage.OperationType.Message,
 						"Sorry, but for security reasons the very 1st entry in a notebook can't start with a single word longer than 50 characters.");
 					frm.ShowDialog();
@@ -262,7 +262,7 @@ namespace MyNotebooks.subforms
 					this.Entry.Text = rtbNewEntry.Text.Trim();
 					this.Entry.Title = txtNewEntryTitle.Text.Trim();
 					this.Entry.Labels = LabelsManager.CheckedLabels_Get(clbLabels);
-
+					opType = OperationType.Update;
 					this.Entry.AllLabels.Clear();
 
 					for(int x = 0; x < clbLabels.Items.Count; x++)

@@ -189,6 +189,27 @@ namespace MyNotebooks.subforms
 			InitializeComponent();
 		}
 
+		private async void frmMain_Activated(object sender, EventArgs e)
+		{
+			if(Program.AllNotebooks.Count == 0)
+			{
+				try
+				{
+					await Utilities.PopulateAllNotebooks();
+					LoadNotebooks();
+					this.Cursor = Cursors.Default;
+				}
+				catch (Exception ex)    // This catches no SQL connection then exits.
+				{
+					using (frmMessage frm = new(frmMessage.OperationType.Message,
+						"An error occurred loading Notebook names and Ids. " + Environment.NewLine + ex.Message, "Fatal Error"))
+					{ frm.ShowDialog(); }
+
+					this.Close();
+				}
+			}
+		}
+
 		private void frmMain_FormClosed(object sender, FormClosedEventArgs e)
 		{
 			foreach (Form f in Application.OpenForms)
@@ -204,22 +225,7 @@ namespace MyNotebooks.subforms
 			System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
 			this.Text = fvi.ProductName + " " + Program.AppVersion + (fvi.FileName.ToLower().Contains("debug") ? " - DEBUG MODE" : "");
 			ShowHideMenusAndControls(SelectionState.HideAll);
-
-			try
-			{
-				await Utilities.PopulateAllNotebooks();
-				LoadNotebooks();
-			}
-			catch (Exception ex)	// This catches no SQL connection then exits.
-			{
-				using (frmMessage frm = new(frmMessage.OperationType.Message, 
-					"An error occurred loading Notebook names and Ids. " + Environment.NewLine + ex.Message, "Error"))
-				{ frm.ShowDialog(); }
-
-				this.Close();
-			}
 			Program.User.Id = 1000;
-			this.Cursor = Cursors.Default;
 		}
 
 		private void frmMain_Resize(object sender, EventArgs e)
@@ -231,7 +237,7 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private async void btnLoadNotebook_Click(object sender, EventArgs e)
+		private async void loadSelectedNotebook(object sender, EventArgs e)
 		{
 			this.Cursor = Cursors.WaitCursor;
 			lstEntries.Items.Clear();
@@ -384,7 +390,7 @@ namespace MyNotebooks.subforms
 			cbxSortEntriesBy.SelectedIndex = 0;
 			var v = ddlNotebooks.SelectedItem as ListItem;
 			SelectedNotebookIds = new(v.Id, v.Name);
-			btnLoadNotebook_Click(sender, e);
+			loadSelectedNotebook(sender, e);
 			notebookChanged = true;
 		}
 
@@ -444,7 +450,7 @@ namespace MyNotebooks.subforms
 				//if (ddlNotebooks.Items.Count == 1)
 				//{
 				//	try { ddlNotebooks.SelectedIndex = 0; } catch(Exception e) { var i = e.Message; }
-				//	btnLoadNotebook_Click(null, new());
+				//	loadSelectedNotebook(null, new());
 				//}
 				//else
 				//{
@@ -452,7 +458,7 @@ namespace MyNotebooks.subforms
 				//}
 			}
 
-			//if (ddlNotebooks.Items.Count == 1) { btnLoadNotebook_Click(null, new()); }
+			//if (ddlNotebooks.Items.Count == 1) { loadSelectedNotebook(null, new()); }
 		}
 
 		private void lstEntries_MouseUp(object sender, MouseEventArgs e)

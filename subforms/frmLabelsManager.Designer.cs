@@ -64,6 +64,13 @@ namespace MyNotebooks.subforms
 			btnContinue = new Button();
 			lblSelectAll = new Label();
 			treeEntriesToEdit = new TreeView();
+			pnlLabelChangeReview = new Panel();
+			btnCancelLabelChanges = new Button();
+			btnAuthorizeLabelChanges = new Button();
+			label2 = new Label();
+			lstLabelChangeReview = new ListBox();
+			button2 = new Button();
+			label1 = new Label();
 			pnlMain.SuspendLayout();
 			pnlLabelDetails.SuspendLayout();
 			mnuContextLabels.SuspendLayout();
@@ -71,6 +78,7 @@ namespace MyNotebooks.subforms
 			((System.ComponentModel.ISupportInitialize)gridViewEntryDetails).BeginInit();
 			mnuMain.SuspendLayout();
 			pnlRenameDeleteManager.SuspendLayout();
+			pnlLabelChangeReview.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// pnlMain
@@ -124,7 +132,7 @@ namespace MyNotebooks.subforms
 			treeAvailableLabels.ContextMenuStrip = mnuContextLabels;
 			treeAvailableLabels.HideSelection = false;
 			treeAvailableLabels.HotTracking = true;
-			treeAvailableLabels.Location = new System.Drawing.Point(11, 6);
+			treeAvailableLabels.Location = new System.Drawing.Point(7, 6);
 			treeAvailableLabels.Name = "treeAvailableLabels";
 			treeNode1.Name = "Node0";
 			treeNode1.Text = "";
@@ -166,7 +174,7 @@ namespace MyNotebooks.subforms
 			lblSortType.Cursor = Cursors.Hand;
 			lblSortType.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
 			lblSortType.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			lblSortType.Location = new System.Drawing.Point(706, 143);
+			lblSortType.Location = new System.Drawing.Point(992, 127);
 			lblSortType.Name = "lblSortType";
 			lblSortType.Size = new System.Drawing.Size(59, 17);
 			lblSortType.TabIndex = 5;
@@ -198,7 +206,7 @@ namespace MyNotebooks.subforms
 			gridViewEntryDetails.Columns.AddRange(new DataGridViewColumn[] { colItem, colIdentifier });
 			gridViewEntryDetails.ContextMenuStrip = mnuContextEntries;
 			gridViewEntryDetails.EditMode = DataGridViewEditMode.EditProgrammatically;
-			gridViewEntryDetails.Location = new System.Drawing.Point(619, 257);
+			gridViewEntryDetails.Location = new System.Drawing.Point(966, 450);
 			gridViewEntryDetails.MultiSelect = false;
 			gridViewEntryDetails.Name = "gridViewEntryDetails";
 			gridViewEntryDetails.ReadOnly = true;
@@ -226,7 +234,7 @@ namespace MyNotebooks.subforms
 			mnuMain.Items.AddRange(new ToolStripItem[] { mnuLabelsOperations, mnuMoveTop, toolStripMenuItem1, toolStripMenuItem2, toolStripMenuItem3 });
 			mnuMain.Location = new System.Drawing.Point(0, 0);
 			mnuMain.Name = "mnuMain";
-			mnuMain.Size = new System.Drawing.Size(894, 24);
+			mnuMain.Size = new System.Drawing.Size(993, 24);
 			mnuMain.TabIndex = 1;
 			mnuMain.Text = "menuStrip1";
 			// 
@@ -301,7 +309,7 @@ namespace MyNotebooks.subforms
 			// btnCancelRenameDelete
 			// 
 			btnCancelRenameDelete.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-			btnCancelRenameDelete.Location = new System.Drawing.Point(175, 535);
+			btnCancelRenameDelete.Location = new System.Drawing.Point(184, 533);
 			btnCancelRenameDelete.Name = "btnCancelRenameDelete";
 			btnCancelRenameDelete.Size = new System.Drawing.Size(75, 23);
 			btnCancelRenameDelete.TabIndex = 9;
@@ -312,11 +320,11 @@ namespace MyNotebooks.subforms
 			// btnContinue
 			// 
 			btnContinue.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-			btnContinue.Location = new System.Drawing.Point(14, 535);
+			btnContinue.Location = new System.Drawing.Point(14, 533);
 			btnContinue.Name = "btnContinue";
 			btnContinue.Size = new System.Drawing.Size(132, 23);
 			btnContinue.TabIndex = 8;
-			btnContinue.Text = "{0} in Selections";
+			btnContinue.Text = "Continue";
 			btnContinue.UseVisualStyleBackColor = true;
 			btnContinue.Click += this.btnContinue_Click;
 			// 
@@ -339,23 +347,103 @@ namespace MyNotebooks.subforms
 			treeEntriesToEdit.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
 			treeEntriesToEdit.CheckBoxes = true;
 			treeEntriesToEdit.HideSelection = false;
-			treeEntriesToEdit.Location = new System.Drawing.Point(11, 24);
+			treeEntriesToEdit.Location = new System.Drawing.Point(7, 24);
 			treeEntriesToEdit.Name = "treeEntriesToEdit";
 			treeEntriesToEdit.Size = new System.Drawing.Size(270, 503);
 			treeEntriesToEdit.TabIndex = 1;
 			treeEntriesToEdit.AfterCheck += this.treeLabels_AfterCheck;
 			// 
+			// pnlLabelChangeReview
+			// 
+			pnlLabelChangeReview.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+			pnlLabelChangeReview.Controls.Add(btnCancelLabelChanges);
+			pnlLabelChangeReview.Controls.Add(btnAuthorizeLabelChanges);
+			pnlLabelChangeReview.Controls.Add(label2);
+			pnlLabelChangeReview.Controls.Add(lstLabelChangeReview);
+			pnlLabelChangeReview.Controls.Add(button2);
+			pnlLabelChangeReview.Controls.Add(label1);
+			pnlLabelChangeReview.Location = new System.Drawing.Point(631, 5);
+			pnlLabelChangeReview.Name = "pnlLabelChangeReview";
+			pnlLabelChangeReview.Size = new System.Drawing.Size(292, 568);
+			pnlLabelChangeReview.TabIndex = 10;
+			pnlLabelChangeReview.Visible = false;
+			// 
+			// btnCancelLabelChanges
+			// 
+			btnCancelLabelChanges.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			btnCancelLabelChanges.Location = new System.Drawing.Point(184, 533);
+			btnCancelLabelChanges.Name = "btnCancelLabelChanges";
+			btnCancelLabelChanges.Size = new System.Drawing.Size(75, 23);
+			btnCancelLabelChanges.TabIndex = 12;
+			btnCancelLabelChanges.Text = "&Cancel";
+			btnCancelLabelChanges.UseVisualStyleBackColor = true;
+			btnCancelLabelChanges.Click += this.btnCancelLabelChanges_Click;
+			// 
+			// btnAuthorizeLabelChanges
+			// 
+			btnAuthorizeLabelChanges.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			btnAuthorizeLabelChanges.Location = new System.Drawing.Point(14, 533);
+			btnAuthorizeLabelChanges.Name = "btnAuthorizeLabelChanges";
+			btnAuthorizeLabelChanges.Size = new System.Drawing.Size(132, 23);
+			btnAuthorizeLabelChanges.TabIndex = 11;
+			btnAuthorizeLabelChanges.Text = "&Authorize Changes";
+			btnAuthorizeLabelChanges.UseVisualStyleBackColor = true;
+			btnAuthorizeLabelChanges.Click += this.btnAuthorizeLabelChanges_Click;
+			// 
+			// label2
+			// 
+			label2.AutoSize = true;
+			label2.Location = new System.Drawing.Point(7, 0);
+			label2.Name = "label2";
+			label2.Size = new System.Drawing.Size(194, 15);
+			label2.TabIndex = 10;
+			label2.Text = "Please review the following actions.";
+			// 
+			// lstLabelChangeReview
+			// 
+			lstLabelChangeReview.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+			lstLabelChangeReview.FormattingEnabled = true;
+			lstLabelChangeReview.IntegralHeight = false;
+			lstLabelChangeReview.ItemHeight = 15;
+			lstLabelChangeReview.Location = new System.Drawing.Point(7, 24);
+			lstLabelChangeReview.Name = "lstLabelChangeReview";
+			lstLabelChangeReview.Size = new System.Drawing.Size(270, 503);
+			lstLabelChangeReview.TabIndex = 9;
+			// 
+			// button2
+			// 
+			button2.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+			button2.Location = new System.Drawing.Point(14, 1003);
+			button2.Name = "button2";
+			button2.Size = new System.Drawing.Size(132, 23);
+			button2.TabIndex = 8;
+			button2.Text = "{0} in Selections";
+			button2.UseVisualStyleBackColor = true;
+			// 
+			// label1
+			// 
+			label1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+			label1.AutoSize = true;
+			label1.Cursor = Cursors.Hand;
+			label1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+			label1.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			label1.Location = new System.Drawing.Point(303, 6);
+			label1.Name = "label1";
+			label1.Size = new System.Drawing.Size(51, 13);
+			label1.TabIndex = 6;
+			label1.Text = "select all";
+			// 
 			// frmLabelsManager
 			// 
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new System.Drawing.Size(894, 585);
+			ClientSize = new System.Drawing.Size(993, 585);
+			Controls.Add(pnlLabelChangeReview);
 			Controls.Add(lblSortType);
 			Controls.Add(pnlRenameDeleteManager);
 			Controls.Add(gridViewEntryDetails);
 			Controls.Add(pnlMain);
 			Controls.Add(mnuMain);
-			FormBorderStyle = FormBorderStyle.SizableToolWindow;
 			Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
 			MainMenuStrip = mnuMain;
 			MaximizeBox = false;
@@ -375,6 +463,8 @@ namespace MyNotebooks.subforms
 			mnuMain.PerformLayout();
 			pnlRenameDeleteManager.ResumeLayout(false);
 			pnlRenameDeleteManager.PerformLayout();
+			pnlLabelChangeReview.ResumeLayout(false);
+			pnlLabelChangeReview.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
@@ -419,5 +509,12 @@ namespace MyNotebooks.subforms
 		private TreeView treeEntriesToEdit;
 		private Button btnCancelRenameDelete;
 		private Button btnContinue;
+		private Panel pnlLabelChangeReview;
+		private ListBox lstLabelChangeReview;
+		private Button button2;
+		private Label label1;
+		private Label label2;
+		private Button btnCancelLabelChanges;
+		private Button btnAuthorizeLabelChanges;
 	}
 }

@@ -93,7 +93,7 @@ namespace MyNotebooks.subforms
 			btnLoadNotebook.TabIndex = 36;
 			btnLoadNotebook.Text = "&Load";
 			btnLoadNotebook.UseVisualStyleBackColor = true;
-			btnLoadNotebook.Click += this.btnLoadNotebook_Click;
+			btnLoadNotebook.Click += this.loadSelectedNotebook;
 			// 
 			// txtJournalPIN
 			// 
@@ -559,6 +559,7 @@ namespace MyNotebooks.subforms
 			MinimumSize = new System.Drawing.Size(650, 441);
 			Name = "frmMain";
 			Text = "MyJournal";
+			Activated += this.frmMain_Activated;
 			FormClosed += this.frmMain_FormClosed;
 			Load += this.frmMain_Load;
 			Resize += this.frmMain_Resize;
