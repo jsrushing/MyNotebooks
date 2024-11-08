@@ -32,6 +32,7 @@ namespace MyNotebooks.subforms
 		public string NotebookName { get; private set; }
 		private List<OrgLevel> OrgLevels = new();
 		private readonly new Form Parent;
+		private List<string> NbsToSearch = new();
 		private Dictionary<string, int> NotebookBoundariesDict = new Dictionary<string, int>();
 		private string LblSearchingInText = "Searching in {0} {1}s";
 		private BackgroundWorker Worker;
@@ -56,24 +57,40 @@ namespace MyNotebooks.subforms
 			//Worker.ProgressChanged += new ProgressChangedEventHandler(bgWorker_ProgressChanged);
 			//Worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgWorker_RunWorkerCompleted);
 
-			using (frmSearch_SelectOrgLevel frm = new(this))
-			{
-				frm.ShowDialog(Parent);
+			//using (frmSearch_SelectOrgLevel frm = new(this))
+			//{
+			//	frm.ShowDialog(Parent);
 
-				using (frmSearch_SelectOrgLevelItems frm2 = new(frm.SelectedOrgLevelType, this))
-				{
-					frm2.ShowDialog(this);
-					this.OrgLevels = frm2.TopOrgLevels;
-				}
+			//	using (frmSearch_SelectOrgLevelItems frm2 = new(frm.SelectedOrgLevelType, this))
+			//	{
+			//		frm2.ShowDialog(this);
+			//		this.OrgLevels = frm2.TopOrgLevels;
+			//	}
+			//}
+
+			//foreach (OrgLevel orgLevel in this.OrgLevels)
+			//{
+			//	orgLevel.Name = orgLevel.Name.Trim();
+			//	ccb.Items.Add(new { orgLevel.Id, orgLevel.Name });
+			//}
+
+			//ccb.CheckUncheckAll(true);
+			//this.Text = string.Format(LblSearchingInText, this.OrgLevels.Count.ToString(), this.OrgLevels[0].OrgLevelType.ToString());
+
+			using (frmNotebooksToSearch frm = new())
+			{
+				frm.ShowDialog(this);
+				NbsToSearch = frm.Notebooks;
+				frm.Close();
 			}
 
-			foreach (OrgLevel orgLevel in this.OrgLevels)
+			if (NbsToSearch.Count == 0)
 			{
-				orgLevel.Name = orgLevel.Name.Trim();
-				ccb.Items.Add(new { orgLevel.Id, orgLevel.Name });
+				using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.Message,
+					"At least one Notebook must be selected.", "Invalid Input", this)) { frm2.ShowDialog(); this.Close(); }
 			}
-			ccb.CheckUncheckAll(true);
-			this.Text = string.Format(LblSearchingInText, this.OrgLevels.Count.ToString(), this.OrgLevels[0].OrgLevelType.ToString());
+
+			foreach (string s in NbsToSearch) { ddlNbsToSearch.Items.Add(s); }
 		}
 
 		//private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -238,14 +255,6 @@ namespace MyNotebooks.subforms
 				Utilities.ResizeListsAndRTBs(lstFoundEntries, rtbSelectedEntry_Found, lblSeparator, lblSelectionType, this);
 				//if (lstFoundEntries.SelectedIndices.Count > 0) { lstFoundEntries.TopIndex = lstFoundEntries.SelectedIndices[0]; }
 			}
-		}
-
-		private void lblSelectAllOrNone_Click(object sender, EventArgs e)
-		{
-			bool b = lblSelectAllOrNone.Text == "select all";
-			ccb.CheckUncheckAll(b);
-			lblSelectAllOrNone.Text = b ? "unselect all" : "select all";
-			ccb.DroppedDown = true;
 		}
 
 		private void lstFoundEntries_MouseMove(object sender, MouseEventArgs e)
@@ -492,6 +501,16 @@ namespace MyNotebooks.subforms
 				lblSeparator.Top = this.Height - 344;
 				Utilities.ResizeListsAndRTBs(lstFoundEntries, rtbSelectedEntry_Found, lblSeparator, lblSelectionType, this);
 			}
+		}
+
+		private void ccbNotebooks_TextChanged(object sender, EventArgs e)
+		{
+			ccbNotebooks.Text = string.Empty;
+		}
+
+		private void ddlNbsToSearch_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			ddlNbsToSearch.Text = string.Empty;
 		}
 
 		//private void ccb_SelectedIndexChanged(object sender, EventArgs e)

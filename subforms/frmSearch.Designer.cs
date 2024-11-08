@@ -62,8 +62,6 @@ namespace MyNotebooks.subforms
 			dtFindDate = new DateTimePicker();
 			chkUseDate = new CheckBox();
 			chkUseDateRange = new CheckBox();
-			lblSelectAllOrNone = new Label();
-			ccb = new CheckedComboBox();
 			lblNumEntriesFound = new Label();
 			btnExportEntries = new Button();
 			btnSearch = new Button();
@@ -82,8 +80,11 @@ namespace MyNotebooks.subforms
 			label17 = new Label();
 			rtbSelectedEntry_Found = new RichTextBox();
 			lblSelectionType = new Label();
+			ccbNotebooks = new CheckedComboBox();
 			mnuEditEntry = new ToolStripMenuItem();
 			bgWorker = new BackgroundWorker();
+			label1 = new Label();
+			ddlNbsToSearch = new ComboBox();
 			grpFindEntry.SuspendLayout();
 			panel5.SuspendLayout();
 			panel4.SuspendLayout();
@@ -101,8 +102,6 @@ namespace MyNotebooks.subforms
 			grpFindEntry.Controls.Add(panel4);
 			grpFindEntry.Controls.Add(panel3);
 			grpFindEntry.Controls.Add(panel2);
-			grpFindEntry.Controls.Add(lblSelectAllOrNone);
-			grpFindEntry.Controls.Add(ccb);
 			grpFindEntry.Controls.Add(lblNumEntriesFound);
 			grpFindEntry.Controls.Add(btnExportEntries);
 			grpFindEntry.Controls.Add(btnSearch);
@@ -114,7 +113,7 @@ namespace MyNotebooks.subforms
 			grpFindEntry.Controls.Add(label17);
 			grpFindEntry.Controls.Add(rtbSelectedEntry_Found);
 			grpFindEntry.Controls.Add(lblSelectionType);
-			grpFindEntry.Location = new System.Drawing.Point(16, 22);
+			grpFindEntry.Location = new System.Drawing.Point(16, 31);
 			grpFindEntry.Name = "grpFindEntry";
 			grpFindEntry.Size = new System.Drawing.Size(787, 638);
 			grpFindEntry.TabIndex = 7;
@@ -403,32 +402,6 @@ namespace MyNotebooks.subforms
 			chkUseDateRange.UseVisualStyleBackColor = true;
 			chkUseDateRange.CheckedChanged += this.chkUseDateRange_CheckedChanged;
 			// 
-			// lblSelectAllOrNone
-			// 
-			lblSelectAllOrNone.ForeColor = System.Drawing.SystemColors.Highlight;
-			lblSelectAllOrNone.Location = new System.Drawing.Point(464, 7);
-			lblSelectAllOrNone.Name = "lblSelectAllOrNone";
-			lblSelectAllOrNone.Size = new System.Drawing.Size(77, 16);
-			lblSelectAllOrNone.TabIndex = 54;
-			lblSelectAllOrNone.Text = "unselect all";
-			lblSelectAllOrNone.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			lblSelectAllOrNone.Click += this.lblSelectAllOrNone_Click;
-			// 
-			// ccb
-			// 
-			ccb.CheckOnClick = true;
-			ccb.DisplayMember = "Name";
-			ccb.DrawMode = DrawMode.OwnerDrawVariable;
-			ccb.DropDownHeight = 1;
-			ccb.IntegralHeight = false;
-			ccb.Location = new System.Drawing.Point(235, 0);
-			ccb.Name = "ccb";
-			ccb.Size = new System.Drawing.Size(227, 24);
-			ccb.TabIndex = 55;
-			ccb.ValueMember = "Id";
-			ccb.ValueSeparator = ", ";
-			ccb.ItemCheck += this.ccb_ItemCheck;
-			// 
 			// lblNumEntriesFound
 			// 
 			lblNumEntriesFound.Anchor = AnchorStyles.Top | AnchorStyles.Right;
@@ -611,6 +584,23 @@ namespace MyNotebooks.subforms
 			lblSelectionType.TabIndex = 15;
 			lblSelectionType.Text = "Selected Entry";
 			// 
+			// ccbNotebooks
+			// 
+			ccbNotebooks.CheckOnClick = true;
+			ccbNotebooks.DisplayMember = "Name";
+			ccbNotebooks.DrawMode = DrawMode.OwnerDrawVariable;
+			ccbNotebooks.DropDownHeight = 1;
+			ccbNotebooks.IntegralHeight = false;
+			ccbNotebooks.Location = new System.Drawing.Point(477, 6);
+			ccbNotebooks.Name = "ccbNotebooks";
+			ccbNotebooks.Size = new System.Drawing.Size(227, 24);
+			ccbNotebooks.TabIndex = 55;
+			ccbNotebooks.ValueMember = "Id";
+			ccbNotebooks.ValueSeparator = ", ";
+			ccbNotebooks.Visible = false;
+			ccbNotebooks.ItemCheck += this.ccb_ItemCheck;
+			ccbNotebooks.TextChanged += this.ccbNotebooks_TextChanged;
+			// 
 			// mnuEditEntry
 			// 
 			mnuEditEntry.Name = "mnuEditEntry";
@@ -621,13 +611,37 @@ namespace MyNotebooks.subforms
 			// 
 			bgWorker.WorkerReportsProgress = true;
 			// 
+			// label1
+			// 
+			label1.AutoSize = true;
+			label1.ForeColor = System.Drawing.SystemColors.ControlText;
+			label1.Location = new System.Drawing.Point(22, 9);
+			label1.Name = "label1";
+			label1.Size = new System.Drawing.Size(139, 15);
+			label1.TabIndex = 56;
+			label1.Text = "Searching In Notebooks: ";
+			label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// ddlNbsToSearch
+			// 
+			ddlNbsToSearch.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+			ddlNbsToSearch.FormattingEnabled = true;
+			ddlNbsToSearch.Location = new System.Drawing.Point(160, 5);
+			ddlNbsToSearch.Name = "ddlNbsToSearch";
+			ddlNbsToSearch.Size = new System.Drawing.Size(63, 23);
+			ddlNbsToSearch.TabIndex = 60;
+			ddlNbsToSearch.SelectedIndexChanged += this.ddlNbsToSearch_SelectedIndexChanged;
+			// 
 			// frmSearch
 			// 
 			AcceptButton = btnSearch;
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new System.Drawing.Size(815, 672);
+			Controls.Add(ddlNbsToSearch);
+			Controls.Add(label1);
 			Controls.Add(grpFindEntry);
+			Controls.Add(ccbNotebooks);
 			Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
 			MinimumSize = new System.Drawing.Size(831, 550);
 			Name = "frmSearch";
@@ -650,6 +664,7 @@ namespace MyNotebooks.subforms
 			pnlLabels_AndOr.PerformLayout();
 			mnuEntryEditTop.ResumeLayout(false);
 			this.ResumeLayout(false);
+			this.PerformLayout();
 		}
 
 		#endregion
@@ -689,8 +704,7 @@ namespace MyNotebooks.subforms
 		private Label lblNumEntriesFound;
 		private ToolStripMenuItem preserveOriginalTextToolStripMenuItem;
 		private ToolStripMenuItem editOriginalTextToolStripMenuItem;
-		private Label lblSelectAllOrNone;
-		private CheckedComboBox ccb;
+		private CheckedComboBox ccbNotebooks;
 		BackgroundWorker bgWorker;
 		private Panel panel3;
 		private RadioButton radDate_Or;
@@ -703,5 +717,7 @@ namespace MyNotebooks.subforms
 		private Panel panel1;
 		private RadioButton radioButton1;
 		private RadioButton radioButton2;
+		private Label label1;
+		private ComboBox ddlNbsToSearch;
 	}
 }

@@ -254,7 +254,7 @@ namespace MyNotebooks.subforms
 			Controls.Add(pnlYesNo);
 			Controls.Add(pnlYesNoCancel);
 			Controls.Add(lblMessage);
-			FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
 			Name = "frmMessage";
 			Text = "Please Confirm";

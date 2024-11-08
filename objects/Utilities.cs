@@ -138,11 +138,11 @@ namespace MyNotebooks.objects
 			Program.AllNotebooks.Clear();
 			Program.AllNotebooks.AddRange(notebooks);
 			DbAccess.PopulateLabelsInAllNotebooks();
+			foreach(Notebook n in Program.AllNotebooks) { Program.NotebooksNamesAndIds.Add(n.Name, n.Id); }
 		}
 
 		public static async Task PopulateAllNotebookNames(List<string> notebookNames = null)
 		{
-
 			if (notebookNames != null)
 			{
 				//Program.AllNotebookNames.AddRange(notebookNames); << DOESN'T WORK ??	
