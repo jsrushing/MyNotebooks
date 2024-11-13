@@ -47,7 +47,7 @@ namespace MyNotebooks.subforms
 			IsEdit = Entry != null;
 		}
 
-		private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
+		private void		bgWorker_DoWork(object sender, DoWorkEventArgs e)
 		{
 			if(Entry != null)
 			{
@@ -60,7 +60,7 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void frmNewEntry_Load(object sender, EventArgs e)
+		private void		frmNewEntry_Load(object sender, EventArgs e)
 		{
 			OriginalTitle = this.Text;
 			Sort = LabelsManager.LabelsSortType.None;
@@ -101,20 +101,20 @@ namespace MyNotebooks.subforms
 			SetIsDirty(false);
 		}
 
-		private void frmNewEntry_FormClosing(object sender, FormClosingEventArgs e)
+		private void		frmNewEntry_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			//	e.Cancel = true;
 			//	mnuCancelExit_Click(null, null);
 		}
 
-		private void ddlFonts_SelectedIndexChanged(object sender, EventArgs e)
+		private void		ddlFonts_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			lblSelectedFont.Font = new Font(ddlFonts.Text, 10);
 			lblSelectedFont.Text = lblSelectedFont.Font.Name;
 			Application.DoEvents();
 		}
 
-		private void InNoTypeArea(bool clicked = false)
+		private void		InNoTypeArea(bool clicked = false)
 		{
 			if (PreserveOriginalText)
 			{
@@ -126,7 +126,7 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void lblManageLabels_Click(object sender, EventArgs e)
+		private void		lblManageLabels_Click(object sender, EventArgs e)
 		{
 			if (this.Entry == null)
 			{
@@ -170,15 +170,15 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void lblSortType_Click(object sender, EventArgs e) { SortLabels(); }
+		private void		lblSortType_Click(object sender, EventArgs e) { SortLabels(); }
 
-		private void clbLabels_SelectedIndexChanged(object sender, EventArgs e)
+		private void		clbLabels_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			//lblNumLabelsSelected.Text = string.Format(LabelLabelsSelected, clbLabels.CheckedItems.Count);
 			SetIsDirty();
 		}
 
-		private void GrayOriginalText()
+		private void		GrayOriginalText()
 		{
 			rtbNewEntry.SelectionStart = 1;
 			rtbNewEntry.SelectionLength = OriginalText_Full.Length + 1;
@@ -191,7 +191,7 @@ namespace MyNotebooks.subforms
 		{
 			if (IsDirty)
 			{
-				using frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Do you want to save your changes?", "", this);
+				using frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Do you want to save your changes?", "Save Changes?", this);
 				frm.ShowDialog(this);
 				if (frm.Result == frmMessage.ReturnResult.No) { Entry = null; }
 				else if (frm.Result == frmMessage.ReturnResult.Yes) { await SaveEntry(); }
@@ -241,16 +241,16 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void ModifyFontStyle(FontStyle style)
+		private void		ModifyFontStyle(FontStyle style)
 		{ rtbNewEntry.SelectionFont = new Font(rtbNewEntry.SelectionFont, rtbNewEntry.SelectionFont.Style ^ style); }
 
-		private void rtbNewEntry_KeyDown(object sender, KeyEventArgs e) { if (e.KeyCode == Keys.Right || e.KeyCode == Keys.Down) { InNoTypeArea(); } }
+		private void		rtbNewEntry_KeyDown(object sender, KeyEventArgs e) { if (e.KeyCode == Keys.Right || e.KeyCode == Keys.Down) { InNoTypeArea(); } }
 
-		private void rtbNewEntry_MouseUp(object sender, MouseEventArgs e) { InNoTypeArea(); }
+		private void		rtbNewEntry_MouseUp(object sender, MouseEventArgs e) { InNoTypeArea(); }
 
-		private void rtbNewEntry_TextChanged(object sender, EventArgs e) { SetIsDirty(); }
+		private void		rtbNewEntry_TextChanged(object sender, EventArgs e) { SetIsDirty(); }
 
-		private async Task SaveEntry()
+		private async Task	SaveEntry()
 		{
 			if (!lblTitleExists.Visible)
 			{
@@ -319,7 +319,7 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void SetIsDirty(bool dirty = true)
+		private void		SetIsDirty(bool dirty = true)
 		{
 			var v = CurrentNotebook != null ? CurrentNotebook.Entries.ToArray().Where(e => e.Title == txtNewEntryTitle.Text) : null;
 			lblTitleExists.Visible = !IsEdit && v.Any();
@@ -335,7 +335,7 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void SortLabels()
+		private void		SortLabels()
 		{
 			switch (Sort)
 			{
@@ -357,13 +357,13 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void ToolsMenuClick(object sender, EventArgs e)
+		private void		ToolsMenuClick(object sender, EventArgs e)
 		{
 			string btnName = ((ToolStripButton)sender).Name.ToLower();
 			FontStyle style = btnName.Contains("bold") ? FontStyle.Bold : btnName.Contains("underline") ? FontStyle.Underline : FontStyle.Italic;
 			ModifyFontStyle(style);
 		}
 
-		private void txtNewEntryTitle_TextChanged(object sender, EventArgs e) { SetIsDirty(); }
+		private void		txtNewEntryTitle_TextChanged(object sender, EventArgs e) { SetIsDirty(); }
 	}
 }
