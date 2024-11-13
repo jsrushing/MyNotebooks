@@ -196,10 +196,10 @@ namespace MyNotebooks.subforms
 				if (frm.Result == frmMessage.ReturnResult.No) { Entry = null; }
 				else if (frm.Result == frmMessage.ReturnResult.Yes) { await SaveEntry(); }
 			}
-			else
-			{
-				this.Entry = null;
-			}
+			//else
+			//{
+			//	//this.Entry = null;	11/14/24 : jsr : Don't know why this was here. Was causing error in Utilities.PopulateEntries (the Sort section).
+			//}
 
 			this.Hide();
 		}
