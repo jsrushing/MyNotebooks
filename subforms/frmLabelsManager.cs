@@ -347,7 +347,7 @@ namespace MyNotebooks.subforms
 			//var x = b.Except(a);
 
 			foreach (var v in a.Except(b))
-			{ CurrentEntry.AddLabel(new MNLabel() { LabelText = v }, Program.LblsInAllNotebooks.Contains(v)); }
+			{ CurrentEntry.AddLabel(new MNLabel() { LabelText = v, ParentId = CurrentEntry.Id }, Program.LblsInAllNotebooks.Contains(v)); }
 
 			//foreach(var label in x)
 			//{ CurrentEntry.RemoveOrReplaceLabel(label,"",false); }
