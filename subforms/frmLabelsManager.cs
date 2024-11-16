@@ -432,17 +432,8 @@ namespace MyNotebooks.subforms
 								if (frm2.Result == frmMessage.ReturnResult.Yes)
 								{
 									treeAvailableLabels.Nodes[2].Nodes[treeAvailableLabels.Nodes[2].Nodes.Count - 1].Checked = true;
-
-									MNLabel lbl = new()
-									{
-										CreatedBy = 1000,
-										LabelText = frm.ResultText,
-										ParentId = CurrentEntry.Id
-									};
-
 									mnuAddToCurrentEntry_Click(null, null);
 									treeAvailableLabels.Nodes[2].Nodes[treeAvailableLabels.Nodes[2].Nodes.Count - 1].Checked = false;
-
 								}
 							}
 						}

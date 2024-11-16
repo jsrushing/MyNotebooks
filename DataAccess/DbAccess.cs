@@ -421,6 +421,7 @@ namespace MyNotebooks.DataAccess
 		public static void			PopulateLabelsInAllNotebooks()
 		{
 			DataTable dt = new DataTable();
+			Program.LblsInAllNotebooks.Clear();
 
 			try
 			{
@@ -782,7 +783,7 @@ namespace MyNotebooks.DataAccess
 			return lstRtrn;
 		}
 
-		private static void			GetSqlReturn(ref SQLResult sqlReturn, SqlCommand cmd)
+		private static void			 GetSqlReturn(ref SQLResult sqlReturn, SqlCommand cmd)
 		{
 			using (SqlDataReader rdr = cmd.ExecuteReader())
 			{
@@ -924,7 +925,7 @@ namespace MyNotebooks.DataAccess
 		//	return lstReturn;
 		//}
 
-		public static DataSet		GetUser(string userName, string password)
+		public static DataSet		 GetUser(string userName, string password)
 		{
 			DataSet ds = new();
 

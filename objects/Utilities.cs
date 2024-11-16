@@ -290,8 +290,12 @@ namespace MyNotebooks.objects
 			DateTime now = DateTime.Now;
 			
 			if(currentEntry != null)
-			{ foreach (MNLabel lbl in currentEntry.AllLabels) PopulateTreeWithLabels(treeView, currentEntry, 0, lbl); }
+			{ 
+				foreach (MNLabel lbl in currentEntry.AllLabels) PopulateTreeWithLabels(treeView, currentEntry, 0, lbl); 
+				Program.LblsUnderNotebook = new(DbAccess.GetLabelsUnderOrgLevel(currentEntry.Id, 2));
+			}
 
+			DbAccess.PopulateLabelsInAllNotebooks();
 			foreach (MNLabel label in Program.LblsUnderNotebook) PopulateTreeWithLabels(treeView, null, 1, label);
 			foreach (string labelText in Program.LblsInAllNotebooks) treeView.Nodes[2].Nodes.Add(labelText);
 		}
