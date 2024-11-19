@@ -302,6 +302,7 @@ namespace MyNotebooks.subforms
 				var sqlResult = DbAccess.CRUDNotebookEntry(this.Entry, opType);
 				this.Entry.Id = sqlResult.intValue;
 				var msg = string.Empty;
+				this.Entry.EditedOn = DateTime.Now;
 
 				if (sqlResult.intValue < -1)
 				{ msg = "A SQL Error occurred (error number " + (sqlResult.intValue * -1).ToString() + ")               "; }
