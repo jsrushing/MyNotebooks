@@ -521,7 +521,6 @@ namespace MyNotebooks.subforms
 		{
 			this.Cursor = Cursors.WaitCursor;
 			var vCurrentEntriesCount = lstEntries.Items.Count;
-
 			using (frmNewEntry frm = new(this, CurrentNotebook, CurrentNotebook.Id))
 			{
 				frm.Text = "New entry in '" + CurrentNotebook.Name + "'";
@@ -537,9 +536,9 @@ namespace MyNotebooks.subforms
 					if (!cbxDatesTo.Items.Contains(CurrentEntry.CreatedOn)) { cbxDatesTo.Items.Insert(0, CurrentEntry.CreatedOn.ToShortDateString()); }
 					if (cbxDatesTo.Items.Count > 0) cbxDatesTo.SelectedIndex = 0;
 					if (lstEntries.Items.Count > 0) lstEntries.SelectedIndex = 0;
+					PromptForBackup();
 				}
 			}
-
 			this.Cursor = Cursors.Default;
 		}
 
@@ -557,6 +556,7 @@ namespace MyNotebooks.subforms
 					CurrentNotebook.Entries.Remove(CurrentEntry);
 					await ProcessDateFiltersAndPopulateEntries();
 					ShowHideMenusAndControls(SelectionState.NotebookLoaded);
+					PromptForBackup();
 				}
 			}
 
@@ -581,6 +581,7 @@ namespace MyNotebooks.subforms
 					await ProcessDateFiltersAndPopulateEntries();
 					var v = lstEntries.Items.OfType<string>().FirstOrDefault(e => e.StartsWith(CurrentEntry.Title));
 					lstEntries.SelectedIndex = lstEntries.Items.IndexOf(v);
+					PromptForBackup();
 				}
 			}
 
@@ -838,6 +839,13 @@ namespace MyNotebooks.subforms
 					lblEntriesCount.Text = string.Format(FoundCountString, (lstEntries.Items.Count / 4).ToString(), CurrentNotebook.Entries.Count.ToString());
 				}
 			}
+		}
+
+		private void PromptForBackup()
+		{
+			frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Would you like to back up '" + CurrentNotebook.Name +"'?       ", "Backup Notebook?", this);
+			frm.ShowDialog();
+			if (frm.Result == frmMessage.ReturnResult.Yes) { mnuNotebook_Print_Click(null, null); }
 		}
 
 		private void rtbSelectedEntry_MouseDown(object sender, MouseEventArgs e)
