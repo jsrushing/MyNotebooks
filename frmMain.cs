@@ -261,6 +261,7 @@ namespace MyNotebooks.subforms
 						{
 							CurrentNotebook.Entries.Add(frm.Entry);
 							await Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries);
+							PromptForBackup();
 						}
 					}
 					ShowHideMenusAndControls(SelectionState.NotebookLoaded);
@@ -630,11 +631,12 @@ namespace MyNotebooks.subforms
 
 				if (frm.Result == frmMessage.ReturnResult.Yes)
 				{
-					CurrentNotebook.Delete_original();
+					//CurrentNotebook.Delete_original();
+					CurrentNotebook.Delete();
 					ddlNotebooks.Text = string.Empty;
 					lstEntries.Items.Clear();
 					ShowHideMenusAndControls(SelectionState.NotebookSelectedNotLoaded);
-					await Utilities.PopulateAllNotebookNames();
+					await Utilities.PopulateAllNotebooks();
 					CurrentNotebook = null;
 					LoadNotebooks();
 				}
@@ -688,7 +690,7 @@ namespace MyNotebooks.subforms
 			}
 
 			SaveFileDialog sfd = new SaveFileDialog();
-			sfd.Filter = "text files (*.txt)|.txt";
+			sfd.Filter = "MyNotebooks backup files (*.mnbak)|.mnbak";
 			sfd.Title = "Save File";
 			sfd.FileName = CurrentNotebook.Name;
 			if (sfd.ShowDialog() == DialogResult.OK && sfd.FileName.Length > 0) { File.WriteAllText(sfd.FileName, sb.ToString()); }

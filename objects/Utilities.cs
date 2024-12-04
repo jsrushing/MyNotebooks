@@ -138,6 +138,7 @@ namespace MyNotebooks.objects
 			Program.AllNotebooks.Clear();
 			Program.AllNotebooks.AddRange(notebooks);
 			DbAccess.PopulateLabelsInAllNotebooks();
+			Program.NotebooksNamesAndIds.Clear();
 			foreach(Notebook n in Program.AllNotebooks) { Program.NotebooksNamesAndIds.Add(n.Name, n.Id); }
 		}
 
