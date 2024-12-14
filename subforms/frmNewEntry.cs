@@ -126,7 +126,7 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void		lblManageLabels_Click(object sender, EventArgs e)
+		private async void	lblManageLabels_Click(object sender, EventArgs e)
 		{
 			if (this.Entry == null)
 			{
@@ -136,25 +136,14 @@ namespace MyNotebooks.subforms
 
 					if (frm.Result == frmMessage.ReturnResult.Yes)
 					{
-						this.Entry = new()
-						{
-							RTF = rtbNewEntry.Rtf,
-							Text = rtbNewEntry.Text,
-							Title = txtNewEntryTitle.Text,
-							ParentId = this.CurrentNotebook.Id,
-							CreatedBy = Program.User.Id,
-							NotebookName = this.CurrentNotebook.Name
-						};
-
-						this.Entry.Id = DbAccess.CRUDNotebookEntry(this.Entry).intValue;
-						SetIsDirty(false);
+						await SaveEntry();
 						frm.Close();
 					}
 				}
 			}
 
-			if (this.Entry != null) 
-			{ 
+			if(this.Entry != null)
+			{
 				using (frmLabelsManager frm2 = new(this, CurrentNotebook, this.Entry))
 				{
 					frm2.ShowDialog();
@@ -166,7 +155,7 @@ namespace MyNotebooks.subforms
 					}
 
 					frm2.Close();
-				}					
+				}		
 			}
 		}
 

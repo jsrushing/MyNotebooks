@@ -10,6 +10,7 @@ using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using Microsoft.VisualBasic;
 using MyNotebooks.DataAccess;
 using MyNotebooks.objects;
 using MyNotebooks.subforms;
@@ -139,7 +140,7 @@ namespace MyNotebooks
 			string[] sRtrn = new string[4];
 			int iTextChunkLength = maxWidth > 0 ? Convert.ToInt32(maxWidth / 5.3): 150;
 			string sTitle = Title + " (" + CreatedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + ")"
-				+ (EditedOn  < new DateTime(2000, 1, 1) ? "" : " [edited on " + EditedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + "]");
+				+ (EditedOn < DateAndTime.DateAdd(DateInterval.Second, 30, CreatedOn) ? "" : " [edited on " + EditedOn.ToString(ConfigurationManager.AppSettings["DisplayedDateFormat"]) + "]");
 
 			if (includeNotebookName) 
 			{
