@@ -108,6 +108,13 @@
 
 		12/07/22
 			003 checkbox lists
+		12/14/24
+			004 Entries display not refreshing when
+					1) Create new entry (also on edit existing?)
+					2) Create new label. Add to entry. Save entry. Exit.
+					3) Entries display does not refresh.
+					4) Editied On is populated in new entry.
+
 
 	***************************************************************************************************************************************
 	enhancements:

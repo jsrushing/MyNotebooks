@@ -360,7 +360,7 @@ namespace MyNotebooks.subforms
 			mnuNotebook_Print.Enabled = false;
 			mnuNotebook_Print.Name = "mnuNotebook_Print";
 			mnuNotebook_Print.Size = new System.Drawing.Size(180, 22);
-			mnuNotebook_Print.Text = "Print";
+			mnuNotebook_Print.Text = "&Save to disk";
 			mnuNotebook_Print.Click += this.mnuNotebook_Print_Click;
 			// 
 			// mnuLabels
