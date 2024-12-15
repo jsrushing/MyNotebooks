@@ -76,8 +76,8 @@
 				Switch to JournalSelected mode when returning from EntryToEdit > Create.
 				Tested OK 11/27/22. The mode switch was already programmed for EntryToEdit delete and EntryToEdit edit modes - just wasn't doing that for Create.
 
-		12/14/24
-			005 Entries display not refreshing when
+		005 12/14/24
+			Entries display not refreshing when
 					1) Create new entry (also on edit existing?)
 					2) Create new label. Add to entry. Save entry. Exit.
 					3) Entries display does not refresh.
@@ -86,6 +86,10 @@
 				Used frmNewEntry.SaveEntry() to save entry.
 				Reason for showing EditedOn after creating a label is that the entry has to be saved before managing labels.
 				Added 30 second delay in Entry.GetSynopsis() to avoid EditedOn being too close to CreatedOn.
+		006 12/14/24 
+			Delete labels not working (frmLabelsManager.mnuDeleteLabels
+
+
 
 		toDo:
 		07/23/22 001x Related to bug 001.

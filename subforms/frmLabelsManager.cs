@@ -88,6 +88,16 @@ namespace MyNotebooks.subforms
 
 		private void DeleteLabels()
 		{
+			var checkedLabels = GetCheckedNodesAsNodes(treeAvailableLabels);
+			var vE = checkedLabels.Where(n => n.Parent.Index == 0).ToList().Select(n => n.Text).ToList();
+			var vNb = checkedLabels.Where(n => n.Parent.Index == 1).ToList().Select(n => n.Text).ToList();
+			var vAllNbs = checkedLabels.Where(n => n.Parent.Index == 2).ToList().Select(n => n.Text).ToList();
+
+			foreach(var node in vE)
+			{
+				// get the entry id from its title and its notebook.
+
+			}
 
 		}
 
@@ -220,7 +230,7 @@ namespace MyNotebooks.subforms
 			{ if (!vAllNbs.Contains(node) & !vNb.Contains(node)) { treeEntriesToEdit.Nodes[0].Nodes.Add(node); } }
 
 			lblSelectAll_Click(null, null);
-			//btnContinue.Text = ((ToolStripMenuItem)sender).Text + " Labels";
+			btnContinue.Text = ((ToolStripMenuItem)sender).Text + " Labels";
 			treeEntriesToEdit.ExpandAll();
 			ShowPanel(pnlRenameDeleteManager);
 			this.Cursor = Cursors.Default;
