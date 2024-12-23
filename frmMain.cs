@@ -151,6 +151,12 @@
 		02/24/23	
 			009 Write mnuJournal_Export_Click (as plain text?, as Journal file (encrypted)?)
 
+		12/24/24
+			010 Using local database.
+
+		12/24/24
+			011 Recreate a notebook from a backup *** NOT COMPLETE ***
+
  */
 using System;
 using System.Collections.Generic;
