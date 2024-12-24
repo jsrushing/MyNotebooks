@@ -156,7 +156,8 @@
 
 		12/24/24
 			011 Recreate a notebook from a backup *** NOT COMPLETE ***
-			011a Serialize notebook to 'Save to Disk'. *** NOT COMPLETE ***
+			011a Serialize notebook for 'Save to Disk'. Output JSON.
+				Done 12/24/24
 
  */
 using System;
@@ -172,6 +173,7 @@ using MyNotebooks.DataAccess;
 using System.ComponentModel;
 using System.Threading;
 using System.Text;
+using System.Text.Json;
 
 namespace MyNotebooks.subforms
 {
@@ -694,28 +696,11 @@ namespace MyNotebooks.subforms
 
 		private void mnuNotebook_Print_Click(object sender, EventArgs e)
 		{
-			StringBuilder sb = new StringBuilder();
-			sb.AppendLine("Notebook: " + CurrentNotebook.Name);
-			foreach (Entry entry in CurrentNotebook.Entries)
-			{
-				sb.Append("Title: " + entry.Title);
-				sb.Append(" Created: " + entry.CreatedOn.ToString());
-				sb.AppendLine(entry.EditedOn > entry.CreatedOn ? " Edited: " + entry.EditedOn : "");
-				sb.AppendLine(entry.Text);
-
-				if (entry.AllLabels.Count > 0)
-				{
-					sb.Append("labels: ");
-					sb.AppendLine(string.Join(", ", entry.AllLabels.Select(e => e.LabelText).ToArray()));
-				}
-				sb.AppendLine();
-			}
-
 			SaveFileDialog sfd = new SaveFileDialog();
 			sfd.Filter = "MyNotebooks backup files (*.mnbak)|.mnbak";
 			sfd.Title = "Save File";
 			sfd.FileName = CurrentNotebook.Name;
-			if (sfd.ShowDialog() == DialogResult.OK && sfd.FileName.Length > 0) { File.WriteAllText(sfd.FileName, sb.ToString()); }
+			if (sfd.ShowDialog() == DialogResult.OK && sfd.FileName.Length > 0) { File.WriteAllText(sfd.FileName, JsonSerializer.Serialize(CurrentNotebook)); }
 		}
 
 		private async void mnuNotebook_Rename_Click(object sender, EventArgs e)

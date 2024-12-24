@@ -31,16 +31,13 @@ namespace MyNotebooks
 		public string		Name { get; set; }
 		public string		PIN { get; set; } = string.Empty;
 		public int			ParentId { get; set; }
-
 		public string		FileName;
 		public string		root = "notebooks\\";
 		public bool			WrongPIN = false;
 		public bool			BackupCompleted;
 		public bool			Saved;
-		public List<Entry>	Entries = new();
-
+		public List<Entry>	Entries { get; set; }
 		public NotebookSettings	Settings;
-
 		private bool		IsNewNotebook = false;
 
 		public Notebook(string _name = null, string _fileName = null) 
@@ -55,13 +52,14 @@ namespace MyNotebooks
 
 		public Notebook(DataTable dt, int rowIndex = 0)
 		{
+			this.Entries = new();
 			var value = "";
 
 			foreach (PropertyInfo sPropertyName in typeof(Notebook).GetProperties())
 			{
 				try
 				{
-					if (dt.Rows[rowIndex].Field<object>(sPropertyName.Name) != null)
+					if (sPropertyName.Name.ToLower() != "entries" && dt.Rows[rowIndex].Field<object>(sPropertyName.Name) != null)
 					{
 						if (dt.Columns[sPropertyName.Name].DataType == typeof(string))
 						{
@@ -114,7 +112,7 @@ namespace MyNotebooks
 		public SQLResult Update() { return GetOperationResult(DbAccess.CRUDNotebook(this, OperationType.Update)); }
 		public SQLResult Delete() { return GetOperationResult(DbAccess.CRUDNotebook(this, OperationType.Delete)); }
 
-		private SQLResult		GetOperationResult(SQLResult result, bool isCreate = false)
+		private SQLResult	GetOperationResult(SQLResult result, bool isCreate = false)
 		{
 			if (isCreate)
 			{
