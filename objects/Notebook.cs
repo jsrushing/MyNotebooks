@@ -262,6 +262,7 @@ namespace MyNotebooks
 			{
 				string fName = Utilities.GetDialogResult(new SaveFileDialog(), "MyNotebooks backup files (*.mnbak)|*.mnbak", this.Name, "Save File");
 				if (fName.Length > 0) { File.WriteAllText(fName, JsonSerializer.Serialize(this)); }
+				GenerateMesssage("The notebook was saved as '" + Path.GetFileName(fName) + "'.", null, "Notebook Saved", callingForm);
 			}
 			catch (Exception ex)
 			{ GenerateMesssage("An Error Occurred", ex); }

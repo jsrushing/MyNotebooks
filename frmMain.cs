@@ -733,14 +733,14 @@ namespace MyNotebooks.subforms
 			try
 			{
 				string fname = Utilities.GetDialogResult(new OpenFileDialog(), "MyNotebooks backup files (*.mnbak)|*.mnbak", "", "Open Notebook Backup File");
-				//string jsonstring = fname.Length > 0 ? File.ReadAllText(fname) : "";
 				Notebook nb = fname.Length > 0 ? JsonSerializer.Deserialize<Notebook>(File.ReadAllText(fname)) : null;
+
 				if (nb != null) 
 				{
-					nb.Name += "_restored";
+					nb.Name = Path.GetFileName(fname) + "_restored";
 					Program.AllNotebooks.Add(nb);
-					//await nb.Save();
 					LoadNotebooks();
+
 				}
 			}
 			catch (Exception ex)
