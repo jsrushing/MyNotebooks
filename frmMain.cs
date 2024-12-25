@@ -235,7 +235,7 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void frmMain_FormClosed(object sender, FormClosedEventArgs e)
+		private void		frmMain_FormClosed(object sender, FormClosedEventArgs e)
 		{
 			foreach (Form f in Application.OpenForms)
 			{
@@ -243,7 +243,7 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private async void frmMain_Load(object sender, EventArgs e)
+		private async void	frmMain_Load(object sender, EventArgs e)
 		{
 			this.Cursor = Cursors.WaitCursor;
 			System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
@@ -253,7 +253,7 @@ namespace MyNotebooks.subforms
 			Program.User.Id = 1000;
 		}
 
-		private void frmMain_Resize(object sender, EventArgs e)
+		private void		frmMain_Resize(object sender, EventArgs e)
 		{
 			if (!rtbSelectedEntry.Visible)
 			{
@@ -262,7 +262,7 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private async void loadSelectedNotebook(object sender, EventArgs e)
+		private async void	loadSelectedNotebook(object sender, EventArgs e)
 		{
 			this.Cursor = Cursors.WaitCursor;
 			lstEntries.Items.Clear();
@@ -320,18 +320,18 @@ namespace MyNotebooks.subforms
 			this.Cursor = Cursors.Default;
 		}
 
-		private async void btnResetLabelFilter_Click(object sender, EventArgs e)
+		private async void	btnResetLabelFilter_Click(object sender, EventArgs e)
 		{
 			await ProcessDateFiltersAndPopulateEntries();
 			ShowHideMenusAndControls(SelectionState.NotebookLoaded);
 		}
 
-		private async void cbxDates_SelectedIndexChanged(object sender, EventArgs e)
+		private async void	cbxDates_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!SuppressDateClick) { await ProcessDateFiltersAndPopulateEntries(); }
 		}
 
-		private async void cbxSortEntriesBy_SelectedIndexChanged(object sender, EventArgs e)
+		private async void	cbxSortEntriesBy_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (CurrentNotebook != null)
 			{
@@ -340,7 +340,7 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		public static void CopyDirectory(DirectoryInfo source, DirectoryInfo target, bool copySubDirectories, bool clearTargetFolderBeforeCopy)
+		public static void	CopyDirectory(DirectoryInfo source, DirectoryInfo target, bool copySubDirectories, bool clearTargetFolderBeforeCopy)
 		{
 			Directory.CreateDirectory(target.FullName);
 
@@ -368,7 +368,7 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void CheckForSystemDirectories(bool recreateAll = false)
+		private void		CheckForSystemDirectories(bool recreateAll = false)
 		{
 			if (recreateAll)
 			{
@@ -402,10 +402,10 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void ddlNotebooks_Click(object sender, EventArgs e)
+		private void		ddlNotebooks_Click(object sender, EventArgs e)
 		{ if (ddlNotebooks.Items.Count > 0) { ddlNotebooks.DroppedDown = true; } }
 
-		private void ddlNotebooks_SelectedIndexChanged(object sender, EventArgs e)
+		private void		ddlNotebooks_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			ShowHideMenusAndControls(SelectionState.NotebookLoaded);
 			CurrentEntry = null;
@@ -420,7 +420,7 @@ namespace MyNotebooks.subforms
 			notebookChanged = true;
 		}
 
-		private void lblSeparator_MouseMove(object sender, MouseEventArgs e)
+		private void		lblSeparator_MouseMove(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left)
 			{
@@ -430,13 +430,13 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void lblShowPIN_Click(object sender, EventArgs e)
+		private void		lblShowPIN_Click(object sender, EventArgs e)
 		{
 			txtJournalPIN.PasswordChar = txtJournalPIN.PasswordChar == '*' ? '\0' : '*';
 			lblShowPIN.Text = lblShowPIN.Text == "show" ? "hide" : "show";
 		}
 
-		private void LoadFonts()
+		private void		LoadFonts()
 		{
 			ListViewItem lvi = null;
 
@@ -449,7 +449,7 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private async void LoadNotebooks()
+		private async void	LoadNotebooks()
 		{
 			ddlNotebooks.Items.Clear();
 			ddlNotebooks.Text = string.Empty;
@@ -487,7 +487,7 @@ namespace MyNotebooks.subforms
 			//if (ddlNotebooks.Items.Count == 1) { loadSelectedNotebook(null, new()); }
 		}
 
-		private void lstEntries_MouseUp(object sender, MouseEventArgs e)
+		private void		lstEntries_MouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Right)
 			{
@@ -498,7 +498,7 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void lstEntries_SelectEntry(object sender, EventArgs e)
+		private void		lstEntries_SelectEntry(object sender, EventArgs e)
 		{
 			ListBox lb = (ListBox)sender;
 
@@ -534,15 +534,15 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void mnuAbout_Click(object sender, EventArgs e)
+		private void		mnuAbout_Click(object sender, EventArgs e)
 		{
 			Form frm = new frmAbout(this);
 			frm.ShowDialog(this);
 		}
 
-		private async void mnuAdministratorConsole_Click(object sender, EventArgs e) { this.Close(); }
+		private async void  mnuAdministratorConsole_Click(object sender, EventArgs e) { this.Close(); }
 
-		private async void mnuEntryCreate_Click(object sender, EventArgs e)
+		private async void	mnuEntryCreate_Click(object sender, EventArgs e)
 		{
 			this.Cursor = Cursors.WaitCursor;
 			var vCurrentEntriesCount = lstEntries.Items.Count;
@@ -567,7 +567,7 @@ namespace MyNotebooks.subforms
 			this.Cursor = Cursors.Default;
 		}
 
-		private async void mnuEntryDelete_Click(object sender, EventArgs e)
+		private async void	mnuEntryDelete_Click(object sender, EventArgs e)
 		{
 			this.Cursor = Cursors.WaitCursor;
 			var vMsg = "Do you want to delete " + "'" + CurrentEntry.Title + "'?";
@@ -588,7 +588,7 @@ namespace MyNotebooks.subforms
 			this.Cursor = Cursors.Default;
 		}
 
-		private async void mnuEntryEdit_Click(object sender, EventArgs e)
+		private async void	mnuEntryEdit_Click(object sender, EventArgs e)
 		{
 			this.Cursor = Cursors.WaitCursor;
 			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
@@ -613,7 +613,7 @@ namespace MyNotebooks.subforms
 			this.Cursor = Cursors.Default;
 		}
 
-		private async void mnuLabels_Click(object sender, EventArgs e)
+		private async void	mnuLabels_Click(object sender, EventArgs e)
 		{
 			DateTime start = DateTime.Now;
 			while (Program.BgWorker.IsBusy && start.AddSeconds(4) > DateTime.Now) { Thread.Sleep(300); }
@@ -631,7 +631,7 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private async void mnuNotebook_Create_Click(object sender, EventArgs e)
+		private async void	mnuNotebook_Create_Click(object sender, EventArgs e)
 		{
 			using (frmNewNotebook frm = new frmNewNotebook(this))
 			{
@@ -647,7 +647,7 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private async void mnuNotebook_Delete_Click(object sender, EventArgs e)
+		private async void	mnuNotebook_Delete_Click(object sender, EventArgs e)
 		{
 			using (frmMessage frm = new frmMessage(frmMessage.OperationType.DeleteNotebook, CurrentNotebook.Name.Replace("\\", ""), "", this))
 			{
@@ -667,7 +667,7 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void mnuNotebook_Export_Click(object sender, EventArgs e)
+		private void		mnuNotebook_Export_Click(object sender, EventArgs e)
 		{
 			// How to export? Thinking needs a form of its own. to Excel, .txt, .pdf, encrypted for sharing?
 
@@ -684,17 +684,17 @@ namespace MyNotebooks.subforms
 			//}
 		}
 
-		private void mnuNotebook_ForceBackup_Click(object sender, EventArgs e)
+		private void		mnuNotebook_ForceBackup_Click(object sender, EventArgs e)
 		{
 			//CurrentNotebook.Backup_Forced();
 			string sMsg = CurrentNotebook.BackupCompleted ? "The backup was completed" : "An error occurred. The backup was not completed.";
 			using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "", this)) { frm.ShowDialog(this); }
 		}
 
-		private async void mnuNotebook_Import_Click(object sender, EventArgs e)
+		private async void	mnuNotebook_Import_Click(object sender, EventArgs e)
 		{ await Utilities.ImportNotebooks(this); LoadNotebooks(); ShowHideMenusAndControls(SelectionState.NotebookNotSelected); }
 
-		private void mnuNotebook_Print_Click(object sender, EventArgs e)
+		private void		mnuNotebook_Print_Click(object sender, EventArgs e)
 		{
 			SaveFileDialog sfd = new SaveFileDialog();
 			sfd.Filter = "MyNotebooks backup files (*.mnbak)|*.mnbak";
@@ -703,7 +703,7 @@ namespace MyNotebooks.subforms
 			if (sfd.ShowDialog() == DialogResult.OK && sfd.FileName.Length > 0) { File.WriteAllText(sfd.FileName, JsonSerializer.Serialize(CurrentNotebook)); }
 		}
 
-		private async void mnuNotebook_Rename_Click(object sender, EventArgs e)
+		private async void	mnuNotebook_Rename_Click(object sender, EventArgs e)
 		{
 			this.Cursor = Cursors.WaitCursor;
 			using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "Enter the new notebook name.", CurrentNotebook.Name, this))
@@ -729,13 +729,13 @@ namespace MyNotebooks.subforms
 			this.Cursor = Cursors.Default;
 		}
 
-		private async void mnuNotebook_ResetPIN_Click(object sender, EventArgs e)
+		private async void	mnuNotebook_ResetPIN_Click(object sender, EventArgs e)
 		{
 			await CurrentNotebook.ResetPIN(this);
 			if (CurrentNotebook.Saved) { LoadNotebooks(); }
 		}
 
-		private async void mnuNotebook_RestoreBackups_Click(object sender, EventArgs e)
+		private async void	mnuNotebook_RestoreBackups_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog ofd = new();
 			ofd.Filter = "MyNotebooks backup files (*.mnbak)|*.mnbak";
@@ -756,7 +756,7 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void mnuNotebook_Search_Click(object sender, EventArgs e)
+		private void		mnuNotebook_Search_Click(object sender, EventArgs e)
 		{
 			using (frmSearch frm = new(this))
 			{
@@ -773,14 +773,14 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void mnuNotebooks_Select_Click(object sender, EventArgs e)
+		private void		mnuNotebooks_Select_Click(object sender, EventArgs e)
 		{
 			using (frmSelectNotebooksToSearch frm = new frmSelectNotebooksToSearch(this,
 				"Select notebooks to work with. Be sure to add a PIN for any protected notebooks."))
 			{ frm.ShowDialog(this); }
 		}
 
-		private async void mnuNotebook_Settings_Click(object sender, EventArgs e)
+		private async void	mnuNotebook_Settings_Click(object sender, EventArgs e)
 		{
 			using (frmNotebookSettings frm = new frmNotebookSettings(CurrentNotebook, this))
 			{
@@ -791,7 +791,7 @@ namespace MyNotebooks.subforms
 			SetDisplayText();
 		}
 
-		private async void mnuSwitchAccount_Click(object sender, EventArgs e)
+		private async void	mnuSwitchAccount_Click(object sender, EventArgs e)
 		{
 			Program.User = null;
 			using (frmUserLogin frm = new()) { frm.ShowDialog(); }
@@ -810,7 +810,7 @@ namespace MyNotebooks.subforms
 			//}
 		}
 
-		private async Task PopulateLabelsSummary()
+		private async Task	PopulateLabelsSummary()
 		{
 			//foreach (var label in LabelsManager.GetLabels_NoFileDate())
 			//{
@@ -824,7 +824,7 @@ namespace MyNotebooks.subforms
 			//}
 		}
 
-		private void PopulateShowFromDates()
+		private void		PopulateShowFromDates()
 		{
 			SuppressDateClick = true;
 			cbxDatesFrom.DataSource = null;
@@ -839,7 +839,7 @@ namespace MyNotebooks.subforms
 			SuppressDateClick = false;
 		}
 
-		private async Task ProcessDateFiltersAndPopulateEntries()
+		private async Task	ProcessDateFiltersAndPopulateEntries()
 		{
 			if (cbxDatesFrom.Text.Length > 0 && cbxDatesTo.Text.Length > 0)
 			{
@@ -861,19 +861,19 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void PromptForBackup()
+		private void		PromptForBackup()
 		{
 			frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Would you like to back up '" + CurrentNotebook.Name +"'?       ", "Backup Notebook?", this);
 			frm.ShowDialog();
 			if (frm.Result == frmMessage.ReturnResult.Yes) { mnuNotebook_Print_Click(null, null); }
 		}
 
-		private void rtbSelectedEntry_MouseDown(object sender, MouseEventArgs e)
+		private void		rtbSelectedEntry_MouseDown(object sender, MouseEventArgs e)
 		{
 			lstEntries.Focus();
 		}
 
-		private void SelectShortEntry(object sender)
+		private void		SelectShortEntry(object sender)
 		{
 			List<int> targets = new List<int>();
 			ListBox lb = (ListBox)sender;
@@ -921,13 +921,13 @@ namespace MyNotebooks.subforms
 			lb.SelectedIndices.Add(ctr + 2);                        //
 		}
 
-		private void SetDisplayText()
+		private void		SetDisplayText()
 		{
 			this.Text = this.Text.EndsWith(" (local)") ? this.Text.Replace(" (local)", "") : this.Text;
 			//this.Text = CurrentNotebook != null ? CurrentNotebook.Settings.AllowCloud ? this.Text : this.Text + " (local)" : this.Text;
 		}
 
-		private async void ShowHideMenusAndControls(SelectionState st)
+		private async void	ShowHideMenusAndControls(SelectionState st)
 		{
 			if (st == SelectionState.NotebookSelectedNotLoaded)
 			{
@@ -1008,7 +1008,7 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void txtNotebookPIN_TextChanged(object sender, EventArgs e)
+		private void		txtNotebookPIN_TextChanged(object sender, EventArgs e)
 		{
 			if (txtJournalPIN.Text.Length > 0)
 			{
