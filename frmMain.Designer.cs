@@ -305,11 +305,9 @@ namespace MyNotebooks.subforms
 			// 
 			// mnuNotebook_RestoreBackups
 			// 
-			mnuNotebook_RestoreBackups.Enabled = false;
 			mnuNotebook_RestoreBackups.Name = "mnuNotebook_RestoreBackups";
 			mnuNotebook_RestoreBackups.Size = new System.Drawing.Size(180, 22);
 			mnuNotebook_RestoreBackups.Text = "&Restore Backups";
-			mnuNotebook_RestoreBackups.Visible = false;
 			mnuNotebook_RestoreBackups.Click += this.mnuNotebook_RestoreBackups_Click;
 			// 
 			// mnuNotebook_Import

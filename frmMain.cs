@@ -697,7 +697,7 @@ namespace MyNotebooks.subforms
 		private void mnuNotebook_Print_Click(object sender, EventArgs e)
 		{
 			SaveFileDialog sfd = new SaveFileDialog();
-			sfd.Filter = "MyNotebooks backup files (*.mnbak)|.mnbak";
+			sfd.Filter = "MyNotebooks backup files (*.mnbak)|*.mnbak";
 			sfd.Title = "Save File";
 			sfd.FileName = CurrentNotebook.Name;
 			if (sfd.ShowDialog() == DialogResult.OK && sfd.FileName.Length > 0) { File.WriteAllText(sfd.FileName, JsonSerializer.Serialize(CurrentNotebook)); }
@@ -737,6 +737,17 @@ namespace MyNotebooks.subforms
 
 		private async void mnuNotebook_RestoreBackups_Click(object sender, EventArgs e)
 		{
+			OpenFileDialog ofd = new();
+			ofd.Filter = "MyNotebooks backup files (*.mnbak)|*.mnbak";
+			ofd.Title = "Open .mnbak file";
+			ofd.ShowDialog();
+			string fname = ofd.FileName;
+
+			string jsonstring = File.ReadAllText(fname);
+
+			Notebook nb = JsonSerializer.Deserialize<Notebook>(jsonstring);
+
+
 			string sJournalName = ddlNotebooks.Text;
 			using (frmBackupManager frm = new frmBackupManager(this))
 			{
