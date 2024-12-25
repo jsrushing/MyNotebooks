@@ -214,7 +214,7 @@ namespace MyNotebooks.subforms
 			InitializeComponent();
 		}
 
-		private async void frmMain_Activated(object sender, EventArgs e)
+		private async void	frmMain_Activated(object sender, EventArgs e)
 		{
 			if (Program.AllNotebooks.Count == 0)
 			{
@@ -696,11 +696,14 @@ namespace MyNotebooks.subforms
 
 		private void		mnuNotebook_Print_Click(object sender, EventArgs e)
 		{
-			SaveFileDialog sfd = new SaveFileDialog();
-			sfd.Filter = "MyNotebooks backup files (*.mnbak)|*.mnbak";
-			sfd.Title = "Save File";
-			sfd.FileName = CurrentNotebook.Name;
-			if (sfd.ShowDialog() == DialogResult.OK && sfd.FileName.Length > 0) { File.WriteAllText(sfd.FileName, JsonSerializer.Serialize(CurrentNotebook)); }
+			//SaveFileDialog sfd = new SaveFileDialog();
+			//sfd.Filter = "MyNotebooks backup files (*.mnbak)|*.mnbak";
+			//sfd.Title = "Save File";
+			//sfd.FileName = CurrentNotebook.Name;
+			//if (sfd.ShowDialog() == DialogResult.OK && sfd.FileName.Length > 0) { File.WriteAllText(sfd.FileName, JsonSerializer.Serialize(CurrentNotebook)); }
+
+			string fName = Utilities.GetDialogResult(new SaveFileDialog(), "MyNotebooks backup files (*.mnbak)|*.mnbak", CurrentNotebook.Name, "Save File");
+			if(fName.Length > 0) { File.WriteAllText(fName, JsonSerializer.Serialize(CurrentNotebook)); }
 		}
 
 		private async void	mnuNotebook_Rename_Click(object sender, EventArgs e)

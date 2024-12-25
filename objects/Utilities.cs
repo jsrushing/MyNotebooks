@@ -55,6 +55,15 @@ namespace MyNotebooks.objects
 			return rtrn;
 		}
 
+		public static string GetDialogResult(FileDialog dialog, string filter, string defaultFileName, string title)
+		{
+			FileDialog fd = dialog;
+			fd.Filter = filter;
+			fd.Title = title;
+			fd.FileName = defaultFileName;
+			return fd.ShowDialog() == DialogResult.OK && fd.FileName.Length > 0 ? fd.FileName : "";
+		}
+
 		//public static SQLResult GetOperationResult(SQLResult result, int objectId, bool isCreate = false)
 		//{
 		//	if (isCreate)
