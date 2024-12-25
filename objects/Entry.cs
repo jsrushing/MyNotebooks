@@ -9,6 +9,7 @@ using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json.Serialization;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
 using MyNotebooks.DataAccess;
@@ -22,6 +23,7 @@ namespace MyNotebooks
     {
 		public int			CreatedBy { get; set; }
         public DateTime		CreatedOn { get; set; }
+		[JsonIgnore]
 		public string		DisplayText { get { return GetTextDisplayText(); } set { DisplayText = value; } }
 		public DateTime		EditedOn { get; set; }
         public int			Id { get; set; }
@@ -90,6 +92,7 @@ namespace MyNotebooks
 						if (setProp) { this.GetType().GetProperty(sPropertyName.Name).SetValue(this, value); }
 						setProp = true;
 					}
+					//else { if (sPropertyName.Name == "DisplayText") { this.GetType().GetProperty(sPropertyName.Name).SetValue(this, ""); } }
 				}
 				catch (Exception ex)
 				{

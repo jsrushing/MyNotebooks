@@ -29,9 +29,9 @@ namespace MyNotebooks.objects
 		//		EncryptDecrypt.Encrypt(RTF, PIN), EncryptDecrypt.Encrypt(labelsForSearch, PIN), EncryptDecrypt.Encrypt(notebookName, PIN));
 		//}
 
-		public static bool FileNameIsValid(string proposedFileName) { return proposedFileName.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) == -1; }
+		public static bool				FileNameIsValid(string proposedFileName) { return proposedFileName.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) == -1; }
 
-		public static List<TreeNode> GetAllNodes(this TreeNode _self)
+		public static List<TreeNode>	GetAllNodes(this TreeNode _self)
 		{
 			List<TreeNode> result = new List<TreeNode>();
 			result.Add(_self);
@@ -42,7 +42,7 @@ namespace MyNotebooks.objects
 			return result;
 		}
 
-		public static List<Notebook> GetCheckedNotebooks()
+		public static List<Notebook>	GetCheckedNotebooks()
 		{
 			List<Notebook> rtrn = new List<Notebook>();
 
@@ -55,7 +55,7 @@ namespace MyNotebooks.objects
 			return rtrn;
 		}
 
-		public static string GetDialogResult(FileDialog dialog, string filter, string defaultFileName, string title)
+		public static string			GetDialogResult(FileDialog dialog, string filter, string defaultFileName, string title)
 		{
 			FileDialog fd = dialog;
 			fd.Filter = filter;
@@ -81,7 +81,7 @@ namespace MyNotebooks.objects
 		//}
 	//}
 
-		public async static Task ImportNotebooks(Form parent)
+		public async static Task		ImportNotebooks(Form parent)
 		{
 			OpenFileDialog ofd = new OpenFileDialog { Multiselect = true };
 			//var filesCopied = false;
@@ -141,7 +141,7 @@ namespace MyNotebooks.objects
 			}
 		}
 
-		public static async Task PopulateAllNotebooks()
+		public static async Task		PopulateAllNotebooks()
 		{
 			List<Notebook> notebooks = DbAccess.GetAllNotebookNamesAndIds();
 			Program.AllNotebooks.Clear();
@@ -151,7 +151,7 @@ namespace MyNotebooks.objects
 			foreach(Notebook n in Program.AllNotebooks) { Program.NotebooksNamesAndIds.Add(n.Name, n.Id); }
 		}
 
-		public static async Task PopulateAllNotebookNames(List<string> notebookNames = null)
+		public static async Task		PopulateAllNotebookNames(List<string> notebookNames = null)
 		{
 			if (notebookNames != null)
 			{
@@ -174,7 +174,7 @@ namespace MyNotebooks.objects
 		//	foreach (var notebookName in Program.AllNotebookNames) { Program.AllNotebooks.Add(new Notebook(notebookName).Open()); }
 		//}
 
-		public static void PopulateDictCheckedNotebooks(string name)
+		public static void				PopulateDictCheckedNotebooks(string name)
 		{
 			var items = name.Split(",");
 
@@ -236,7 +236,7 @@ namespace MyNotebooks.objects
 		//	}
 		//}
 
-		public static async Task PopulateEntries(ListBox lbxToPopulate, List<Entry> entries, string notebookName = "", string startDate = "", 
+		public static async Task		PopulateEntries(ListBox lbxToPopulate, List<Entry> entries, string notebookName = "", string startDate = "", 
 			string endDate = "", bool clearPrevious = true, int SortBy = 0, bool includeNotebookName = false, int maxWidth = 0, string labelFilter = "")
 		{
 			if(clearPrevious) lbxToPopulate.Items.Clear();
@@ -275,7 +275,7 @@ namespace MyNotebooks.objects
 			}
 		}
 
-		public static void PopulateTreeWithLabels(TreeView treeView, Entry currentEntry, int nodeIndex, MNLabel lbl)
+		public static void				PopulateTreeWithLabels(TreeView treeView, Entry currentEntry, int nodeIndex, MNLabel lbl)
 		{
 			TreeNode tn = new();
 			tn.Text = lbl.LabelText;
@@ -291,7 +291,7 @@ namespace MyNotebooks.objects
 			}
 		}
 
-		public static void ResetTree(TreeView treeView, Entry currentEntry, frmMain.OrgLevelTypes orgLevelType = frmMain.OrgLevelTypes.None)
+		public static void				ResetTree(TreeView treeView, Entry currentEntry, frmMain.OrgLevelTypes orgLevelType = frmMain.OrgLevelTypes.None)
 		{
 			treeView.Nodes.Clear();
 			treeView.Nodes.Add("Entry '" + (currentEntry == null ? "n/a" : currentEntry.Title) + "'"); 
@@ -310,7 +310,7 @@ namespace MyNotebooks.objects
 			foreach (string labelText in Program.LblsInAllNotebooks) treeView.Nodes[2].Nodes.Add(labelText);
 		}
 
-		public static void ResizeListsAndRTBs(ListBox entriesList, RichTextBox entryRTB, Label seperatorLabel, Label typeLabel, Form callingForm)
+		public static void				ResizeListsAndRTBs(ListBox entriesList, RichTextBox entryRTB, Label seperatorLabel, Label typeLabel, Form callingForm)
 		{
 			int iBoxCenter = entriesList.Width / 2;
 			seperatorLabel.Visible = true;
@@ -323,10 +323,10 @@ namespace MyNotebooks.objects
 			entryRTB.Height = callingForm.Height - entryRTB.Top - 50;
 		}
 
-		public static void SetProgramPIN(string nb)
+		public static void				SetProgramPIN(string nb)
 		{ Program.PIN = Program.DictCheckedNotebooks[nb] == "" ? "" : Program.DictCheckedNotebooks[nb]; }
 
-		public static void SetStartPosition(Form formToInitialize, Form parentForm)
+		public static void				SetStartPosition(Form formToInitialize, Form parentForm)
 		{ 
 			formToInitialize.StartPosition = FormStartPosition.Manual;	
 			formToInitialize.Location = new System.Drawing.Point(parentForm.Location.X + 25, parentForm.Location.Y + 25); 

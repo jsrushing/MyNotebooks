@@ -18,6 +18,7 @@ using MyNotebooks.DataAccess;
 using MyNotebooks.objects;
 using MyNotebooks.subforms;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace MyNotebooks
 {
@@ -40,6 +41,8 @@ namespace MyNotebooks
 		private bool		IsNewNotebook = false;
 		public List<Entry>		Entries { get; set; } = new();
 		public NotebookSettings	Settings;
+
+		public Notebook() { }
 
 		public Notebook(string _name = null, string _fileName = null) 
         {
@@ -123,13 +126,9 @@ namespace MyNotebooks
 
 		public async Task	Create(bool addCreatedOn = true)
         {
-			//this.FileName += this.Settings.AllowCloud ? "" : " (local)";
-			//if(addCreatedOn) Entries.Add(new Entry("created", "-", "-", "", this.Name));
-			//Program.SkipFileSizeComparison = true;
 			this.CreatedBy = Program.User.Id;
 			IsNewNotebook = true;
 			await this.Save();
-			//Program.SkipFileSizeComparison = false;
 		}
 
 		public async void	Delete_original()
