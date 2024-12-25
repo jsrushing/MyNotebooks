@@ -17,6 +17,7 @@ using Encryption;
 using MyNotebooks.DataAccess;
 using MyNotebooks.objects;
 using MyNotebooks.subforms;
+using System.Text.Json;
 
 namespace MyNotebooks
 {
@@ -36,9 +37,9 @@ namespace MyNotebooks
 		public bool			WrongPIN = false;
 		public bool			BackupCompleted;
 		public bool			Saved;
-		public List<Entry>	Entries { get; set; }
-		public NotebookSettings	Settings;
 		private bool		IsNewNotebook = false;
+		public List<Entry>		Entries { get; set; } = new();
+		public NotebookSettings	Settings;
 
 		public Notebook(string _name = null, string _fileName = null) 
         {
@@ -52,7 +53,6 @@ namespace MyNotebooks
 
 		public Notebook(DataTable dt, int rowIndex = 0)
 		{
-			this.Entries = new();
 			var value = "";
 
 			foreach (PropertyInfo sPropertyName in typeof(Notebook).GetProperties())
@@ -114,18 +114,10 @@ namespace MyNotebooks
 
 		private SQLResult	GetOperationResult(SQLResult result, bool isCreate = false)
 		{
-			if (isCreate)
-			{
-				if (result.strValue.Length == 0) { this.Id = result.intValue; }
-			}
+			if (isCreate) { if (result.strValue.Length == 0) { this.Id = result.intValue; } }
 			else
-			{
-				if (result.strValue.Length > 0)
-				{
-					using (frmMessage frm = new(frmMessage.OperationType.Message, "An error occurred. '" + result.strValue + "'", "Error"))
-					{ frm.ShowDialog(); }
-				}
-			}
+			{ if (result.strValue.Length > 0) { GenerateMesssage("An error occurred" + result.strValue, null, "Error"); } }
+			
 			return result;
 		}
 
@@ -205,6 +197,12 @@ namespace MyNotebooks
 			return jeRtrn;
         }
 
+		private void GenerateMesssage(string errorMessage, Exception exception = null, string title = "", Form caller = null)
+		{
+			frmMessage frm = new(frmMessage.OperationType.Message, errorMessage + (exception != null ? Environment.NewLine + exception.Message : ""), title, caller);
+			frm.ShowDialog();
+		}
+
 		public List<string> GetAllLabelsInNotebook()
 		{
 			List<string> lstRtrn = new List<string>();
@@ -258,6 +256,17 @@ namespace MyNotebooks
 
             return nbRtrn;
         }
+
+		public void			Print(Form callingForm)
+		{
+			try
+			{
+				string fName = Utilities.GetDialogResult(new SaveFileDialog(), "MyNotebooks backup files (*.mnbak)|*.mnbak", this.Name, "Save File");
+				if (fName.Length > 0) { File.WriteAllText(fName, JsonSerializer.Serialize(this)); }
+			}
+			catch (Exception ex)
+			{ GenerateMesssage("An Error Occurred", ex); }
+		}
 
 		private List<Entry> ProcessLabels(List<Entry> entriesToSearch, List<MNLabel> labelsForSearch, bool UseAnd)
 		{
@@ -350,8 +359,7 @@ namespace MyNotebooks
 
 				if (frmGetCurrentPIN.ResultText != currentPIN)
 				{
-					using (frmMessage frmBadPIN = new frmMessage(frmMessage.OperationType.Message, "The PIN you entered is not correct.", "Bad PIN", caller))
-					{ frmBadPIN.ShowDialog(); }
+					GenerateMesssage("The PIN you entered is not correct.", null, "Bad PIN", caller);
 				}
 				else	// input new PIN
 				{
@@ -395,11 +403,7 @@ namespace MyNotebooks
 			{
 				var vId = DbAccess.CRUDNotebook(this);
 
-				if(vId.intValue == 0)
-				{
-					using (frmMessage frm = new(frmMessage.OperationType.Message,
-						"An error occurred. The Notebook was not created. " + vId.strValue)) { frm.ShowDialog(); }
-				}
+				if(vId.intValue == 0) { GenerateMesssage("An error occurred. The Notebook was not created. " + vId.strValue);	}
 				else { this.Id = vId.intValue; }
 			}
 			else 

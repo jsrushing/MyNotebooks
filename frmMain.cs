@@ -226,10 +226,7 @@ namespace MyNotebooks.subforms
 				}
 				catch (Exception ex)    // This catches no SQL connection then exits.
 				{
-					using (frmMessage frm = new(frmMessage.OperationType.Message,
-						"An error occurred loading Notebook names and Ids. " + Environment.NewLine + ex.Message, "Fatal Error"))
-					{ frm.ShowDialog(); }
-
+					GenerateMesssage("An error occurred loading Notebook names and Ids. ", ex, "Fatal Error");
 					this.Close();
 				}
 			}
@@ -418,6 +415,12 @@ namespace MyNotebooks.subforms
 			SelectedNotebookIds = new(v.Id, v.Name);
 			loadSelectedNotebook(sender, e);
 			notebookChanged = true;
+		}
+
+		private void		GenerateMesssage(string errorMessage, Exception exception = null, string title = "")
+		{
+			frmMessage frm = new(frmMessage.OperationType.Message, errorMessage + (exception != null ? Environment.NewLine + exception.Message : ""), title, this);
+			frm.ShowDialog();
 		}
 
 		private void		lblSeparator_MouseMove(object sender, MouseEventArgs e)
@@ -686,25 +689,14 @@ namespace MyNotebooks.subforms
 
 		private void		mnuNotebook_ForceBackup_Click(object sender, EventArgs e)
 		{
-			//CurrentNotebook.Backup_Forced();
 			string sMsg = CurrentNotebook.BackupCompleted ? "The backup was completed" : "An error occurred. The backup was not completed.";
-			using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, sMsg, "", this)) { frm.ShowDialog(this); }
+			GenerateMesssage(sMsg);
 		}
 
 		private async void	mnuNotebook_Import_Click(object sender, EventArgs e)
 		{ await Utilities.ImportNotebooks(this); LoadNotebooks(); ShowHideMenusAndControls(SelectionState.NotebookNotSelected); }
 
-		private void		mnuNotebook_Print_Click(object sender, EventArgs e)
-		{
-			//SaveFileDialog sfd = new SaveFileDialog();
-			//sfd.Filter = "MyNotebooks backup files (*.mnbak)|*.mnbak";
-			//sfd.Title = "Save File";
-			//sfd.FileName = CurrentNotebook.Name;
-			//if (sfd.ShowDialog() == DialogResult.OK && sfd.FileName.Length > 0) { File.WriteAllText(sfd.FileName, JsonSerializer.Serialize(CurrentNotebook)); }
-
-			string fName = Utilities.GetDialogResult(new SaveFileDialog(), "MyNotebooks backup files (*.mnbak)|*.mnbak", CurrentNotebook.Name, "Save File");
-			if(fName.Length > 0) { File.WriteAllText(fName, JsonSerializer.Serialize(CurrentNotebook)); }
-		}
+		private void		mnuNotebook_Print_Click(object sender, EventArgs e) { CurrentNotebook.Print(this); }
 
 		private async void	mnuNotebook_Rename_Click(object sender, EventArgs e)
 		{
@@ -722,12 +714,10 @@ namespace MyNotebooks.subforms
 						LoadNotebooks();
 					}
 					else
-					{ using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.Message, "The name has not been changed.", "Name Not Changed")) { frm2.ShowDialog(); } }
+					{ GenerateMesssage("The name has not been changed.", null, "Name Not Changed"); }
 				}
 				else if (frm.ResultText != null && frm.ResultText.Length == 0)
-				{
-					using (frmMessage frm3 = new frmMessage(frmMessage.OperationType.Message, "You must enter a new name.", "Name Required")) { frm3.ShowDialog(); }
-				}
+				{ GenerateMesssage("You must enter a new name.", null, "Name Required"); }
 			}
 			this.Cursor = Cursors.Default;
 		}
@@ -740,23 +730,19 @@ namespace MyNotebooks.subforms
 
 		private async void	mnuNotebook_RestoreBackups_Click(object sender, EventArgs e)
 		{
-			OpenFileDialog ofd = new();
-			ofd.Filter = "MyNotebooks backup files (*.mnbak)|*.mnbak";
-			ofd.Title = "Open .mnbak file";
-			ofd.ShowDialog();
-			string fname = ofd.FileName;
-
-			string jsonstring = File.ReadAllText(fname);
-
-			Notebook nb = JsonSerializer.Deserialize<Notebook>(jsonstring);
-
-
-			string sJournalName = ddlNotebooks.Text;
-			using (frmBackupManager frm = new frmBackupManager(this))
+			try
 			{
-				frm.ShowDialog(this);
-				if (frm.BackupRestored) { await Utilities.PopulateAllNotebookNames(); LoadNotebooks(); }
+				string fname = Utilities.GetDialogResult(new OpenFileDialog(), "MyNotebooks backup files (*.mnbak)|*.mnbak", CurrentNotebook.Name, "Open Notebook Backup File");
+				//string jsonstring = fname.Length > 0 ? File.ReadAllText(fname) : "";
+				Notebook nb = fname.Length > 0 ? JsonSerializer.Deserialize<Notebook>(File.ReadAllText(fname)) : null;
+				if (nb != null) 
+				{
+					await nb.Save();
+					LoadNotebooks();
+				}
 			}
+			catch (Exception ex)
+			{ GenerateMesssage("An Error Occurred", ex); }
 		}
 
 		private void		mnuNotebook_Search_Click(object sender, EventArgs e)
@@ -769,10 +755,7 @@ namespace MyNotebooks.subforms
 					if (frm.NotebookName != null && frm.NotebookName.Length > 0) { LoadNotebooks(); }
 				}
 				catch (Exception ex)
-				{
-					using (frmMessage frmMsg = new frmMessage(frmMessage.OperationType.Message, ex.Message, "An error occurred", this))
-					{ frmMsg.ShowDialog(); }
-				}
+				{ GenerateMesssage("An Error Occurred", ex); }
 			}
 		}
 
@@ -847,17 +830,11 @@ namespace MyNotebooks.subforms
 			if (cbxDatesFrom.Text.Length > 0 && cbxDatesTo.Text.Length > 0)
 			{
 				if (DateTime.Parse(cbxDatesFrom.Text) > DateTime.Parse(cbxDatesTo.Text))
-				{
-					using (frmMessage frm = new frmMessage(frmMessage.OperationType.Message, "The 'from' date must be earlier than the 'to' date.", "Check Your Dates", this))
-					{ frm.ShowDialog(); }
-				}
+				{ GenerateMesssage("The 'from' date must be earlier than the 'to' date.", null, "Check Your Dates"); }
 				else
 				{
 					await Utilities.PopulateEntries(lstEntries, CurrentNotebook.Entries, CurrentNotebook.Name,
 						cbxDatesFrom.Text, cbxDatesTo.Text, true, cbxSortEntriesBy.SelectedIndex, false, lstEntries.Width - 85);
-
-					//if (lstEntries.SelectedIndex == -1 && CurrentNotebook.Entries.Contains(CurrentEntry))
-					//{ Entry.Select(rtbSelectedEntry, lstEntries, null, true, CurrentEntry, true); }
 
 					lblEntriesCount.Text = string.Format(FoundCountString, (lstEntries.Items.Count / 4).ToString(), CurrentNotebook.Entries.Count.ToString());
 				}
