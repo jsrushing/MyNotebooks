@@ -160,6 +160,7 @@
 			011a Serialize notebook for 'Save to Disk'. Output JSON.
 				Done 12/24/24
 				Enhanced: Added both JSON and plain text outputs. 12/25/24
+			011b Handle restored notebook. ** INCOMPLETE **
 
  */
 using System;
