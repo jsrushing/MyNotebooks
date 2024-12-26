@@ -54,13 +54,14 @@ namespace MyNotebooks.subforms
 			mnuNotebook_Search = new System.Windows.Forms.ToolStripMenuItem();
 			mnuNotebook_Rename = new System.Windows.Forms.ToolStripMenuItem();
 			mnuNotebook_ForceBackup = new System.Windows.Forms.ToolStripMenuItem();
-			mnuNotebook_RestoreBackups = new System.Windows.Forms.ToolStripMenuItem();
 			mnuNotebook_Import = new System.Windows.Forms.ToolStripMenuItem();
 			mnuNotebook_Export = new System.Windows.Forms.ToolStripMenuItem();
 			mnuNotebook_Settings = new System.Windows.Forms.ToolStripMenuItem();
 			mnuNotebook_ResetPIN = new System.Windows.Forms.ToolStripMenuItem();
 			mnuLabelsSummary = new System.Windows.Forms.ToolStripMenuItem();
-			mnuNotebook_Print = new System.Windows.Forms.ToolStripMenuItem();
+			mnuNotebook_Backups = new System.Windows.Forms.ToolStripMenuItem();
+			mnuNotebook_Backups_Create = new System.Windows.Forms.ToolStripMenuItem();
+			mnuNotebook_Backups_Restore = new System.Windows.Forms.ToolStripMenuItem();
 			mnuLabels = new System.Windows.Forms.ToolStripMenuItem();
 			helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
@@ -80,6 +81,8 @@ namespace MyNotebooks.subforms
 			pnlPin = new System.Windows.Forms.Panel();
 			btnResetLabelFilter = new System.Windows.Forms.Button();
 			bgWorker = new System.ComponentModel.BackgroundWorker();
+			mnuNotebook_Backups_CreateJSON = new System.Windows.Forms.ToolStripMenuItem();
+			mnuNotebook_Backups_CreatePlain = new System.Windows.Forms.ToolStripMenuItem();
 			mnuEntryTop.SuspendLayout();
 			menuStrip1.SuspendLayout();
 			pnlDateFilters.SuspendLayout();
@@ -117,7 +120,7 @@ namespace MyNotebooks.subforms
 			// lblSelectionType
 			// 
 			lblSelectionType.AutoSize = true;
-			lblSelectionType.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			lblSelectionType.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
 			lblSelectionType.ForeColor = System.Drawing.SystemColors.MenuHighlight;
 			lblSelectionType.Location = new System.Drawing.Point(12, 252);
 			lblSelectionType.Name = "lblSelectionType";
@@ -229,7 +232,7 @@ namespace MyNotebooks.subforms
 			// 
 			lblSeparator.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
 			lblSeparator.Cursor = System.Windows.Forms.Cursors.HSplit;
-			lblSeparator.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			lblSeparator.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
 			lblSeparator.ForeColor = System.Drawing.Color.Red;
 			lblSeparator.Location = new System.Drawing.Point(13, 232);
 			lblSeparator.Name = "lblSeparator";
@@ -250,7 +253,7 @@ namespace MyNotebooks.subforms
 			// 
 			// mnuNotebook
 			// 
-			mnuNotebook.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuNotebooks_Select, mnuNotebook_Create, mnuNotebook_Delete, mnuNotebook_Search, mnuNotebook_Rename, mnuNotebook_ForceBackup, mnuNotebook_RestoreBackups, mnuNotebook_Import, mnuNotebook_Export, mnuNotebook_Settings, mnuNotebook_ResetPIN, mnuLabelsSummary, mnuNotebook_Print });
+			mnuNotebook.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuNotebooks_Select, mnuNotebook_Create, mnuNotebook_Delete, mnuNotebook_Search, mnuNotebook_Rename, mnuNotebook_ForceBackup, mnuNotebook_Import, mnuNotebook_Export, mnuNotebook_Settings, mnuNotebook_ResetPIN, mnuLabelsSummary, mnuNotebook_Backups });
 			mnuNotebook.Name = "mnuNotebook";
 			mnuNotebook.Size = new System.Drawing.Size(77, 20);
 			mnuNotebook.Text = "&Notebooks";
@@ -259,7 +262,7 @@ namespace MyNotebooks.subforms
 			// 
 			mnuNotebooks_Select.Enabled = false;
 			mnuNotebooks_Select.Name = "mnuNotebooks_Select";
-			mnuNotebooks_Select.Size = new System.Drawing.Size(180, 22);
+			mnuNotebooks_Select.Size = new System.Drawing.Size(161, 22);
 			mnuNotebooks_Select.Text = "Se&lect";
 			mnuNotebooks_Select.Visible = false;
 			mnuNotebooks_Select.Click += this.mnuNotebooks_Select_Click;
@@ -267,7 +270,7 @@ namespace MyNotebooks.subforms
 			// mnuNotebook_Create
 			// 
 			mnuNotebook_Create.Name = "mnuNotebook_Create";
-			mnuNotebook_Create.Size = new System.Drawing.Size(180, 22);
+			mnuNotebook_Create.Size = new System.Drawing.Size(161, 22);
 			mnuNotebook_Create.Text = "&Create";
 			mnuNotebook_Create.Click += this.mnuNotebook_Create_Click;
 			// 
@@ -275,14 +278,14 @@ namespace MyNotebooks.subforms
 			// 
 			mnuNotebook_Delete.Enabled = false;
 			mnuNotebook_Delete.Name = "mnuNotebook_Delete";
-			mnuNotebook_Delete.Size = new System.Drawing.Size(180, 22);
+			mnuNotebook_Delete.Size = new System.Drawing.Size(161, 22);
 			mnuNotebook_Delete.Text = "Delete";
 			mnuNotebook_Delete.Click += this.mnuNotebook_Delete_Click;
 			// 
 			// mnuNotebook_Search
 			// 
 			mnuNotebook_Search.Name = "mnuNotebook_Search";
-			mnuNotebook_Search.Size = new System.Drawing.Size(180, 22);
+			mnuNotebook_Search.Size = new System.Drawing.Size(161, 22);
 			mnuNotebook_Search.Text = "&Search";
 			mnuNotebook_Search.Click += this.mnuNotebook_Search_Click;
 			// 
@@ -290,7 +293,7 @@ namespace MyNotebooks.subforms
 			// 
 			mnuNotebook_Rename.Enabled = false;
 			mnuNotebook_Rename.Name = "mnuNotebook_Rename";
-			mnuNotebook_Rename.Size = new System.Drawing.Size(180, 22);
+			mnuNotebook_Rename.Size = new System.Drawing.Size(161, 22);
 			mnuNotebook_Rename.Text = "Rename";
 			mnuNotebook_Rename.Click += this.mnuNotebook_Rename_Click;
 			// 
@@ -298,23 +301,16 @@ namespace MyNotebooks.subforms
 			// 
 			mnuNotebook_ForceBackup.Enabled = false;
 			mnuNotebook_ForceBackup.Name = "mnuNotebook_ForceBackup";
-			mnuNotebook_ForceBackup.Size = new System.Drawing.Size(180, 22);
+			mnuNotebook_ForceBackup.Size = new System.Drawing.Size(161, 22);
 			mnuNotebook_ForceBackup.Text = "Force &Backup";
 			mnuNotebook_ForceBackup.Visible = false;
 			mnuNotebook_ForceBackup.Click += this.mnuNotebook_ForceBackup_Click;
-			// 
-			// mnuNotebook_RestoreBackups
-			// 
-			mnuNotebook_RestoreBackups.Name = "mnuNotebook_RestoreBackups";
-			mnuNotebook_RestoreBackups.Size = new System.Drawing.Size(180, 22);
-			mnuNotebook_RestoreBackups.Text = "&Restore Backups";
-			mnuNotebook_RestoreBackups.Click += this.mnuNotebook_RestoreBackups_Click;
 			// 
 			// mnuNotebook_Import
 			// 
 			mnuNotebook_Import.Enabled = false;
 			mnuNotebook_Import.Name = "mnuNotebook_Import";
-			mnuNotebook_Import.Size = new System.Drawing.Size(180, 22);
+			mnuNotebook_Import.Size = new System.Drawing.Size(161, 22);
 			mnuNotebook_Import.Text = "Import";
 			mnuNotebook_Import.Click += this.mnuNotebook_Import_Click;
 			// 
@@ -322,7 +318,7 @@ namespace MyNotebooks.subforms
 			// 
 			mnuNotebook_Export.Enabled = false;
 			mnuNotebook_Export.Name = "mnuNotebook_Export";
-			mnuNotebook_Export.Size = new System.Drawing.Size(180, 22);
+			mnuNotebook_Export.Size = new System.Drawing.Size(161, 22);
 			mnuNotebook_Export.Text = "Synch";
 			mnuNotebook_Export.Visible = false;
 			mnuNotebook_Export.Click += this.mnuNotebook_Export_Click;
@@ -331,7 +327,7 @@ namespace MyNotebooks.subforms
 			// 
 			mnuNotebook_Settings.Enabled = false;
 			mnuNotebook_Settings.Name = "mnuNotebook_Settings";
-			mnuNotebook_Settings.Size = new System.Drawing.Size(180, 22);
+			mnuNotebook_Settings.Size = new System.Drawing.Size(161, 22);
 			mnuNotebook_Settings.Text = "Settings";
 			mnuNotebook_Settings.Visible = false;
 			mnuNotebook_Settings.Click += this.mnuNotebook_Settings_Click;
@@ -340,7 +336,7 @@ namespace MyNotebooks.subforms
 			// 
 			mnuNotebook_ResetPIN.Enabled = false;
 			mnuNotebook_ResetPIN.Name = "mnuNotebook_ResetPIN";
-			mnuNotebook_ResetPIN.Size = new System.Drawing.Size(180, 22);
+			mnuNotebook_ResetPIN.Size = new System.Drawing.Size(161, 22);
 			mnuNotebook_ResetPIN.Text = "Reset &PIN";
 			mnuNotebook_ResetPIN.Visible = false;
 			mnuNotebook_ResetPIN.Click += this.mnuNotebook_ResetPIN_Click;
@@ -349,17 +345,31 @@ namespace MyNotebooks.subforms
 			// 
 			mnuLabelsSummary.Enabled = false;
 			mnuLabelsSummary.Name = "mnuLabelsSummary";
-			mnuLabelsSummary.Size = new System.Drawing.Size(180, 22);
+			mnuLabelsSummary.Size = new System.Drawing.Size(161, 22);
 			mnuLabelsSummary.Text = "Labels Summary";
 			mnuLabelsSummary.Visible = false;
 			// 
-			// mnuNotebook_Print
+			// mnuNotebook_Backups
 			// 
-			mnuNotebook_Print.Enabled = false;
-			mnuNotebook_Print.Name = "mnuNotebook_Print";
-			mnuNotebook_Print.Size = new System.Drawing.Size(180, 22);
-			mnuNotebook_Print.Text = "&Save to disk";
-			mnuNotebook_Print.Click += this.mnuNotebook_Print_Click;
+			mnuNotebook_Backups.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuNotebook_Backups_Create, mnuNotebook_Backups_Restore });
+			mnuNotebook_Backups.Name = "mnuNotebook_Backups";
+			mnuNotebook_Backups.Size = new System.Drawing.Size(161, 22);
+			mnuNotebook_Backups.Text = "&Backups";
+			// 
+			// mnuNotebook_Backups_Create
+			// 
+			mnuNotebook_Backups_Create.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { mnuNotebook_Backups_CreateJSON, mnuNotebook_Backups_CreatePlain });
+			mnuNotebook_Backups_Create.Enabled = false;
+			mnuNotebook_Backups_Create.Name = "mnuNotebook_Backups_Create";
+			mnuNotebook_Backups_Create.Size = new System.Drawing.Size(113, 22);
+			mnuNotebook_Backups_Create.Text = "&Create";
+			// 
+			// mnuNotebook_Backups_Restore
+			// 
+			mnuNotebook_Backups_Restore.Name = "mnuNotebook_Backups_Restore";
+			mnuNotebook_Backups_Restore.Size = new System.Drawing.Size(113, 22);
+			mnuNotebook_Backups_Restore.Text = "&Restore";
+			mnuNotebook_Backups_Restore.Click += this.mnuNotebook_Backups_CreateOrRestore;
 			// 
 			// mnuLabels
 			// 
@@ -410,7 +420,7 @@ namespace MyNotebooks.subforms
 			// lblEntries
 			// 
 			lblEntries.AutoSize = true;
-			lblEntries.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			lblEntries.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
 			lblEntries.ForeColor = System.Drawing.SystemColors.MenuHighlight;
 			lblEntries.Location = new System.Drawing.Point(10, 90);
 			lblEntries.Name = "lblEntries";
@@ -421,7 +431,7 @@ namespace MyNotebooks.subforms
 			// 
 			// lblShowPIN
 			// 
-			lblShowPIN.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+			lblShowPIN.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Underline);
 			lblShowPIN.Location = new System.Drawing.Point(29, 27);
 			lblShowPIN.Name = "lblShowPIN";
 			lblShowPIN.Size = new System.Drawing.Size(35, 13);
@@ -528,7 +538,7 @@ namespace MyNotebooks.subforms
 			// btnResetLabelFilter
 			// 
 			btnResetLabelFilter.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
-			btnResetLabelFilter.Font = new System.Drawing.Font("Arial Unicode MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			btnResetLabelFilter.Font = new System.Drawing.Font("Arial Unicode MS", 8.25F);
 			btnResetLabelFilter.Location = new System.Drawing.Point(610, 86);
 			btnResetLabelFilter.Name = "btnResetLabelFilter";
 			btnResetLabelFilter.Size = new System.Drawing.Size(137, 21);
@@ -542,6 +552,20 @@ namespace MyNotebooks.subforms
 			// bgWorker
 			// 
 			bgWorker.WorkerReportsProgress = true;
+			// 
+			// mnuNotebook_Backups_CreateJSON
+			// 
+			mnuNotebook_Backups_CreateJSON.Name = "mnuNotebook_Backups_CreateJSON";
+			mnuNotebook_Backups_CreateJSON.Size = new System.Drawing.Size(180, 22);
+			mnuNotebook_Backups_CreateJSON.Text = "&JSON";
+			mnuNotebook_Backups_CreateJSON.Click += this.mnuNotebook_Backups_CreateOrRestore;
+			// 
+			// mnuNotebook_Backups_CreatePlain
+			// 
+			mnuNotebook_Backups_CreatePlain.Name = "mnuNotebook_Backups_CreatePlain";
+			mnuNotebook_Backups_CreatePlain.Size = new System.Drawing.Size(180, 22);
+			mnuNotebook_Backups_CreatePlain.Text = "&Plain Text";
+			mnuNotebook_Backups_CreatePlain.Click += this.mnuNotebook_Backups_CreateOrRestore;
 			// 
 			// frmMain
 			// 
@@ -610,7 +634,6 @@ namespace MyNotebooks.subforms
 		private System.Windows.Forms.ToolStripMenuItem mnuDiscardOriginalText;
 		private System.Windows.Forms.ToolStripMenuItem mnuNotebook_Rename;
 		private System.Windows.Forms.ToolStripMenuItem mnuNotebook_ForceBackup;
-		private System.Windows.Forms.ToolStripMenuItem mnuNotebook_RestoreBackups;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.ComboBox cbxDatesTo;
 		private System.Windows.Forms.ToolStripMenuItem mnuLabels;
@@ -630,6 +653,10 @@ namespace MyNotebooks.subforms
 		private System.Windows.Forms.Button btnResetLabelFilter;
 		private System.Windows.Forms.ToolStripMenuItem mnuAdministratorConsole;
 		private System.ComponentModel.BackgroundWorker bgWorker;
-		private System.Windows.Forms.ToolStripMenuItem mnuNotebook_Print;
+		private System.Windows.Forms.ToolStripMenuItem mnuNotebook_Backups;
+		private System.Windows.Forms.ToolStripMenuItem mnuNotebook_Backups_Create;
+		private System.Windows.Forms.ToolStripMenuItem mnuNotebook_Backups_Restore;
+		private System.Windows.Forms.ToolStripMenuItem mnuNotebook_Backups_CreateJSON;
+		private System.Windows.Forms.ToolStripMenuItem mnuNotebook_Backups_CreatePlain;
 	}
 }

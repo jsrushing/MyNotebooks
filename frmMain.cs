@@ -634,6 +634,13 @@ namespace MyNotebooks.subforms
 			}
 		}
 
+		private void mnuNotebook_Backups_CreateOrRestore(object sender, EventArgs e)
+		{
+			ToolStripMenuItem tsmi = (ToolStripMenuItem)sender;
+			if (tsmi.Name.ToLower().Contains("create")) { mnuNotebook_Print_Click(sender, e); }
+			else { mnuNotebook_RestoreBackups_Click(sender, e); }
+		}
+
 		private async void	mnuNotebook_Create_Click(object sender, EventArgs e)
 		{
 			using (frmNewNotebook frm = new frmNewNotebook(this))
@@ -696,7 +703,10 @@ namespace MyNotebooks.subforms
 		private async void	mnuNotebook_Import_Click(object sender, EventArgs e)
 		{ await Utilities.ImportNotebooks(this); LoadNotebooks(); ShowHideMenusAndControls(SelectionState.NotebookNotSelected); }
 
-		private void		mnuNotebook_Print_Click(object sender, EventArgs e) { CurrentNotebook.Print(this); }
+		private void		mnuNotebook_Print_Click(object sender, EventArgs e) 
+		{
+			CurrentNotebook.Print(this, ((ToolStripMenuItem)sender).Name.ToLower().Contains("json")); 
+		}
 
 		private async void	mnuNotebook_Rename_Click(object sender, EventArgs e)
 		{
@@ -740,7 +750,7 @@ namespace MyNotebooks.subforms
 					nb.Name = Path.GetFileName(fname) + "_restored";
 					Program.AllNotebooks.Add(nb);
 					LoadNotebooks();
-
+					ddlNotebooks.DroppedDown = true;
 				}
 			}
 			catch (Exception ex)
@@ -928,7 +938,7 @@ namespace MyNotebooks.subforms
 
 				mnuNotebook_Delete.Enabled = false;
 				mnuNotebook_Rename.Enabled = false;
-				mnuNotebook_Print.Enabled = false;
+				mnuNotebook_Backups_Create.Enabled = false;
 				mnuNotebook_ForceBackup.Enabled = false;
 				mnuNotebook_Export.Enabled = true;
 				mnuNotebook_Settings.Enabled = false;
@@ -955,7 +965,7 @@ namespace MyNotebooks.subforms
 
 				mnuNotebook_Delete.Enabled = true;
 				mnuNotebook_Rename.Enabled = true;
-				mnuNotebook_Print.Enabled = true;
+				mnuNotebook_Backups_Create.Enabled = true;
 				mnuNotebook_ForceBackup.Enabled = true;
 				//mnuJournal_Export.Enabled = currentJournal.Settings.AllowCloud;
 				mnuNotebook_Settings.Enabled = true;

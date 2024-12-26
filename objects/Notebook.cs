@@ -196,7 +196,7 @@ namespace MyNotebooks
 			return jeRtrn;
         }
 
-		private void GenerateMesssage(string errorMessage, Exception exception = null, string title = "", Form caller = null)
+		private void		GenerateMesssage(string errorMessage, Exception exception = null, string title = "", Form caller = null)
 		{
 			frmMessage frm = new(frmMessage.OperationType.Message, errorMessage + (exception != null ? Environment.NewLine + exception.Message : ""), title, caller);
 			frm.ShowDialog();
@@ -256,13 +256,20 @@ namespace MyNotebooks
             return nbRtrn;
         }
 
-		public void			Print(Form callingForm)
+		public void			Print(Form callingForm, bool printJSON = true)
 		{
 			try
 			{
-				string fName = Utilities.GetDialogResult(new SaveFileDialog(), "MyNotebooks backup files (*.mnbak)|*.mnbak", this.Name, "Save File");
-				if (fName.Length > 0) { File.WriteAllText(fName, JsonSerializer.Serialize(this)); }
-				GenerateMesssage("The notebook was saved as '" + Path.GetFileName(fName) + "'.", null, "Notebook Saved", callingForm);
+				if (printJSON)
+				{
+					string fName = Utilities.GetDialogResult(new SaveFileDialog(), "MyNotebooks backup files (*.mnbak)|*.mnbak", this.Name, "Save File");
+					if (fName.Length > 0) { File.WriteAllText(fName + "_json", JsonSerializer.Serialize(this)); }
+					GenerateMesssage("The notebook was printed as '" + Path.GetFileName(fName) + "'.", null, "Notebook Saved", callingForm);
+				}
+				else
+				{
+
+				}
 			}
 			catch (Exception ex)
 			{ GenerateMesssage("An Error Occurred", ex); }
