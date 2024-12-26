@@ -197,9 +197,9 @@ namespace MyNotebooks
 			return jeRtrn;
         }
 
-		private void		GenerateMesssage(string errorMessage, Exception exception = null, string title = "", Form caller = null)
+		private void		GenerateMesssage(string message, Exception exception = null, string title = "", Form caller = null)
 		{
-			frmMessage frm = new(frmMessage.OperationType.Message, errorMessage + (exception != null ? Environment.NewLine + exception.Message : ""), title, caller);
+			frmMessage frm = new(frmMessage.OperationType.Message, message + (exception != null ? Environment.NewLine + exception.Message : ""), title, caller);
 			frm.ShowDialog();
 		}
 
@@ -288,6 +288,7 @@ namespace MyNotebooks
 
 					string fName = Utilities.GetDialogResult(new SaveFileDialog(), "MyNotebooks backup files (*.mnbak)|.mnbak", this.Name + "_plaintext", "Save File");
 					if(fName.Length > 0) { File.WriteAllText(fName, sb.ToString()); }
+					GenerateMesssage("The notebook was printed as '" + Path.GetFileName(fName) + "'.", null, "Notebook Saved", callingForm);
 				}
 			}
 			catch (Exception ex)

@@ -45,7 +45,7 @@ namespace MyNotebooks.subforms
 		{
 			InitializeComponent();
 			opType = type;
-			msg = message;
+			msg = message + "            ";
 			this.defaultText = defaultText;
 			if (parent != null) { Utilities.SetStartPosition(this, parent); }
 

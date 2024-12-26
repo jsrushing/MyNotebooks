@@ -155,9 +155,11 @@
 			010 Using local database.
 
 		12/24/24
-			011 Recreate a notebook from a backup *** NOT COMPLETE ***
+			011 Recreate a notebook from a backup
+				Done 12/25/24
 			011a Serialize notebook for 'Save to Disk'. Output JSON.
 				Done 12/24/24
+				Enhanced: Added both JSON and plain text outputs. 12/25/24
 
  */
 using System;
@@ -704,9 +706,7 @@ namespace MyNotebooks.subforms
 		{ await Utilities.ImportNotebooks(this); LoadNotebooks(); ShowHideMenusAndControls(SelectionState.NotebookNotSelected); }
 
 		private void		mnuNotebook_Print_Click(object sender, EventArgs e) 
-		{
-			CurrentNotebook.Print(this, ((ToolStripMenuItem)sender).Name.ToLower().Contains("json")); 
-		}
+		{ CurrentNotebook.Print(this, ((ToolStripMenuItem)sender).Name.ToLower().Contains("json")); }
 
 		private async void	mnuNotebook_Rename_Click(object sender, EventArgs e)
 		{
