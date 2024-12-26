@@ -650,11 +650,9 @@ namespace MyNotebooks.subforms
 			{
 				frm.ShowDialog(this);
 
-				if (frm.LocalNotebook != null)  // && frm.LocalNotebook.Name.Length > 0)
+				if (frm.LocalNotebook != null)
 				{
-					frm.LocalNotebook.Id = DbAccess.CRUDNotebook(frm.LocalNotebook).intValue;
-					Program.AllNotebooks.Add(frm.LocalNotebook);
-					await Utilities.PopulateAllNotebookNames();
+					await frm.LocalNotebook.Create();
 					LoadNotebooks();
 				}
 			}
@@ -721,7 +719,6 @@ namespace MyNotebooks.subforms
 					if (frm.ResultText != CurrentNotebook.Name)
 					{
 						await CurrentNotebook.Rename(frm.ResultText, true);
-						await Utilities.PopulateAllNotebookNames();
 						LoadNotebooks();
 					}
 					else

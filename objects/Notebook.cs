@@ -112,8 +112,8 @@ namespace MyNotebooks
 		//	catch (Exception) { }
 		//}
 
-		public SQLResult Create() { return GetOperationResult(DbAccess.CRUDNotebook(this), true); }
-		public SQLResult Update() { return GetOperationResult(DbAccess.CRUDNotebook(this, OperationType.Update)); }
+		//public SQLResult Create() { return GetOperationResult(DbAccess.CRUDNotebook(this), true); }
+		//public SQLResult Update() { return GetOperationResult(DbAccess.CRUDNotebook(this, OperationType.Update)); }
 		public SQLResult Delete() { return GetOperationResult(DbAccess.CRUDNotebook(this, OperationType.Delete)); }
 
 		private SQLResult	GetOperationResult(SQLResult result, bool isCreate = false)
@@ -128,7 +128,6 @@ namespace MyNotebooks
 		public async Task	Create(bool addCreatedOn = true)
         {
 			this.CreatedBy = Program.User.Id;
-			IsNewNotebook = true;
 			await this.Save();
 		}
 
@@ -327,33 +326,6 @@ namespace MyNotebooks
 		{
 			this.Name = newName;
 			await this.Save();
-
-			//DeleteBackups();
-			//var oldName		= this.Name;
-			//var oldFileName = Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + this.Name;
-			//File.Move		(this.FileName, this.FileName.Substring(0, this.FileName.LastIndexOf("\\")) + "\\" + newName);
-			//Thread.Sleep	(500);
-			//this.FileName	= Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + newName;
-			//this.Name		= newName;
-			//this.Entries	.ForEach(e => e.NotebookName = newName);
-			//await this.Save(false);
-
-			//if (this.Settings.AllowCloud)
-			//{
-			//	await AzureFileClient.GetAzureItemNames();	// Populate Program.AzureNotebooks.
-
-			//	if(Program.AzureNotebookNames.Contains(Program.AzurePassword + oldName)) 
-			//	{ 
-			//		Program.AzureNotebookNames.Remove(Program.AzurePassword + oldName);
-			//		//await AzureFileClient.RenameFile($"notebooks/container1a.file.core.windows.net" + "//" + Program.AzurePassword + oldName, newName);
-			//		await AzureFileClient.DownloadOrDeleteFile(this.FileName, Program.AzurePassword + oldName, FileMode.Create, true);
-			//		CloudSynchronizer cs = new CloudSynchronizer(); await AzureFileClient.UploadFile(this.FileName);   // gets this newly renamed notebook to Azure
-
-			//	}
-			//	if (!Program.AzureNotebookNames.Contains(Program.AzurePassword + newName)) { Program.AzureNotebookNames.Add(Program.AzurePassword + newName); }
-			//	if (uploadTriggerFile) { AzureFileClient.UploadRenamedFileTrigger(oldName, newName); }
-			//}
-			//Backup();
 		}
 
 		public async Task	RenameLabel(string oldName,  string newName)
@@ -407,75 +379,26 @@ namespace MyNotebooks
 			}
 		}
 
-		public async Task	Save(bool synchWithCloud = true)
+		public async Task	Save()
 		{
-			//var fName = this.FileName.Length > 0 ? this.FileName : Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + this.Name;
-			//fName = fName.Contains("\\") ? fName :  Program.AppRoot + ConfigurationManager.AppSettings["FolderStructure_NotebooksFolder"] + this.Name;
-
-			Notebook nTmp = (Notebook)this.MemberwiseClone();
-
-			// Encrypt the notebook and entries to save to disk.
-			//this.FileName						= EncryptDecrypt.Encrypt(this.FileName, this.PIN);
-			//this.Name		= EncryptDecrypt.Encrypt(this.Name,		this.PIN);
-			//this.PIN		= EncryptDecrypt.Encrypt(this.PIN, this.PIN);
-			//this.Description = EncryptDecrypt.Encrypt(this.Description, this.PIN);
-
-			//this.Entries.ForEach(e	=> e.Title	= EncryptDecrypt.Encrypt(e.Title,	this.PIN));
-			//this.Entries.ForEach(e	=> e.Text	= EncryptDecrypt.Encrypt(e.Text,	this.PIN));
-			//this.Entries.ForEach(e	=> e.Labels = EncryptDecrypt.Encrypt(e.Labels,	this.PIN));
-			//this.Entries.ForEach(e	=> e.RTF	= EncryptDecrypt.Encrypt(e.RTF,		this.PIN));
-			//this.Entries.ForEach(e	=> e.NotebookName = EncryptDecrypt.Encrypt(e.NotebookName, this.PIN));
-
-			if (IsNewNotebook)
+			if (this.Id == 0)
 			{
 				var vId = DbAccess.CRUDNotebook(this);
 
-				if(vId.intValue == 0) { GenerateMesssage("An error occurred. The Notebook was not created. " + vId.strValue);	}
-				else { this.Id = vId.intValue; }
+				if(vId.intValue == 0) 
+				{ GenerateMesssage("An error occurred. The Notebook was not created. " + vId.strValue);	}
+				else 
+				{ 
+					this.Id = vId.intValue;
+					Program.AllNotebooks.Add(this);
+					await Utilities.PopulateAllNotebookNames();
+				}
 			}
-			else 
+			else
 			{
-				//var vRtrn = DbAccess.CRUDNotebook(this, OperationType.Update);
-
-				//if (vRtrn.intValue == 0 | vRtrn.intValue != this.Id)
-				//{
-				//	using (frmMessage frm = new(frmMessage.OperationType.Message,
-				//	"An error occurred. The Notebook was not updated. " + vRtrn.strValue)) { frm.ShowDialog(); }
-				//}
+				DbAccess.CRUDNotebook(this, OperationType.Update);
+				await Utilities.PopulateAllNotebooks();
 			}
-			//File.Delete_original(fName);
-
-			//using (Stream stream = File.Open(fName, FileMode.Create))
-			//{
-			//	DataContractSerializer dcs = new DataContractSerializer(typeof(Notebook));
-			//	dcs.WriteObject(stream, this);
-			//}
-
-			//if (Program.AzurePassword.Length > 0 && this.Settings.AllowCloud)
-			//{
-			//	if(synchWithCloud)
-			//	{
-			//		CloudSynchronizer cs = new CloudSynchronizer();
-			//		await cs.SynchWithCloud(false, this);
-			//	}
-			//}
-
-			// switch back to the original notebook
-			//this.FileName	= nTmp.FileName;  // EncryptDecrypt.Decrypt(this.FileName, Program.PIN);
-			this.Name		= nTmp.Name;	// EncryptDecrypt.Decrypt(this.Name, Program.PIN);
-			//this.Entries	= nTmp.Entries;
-
-			//if(Program.PIN.Length > 0)
-			//{
-			//	this.Entries.ForEach(e => e.Title	= EncryptDecrypt.Decrypt(e.Title, Program.PIN));
-			//	this.Entries.ForEach(e => e.Text	= EncryptDecrypt.Decrypt(e.Text, Program.PIN));
-			//	this.Entries.ForEach(e => e.Labels	= EncryptDecrypt.Decrypt(e.Labels, Program.PIN));
-			//	this.Entries.ForEach(e => e.RTF		= EncryptDecrypt.Decrypt(e.RTF, Program.PIN));
-			//	this.Entries.ForEach(e => e.NotebookName = EncryptDecrypt.Decrypt(e.NotebookName, Program.PIN));
-			//}
-
-			//Backup();
-			if (IsNewNotebook) { await Utilities.PopulateAllNotebookNames(); }
 		}
 
 		public List<Entry>	Search(SearchObject So)

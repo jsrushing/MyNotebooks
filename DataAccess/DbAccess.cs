@@ -186,9 +186,6 @@ namespace MyNotebooks.DataAccess
 						cmd.Parameters.AddWithValue("@RTF",		entry.RTF);
 						cmd.Parameters.AddWithValue("@text",	entry.Text);
 						cmd.Parameters.AddWithValue("@title",	entry.Title);
-						//cmd.Parameters.AddWithValue("@RTF",	EncryptDecrypt.Encrypt(entry.RTF, Program.User.Password));
-						//cmd.Parameters.AddWithValue("@text",	EncryptDecrypt.Encrypt(entry.Text, Program.User.Password));
-						//cmd.Parameters.AddWithValue("@title",	EncryptDecrypt.Encrypt(entry.Title, Program.User.Password));
 						cmd.Parameters.AddWithValue("@opType",	opType == OperationType.Delete ? 2: (int)opType);
 					}
 
