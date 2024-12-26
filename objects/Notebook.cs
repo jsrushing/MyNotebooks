@@ -19,6 +19,7 @@ using MyNotebooks.objects;
 using MyNotebooks.subforms;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text;
 
 namespace MyNotebooks
 {
@@ -262,13 +263,31 @@ namespace MyNotebooks
 			{
 				if (printJSON)
 				{
-					string fName = Utilities.GetDialogResult(new SaveFileDialog(), "MyNotebooks backup files (*.mnbak)|*.mnbak", this.Name, "Save File");
-					if (fName.Length > 0) { File.WriteAllText(fName + "_json", JsonSerializer.Serialize(this)); }
+					string fName = Utilities.GetDialogResult(new SaveFileDialog(), "MyNotebooks backup files (*.mnbak)|*.mnbak", this.Name + "_json", "Save File");
+					if (fName.Length > 0) { File.WriteAllText(fName, JsonSerializer.Serialize(this)); }
 					GenerateMesssage("The notebook was printed as '" + Path.GetFileName(fName) + "'.", null, "Notebook Saved", callingForm);
 				}
 				else
 				{
+					StringBuilder sb = new StringBuilder();
+					sb.AppendLine("Notebook: " + this.Name);
+					foreach (Entry entry in this.Entries)
+					{
+						sb.Append("Title: " + entry.Title);
+						sb.Append(" Created: " + entry.CreatedOn.ToString());
+						sb.AppendLine(entry.EditedOn > entry.CreatedOn ? " Edited: " + entry.EditedOn : "");
+						sb.AppendLine(entry.Text);
 
+						if (entry.AllLabels.Count > 0)
+						{
+							sb.Append("labels: ");
+							sb.AppendLine(string.Join(", ", entry.AllLabels.Select(e => e.LabelText).ToArray()));
+						}
+						sb.AppendLine();
+					}
+
+					string fName = Utilities.GetDialogResult(new SaveFileDialog(), "MyNotebooks backup files (*.mnbak)|.mnbak", this.Name + "_plaintext", "Save File");
+					if(fName.Length > 0) { File.WriteAllText(fName, sb.ToString()); }
 				}
 			}
 			catch (Exception ex)
