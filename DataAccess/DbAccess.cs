@@ -162,6 +162,15 @@ namespace MyNotebooks.DataAccess
 					if (opType == OperationType.Delete)			cmd.Parameters.AddWithValue("isActive", 0);
 					GetSqlReturn(ref rtrn, cmd);
 				}
+
+				if(opType == OperationType.Create && nb.Entries.Count > 0)	// Creating a restored notebook. See enhancement 011a.
+				{
+					foreach (var entry in nb.Entries)
+					{
+						entry.ParentId = rtrn.intValue;
+						CRUDNotebookEntry(entry, OperationType.Create);
+					}
+				}
 			}
 
 			return rtrn;

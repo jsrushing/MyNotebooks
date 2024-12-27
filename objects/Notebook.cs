@@ -39,7 +39,7 @@ namespace MyNotebooks
 		public bool			WrongPIN = false;
 		public bool			BackupCompleted;
 		public bool			Saved;
-		public List<Entry>		Entries { get; set; } = new();
+		public List<Entry>		Entries { get; set; }
 		public NotebookSettings	Settings;
 
 		public Notebook() { }
@@ -57,6 +57,7 @@ namespace MyNotebooks
 		public Notebook(DataTable dt, int rowIndex = 0)
 		{
 			var value = "";
+			this.Entries = new List<Entry>();
 
 			foreach (PropertyInfo sPropertyName in typeof(Notebook).GetProperties())
 			{
@@ -127,6 +128,7 @@ namespace MyNotebooks
 		public async Task	Create(bool addCreatedOn = true)
         {
 			this.CreatedBy = Program.User.Id;
+			this.Entries = this.Entries == null ? new() : this.Entries;
 			await this.Save();
 		}
 
@@ -262,8 +264,11 @@ namespace MyNotebooks
 				if (printJSON)
 				{
 					string fName = Utilities.GetDialogResult(new SaveFileDialog(), "MyNotebooks backup files (*.mnbak)|*.mnbak", this.Name + "_json", "Save File");
-					if (fName.Length > 0) { File.WriteAllText(fName, JsonSerializer.Serialize(this)); }
-					GenerateMesssage("The notebook was saved as '" + Path.GetFileName(fName) + "'.", null, "Notebook Saved", callingForm);
+					if (fName.Length > 0) 
+					{ 
+						File.WriteAllText(fName, JsonSerializer.Serialize(this)); 
+						GenerateMesssage("The notebook was saved as '" + Path.GetFileName(fName) + "'.", null, "Notebook Saved", callingForm);
+					}
 				}
 				else
 				{
@@ -385,18 +390,20 @@ namespace MyNotebooks
 				var vId = DbAccess.CRUDNotebook(this);
 
 				if(vId.intValue == 0) 
-				{ GenerateMesssage("An error occurred. The Notebook was not created. " + vId.strValue);	}
+				{ GenerateMesssage("An error occurred. The Notebook was not saved. " + vId.strValue);	}
 				else 
 				{ 
 					this.Id = vId.intValue;
 					Program.AllNotebooks.Add(this);
 					await Utilities.PopulateAllNotebookNames();
+					GenerateMesssage("The Notebook was saved. ");
 				}
 			}
 			else
 			{
 				DbAccess.CRUDNotebook(this, OperationType.Update);
 				await Utilities.PopulateAllNotebooks();
+				GenerateMesssage("The Notebook was updated.");
 			}
 		}
 

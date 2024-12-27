@@ -854,7 +854,7 @@ namespace MyNotebooks.subforms
 		{
 			frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Would you like to back up '" + CurrentNotebook.Name +"'?       ", "Backup Notebook?", this);
 			frm.ShowDialog();
-			if (frm.Result == frmMessage.ReturnResult.Yes) { mnuNotebook_Print_Click(null, null); }
+			if (frm.Result == frmMessage.ReturnResult.Yes) { mnuNotebook_Print_Click(mnuNotebook_Backups_CreateJSON, null); }
 		}
 
 		private void		rtbSelectedEntry_MouseDown(object sender, MouseEventArgs e)
