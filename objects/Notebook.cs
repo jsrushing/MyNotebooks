@@ -39,7 +39,6 @@ namespace MyNotebooks
 		public bool			WrongPIN = false;
 		public bool			BackupCompleted;
 		public bool			Saved;
-		private bool		IsNewNotebook = false;
 		public List<Entry>		Entries { get; set; } = new();
 		public NotebookSettings	Settings;
 
@@ -264,7 +263,7 @@ namespace MyNotebooks
 				{
 					string fName = Utilities.GetDialogResult(new SaveFileDialog(), "MyNotebooks backup files (*.mnbak)|*.mnbak", this.Name + "_json", "Save File");
 					if (fName.Length > 0) { File.WriteAllText(fName, JsonSerializer.Serialize(this)); }
-					GenerateMesssage("The notebook was printed as '" + Path.GetFileName(fName) + "'.", null, "Notebook Saved", callingForm);
+					GenerateMesssage("The notebook was saved as '" + Path.GetFileName(fName) + "'.", null, "Notebook Saved", callingForm);
 				}
 				else
 				{

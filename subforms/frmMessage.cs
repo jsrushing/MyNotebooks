@@ -17,8 +17,8 @@ namespace MyNotebooks.subforms
 		public string ResultText { get; private set; }
 		public bool IsLocalFile { get; private set; }
 
-		private const int SmallWidth = 258;
-		private const int RegularWidth = 394;
+		private const int SmallWidth = 400;
+		private const int RegularWidth = 694;
 
 		public enum OperationType
 		{
@@ -45,7 +45,7 @@ namespace MyNotebooks.subforms
 		{
 			InitializeComponent();
 			opType = type;
-			msg = message + "            ";
+			msg = message;
 			this.defaultText = defaultText;
 			if (parent != null) { Utilities.SetStartPosition(this, parent); }
 

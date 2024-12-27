@@ -60,7 +60,7 @@ namespace MyNotebooks.subforms
 			lblMessage.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
 			lblMessage.Location = new System.Drawing.Point(5, 5);
 			lblMessage.Name = "lblMessage";
-			lblMessage.Size = new System.Drawing.Size(357, 56);
+			lblMessage.Size = new System.Drawing.Size(506, 56);
 			lblMessage.TabIndex = 0;
 			lblMessage.Text = "Delete entry 'this is the entry'?";
 			// 
@@ -72,7 +72,7 @@ namespace MyNotebooks.subforms
 			pnlYesNoCancel.Controls.Add(btnYes1);
 			pnlYesNoCancel.Location = new System.Drawing.Point(3, 64);
 			pnlYesNoCancel.Name = "pnlYesNoCancel";
-			pnlYesNoCancel.Size = new System.Drawing.Size(359, 32);
+			pnlYesNoCancel.Size = new System.Drawing.Size(508, 32);
 			pnlYesNoCancel.TabIndex = 1;
 			pnlYesNoCancel.Visible = false;
 			// 
@@ -113,7 +113,7 @@ namespace MyNotebooks.subforms
 			pnlYesNo.Controls.Add(btnYes2);
 			pnlYesNo.Location = new System.Drawing.Point(3, 102);
 			pnlYesNo.Name = "pnlYesNo";
-			pnlYesNo.Size = new System.Drawing.Size(359, 32);
+			pnlYesNo.Size = new System.Drawing.Size(508, 32);
 			pnlYesNo.TabIndex = 2;
 			pnlYesNo.Visible = false;
 			// 
@@ -144,7 +144,7 @@ namespace MyNotebooks.subforms
 			pnlOkCancel.Controls.Add(btnOk1);
 			pnlOkCancel.Location = new System.Drawing.Point(3, 140);
 			pnlOkCancel.Name = "pnlOkCancel";
-			pnlOkCancel.Size = new System.Drawing.Size(359, 32);
+			pnlOkCancel.Size = new System.Drawing.Size(508, 32);
 			pnlOkCancel.TabIndex = 3;
 			pnlOkCancel.Visible = false;
 			// 
@@ -174,14 +174,14 @@ namespace MyNotebooks.subforms
 			pnlOk.Controls.Add(btnOk2);
 			pnlOk.Location = new System.Drawing.Point(3, 178);
 			pnlOk.Name = "pnlOk";
-			pnlOk.Size = new System.Drawing.Size(359, 32);
+			pnlOk.Size = new System.Drawing.Size(508, 32);
 			pnlOk.TabIndex = 4;
 			pnlOk.Visible = false;
 			// 
 			// btnOk2
 			// 
 			btnOk2.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
-			btnOk2.Location = new System.Drawing.Point(142, 4);
+			btnOk2.Location = new System.Drawing.Point(291, 4);
 			btnOk2.Name = "btnOk2";
 			btnOk2.Size = new System.Drawing.Size(75, 23);
 			btnOk2.TabIndex = 0;
@@ -194,7 +194,7 @@ namespace MyNotebooks.subforms
 			txtInput.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
 			txtInput.Location = new System.Drawing.Point(13, 28);
 			txtInput.Name = "txtInput";
-			txtInput.Size = new System.Drawing.Size(343, 23);
+			txtInput.Size = new System.Drawing.Size(492, 23);
 			txtInput.TabIndex = 0;
 			txtInput.Visible = false;
 			// 
@@ -202,7 +202,7 @@ namespace MyNotebooks.subforms
 			// 
 			lblSelectFromLabelsList.AutoSize = true;
 			lblSelectFromLabelsList.Cursor = System.Windows.Forms.Cursors.Hand;
-			lblSelectFromLabelsList.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+			lblSelectFromLabelsList.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Underline);
 			lblSelectFromLabelsList.ForeColor = System.Drawing.SystemColors.Highlight;
 			lblSelectFromLabelsList.Location = new System.Drawing.Point(117, 213);
 			lblSelectFromLabelsList.Name = "lblSelectFromLabelsList";
@@ -219,7 +219,7 @@ namespace MyNotebooks.subforms
 			pnlDropDown.Controls.Add(label1);
 			pnlDropDown.Location = new System.Drawing.Point(8, 244);
 			pnlDropDown.Name = "pnlDropDown";
-			pnlDropDown.Size = new System.Drawing.Size(359, 32);
+			pnlDropDown.Size = new System.Drawing.Size(508, 32);
 			pnlDropDown.TabIndex = 6;
 			pnlDropDown.Visible = false;
 			// 
@@ -245,7 +245,7 @@ namespace MyNotebooks.subforms
 			// 
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			ClientSize = new System.Drawing.Size(378, 287);
+			ClientSize = new System.Drawing.Size(527, 287);
 			Controls.Add(pnlDropDown);
 			Controls.Add(lblSelectFromLabelsList);
 			Controls.Add(txtInput);

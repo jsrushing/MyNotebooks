@@ -459,13 +459,6 @@ namespace MyNotebooks.subforms
 		{
 			ddlNotebooks.Items.Clear();
 			ddlNotebooks.Text = string.Empty;
-			//if (Program.NotebooksNamesAndIds.Count == 0) await Utilities.PopulateAllNotebookNames();
-
-			//foreach (var v in Program.NotebooksNamesAndIds)
-			//{
-			//	ListItem lvi = new ListItem() { Name = v.Key, Id = v.Value };
-			//	ddlNotebooks.Items.Add(lvi);
-			//}
 
 			foreach (Notebook n in Program.AllNotebooks)
 			{
@@ -479,18 +472,8 @@ namespace MyNotebooks.subforms
 
 			if (ddlNotebooks.Items.Count > 0)
 			{
-				//if (ddlNotebooks.Items.Count == 1)
-				//{
-				//	try { ddlNotebooks.SelectedIndex = 0; } catch(Exception e) { var i = e.Message; }
-				//	loadSelectedNotebook(null, new());
-				//}
-				//else
-				//{
 				ShowHideMenusAndControls(SelectionState.NotebookNotSelected);
-				//}
 			}
-
-			//if (ddlNotebooks.Items.Count == 1) { loadSelectedNotebook(null, new()); }
 		}
 
 		private void		lstEntries_MouseUp(object sender, MouseEventArgs e)
@@ -637,7 +620,7 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void mnuNotebook_Backups_CreateOrRestore(object sender, EventArgs e)
+		private void		mnuNotebook_Backups_CreateOrRestore(object sender, EventArgs e)
 		{
 			ToolStripMenuItem tsmi = (ToolStripMenuItem)sender;
 			if (tsmi.Name.ToLower().Contains("create")) { mnuNotebook_Print_Click(sender, e); }
@@ -710,7 +693,7 @@ namespace MyNotebooks.subforms
 		private async void	mnuNotebook_Rename_Click(object sender, EventArgs e)
 		{
 			this.Cursor = Cursors.WaitCursor;
-			using (frmMessage frm = new frmMessage(frmMessage.OperationType.InputBox, "Enter the new notebook name.", CurrentNotebook.Name, this))
+			using (frmMessage frm = new(frmMessage.OperationType.InputBox, "Enter the new notebook name.", CurrentNotebook.Name, this))
 			{
 				frm.ShowDialog(this);
 
@@ -720,7 +703,15 @@ namespace MyNotebooks.subforms
 					{
 						await CurrentNotebook.Rename(frm.ResultText, true);
 						LoadNotebooks();
-					}
+
+						for(int i = 0; i < ddlNotebooks.Items.Count; i++)
+						{
+							if (((ListItem)ddlNotebooks.Items[i]).Name == frm.ResultText) { ddlNotebooks.SelectedIndex = i; return; }
+						}
+						
+					
+
+						ddlNotebooks.SelectedIndex = ddlNotebooks.Items.IndexOf(frm.ResultText); }
 					else
 					{ GenerateMesssage("The name has not been changed.", null, "Name Not Changed"); }
 				}
@@ -746,7 +737,7 @@ namespace MyNotebooks.subforms
 				if (nb != null) 
 				{
 					nb.Name = Path.GetFileName(fname) + "_restored";
-					Program.AllNotebooks.Add(nb);
+					await nb.Create();
 					LoadNotebooks();
 					ddlNotebooks.DroppedDown = true;
 				}
