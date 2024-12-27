@@ -63,6 +63,7 @@ namespace MyNotebooks.subforms
 			lblMessage.Size = new System.Drawing.Size(506, 56);
 			lblMessage.TabIndex = 0;
 			lblMessage.Text = "Delete entry 'this is the entry'?";
+			lblMessage.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
 			// pnlYesNoCancel
 			// 
@@ -78,7 +79,7 @@ namespace MyNotebooks.subforms
 			// 
 			// btnNo1
 			// 
-			btnNo1.Location = new System.Drawing.Point(145, 4);
+			btnNo1.Location = new System.Drawing.Point(206, 3);
 			btnNo1.Name = "btnNo1";
 			btnNo1.Size = new System.Drawing.Size(75, 23);
 			btnNo1.TabIndex = 2;
@@ -88,7 +89,7 @@ namespace MyNotebooks.subforms
 			// 
 			// btnCancel1
 			// 
-			btnCancel1.Location = new System.Drawing.Point(226, 4);
+			btnCancel1.Location = new System.Drawing.Point(287, 3);
 			btnCancel1.Name = "btnCancel1";
 			btnCancel1.Size = new System.Drawing.Size(75, 23);
 			btnCancel1.TabIndex = 1;
@@ -98,7 +99,7 @@ namespace MyNotebooks.subforms
 			// 
 			// btnYes1
 			// 
-			btnYes1.Location = new System.Drawing.Point(64, 4);
+			btnYes1.Location = new System.Drawing.Point(125, 3);
 			btnYes1.Name = "btnYes1";
 			btnYes1.Size = new System.Drawing.Size(75, 23);
 			btnYes1.TabIndex = 0;
@@ -119,7 +120,7 @@ namespace MyNotebooks.subforms
 			// 
 			// btnNo2
 			// 
-			btnNo2.Location = new System.Drawing.Point(198, 3);
+			btnNo2.Location = new System.Drawing.Point(248, 6);
 			btnNo2.Name = "btnNo2";
 			btnNo2.Size = new System.Drawing.Size(75, 23);
 			btnNo2.TabIndex = 2;
@@ -129,7 +130,7 @@ namespace MyNotebooks.subforms
 			// 
 			// btnYes2
 			// 
-			btnYes2.Location = new System.Drawing.Point(93, 3);
+			btnYes2.Location = new System.Drawing.Point(143, 3);
 			btnYes2.Name = "btnYes2";
 			btnYes2.Size = new System.Drawing.Size(75, 23);
 			btnYes2.TabIndex = 0;
@@ -150,7 +151,7 @@ namespace MyNotebooks.subforms
 			// 
 			// btnCancel2
 			// 
-			btnCancel2.Location = new System.Drawing.Point(198, 4);
+			btnCancel2.Location = new System.Drawing.Point(248, 3);
 			btnCancel2.Name = "btnCancel2";
 			btnCancel2.Size = new System.Drawing.Size(75, 23);
 			btnCancel2.TabIndex = 2;
@@ -160,7 +161,7 @@ namespace MyNotebooks.subforms
 			// 
 			// btnOk1
 			// 
-			btnOk1.Location = new System.Drawing.Point(93, 4);
+			btnOk1.Location = new System.Drawing.Point(143, 3);
 			btnOk1.Name = "btnOk1";
 			btnOk1.Size = new System.Drawing.Size(75, 23);
 			btnOk1.TabIndex = 0;
@@ -181,7 +182,7 @@ namespace MyNotebooks.subforms
 			// btnOk2
 			// 
 			btnOk2.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
-			btnOk2.Location = new System.Drawing.Point(291, 4);
+			btnOk2.Location = new System.Drawing.Point(212, 6);
 			btnOk2.Name = "btnOk2";
 			btnOk2.Size = new System.Drawing.Size(75, 23);
 			btnOk2.TabIndex = 0;

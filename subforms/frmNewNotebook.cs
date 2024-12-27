@@ -2,6 +2,7 @@
  * 6/15/22
  */
 using System;
+using System.Linq;
 using System.Windows.Forms;
 using MyNotebooks.DataAccess;
 using MyNotebooks.objects;
@@ -33,27 +34,35 @@ namespace MyNotebooks.subforms
 
 		private void frmNewJournal_Activated(object sender, EventArgs e) { txtName.Focus(); }
 
-		private void btnCancel_Click(object sender, EventArgs e) { this.Hide(); }
+		private void btnCancel_Click(object sender, EventArgs e) { LocalNotebook = null; this.Hide(); }
 
 		private void btnOk_Click(object sender, EventArgs e)
 		{
+			if (!Program.AllNotebooks.Select(e => e.Name.ToLower()).ToList().Contains(txtName.Text.Trim().ToLower()))
+			{
+				this.LocalNotebook = new Notebook();
+				//NotebookSettings nbs = LocalNotebook.Settings;
+				//LocalNotebook.Settings = nbs;
+				LocalNotebook.Name = txtName.Text;
+				LocalNotebook.CreatedOn = DateTime.Now;
+				LocalNotebook.ParentId = Program.ActiveNBParentId;
+				LocalNotebook.Description = txtDescription.Text;
+				this.Hide();
 
-			this.LocalNotebook = new Notebook();
-			//NotebookSettings nbs = LocalNotebook.Settings;
-			//LocalNotebook.Settings = nbs;
-			LocalNotebook.Name = txtName.Text;
-			LocalNotebook.CreatedOn = DateTime.Now;
-			LocalNotebook.ParentId = Program.ActiveNBParentId;
-			LocalNotebook.Description = txtDescription.Text;
-			this.Hide();
-
-			//NotebookSettings nbs = LocalNotebook.Settings;
-			//this.LocalNotebook = new Notebook(txtName.Text, null);
-			//LocalNotebook.Settings = nbs;
-			//LocalNotebook.PIN = txtPIN.Text;
-			//LocalNotebook.Description = txtDescription.Text;
-			////Program.PIN = txtPIN.Text;
-			//this.Hide();
+				//NotebookSettings nbs = LocalNotebook.Settings;
+				//this.LocalNotebook = new Notebook(txtName.Text, null);
+				//LocalNotebook.Settings = nbs;
+				//LocalNotebook.PIN = txtPIN.Text;
+				//LocalNotebook.Description = txtDescription.Text;
+				////Program.PIN = txtPIN.Text;
+				//this.Hide();
+			}
+			else
+			{
+				using (frmMessage frm = new(frmMessage.OperationType.Message, "The notebook '" + 
+					txtName.Text.Trim() + "' already exists.", "Notebook Already Exists", this)) { frm.ShowDialog(); }
+				txtName.SelectAll();
+			}
 		}
 
 		private void txtName_TextChanged(object sender, EventArgs e)
