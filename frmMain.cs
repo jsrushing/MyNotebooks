@@ -737,9 +737,10 @@ namespace MyNotebooks.subforms
 				if (nb != null) 
 				{
 					nb.Name = Path.GetFileName(fname) + "_restored";
+					nb.Id = 0;
 					await nb.Create();
 					LoadNotebooks();
-					ddlNotebooks.DroppedDown = true;
+					//ddlNotebooks.DroppedDown = true;
 				}
 			}
 			catch (Exception ex)
