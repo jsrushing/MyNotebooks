@@ -125,11 +125,11 @@ namespace MyNotebooks
 			return result;
 		}
 
-		public async Task	Create(bool addCreatedOn = true)
+		public async Task	Create(Form callingForm = null)
         {
 			this.CreatedBy = Program.User.Id;
 			this.Entries = this.Entries == null ? new() : this.Entries;
-			await this.Save();
+			await this.Save(callingForm);
 		}
 
 		public async void	Delete_original()
@@ -383,27 +383,27 @@ namespace MyNotebooks
 			}
 		}
 
-		public async Task	Save()
+		public async Task	Save(Form callingForm = null)
 		{
 			if (this.Id == 0)
 			{
 				var vId = DbAccess.CRUDNotebook(this);
 
 				if(vId.intValue == 0) 
-				{ GenerateMesssage("An error occurred. The Notebook was not saved. " + vId.strValue);	}
+				{ GenerateMesssage("An error occurred. The Notebook was not saved. " + vId.strValue, null, "Error!", callingForm);	}
 				else 
 				{ 
 					this.Id = vId.intValue;
 					Program.AllNotebooks.Add(this);
 					await Utilities.PopulateAllNotebookNames();
-					GenerateMesssage("The Notebook was saved. ");
+					GenerateMesssage("The Notebook was saved/restored.", null, "Operation Complete", callingForm);
 				}
 			}
 			else
 			{
 				DbAccess.CRUDNotebook(this, OperationType.Update);
 				await Utilities.PopulateAllNotebooks();
-				GenerateMesssage("The Notebook was updated.");
+				GenerateMesssage("The Notebook was updated.", null, "Operation Complete", callingForm);
 			}
 		}
 

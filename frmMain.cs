@@ -217,7 +217,7 @@ namespace MyNotebooks.subforms
 			InitializeComponent();
 		}
 
-		private async void frmMain_Activated(object sender, EventArgs e)
+		private async void	frmMain_Activated(object sender, EventArgs e)
 		{
 			if (Program.AllNotebooks.Count == 0)
 			{
@@ -235,7 +235,7 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void frmMain_FormClosed(object sender, FormClosedEventArgs e)
+		private void		frmMain_FormClosed(object sender, FormClosedEventArgs e)
 		{
 			foreach (Form f in Application.OpenForms)
 			{
@@ -243,7 +243,7 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private async void frmMain_Load(object sender, EventArgs e)
+		private async void	frmMain_Load(object sender, EventArgs e)
 		{
 			this.Cursor = Cursors.WaitCursor;
 			System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
@@ -253,7 +253,7 @@ namespace MyNotebooks.subforms
 			Program.User.Id = 1000;
 		}
 
-		private void frmMain_Resize(object sender, EventArgs e)
+		private void		frmMain_Resize(object sender, EventArgs e)
 		{
 			if (!rtbSelectedEntry.Visible)
 			{
@@ -262,7 +262,7 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private async void loadSelectedNotebook(object sender, EventArgs e)
+		private async void	loadSelectedNotebook(object sender, EventArgs e)
 		{
 			this.Cursor = Cursors.WaitCursor;
 			lstEntries.Items.Clear();
@@ -320,11 +320,12 @@ namespace MyNotebooks.subforms
 			this.Cursor = Cursors.Default;
 		}
 
-		private async void btnResetLabelFilter_Click(object sender, EventArgs e)
+		private async void	btnResetLabelFilter_Click(object sender, EventArgs e)
 		{
 			await ProcessDateFiltersAndPopulateEntries();
 			ShowHideMenusAndControls(SelectionState.NotebookLoaded);
 		}
+
 		private async void	cbxDates_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (!SuppressDateClick) { await ProcessDateFiltersAndPopulateEntries(); }
@@ -647,7 +648,7 @@ namespace MyNotebooks.subforms
 
 				if (frm.LocalNotebook != null)
 				{
-					await frm.LocalNotebook.Create();
+					await frm.LocalNotebook.Create(this);
 					LoadNotebooks();
 				}
 			}
@@ -745,7 +746,7 @@ namespace MyNotebooks.subforms
 				{
 					nb.Name = GetUniqueNotebookName(Path.GetFileName(fname) + "_restored");
 					nb.Id = 0;
-					await nb.Create();
+					await nb.Create(this);
 					LoadNotebooks();
 					//ddlNotebooks.DroppedDown = true;
 				}

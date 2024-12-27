@@ -140,7 +140,7 @@ namespace MyNotebooks.subforms
 					FoundEntries.ForEach(e => e.NotebookName = frm.LocalNotebook.Name);
 					nb.Entries.Add(new Entry("created", "-", "{rtf", nb.Name));
 					nb.Entries.AddRange(FoundEntries);
-					await nb.Create(false);
+					await nb.Create();
 					NotebookName = nb.Name;
 					using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.Message, "The notebook '" + NotebookName + "' was created.", "", this)) { frm2.ShowDialog(); }
 				}
