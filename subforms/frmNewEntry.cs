@@ -311,8 +311,7 @@ namespace MyNotebooks.subforms
 
 		private void		SetIsDirty(bool dirty = true)
 		{
-			var v = CurrentNotebook != null ? CurrentNotebook.Entries.ToArray().Where(e => e.Title == txtNewEntryTitle.Text) : null;
-			lblTitleExists.Visible = !IsEdit && v.Any();
+			lblTitleExists.Visible = !IsEdit && (CurrentNotebook != null && CurrentNotebook.Entries.ToArray().Where(e => e.Title == txtNewEntryTitle.Text).Any());
 
 			if (!lblTitleExists.Visible)
 			{

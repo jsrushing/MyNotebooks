@@ -4,7 +4,7 @@
 	08/25/24 Removed all multi-notebook features in 10/2023. 
 
 	bugs/hotfixes:
-		bugs: (annotated with 'x' when complete.
+		bugs: ('x' = done)
 		07/07/22 1100
 			001x Can arrow down or right into no type area.
 			> 002x Can select and drag into or out of no type area.
@@ -63,10 +63,6 @@
 
 		006 12/14/24 
 			Delete labels not working (frmLabelsManager.mnuDeleteLabels)
-
-		007 12/28/24
-			Entries can have the same name. 
-				Trap in code.
 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		toDo: ('x' = done)
