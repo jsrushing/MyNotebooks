@@ -1,7 +1,10 @@
 ﻿/* Main form.
-	04/01/22
+	04/01/22 Created - jsr
+	07/13/22 Dev. closed. v1.0 released.
+	08/25/24 Removed all multi-notebook features in 10/2023. 
 
-	bug list:
+	bugs/hotfixes:
+		bugs: (annotated with 'x' when complete.
 		07/07/22 1100
 			001x Can arrow down or right into no type area.
 			> 002x Can select and drag into or out of no type area.
@@ -14,36 +17,6 @@
 			004x Entries with no text cannot be edited or deleted (menus are disabled because they toggle on rtbSelectedEntry.Text.Length > 0).
 				1745 Fixed with 0003. This should never happen. Only came up because of 0003.
 
-
-	toDo:
-		07/07/22 001 EntryToEdit RTB formatting controls.
-				 002 Create .RichText instead of just .Text;
-				002ax Add password char for PIN and show/hide function.
-					1730 Done.
-		07/08/22 003x Column tab stops in rtbNewEntry.
-					07/10/22 1810 Done (was simple properties setting - .AcceptTab)
-				 004x Create new entry without exiting (to save incrementally)?
-					07/11/22 1445 No. Have user save entry then edit if desired.
-				 005x Allow selection length > 1 in editing entry notypearea for copying? Catch key code, only allow Ctrl.
-					07/12/22 1330 No. Parts of old text can be copied via the Edit Existing Text menu.
-				 006x Don't allow save of entry with no text or title.
-					16:50 Done
-				 007x Context menu for entries? (Delete_original, Edit)
-					07/11/22 1445 No. This functionality isn't important since app is destined for mobile UI.
-				 008x Disallow clicking/typing in Selected EntryToEdit text on frmMain.
-					07/10/22 1145 Done.
-				 009x PIN show/hide on frmNewJournal.
-					7/10/22 1400 Done.
-		07/10/22 010x Search criteria is case sensitive. Should be a user choice (default insensitive).
-					07/11/22 1430 Fixed.
-				 011x Add Yes/No/Cancel prompt for Cancel/Exit on frmNewEntry.
-					1130 Done.
-
-	07/13/22 Dev. closed. v1.0 released.
-	08/25/24 Removed all multi-notebook features in 10/2023. 
-
-	bugs/hotfixes:
-		bugs: 
 		001x 07/23/22 1330
 			Fatal error when selecting an entry from lstEntries AFTER selecting entry > clicking 'week' or 'month' filter > selecting one of the entries shown in the filtered results.
 			08/02/22 Declared fixed. Bug hasn't been seen since this incident. It is probably related to old journals and entries. Deleted all old test journals.
@@ -72,26 +45,54 @@
 				> Create a new entry (Create and Exit)
 				->  frmMain is shown in EntrySelected mode but no entry is selected (because they reloaded). Therefore when lblSeperator is clicked on we throw an 'Index out of range' error 
 						because no entry is selected.
-			Fix:
+			Fix: 
 				Switch to JournalSelected mode when returning from EntryToEdit > Create.
 				Tested OK 11/27/22. The mode switch was already programmed for EntryToEdit delete and EntryToEdit edit modes - just wasn't doing that for Create.
 
-		005 12/14/24
+		005x 12/14/24
 			Entries display not refreshing when
 					1) Create new entry (also on edit existing?)
 					2) Create new label. Add to entry. Save entry. Exit.
 					3) Entries display does not refresh.
 					4) Editied On is populated in new entry.
-			FIX:
+			FIX: 12/15/24
 				Used frmNewEntry.SaveEntry() to save entry.
 				Reason for showing EditedOn after creating a label is that the entry has to be saved before managing labels.
 				Added 30 second delay in Entry.GetSynopsis() to avoid EditedOn being too close to CreatedOn.
+				Changed delay to 60. 12/28/24
+
 		006 12/14/24 
-			Delete labels not working (frmLabelsManager.mnuDeleteLabels
+			Delete labels not working (frmLabelsManager.mnuDeleteLabels)
 
+		007 12/28/24
+			Entries can have the same name. 
+				Trap in code.
 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+		toDo: ('x' = done)
+		07/07/22 001 EntryToEdit RTB formatting controls.
+				 002 Create .RichText instead of just .Text;
+				002ax Add password char for PIN and show/hide function.
+					1730 Done.
+		07/08/22 003x Column tab stops in rtbNewEntry.
+					07/10/22 1810 Done (was simple properties setting - .AcceptTab)
+				 004x Create new entry without exiting (to save incrementally)?
+					07/11/22 1445 No. Have user save entry then edit if desired.
+				 005x Allow selection length > 1 in editing entry notypearea for copying? Catch key code, only allow Ctrl.
+					07/12/22 1330 No. Parts of old text can be copied via the Edit Existing Text menu.
+				 006x Don't allow save of entry with no text or title.
+					16:50 Done
+				 007x Context menu for entries? (Delete_original, Edit)
+					07/11/22 1445 No. This functionality isn't important since app is destined for mobile UI.
+				 008x Disallow clicking/typing in Selected EntryToEdit text on frmMain.
+					07/10/22 1145 Done.
+				 009x PIN show/hide on frmNewJournal.
+					7/10/22 1400 Done.
+		07/10/22 010x Search criteria is case sensitive. Should be a user choice (default insensitive).
+					07/11/22 1430 Fixed.
+				 011x Add Yes/No/Cancel prompt for Cancel/Exit on frmNewEntry.
+					1130 Done.
 
-		toDo:
 		07/23/22 001x Related to bug 001.
 					WHEN CLICKING 'week' OR 'month' FILTER ...
 						1) IF an entry is clicked, remember it.
@@ -122,9 +123,15 @@
 					> 02/24/23 All is working, clickonce + cloud sync. Marked complete.
 
 		12/07/22
-			003 checkbox lists
+			003x checkbox lists
+				12/28/24 - Don't remember this so marking it complete.
 
-	***************************************************************************************************************************************
+		12/28/24
+			004 Db needs work.
+				Change primary keys in Labels, Groups, Departments, and Accounts from (Id & ParentId) to (<text val> & ParentId).
+				Chaange primary key in NotebookEntries from (Id) to (ParentId & Title).
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	enhancements:
 		07/14/22 001x Add date selection for shown entries (e.g. last <x> days)
 			07/15/22 0230 Is working with user specified number of weeks.
@@ -162,6 +169,9 @@
 				Done 12/24/24
 			011b Handle restored notebook.
 				Done 12/28/24
+
+		12/28/24
+			012 Stop prompting to 'add (newly created) label to <entry>?'. Just add it.
 
  */
 using System;
