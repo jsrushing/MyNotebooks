@@ -19,7 +19,7 @@ namespace MyNotebooks.DataAccess
 
 	internal class DbAccess
 	{
-		//		private static string connString = "Server=mynotebooksserver.database.windows.net;Database=MyNotebooks;user id=mydb_admin;password=cloud_Bringer1!";
+		//private static string connString = "Server=mynotebooksserver.database.windows.net;Database=MyNotebooks;user id=mydb_admin;password=cloud_Bringer1!";
 		//private static string connString = "Server=FORRESTSTNW;Database=MyNotebooks;Trusted_Connection = true";
 		private static string connString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\js_ru\\source\\repos\\MyNotebooks\\localMyNotebooksDb.mdf;Integrated Security=True";
 
