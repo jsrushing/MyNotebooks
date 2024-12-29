@@ -42,7 +42,7 @@ namespace MyNotebooks.subforms
 		{
 			this.Parent = parent;
 			InitializeComponent();
-			LabelsManager.PopulateLabelsList(lstLabelsForSearch);
+			//LabelsManager.PopulateLabelsList(lstLabelsForSearch);
 			Utilities.SetStartPosition(this, parent);
 			dtFindDate.Value = DateTime.Now;
 			dtFindDate_From.Value = DateTime.Now.AddDays(-30);
@@ -87,10 +87,24 @@ namespace MyNotebooks.subforms
 			if (NbsToSearch.Count == 0)
 			{
 				using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.Message,
-					"At least one Notebook must be selected.", "Invalid Input", this)) { frm2.ShowDialog(); this.Close(); }
+					"At least one Notebook must be selected.", "Invalid Input", this)) 
+				{	
+					frm2.ShowDialog(); 
+					this.Close(); 
+				}
 			}
 
-			foreach (string s in NbsToSearch) { ddlNbsToSearch.Items.Add(s); }
+			List<string> lbls = new List<string>();
+
+			foreach(string nbName in NbsToSearch)
+			{
+				ddlNbsToSearch.Items.Add(nbName);
+				lbls.AddRange(DbAccess.GetLabelsForNotebook
+					(Program.AllNotebooks.Where(nb => nb.Name == nbName).FirstOrDefault().Id)
+					.Except(lbls).ToList());
+			}
+
+			clbLabelsInNotebooks.Items.AddRange(lbls.ToArray());
 		}
 
 		//private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -142,7 +156,7 @@ namespace MyNotebooks.subforms
 					nb.Entries.AddRange(FoundEntries);
 					await nb.Create();
 					NotebookName = nb.Name;
-					using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.Message, "The notebook '" + NotebookName + "' was created.", "", this)) { frm2.ShowDialog(); }
+					using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.Message, "The nbName '" + NotebookName + "' was created.", "", this)) { frm2.ShowDialog(); }
 				}
 			}
 		}
@@ -153,7 +167,7 @@ namespace MyNotebooks.subforms
 
 		private async Task DoSearch()
 		{
-			while (Worker.IsBusy) { Thread.Sleep(100); }
+			//while (Worker.IsBusy) { Thread.Sleep(100); }
 			this.Cursor = Cursors.WaitCursor;
 			EntriesToSearch.Clear();
 			this.FoundEntries.Clear();
@@ -221,7 +235,7 @@ namespace MyNotebooks.subforms
 		{
 			List<MNLabel> lblsToReturn = new();
 
-			foreach (ListItem li in lstLabelsForSearch.CheckedItems) { lblsToReturn.Add(new() { Id = li.Id, LabelText = li.Name }); }
+			//foreach (ListItem li in lstLabelsForSearch.CheckedItems) { lblsToReturn.Add(new() { Id = li.Id, LabelText = li.Name }); }
 
 			return lblsToReturn;
 
@@ -351,10 +365,10 @@ namespace MyNotebooks.subforms
 
 		private void mnuClearFields_Click(object sender, EventArgs e)
 		{
-			for (int i = 0; i < lstLabelsForSearch.Items.Count; i++)
-			{
-				lstLabelsForSearch.SetItemChecked(i, false);
-			}
+			//for (int i = 0; i < lstLabelsForSearch.Items.Count; i++)
+			//{
+			//	lstLabelsForSearch.SetItemChecked(i, false);
+			//}
 			txtSearchText.Text = string.Empty;
 			txtSearchTitle.Text = string.Empty;
 			chkMatchCase.Checked = false;
@@ -381,7 +395,7 @@ namespace MyNotebooks.subforms
 				{
 					var indx = lstFoundEntries.SelectedIndex;   // nxt line will clear selections
 					await DoSearch();
-					lstFoundEntries.SelectedIndex = lstFoundEntries.Items.Count > 1 ? indx : -1;
+					lstFoundEntries.SelectedIndex = lstFoundEntries.Items.Count > indx - 1 ? indx : -1;
 				}
 			}
 

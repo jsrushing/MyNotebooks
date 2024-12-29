@@ -76,7 +76,6 @@ namespace MyNotebooks.subforms
 			preserveOriginalTextToolStripMenuItem = new ToolStripMenuItem();
 			editOriginalTextToolStripMenuItem = new ToolStripMenuItem();
 			mnuDeleteEntry = new ToolStripMenuItem();
-			lstLabelsForSearch = new CheckedListBox();
 			label17 = new Label();
 			rtbSelectedEntry_Found = new RichTextBox();
 			lblSelectionType = new Label();
@@ -85,6 +84,7 @@ namespace MyNotebooks.subforms
 			bgWorker = new BackgroundWorker();
 			label1 = new Label();
 			ddlNbsToSearch = new ComboBox();
+			clbLabelsInNotebooks = new CheckedListBox();
 			grpFindEntry.SuspendLayout();
 			panel5.SuspendLayout();
 			panel4.SuspendLayout();
@@ -98,6 +98,7 @@ namespace MyNotebooks.subforms
 			// grpFindEntry
 			// 
 			grpFindEntry.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+			grpFindEntry.Controls.Add(clbLabelsInNotebooks);
 			grpFindEntry.Controls.Add(panel5);
 			grpFindEntry.Controls.Add(panel4);
 			grpFindEntry.Controls.Add(panel3);
@@ -109,7 +110,6 @@ namespace MyNotebooks.subforms
 			grpFindEntry.Controls.Add(pnlLabels_AndOr);
 			grpFindEntry.Controls.Add(lblSeparator);
 			grpFindEntry.Controls.Add(lstFoundEntries);
-			grpFindEntry.Controls.Add(lstLabelsForSearch);
 			grpFindEntry.Controls.Add(label17);
 			grpFindEntry.Controls.Add(rtbSelectedEntry_Found);
 			grpFindEntry.Controls.Add(lblSelectionType);
@@ -180,7 +180,7 @@ namespace MyNotebooks.subforms
 			// label8
 			// 
 			label8.AutoSize = true;
-			label8.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			label8.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
 			label8.ForeColor = System.Drawing.SystemColors.MenuHighlight;
 			label8.Location = new System.Drawing.Point(6, 23);
 			label8.Name = "label8";
@@ -191,7 +191,7 @@ namespace MyNotebooks.subforms
 			// label9
 			// 
 			label9.AutoSize = true;
-			label9.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			label9.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
 			label9.ForeColor = System.Drawing.SystemColors.MenuHighlight;
 			label9.Location = new System.Drawing.Point(8, 66);
 			label9.Name = "label9";
@@ -482,7 +482,7 @@ namespace MyNotebooks.subforms
 			// 
 			lblSeparator.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
 			lblSeparator.Cursor = Cursors.HSplit;
-			lblSeparator.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			lblSeparator.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
 			lblSeparator.ForeColor = System.Drawing.Color.Red;
 			lblSeparator.Location = new System.Drawing.Point(111, 382);
 			lblSeparator.Name = "lblSeparator";
@@ -542,20 +542,10 @@ namespace MyNotebooks.subforms
 			mnuDeleteEntry.Text = "Delete";
 			mnuDeleteEntry.Click += this.mnuDeleteEntry_Click;
 			// 
-			// lstLabelsForSearch
-			// 
-			lstLabelsForSearch.CheckOnClick = true;
-			lstLabelsForSearch.FormattingEnabled = true;
-			lstLabelsForSearch.IntegralHeight = false;
-			lstLabelsForSearch.Location = new System.Drawing.Point(6, 30);
-			lstLabelsForSearch.Name = "lstLabelsForSearch";
-			lstLabelsForSearch.Size = new System.Drawing.Size(179, 158);
-			lstLabelsForSearch.TabIndex = 29;
-			// 
 			// label17
 			// 
 			label17.AutoSize = true;
-			label17.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			label17.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
 			label17.ForeColor = System.Drawing.SystemColors.MenuHighlight;
 			label17.Location = new System.Drawing.Point(3, 10);
 			label17.Name = "label17";
@@ -576,7 +566,7 @@ namespace MyNotebooks.subforms
 			// lblSelectionType
 			// 
 			lblSelectionType.AutoSize = true;
-			lblSelectionType.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			lblSelectionType.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
 			lblSelectionType.ForeColor = System.Drawing.SystemColors.MenuHighlight;
 			lblSelectionType.Location = new System.Drawing.Point(3, 388);
 			lblSelectionType.Name = "lblSelectionType";
@@ -628,9 +618,17 @@ namespace MyNotebooks.subforms
 			ddlNbsToSearch.FormattingEnabled = true;
 			ddlNbsToSearch.Location = new System.Drawing.Point(160, 5);
 			ddlNbsToSearch.Name = "ddlNbsToSearch";
-			ddlNbsToSearch.Size = new System.Drawing.Size(63, 23);
+			ddlNbsToSearch.Size = new System.Drawing.Size(189, 23);
 			ddlNbsToSearch.TabIndex = 60;
 			ddlNbsToSearch.SelectedIndexChanged += this.ddlNbsToSearch_SelectedIndexChanged;
+			// 
+			// clbLabelsInNotebooks
+			// 
+			clbLabelsInNotebooks.FormattingEnabled = true;
+			clbLabelsInNotebooks.Location = new System.Drawing.Point(6, 36);
+			clbLabelsInNotebooks.Name = "clbLabelsInNotebooks";
+			clbLabelsInNotebooks.Size = new System.Drawing.Size(171, 148);
+			clbLabelsInNotebooks.TabIndex = 60;
 			// 
 			// frmSearch
 			// 
@@ -673,7 +671,6 @@ namespace MyNotebooks.subforms
 		private ListBox lstFoundEntries;
 		private CheckBox chkUseDateRange;
 		private CheckBox chkUseDate;
-		private CheckedListBox lstLabelsForSearch;
 		private Label label17;
 		private DateTimePicker dtFindDate;
 		private TextBox txtSearchText;
@@ -719,5 +716,6 @@ namespace MyNotebooks.subforms
 		private RadioButton radioButton2;
 		private Label label1;
 		private ComboBox ddlNbsToSearch;
+		private CheckedListBox clbLabelsInNotebooks;
 	}
 }

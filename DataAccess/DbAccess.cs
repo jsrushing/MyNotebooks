@@ -5,10 +5,11 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
+//using System.Data.SqlClient;
 using System.Linq;
 using System.Security.Cryptography;
 using Encryption;
+using Microsoft.Data.SqlClient;
 using MyNotebooks.objects;
 using MyNotebooks.subforms;
 
@@ -427,7 +428,7 @@ namespace MyNotebooks.DataAccess
 
 		public static void			PopulateLabelsInAllNotebooks()
 		{
-			DataTable dt = new DataTable();
+			//DataTable dt = new DataTable();
 			Program.LblsInAllNotebooks.Clear();
 
 			try
@@ -474,6 +475,34 @@ namespace MyNotebooks.DataAccess
 					}
 				}
 			}
+
+			return lstRtrn;
+		}
+
+		public static List<string> GetLabelsForNotebook(int notebookId)
+		{
+			List<string> lstRtrn = new();
+
+			try
+			{
+				using (SqlConnection conn = new(connString))
+				{
+					conn.Open();
+					using (SqlCommand cmd = new("sp_GetLabelsForNotebook", conn))
+					{
+						cmd.CommandType = CommandType.StoredProcedure;
+						cmd.Parameters.AddWithValue("@notebookId", notebookId);
+
+						using SqlDataReader reader = cmd.ExecuteReader();
+						{
+							while (reader.Read())
+							{ lstRtrn.Add(reader.GetString(0)); }
+						}
+					}
+				}
+
+			}
+			catch (Exception ex) { }
 
 			return lstRtrn;
 		}
