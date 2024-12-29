@@ -28,6 +28,7 @@ namespace MyNotebooks
 		public static List<string>	AzureNotebookNames		= new List<string>();
 		public static List<string>	AzureRenameCommands		= new List<string>();
 		public static List<string>	AzurePinFileNames		= new List<string>();
+		public static string		ConnectionString		= string.Empty;
 		public static BackgroundWorker BgWorker				= new();
 		public static string		GroupsFolder			= Program.AppRoot + "groups\\";
 

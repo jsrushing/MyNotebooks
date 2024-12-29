@@ -99,6 +99,7 @@ namespace MyNotebooks.subforms
 			foreach(string nbName in NbsToSearch)
 			{
 				ddlNbsToSearch.Items.Add(nbName);
+
 				lbls.AddRange(DbAccess.GetLabelsForNotebook
 					(Program.AllNotebooks.Where(nb => nb.Name == nbName).FirstOrDefault().Id)
 					.Except(lbls).ToList());

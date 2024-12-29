@@ -261,6 +261,8 @@ namespace MyNotebooks.subforms
 			this.Text = fvi.ProductName + " " + Program.AppVersion + (fvi.FileName.ToLower().Contains("debug") ? " - DEBUG MODE" : "");
 			ShowHideMenusAndControls(SelectionState.HideAll);
 			Program.User.Id = 1000;
+			Program.ConnectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\js_ru\\source\\repos\\MyNotebooks\\localMyNotebooksDb" +
+				(fvi.FileName.ToLower().Contains("debug") ? "_DEV" : "") + ".mdf; Integrated Security = True"; ;
 		}
 
 		private void		frmMain_Resize(object sender, EventArgs e)
