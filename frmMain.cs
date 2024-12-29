@@ -858,7 +858,8 @@ namespace MyNotebooks.subforms
 
 		private void		PromptForBackup()
 		{
-			frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Would you like to back up '" + CurrentNotebook.Name +"'?       ", "Backup Notebook?", this);
+			frmMessage frm = new frmMessage(frmMessage.OperationType.YesNoQuestion, "Would you like to back up '" + 
+				CurrentNotebook.Name +"'?", "Backup Notebook?", this);
 			frm.ShowDialog();
 			if (frm.Result == frmMessage.ReturnResult.Yes) { mnuNotebook_Print_Click(mnuNotebook_Backups_CreateJSON, null); }
 		}
