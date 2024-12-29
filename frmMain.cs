@@ -158,9 +158,10 @@
 			011 Recreate a notebook from a backup
 				Done 12/25/24
 			011a Serialize notebook for 'Save to Disk'. Output JSON.
-				Done 12/24/24
 				Enhanced: Added both JSON and plain text outputs. 12/25/24
-			011b Handle restored notebook. ** INCOMPLETE **
+				Done 12/24/24
+			011b Handle restored notebook.
+				Done 12/28/24
 
  */
 using System;
@@ -428,9 +429,10 @@ namespace MyNotebooks.subforms
 
 		private string		GetUniqueNotebookName(string proposedNbName)
 		{
-			while(Program.AllNotebookNames.Contains(proposedNbName))
+			while(Program.AllNotebooks.Select(n => n.Name).Contains(proposedNbName))
 			{
-				using (frmMessage frm = new(frmMessage.OperationType.InputBox, "The notebook '" + proposedNbName + "' already exists. You must provide a unique name.", proposedNbName, this))
+				using (frmMessage frm = new(frmMessage.OperationType.InputBox, "The notebook '" + 
+					proposedNbName + "' already exists." + Environment.NewLine + "You must provide a unique name.", proposedNbName + "(2)", this))
 				{
 					frm.ShowDialog();
 					proposedNbName = frm.ResultText;
@@ -744,15 +746,18 @@ namespace MyNotebooks.subforms
 
 				if (nb != null) 
 				{
-					nb.Name = GetUniqueNotebookName(Path.GetFileName(fname) + "_restored");
-					nb.Id = 0;
-					await nb.Create(this);
-					LoadNotebooks();
-					//ddlNotebooks.DroppedDown = true;
+					nb.Name = GetUniqueNotebookName(Path.GetFileName(fname.Substring(0, fname.IndexOf("."))) + "-restored");
+					if(nb.Name != null)
+					{
+						nb.Id = 0;
+						await nb.Create(this);
+						LoadNotebooks();
+						ddlNotebooks.SelectedIndex = ddlNotebooks.Items.Count - 1;
+					}
 				}
 			}
 			catch (Exception ex)
-			{ GenerateMesssage("An Error Occurred", ex); }
+			{ GenerateMesssage("An Error Occurred.", ex); }
 		}
 
 		private void		mnuNotebook_Search_Click(object sender, EventArgs e)

@@ -163,7 +163,7 @@ namespace MyNotebooks.DataAccess
 					GetSqlReturn(ref rtrn, cmd);
 				}
 
-				if(opType == OperationType.Create && nb.Entries.Count > 0)	// Creating a restored notebook. See enhancement 011a.
+				if(opType == OperationType.Create && nb.Entries.Count > 0)	// Creating a restored notebook. See enhancement 011b.
 				{
 					foreach (var entry in nb.Entries)
 					{
