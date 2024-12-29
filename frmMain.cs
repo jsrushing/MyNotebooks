@@ -127,6 +127,9 @@
 				Change primary keys in Labels, Groups, Departments, and Accounts from (Id & ParentId) to (<text val> & ParentId).
 				Chaange primary key in NotebookEntries from (Id) to (ParentId & Title).
 
+		12/28/24
+			005 SEARCH SEARCH SEARCH!
+
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	enhancements:
 		07/14/22 001x Add date selection for shown entries (e.g. last <x> days)
