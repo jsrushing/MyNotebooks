@@ -25,7 +25,7 @@ namespace MyNotebooks.objects
 
 		public string			searchTitle { get; set; }
 		public string			searchText { get; set; }
-		public List<MNLabel>	labelsForSearch { get; set; }
+		public List<string>		labelsForSearch { get; set; }
 		//public string[]	labelsArray { get; set; }
 
 
@@ -33,7 +33,7 @@ namespace MyNotebooks.objects
 			DateTimePicker _dtFindDate_From, DateTimePicker _dtFindDate_To
 			, RadioButton _radDateAnd, RadioButton _radLabelsAnd, RadioButton _radTitleTextAnd, RadioButton _radTitleAnd
 			, string _searchTitle, string _searchText
-			, List<MNLabel> _labels)	// string[] _labelsArray)
+			, List<string> _labels)	// string[] _labelsArray)
 		{
 			chkUseDate			= _chkUseDate;
 			chkUseDateRange		= _chkUseDateRange;

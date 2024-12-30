@@ -36,6 +36,7 @@ namespace MyNotebooks.subforms
 			components = new Container();
 			ComponentResourceManager resources = new ComponentResourceManager(typeof(frmSearch));
 			grpFindEntry = new GroupBox();
+			clbLabelsInNotebooks = new CheckedListBox();
 			panel5 = new Panel();
 			radTitleText_Or = new RadioButton();
 			radTitleText_And = new RadioButton();
@@ -79,12 +80,12 @@ namespace MyNotebooks.subforms
 			label17 = new Label();
 			rtbSelectedEntry_Found = new RichTextBox();
 			lblSelectionType = new Label();
+			label3 = new Label();
 			ccbNotebooks = new CheckedComboBox();
 			mnuEditEntry = new ToolStripMenuItem();
 			bgWorker = new BackgroundWorker();
 			label1 = new Label();
 			ddlNbsToSearch = new ComboBox();
-			clbLabelsInNotebooks = new CheckedListBox();
 			grpFindEntry.SuspendLayout();
 			panel5.SuspendLayout();
 			panel4.SuspendLayout();
@@ -113,11 +114,22 @@ namespace MyNotebooks.subforms
 			grpFindEntry.Controls.Add(label17);
 			grpFindEntry.Controls.Add(rtbSelectedEntry_Found);
 			grpFindEntry.Controls.Add(lblSelectionType);
+			grpFindEntry.Controls.Add(label3);
 			grpFindEntry.Location = new System.Drawing.Point(16, 31);
 			grpFindEntry.Name = "grpFindEntry";
 			grpFindEntry.Size = new System.Drawing.Size(787, 638);
 			grpFindEntry.TabIndex = 7;
 			grpFindEntry.TabStop = false;
+			// 
+			// clbLabelsInNotebooks
+			// 
+			clbLabelsInNotebooks.CheckOnClick = true;
+			clbLabelsInNotebooks.FormattingEnabled = true;
+			clbLabelsInNotebooks.Location = new System.Drawing.Point(6, 34);
+			clbLabelsInNotebooks.Name = "clbLabelsInNotebooks";
+			clbLabelsInNotebooks.Size = new System.Drawing.Size(171, 148);
+			clbLabelsInNotebooks.TabIndex = 60;
+			clbLabelsInNotebooks.SelectedIndexChanged += this.clbLabelsInNotebooks_SelectedIndexChanged;
 			// 
 			// panel5
 			// 
@@ -451,7 +463,7 @@ namespace MyNotebooks.subforms
 			// 
 			pnlLabels_AndOr.Controls.Add(radLabels_Or);
 			pnlLabels_AndOr.Controls.Add(radLabels_And);
-			pnlLabels_AndOr.Location = new System.Drawing.Point(87, 5);
+			pnlLabels_AndOr.Location = new System.Drawing.Point(60, 6);
 			pnlLabels_AndOr.Name = "pnlLabels_AndOr";
 			pnlLabels_AndOr.Size = new System.Drawing.Size(90, 25);
 			pnlLabels_AndOr.TabIndex = 48;
@@ -473,9 +485,9 @@ namespace MyNotebooks.subforms
 			radLabels_And.AutoSize = true;
 			radLabels_And.Location = new System.Drawing.Point(39, 4);
 			radLabels_And.Name = "radLabels_And";
-			radLabels_And.Size = new System.Drawing.Size(45, 19);
+			radLabels_And.Size = new System.Drawing.Size(49, 19);
 			radLabels_And.TabIndex = 0;
-			radLabels_And.Text = "and";
+			radLabels_And.Text = "and)";
 			radLabels_And.UseVisualStyleBackColor = true;
 			// 
 			// lblSeparator
@@ -574,6 +586,15 @@ namespace MyNotebooks.subforms
 			lblSelectionType.TabIndex = 15;
 			lblSelectionType.Text = "Selected Entry";
 			// 
+			// label3
+			// 
+			label3.AutoSize = true;
+			label3.Location = new System.Drawing.Point(53, 11);
+			label3.Name = "label3";
+			label3.Size = new System.Drawing.Size(11, 15);
+			label3.TabIndex = 61;
+			label3.Text = "(";
+			// 
 			// ccbNotebooks
 			// 
 			ccbNotebooks.CheckOnClick = true;
@@ -621,14 +642,6 @@ namespace MyNotebooks.subforms
 			ddlNbsToSearch.Size = new System.Drawing.Size(189, 23);
 			ddlNbsToSearch.TabIndex = 60;
 			ddlNbsToSearch.SelectedIndexChanged += this.ddlNbsToSearch_SelectedIndexChanged;
-			// 
-			// clbLabelsInNotebooks
-			// 
-			clbLabelsInNotebooks.FormattingEnabled = true;
-			clbLabelsInNotebooks.Location = new System.Drawing.Point(6, 36);
-			clbLabelsInNotebooks.Name = "clbLabelsInNotebooks";
-			clbLabelsInNotebooks.Size = new System.Drawing.Size(171, 148);
-			clbLabelsInNotebooks.TabIndex = 60;
 			// 
 			// frmSearch
 			// 
@@ -717,5 +730,6 @@ namespace MyNotebooks.subforms
 		private Label label1;
 		private ComboBox ddlNbsToSearch;
 		private CheckedListBox clbLabelsInNotebooks;
+		private Label label3;
 	}
 }

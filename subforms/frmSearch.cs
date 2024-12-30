@@ -87,16 +87,16 @@ namespace MyNotebooks.subforms
 			if (NbsToSearch.Count == 0)
 			{
 				using (frmMessage frm2 = new frmMessage(frmMessage.OperationType.Message,
-					"At least one Notebook must be selected.", "Invalid Input", this)) 
-				{	
-					frm2.ShowDialog(); 
-					this.Close(); 
+					"At least one Notebook must be selected.", "Invalid Input", this))
+				{
+					frm2.ShowDialog();
+					this.Close();
 				}
 			}
 
 			List<string> lbls = new List<string>();
 
-			foreach(string nbName in NbsToSearch)
+			foreach (string nbName in NbsToSearch)
 			{
 				ddlNbsToSearch.Items.Add(nbName);
 
@@ -167,6 +167,13 @@ namespace MyNotebooks.subforms
 
 		private void chkUseDateRange_CheckedChanged(object sender, EventArgs e) { ToggleDateControls(false); }
 
+		private void clbLabelsInNotebooks_SelectedIndexChanged(object sender, EventArgs e) { btnSearch.Enabled = clbLabelsInNotebooks.CheckedItems.Count > 0; }
+
+		private void ddlNbsToSearch_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			ddlNbsToSearch.Text = string.Empty;
+		}
+
 		private async Task DoSearch()
 		{
 			//while (Worker.IsBusy) { Thread.Sleep(100); }
@@ -176,9 +183,13 @@ namespace MyNotebooks.subforms
 			List<Entry> entries = new();
 			List<Notebook> notebooks = new();
 
-			foreach (Notebook nb in Program.User.Notebooks)
+			foreach (string nbName in NbsToSearch)
 			{
-				foreach (Entry entry in nb.Entries)
+				Notebook nb = Program.AllNotebooks.Where(nb => nb.Name == nbName).FirstOrDefault();
+				nb.Entries = new();
+				nb.Entries.AddRange(DbAccess.GetEntriesInNotebook(nb.Id));
+
+				foreach (Entry entry in DbAccess.GetEntriesInNotebook(nb.Id))
 				{
 					SearchObject so = new SearchObject(
 						chkUseDate, chkUseDateRange, chkMatchCase, dtFindDate, dtFindDate_From, dtFindDate_To
@@ -233,11 +244,11 @@ namespace MyNotebooks.subforms
 			return vRtrn.AsSpan(0, vRtrn.Length - 1).ToString();
 		}
 
-		private List<MNLabel> GetCheckedLabels()
+		private List<string> GetCheckedLabels()
 		{
-			List<MNLabel> lblsToReturn = new();
+			List<string> lblsToReturn = new();
 
-			//foreach (ListItem li in lstLabelsForSearch.CheckedItems) { lblsToReturn.Add(new() { Id = li.Id, LabelText = li.Name }); }
+			foreach (string li in clbLabelsInNotebooks.CheckedItems) { lblsToReturn.Add(li); }
 
 			return lblsToReturn;
 
@@ -522,11 +533,6 @@ namespace MyNotebooks.subforms
 		private void ccbNotebooks_TextChanged(object sender, EventArgs e)
 		{
 			ccbNotebooks.Text = string.Empty;
-		}
-
-		private void ddlNbsToSearch_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			ddlNbsToSearch.Text = string.Empty;
 		}
 
 		//private void ccb_SelectedIndexChanged(object sender, EventArgs e)

@@ -298,7 +298,7 @@ namespace MyNotebooks
 			{ GenerateMesssage("An Error Occurred", ex); }
 		}
 
-		private List<Entry> ProcessLabels(List<Entry> entriesToSearch, List<MNLabel> labelsForSearch, bool UseAnd)
+		private List<Entry> ProcessLabels(List<Entry> entriesToSearch, List<string> labelsForSearch, bool UseAnd)
 		{
 			List<Entry> entriesToReturn = new();
 			var hasLabels = false;
@@ -310,7 +310,7 @@ namespace MyNotebooks
 					foreach (MNLabel label in entry.AllLabels)
 					{
 						if (labelsForSearch.Count > 0) 
-						{ hasLabels = labelsForSearch.Select(l => l.LabelText).ToArray().Intersect(entry.AllLabels.Select(l => l.LabelText)).Count() == labelsForSearch.Count; }
+						{ hasLabels = labelsForSearch.Intersect(entry.AllLabels.Select(l => l.LabelText)).Count() == labelsForSearch.Count; }
 						if(!hasLabels) break;
 					}
 
@@ -318,11 +318,9 @@ namespace MyNotebooks
 				}
 				else
 				{
-					if (labelsForSearch.Select(l => l.LabelText).ToArray().Intersect(entry.AllLabels.Select(l => l.LabelText)).Any()) { entriesToReturn.Add(entry); }
+					if (labelsForSearch.Intersect(entry.AllLabels.Select(l => l.LabelText)).Any()) { entriesToReturn.Add(entry); }
 				}
-
 			}
-
 			return entriesToReturn;
 		}
 

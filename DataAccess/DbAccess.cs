@@ -358,15 +358,15 @@ namespace MyNotebooks.DataAccess
 						SqlDataAdapter sda = new() { SelectCommand = cmd };
 						sda.Fill(ds);
 						DataTable tblEntries = ds.Tables[0];
-						DataTable tblLabels = ds.Tables[1];
+						//DataTable tblLabels = ds.Tables[1];
 						//List<MNLabel> labels = new();
 
 						for (int i = 0; i < tblEntries.Rows.Count; i++)
 						{
 							entry = new(tblEntries, i);
 
-							for (int i2 = 0; i2 < tblLabels.Rows.Count; i2++)
-							{ entry.AllLabels.Add(new(tblLabels, i2)); }
+							//for (int i2 = 0; i2 < tblLabels.Rows.Count; i2++)
+							//{ entry.AllLabels.Add(new(tblLabels, i2)); }
 
 							entries.Add(entry);
 						}
@@ -424,32 +424,6 @@ namespace MyNotebooks.DataAccess
 			}
 
 			return kvpRtrn;
-		}
-
-		public static void			PopulateLabelsInAllNotebooks()
-		{
-			//DataTable dt = new DataTable();
-			Program.LblsInAllNotebooks.Clear();
-
-			try
-			{
-				using (SqlConnection conn = new(Program.ConnectionString))
-				{
-					conn.Open();
-					using (SqlCommand cmd = new("sp_GetAllLabels", conn))
-					{
-						cmd.CommandType = CommandType.StoredProcedure;
-
-						using SqlDataReader reader = cmd.ExecuteReader();
-						{
-							while (reader.Read())
-							{ Program.LblsInAllNotebooks.Add(reader.GetString(0)); }
-						}
-					}
-				}
-
-			}
-			catch (Exception ex) { }
 		}
 
 		public static List<MNLabel> GetLabelsForEntry(int entryId)
@@ -599,6 +573,32 @@ namespace MyNotebooks.DataAccess
 			}
 
 			return nbRtrn;
+		}
+
+		public static void			PopulateLabelsInAllNotebooks()
+		{
+			//DataTable dt = new DataTable();
+			Program.LblsInAllNotebooks.Clear();
+
+			try
+			{
+				using (SqlConnection conn = new(Program.ConnectionString))
+				{
+					conn.Open();
+					using (SqlCommand cmd = new("sp_GetAllLabels", conn))
+					{
+						cmd.CommandType = CommandType.StoredProcedure;
+
+						using SqlDataReader reader = cmd.ExecuteReader();
+						{
+							while (reader.Read())
+							{ Program.LblsInAllNotebooks.Add(reader.GetString(0)); }
+						}
+					}
+				}
+
+			}
+			catch (Exception ex) { }
 		}
 
 		public static void			PopulateNotebooksByUserAndDescendants(bool getEntries)
