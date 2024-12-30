@@ -64,6 +64,9 @@
 		006 12/14/24 
 			Delete labels not working (frmLabelsManager.mnuDeleteLabels)
 
+		007 12/30/24
+			Prompt for 'Add new label to entry <entry>?' not tall enough, cuts off entry title on 2nd line.
+
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		toDo: ('x' = done)
 		07/07/22 001 EntryToEdit RTB formatting controls.
