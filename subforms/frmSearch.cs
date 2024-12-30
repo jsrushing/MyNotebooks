@@ -105,6 +105,7 @@ namespace MyNotebooks.subforms
 					.Except(lbls).ToList());
 			}
 
+			lbls.Sort();
 			clbLabelsInNotebooks.Items.AddRange(lbls.ToArray());
 		}
 

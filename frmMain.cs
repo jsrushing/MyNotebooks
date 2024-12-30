@@ -124,7 +124,7 @@
 
 		12/28/24
 			004 Db needs work.
-				Change primary keys in Labels, Groups, Departments, and Accounts from (Id & ParentId) to (<text val> & ParentId).
+				Change primary keys in Labels, Groups, Departments, and Accounts from (Id & ParentId) to (ParentId & <text val>).
 				Chaange primary key in NotebookEntries from (Id) to (ParentId & Title).
 
 		12/28/24
