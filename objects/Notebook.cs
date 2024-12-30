@@ -301,7 +301,6 @@ namespace MyNotebooks
 		private List<Entry> ProcessLabels(List<Entry> entriesToSearch, List<string> labelsForSearch, bool UseAnd)
 		{
 			List<Entry> entriesToReturn = new();
-			var hasLabels = false;
 
 			foreach (Entry entry in entriesToSearch)
 			{
@@ -309,18 +308,20 @@ namespace MyNotebooks
 				{
 					foreach (MNLabel label in entry.AllLabels)
 					{
-						if (labelsForSearch.Count > 0) 
-						{ hasLabels = labelsForSearch.Intersect(entry.AllLabels.Select(l => l.LabelText)).Count() == labelsForSearch.Count; }
-						if(!hasLabels) break;
+						if (labelsForSearch.Count > 0)
+						{
+							if (labelsForSearch.Intersect(entry.AllLabels.Select(l => l.LabelText)).Count() == labelsForSearch.Count && !entriesToReturn.Contains(entry)) 
+							{ entriesToReturn.Add(entry); }
+						}
 					}
-
-					if (hasLabels) { if (!entriesToReturn.Contains(entry)) { entriesToReturn.Add(entry); } }
 				}
 				else
 				{
 					if (labelsForSearch.Intersect(entry.AllLabels.Select(l => l.LabelText)).Any()) { entriesToReturn.Add(entry); }
 				}
+
 			}
+
 			return entriesToReturn;
 		}
 
