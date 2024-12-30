@@ -109,6 +109,15 @@ namespace MyNotebooks.subforms
 			clbLabelsInNotebooks.Items.AddRange(lbls.ToArray());
 		}
 
+		private void frmSearch_ResizeEnd(object sender, EventArgs e)
+		{
+			if (this.Height - 344 > 277)
+			{
+				lblSeparator.Top = this.Height - 344;
+				Utilities.ResizeListsAndRTBs(lstFoundEntries, rtbSelectedEntry_Found, lblSeparator, lblSelectionType, this);
+			}
+		}
+
 		//private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
 		//{
 		//	Program.User.Notebooks.Clear();
@@ -163,6 +172,35 @@ namespace MyNotebooks.subforms
 			}
 		}
 
+		private void ccb_ItemCheck(object sender, ItemCheckEventArgs e)
+		{
+			//this.Text = sender.ToString();  // this.Text == "whoo" ? "what?" : "whoo";
+
+			////MyNotebooks.objects.CheckedComboBox+Dropdown+CustomCheckedListBox 
+			////CheckedComboBox clb = (CheckedComboBox)sender;
+			//CheckedListBox clb = (CheckedListBox)sender;
+
+			//var v = clb.SelectedItem as ListViewItem;
+
+			//var v3 = clb.Items;
+
+			//var v4 = ccb.GetSelectedItem();
+
+
+			//if(v != null)
+			//{
+			//	foreach(ListViewItem item in clb.Items)
+			//	{
+			//		if (item.Checked) { }
+			//	}
+			//}
+		}
+
+		private void ccbNotebooks_TextChanged(object sender, EventArgs e)
+		{
+			ccbNotebooks.Text = string.Empty;
+		}
+
 		private void chkUseDate_CheckedChanged(object sender, EventArgs e) { ToggleDateControls(true); }
 
 		private void chkUseDateRange_CheckedChanged(object sender, EventArgs e) { ToggleDateControls(false); }
@@ -192,8 +230,8 @@ namespace MyNotebooks.subforms
 				foreach (Entry entry in DbAccess.GetEntriesInNotebook(nb.Id))
 				{
 					SearchObject so = new SearchObject(
-						chkUseDate, chkUseDateRange, chkMatchCase, dtFindDate, dtFindDate_From, dtFindDate_To
-						, radDate_And, radLabels_And, radTitleText_And, radTitle_And
+						chkUseDate, chkUseDateRange, chkMatchCase_Title, chkMatchCase_Text, dtFindDate, dtFindDate_From, dtFindDate_To
+						, radDate_And, radLabels_And, radTitle_And, radText_And
 						, txtSearchTitle.Text
 						, txtSearchText.Text, GetCheckedLabels());
 
@@ -247,14 +285,8 @@ namespace MyNotebooks.subforms
 		private List<string> GetCheckedLabels()
 		{
 			List<string> lblsToReturn = new();
-
 			foreach (string li in clbLabelsInNotebooks.CheckedItems) { lblsToReturn.Add(li); }
-
 			return lblsToReturn;
-
-			//string vRtrn = string.Empty;
-			//foreach (ListItem li in lstLabelsForSearch.CheckedItems) { vRtrn += li.Name + ","; }
-			//return vRtrn.AsSpan(0, vRtrn.Length - 1).ToString();
 		}
 
 		private void GetCurrentSelections()
@@ -384,7 +416,7 @@ namespace MyNotebooks.subforms
 			//}
 			txtSearchText.Text = string.Empty;
 			txtSearchTitle.Text = string.Empty;
-			chkMatchCase.Checked = false;
+			chkMatchCase_Title.Checked = false;
 			radTitleOr.Checked = true;
 			chkUseDate.Checked = false;
 			chkUseDateRange.Checked = false;
@@ -452,6 +484,11 @@ namespace MyNotebooks.subforms
 
 		private void mnuExit_Click(object sender, EventArgs e) { this.Hide(); }
 
+		private void SearchButtonEnableDisable(object sender, EventArgs e)
+		{
+			btnSearch.Enabled = txtSearchText.Text.Length > 0 | txtSearchTitle.Text.Length > 0 | clbLabelsInNotebooks.CheckedItems.Count > 0;
+		}
+
 		private void SelectEntry()
 		{
 			var indx = CurrentMouseOverIndex_lstEntries;
@@ -495,44 +532,6 @@ namespace MyNotebooks.subforms
 				}
 			}
 
-		}
-
-		private void ccb_ItemCheck(object sender, ItemCheckEventArgs e)
-		{
-			//this.Text = sender.ToString();  // this.Text == "whoo" ? "what?" : "whoo";
-
-			////MyNotebooks.objects.CheckedComboBox+Dropdown+CustomCheckedListBox 
-			////CheckedComboBox clb = (CheckedComboBox)sender;
-			//CheckedListBox clb = (CheckedListBox)sender;
-
-			//var v = clb.SelectedItem as ListViewItem;
-
-			//var v3 = clb.Items;
-
-			//var v4 = ccb.GetSelectedItem();
-
-
-			//if(v != null)
-			//{
-			//	foreach(ListViewItem item in clb.Items)
-			//	{
-			//		if (item.Checked) { }
-			//	}
-			//}
-		}
-
-		private void frmSearch_ResizeEnd(object sender, EventArgs e)
-		{
-			if (this.Height - 344 > 277)
-			{
-				lblSeparator.Top = this.Height - 344;
-				Utilities.ResizeListsAndRTBs(lstFoundEntries, rtbSelectedEntry_Found, lblSeparator, lblSelectionType, this);
-			}
-		}
-
-		private void ccbNotebooks_TextChanged(object sender, EventArgs e)
-		{
-			ccbNotebooks.Text = string.Empty;
 		}
 
 		//private void ccb_SelectedIndexChanged(object sender, EventArgs e)

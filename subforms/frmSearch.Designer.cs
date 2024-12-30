@@ -39,17 +39,16 @@ namespace MyNotebooks.subforms
 			clbLabelsInNotebooks = new CheckedListBox();
 			panel5 = new Panel();
 			radTitleText_Or = new RadioButton();
-			radTitleText_And = new RadioButton();
+			radTitle_And = new RadioButton();
 			panel4 = new Panel();
+			chkMatchCase_Text = new CheckBox();
 			txtSearchText = new TextBox();
 			label8 = new Label();
 			label9 = new Label();
 			txtSearchTitle = new TextBox();
 			radTitleOr = new RadioButton();
-			radTitle_And = new RadioButton();
-			chkMatchCase = new CheckBox();
-			chkMatchWholeWord = new CheckBox();
-			label2 = new Label();
+			radText_And = new RadioButton();
+			chkMatchCase_Title = new CheckBox();
 			panel3 = new Panel();
 			panel1 = new Panel();
 			radioButton1 = new RadioButton();
@@ -86,6 +85,7 @@ namespace MyNotebooks.subforms
 			bgWorker = new BackgroundWorker();
 			label1 = new Label();
 			ddlNbsToSearch = new ComboBox();
+			panel6 = new Panel();
 			grpFindEntry.SuspendLayout();
 			panel5.SuspendLayout();
 			panel4.SuspendLayout();
@@ -94,11 +94,13 @@ namespace MyNotebooks.subforms
 			panel2.SuspendLayout();
 			pnlLabels_AndOr.SuspendLayout();
 			mnuEntryEditTop.SuspendLayout();
+			panel6.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// grpFindEntry
 			// 
 			grpFindEntry.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+			grpFindEntry.Controls.Add(panel6);
 			grpFindEntry.Controls.Add(clbLabelsInNotebooks);
 			grpFindEntry.Controls.Add(panel5);
 			grpFindEntry.Controls.Add(panel4);
@@ -129,12 +131,12 @@ namespace MyNotebooks.subforms
 			clbLabelsInNotebooks.Name = "clbLabelsInNotebooks";
 			clbLabelsInNotebooks.Size = new System.Drawing.Size(171, 148);
 			clbLabelsInNotebooks.TabIndex = 60;
-			clbLabelsInNotebooks.SelectedIndexChanged += this.clbLabelsInNotebooks_SelectedIndexChanged;
+			clbLabelsInNotebooks.SelectedIndexChanged += this.SearchButtonEnableDisable;
 			// 
 			// panel5
 			// 
 			panel5.Controls.Add(radTitleText_Or);
-			panel5.Controls.Add(radTitleText_And);
+			panel5.Controls.Add(radTitle_And);
 			panel5.Location = new System.Drawing.Point(188, 24);
 			panel5.Name = "panel5";
 			panel5.Size = new System.Drawing.Size(90, 25);
@@ -152,49 +154,56 @@ namespace MyNotebooks.subforms
 			radTitleText_Or.Text = "or";
 			radTitleText_Or.UseVisualStyleBackColor = true;
 			// 
-			// radTitleText_And
+			// radText_And
 			// 
-			radTitleText_And.AutoSize = true;
-			radTitleText_And.Location = new System.Drawing.Point(39, 4);
-			radTitleText_And.Name = "radTitleText_And";
-			radTitleText_And.Size = new System.Drawing.Size(45, 19);
-			radTitleText_And.TabIndex = 0;
-			radTitleText_And.Text = "and";
-			radTitleText_And.UseVisualStyleBackColor = true;
+			radTitle_And.AutoSize = true;
+			radTitle_And.Location = new System.Drawing.Point(39, 4);
+			radTitle_And.Name = "radText_And";
+			radTitle_And.Size = new System.Drawing.Size(45, 19);
+			radTitle_And.TabIndex = 0;
+			radTitle_And.Text = "and";
+			radTitle_And.UseVisualStyleBackColor = true;
 			// 
 			// panel4
 			// 
 			panel4.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
 			panel4.BorderStyle = BorderStyle.FixedSingle;
+			panel4.Controls.Add(chkMatchCase_Text);
 			panel4.Controls.Add(txtSearchText);
 			panel4.Controls.Add(label8);
 			panel4.Controls.Add(label9);
 			panel4.Controls.Add(txtSearchTitle);
-			panel4.Controls.Add(radTitleOr);
-			panel4.Controls.Add(radTitle_And);
-			panel4.Controls.Add(chkMatchCase);
-			panel4.Controls.Add(chkMatchWholeWord);
-			panel4.Controls.Add(label2);
+			panel4.Controls.Add(chkMatchCase_Title);
 			panel4.Location = new System.Drawing.Point(191, 35);
 			panel4.Name = "panel4";
 			panel4.Size = new System.Drawing.Size(584, 94);
 			panel4.TabIndex = 57;
 			// 
+			// chkMatchCase_Text
+			// 
+			chkMatchCase_Text.AutoSize = true;
+			chkMatchCase_Text.Location = new System.Drawing.Point(315, 45);
+			chkMatchCase_Text.Name = "chkMatchCase_Text";
+			chkMatchCase_Text.Size = new System.Drawing.Size(112, 19);
+			chkMatchCase_Text.TabIndex = 39;
+			chkMatchCase_Text.Text = "match case, text";
+			// 
 			// txtSearchText
 			// 
 			txtSearchText.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
 			txtSearchText.BorderStyle = BorderStyle.FixedSingle;
-			txtSearchText.Location = new System.Drawing.Point(49, 64);
+			txtSearchText.Location = new System.Drawing.Point(49, 66);
 			txtSearchText.Name = "txtSearchText";
 			txtSearchText.Size = new System.Drawing.Size(516, 23);
 			txtSearchText.TabIndex = 22;
+			txtSearchText.TextChanged += this.SearchButtonEnableDisable;
 			// 
 			// label8
 			// 
 			label8.AutoSize = true;
 			label8.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
 			label8.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			label8.Location = new System.Drawing.Point(6, 23);
+			label8.Location = new System.Drawing.Point(6, 21);
 			label8.Name = "label8";
 			label8.Size = new System.Drawing.Size(40, 17);
 			label8.TabIndex = 2;
@@ -205,7 +214,7 @@ namespace MyNotebooks.subforms
 			label9.AutoSize = true;
 			label9.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
 			label9.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			label9.Location = new System.Drawing.Point(8, 66);
+			label9.Location = new System.Drawing.Point(8, 68);
 			label9.Name = "label9";
 			label9.Size = new System.Drawing.Size(38, 17);
 			label9.TabIndex = 3;
@@ -215,16 +224,17 @@ namespace MyNotebooks.subforms
 			// 
 			txtSearchTitle.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
 			txtSearchTitle.BorderStyle = BorderStyle.FixedSingle;
-			txtSearchTitle.Location = new System.Drawing.Point(49, 20);
+			txtSearchTitle.Location = new System.Drawing.Point(49, 18);
 			txtSearchTitle.Name = "txtSearchTitle";
 			txtSearchTitle.Size = new System.Drawing.Size(516, 23);
 			txtSearchTitle.TabIndex = 21;
+			txtSearchTitle.TextChanged += this.SearchButtonEnableDisable;
 			// 
 			// radTitleOr
 			// 
 			radTitleOr.AutoSize = true;
 			radTitleOr.Checked = true;
-			radTitleOr.Location = new System.Drawing.Point(81, 44);
+			radTitleOr.Location = new System.Drawing.Point(3, 3);
 			radTitleOr.Name = "radTitleOr";
 			radTitleOr.Size = new System.Drawing.Size(36, 19);
 			radTitleOr.TabIndex = 35;
@@ -232,43 +242,24 @@ namespace MyNotebooks.subforms
 			radTitleOr.Text = "or";
 			radTitleOr.UseVisualStyleBackColor = true;
 			// 
-			// radTitle_And
+			// radText_And
 			// 
-			radTitle_And.AutoSize = true;
-			radTitle_And.Location = new System.Drawing.Point(119, 44);
-			radTitle_And.Name = "radTitle_And";
-			radTitle_And.Size = new System.Drawing.Size(45, 19);
-			radTitle_And.TabIndex = 36;
-			radTitle_And.Text = "and";
-			radTitle_And.UseVisualStyleBackColor = true;
+			radText_And.AutoSize = true;
+			radText_And.Location = new System.Drawing.Point(41, 3);
+			radText_And.Name = "radText_And";
+			radText_And.Size = new System.Drawing.Size(45, 19);
+			radText_And.TabIndex = 36;
+			radText_And.Text = "and";
+			radText_And.UseVisualStyleBackColor = true;
 			// 
-			// chkMatchCase
+			// chkMatchCase_Title
 			// 
-			chkMatchCase.AutoSize = true;
-			chkMatchCase.Location = new System.Drawing.Point(227, 44);
-			chkMatchCase.Name = "chkMatchCase";
-			chkMatchCase.Size = new System.Drawing.Size(49, 19);
-			chkMatchCase.TabIndex = 38;
-			chkMatchCase.Text = "case";
-			// 
-			// chkMatchWholeWord
-			// 
-			chkMatchWholeWord.AutoSize = true;
-			chkMatchWholeWord.Location = new System.Drawing.Point(279, 44);
-			chkMatchWholeWord.Name = "chkMatchWholeWord";
-			chkMatchWholeWord.Size = new System.Drawing.Size(88, 19);
-			chkMatchWholeWord.TabIndex = 41;
-			chkMatchWholeWord.Text = "whole word";
-			chkMatchWholeWord.UseVisualStyleBackColor = true;
-			// 
-			// label2
-			// 
-			label2.AutoSize = true;
-			label2.Location = new System.Drawing.Point(178, 46);
-			label2.Name = "label2";
-			label2.Size = new System.Drawing.Size(47, 15);
-			label2.TabIndex = 42;
-			label2.Text = "match: ";
+			chkMatchCase_Title.AutoSize = true;
+			chkMatchCase_Title.Location = new System.Drawing.Point(180, 45);
+			chkMatchCase_Title.Name = "chkMatchCase_Title";
+			chkMatchCase_Title.Size = new System.Drawing.Size(112, 19);
+			chkMatchCase_Title.TabIndex = 38;
+			chkMatchCase_Title.Text = "match case, title";
 			// 
 			// panel3
 			// 
@@ -643,6 +634,15 @@ namespace MyNotebooks.subforms
 			ddlNbsToSearch.TabIndex = 60;
 			ddlNbsToSearch.SelectedIndexChanged += this.ddlNbsToSearch_SelectedIndexChanged;
 			// 
+			// panel6
+			// 
+			panel6.Controls.Add(radText_And);
+			panel6.Controls.Add(radTitleOr);
+			panel6.Location = new System.Drawing.Point(188, 77);
+			panel6.Name = "panel6";
+			panel6.Size = new System.Drawing.Size(90, 25);
+			panel6.TabIndex = 40;
+			// 
 			// frmSearch
 			// 
 			AcceptButton = btnSearch;
@@ -674,6 +674,8 @@ namespace MyNotebooks.subforms
 			pnlLabels_AndOr.ResumeLayout(false);
 			pnlLabels_AndOr.PerformLayout();
 			mnuEntryEditTop.ResumeLayout(false);
+			panel6.ResumeLayout(false);
+			panel6.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
@@ -695,12 +697,10 @@ namespace MyNotebooks.subforms
 		private Label label9;
 		private Label lblSelectionType;
 		private Label label8;
-		private RadioButton radTitle_And;
+		private RadioButton radText_And;
 		private RadioButton radTitleOr;
 		private Label lblSeparator;
-		private CheckBox chkMatchCase;
-		private Label label2;
-		private CheckBox chkMatchWholeWord;
+		private CheckBox chkMatchCase_Title;
 		private Button btnSearch;
 		private RadioButton radLabels_Or;
 		private RadioButton radLabels_And;
@@ -722,7 +722,7 @@ namespace MyNotebooks.subforms
 		private Panel panel2;
 		private Panel panel5;
 		private RadioButton radTitleText_Or;
-		private RadioButton radTitleText_And;
+		private RadioButton radTitle_And;
 		private Panel panel4;
 		private Panel panel1;
 		private RadioButton radioButton1;
@@ -731,5 +731,7 @@ namespace MyNotebooks.subforms
 		private ComboBox ddlNbsToSearch;
 		private CheckedListBox clbLabelsInNotebooks;
 		private Label label3;
+		private CheckBox chkMatchCase_Text;
+		private Panel panel6;
 	}
 }
