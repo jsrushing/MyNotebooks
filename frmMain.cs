@@ -129,6 +129,7 @@
 
 		12/28/24
 			005 SEARCH SEARCH SEARCH!
+				ALSO: Start using dev db. - DONE 12/28/24
 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	enhancements:
@@ -262,7 +263,7 @@ namespace MyNotebooks.subforms
 			ShowHideMenusAndControls(SelectionState.HideAll);
 			Program.User.Id = 1000;
 			Program.ConnectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\js_ru\\source\\repos\\MyNotebooks\\localMyNotebooksDb" +
-				(fvi.FileName.ToLower().Contains("debug") ? "_DEV" : "") + ".mdf; Integrated Security = True"; ;
+				(fvi.FileName.ToLower().Contains("debug") ? "_DEV" : "") + ".mdf; Integrated Security = True";
 		}
 
 		private void		frmMain_Resize(object sender, EventArgs e)
