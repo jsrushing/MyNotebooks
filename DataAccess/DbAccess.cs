@@ -500,7 +500,6 @@ namespace MyNotebooks.DataAccess
 						}
 					}
 				}
-
 			}
 			catch (Exception ex) { }
 

@@ -93,11 +93,11 @@ namespace MyNotebooks.subforms
 			var vNb = checkedLabels.Where(n => n.Parent.Index == 1).ToList().Select(n => n.Text).ToList();
 			var vAllNbs = checkedLabels.Where(n => n.Parent.Index == 2).ToList().Select(n => n.Text).ToList();
 
-			foreach(var node in vE)
-			{
-				// get the entry id from its title and its notebook.
+			//foreach(var node in vE)
+			//{
+			//	// get the entry id from its title and its notebook.
 
-			}
+			//}
 
 		}
 
@@ -433,19 +433,9 @@ namespace MyNotebooks.subforms
 
 						if (CurrentEntry != null)
 						{
-							//msg = "Would you like to add the label '" + frm.ResultText + "' to the entry " + Environment.NewLine + "'" + CurrentEntry.Title + "'?";
-
-							//using (frmMessage frm2 = new(frmMessage.OperationType.YesNoQuestion, msg, "All Label to Entry?", this))
-							//{
-								//frm2.ShowDialog(this);
-
-								//if (frm2.Result == frmMessage.ReturnResult.Yes)
-								//{
-									treeAvailableLabels.Nodes[2].Nodes[treeAvailableLabels.Nodes[2].Nodes.Count - 1].Checked = true;
-									mnuAddToCurrentEntry_Click(null, null);
-									treeAvailableLabels.Nodes[2].Nodes[treeAvailableLabels.Nodes[2].Nodes.Count - 1].Checked = false;
-								//}
-							//}
+							treeAvailableLabels.Nodes[2].Nodes[treeAvailableLabels.Nodes[2].Nodes.Count - 1].Checked = true;
+							mnuAddToCurrentEntry_Click(null, null);
+							treeAvailableLabels.Nodes[2].Nodes[treeAvailableLabels.Nodes[2].Nodes.Count - 1].Checked = false;
 						}
 					}
 				}
