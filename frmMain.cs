@@ -63,10 +63,12 @@
 
 		006 12/14/24 
 			Delete labels not working (frmLabelsManager.mnuDeleteLabels)
+			Also look at Labels operation in general, specifically launching frmLabelsMgr with no nb or entry selected.
 
-		007 12/30/24
+		007x 12/30/24
 			Prompt for 'Add new label to entry <entry>?' not tall enough, cuts off entry title on 2nd line.
 				Stop prompting, just add the new label to the entry.
+			Done 12/30/24
 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		toDo: ('x' = done)
