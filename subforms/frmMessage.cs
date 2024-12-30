@@ -71,9 +71,9 @@ namespace MyNotebooks.subforms
 			}
 
 			lblMessage.Text = msg;
-			//////msg = msg.Replace("\\n", "  ");
 			var lineLength = 80;
 			lblMessage.Height = (int)Math.Ceiling((double)msg.Length / lineLength) <= 1 ? 25 : 25 * ((int)Math.Ceiling((double)msg.Length / lineLength));
+			if(msg.IndexOf(Environment.NewLine) > -1) { lblMessage.Height += 25; }
 			lblSelectFromLabelsList.Visible = false;
 
 			//if (msg.Length > 45) { lblMessage.Height += 20; }

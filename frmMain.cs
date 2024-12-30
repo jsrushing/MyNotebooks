@@ -66,6 +66,7 @@
 
 		007 12/30/24
 			Prompt for 'Add new label to entry <entry>?' not tall enough, cuts off entry title on 2nd line.
+				Stop prompting, just add the new label to the entry.
 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		toDo: ('x' = done)
@@ -171,9 +172,6 @@
 				Done 12/24/24
 			011b Handle restored notebook.
 				Done 12/28/24
-
-		12/28/24
-			012 Stop prompting to 'add (newly created) label to <entry>?'. Just add it.
 
  */
 using System;

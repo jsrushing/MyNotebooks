@@ -433,19 +433,19 @@ namespace MyNotebooks.subforms
 
 						if (CurrentEntry != null)
 						{
-							msg = "Would you like to add the label '" + frm.ResultText + "' to the entry " + Environment.NewLine + "'" + CurrentEntry.Title + "'?";
+							//msg = "Would you like to add the label '" + frm.ResultText + "' to the entry " + Environment.NewLine + "'" + CurrentEntry.Title + "'?";
 
-							using (frmMessage frm2 = new(frmMessage.OperationType.YesNoQuestion, msg, "All Label to Entry?"))
-							{
-								frm2.ShowDialog(this);
+							//using (frmMessage frm2 = new(frmMessage.OperationType.YesNoQuestion, msg, "All Label to Entry?", this))
+							//{
+								//frm2.ShowDialog(this);
 
-								if (frm2.Result == frmMessage.ReturnResult.Yes)
-								{
+								//if (frm2.Result == frmMessage.ReturnResult.Yes)
+								//{
 									treeAvailableLabels.Nodes[2].Nodes[treeAvailableLabels.Nodes[2].Nodes.Count - 1].Checked = true;
 									mnuAddToCurrentEntry_Click(null, null);
 									treeAvailableLabels.Nodes[2].Nodes[treeAvailableLabels.Nodes[2].Nodes.Count - 1].Checked = false;
-								}
-							}
+								//}
+							//}
 						}
 					}
 				}
