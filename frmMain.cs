@@ -128,11 +128,12 @@
 
 		12/28/24
 			004 Db needs work.
-				Change primary keys in Labels, Groups, Departments, and Accounts from (Id & ParentId) to (<text val> & ParentId).
+				Change primary keys in Labels, Groups, Departments, and Accounts from (Id & ParentId) to (ParentId & <text val>).
 				Chaange primary key in NotebookEntries from (Id) to (ParentId & Title).
 
 		12/28/24
 			005 SEARCH SEARCH SEARCH!
+				ALSO: Start using dev db. - DONE 12/28/24
 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	enhancements:
@@ -261,6 +262,8 @@ namespace MyNotebooks.subforms
 			this.Text = fvi.ProductName + " " + Program.AppVersion + (fvi.FileName.ToLower().Contains("debug") ? " - DEBUG MODE" : "");
 			ShowHideMenusAndControls(SelectionState.HideAll);
 			Program.User.Id = 1000;
+			Program.ConnectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\js_ru\\source\\repos\\MyNotebooks\\localMyNotebooksDb" +
+				(fvi.FileName.ToLower().Contains("debug") ? "_DEV" : "") + ".mdf; Integrated Security = True";
 		}
 
 		private void		frmMain_Resize(object sender, EventArgs e)

@@ -5,10 +5,11 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
+//using System.Data.SqlClient;
 using System.Linq;
 using System.Security.Cryptography;
 using Encryption;
+using Microsoft.Data.SqlClient;
 using MyNotebooks.objects;
 using MyNotebooks.subforms;
 
@@ -21,7 +22,7 @@ namespace MyNotebooks.DataAccess
 	{
 		//private static string connString = "Server=mynotebooksserver.database.windows.net;Database=MyNotebooks;user id=mydb_admin;password=cloud_Bringer1!";
 		//private static string connString = "Server=FORRESTSTNW;Database=MyNotebooks;Trusted_Connection = true";
-		private static string connString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\js_ru\\source\\repos\\MyNotebooks\\localMyNotebooksDb.mdf;Integrated Security=True";
+		//private static string connString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\js_ru\\source\\repos\\MyNotebooks\\localMyNotebooksDb.mdf;Integrated Security=True";
 
 		public static SQLResult		CRUDLabel(MNLabel label, OperationType opType = OperationType.Create)
 		{
@@ -29,7 +30,7 @@ namespace MyNotebooks.DataAccess
 
 			try
 			{
-				using (SqlConnection conn = new(connString))
+				using (SqlConnection conn = new(Program.ConnectionString))
 				{
 					conn.Open();
 					using (SqlCommand cmd = new("sp_CRUD_Label", conn))
@@ -56,7 +57,7 @@ namespace MyNotebooks.DataAccess
 
 			try
 			{
-				using (SqlConnection conn = new(connString))
+				using (SqlConnection conn = new(Program.ConnectionString))
 				{
 					conn.Open();
 					using (SqlCommand cmd = new SqlCommand("sp_CRUD_User", conn))
@@ -83,7 +84,7 @@ namespace MyNotebooks.DataAccess
 		{
 			var bRtrn = false;
 
-			using (SqlConnection conn = new(connString))
+			using (SqlConnection conn = new(Program.ConnectionString))
 			{
 				conn.Open();
 
@@ -118,7 +119,7 @@ namespace MyNotebooks.DataAccess
 
 			try
 			{
-				using (SqlConnection conn = new(connString))
+				using (SqlConnection conn = new(Program.ConnectionString))
 				{
 					conn.Open();
 					using (SqlCommand cmd = new SqlCommand("sp_CRUD_UserPermissions", conn))
@@ -145,7 +146,7 @@ namespace MyNotebooks.DataAccess
 		{
 			SQLResult rtrn = new();
 
-			using (SqlConnection conn = new(connString))
+			using (SqlConnection conn = new(Program.ConnectionString))
 			{
 				conn.Open();
 
@@ -180,7 +181,7 @@ namespace MyNotebooks.DataAccess
 		{
 			SQLResult rtrn = new();
 
-			using (SqlConnection conn = new(connString))
+			using (SqlConnection conn = new(Program.ConnectionString))
 			{
 				conn.Open();
 
@@ -215,7 +216,7 @@ namespace MyNotebooks.DataAccess
 
 			try
 			{
-				using (SqlConnection conn = new(connString))
+				using (SqlConnection conn = new(Program.ConnectionString))
 				{
 					conn.Open();
 					using (SqlCommand cmd = new SqlCommand("sp_CRUD_OrgLevel", conn))
@@ -240,7 +241,7 @@ namespace MyNotebooks.DataAccess
 		{
 			List<string> list = new();
 
-			using (SqlConnection conn = new(connString))
+			using (SqlConnection conn = new(Program.ConnectionString))
 			{
 				conn.Open();
 				using (SqlCommand cmd = new("sp_GetAccessLevels", conn))
@@ -262,7 +263,7 @@ namespace MyNotebooks.DataAccess
 			DataSet ds = new();
 			DataTable dt = new();
 
-			using (SqlConnection conn = new(connString))
+			using (SqlConnection conn = new(Program.ConnectionString))
 			{
 				conn.Open();
 
@@ -289,7 +290,7 @@ namespace MyNotebooks.DataAccess
 			List<KeyValuePair<int, string>> lstRtrn = new();
 			DataSet ds = new();
 
-			using (SqlConnection conn = new(connString))
+			using (SqlConnection conn = new(Program.ConnectionString))
 			{
 				conn.Open();
 
@@ -316,7 +317,7 @@ namespace MyNotebooks.DataAccess
 		//		List<Entry> entries = new();
 		//		DataTable dt = new();
 
-		//		using (SqlConnection conn = new(connString))
+		//		using (SqlConnection conn = new(Program.ConnectionString))
 		//		{
 		//			conn.Open();
 
@@ -346,7 +347,7 @@ namespace MyNotebooks.DataAccess
 				DataSet ds = new();
 				Entry entry = null;
 
-				using (SqlConnection conn = new(connString))
+				using (SqlConnection conn = new(Program.ConnectionString))
 				{
 					conn.Open();
 					 
@@ -381,7 +382,7 @@ namespace MyNotebooks.DataAccess
 			List<Entry> entries = new();
 			DataTable dt = new();
 
-			using (SqlConnection conn = new(connString))
+			using (SqlConnection conn = new(Program.ConnectionString))
 			{
 				conn.Open();
 
@@ -407,7 +408,7 @@ namespace MyNotebooks.DataAccess
 			KeyValuePair<MNLabel, MNUser>  kvpRtrn = new();
 			DataSet dataSet = new();
 
-			using (SqlConnection conn = new(connString))
+			using (SqlConnection conn = new(Program.ConnectionString))
 			{
 				conn.Open();
 
@@ -427,12 +428,12 @@ namespace MyNotebooks.DataAccess
 
 		public static void			PopulateLabelsInAllNotebooks()
 		{
-			DataTable dt = new DataTable();
+			//DataTable dt = new DataTable();
 			Program.LblsInAllNotebooks.Clear();
 
 			try
 			{
-				using (SqlConnection conn = new(connString))
+				using (SqlConnection conn = new(Program.ConnectionString))
 				{
 					conn.Open();
 					using (SqlCommand cmd = new("sp_GetAllLabels", conn))
@@ -456,7 +457,7 @@ namespace MyNotebooks.DataAccess
 			List<MNLabel> lstRtrn = new();
 			DataTable dataTable = new();
 
-			using (SqlConnection conn = new(connString))
+			using (SqlConnection conn = new(Program.ConnectionString))
 			{
 				conn.Open();
 
@@ -478,12 +479,40 @@ namespace MyNotebooks.DataAccess
 			return lstRtrn;
 		}
 
+		public static List<string> GetLabelsForNotebook(int notebookId)
+		{
+			List<string> lstRtrn = new();
+
+			try
+			{
+				using (SqlConnection conn = new(Program.ConnectionString))
+				{
+					conn.Open();
+					using (SqlCommand cmd = new("sp_GetLabelsForNotebook", conn))
+					{
+						cmd.CommandType = CommandType.StoredProcedure;
+						cmd.Parameters.AddWithValue("@notebookId", notebookId);
+
+						using SqlDataReader reader = cmd.ExecuteReader();
+						{
+							while (reader.Read())
+							{ lstRtrn.Add(reader.GetString(0)); }
+						}
+					}
+				}
+
+			}
+			catch (Exception ex) { }
+
+			return lstRtrn;
+		}
+
 		public static List<MNLabel> GetLabelsUnderOrgLevel(int entryId, int orgLevel, string[] currentLabels = null)
 		{
 			List<MNLabel> lstRtrn = new();
 			DataTable dataTable = new();
 
-			using (SqlConnection conn = new(connString))
+			using (SqlConnection conn = new(Program.ConnectionString))
 			{
 				conn.Open();
 
@@ -522,7 +551,7 @@ namespace MyNotebooks.DataAccess
 				List<Notebook> notebooks = new();
 				DataTable dt = new();
 
-				using (SqlConnection conn = new(connString))
+				using (SqlConnection conn = new(Program.ConnectionString))
 				{
 					conn.Open();
 
@@ -550,7 +579,7 @@ namespace MyNotebooks.DataAccess
 			Notebook nbRtrn = null;
 			DataTable dt = new();
 
-			using (SqlConnection conn = new(connString))
+			using (SqlConnection conn = new(Program.ConnectionString))
 			{
 				conn.Open();
 
@@ -580,7 +609,7 @@ namespace MyNotebooks.DataAccess
 
 			try
 			{
-				using (SqlConnection conn = new(connString))
+				using (SqlConnection conn = new(Program.ConnectionString))
 				{
 					conn.Open();
 					using (SqlCommand cmd = new("sp_GetNotebooksCreatedByUser", conn))
@@ -611,7 +640,7 @@ namespace MyNotebooks.DataAccess
 			notebook.Entries.Clear();
 			Program.LblsUnderNotebook.Clear();
 
-			using (SqlConnection conn = new(connString))
+			using (SqlConnection conn = new(Program.ConnectionString))
 			{
 				conn.Open();
 
@@ -637,7 +666,7 @@ namespace MyNotebooks.DataAccess
 		{
 			List<Notebook> lstReturn = new List<Notebook>();
 
-			using (SqlConnection conn = new(connString))
+			using (SqlConnection conn = new(Program.ConnectionString))
 			{
 				conn.Open();
 
@@ -672,7 +701,7 @@ namespace MyNotebooks.DataAccess
 		{
 			List<Notebook> lstReturn = new List<Notebook>();
 
-			using (SqlConnection conn = new(connString))
+			using (SqlConnection conn = new(Program.ConnectionString))
 			{
 				conn.Open();
 
@@ -706,7 +735,7 @@ namespace MyNotebooks.DataAccess
 		{
 			List<ListItem> list = new();
 
-			using (SqlConnection conn = new(connString))
+			using (SqlConnection conn = new(Program.ConnectionString))
 			{
 				conn.Open();
 				using (SqlCommand cmd = new("sp_GetOrgLevels", conn))
@@ -727,7 +756,7 @@ namespace MyNotebooks.DataAccess
 			List<OrgLevel> lstRtrn = new();
 			DataTable dt = new();
 
-			using (SqlConnection conn = new(connString))
+			using (SqlConnection conn = new(Program.ConnectionString))
 			{
 				conn.Open();
 				using (SqlCommand cmd = new("sp_GetOrgLevelItemsAvailableToUser", conn))
@@ -766,7 +795,7 @@ namespace MyNotebooks.DataAccess
 			//TreeNode node;
 			DataTable dt = new();
 
-			using (SqlConnection conn = new(connString))
+			using (SqlConnection conn = new(Program.ConnectionString))
 			{
 				conn.Open();
 				using (SqlCommand cmd = new("sp_GetOrgLevelChildren", conn))
@@ -811,7 +840,7 @@ namespace MyNotebooks.DataAccess
 			DataTable dt = new();
 			List<ListItem> lstRtrn = new List<ListItem>();
 
-			using (SqlConnection conn = new(connString))
+			using (SqlConnection conn = new(Program.ConnectionString))
 			{
 				conn.Open();
 				using (SqlCommand cmd = new("sp_GetOrgLevelItems", conn))
@@ -837,7 +866,7 @@ namespace MyNotebooks.DataAccess
 		//{
 		//	DataSet ds = new();
 
-		//	using(SqlConnection conn = new(connString))
+		//	using(SqlConnection conn = new(Program.ConnectionString))
 		//	{
 		//		conn.Open();
 
@@ -857,7 +886,7 @@ namespace MyNotebooks.DataAccess
 		//	List<SelectedCompanyName> lstReturn = new List<SelectedCompanyName>();
 		//	DataTable dt = new();
 
-		//	using (SqlConnection conn = new(connString))
+		//	using (SqlConnection conn = new(Program.ConnectionString))
 		//	{
 		//		conn.Open();
 		//		using (SqlCommand cmd = new("sp_GetCompanies"))
@@ -877,7 +906,7 @@ namespace MyNotebooks.DataAccess
 		//	List<Account>lstReturn = new List<Account>();
 		//	DataTable dt = new();
 
-		//	using (SqlConnection conn = new(connString))
+		//	using (SqlConnection conn = new(Program.ConnectionString))
 		//	{
 		//		conn.Open();
 		//		using(SqlCommand cmd = new("sp_GetAccounts"))
@@ -897,7 +926,7 @@ namespace MyNotebooks.DataAccess
 		//	List<Department> lstReturn = new List<Department>();
 		//	DataTable dt = new();
 
-		//	using (SqlConnection conn = new(connString))
+		//	using (SqlConnection conn = new(Program.ConnectionString))
 		//	{
 		//		conn.Open();
 		//		using (SqlCommand cmd = new("sp_GetDepartments"))
@@ -917,7 +946,7 @@ namespace MyNotebooks.DataAccess
 		//	List<Group> lstReturn = new List<Group>();
 		//	DataTable dt = new();
 
-		//	using (SqlConnection conn = new(connString))
+		//	using (SqlConnection conn = new(Program.ConnectionString))
 		//	{
 		//		conn.Open();
 		//		using (SqlCommand cmd = new("sp_GetGroups"))
@@ -936,7 +965,7 @@ namespace MyNotebooks.DataAccess
 		{
 			DataSet ds = new();
 
-			using(SqlConnection conn = new(connString))
+			using(SqlConnection conn = new(Program.ConnectionString))
 			{
 				conn.Open();
 
