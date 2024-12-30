@@ -195,15 +195,14 @@ namespace MyNotebooks.subforms
 {
 	public partial class frmMain : Form
 	{
-		Notebook CurrentNotebook;
-		Entry CurrentEntry;
-		private bool FirstSelection = true;
-		bool SuppressDateClick = false;
-		string FoundCountString = "showing {0} of {1} entries";
-		private int SelectedNotebookId;
+		private Notebook		CurrentNotebook;
+		private Entry			CurrentEntry;
+		private bool			FirstSelection = true;
+		private bool			SuppressDateClick = false;
+		private readonly string FoundCountString = "showing {0} of {1} entries";
+		private readonly int	SelectedNotebookId;
 		private KeyValuePair<int, string> SelectedNotebookIds;
-		private BackgroundWorker Worker;
-		private bool notebookChanged;
+		//private BackgroundWorker Worker;
 
 		private enum SelectionState
 		{
@@ -430,7 +429,6 @@ namespace MyNotebooks.subforms
 			var v = ddlNotebooks.SelectedItem as ListItem;
 			SelectedNotebookIds = new(v.Id, v.Name);
 			loadSelectedNotebook(sender, e);
-			notebookChanged = true;
 		}
 
 		private void		GenerateMesssage(string errorMessage, Exception exception = null, string title = "")
