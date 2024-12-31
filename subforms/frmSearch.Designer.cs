@@ -39,6 +39,10 @@ namespace MyNotebooks.subforms
 			panel7 = new Panel();
 			radCreatedOn = new RadioButton();
 			radEditedOn = new RadioButton();
+			panel1 = new Panel();
+			chkMatchCase_Title = new CheckBox();
+			chkWholeWord_Title = new CheckBox();
+			label2 = new Label();
 			panel6 = new Panel();
 			radText_And = new RadioButton();
 			radTitleOr = new RadioButton();
@@ -47,12 +51,14 @@ namespace MyNotebooks.subforms
 			radTitleText_Or = new RadioButton();
 			radTitle_And = new RadioButton();
 			panel4 = new Panel();
+			panel8 = new Panel();
+			chkWholeWord_Text = new CheckBox();
 			chkMatchCase_Text = new CheckBox();
+			label4 = new Label();
 			txtSearchText = new TextBox();
 			label8 = new Label();
 			label9 = new Label();
 			txtSearchTitle = new TextBox();
-			chkMatchCase_Title = new CheckBox();
 			panel3 = new Panel();
 			radDate_Or = new RadioButton();
 			radDate_And = new RadioButton();
@@ -88,9 +94,11 @@ namespace MyNotebooks.subforms
 			ddlNbsToSearch = new ComboBox();
 			grpFindEntry.SuspendLayout();
 			panel7.SuspendLayout();
+			panel1.SuspendLayout();
 			panel6.SuspendLayout();
 			panel5.SuspendLayout();
 			panel4.SuspendLayout();
+			panel8.SuspendLayout();
 			panel3.SuspendLayout();
 			panel2.SuspendLayout();
 			pnlLabels_AndOr.SuspendLayout();
@@ -101,6 +109,7 @@ namespace MyNotebooks.subforms
 			// 
 			grpFindEntry.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
 			grpFindEntry.Controls.Add(panel7);
+			grpFindEntry.Controls.Add(panel1);
 			grpFindEntry.Controls.Add(panel6);
 			grpFindEntry.Controls.Add(clbLabelsInNotebooks);
 			grpFindEntry.Controls.Add(panel5);
@@ -128,7 +137,7 @@ namespace MyNotebooks.subforms
 			// 
 			panel7.Controls.Add(radCreatedOn);
 			panel7.Controls.Add(radEditedOn);
-			panel7.Location = new System.Drawing.Point(286, 132);
+			panel7.Location = new System.Drawing.Point(296, 125);
 			panel7.Name = "panel7";
 			panel7.Size = new System.Drawing.Size(177, 25);
 			panel7.TabIndex = 60;
@@ -155,11 +164,49 @@ namespace MyNotebooks.subforms
 			radEditedOn.Text = "edited on";
 			radEditedOn.UseVisualStyleBackColor = true;
 			// 
+			// panel1
+			// 
+			panel1.BorderStyle = BorderStyle.FixedSingle;
+			panel1.Controls.Add(chkMatchCase_Title);
+			panel1.Controls.Add(chkWholeWord_Title);
+			panel1.Controls.Add(label2);
+			panel1.Location = new System.Drawing.Point(537, 15);
+			panel1.Name = "panel1";
+			panel1.Size = new System.Drawing.Size(195, 25);
+			panel1.TabIndex = 62;
+			// 
+			// chkMatchCase_Title
+			// 
+			chkMatchCase_Title.AutoSize = true;
+			chkMatchCase_Title.Location = new System.Drawing.Point(51, 2);
+			chkMatchCase_Title.Name = "chkMatchCase_Title";
+			chkMatchCase_Title.Size = new System.Drawing.Size(49, 19);
+			chkMatchCase_Title.TabIndex = 38;
+			chkMatchCase_Title.Text = "case";
+			// 
+			// chkWholeWord_Title
+			// 
+			chkWholeWord_Title.AutoSize = true;
+			chkWholeWord_Title.Location = new System.Drawing.Point(107, 2);
+			chkWholeWord_Title.Name = "chkWholeWord_Title";
+			chkWholeWord_Title.Size = new System.Drawing.Size(88, 19);
+			chkWholeWord_Title.TabIndex = 39;
+			chkWholeWord_Title.Text = "whole word";
+			// 
+			// label2
+			// 
+			label2.AutoSize = true;
+			label2.Location = new System.Drawing.Point(4, 3);
+			label2.Name = "label2";
+			label2.Size = new System.Drawing.Size(44, 15);
+			label2.TabIndex = 0;
+			label2.Text = "match:";
+			// 
 			// panel6
 			// 
 			panel6.Controls.Add(radText_And);
 			panel6.Controls.Add(radTitleOr);
-			panel6.Location = new System.Drawing.Point(188, 77);
+			panel6.Location = new System.Drawing.Point(188, 65);
 			panel6.Name = "panel6";
 			panel6.Size = new System.Drawing.Size(90, 25);
 			panel6.TabIndex = 40;
@@ -178,7 +225,7 @@ namespace MyNotebooks.subforms
 			// 
 			radTitleOr.AutoSize = true;
 			radTitleOr.Checked = true;
-			radTitleOr.Location = new System.Drawing.Point(3, 3);
+			radTitleOr.Location = new System.Drawing.Point(0, 3);
 			radTitleOr.Name = "radTitleOr";
 			radTitleOr.Size = new System.Drawing.Size(36, 19);
 			radTitleOr.TabIndex = 35;
@@ -200,7 +247,7 @@ namespace MyNotebooks.subforms
 			// 
 			panel5.Controls.Add(radTitleText_Or);
 			panel5.Controls.Add(radTitle_And);
-			panel5.Location = new System.Drawing.Point(188, 24);
+			panel5.Location = new System.Drawing.Point(188, 12);
 			panel5.Name = "panel5";
 			panel5.Size = new System.Drawing.Size(90, 25);
 			panel5.TabIndex = 59;
@@ -209,7 +256,7 @@ namespace MyNotebooks.subforms
 			// 
 			radTitleText_Or.AutoSize = true;
 			radTitleText_Or.Checked = true;
-			radTitleText_Or.Location = new System.Drawing.Point(2, 4);
+			radTitleText_Or.Location = new System.Drawing.Point(0, 3);
 			radTitleText_Or.Name = "radTitleText_Or";
 			radTitleText_Or.Size = new System.Drawing.Size(36, 19);
 			radTitleText_Or.TabIndex = 1;
@@ -220,7 +267,7 @@ namespace MyNotebooks.subforms
 			// radTitle_And
 			// 
 			radTitle_And.AutoSize = true;
-			radTitle_And.Location = new System.Drawing.Point(39, 4);
+			radTitle_And.Location = new System.Drawing.Point(39, 3);
 			radTitle_And.Name = "radTitle_And";
 			radTitle_And.Size = new System.Drawing.Size(45, 19);
 			radTitle_And.TabIndex = 0;
@@ -230,34 +277,61 @@ namespace MyNotebooks.subforms
 			// panel4
 			// 
 			panel4.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-			panel4.BorderStyle = BorderStyle.FixedSingle;
-			panel4.Controls.Add(chkMatchCase_Text);
+			panel4.Controls.Add(panel8);
 			panel4.Controls.Add(txtSearchText);
 			panel4.Controls.Add(label8);
 			panel4.Controls.Add(label9);
 			panel4.Controls.Add(txtSearchTitle);
-			panel4.Controls.Add(chkMatchCase_Title);
-			panel4.Location = new System.Drawing.Point(191, 35);
+			panel4.Location = new System.Drawing.Point(191, 19);
 			panel4.Name = "panel4";
-			panel4.Size = new System.Drawing.Size(584, 94);
+			panel4.Size = new System.Drawing.Size(584, 100);
 			panel4.TabIndex = 57;
+			// 
+			// panel8
+			// 
+			panel8.BorderStyle = BorderStyle.FixedSingle;
+			panel8.Controls.Add(chkWholeWord_Text);
+			panel8.Controls.Add(chkMatchCase_Text);
+			panel8.Controls.Add(label4);
+			panel8.Location = new System.Drawing.Point(345, 48);
+			panel8.Name = "panel8";
+			panel8.Size = new System.Drawing.Size(195, 25);
+			panel8.TabIndex = 63;
+			// 
+			// chkWholeWord_Text
+			// 
+			chkWholeWord_Text.AutoSize = true;
+			chkWholeWord_Text.Location = new System.Drawing.Point(107, 2);
+			chkWholeWord_Text.Name = "chkWholeWord_Text";
+			chkWholeWord_Text.Size = new System.Drawing.Size(88, 19);
+			chkWholeWord_Text.TabIndex = 39;
+			chkWholeWord_Text.Text = "whole word";
 			// 
 			// chkMatchCase_Text
 			// 
 			chkMatchCase_Text.AutoSize = true;
-			chkMatchCase_Text.Location = new System.Drawing.Point(315, 45);
+			chkMatchCase_Text.Location = new System.Drawing.Point(51, 2);
 			chkMatchCase_Text.Name = "chkMatchCase_Text";
-			chkMatchCase_Text.Size = new System.Drawing.Size(112, 19);
+			chkMatchCase_Text.Size = new System.Drawing.Size(49, 19);
 			chkMatchCase_Text.TabIndex = 39;
-			chkMatchCase_Text.Text = "match case, text";
+			chkMatchCase_Text.Text = "case";
+			// 
+			// label4
+			// 
+			label4.AutoSize = true;
+			label4.Location = new System.Drawing.Point(4, 3);
+			label4.Name = "label4";
+			label4.Size = new System.Drawing.Size(44, 15);
+			label4.TabIndex = 0;
+			label4.Text = "match:";
 			// 
 			// txtSearchText
 			// 
 			txtSearchText.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
 			txtSearchText.BorderStyle = BorderStyle.FixedSingle;
-			txtSearchText.Location = new System.Drawing.Point(49, 66);
+			txtSearchText.Location = new System.Drawing.Point(49, 71);
 			txtSearchText.Name = "txtSearchText";
-			txtSearchText.Size = new System.Drawing.Size(516, 23);
+			txtSearchText.Size = new System.Drawing.Size(518, 23);
 			txtSearchText.TabIndex = 22;
 			txtSearchText.TextChanged += this.SearchButtonEnableDisable;
 			// 
@@ -277,7 +351,7 @@ namespace MyNotebooks.subforms
 			label9.AutoSize = true;
 			label9.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
 			label9.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			label9.Location = new System.Drawing.Point(8, 68);
+			label9.Location = new System.Drawing.Point(8, 74);
 			label9.Name = "label9";
 			label9.Size = new System.Drawing.Size(38, 17);
 			label9.TabIndex = 3;
@@ -289,33 +363,24 @@ namespace MyNotebooks.subforms
 			txtSearchTitle.BorderStyle = BorderStyle.FixedSingle;
 			txtSearchTitle.Location = new System.Drawing.Point(49, 18);
 			txtSearchTitle.Name = "txtSearchTitle";
-			txtSearchTitle.Size = new System.Drawing.Size(516, 23);
+			txtSearchTitle.Size = new System.Drawing.Size(518, 23);
 			txtSearchTitle.TabIndex = 21;
 			txtSearchTitle.TextChanged += this.SearchButtonEnableDisable;
-			// 
-			// chkMatchCase_Title
-			// 
-			chkMatchCase_Title.AutoSize = true;
-			chkMatchCase_Title.Location = new System.Drawing.Point(180, 45);
-			chkMatchCase_Title.Name = "chkMatchCase_Title";
-			chkMatchCase_Title.Size = new System.Drawing.Size(112, 19);
-			chkMatchCase_Title.TabIndex = 38;
-			chkMatchCase_Title.Text = "match case, title";
 			// 
 			// panel3
 			// 
 			panel3.Controls.Add(radDate_Or);
 			panel3.Controls.Add(radDate_And);
-			panel3.Location = new System.Drawing.Point(191, 129);
+			panel3.Location = new System.Drawing.Point(191, 121);
 			panel3.Name = "panel3";
-			panel3.Size = new System.Drawing.Size(272, 25);
+			panel3.Size = new System.Drawing.Size(87, 25);
 			panel3.TabIndex = 58;
 			// 
 			// radDate_Or
 			// 
 			radDate_Or.AutoSize = true;
 			radDate_Or.Checked = true;
-			radDate_Or.Location = new System.Drawing.Point(2, 4);
+			radDate_Or.Location = new System.Drawing.Point(0, 3);
 			radDate_Or.Name = "radDate_Or";
 			radDate_Or.Size = new System.Drawing.Size(36, 19);
 			radDate_Or.TabIndex = 1;
@@ -335,16 +400,15 @@ namespace MyNotebooks.subforms
 			// 
 			// panel2
 			// 
-			panel2.BorderStyle = BorderStyle.FixedSingle;
 			panel2.Controls.Add(dtFindDate_From);
 			panel2.Controls.Add(dtFindDate);
 			panel2.Controls.Add(dtFindDate_To);
 			panel2.Controls.Add(label12);
 			panel2.Controls.Add(chkUseDate);
 			panel2.Controls.Add(chkUseDateRange);
-			panel2.Location = new System.Drawing.Point(194, 137);
+			panel2.Location = new System.Drawing.Point(194, 121);
 			panel2.Name = "panel2";
-			panel2.Size = new System.Drawing.Size(430, 51);
+			panel2.Size = new System.Drawing.Size(430, 69);
 			panel2.TabIndex = 57;
 			// 
 			// dtFindDate_From
@@ -352,7 +416,7 @@ namespace MyNotebooks.subforms
 			dtFindDate_From.CustomFormat = "M/d/yyyy";
 			dtFindDate_From.Enabled = false;
 			dtFindDate_From.Format = DateTimePickerFormat.Custom;
-			dtFindDate_From.Location = new System.Drawing.Point(238, 21);
+			dtFindDate_From.Location = new System.Drawing.Point(237, 33);
 			dtFindDate_From.Name = "dtFindDate_From";
 			dtFindDate_From.ShowUpDown = true;
 			dtFindDate_From.Size = new System.Drawing.Size(79, 23);
@@ -364,7 +428,7 @@ namespace MyNotebooks.subforms
 			dtFindDate.CustomFormat = "M/d/yyyy";
 			dtFindDate.Enabled = false;
 			dtFindDate.Format = DateTimePickerFormat.Custom;
-			dtFindDate.Location = new System.Drawing.Point(59, 21);
+			dtFindDate.Location = new System.Drawing.Point(54, 33);
 			dtFindDate.Name = "dtFindDate";
 			dtFindDate.ShowUpDown = true;
 			dtFindDate.Size = new System.Drawing.Size(79, 23);
@@ -376,7 +440,7 @@ namespace MyNotebooks.subforms
 			dtFindDate_To.CustomFormat = "M/d/yyyy";
 			dtFindDate_To.Enabled = false;
 			dtFindDate_To.Format = DateTimePickerFormat.Custom;
-			dtFindDate_To.Location = new System.Drawing.Point(344, 21);
+			dtFindDate_To.Location = new System.Drawing.Point(339, 33);
 			dtFindDate_To.Name = "dtFindDate_To";
 			dtFindDate_To.ShowUpDown = true;
 			dtFindDate_To.Size = new System.Drawing.Size(79, 23);
@@ -386,7 +450,7 @@ namespace MyNotebooks.subforms
 			// label12
 			// 
 			label12.AutoSize = true;
-			label12.Location = new System.Drawing.Point(321, 25);
+			label12.Location = new System.Drawing.Point(318, 37);
 			label12.Name = "label12";
 			label12.Size = new System.Drawing.Size(18, 15);
 			label12.TabIndex = 19;
@@ -395,7 +459,7 @@ namespace MyNotebooks.subforms
 			// chkUseDate
 			// 
 			chkUseDate.AutoSize = true;
-			chkUseDate.Location = new System.Drawing.Point(8, 25);
+			chkUseDate.Location = new System.Drawing.Point(5, 35);
 			chkUseDate.Name = "chkUseDate";
 			chkUseDate.Size = new System.Drawing.Size(49, 19);
 			chkUseDate.TabIndex = 33;
@@ -406,7 +470,7 @@ namespace MyNotebooks.subforms
 			// chkUseDateRange
 			// 
 			chkUseDateRange.AutoSize = true;
-			chkUseDateRange.Location = new System.Drawing.Point(153, 25);
+			chkUseDateRange.Location = new System.Drawing.Point(156, 35);
 			chkUseDateRange.Name = "chkUseDateRange";
 			chkUseDateRange.Size = new System.Drawing.Size(82, 19);
 			chkUseDateRange.TabIndex = 34;
@@ -664,12 +728,16 @@ namespace MyNotebooks.subforms
 			grpFindEntry.PerformLayout();
 			panel7.ResumeLayout(false);
 			panel7.PerformLayout();
+			panel1.ResumeLayout(false);
+			panel1.PerformLayout();
 			panel6.ResumeLayout(false);
 			panel6.PerformLayout();
 			panel5.ResumeLayout(false);
 			panel5.PerformLayout();
 			panel4.ResumeLayout(false);
 			panel4.PerformLayout();
+			panel8.ResumeLayout(false);
+			panel8.PerformLayout();
 			panel3.ResumeLayout(false);
 			panel3.PerformLayout();
 			panel2.ResumeLayout(false);
@@ -734,5 +802,11 @@ namespace MyNotebooks.subforms
 		private RadioButton radEditedOn;
 		private Panel panel7;
 		private RadioButton radCreatedOn;
+		private Panel panel1;
+		private CheckBox chkWholeWord_Title;
+		private Label label2;
+		private Panel panel8;
+		private CheckBox chkWholeWord_Text;
+		private Label label4;
 	}
 }

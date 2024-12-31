@@ -231,11 +231,10 @@ namespace MyNotebooks.subforms
 
 				foreach (Entry entry in DbAccess.GetEntriesInNotebook(nb.Id))
 				{
-					SearchObject so = new SearchObject(
-						chkUseDate, chkUseDateRange, chkMatchCase_Title, chkMatchCase_Text, dtFindDate, dtFindDate_From, dtFindDate_To
-						, radDate_And, radLabels_And, radTitle_And, radText_And
-						, txtSearchTitle.Text
-						, txtSearchText.Text, GetCheckedLabels(), radCreatedOn);
+					SearchObject so = new (
+						chkUseDate, chkUseDateRange, chkMatchCase_Title, chkMatchCase_Text, chkMatchCase_Title, chkMatchCase_Text 
+						, dtFindDate, dtFindDate_From, dtFindDate_To, radDate_And, radLabels_And, radCreatedOn, radTitle_And, radText_And
+						, txtSearchTitle.Text, txtSearchText.Text, GetCheckedLabels());
 
 					var v = nb.Search(so);
 					if (v.Count > 0) { FoundEntries.AddRange(v.Where(e => !FoundEntries.Contains(e))); }

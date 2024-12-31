@@ -409,7 +409,7 @@ namespace MyNotebooks
 		public List<Entry>	Search(SearchObject So)
 		{
 			List<Entry> allEntries			= new();
-			List<Entry> entriesForDate		= new();
+			List<Entry> entriesWithDate		= new();
 			List<Entry> entriesWithLabels	= new();
 			List<Entry> entriesWithTitle	= new();
 			List<Entry> entriesWithText		= new();
@@ -481,22 +481,22 @@ namespace MyNotebooks
 				{
 					if(So.radCreatedOn.Checked)
 					{
-						entriesForDate = Entries.Where(p => p.CreatedOn.ToShortDateString() == So.dtFindDate.Value.ToShortDateString()).ToList(); 
+						entriesWithDate = Entries.Where(p => p.CreatedOn.ToShortDateString() == So.dtFindDate.Value.ToShortDateString()).ToList(); 
 					}
 					else
 					{
-						entriesForDate = Entries.Where(p => p.EditedOn.ToShortDateString() == So.dtFindDate.Value.ToShortDateString()).ToList();
+						entriesWithDate = Entries.Where(p => p.EditedOn.ToShortDateString() == So.dtFindDate.Value.ToShortDateString()).ToList();
 					}
 				}
 				else
 				{
 					if (So.radCreatedOn.Checked)
 					{
-						entriesForDate = Entries.Where(p => p.CreatedOn >= So.dtFindDate_From.Value && p.CreatedOn <= So.dtFindDate_To.Value).ToList(); 
+						entriesWithDate = Entries.Where(p => p.CreatedOn >= So.dtFindDate_From.Value && p.CreatedOn <= So.dtFindDate_To.Value).ToList(); 
 					}
 					else
 					{
-						entriesForDate = Entries.Where(p => p.EditedOn >= So.dtFindDate_From.Value && p.EditedOn <= So.dtFindDate_To.Value).ToList();
+						entriesWithDate = Entries.Where(p => p.EditedOn >= So.dtFindDate_From.Value && p.EditedOn <= So.dtFindDate_To.Value).ToList();
 					}
 				}
 			}
@@ -507,7 +507,7 @@ namespace MyNotebooks
 			{
 				if(So.radTitle_And.Checked)
 				{
-					allEntries = entriesWithTitle.Intersect(allEntries).ToList();
+					allEntries = allEntries.Count > 0 ? entriesWithTitle.Intersect(allEntries).ToList() : entriesWithTitle;
 				}
 				else
 				{
@@ -527,15 +527,15 @@ namespace MyNotebooks
 				}
 			}
 
-			if(entriesForDate.Count > 0)
+			if(entriesWithDate.Count > 0)
 			{
 				if(So.radDate_And.Checked)
 				{
-					allEntries = allEntries.Count > 0 ? entriesForDate.Intersect(allEntries).ToList() : entriesForDate;
+					allEntries = allEntries.Count > 0 ? entriesWithDate.Intersect(allEntries).ToList() : entriesWithDate;
 				}
 				else
 				{
-					allEntries.AddRange(entriesForDate);
+					allEntries.AddRange(entriesWithDate);
 				}
 			}
 
