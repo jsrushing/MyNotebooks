@@ -22,6 +22,7 @@ namespace MyNotebooks.objects
 		public RadioButton		radLabels_And { get; set; }
 		public RadioButton		radText_And { get; set; }
 		public RadioButton		radTitle_And { get; set; }
+		public RadioButton		radCreatedOn { get; set; }
 
 
 		public string			searchTitle { get; set; }
@@ -33,8 +34,7 @@ namespace MyNotebooks.objects
 		public SearchObject(CheckBox _chkUseDate, CheckBox _chkUseDateRange, CheckBox _chkMatchCase_title, CheckBox _chkMatchCase_text, DateTimePicker _dtFindDate, 
 			DateTimePicker _dtFindDate_From, DateTimePicker _dtFindDate_To
 			, RadioButton _radDateAnd, RadioButton _radLabelsAnd, RadioButton _radTitleAnd, RadioButton _radTextAnd
-			, string _searchTitle, string _searchText
-			, List<string> _labels)	// string[] _labelsArray)
+			, string _searchTitle, string _searchText, List<string> _labels, RadioButton _radCreatedOn )
 		{
 			chkUseDate			= _chkUseDate;
 			chkUseDateRange		= _chkUseDateRange;
@@ -50,7 +50,8 @@ namespace MyNotebooks.objects
 			searchTitle			= _searchTitle;
 			searchText			= _searchText;
 			//labelsArray		= _labelsArray;
-			labelsForSearch =	_labels;
+			labelsForSearch		=	_labels;
+			radCreatedOn		= _radCreatedOn;
 		}
 	}
 }

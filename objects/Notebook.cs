@@ -408,19 +408,11 @@ namespace MyNotebooks
 
 		public List<Entry>	Search(SearchObject So)
 		{
-			List<Entry> allEntries = new();
-			List<Entry> entriesForDate = new();
-			List<Entry> entriesWithLabels = new();
-			List<Entry> entriesWithTitle = new();
-			List<Entry> entriesWithText = new();
-
-			if (So.chkUseDate.Checked | So.chkUseDateRange.Checked)	// if chkUseDate.. controls are checked, clear all and stop if nothing found.
-			{
-				if (So.chkUseDate.Checked) 
-				{ entriesForDate = Entries.Where(p => p.CreatedOn.ToShortDateString() == So.dtFindDate.Value.ToShortDateString()).ToList(); }
-				else
-				{ entriesForDate = Entries.Where(p => p.CreatedOn >= So.dtFindDate_From.Value && p.CreatedOn <= So.dtFindDate_To.Value).ToList(); }
-			}
+			List<Entry> allEntries			= new();
+			List<Entry> entriesForDate		= new();
+			List<Entry> entriesWithLabels	= new();
+			List<Entry> entriesWithTitle	= new();
+			List<Entry> entriesWithText		= new();
 
 			if(So.labelsForSearch.Count > 0 & Entries.Count > 0) 
 			{
@@ -483,18 +475,42 @@ namespace MyNotebooks
 					
 			}
 
+			if (So.chkUseDate.Checked | So.chkUseDateRange.Checked)
+			{
+				if (So.chkUseDate.Checked) 
+				{
+					if(So.radCreatedOn.Checked)
+					{
+						entriesForDate = Entries.Where(p => p.CreatedOn.ToShortDateString() == So.dtFindDate.Value.ToShortDateString()).ToList(); 
+					}
+					else
+					{
+						entriesForDate = Entries.Where(p => p.EditedOn.ToShortDateString() == So.dtFindDate.Value.ToShortDateString()).ToList();
+					}
+				}
+				else
+				{
+					if (So.radCreatedOn.Checked)
+					{
+						entriesForDate = Entries.Where(p => p.CreatedOn >= So.dtFindDate_From.Value && p.CreatedOn <= So.dtFindDate_To.Value).ToList(); 
+					}
+					else
+					{
+						entriesForDate = Entries.Where(p => p.EditedOn >= So.dtFindDate_From.Value && p.EditedOn <= So.dtFindDate_To.Value).ToList();
+					}
+				}
+			}
+
 			allEntries = entriesWithLabels;
 
 			if(entriesWithTitle.Count > 0)
 			{
 				if(So.radTitle_And.Checked)
 				{
-					// set allEntries = any items in entriesWithTitle which are in allEntries
 					allEntries = entriesWithTitle.Intersect(allEntries).ToList();
 				}
 				else
 				{
-					// add entriesWithTitle to allEntries
 					allEntries.AddRange(entriesWithTitle);
 				}
 			}
@@ -503,12 +519,10 @@ namespace MyNotebooks
 			{
 				if(So.radText_And.Checked)
 				{
-					// set allEntries = any items in entriesWithText which are in allEntries
-					allEntries = entriesWithText.Intersect(allEntries).ToList();
+					allEntries = allEntries.Count > 0 ? entriesWithText.Intersect(allEntries).ToList() : entriesWithText;
 				}
 				else
 				{
-					// add entriesWithText to allEntries
 					allEntries.AddRange(entriesWithText);
 				}
 			}
@@ -517,7 +531,7 @@ namespace MyNotebooks
 			{
 				if(So.radDate_And.Checked)
 				{
-					allEntries = entriesForDate.Intersect(allEntries).ToList();
+					allEntries = allEntries.Count > 0 ? entriesForDate.Intersect(allEntries).ToList() : entriesForDate;
 				}
 				else
 				{

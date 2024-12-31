@@ -235,7 +235,7 @@ namespace MyNotebooks.subforms
 						chkUseDate, chkUseDateRange, chkMatchCase_Title, chkMatchCase_Text, dtFindDate, dtFindDate_From, dtFindDate_To
 						, radDate_And, radLabels_And, radTitle_And, radText_And
 						, txtSearchTitle.Text
-						, txtSearchText.Text, GetCheckedLabels());
+						, txtSearchText.Text, GetCheckedLabels(), radCreatedOn);
 
 					var v = nb.Search(so);
 					if (v.Count > 0) { FoundEntries.AddRange(v.Where(e => !FoundEntries.Contains(e))); }

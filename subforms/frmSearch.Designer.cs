@@ -36,6 +36,12 @@ namespace MyNotebooks.subforms
 			components = new Container();
 			ComponentResourceManager resources = new ComponentResourceManager(typeof(frmSearch));
 			grpFindEntry = new GroupBox();
+			panel7 = new Panel();
+			radCreatedOn = new RadioButton();
+			radEditedOn = new RadioButton();
+			panel6 = new Panel();
+			radText_And = new RadioButton();
+			radTitleOr = new RadioButton();
 			clbLabelsInNotebooks = new CheckedListBox();
 			panel5 = new Panel();
 			radTitleText_Or = new RadioButton();
@@ -46,20 +52,15 @@ namespace MyNotebooks.subforms
 			label8 = new Label();
 			label9 = new Label();
 			txtSearchTitle = new TextBox();
-			radTitleOr = new RadioButton();
-			radText_And = new RadioButton();
 			chkMatchCase_Title = new CheckBox();
 			panel3 = new Panel();
-			panel1 = new Panel();
-			radioButton1 = new RadioButton();
-			radioButton2 = new RadioButton();
 			radDate_Or = new RadioButton();
 			radDate_And = new RadioButton();
 			panel2 = new Panel();
-			dtFindDate_To = new DateTimePicker();
 			dtFindDate_From = new DateTimePicker();
-			label12 = new Label();
 			dtFindDate = new DateTimePicker();
+			dtFindDate_To = new DateTimePicker();
+			label12 = new Label();
 			chkUseDate = new CheckBox();
 			chkUseDateRange = new CheckBox();
 			lblNumEntriesFound = new Label();
@@ -85,21 +86,21 @@ namespace MyNotebooks.subforms
 			bgWorker = new BackgroundWorker();
 			label1 = new Label();
 			ddlNbsToSearch = new ComboBox();
-			panel6 = new Panel();
 			grpFindEntry.SuspendLayout();
+			panel7.SuspendLayout();
+			panel6.SuspendLayout();
 			panel5.SuspendLayout();
 			panel4.SuspendLayout();
 			panel3.SuspendLayout();
-			panel1.SuspendLayout();
 			panel2.SuspendLayout();
 			pnlLabels_AndOr.SuspendLayout();
 			mnuEntryEditTop.SuspendLayout();
-			panel6.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// grpFindEntry
 			// 
 			grpFindEntry.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+			grpFindEntry.Controls.Add(panel7);
 			grpFindEntry.Controls.Add(panel6);
 			grpFindEntry.Controls.Add(clbLabelsInNotebooks);
 			grpFindEntry.Controls.Add(panel5);
@@ -122,6 +123,68 @@ namespace MyNotebooks.subforms
 			grpFindEntry.Size = new System.Drawing.Size(787, 638);
 			grpFindEntry.TabIndex = 7;
 			grpFindEntry.TabStop = false;
+			// 
+			// panel7
+			// 
+			panel7.Controls.Add(radCreatedOn);
+			panel7.Controls.Add(radEditedOn);
+			panel7.Location = new System.Drawing.Point(286, 132);
+			panel7.Name = "panel7";
+			panel7.Size = new System.Drawing.Size(177, 25);
+			panel7.TabIndex = 60;
+			// 
+			// radCreatedOn
+			// 
+			radCreatedOn.AutoSize = true;
+			radCreatedOn.Checked = true;
+			radCreatedOn.Location = new System.Drawing.Point(2, 1);
+			radCreatedOn.Name = "radCreatedOn";
+			radCreatedOn.Size = new System.Drawing.Size(81, 19);
+			radCreatedOn.TabIndex = 1;
+			radCreatedOn.TabStop = true;
+			radCreatedOn.Text = "created on";
+			radCreatedOn.UseVisualStyleBackColor = true;
+			// 
+			// radEditedOn
+			// 
+			radEditedOn.AutoSize = true;
+			radEditedOn.Location = new System.Drawing.Point(93, 1);
+			radEditedOn.Name = "radEditedOn";
+			radEditedOn.Size = new System.Drawing.Size(75, 19);
+			radEditedOn.TabIndex = 0;
+			radEditedOn.Text = "edited on";
+			radEditedOn.UseVisualStyleBackColor = true;
+			// 
+			// panel6
+			// 
+			panel6.Controls.Add(radText_And);
+			panel6.Controls.Add(radTitleOr);
+			panel6.Location = new System.Drawing.Point(188, 77);
+			panel6.Name = "panel6";
+			panel6.Size = new System.Drawing.Size(90, 25);
+			panel6.TabIndex = 40;
+			// 
+			// radText_And
+			// 
+			radText_And.AutoSize = true;
+			radText_And.Location = new System.Drawing.Point(41, 3);
+			radText_And.Name = "radText_And";
+			radText_And.Size = new System.Drawing.Size(45, 19);
+			radText_And.TabIndex = 36;
+			radText_And.Text = "and";
+			radText_And.UseVisualStyleBackColor = true;
+			// 
+			// radTitleOr
+			// 
+			radTitleOr.AutoSize = true;
+			radTitleOr.Checked = true;
+			radTitleOr.Location = new System.Drawing.Point(3, 3);
+			radTitleOr.Name = "radTitleOr";
+			radTitleOr.Size = new System.Drawing.Size(36, 19);
+			radTitleOr.TabIndex = 35;
+			radTitleOr.TabStop = true;
+			radTitleOr.Text = "or";
+			radTitleOr.UseVisualStyleBackColor = true;
 			// 
 			// clbLabelsInNotebooks
 			// 
@@ -154,11 +217,11 @@ namespace MyNotebooks.subforms
 			radTitleText_Or.Text = "or";
 			radTitleText_Or.UseVisualStyleBackColor = true;
 			// 
-			// radText_And
+			// radTitle_And
 			// 
 			radTitle_And.AutoSize = true;
 			radTitle_And.Location = new System.Drawing.Point(39, 4);
-			radTitle_And.Name = "radText_And";
+			radTitle_And.Name = "radTitle_And";
 			radTitle_And.Size = new System.Drawing.Size(45, 19);
 			radTitle_And.TabIndex = 0;
 			radTitle_And.Text = "and";
@@ -230,28 +293,6 @@ namespace MyNotebooks.subforms
 			txtSearchTitle.TabIndex = 21;
 			txtSearchTitle.TextChanged += this.SearchButtonEnableDisable;
 			// 
-			// radTitleOr
-			// 
-			radTitleOr.AutoSize = true;
-			radTitleOr.Checked = true;
-			radTitleOr.Location = new System.Drawing.Point(3, 3);
-			radTitleOr.Name = "radTitleOr";
-			radTitleOr.Size = new System.Drawing.Size(36, 19);
-			radTitleOr.TabIndex = 35;
-			radTitleOr.TabStop = true;
-			radTitleOr.Text = "or";
-			radTitleOr.UseVisualStyleBackColor = true;
-			// 
-			// radText_And
-			// 
-			radText_And.AutoSize = true;
-			radText_And.Location = new System.Drawing.Point(41, 3);
-			radText_And.Name = "radText_And";
-			radText_And.Size = new System.Drawing.Size(45, 19);
-			radText_And.TabIndex = 36;
-			radText_And.Text = "and";
-			radText_And.UseVisualStyleBackColor = true;
-			// 
 			// chkMatchCase_Title
 			// 
 			chkMatchCase_Title.AutoSize = true;
@@ -263,44 +304,12 @@ namespace MyNotebooks.subforms
 			// 
 			// panel3
 			// 
-			panel3.Controls.Add(panel1);
 			panel3.Controls.Add(radDate_Or);
 			panel3.Controls.Add(radDate_And);
-			panel3.Location = new System.Drawing.Point(191, 128);
+			panel3.Location = new System.Drawing.Point(191, 129);
 			panel3.Name = "panel3";
-			panel3.Size = new System.Drawing.Size(90, 25);
+			panel3.Size = new System.Drawing.Size(272, 25);
 			panel3.TabIndex = 58;
-			// 
-			// panel1
-			// 
-			panel1.Controls.Add(radioButton1);
-			panel1.Controls.Add(radioButton2);
-			panel1.Location = new System.Drawing.Point(107, 1);
-			panel1.Name = "panel1";
-			panel1.Size = new System.Drawing.Size(90, 25);
-			panel1.TabIndex = 59;
-			// 
-			// radioButton1
-			// 
-			radioButton1.AutoSize = true;
-			radioButton1.Checked = true;
-			radioButton1.Location = new System.Drawing.Point(2, 4);
-			radioButton1.Name = "radioButton1";
-			radioButton1.Size = new System.Drawing.Size(36, 19);
-			radioButton1.TabIndex = 1;
-			radioButton1.TabStop = true;
-			radioButton1.Text = "or";
-			radioButton1.UseVisualStyleBackColor = true;
-			// 
-			// radioButton2
-			// 
-			radioButton2.AutoSize = true;
-			radioButton2.Location = new System.Drawing.Point(39, 4);
-			radioButton2.Name = "radioButton2";
-			radioButton2.Size = new System.Drawing.Size(45, 19);
-			radioButton2.TabIndex = 0;
-			radioButton2.Text = "and";
-			radioButton2.UseVisualStyleBackColor = true;
 			// 
 			// radDate_Or
 			// 
@@ -327,28 +336,16 @@ namespace MyNotebooks.subforms
 			// panel2
 			// 
 			panel2.BorderStyle = BorderStyle.FixedSingle;
-			panel2.Controls.Add(dtFindDate_To);
 			panel2.Controls.Add(dtFindDate_From);
-			panel2.Controls.Add(label12);
 			panel2.Controls.Add(dtFindDate);
+			panel2.Controls.Add(dtFindDate_To);
+			panel2.Controls.Add(label12);
 			panel2.Controls.Add(chkUseDate);
 			panel2.Controls.Add(chkUseDateRange);
 			panel2.Location = new System.Drawing.Point(194, 137);
 			panel2.Name = "panel2";
 			panel2.Size = new System.Drawing.Size(430, 51);
 			panel2.TabIndex = 57;
-			// 
-			// dtFindDate_To
-			// 
-			dtFindDate_To.CustomFormat = "M/d/yyyy";
-			dtFindDate_To.Enabled = false;
-			dtFindDate_To.Format = DateTimePickerFormat.Custom;
-			dtFindDate_To.Location = new System.Drawing.Point(344, 21);
-			dtFindDate_To.Name = "dtFindDate_To";
-			dtFindDate_To.ShowUpDown = true;
-			dtFindDate_To.Size = new System.Drawing.Size(79, 23);
-			dtFindDate_To.TabIndex = 20;
-			dtFindDate_To.Value = new System.DateTime(2021, 12, 23, 18, 55, 40, 0);
 			// 
 			// dtFindDate_From
 			// 
@@ -362,15 +359,6 @@ namespace MyNotebooks.subforms
 			dtFindDate_From.TabIndex = 18;
 			dtFindDate_From.Value = new System.DateTime(2021, 12, 23, 18, 55, 40, 0);
 			// 
-			// label12
-			// 
-			label12.AutoSize = true;
-			label12.Location = new System.Drawing.Point(321, 25);
-			label12.Name = "label12";
-			label12.Size = new System.Drawing.Size(18, 15);
-			label12.TabIndex = 19;
-			label12.Text = "to";
-			// 
 			// dtFindDate
 			// 
 			dtFindDate.CustomFormat = "M/d/yyyy";
@@ -382,6 +370,27 @@ namespace MyNotebooks.subforms
 			dtFindDate.Size = new System.Drawing.Size(79, 23);
 			dtFindDate.TabIndex = 17;
 			dtFindDate.Value = new System.DateTime(2021, 12, 23, 18, 55, 40, 0);
+			// 
+			// dtFindDate_To
+			// 
+			dtFindDate_To.CustomFormat = "M/d/yyyy";
+			dtFindDate_To.Enabled = false;
+			dtFindDate_To.Format = DateTimePickerFormat.Custom;
+			dtFindDate_To.Location = new System.Drawing.Point(344, 21);
+			dtFindDate_To.Name = "dtFindDate_To";
+			dtFindDate_To.ShowUpDown = true;
+			dtFindDate_To.Size = new System.Drawing.Size(79, 23);
+			dtFindDate_To.TabIndex = 20;
+			dtFindDate_To.Value = new System.DateTime(2021, 12, 23, 18, 55, 40, 0);
+			// 
+			// label12
+			// 
+			label12.AutoSize = true;
+			label12.Location = new System.Drawing.Point(321, 25);
+			label12.Name = "label12";
+			label12.Size = new System.Drawing.Size(18, 15);
+			label12.TabIndex = 19;
+			label12.Text = "to";
 			// 
 			// chkUseDate
 			// 
@@ -500,6 +509,7 @@ namespace MyNotebooks.subforms
 			lstFoundEntries.BorderStyle = BorderStyle.FixedSingle;
 			lstFoundEntries.ContextMenuStrip = mnuEntryEditTop;
 			lstFoundEntries.FormattingEnabled = true;
+			lstFoundEntries.IntegralHeight = false;
 			lstFoundEntries.ItemHeight = 15;
 			lstFoundEntries.Location = new System.Drawing.Point(6, 192);
 			lstFoundEntries.Name = "lstFoundEntries";
@@ -634,15 +644,6 @@ namespace MyNotebooks.subforms
 			ddlNbsToSearch.TabIndex = 60;
 			ddlNbsToSearch.SelectedIndexChanged += this.ddlNbsToSearch_SelectedIndexChanged;
 			// 
-			// panel6
-			// 
-			panel6.Controls.Add(radText_And);
-			panel6.Controls.Add(radTitleOr);
-			panel6.Location = new System.Drawing.Point(188, 77);
-			panel6.Name = "panel6";
-			panel6.Size = new System.Drawing.Size(90, 25);
-			panel6.TabIndex = 40;
-			// 
 			// frmSearch
 			// 
 			AcceptButton = btnSearch;
@@ -661,21 +662,21 @@ namespace MyNotebooks.subforms
 			ResizeEnd += this.frmSearch_ResizeEnd;
 			grpFindEntry.ResumeLayout(false);
 			grpFindEntry.PerformLayout();
+			panel7.ResumeLayout(false);
+			panel7.PerformLayout();
+			panel6.ResumeLayout(false);
+			panel6.PerformLayout();
 			panel5.ResumeLayout(false);
 			panel5.PerformLayout();
 			panel4.ResumeLayout(false);
 			panel4.PerformLayout();
 			panel3.ResumeLayout(false);
 			panel3.PerformLayout();
-			panel1.ResumeLayout(false);
-			panel1.PerformLayout();
 			panel2.ResumeLayout(false);
 			panel2.PerformLayout();
 			pnlLabels_AndOr.ResumeLayout(false);
 			pnlLabels_AndOr.PerformLayout();
 			mnuEntryEditTop.ResumeLayout(false);
-			panel6.ResumeLayout(false);
-			panel6.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
@@ -724,14 +725,14 @@ namespace MyNotebooks.subforms
 		private RadioButton radTitleText_Or;
 		private RadioButton radTitle_And;
 		private Panel panel4;
-		private Panel panel1;
-		private RadioButton radioButton1;
-		private RadioButton radioButton2;
 		private Label label1;
 		private ComboBox ddlNbsToSearch;
 		private CheckedListBox clbLabelsInNotebooks;
 		private Label label3;
 		private CheckBox chkMatchCase_Text;
 		private Panel panel6;
+		private RadioButton radEditedOn;
+		private Panel panel7;
+		private RadioButton radCreatedOn;
 	}
 }

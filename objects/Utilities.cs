@@ -320,7 +320,7 @@ namespace MyNotebooks.objects
 			entriesList.Height = seperatorLabel.Top - entriesList.Top;
 			typeLabel.Top = seperatorLabel.Top + seperatorLabel.Height;
 			entryRTB.Top = typeLabel.Top + typeLabel.Height;
-			entryRTB.Height = callingForm.Height - entryRTB.Top - 50;
+			entryRTB.Height = callingForm.Height - entryRTB.Top - 80;
 		}
 
 		public static void				SetProgramPIN(string nb)
