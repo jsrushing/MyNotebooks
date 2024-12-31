@@ -218,6 +218,8 @@ namespace MyNotebooks.subforms
 			this.Cursor = Cursors.WaitCursor;
 			EntriesToSearch.Clear();
 			this.FoundEntries.Clear();
+			rtbSelectedEntry_Found.Clear();
+			lstFoundEntries.Items.Clear();
 			List<Entry> entries = new();
 			List<Notebook> notebooks = new();
 
