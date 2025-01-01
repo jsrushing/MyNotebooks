@@ -319,9 +319,7 @@ namespace MyNotebooks
 				{
 					if (labelsForSearch.Intersect(entry.AllLabels.Select(l => l.LabelText)).Any()) { entriesToReturn.Add(entry); }
 				}
-
 			}
-
 			return entriesToReturn;
 		}
 
@@ -406,17 +404,13 @@ namespace MyNotebooks
 			}
 		}
 
-		public List<Entry>	Search(SearchObject So)
+		public AllFoundEntries	Search(SearchObject So)
 		{
-			List<Entry> allEntries			= new();
-			List<Entry> entriesWithDate		= new();
-			List<Entry> entriesWithLabels	= new();
-			List<Entry> entriesWithTitle	= new();
-			List<Entry> entriesWithText		= new();
+			AllFoundEntries fe = new();
 
-			if(So.labelsForSearch.Count > 0 & Entries.Count > 0) 
+			if (So.labelsForSearch.Count > 0 & Entries.Count > 0)
 			{
-				entriesWithLabels.AddRange(ProcessLabels(Entries, So.labelsForSearch, So.radLabels_And.Checked)); 
+				fe.foundWithLabels.AddRange(ProcessLabels(Entries, So.labelsForSearch, So.radLabels_And.Checked));
 			}
 
 			var title = !So.chkMatchCase_Title.Checked ? So.searchTitle.ToLower() : So.searchTitle;
@@ -424,123 +418,42 @@ namespace MyNotebooks
 
 			if (So.searchTitle.Length > 0)
 			{
-				if (So.radTitle_And.Checked)
+				if (!So.chkMatchCase_Title.Checked)
 				{
-					if (!So.chkMatchCase_Title.Checked)
-					{
-						entriesWithTitle = Entries.Where(e => e.Title.ToLower().Contains(title) & e.Text.ToLower().Contains(text)).ToList();
-					}
-					else
-					{
-						entriesWithTitle = Entries.Where(e => e.Title.Contains(title) & e.Text.Contains(text)).ToList();
-					}
+					fe.foundWithTitle = Entries.Where(e => e.Title.ToLower().Contains(title)).ToList();
 				}
 				else
 				{
-					if (!So.chkMatchCase_Title.Checked)
-					{
-						entriesWithTitle = Entries.Where(e => e.Title.ToLower().Contains(title)).ToList();
-					}
-					else
-					{
-						entriesWithTitle = Entries.Where(e => e.Title.Contains(title)).ToList();
-					}
+					fe.foundWithTitle = Entries.Where(e => e.Title.Contains(title)).ToList();
 				}
 			}
 
-			if(So.searchText.Length > 0)
+			if (So.searchText.Length > 0)
 			{
-				if(So.radText_And.Checked)
+				if (!So.chkMatchCase_Text.Checked)
 				{
-					if (!So.chkMatchCase_Text.Checked)
-					{
-						entriesWithText = Entries.Where(e => e.Text.ToLower().Contains(text) & e.Text.ToLower().Contains(title)).ToList();
-					}
-					else
-					{
-						entriesWithText = Entries.Where(e => e.Text.Contains(text)).ToList();
-					}
+					fe.foundWithText = Entries.Where(e => e.Text.ToLower().Contains(text)).ToList();
 				}
 				else
 				{
-					if(!So.chkMatchCase_Text.Checked)
-					{
-						entriesWithText = Entries.Where(e => e.Text.ToLower().Contains(text)).ToList();
-					}
-					else
-					{
-						entriesWithText = Entries.Where(e => e.Text.Contains(text)).ToList();
-					}
+					fe.foundWithText = Entries.Where(e => e.Text.Contains(text)).ToList();
 				}
-					
 			}
 
 			if (So.chkUseDate.Checked | So.chkUseDateRange.Checked)
 			{
-				if (So.chkUseDate.Checked) 
+				if (So.radCreatedOn.Checked)
 				{
-					if(So.radCreatedOn.Checked)
-					{
-						entriesWithDate = Entries.Where(p => p.CreatedOn.ToShortDateString() == So.dtFindDate.Value.ToShortDateString()).ToList(); 
-					}
-					else
-					{
-						entriesWithDate = Entries.Where(p => p.EditedOn.ToShortDateString() == So.dtFindDate.Value.ToShortDateString()).ToList();
-					}
+					fe.foundWithDate = Entries.Where(p => p.CreatedOn >= So.dtFindDate_From.Value && p.CreatedOn <= So.dtFindDate_To.Value).ToList();
 				}
 				else
 				{
-					if (So.radCreatedOn.Checked)
-					{
-						entriesWithDate = Entries.Where(p => p.CreatedOn >= So.dtFindDate_From.Value && p.CreatedOn <= So.dtFindDate_To.Value).ToList(); 
-					}
-					else
-					{
-						entriesWithDate = Entries.Where(p => p.EditedOn >= So.dtFindDate_From.Value && p.EditedOn <= So.dtFindDate_To.Value).ToList();
-					}
+					fe.foundWithDate = Entries.Where(p => p.EditedOn >= So.dtFindDate_From.Value && p.EditedOn <= So.dtFindDate_To.Value).ToList();
 				}
 			}
 
-			allEntries = entriesWithLabels;
-
-			if(entriesWithTitle.Count > 0)
-			{
-				if(So.radTitle_And.Checked)
-				{
-					allEntries = allEntries.Count > 0 ? entriesWithTitle.Intersect(allEntries).ToList() : entriesWithTitle;
-				}
-				else
-				{
-					allEntries.AddRange(entriesWithTitle);
-				}
-			}
-
-			if(entriesWithText.Count > 0)
-			{
-				if(So.radText_And.Checked)
-				{
-					allEntries = allEntries.Count > 0 ? entriesWithText.Intersect(allEntries).ToList() : entriesWithText;
-				}
-				else
-				{
-					allEntries.AddRange(entriesWithText);
-				}
-			}
-
-			if(entriesWithDate.Count > 0)
-			{
-				if(So.radDate_And.Checked)
-				{
-					allEntries = allEntries.Count > 0 ? entriesWithDate.Intersect(allEntries).ToList() : entriesWithDate;
-				}
-				else
-				{
-					allEntries.AddRange(entriesWithDate);
-				}
-			}
-
-			return allEntries;
+			return fe;
 		}
-    }
+	}
 
 }

@@ -33,7 +33,8 @@ namespace MyNotebooks.objects
 		public SearchObject(CheckBox _chkUseDate, CheckBox _chkUseDateRange, CheckBox _chkMatchCase_title, 
 			CheckBox _chkMatchCase_text, CheckBox _chkWholeWord_Title, CheckBox _chkWholeWord_Text
 			, DateTimePicker _dtFindDate, DateTimePicker _dtFindDate_From, DateTimePicker _dtFindDate_To
-			, RadioButton _radDateAnd, RadioButton _radCreatedOn, RadioButton _radLabelsAnd, RadioButton _radTitleAnd, RadioButton _radTextAnd
+			, RadioButton _radDateAnd, RadioButton _radCreatedOn, RadioButton _radLabelsAnd
+			, RadioButton _radTitleAnd, RadioButton _radTextAnd
 			, string _searchTitle, string _searchText, List<string> _labels )
 		{
 			chkUseDate			= _chkUseDate;

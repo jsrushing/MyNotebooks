@@ -222,6 +222,9 @@ namespace MyNotebooks.subforms
 			lstFoundEntries.Items.Clear();
 			List<Entry> entries = new();
 			List<Notebook> notebooks = new();
+			List<string> checkedLabels = GetCheckedLabels();
+
+			AllFoundEntries fe = new();
 
 			foreach (string nbName in NbsToSearch)
 			{
@@ -229,16 +232,82 @@ namespace MyNotebooks.subforms
 				nb.Entries = new();
 				nb.Entries.AddRange(DbAccess.GetEntriesInNotebook(nb.Id));
 
-				foreach (Entry entry in DbAccess.GetEntriesInNotebook(nb.Id))
-				{
-					SearchObject so = new (
-						chkUseDate, chkUseDateRange, chkMatchCase_Title, chkMatchCase_Text, chkMatchCase_Title, chkMatchCase_Text 
-						, dtFindDate, dtFindDate_From, dtFindDate_To, radDate_And, radLabels_And, radCreatedOn, radTitle_And, radText_And
-						, txtSearchTitle.Text, txtSearchText.Text, GetCheckedLabels());
+				SearchObject so = new (
+					chkUseDate, chkUseDateRange, chkMatchCase_Title, chkMatchCase_Text, chkWholeWord_Title, chkWholeWord_Text 
+					, dtFindDate, dtFindDate_From, dtFindDate_To, radDate_And, radCreatedOn, radLabels_And, radTitle_And, radText_And
+					, txtSearchTitle.Text, txtSearchText.Text, checkedLabels);
 
-					var v = nb.Search(so);
-					if (v.Count > 0) { FoundEntries.AddRange(v.Where(e => !FoundEntries.Contains(e))); }
+				fe.Add(nb.Search(so));
+			}
+
+			if(fe.foundWithLabels.Count > 0)
+			{
+				FoundEntries.AddRange(fe.foundWithLabels);
+			}
+
+			if(fe.foundWithTitle.Count > 0)
+			{
+				if (radTitle_And.Checked)
+				{
+					if(FoundEntries.Count > 0)
+					{
+						if (chkMatchCase_Title.Checked)
+						{
+							FoundEntries = FoundEntries.Where(e => e.Title.Contains(txtSearchTitle.Text)).ToList();
+						}
+						else
+						{
+							FoundEntries = FoundEntries.Where(e => e.Title.ToLower().Contains(txtSearchTitle.Text.ToLower())).ToList();
+						}
+					}
+					else
+					{
+						FoundEntries.AddRange(fe.foundWithTitle);
+					}
 				}
+				else
+				{
+					FoundEntries.AddRange(fe.foundWithTitle);
+				}
+			}
+
+			if(fe.foundWithText.Count > 0)
+			{
+				if (radText_And.Checked)
+				{
+					if (chkMatchCase_Text.Checked)
+					{
+						FoundEntries = FoundEntries.Where(e => e.Text.Contains(txtSearchText.Text)).ToList();
+					}
+					else
+					{
+						FoundEntries = FoundEntries.Where(e => e.Text.ToLower().Contains(txtSearchText.Text.ToLower())).ToList();
+					}
+				}
+				else
+				{
+					FoundEntries.AddRange(fe.foundWithText);
+				}
+			}
+
+			if(fe.foundWithDate.Count > 0)
+			{
+				if (radDate_And.Checked)
+				{
+					if (radCreatedOn.Checked)
+					{
+						FoundEntries = FoundEntries.Where(e => e.CreatedOn == dtFindDate.Value).ToList();
+					}
+					else
+					{
+						FoundEntries = FoundEntries.Where(e => e.EditedOn == dtFindDate.Value).ToList();
+					}
+				}
+				else
+				{
+					FoundEntries.AddRange(fe.foundWithDate);
+				}
+
 			}
 
 			await Utilities.PopulateEntries(lstFoundEntries, FoundEntries, "", "", "", true, 3, true, lstFoundEntries.Width - 25);
@@ -358,7 +427,7 @@ namespace MyNotebooks.subforms
 
 				//while (indx > 0 & !lstFoundEntries.Items[indx].ToString().StartsWith("---")) { indx--; }
 				//indx += indx > 0 ? 1 : 0 ;
-				//SelectedEntry = FoundEntries[indx / 4];
+				//SelectedEntry = AllFoundEntries[indx / 4];
 
 				//lb.SelectedIndices.Clear();
 				//lb.SelectedIndices.Add(indx); lb.SelectedIndices.Add(indx + 1); lb.SelectedIndices.Add(indx + 2);
@@ -382,7 +451,7 @@ namespace MyNotebooks.subforms
 				////if (selectedIndices.Count() > 1) { selectedIndices = selectedIndices.Except(ThreeSelections).ToList(); }
 
 
-				//Entry e2 = FoundEntries[lb.SelectedIndex/4];
+				//Entry e2 = AllFoundEntries[lb.SelectedIndex/4];
 
 				////select the entire short entry
 				////lb.SelectedIndices.Clear();
