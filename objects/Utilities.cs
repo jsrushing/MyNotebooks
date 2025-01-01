@@ -275,22 +275,6 @@ namespace MyNotebooks.objects
 			}
 		}
 
-		public static void				PopulateTreeWithLabels(TreeView treeView, Entry currentEntry, int nodeIndex, MNLabel lbl)
-		{
-			TreeNode tn = new();
-			tn.Text = lbl.LabelText;
-			tn.Checked = nodeIndex == 0;
-
-			if (currentEntry != null)
-			{
-				if (!tn.Checked | nodeIndex == 0) { if (!treeView.Nodes[nodeIndex].Nodes.ContainsKey(tn.Text)) { treeView.Nodes[nodeIndex].Nodes.Add(tn); } }
-			}
-			else
-			{
-				if (!treeView.Nodes[nodeIndex].Nodes.ContainsKey(tn.Text)) treeView.Nodes[nodeIndex].Nodes.Add(tn);
-			}
-		}
-
 		public static void				ResetTree(TreeView treeView, Entry currentEntry, frmMain.OrgLevelTypes orgLevelType = frmMain.OrgLevelTypes.None)
 		{
 			treeView.Nodes.Clear();
@@ -300,13 +284,9 @@ namespace MyNotebooks.objects
 			DateTime now = DateTime.Now;
 			
 			if(currentEntry != null)
-			{ 
-				foreach (MNLabel lbl in currentEntry.AllLabels) PopulateTreeWithLabels(treeView, currentEntry, 0, lbl); 
-				Program.LblsUnderNotebook = new(DbAccess.GetLabelsUnderOrgLevel(currentEntry.Id, 2));
-			}
+			{ foreach(string labelText in currentEntry.AllLabels.Select(l => l.LabelText)) { treeView.Nodes[0].Nodes.Add(labelText); } }
 
-			DbAccess.PopulateLabelsInAllNotebooks();
-			foreach (MNLabel label in Program.LblsUnderNotebook) PopulateTreeWithLabels(treeView, null, 1, label);
+			foreach (string labelText in Program.LblsUnderNotebook.Select(l => l.LabelText).Distinct().ToList()) { treeView.Nodes[1].Nodes.Add(labelText); }
 			foreach (string labelText in Program.LblsInAllNotebooks) treeView.Nodes[2].Nodes.Add(labelText);
 		}
 
