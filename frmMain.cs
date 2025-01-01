@@ -113,7 +113,7 @@
 					Still have to FTP newly published files to GoDaddy.
 					Would like to publish directly to FTP but apparently that's not an option in VS2022
 
-				003 Need to be able to distribute journals to multiple devices - so journals are portable.
+				003x Need to be able to distribute journals to multiple devices - so journals are portable.
 					> Export Journal via email?
 						Will need 'Import Journal' in app so user can browse to downloaded journal.
 						This isn't really portable since updates on one device will have to be emailed.
@@ -139,7 +139,9 @@
 				DONE 01/01/25
 
 		01/01/25
-			006 Fix Labels management. Rename, Delete, etc.
+			006 Fix Labels management. 
+				Rename, Delete, etc.
+				When adding label to entry, list for the current notebook contains duplicates.
 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	enhancements:
@@ -172,13 +174,16 @@
 			010 Using local database.
 
 		12/24/24
-			011 Recreate a notebook from a backup
+			011x Recreate a notebook from a backup
 				Done 12/25/24
-			011a Serialize notebook for 'Save to Disk'. Output JSON.
+			011ax Serialize notebook for 'Save to Disk'. Output JSON.
 				Enhanced: Added both JSON and plain text outputs. 12/25/24
 				Done 12/24/24
-			011b Handle restored notebook.
+			011bx Handle restored notebook.
 				Done 12/28/24
+
+		01/01/25
+			012 Add 'backup all notebooks'
 
  */
 using System;
