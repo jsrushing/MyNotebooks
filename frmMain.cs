@@ -142,6 +142,7 @@
 			006 Fix Labels management. 
 				Rename, Delete, etc.
 				When adding label to entry, list for the current notebook contains duplicates.
+					DONE 01/01/25
 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	enhancements:

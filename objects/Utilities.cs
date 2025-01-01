@@ -283,11 +283,11 @@ namespace MyNotebooks.objects
 
 			if (currentEntry != null)
 			{
-				if (!tn.Checked | nodeIndex == 0) { treeView.Nodes[nodeIndex].Nodes.Add(tn); }
+				if (!tn.Checked | nodeIndex == 0) { if (!treeView.Nodes[nodeIndex].Nodes.ContainsKey(tn.Text)) { treeView.Nodes[nodeIndex].Nodes.Add(tn); } }
 			}
 			else
 			{
-				treeView.Nodes[nodeIndex].Nodes.Add(tn);
+				if (!treeView.Nodes[nodeIndex].Nodes.ContainsKey(tn.Text)) treeView.Nodes[nodeIndex].Nodes.Add(tn);
 			}
 		}
 

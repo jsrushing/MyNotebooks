@@ -577,7 +577,6 @@ namespace MyNotebooks.DataAccess
 
 		public static void			PopulateLabelsInAllNotebooks()
 		{
-			//DataTable dt = new DataTable();
 			Program.LblsInAllNotebooks.Clear();
 
 			try
@@ -596,7 +595,6 @@ namespace MyNotebooks.DataAccess
 						}
 					}
 				}
-
 			}
 			catch (Exception ex) { }
 		}
