@@ -406,25 +406,22 @@ namespace MyNotebooks
 
 		public AllFoundEntries	Search(SearchObject So)
 		{
-			AllFoundEntries fe = new();
+			AllFoundEntries afe = new();
 
 			if (So.labelsForSearch.Count > 0 & Entries.Count > 0)
 			{
-				fe.foundWithLabels.AddRange(ProcessLabels(Entries, So.labelsForSearch, So.radLabels_And.Checked));
+				afe.foundWithLabels.AddRange(ProcessLabels(Entries, So.labelsForSearch, So.radLabels_And.Checked));
 			}
-
-			var title = !So.chkMatchCase_Title.Checked ? So.searchTitle.ToLower() : So.searchTitle;
-			var text = !So.chkMatchCase_Text.Checked ? So.searchText.ToLower() : So.searchText;
 
 			if (So.searchTitle.Length > 0)
 			{
 				if (!So.chkMatchCase_Title.Checked)
 				{
-					fe.foundWithTitle = Entries.Where(e => e.Title.ToLower().Contains(title)).ToList();
+					afe.foundWithTitle = Entries.Where(e => e.Title.ToLower().Contains(So.searchTitle.ToLower())).ToList();
 				}
 				else
 				{
-					fe.foundWithTitle = Entries.Where(e => e.Title.Contains(title)).ToList();
+					afe.foundWithTitle = Entries.Where(e => e.Title.Contains(So.searchTitle)).ToList();
 				}
 			}
 
@@ -432,11 +429,11 @@ namespace MyNotebooks
 			{
 				if (!So.chkMatchCase_Text.Checked)
 				{
-					fe.foundWithText = Entries.Where(e => e.Text.ToLower().Contains(text)).ToList();
+					afe.foundWithText = Entries.Where(e => e.Text.ToLower().Contains(So.searchText.ToLower())).ToList();
 				}
 				else
 				{
-					fe.foundWithText = Entries.Where(e => e.Text.Contains(text)).ToList();
+					afe.foundWithText = Entries.Where(e => e.Text.Contains(So.searchText)).ToList();
 				}
 			}
 
@@ -444,11 +441,11 @@ namespace MyNotebooks
 			{
 				if (So.radCreatedOn.Checked)
 				{
-					fe.foundWithDate = Entries.Where(p => p.CreatedOn.ToShortDateString() == So.dtFindDate.Value.ToShortDateString()).ToList();
+					afe.foundWithDate = Entries.Where(p => p.CreatedOn.ToShortDateString() == So.dtFindDate.Value.ToShortDateString()).ToList();
 				}
 				else
 				{
-					fe.foundWithDate = Entries.Where(p => p.EditedOn.ToShortDateString() == So.dtFindDate.Value.ToShortDateString()).ToList();
+					afe.foundWithDate = Entries.Where(p => p.EditedOn.ToShortDateString() == So.dtFindDate.Value.ToShortDateString()).ToList();
 				}
 			}
 
@@ -456,15 +453,15 @@ namespace MyNotebooks
 			{
 				if (So.radCreatedOn.Checked)
 				{
-					fe.foundWithDate = Entries.Where(p => p.CreatedOn >= So.dtFindDate_From.Value && p.CreatedOn <= So.dtFindDate_To.Value).ToList();
+					afe.foundWithDate = Entries.Where(p => p.CreatedOn >= So.dtFindDate_From.Value && p.CreatedOn <= So.dtFindDate_To.Value).ToList();
 				}
 				else
 				{
-					fe.foundWithDate = Entries.Where(p => p.EditedOn >= So.dtFindDate_From.Value && p.EditedOn <= So.dtFindDate_To.Value).ToList();
+					afe.foundWithDate = Entries.Where(p => p.EditedOn >= So.dtFindDate_From.Value && p.EditedOn <= So.dtFindDate_To.Value).ToList();
 				}
 			}
 
-			return fe;
+			return afe;
 		}
 	}
 
