@@ -36,6 +36,7 @@ namespace MyNotebooks.subforms
 			components = new Container();
 			ComponentResourceManager resources = new ComponentResourceManager(typeof(frmSearch));
 			grpFindEntry = new GroupBox();
+			lblUncheckAllLabels = new Label();
 			panel7 = new Panel();
 			radCreatedOn = new RadioButton();
 			radEditedOn = new RadioButton();
@@ -108,6 +109,7 @@ namespace MyNotebooks.subforms
 			// grpFindEntry
 			// 
 			grpFindEntry.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+			grpFindEntry.Controls.Add(lblUncheckAllLabels);
 			grpFindEntry.Controls.Add(panel7);
 			grpFindEntry.Controls.Add(panel1);
 			grpFindEntry.Controls.Add(panel6);
@@ -132,6 +134,20 @@ namespace MyNotebooks.subforms
 			grpFindEntry.Size = new System.Drawing.Size(787, 638);
 			grpFindEntry.TabIndex = 7;
 			grpFindEntry.TabStop = false;
+			// 
+			// lblUncheckAllLabels
+			// 
+			lblUncheckAllLabels.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+			lblUncheckAllLabels.AutoSize = true;
+			lblUncheckAllLabels.Cursor = Cursors.Hand;
+			lblUncheckAllLabels.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline);
+			lblUncheckAllLabels.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			lblUncheckAllLabels.Location = new System.Drawing.Point(112, 22);
+			lblUncheckAllLabels.Name = "lblUncheckAllLabels";
+			lblUncheckAllLabels.Size = new System.Drawing.Size(65, 13);
+			lblUncheckAllLabels.TabIndex = 63;
+			lblUncheckAllLabels.Text = "uncheck all";
+			lblUncheckAllLabels.Click += this.lblUncheckAllLabels_Click;
 			// 
 			// panel7
 			// 
@@ -527,7 +543,7 @@ namespace MyNotebooks.subforms
 			// 
 			pnlLabels_AndOr.Controls.Add(radLabels_Or);
 			pnlLabels_AndOr.Controls.Add(radLabels_And);
-			pnlLabels_AndOr.Location = new System.Drawing.Point(60, 6);
+			pnlLabels_AndOr.Location = new System.Drawing.Point(60, 0);
 			pnlLabels_AndOr.Name = "pnlLabels_AndOr";
 			pnlLabels_AndOr.Size = new System.Drawing.Size(90, 25);
 			pnlLabels_AndOr.TabIndex = 48;
@@ -624,7 +640,7 @@ namespace MyNotebooks.subforms
 			label17.AutoSize = true;
 			label17.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
 			label17.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			label17.Location = new System.Drawing.Point(3, 10);
+			label17.Location = new System.Drawing.Point(3, 4);
 			label17.Name = "label17";
 			label17.Size = new System.Drawing.Size(51, 17);
 			label17.TabIndex = 26;
@@ -654,7 +670,7 @@ namespace MyNotebooks.subforms
 			// label3
 			// 
 			label3.AutoSize = true;
-			label3.Location = new System.Drawing.Point(53, 11);
+			label3.Location = new System.Drawing.Point(53, 5);
 			label3.Name = "label3";
 			label3.Size = new System.Drawing.Size(11, 15);
 			label3.TabIndex = 61;
@@ -808,5 +824,6 @@ namespace MyNotebooks.subforms
 		private Panel panel8;
 		private CheckBox chkWholeWord_Text;
 		private Label label4;
+		private Label lblUncheckAllLabels;
 	}
 }

@@ -19,11 +19,10 @@ namespace MyNotebooks.objects
 
 		public void Add(AllFoundEntries entriesToAdd)
 		{
-			this.foundWithLabels.AddRange(entriesToAdd.foundWithLabels.Except(this.foundWithLabels));
-			this.foundWithTitle.AddRange(entriesToAdd.foundWithTitle.Except(this.foundWithLabels));
+			this.foundWithLabels.AddRange(entriesToAdd.foundWithLabels);
+			this.foundWithTitle.AddRange(entriesToAdd.foundWithTitle);
 			this.foundWithText.AddRange(entriesToAdd.foundWithText);
 			this.foundWithDate.AddRange(entriesToAdd.foundWithDate);
 		}
-
 	}
 }

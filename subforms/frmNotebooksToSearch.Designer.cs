@@ -56,6 +56,7 @@
 			// lblSelectAllOrNone
 			// 
 			lblSelectAllOrNone.AutoSize = true;
+			lblSelectAllOrNone.Cursor = System.Windows.Forms.Cursors.Hand;
 			lblSelectAllOrNone.ForeColor = System.Drawing.SystemColors.Highlight;
 			lblSelectAllOrNone.Location = new System.Drawing.Point(177, 3);
 			lblSelectAllOrNone.Name = "lblSelectAllOrNone";

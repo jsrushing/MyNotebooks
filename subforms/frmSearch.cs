@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Encryption;
+using Microsoft.Extensions.Azure;
 using MyNotebooks.DataAccess;
 using MyNotebooks.objects;
 using MyNotebooks.subforms;
@@ -49,7 +50,7 @@ namespace MyNotebooks.subforms
 			dtFindDate_To.Value = DateTime.Now;
 		}
 
-		private void frmSearch_Load(object sender, EventArgs e)
+		private void			frmSearch_Load(object sender, EventArgs e)
 		{
 			//Worker = new BackgroundWorker();
 			//Worker.DoWork += new DoWorkEventHandler(bgWorker_DoWork);
@@ -109,7 +110,7 @@ namespace MyNotebooks.subforms
 			clbLabelsInNotebooks.Items.AddRange(lbls.ToArray());
 		}
 
-		private void frmSearch_ResizeEnd(object sender, EventArgs e)
+		private void			frmSearch_ResizeEnd(object sender, EventArgs e)
 		{
 			if (this.Height - 344 > 277)
 			{
@@ -151,9 +152,9 @@ namespace MyNotebooks.subforms
 		//	btnSearch.Enabled = true;
 		//}
 
-		private async void btnSearch_Click(object sender, EventArgs e) { await DoSearch(); }
+		private async void		btnSearch_Click(object sender, EventArgs e) { await DoSearch(); }
 
-		private async void btnExportEntries_Click(object sender, EventArgs e)
+		private async void		btnExportEntries_Click(object sender, EventArgs e)
 		{
 			using (frmNewNotebook frm = new frmNewNotebook(this))
 			{
@@ -172,7 +173,7 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void ccb_ItemCheck(object sender, ItemCheckEventArgs e)
+		private void			ccb_ItemCheck(object sender, ItemCheckEventArgs e)
 		{
 			//this.Text = sender.ToString();  // this.Text == "whoo" ? "what?" : "whoo";
 
@@ -196,25 +197,24 @@ namespace MyNotebooks.subforms
 			//}
 		}
 
-		private void ccbNotebooks_TextChanged(object sender, EventArgs e)
+		private void			ccbNotebooks_TextChanged(object sender, EventArgs e)
 		{
 			ccbNotebooks.Text = string.Empty;
 		}
 
-		private void chkUseDate_CheckedChanged(object sender, EventArgs e) { ToggleDateControls(true); }
+		private void			chkUseDate_CheckedChanged(object sender, EventArgs e) { ToggleDateControls(true); SearchButtonEnableDisable(null, null); }
 
-		private void chkUseDateRange_CheckedChanged(object sender, EventArgs e) { ToggleDateControls(false); }
+		private void			chkUseDateRange_CheckedChanged(object sender, EventArgs e) { ToggleDateControls(false); SearchButtonEnableDisable(null, null); }
 
-		private void clbLabelsInNotebooks_SelectedIndexChanged(object sender, EventArgs e) { btnSearch.Enabled = clbLabelsInNotebooks.CheckedItems.Count > 0; }
+		private void			clbLabelsInNotebooks_SelectedIndexChanged(object sender, EventArgs e) { btnSearch.Enabled = clbLabelsInNotebooks.CheckedItems.Count > 0; }
 
-		private void ddlNbsToSearch_SelectedIndexChanged(object sender, EventArgs e)
+		private void			ddlNbsToSearch_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			ddlNbsToSearch.Text = string.Empty;
 		}
 
-		private async Task DoSearch()
+		private async Task		DoSearch()
 		{
-			//while (Worker.IsBusy) { Thread.Sleep(100); }
 			this.Cursor = Cursors.WaitCursor;
 			EntriesToSearch.Clear();
 			this.FoundEntries.Clear();
@@ -232,24 +232,24 @@ namespace MyNotebooks.subforms
 				nb.Entries = new();
 				nb.Entries.AddRange(DbAccess.GetEntriesInNotebook(nb.Id));
 
-				SearchObject so = new (
-					chkUseDate, chkUseDateRange, chkMatchCase_Title, chkMatchCase_Text, chkWholeWord_Title, chkWholeWord_Text 
+				SearchObject so = new(
+					chkUseDate, chkUseDateRange, chkMatchCase_Title, chkMatchCase_Text, chkWholeWord_Title, chkWholeWord_Text
 					, dtFindDate, dtFindDate_From, dtFindDate_To, radDate_And, radCreatedOn, radLabels_And, radTitle_And, radText_And
 					, txtSearchTitle.Text, txtSearchText.Text, checkedLabels);
 
 				fe.Add(nb.Search(so));
 			}
 
-			if(fe.foundWithLabels.Count > 0)
+			if (fe.foundWithLabels.Count > 0)
 			{
 				FoundEntries.AddRange(fe.foundWithLabels);
 			}
 
-			if(fe.foundWithTitle.Count > 0)
+			if (fe.foundWithTitle.Count > 0)
 			{
 				if (radTitle_And.Checked)
 				{
-					if(FoundEntries.Count > 0)
+					if (FoundEntries.Count > 0)
 					{
 						if (chkMatchCase_Title.Checked)
 						{
@@ -271,18 +271,22 @@ namespace MyNotebooks.subforms
 				}
 			}
 
-			if(fe.foundWithText.Count > 0)
+			if (fe.foundWithText.Count > 0)
 			{
 				if (radText_And.Checked)
 				{
-					if (chkMatchCase_Text.Checked)
+					if (FoundEntries.Count > 0)
 					{
-						FoundEntries = FoundEntries.Where(e => e.Text.Contains(txtSearchText.Text)).ToList();
+						if (chkMatchCase_Text.Checked)
+						{
+							FoundEntries = FoundEntries.Where(e => e.Text.Contains(txtSearchText.Text)).ToList();
+						}
+						else
+						{
+							FoundEntries = FoundEntries.Where(e => e.Text.ToLower().Contains(txtSearchText.Text.ToLower())).ToList();
+						}
 					}
-					else
-					{
-						FoundEntries = FoundEntries.Where(e => e.Text.ToLower().Contains(txtSearchText.Text.ToLower())).ToList();
-					}
+					else { FoundEntries.AddRange(fe.foundWithText); }
 				}
 				else
 				{
@@ -290,25 +294,30 @@ namespace MyNotebooks.subforms
 				}
 			}
 
-			if(fe.foundWithDate.Count > 0)
+			if (fe.foundWithDate.Count > 0)
 			{
 				if (radDate_And.Checked)
 				{
-					if (radCreatedOn.Checked)
+					if (FoundEntries.Count > 0)
 					{
-						FoundEntries = FoundEntries.Where(e => e.CreatedOn == dtFindDate.Value).ToList();
+						if (radCreatedOn.Checked)
+						{
+							FoundEntries = FoundEntries.Where(e => e.CreatedOn == dtFindDate.Value).ToList();
+						}
+						else
+						{
+							FoundEntries = FoundEntries.Where(e => e.EditedOn == dtFindDate.Value).ToList();
+						}
 					}
-					else
-					{
-						FoundEntries = FoundEntries.Where(e => e.EditedOn == dtFindDate.Value).ToList();
-					}
+					else { FoundEntries.AddRange(fe.foundWithDate); }
 				}
 				else
 				{
 					FoundEntries.AddRange(fe.foundWithDate);
 				}
-
 			}
+
+			FoundEntries = FoundEntries.Distinct().ToList();
 
 			await Utilities.PopulateEntries(lstFoundEntries, FoundEntries, "", "", "", true, 3, true, lstFoundEntries.Width - 25);
 			if (lstFoundEntries.Items.Count == 0) { lstFoundEntries.Items.Add("no matches found"); }
@@ -319,7 +328,7 @@ namespace MyNotebooks.subforms
 			this.Cursor = Cursors.Default;
 		}
 
-		private string GetCheckedIds()
+		private string			GetCheckedIds()
 		{
 			var vRtrn = string.Empty;
 
@@ -352,20 +361,20 @@ namespace MyNotebooks.subforms
 			return vRtrn.AsSpan(0, vRtrn.Length - 1).ToString();
 		}
 
-		private List<string> GetCheckedLabels()
+		private List<string>	GetCheckedLabels()
 		{
 			List<string> lblsToReturn = new();
 			foreach (string li in clbLabelsInNotebooks.CheckedItems) { lblsToReturn.Add(li); }
 			return lblsToReturn;
 		}
 
-		private void GetCurrentSelections()
+		private void			GetCurrentSelections()
 		{
 			ThreeSelections.Clear();
 			foreach (int i in lstFoundEntries.SelectedIndices) { ThreeSelections.Add(i); }
 		}
 
-		private Notebook GetEntryNotebook()
+		private Notebook		GetEntryNotebook()
 		{
 			List<int> selectedIndices = new List<int>();
 			KeyValuePair<string, int> kvp = new KeyValuePair<string, int>();
@@ -376,7 +385,17 @@ namespace MyNotebooks.subforms
 			return kvp.Key == "" ? null : new Notebook(kvp.Key, "").Open();
 		}
 
-		private void lblSeparator_MouseMove(object sender, MouseEventArgs e)
+		private void			lblUncheckAllLabels_Click(object sender, EventArgs e)
+		{
+			for (int i = 0; i < clbLabelsInNotebooks.Items.Count; i++)
+			{
+				clbLabelsInNotebooks.SetItemChecked(i, false);
+			}
+
+			SearchButtonEnableDisable(null, null);
+		}
+
+		private void			lblSeparator_MouseMove(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left)
 			{
@@ -386,18 +405,18 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void lstFoundEntries_MouseMove(object sender, MouseEventArgs e)
+		private void			lstFoundEntries_MouseMove(object sender, MouseEventArgs e)
 		{
 			CurrentMouseOverIndex_lstEntries = (e.Y / lstFoundEntries.ItemHeight) + lstFoundEntries.TopIndex;
 		}
 
-		private void lstFoundEntries_MouseUp(object sender, MouseEventArgs e)
+		private void			lstFoundEntries_MouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Right)
 			{ mnuEntryEditTop.Visible = lstFoundEntries.SelectedIndices.Contains((e.Y / 15) + lstFoundEntries.TopIndex); }
 		}
 
-		private void lstFoundEntries_SelectedIndexChanged(object sender, EventArgs e)
+		private void			lstFoundEntries_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			ListBox lb = (ListBox)sender;
 			RichTextBox rtb = rtbSelectedEntry_Found;
@@ -478,7 +497,7 @@ namespace MyNotebooks.subforms
 
 		}
 
-		private void mnuClearFields_Click(object sender, EventArgs e)
+		private void			mnuClearFields_Click(object sender, EventArgs e)
 		{
 			//for (int i = 0; i < lstLabelsForSearch.Items.Count; i++)
 			//{
@@ -495,7 +514,7 @@ namespace MyNotebooks.subforms
 			lblSeparator.Visible = false;
 		}
 
-		private async void mnuEditEntry_Click(object sender, EventArgs e)
+		private async void		mnuEditEntry_Click(object sender, EventArgs e)
 		{
 			this.Cursor = Cursors.WaitCursor;
 
@@ -517,7 +536,7 @@ namespace MyNotebooks.subforms
 			this.Cursor = Cursors.Default;
 		}
 
-		private async void mnuDeleteEntry_Click(object sender, EventArgs e)
+		private async void		mnuDeleteEntry_Click(object sender, EventArgs e)
 		{
 			this.Cursor = Cursors.WaitCursor;
 			Entry fe = lstFoundEntries.SelectedIndex == 0 ? FoundEntries[0] : FoundEntries[lstFoundEntries.SelectedIndex / 4];
@@ -552,14 +571,17 @@ namespace MyNotebooks.subforms
 			}
 		}
 
-		private void mnuExit_Click(object sender, EventArgs e) { this.Hide(); }
+		private void			mnuExit_Click(object sender, EventArgs e) { this.Hide(); }
 
-		private void SearchButtonEnableDisable(object sender, EventArgs e)
+		private void			SearchButtonEnableDisable(object sender, EventArgs e)
 		{
-			btnSearch.Enabled = txtSearchText.Text.Length > 0 | txtSearchTitle.Text.Length > 0 | clbLabelsInNotebooks.CheckedItems.Count > 0;
+			btnSearch.Enabled = txtSearchText.Text.Length > 0 | 
+				txtSearchTitle.Text.Length > 0 | 
+				clbLabelsInNotebooks.CheckedItems.Count > 0 |
+				chkUseDate.Checked | chkUseDateRange.Checked;
 		}
 
-		private void SelectEntry()
+		private void			SelectEntry()
 		{
 			var indx = CurrentMouseOverIndex_lstEntries;
 
@@ -574,7 +596,7 @@ namespace MyNotebooks.subforms
 			else { lstFoundEntries.SelectedIndices.Clear(); }
 		}
 
-		private void ToggleDateControls(bool toggleUseDate)
+		private void			ToggleDateControls(bool toggleUseDate)
 		{
 			if (!IgnoreCheckChange)
 			{
@@ -603,27 +625,5 @@ namespace MyNotebooks.subforms
 			}
 
 		}
-
-		//private void ccb_SelectedIndexChanged(object sender, EventArgs e)
-		//{
-
-		//}
-
-		//private void ccb_SelectedValueChanged(object sender, EventArgs e)
-		//{
-
-		//}
-
-		//private void ccb_MouseClick(object sender, MouseEventArgs e)
-		//{
-		//	//if (ccb.SelectedIndex > 0)
-		//	//{ int i = 1; }
-		//	lblSearchingIn.Text = string.Format(LblSearchingInText, ccb.CheckedItems.Count, OrgLevels[0].OrgLevelType.ToString());
-		//}
-
-		//private void ccb_Click(object sender, EventArgs e)
-		//{
-		//	lblSearchingIn.Text = string.Format(LblSearchingInText, OrgLevels[0].OrgLevelType.ToString(), ccb.CheckedItems.Count);
-		//}
 	}
 }
