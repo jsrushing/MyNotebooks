@@ -318,7 +318,6 @@ namespace MyNotebooks.subforms
 			}
 
 			FoundEntries = FoundEntries.Distinct().ToList();
-
 			await Utilities.PopulateEntries(lstFoundEntries, FoundEntries, "", "", "", true, 3, true, lstFoundEntries.Width - 25);
 			if (lstFoundEntries.Items.Count == 0) { lstFoundEntries.Items.Add("no matches found"); }
 			btnExportEntries.Visible = lstFoundEntries.Items.Count > 1;

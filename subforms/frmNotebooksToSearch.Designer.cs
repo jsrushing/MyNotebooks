@@ -57,10 +57,11 @@
 			// 
 			lblSelectAllOrNone.AutoSize = true;
 			lblSelectAllOrNone.Cursor = System.Windows.Forms.Cursors.Hand;
+			lblSelectAllOrNone.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, 0);
 			lblSelectAllOrNone.ForeColor = System.Drawing.SystemColors.Highlight;
 			lblSelectAllOrNone.Location = new System.Drawing.Point(177, 3);
 			lblSelectAllOrNone.Name = "lblSelectAllOrNone";
-			lblSelectAllOrNone.Size = new System.Drawing.Size(52, 15);
+			lblSelectAllOrNone.Size = new System.Drawing.Size(55, 15);
 			lblSelectAllOrNone.TabIndex = 2;
 			lblSelectAllOrNone.Text = "select all";
 			lblSelectAllOrNone.Click += this.lblSelectAll_Click;

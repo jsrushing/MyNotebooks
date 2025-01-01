@@ -440,7 +440,19 @@ namespace MyNotebooks
 				}
 			}
 
-			if (So.chkUseDate.Checked | So.chkUseDateRange.Checked)
+			if (So.chkUseDate.Checked)
+			{
+				if (So.radCreatedOn.Checked)
+				{
+					fe.foundWithDate = Entries.Where(p => p.CreatedOn.ToShortDateString() == So.dtFindDate.Value.ToShortDateString()).ToList();
+				}
+				else
+				{
+					fe.foundWithDate = Entries.Where(p => p.EditedOn.ToShortDateString() == So.dtFindDate.Value.ToShortDateString()).ToList();
+				}
+			}
+
+			if (So.chkUseDateRange.Checked)
 			{
 				if (So.radCreatedOn.Checked)
 				{
