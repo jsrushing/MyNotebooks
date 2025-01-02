@@ -225,17 +225,25 @@ namespace MyNotebooks.subforms
 			{
 				var a = GetCheckedNodesAsLabels().Select(l => l.LabelText).Except(CurrentEntry.AllLabels.Select(l => l.LabelText));
 
-				foreach (var v in a)
+				if(a.Count() > 0)
 				{
-					MNLabel newLabel = new() { LabelText = v, ParentId = CurrentEntry.Id }; 
-					DbAccess.CRUDLabel(newLabel, OperationType.Create);
-					CurrentEntry.AllLabels.Add(newLabel);
-					Program.LblsUnderNotebook.Add(newLabel);
-					Program.LblsInAllNotebooks.Add(newLabel.LabelText);
+					foreach (var v in a)
+					{
+						MNLabel newLabel = new() { LabelText = v, ParentId = CurrentEntry.Id }; 
+						DbAccess.CRUDLabel(newLabel, OperationType.Create);
+						CurrentEntry.AllLabels.Add(newLabel);
+						Program.LblsUnderNotebook.Add(newLabel);
+						Program.LblsInAllNotebooks.Add(newLabel.LabelText);
+					}
+
+					this.ActionTaken = true;
+					this.Hide();
+				}
+				else
+				{
+					// message that nothing happened
 				}
 
-				this.ActionTaken = true;
-				this.Hide();
 			}
 			catch (Exception ex) 
 			{

@@ -462,7 +462,7 @@ namespace MyNotebooks.DataAccess
 				using (SqlConnection conn = new(Program.ConnectionString))
 				{
 					conn.Open();
-					using (SqlCommand cmd = new("sp_GetLabelsForNotebook", conn))
+					using (SqlCommand cmd = new("sp_GetLabelsForNotebook", conn))	// returns ordered list DB CHANGE!
 					{
 						cmd.CommandType = CommandType.StoredProcedure;
 						cmd.Parameters.AddWithValue("@notebookId", notebookId);
@@ -489,7 +489,7 @@ namespace MyNotebooks.DataAccess
 			{
 				conn.Open();
 
-				using (SqlCommand cmd = new("sp_GetLabelsUnderOrgLevel", conn))
+				using (SqlCommand cmd = new("sp_GetLabelsUnderOrgLevel", conn))	// returns ordered list
 				{
 					cmd.CommandType = CommandType.StoredProcedure;
 					cmd.Parameters.AddWithValue("@entryId", entryId);
@@ -584,7 +584,7 @@ namespace MyNotebooks.DataAccess
 				using (SqlConnection conn = new(Program.ConnectionString))
 				{
 					conn.Open();
-					using (SqlCommand cmd = new("sp_GetAllLabels", conn))
+					using (SqlCommand cmd = new("sp_GetAllLabels", conn))	// returns ordered list DB CHANGE!!
 					{
 						cmd.CommandType = CommandType.StoredProcedure;
 
@@ -655,6 +655,7 @@ namespace MyNotebooks.DataAccess
 						notebook.Entries.Add(entry);
 						Program.LblsUnderNotebook.AddRange(entry.AllLabels.Where(l => !Program.LblsUnderNotebook.Select(l => l.LabelText).ToList().Contains(l.LabelText)));
 					}
+					Program.LblsUnderNotebook = Program.LblsUnderNotebook.OrderBy(l => l.LabelText).ToList();
 				}
 			}
 		}

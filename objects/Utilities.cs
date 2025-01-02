@@ -284,7 +284,7 @@ namespace MyNotebooks.objects
 			DateTime now = DateTime.Now;
 			
 			if(currentEntry != null)
-			{ foreach(string labelText in currentEntry.AllLabels.Select(l => l.LabelText)) { treeView.Nodes[0].Nodes.Add(labelText); } }
+			{ foreach(string labelText in currentEntry.AllLabels.OrderBy(l => l.LabelText).Select(l => l.LabelText)) { treeView.Nodes[0].Nodes.Add(labelText); } }
 
 			foreach (string labelText in Program.LblsUnderNotebook.Select(l => l.LabelText).Distinct().ToList()) { treeView.Nodes[1].Nodes.Add(labelText); }
 			foreach (string labelText in Program.LblsInAllNotebooks) treeView.Nodes[2].Nodes.Add(labelText);
