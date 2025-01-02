@@ -186,17 +186,11 @@ namespace MyNotebooks.objects
 					else { clb.Items.Add(lbl.LabelText); }
 				}
 
-				if(clb != null)
-				{
-					for(int i = 0; i < clb.Items.Count; i++) { clb.SetItemChecked(i, true); }
-				}
+				//if(clb != null)
+				//{
+				//	for(int i = 0; i < clb.Items.Count; i++) { clb.SetItemChecked(i, true); }
+				//}
 			}
-
-			//foreach (string label in LabelsManager.GetLabels_NoFileDate(sort))
-			//{
-			//	if (lb != null) { lb.Items.Add(label); }
-			//	else { clb.Items.Add(label); }
-			//}
 		}
 
 		public static async Task	RenameLabelInNotebooksList(string oldLabelName, string newLabelName, List<Notebook> notebooksToEdit, Dictionary<string, string> jrnlsAndPINs, Form parent)

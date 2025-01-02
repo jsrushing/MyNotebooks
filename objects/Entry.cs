@@ -111,11 +111,11 @@ namespace MyNotebooks
 			if(!err) this.AllLabels = DbAccess.GetLabelsForEntry(this.Id);
 		}
 
-		public void AddLabel(MNLabel label, bool createLabel)
-		{
-			this.AllLabels.Add(label);
-			if (createLabel) DbAccess.CRUDLabel(label, OperationType.Create);
-		}
+		//public void AddLabel(MNLabel label, bool createLabel)
+		//{
+		//	this.AllLabels.Add(label);
+		//	if (createLabel) DbAccess.CRUDLabel(label, OperationType.Create);
+		//}
 
 		public SQLResult Create() { return GetOperationResult(DbAccess.CRUDNotebookEntry(this), true); }
 		public SQLResult Update() { return GetOperationResult(DbAccess.CRUDNotebookEntry(this, OperationType.Update)); }

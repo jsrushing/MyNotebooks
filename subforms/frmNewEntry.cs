@@ -141,7 +141,7 @@ namespace MyNotebooks.subforms
 					}
 				}
 			}
-
+			
 			if(this.Entry != null)
 			{
 				using (frmLabelsManager frm2 = new(this, CurrentNotebook, this.Entry))
@@ -150,7 +150,7 @@ namespace MyNotebooks.subforms
 
 					if (frm2.ActionTaken)
 					{
-						LabelsManager.PopulateLabelsList(clbLabels, null, LabelsManager.LabelsSortType.None, this.Entry);
+						LabelsManager.PopulateLabelsList(clbLabels, null, LabelsManager.LabelsSortType.Descending, this.Entry);
 						SetIsDirty();
 					}
 
