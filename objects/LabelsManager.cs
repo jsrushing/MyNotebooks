@@ -175,9 +175,6 @@ namespace MyNotebooks.objects
 			if (clb != null) { clb.Items.Clear(); }
 			if (lb != null) { lb.Items.Clear(); }
 
-			//var v = currentEntry.AllLabels.Select(e => e.LabelText).ToList();
-			//clb.Items.AddRange(v);
-
 			if(currentEntry != null)
 			{
 				foreach (MNLabel lbl in currentEntry.AllLabels)
@@ -185,11 +182,6 @@ namespace MyNotebooks.objects
 					if (lb != null) { lb.Items.Add(lbl.LabelText); }
 					else { clb.Items.Add(lbl.LabelText); }
 				}
-
-				//if(clb != null)
-				//{
-				//	for(int i = 0; i < clb.Items.Count; i++) { clb.SetItemChecked(i, true); }
-				//}
 			}
 		}
 

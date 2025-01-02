@@ -629,7 +629,8 @@ namespace MyNotebooks.subforms
 				{
 					CurrentEntry = frm.Entry;
 					//if (CurrentEntry.LabelsToRemove == null) await CurrentNotebook.Save();
-					await CurrentNotebook.Save();
+					await CurrentNotebook.Save(this);
+					CurrentNotebook.Entries = DbAccess.GetEntriesInNotebook(CurrentNotebook.Id);
 					await ProcessDateFiltersAndPopulateEntries();
 					var v = lstEntries.Items.OfType<string>().FirstOrDefault(e => e.StartsWith(CurrentEntry.Title));
 					lstEntries.SelectedIndex = lstEntries.Items.IndexOf(v);
@@ -651,9 +652,14 @@ namespace MyNotebooks.subforms
 
 				if (frm.ActionTaken)
 				{
+					CurrentNotebook.Entries = DbAccess.GetEntriesInNotebook(CurrentNotebook.Id);
 					await ProcessDateFiltersAndPopulateEntries();
-					var v = lstEntries.Items.OfType<string>().FirstOrDefault(e => e.StartsWith(CurrentEntry.Title));
-					lstEntries.SelectedIndex = lstEntries.Items.IndexOf(v);
+
+					if (CurrentEntry != null)
+					{
+						var v = lstEntries.Items.OfType<string>().FirstOrDefault(e => e.StartsWith(CurrentEntry.Title));
+						lstEntries.SelectedIndex = lstEntries.Items.IndexOf(v);
+					}
 				}
 			}
 		}

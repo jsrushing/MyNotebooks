@@ -247,7 +247,9 @@ namespace MyNotebooks.subforms
 			}
 			catch (Exception ex) 
 			{
-				using(frmMessage frm = new(frmMessage.OperationType.Message, "An error occurred. The Label was not added." + ex.Message, "Label Operation Failed!", this)) { frm.ShowDialog(); }	
+				using(frmMessage frm = new(frmMessage.OperationType.Message, 
+					"An error occurred. The Label was not added." + ex.Message, "Label Operation Failed!", this)) 
+				{ frm.ShowDialog(); }	
 			}
 
 		}
@@ -438,13 +440,13 @@ namespace MyNotebooks.subforms
 			bool actionTaken = false;
 			string newName = "";
 
-			using (frmMessage frm = new(frmMessage.OperationType.InputBox, "What is the new label name?"))
+			using (frmMessage frm = new(frmMessage.OperationType.InputBox, "What is the new label name?", checkedLabels[0].Text, this))
 			{
 				frm.ShowDialog();
 				newName = frm.ResultText;
 			}
 
-			if (newName.Length > 0)
+			if (newName != null)
 			{
 				if (checkedLabels[0].Parent.Index == 0) // renaming in entry
 				{
@@ -453,9 +455,10 @@ namespace MyNotebooks.subforms
 				else if (checkedLabels[0].Parent.Index == 1) // in notebook
 				{
 					foreach (Entry e in CurrentNotebook.Entries)
-					{
-						ProcessRename(e, checkedLabels[0].Text, newName, ref actionTaken);
-					}
+					{ ProcessRename(e, checkedLabels[0].Text, newName, ref actionTaken); }					
+
+					var item = Program.LblsUnderNotebook.FirstOrDefault(x => x.LabelText == checkedLabels[0].Text);
+					if (item != null) { Program.LblsUnderNotebook.Remove(item); }
 				}
 				else if (checkedLabels[0].Parent.Index == 2) // in all notebooks
 				{
@@ -465,10 +468,10 @@ namespace MyNotebooks.subforms
 						n.Entries.AddRange(DbAccess.GetEntriesInNotebook(n.Id));
 
 						foreach (Entry e in n.Entries)
-						{
-							ProcessRename(e, checkedLabels[0].Text, newName, ref actionTaken);
-						}
+						{ ProcessRename(e, checkedLabels[0].Text, newName, ref actionTaken); }
 					}
+					var item = Program.LblsInAllNotebooks.FirstOrDefault(x => x.IndexOf(checkedLabels[0].Text) > -1);
+					if(item != null) { Program.LblsInAllNotebooks.Remove(item);	}
 				}
 
 				if (actionTaken)

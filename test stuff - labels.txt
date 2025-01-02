@@ -1,0 +1,13 @@
+Add label to entry.
+> choose existing label
+> on return to frmMain the entry has no labels. Is OK after nb reselect.
+
+Rename label in all notebooks
+> Renamed but labels under notebook wasn't updated.
+> had to reselect nb for change to show (and labels under notebook to repopulate)
+
+Looks like renaming is working in nb, all nb's, and entry.
+	STILL NOT UPDATING CORRECTLY AFTER RETURN FROM frmLabelsMgr!!!
+
+
+

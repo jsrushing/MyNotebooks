@@ -505,9 +505,7 @@ namespace MyNotebooks.DataAccess
 							var value = dataTable.Rows[i][0];
 
 							if (!currentLabels.Contains(dataTable.Rows[i][0].ToString()))
-							{
-								lstRtrn.Add(new(dataTable, i));
-							}
+							{ lstRtrn.Add(new(dataTable, i)); }
 						}
 						else { lstRtrn.Add(new(dataTable, i)); }
 					}
