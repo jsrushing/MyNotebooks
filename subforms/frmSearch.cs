@@ -52,32 +52,6 @@ namespace MyNotebooks.subforms
 
 		private void			frmSearch_Load(object sender, EventArgs e)
 		{
-			//Worker = new BackgroundWorker();
-			//Worker.DoWork += new DoWorkEventHandler(bgWorker_DoWork);
-			//Worker.WorkerReportsProgress = true;
-			//Worker.ProgressChanged += new ProgressChangedEventHandler(bgWorker_ProgressChanged);
-			//Worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgWorker_RunWorkerCompleted);
-
-			//using (frmSearch_SelectOrgLevel frm = new(this))
-			//{
-			//	frm.ShowDialog(Parent);
-
-			//	using (frmSearch_SelectOrgLevelItems frm2 = new(frm.SelectedOrgLevelType, this))
-			//	{
-			//		frm2.ShowDialog(this);
-			//		this.OrgLevels = frm2.TopOrgLevels;
-			//	}
-			//}
-
-			//foreach (OrgLevel orgLevel in this.OrgLevels)
-			//{
-			//	orgLevel.Name = orgLevel.Name.Trim();
-			//	ccb.Items.Add(new { orgLevel.Id, orgLevel.Name });
-			//}
-
-			//ccb.CheckUncheckAll(true);
-			//this.Text = string.Format(LblSearchingInText, this.OrgLevels.Count.ToString(), this.OrgLevels[0].OrgLevelType.ToString());
-
 			using (frmNotebooksToSearch frm = new())
 			{
 				frm.ShowDialog(this);
@@ -95,18 +69,22 @@ namespace MyNotebooks.subforms
 				}
 			}
 
-			List<string> lbls = new List<string>();
+			List<MNLabel> lbls = new();
 
 			foreach (string nbName in NbsToSearch)
 			{
 				ddlNbsToSearch.Items.Add(nbName);
 
-				lbls.AddRange(DbAccess.GetLabelsForNotebook
-					(Program.AllNotebooks.Where(nb => nb.Name == nbName).FirstOrDefault().Id)
-					.Except(lbls).ToList());
+				List<MNLabel> v = Program.LblsUnderNotebook.Where(l => l.NotebookId == Program.AllNotebooks.FirstOrDefault(nb => nb.Name == nbName).Id).ToList();
+
+				lbls.AddRange(v);
+
+				//lbls.AddRange(Program.LblsUnderNotebook.FirstOrDefault(l => l.NotebookId == 
+				//	Program.AllNotebooks.FirstOrDefault(nb => nb.Name == nbName).Id);
+					//.Except(lbls).ToList());
 			}
 
-			lbls.Sort();
+			lbls.OrderBy(l => l.LabelText);
 			clbLabelsInNotebooks.Items.AddRange(lbls.ToArray());
 		}
 

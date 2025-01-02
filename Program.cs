@@ -34,7 +34,7 @@ namespace MyNotebooks
 
 		public static List<MNLabel> LblsUnderEntry			= new();
 		public static List<MNLabel> LblsUnderNotebook		= new();
-		public static List<string>	LblsInAllNotebooks		= new();
+		public static List<MNLabel>	LblsInAllNotebooks		= new();
 
 		public static List<Entry>	CurrentEntries			= new();
 

@@ -287,7 +287,7 @@ namespace MyNotebooks.objects
 			{ foreach(string labelText in currentEntry.AllLabels.OrderBy(l => l.LabelText).Select(l => l.LabelText)) { treeView.Nodes[0].Nodes.Add(labelText); } }
 
 			foreach (string labelText in Program.LblsUnderNotebook.Select(l => l.LabelText).Distinct().ToList()) { treeView.Nodes[1].Nodes.Add(labelText); }
-			foreach (string labelText in Program.LblsInAllNotebooks) treeView.Nodes[2].Nodes.Add(labelText);
+			foreach (string labelText in Program.LblsInAllNotebooks.Select(l => l.LabelText).Distinct().ToList()) treeView.Nodes[2].Nodes.Add(labelText);
 		}
 
 		public static void				ResizeListsAndRTBs(ListBox entriesList, RichTextBox entryRTB, Label seperatorLabel, Label typeLabel, Form callingForm)

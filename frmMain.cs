@@ -141,6 +141,7 @@
 		01/01/25
 			006 Fix Labels management. 
 				Rename, Delete, etc.
+					Rename working (being tested) 01/02/25
 				When adding label to entry, list for the current notebook contains duplicates.
 					DONE 01/01/25
 
@@ -628,7 +629,6 @@ namespace MyNotebooks.subforms
 				if (frm.Saved && frm.Entry != null)
 				{
 					CurrentEntry = frm.Entry;
-					//if (CurrentEntry.LabelsToRemove == null) await CurrentNotebook.Save();
 					await CurrentNotebook.Save(this);
 					CurrentNotebook.Entries = DbAccess.GetEntriesInNotebook(CurrentNotebook.Id);
 					await ProcessDateFiltersAndPopulateEntries();

@@ -453,24 +453,27 @@ namespace MyNotebooks.DataAccess
 			return lstRtrn;
 		}
 
-		public static List<string> GetLabelsForNotebook(int notebookId)
+		public static List<MNLabel> GetLabelsForNotebook(int notebookId)
 		{
-			List<string> lstRtrn = new();
+			List<MNLabel> lstRtrn = new();
+			DataTable dataTable = new();
 
 			try
 			{
 				using (SqlConnection conn = new(Program.ConnectionString))
 				{
 					conn.Open();
-					using (SqlCommand cmd = new("sp_GetLabelsForNotebook", conn))	// returns ordered list DB CHANGE!
+					using (SqlCommand cmd = new("sp_GetLabelsForNotebook", conn))	// returns ordered list
 					{
 						cmd.CommandType = CommandType.StoredProcedure;
 						cmd.Parameters.AddWithValue("@notebookId", notebookId);
 
-						using SqlDataReader reader = cmd.ExecuteReader();
+						SqlDataAdapter sda = new() { SelectCommand= cmd };
+						sda.Fill(dataTable);
+
+						for (int i = 0;i < dataTable.Rows.Count;i++)
 						{
-							while (reader.Read())
-							{ lstRtrn.Add(reader.GetString(0)); }
+							lstRtrn.Add(new(dataTable, i)) ;
 						}
 					}
 				}
@@ -576,21 +579,29 @@ namespace MyNotebooks.DataAccess
 		public static void			PopulateLabelsInAllNotebooks()
 		{
 			Program.LblsInAllNotebooks.Clear();
+			DataTable dataTable = new();
 
 			try
 			{
 				using (SqlConnection conn = new(Program.ConnectionString))
 				{
 					conn.Open();
-					using (SqlCommand cmd = new("sp_GetAllLabels", conn))	// returns ordered list DB CHANGE!!
+					using (SqlCommand cmd = new("sp_GetAllLabels", conn))	// returns ordered list
 					{
 						cmd.CommandType = CommandType.StoredProcedure;
 
-						using SqlDataReader reader = cmd.ExecuteReader();
+						SqlDataAdapter sda = new() { SelectCommand = cmd };
+						sda.Fill(dataTable);
+
+						for (int i = 0; i < dataTable.Rows.Count; i++)
 						{
-							while (reader.Read())
-							{ Program.LblsInAllNotebooks.Add(reader.GetString(0)); }
+							Program.LblsInAllNotebooks.Add(new(dataTable, i));
 						}
+						//using SqlDataReader reader = cmd.ExecuteReader();
+						//{
+						//	while (reader.Read())
+						//	{ Program.LblsInAllNotebooks.Add(reader.GetString(0)); }
+						//}
 					}
 				}
 			}
