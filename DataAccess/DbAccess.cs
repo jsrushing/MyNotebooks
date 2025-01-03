@@ -8,6 +8,7 @@ using System.Data;
 //using System.Data.SqlClient;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Xml.Serialization;
 using Encryption;
 using Microsoft.Data.SqlClient;
 using MyNotebooks.objects;
@@ -24,61 +25,6 @@ namespace MyNotebooks.DataAccess
 		//private static string connString = "Server=FORRESTSTNW;Database=MyNotebooks;Trusted_Connection = true";
 		//private static string connString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\js_ru\\source\\repos\\MyNotebooks\\localMyNotebooksDb.mdf;Integrated Security=True";
 
-		public static SQLResult		CRUDLabel(MNLabel label, OperationType opType = OperationType.Create)
-		{
-			SQLResult rtrn = new();
-
-			try
-			{
-				using (SqlConnection conn = new(Program.ConnectionString))
-				{
-					conn.Open();
-					using (SqlCommand cmd = new("sp_CRUD_Label", conn))
-					{
-						cmd.CommandType = CommandType.StoredProcedure;
-						cmd.Parameters.AddWithValue("@labelText",label.LabelText);
-						cmd.Parameters.AddWithValue("@parentId", label.ParentId);
-						cmd.Parameters.AddWithValue("@opType",	opType == OperationType.Delete ? 2 : (int)opType);
-						if (opType == OperationType.Create)		cmd.Parameters.AddWithValue("@createdBy",	Program.User.Id);
-						if (opType != OperationType.Create)		cmd.Parameters.AddWithValue("@labelId",		label.Id);
-						if (opType == OperationType.Delete)		cmd.Parameters.AddWithValue("isActive",		0);
-						GetSqlReturn(ref rtrn, cmd);
-					}
-				}
-			}
-			catch { }
-
-			return rtrn;
-		}
-
-		public static SQLResult		CRUDMNUser(MNUser user, OperationType opType = OperationType.Create)
-		{
-			SQLResult rtrn = new();
-
-			try
-			{
-				using (SqlConnection conn = new(Program.ConnectionString))
-				{
-					conn.Open();
-					using (SqlCommand cmd = new SqlCommand("sp_CRUD_User", conn))
-					{
-						cmd.CommandType = CommandType.StoredProcedure;
-						cmd.Parameters.AddWithValue("@userName",	user.Name);
-						cmd.Parameters.AddWithValue("@password",	user.Password);
-						cmd.Parameters.AddWithValue("@accessLevel", user.AccessLevel);
-						cmd.Parameters.AddWithValue("@email",		user.Email);
-						cmd.Parameters.AddWithValue("@opType",		opType == OperationType.Delete ? 2 : (int)opType);
-						if (opType == OperationType.Create) cmd.Parameters.AddWithValue("@createdBy", Program.User.Id);
-						if (opType != OperationType.Create) cmd.Parameters.AddWithValue("@userId", Program.User.Id);
-						if (opType == OperationType.Delete) cmd.Parameters.AddWithValue("isActive", 0);
-						GetSqlReturn(ref rtrn, cmd);
-					}
-				}
-			}
-			catch (Exception ex) { var v = ex.Message; }
-
-			return rtrn;
-		}
 
 		public static bool			CreateMNUserAssignments(MNUser user)
 		{
@@ -140,6 +86,62 @@ namespace MyNotebooks.DataAccess
 			catch (Exception ex) { var v = ex.Message; }
 
 			return iRtrn;
+		}
+
+		public static SQLResult		CRUDLabel(MNLabel label, OperationType opType = OperationType.Create)
+		{
+			SQLResult rtrn = new();
+
+			try
+			{
+				using (SqlConnection conn = new(Program.ConnectionString))
+				{
+					conn.Open();
+					using (SqlCommand cmd = new("sp_CRUD_Label", conn))
+					{
+						cmd.CommandType = CommandType.StoredProcedure;
+						cmd.Parameters.AddWithValue("@labelText",label.LabelText);
+						cmd.Parameters.AddWithValue("@parentId", label.ParentId);
+						cmd.Parameters.AddWithValue("@opType",	opType == OperationType.Delete ? 2 : (int)opType);
+						if (opType == OperationType.Create)		cmd.Parameters.AddWithValue("@createdBy",	Program.User.Id);
+						if (opType != OperationType.Create)		cmd.Parameters.AddWithValue("@labelId",		label.Id);
+						if (opType == OperationType.Delete)		cmd.Parameters.AddWithValue("isActive",		0);
+						GetSqlReturn(ref rtrn, cmd);
+					}
+				}
+			}
+			catch { }
+
+			return rtrn;
+		}
+
+		public static SQLResult		CRUDMNUser(MNUser user, OperationType opType = OperationType.Create)
+		{
+			SQLResult rtrn = new();
+
+			try
+			{
+				using (SqlConnection conn = new(Program.ConnectionString))
+				{
+					conn.Open();
+					using (SqlCommand cmd = new SqlCommand("sp_CRUD_User", conn))
+					{
+						cmd.CommandType = CommandType.StoredProcedure;
+						cmd.Parameters.AddWithValue("@userName",	user.Name);
+						cmd.Parameters.AddWithValue("@password",	user.Password);
+						cmd.Parameters.AddWithValue("@accessLevel", user.AccessLevel);
+						cmd.Parameters.AddWithValue("@email",		user.Email);
+						cmd.Parameters.AddWithValue("@opType",		opType == OperationType.Delete ? 2 : (int)opType);
+						if (opType == OperationType.Create) cmd.Parameters.AddWithValue("@createdBy", Program.User.Id);
+						if (opType != OperationType.Create) cmd.Parameters.AddWithValue("@userId", Program.User.Id);
+						if (opType == OperationType.Delete) cmd.Parameters.AddWithValue("isActive", 0);
+						GetSqlReturn(ref rtrn, cmd);
+					}
+				}
+			}
+			catch (Exception ex) { var v = ex.Message; }
+
+			return rtrn;
 		}
 
 		public static SQLResult		CRUDNotebook(Notebook nb, OperationType opType = OperationType.Create)
@@ -358,16 +360,10 @@ namespace MyNotebooks.DataAccess
 						SqlDataAdapter sda = new() { SelectCommand = cmd };
 						sda.Fill(ds);
 						DataTable tblEntries = ds.Tables[0];
-						//DataTable tblLabels = ds.Tables[1];
-						//List<MNLabel> labels = new();
 
 						for (int i = 0; i < tblEntries.Rows.Count; i++)
 						{
 							entry = new(tblEntries, i);
-
-							//for (int i2 = 0; i2 < tblLabels.Rows.Count; i2++)
-							//{ entry.AllLabels.Add(new(tblLabels, i2)); }
-
 							entries.Add(entry);
 						}
 					}
@@ -436,7 +432,7 @@ namespace MyNotebooks.DataAccess
 				conn.Open();
 
 				using (SqlCommand cmd = new("sp_GetLabelsForEntry", conn))	// THIS IS WHERE TO ADD PARENTPATH FOR SHORT ENTRY DISPLAY ON frmMain !1!
-				{
+				{															// DB CHANGE
 					cmd.CommandType = CommandType.StoredProcedure;
 					cmd.Parameters.AddWithValue("@entryId", entryId);
 
@@ -453,35 +449,35 @@ namespace MyNotebooks.DataAccess
 			return lstRtrn;
 		}
 
-		public static List<MNLabel> GetLabelsForNotebook(int notebookId)
-		{
-			List<MNLabel> lstRtrn = new();
-			DataTable dataTable = new();
+		//public static List<MNLabel> GetLabelsForNotebook(int notebookId)
+		//{
+		//	List<MNLabel> lstRtrn = new();
+		//	DataTable dataTable = new();
 
-			try
-			{
-				using (SqlConnection conn = new(Program.ConnectionString))
-				{
-					conn.Open();
-					using (SqlCommand cmd = new("sp_GetLabelsForNotebook", conn))	// returns ordered list
-					{
-						cmd.CommandType = CommandType.StoredProcedure;
-						cmd.Parameters.AddWithValue("@notebookId", notebookId);
+		//	try
+		//	{
+		//		using (SqlConnection conn = new(Program.ConnectionString))
+		//		{
+		//			conn.Open();
+		//			using (SqlCommand cmd = new("sp_GetLabelsForNotebook", conn))	// returns ordered list DB CHANGE
+		//			{
+		//				cmd.CommandType = CommandType.StoredProcedure;
+		//				cmd.Parameters.AddWithValue("@notebookId", notebookId);
 
-						SqlDataAdapter sda = new() { SelectCommand= cmd };
-						sda.Fill(dataTable);
+		//				SqlDataAdapter sda = new() { SelectCommand= cmd };
+		//				sda.Fill(dataTable);
 
-						for (int i = 0;i < dataTable.Rows.Count;i++)
-						{
-							lstRtrn.Add(new(dataTable, i)) ;
-						}
-					}
-				}
-			}
-			catch (Exception ex) { }
+		//				for (int i = 0;i < dataTable.Rows.Count;i++)
+		//				{
+		//					lstRtrn.Add(new(dataTable, i)) ;
+		//				}
+		//			}
+		//		}
+		//	}
+		//	catch (Exception ex) { }
 
-			return lstRtrn;
-		}
+		//	return lstRtrn;
+		//}
 
 		public static List<MNLabel> GetLabelsUnderOrgLevel(int entryId, int orgLevel, string[] currentLabels = null)
 		{
@@ -501,18 +497,9 @@ namespace MyNotebooks.DataAccess
 					SqlDataAdapter sda = new() { SelectCommand = cmd };
 					sda.Fill(dataTable);
 
-					for (int i = 0; i < dataTable.Rows.Count; i++)
-					{
-						if (currentLabels != null)
-						{
-							var value = dataTable.Rows[i][0];
-
-							if (!currentLabels.Contains(dataTable.Rows[i][0].ToString()))
-							{ lstRtrn.Add(new(dataTable, i)); }
-						}
-						else { lstRtrn.Add(new(dataTable, i)); }
-					}
+					for (int i = 0; i < dataTable.Rows.Count; i++) { lstRtrn.Add(new(dataTable, i)); }
 				}
+				lstRtrn = lstRtrn.GroupBy(l => l.LabelText).Select(x => x.First()).ToList();
 			}
 
 			return lstRtrn;
@@ -579,7 +566,7 @@ namespace MyNotebooks.DataAccess
 		public static void			PopulateLabelsInAllNotebooks()
 		{
 			Program.LblsInAllNotebooks.Clear();
-			DataTable dataTable = new();
+			DataTable tblLabels = new();
 
 			try
 			{
@@ -591,18 +578,11 @@ namespace MyNotebooks.DataAccess
 						cmd.CommandType = CommandType.StoredProcedure;
 
 						SqlDataAdapter sda = new() { SelectCommand = cmd };
-						sda.Fill(dataTable);
+						sda.Fill(tblLabels);
 
-						for (int i = 0; i < dataTable.Rows.Count; i++)
-						{
-							Program.LblsInAllNotebooks.Add(new(dataTable, i));
-						}
-						//using SqlDataReader reader = cmd.ExecuteReader();
-						//{
-						//	while (reader.Read())
-						//	{ Program.LblsInAllNotebooks.Add(reader.GetString(0)); }
-						//}
+						for (int i = 0; i < tblLabels.Rows.Count; i++) { Program.LblsInAllNotebooks.Add(new(tblLabels, i)); }
 					}
+					Program.LblsInAllNotebooks = Program.LblsInAllNotebooks.GroupBy(l => l.LabelText).Select(x => x.First()).ToList();
 				}
 			}
 			catch (Exception ex) { }
@@ -662,7 +642,8 @@ namespace MyNotebooks.DataAccess
 					{
 						entry = new(tblEntries, i);
 						notebook.Entries.Add(entry);
-						Program.LblsUnderNotebook.AddRange(entry.AllLabels.Where(l => !Program.LblsUnderNotebook.Select(l => l.LabelText).ToList().Contains(l.LabelText)));
+						Program.LblsUnderNotebook.AddRange
+							(entry.AllLabels.Where(l => !Program.LblsUnderNotebook.Select(l => l.LabelText).ToList().Contains(l.LabelText)));
 					}
 					Program.LblsUnderNotebook = Program.LblsUnderNotebook.OrderBy(l => l.LabelText).ToList();
 				}

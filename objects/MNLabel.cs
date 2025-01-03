@@ -41,7 +41,7 @@ namespace MyNotebooks.objects
 			{
 				foreach (PropertyInfo sPropertyName in typeof(MNLabel).GetProperties())
 				{
-					if(sPropertyName.Name != "ParentId" & sPropertyName.Name != "NotebookId")
+					if (sPropertyName.Name != "NotebookId")
 					{
 						try
 						{
@@ -85,8 +85,8 @@ namespace MyNotebooks.objects
 						}
 					}
 
-					this.ParentId = this.Id;
-					this.NotebookId = this.Id;
+					//this.ParentId = this.Id;
+					//this.NotebookId = this.Id;
 				}
 			}
 		}

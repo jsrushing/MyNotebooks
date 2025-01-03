@@ -74,10 +74,10 @@ namespace MyNotebooks.subforms
 			foreach (string nbName in NbsToSearch)
 			{
 				ddlNbsToSearch.Items.Add(nbName);
-
+				DbAccess.GetEntriesInNotebook(Program.AllNotebooks.FirstOrDefault(nb => nb.Name == nbName).Id);
 				List<MNLabel> v = Program.LblsUnderNotebook.Where(l => l.NotebookId == Program.AllNotebooks.FirstOrDefault(nb => nb.Name == nbName).Id).ToList();
 
-				lbls.AddRange(v);
+				lbls.AddRange(v.Except(lbls));
 
 				//lbls.AddRange(Program.LblsUnderNotebook.FirstOrDefault(l => l.NotebookId == 
 				//	Program.AllNotebooks.FirstOrDefault(nb => nb.Name == nbName).Id);
