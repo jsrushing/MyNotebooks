@@ -51,10 +51,8 @@ namespace MyNotebooks.subforms
 			colIdentifier = new DataGridViewTextBoxColumn();
 			mnuMain = new MenuStrip();
 			mnuLabelsOperations = new ToolStripMenuItem();
-			mnuAddToCurrentEntry = new ToolStripMenuItem();
 			mnuRename = new ToolStripMenuItem();
 			mnuDelete = new ToolStripMenuItem();
-			mnuMoveTop = new ToolStripMenuItem();
 			toolStripMenuItem1 = new ToolStripMenuItem();
 			toolStripMenuItem2 = new ToolStripMenuItem();
 			toolStripMenuItem3 = new ToolStripMenuItem();
@@ -231,7 +229,7 @@ namespace MyNotebooks.subforms
 			// 
 			// mnuMain
 			// 
-			mnuMain.Items.AddRange(new ToolStripItem[] { mnuLabelsOperations, mnuMoveTop, toolStripMenuItem1, toolStripMenuItem2, toolStripMenuItem3 });
+			mnuMain.Items.AddRange(new ToolStripItem[] { mnuLabelsOperations, toolStripMenuItem1, toolStripMenuItem2, toolStripMenuItem3 });
 			mnuMain.Location = new System.Drawing.Point(0, 0);
 			mnuMain.Name = "mnuMain";
 			mnuMain.Size = new System.Drawing.Size(993, 24);
@@ -240,39 +238,25 @@ namespace MyNotebooks.subforms
 			// 
 			// mnuLabelsOperations
 			// 
-			mnuLabelsOperations.DropDownItems.AddRange(new ToolStripItem[] { mnuAddToCurrentEntry, mnuRename, mnuDelete });
+			mnuLabelsOperations.DropDownItems.AddRange(new ToolStripItem[] { mnuRename, mnuDelete });
 			mnuLabelsOperations.Enabled = false;
 			mnuLabelsOperations.Name = "mnuLabelsOperations";
 			mnuLabelsOperations.Size = new System.Drawing.Size(109, 20);
 			mnuLabelsOperations.Text = "&Checked Label(s)";
 			// 
-			// mnuAddToCurrentEntry
-			// 
-			mnuAddToCurrentEntry.Name = "mnuAddToCurrentEntry";
-			mnuAddToCurrentEntry.Size = new System.Drawing.Size(183, 22);
-			mnuAddToCurrentEntry.Text = "&Add to Current Entry";
-			mnuAddToCurrentEntry.Click += this.mnuAddToCurrentEntry_Click;
-			// 
 			// mnuRename
 			// 
 			mnuRename.Name = "mnuRename";
-			mnuRename.Size = new System.Drawing.Size(183, 22);
+			mnuRename.Size = new System.Drawing.Size(180, 22);
 			mnuRename.Text = "&Rename";
 			mnuRename.Click += this.DeleteOrRename;
 			// 
 			// mnuDelete
 			// 
 			mnuDelete.Name = "mnuDelete";
-			mnuDelete.Size = new System.Drawing.Size(183, 22);
+			mnuDelete.Size = new System.Drawing.Size(180, 22);
 			mnuDelete.Text = "&Delete";
 			mnuDelete.Click += this.DeleteOrRename;
-			// 
-			// mnuMoveTop
-			// 
-			mnuMoveTop.Name = "mnuMoveTop";
-			mnuMoveTop.Size = new System.Drawing.Size(111, 20);
-			mnuMoveTop.Text = "Create &New Label";
-			mnuMoveTop.Click += this.mnuCreateNewLabel_Click;
 			// 
 			// toolStripMenuItem1
 			// 
@@ -479,7 +463,6 @@ namespace MyNotebooks.subforms
 		private ToolStripMenuItem mnuAssignPINs;
 		private Label lblSortType;
 		private ToolStripMenuItem mnuLabelsOperations;
-		private ToolStripMenuItem mnuMoveTop;
 		private ToolStripMenuItem mnuAddCheckedLabelsToEntry;
 
 		private ContextMenuStrip mnuContextEntries;
@@ -501,7 +484,6 @@ namespace MyNotebooks.subforms
 		private ToolStripMenuItem addToCurrentEntryToolStripMenuItem;
 		private ToolStripMenuItem renameToolStripMenuItem;
 		private ToolStripMenuItem deleteToolStripMenuItem;
-		private ToolStripMenuItem mnuAddToCurrentEntry;
 		private ToolStripMenuItem mnuRename;
 		private ToolStripMenuItem mnuDelete;
 		private Panel pnlRenameDeleteManager;

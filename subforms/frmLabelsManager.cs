@@ -77,8 +77,6 @@ namespace MyNotebooks.subforms
 			pnlMain.Anchor = AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Top;
 			pnlRenameDeleteManager.Anchor = AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Top;
 			ResetTree();
-			mnuAddToCurrentEntry.Enabled = CurrentEntry != null;
-			mnuMoveTop.Visible = false;	
 		}
 
 		private void		frmLabelsManager_Resize(object sender, EventArgs e) { ShowHideOccurrences(); }
@@ -86,12 +84,56 @@ namespace MyNotebooks.subforms
 		private void		btnExitOrphans_Click(object sender, EventArgs e)
 		{ lstOccurrences.Items.Clear(); ShowHideOccurrences(); ShowPanel(pnlMain); }
 
-		private void		DeleteLabels()
+		private void DeleteLabels()
 		{
-			var checkedLabels = GetCheckedNodesAsNodes(treeAvailableLabels);
+			var checkedNodes = GetCheckedNodesAsNodes(treeAvailableLabels);
 			bool actionTaken = false;
 
+			foreach (var node in checkedNodes)
+			{
+				if (node.Parent.Index == 0) // renaming in entry
+				{
+					DbAccess.CRUDLabel(new() { LabelText = node.Text, ParentId = CurrentEntry.Id }, OperationType.Delete);
+					actionTaken = true;
+				}
+				else if (node.Parent.Index == 1) // in notebook
+				{
+					foreach (Entry e in CurrentNotebook.Entries.Where(e => e.AllLabels.Select(l => l.LabelText).Contains(node.Text)))
+					{
+						DbAccess.CRUDLabel(new() { LabelText = node.Text, ParentId = e.Id }, OperationType.Delete);
+					}
 
+					//var item = Program.LblsUnderNotebook.FirstOrDefault(x => x.LabelText == label.Text);
+					//if (item != null) { Program.LblsUnderNotebook.Remove(item); }
+					actionTaken = true;
+				}
+				else if (node.Parent.Index == 2) // in all notebooks
+				{
+					foreach (Notebook n in Program.AllNotebooks)
+					{
+						n.Entries = new();
+						n.Entries.AddRange(DbAccess.GetEntriesInNotebook(n.Id));
+
+						foreach (Entry e in n.Entries.Where(e => e.AllLabels.Select(l => l.LabelText).Contains(node.Text)))
+						{
+							DbAccess.CRUDLabel(new() { LabelText = node.Text, ParentId = e.Id }, OperationType.Delete);
+						}
+
+						//var item = Program.LblsInAllNotebooks.FirstOrDefault(x => x.LabelText == label.Text);
+						//if (item != null) { Program.LblsInAllNotebooks.Remove(item); }
+						actionTaken = true;
+					}
+				}
+			}
+
+			if (actionTaken)
+			{
+				DbAccess.PopulateLabelsInAllNotebooks();
+				Program.LblsUnderNotebook = DbAccess.GetLabelsUnderOrgLevel(CurrentNotebook.Entries[0].Id, 2);
+				ResetTree();
+			}
+
+			this.ActionTaken = actionTaken;
 
 		}
 
@@ -216,40 +258,6 @@ namespace MyNotebooks.subforms
 		private void		lstOccurrences_MouseUp(object sender, MouseEventArgs e)
 		{ PopulateGridViewEntryDetails(e.Y); }
 
-		private void		mnuAddToCurrentEntry_Click(object sender, EventArgs e)
-		{
-			try
-			{
-				var a = GetCheckedNodesAsLabels().Select(l => l.LabelText).Except(CurrentEntry.AllLabels.Select(l => l.LabelText));
-
-				if(a.Count() > 0)
-				{
-					foreach (var v in a)
-					{
-						MNLabel newLabel = new() { LabelText = v, ParentId = CurrentEntry.Id }; 
-						DbAccess.CRUDLabel(newLabel, OperationType.Create);
-						CurrentEntry.AllLabels.Add(newLabel);
-						Program.LblsUnderNotebook.Add(newLabel);
-						Program.LblsInAllNotebooks.Add(newLabel);
-					}
-
-					this.ActionTaken = true;
-					this.Hide();
-				}
-				else
-				{
-					// message that nothing happened
-				}
-
-			}
-			catch (Exception ex) 
-			{
-				using(frmMessage frm = new(frmMessage.OperationType.Message, 
-					"An error occurred. The Label was not added." + ex.Message, "Label Operation Failed!", this)) 
-				{ frm.ShowDialog(); }	
-			}
-		}
-
 		private void		mnuContext_GridEntryDetails_Click(object sender, EventArgs e)
 		{
 			ToolStripMenuItem mnu = (ToolStripMenuItem)sender;
@@ -290,40 +298,6 @@ namespace MyNotebooks.subforms
 					//	break;
 			}
 
-		}
-
-		private void		mnuCreateNewLabel_Click(object sender, EventArgs e)
-		{
-			var msg = "What is the Label text?";
-
-			using (frmMessage frm = new(frmMessage.OperationType.InputBox, msg, "", this, null, 100))
-			{
-				frm.ShowDialog(this);
-
-				if (frm.ResultText != null)
-				{
-					var txt = frm.ResultText.Trim();
-
-					if (Program.LblsInAllNotebooks.ConvertAll(s => s.LabelText.ToLower()).Contains(txt.ToLower()))
-					{
-						msg = "The label '" + txt + "' already exists. Select it under All Notebooks and click 'Checked Label(s) > Add to Entry'";
-						frmMessage frm3 = new(frmMessage.OperationType.Message, msg);
-						frm3.ShowDialog(this);
-					}
-					else
-					{
-						Program.LblsInAllNotebooks.Add(new() { LabelText = frm.ResultText, ParentId = CurrentEntry.Id });
-						treeAvailableLabels.Nodes[2].Nodes.Add(txt);
-
-						if (CurrentEntry != null)
-						{
-							treeAvailableLabels.Nodes[2].Nodes[treeAvailableLabels.Nodes[2].Nodes.Count - 1].Checked = true;
-							mnuAddToCurrentEntry_Click(null, null);
-							treeAvailableLabels.Nodes[2].Nodes[treeAvailableLabels.Nodes[2].Nodes.Count - 1].Checked = false;
-						}
-					}
-				}
-			}
 		}
 
 		private void		PopulateLabelInformation()
@@ -450,11 +424,11 @@ namespace MyNotebooks.subforms
 				}
 				else if (checkedLabels[0].Parent.Index == 1) // in notebook
 				{
-					foreach (Entry e in CurrentNotebook.Entries)
+					foreach (Entry e in CurrentNotebook.Entries.Where(e => e.AllLabels.Select(l => l.LabelText).Contains(checkedLabels[0].Text)))
 					{ ProcessRename(e, checkedLabels[0].Text, newName, ref actionTaken); }					
 
-					var item = Program.LblsUnderNotebook.FirstOrDefault(x => x.LabelText == checkedLabels[0].Text);
-					if (item != null) { Program.LblsUnderNotebook.Remove(item); }
+					//var item = Program.LblsUnderNotebook.FirstOrDefault(x => x.LabelText == checkedNodes[0].Text);
+					//if (item != null) { Program.LblsUnderNotebook.Remove(item); }
 				}
 				else if (checkedLabels[0].Parent.Index == 2) // in all notebooks
 				{
@@ -463,11 +437,11 @@ namespace MyNotebooks.subforms
 						n.Entries = new();
 						n.Entries.AddRange(DbAccess.GetEntriesInNotebook(n.Id));
 
-						foreach (Entry e in n.Entries)
+						foreach (Entry e in n.Entries.Where(e => e.AllLabels.Select(l => l.LabelText).Contains(checkedLabels[0].Text)))
 						{ ProcessRename(e, checkedLabels[0].Text, newName, ref actionTaken); }
 					}
-					var item = Program.LblsInAllNotebooks.FirstOrDefault(x => x.LabelText == checkedLabels[0].Text);
-					if(item != null) { Program.LblsInAllNotebooks.Remove(item);	}
+					//var item = Program.LblsInAllNotebooks.FirstOrDefault(x => x.LabelText == checkedNodes[0].Text);
+					//if(item != null) { Program.LblsInAllNotebooks.Remove(item);	}
 				}
 
 				if (actionTaken)
