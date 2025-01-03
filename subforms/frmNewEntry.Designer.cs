@@ -72,6 +72,7 @@ namespace MyNotebooks.subforms
 			txtFind = new System.Windows.Forms.ToolStripTextBox();
 			mnuCancelExit = new System.Windows.Forms.ToolStripMenuItem();
 			bgWorker = new System.ComponentModel.BackgroundWorker();
+			lblAddNewLabel = new System.Windows.Forms.Label();
 			grpCreateEntry.SuspendLayout();
 			pnlEntryDates.SuspendLayout();
 			panel1.SuspendLayout();
@@ -82,6 +83,7 @@ namespace MyNotebooks.subforms
 			// grpCreateEntry
 			// 
 			grpCreateEntry.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+			grpCreateEntry.Controls.Add(lblAddNewLabel);
 			grpCreateEntry.Controls.Add(lblTitleExists);
 			grpCreateEntry.Controls.Add(pnlEntryDates);
 			grpCreateEntry.Controls.Add(lblSortType);
@@ -178,9 +180,9 @@ namespace MyNotebooks.subforms
 			lblSortType.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
 			lblSortType.AutoSize = true;
 			lblSortType.Cursor = System.Windows.Forms.Cursors.Hand;
-			lblSortType.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+			lblSortType.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline);
 			lblSortType.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			lblSortType.Location = new System.Drawing.Point(153, 324);
+			lblSortType.Location = new System.Drawing.Point(75, 324);
 			lblSortType.Name = "lblSortType";
 			lblSortType.Size = new System.Drawing.Size(54, 17);
 			lblSortType.TabIndex = 43;
@@ -213,7 +215,7 @@ namespace MyNotebooks.subforms
 			// 
 			// btnColor
 			// 
-			btnColor.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			btnColor.Font = new System.Drawing.Font("Segoe UI", 9F);
 			btnColor.Location = new System.Drawing.Point(247, 0);
 			btnColor.Name = "btnColor";
 			btnColor.Size = new System.Drawing.Size(59, 23);
@@ -223,7 +225,7 @@ namespace MyNotebooks.subforms
 			// 
 			// btnStrikeout
 			// 
-			btnStrikeout.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Strikeout, System.Drawing.GraphicsUnit.Point);
+			btnStrikeout.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Strikeout);
 			btnStrikeout.Location = new System.Drawing.Point(227, 0);
 			btnStrikeout.Name = "btnStrikeout";
 			btnStrikeout.Size = new System.Drawing.Size(22, 23);
@@ -233,7 +235,7 @@ namespace MyNotebooks.subforms
 			// 
 			// btnUnderline
 			// 
-			btnUnderline.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+			btnUnderline.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline);
 			btnUnderline.Location = new System.Drawing.Point(207, 0);
 			btnUnderline.Name = "btnUnderline";
 			btnUnderline.Size = new System.Drawing.Size(22, 23);
@@ -243,7 +245,7 @@ namespace MyNotebooks.subforms
 			// 
 			// btnItalic
 			// 
-			btnItalic.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point);
+			btnItalic.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic);
 			btnItalic.Location = new System.Drawing.Point(187, 0);
 			btnItalic.Name = "btnItalic";
 			btnItalic.Size = new System.Drawing.Size(22, 23);
@@ -253,7 +255,7 @@ namespace MyNotebooks.subforms
 			// 
 			// btnBold
 			// 
-			btnBold.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			btnBold.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
 			btnBold.Location = new System.Drawing.Point(169, 0);
 			btnBold.Name = "btnBold";
 			btnBold.Size = new System.Drawing.Size(22, 23);
@@ -294,7 +296,7 @@ namespace MyNotebooks.subforms
 			// toolsBold
 			// 
 			toolsBold.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			toolsBold.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			toolsBold.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Bold);
 			toolsBold.Image = (System.Drawing.Image)resources.GetObject("toolsBold.Image");
 			toolsBold.ImageTransparentColor = System.Drawing.Color.Magenta;
 			toolsBold.Name = "toolsBold";
@@ -305,7 +307,7 @@ namespace MyNotebooks.subforms
 			// toolsUnderline
 			// 
 			toolsUnderline.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			toolsUnderline.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+			toolsUnderline.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Underline);
 			toolsUnderline.Image = (System.Drawing.Image)resources.GetObject("toolsUnderline.Image");
 			toolsUnderline.ImageTransparentColor = System.Drawing.Color.Magenta;
 			toolsUnderline.Name = "toolsUnderline";
@@ -316,7 +318,7 @@ namespace MyNotebooks.subforms
 			// toolsItalic
 			// 
 			toolsItalic.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			toolsItalic.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point);
+			toolsItalic.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Italic);
 			toolsItalic.Image = (System.Drawing.Image)resources.GetObject("toolsItalic.Image");
 			toolsItalic.ImageTransparentColor = System.Drawing.Color.Magenta;
 			toolsItalic.Name = "toolsItalic";
@@ -343,13 +345,13 @@ namespace MyNotebooks.subforms
 			lblManageLabels.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
 			lblManageLabels.AutoSize = true;
 			lblManageLabels.Cursor = System.Windows.Forms.Cursors.Hand;
-			lblManageLabels.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+			lblManageLabels.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline);
 			lblManageLabels.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-			lblManageLabels.Location = new System.Drawing.Point(218, 324);
+			lblManageLabels.Location = new System.Drawing.Point(154, 324);
 			lblManageLabels.Name = "lblManageLabels";
-			lblManageLabels.Size = new System.Drawing.Size(57, 17);
+			lblManageLabels.Size = new System.Drawing.Size(86, 17);
 			lblManageLabels.TabIndex = 40;
-			lblManageLabels.Text = "manage";
+			lblManageLabels.Text = "Add Existing";
 			lblManageLabels.Click += this.lblManageLabels_Click;
 			// 
 			// txtNewEntryTitle
@@ -367,7 +369,7 @@ namespace MyNotebooks.subforms
 			// label2
 			// 
 			label2.AutoSize = true;
-			label2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			label2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
 			label2.ForeColor = System.Drawing.SystemColors.MenuHighlight;
 			label2.Location = new System.Drawing.Point(6, 19);
 			label2.Name = "label2";
@@ -379,7 +381,7 @@ namespace MyNotebooks.subforms
 			// 
 			label4.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
 			label4.AutoSize = true;
-			label4.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			label4.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
 			label4.ForeColor = System.Drawing.SystemColors.MenuHighlight;
 			label4.Location = new System.Drawing.Point(6, 324);
 			label4.Name = "label4";
@@ -423,7 +425,7 @@ namespace MyNotebooks.subforms
 			// 
 			label14.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
 			label14.AutoSize = true;
-			label14.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			label14.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
 			label14.ForeColor = System.Drawing.SystemColors.MenuHighlight;
 			label14.Location = new System.Drawing.Point(6, 781);
 			label14.Name = "label14";
@@ -436,7 +438,7 @@ namespace MyNotebooks.subforms
 			lblFont_NewEntry.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
 			lblFont_NewEntry.AutoSize = true;
 			lblFont_NewEntry.Cursor = System.Windows.Forms.Cursors.Hand;
-			lblFont_NewEntry.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+			lblFont_NewEntry.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline);
 			lblFont_NewEntry.ForeColor = System.Drawing.SystemColors.MenuHighlight;
 			lblFont_NewEntry.Location = new System.Drawing.Point(618, 70);
 			lblFont_NewEntry.Name = "lblFont_NewEntry";
@@ -447,7 +449,7 @@ namespace MyNotebooks.subforms
 			// label3
 			// 
 			label3.AutoSize = true;
-			label3.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			label3.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
 			label3.ForeColor = System.Drawing.SystemColors.MenuHighlight;
 			label3.Location = new System.Drawing.Point(6, 50);
 			label3.Name = "label3";
@@ -460,7 +462,7 @@ namespace MyNotebooks.subforms
 			rtbNewEntry.AcceptsTab = true;
 			rtbNewEntry.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
 			rtbNewEntry.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			rtbNewEntry.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			rtbNewEntry.Font = new System.Drawing.Font("Segoe UI", 9F);
 			rtbNewEntry.Location = new System.Drawing.Point(6, 69);
 			rtbNewEntry.Name = "rtbNewEntry";
 			rtbNewEntry.Size = new System.Drawing.Size(550, 247);
@@ -520,6 +522,20 @@ namespace MyNotebooks.subforms
 			// bgWorker
 			// 
 			bgWorker.WorkerReportsProgress = true;
+			// 
+			// lblAddNewLabel
+			// 
+			lblAddNewLabel.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+			lblAddNewLabel.AutoSize = true;
+			lblAddNewLabel.Cursor = System.Windows.Forms.Cursors.Hand;
+			lblAddNewLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline);
+			lblAddNewLabel.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			lblAddNewLabel.Location = new System.Drawing.Point(253, 324);
+			lblAddNewLabel.Name = "lblAddNewLabel";
+			lblAddNewLabel.Size = new System.Drawing.Size(64, 17);
+			lblAddNewLabel.TabIndex = 51;
+			lblAddNewLabel.Text = "Add New";
+			lblAddNewLabel.Click += this.lblAddNewLabel_Click;
 			// 
 			// frmNewEntry
 			// 
@@ -593,5 +609,6 @@ namespace MyNotebooks.subforms
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.Label lblTitleExists;
 		private System.ComponentModel.BackgroundWorker bgWorker;
+		private System.Windows.Forms.Label lblAddNewLabel;
 	}
 }

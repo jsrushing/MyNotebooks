@@ -49,7 +49,7 @@ namespace MyNotebooks.subforms
 
 		private void		bgWorker_DoWork(object sender, DoWorkEventArgs e)
 		{
-			if(Entry != null)
+			if (Entry != null)
 			{
 				Program.LblsUnderEntry = new(DbAccess.GetLabelsUnderOrgLevel(Entry.Id, 1));
 				Program.LblsUnderNotebook = new(DbAccess.GetLabelsUnderOrgLevel(Entry.Id, 2));
@@ -126,6 +126,40 @@ namespace MyNotebooks.subforms
 			}
 		}
 
+		private void		lblAddNewLabel_Click(object sender, EventArgs e)
+		{
+			{
+				var msg = "What is the Label text?";
+
+				using (frmMessage frm = new(frmMessage.OperationType.InputBox, msg, "", this, null, 100))
+				{
+					frm.ShowDialog(this);
+
+					if (frm.ResultText != null)
+					{
+						var txt = frm.ResultText.Trim();
+
+						if (Entry.AllLabels.Where(l => l.LabelText.ToLower() == txt.ToLower()).Any())
+						{
+							msg = "The label '" + txt + "' already exists in this entry.";
+							frmMessage frm3 = new(frmMessage.OperationType.Message, msg);
+							frm3.ShowDialog(this);
+						}
+						else
+						{
+							MNLabel newLabel = new MNLabel() { LabelText = txt, ParentId = Entry.Id };
+							DbAccess.CRUDLabel(newLabel, OperationType.Create);
+							Program.LblsInAllNotebooks.Add(newLabel);
+							Program.LblsUnderNotebook.Add(newLabel);
+							Entry.AllLabels.Add(newLabel);
+							LabelsManager.PopulateLabelsList(clbLabels, null, LabelsManager.LabelsSortType.Descending, this.Entry);
+							SetIsDirty();
+						}
+					}
+				}
+			}
+		}
+
 		private async void	lblManageLabels_Click(object sender, EventArgs e)
 		{
 			if (this.Entry == null)
@@ -141,8 +175,8 @@ namespace MyNotebooks.subforms
 					}
 				}
 			}
-			
-			if(this.Entry != null)
+
+			if (this.Entry != null)
 			{
 				using (frmLabelsManager frm2 = new(this, CurrentNotebook, this.Entry))
 				{
@@ -155,7 +189,7 @@ namespace MyNotebooks.subforms
 					}
 
 					frm2.Close();
-				}		
+				}
 			}
 		}
 
@@ -254,7 +288,7 @@ namespace MyNotebooks.subforms
 					opType = OperationType.Update;
 					this.Entry.AllLabels.Clear();
 
-					for(int x = 0; x < clbLabels.Items.Count; x++)
+					for (int x = 0; x < clbLabels.Items.Count; x++)
 					{
 						if (clbLabels.CheckedIndices.Contains(x))
 						{

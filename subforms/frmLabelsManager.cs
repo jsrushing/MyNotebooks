@@ -78,6 +78,7 @@ namespace MyNotebooks.subforms
 			pnlRenameDeleteManager.Anchor = AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Top;
 			ResetTree();
 			mnuAddToCurrentEntry.Enabled = CurrentEntry != null;
+			mnuMoveTop.Visible = false;	
 		}
 
 		private void		frmLabelsManager_Resize(object sender, EventArgs e) { ShowHideOccurrences(); }
@@ -89,6 +90,7 @@ namespace MyNotebooks.subforms
 		{
 			var checkedLabels = GetCheckedNodesAsNodes(treeAvailableLabels);
 			bool actionTaken = false;
+
 
 
 		}
@@ -246,7 +248,6 @@ namespace MyNotebooks.subforms
 					"An error occurred. The Label was not added." + ex.Message, "Label Operation Failed!", this)) 
 				{ frm.ShowDialog(); }	
 			}
-
 		}
 
 		private void		mnuContext_GridEntryDetails_Click(object sender, EventArgs e)

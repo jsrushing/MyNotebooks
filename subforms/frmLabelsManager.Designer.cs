@@ -172,7 +172,7 @@ namespace MyNotebooks.subforms
 			// 
 			lblSortType.AutoSize = true;
 			lblSortType.Cursor = Cursors.Hand;
-			lblSortType.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+			lblSortType.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline);
 			lblSortType.ForeColor = System.Drawing.SystemColors.MenuHighlight;
 			lblSortType.Location = new System.Drawing.Point(992, 127);
 			lblSortType.Name = "lblSortType";
@@ -333,7 +333,7 @@ namespace MyNotebooks.subforms
 			lblSelectAll.Anchor = AnchorStyles.Top | AnchorStyles.Right;
 			lblSelectAll.AutoSize = true;
 			lblSelectAll.Cursor = Cursors.Hand;
-			lblSelectAll.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+			lblSelectAll.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline);
 			lblSelectAll.ForeColor = System.Drawing.SystemColors.MenuHighlight;
 			lblSelectAll.Location = new System.Drawing.Point(211, 6);
 			lblSelectAll.Name = "lblSelectAll";
@@ -425,7 +425,7 @@ namespace MyNotebooks.subforms
 			label1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
 			label1.AutoSize = true;
 			label1.Cursor = Cursors.Hand;
-			label1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+			label1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline);
 			label1.ForeColor = System.Drawing.SystemColors.MenuHighlight;
 			label1.Location = new System.Drawing.Point(303, 6);
 			label1.Name = "label1";
